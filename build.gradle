@@ -8,7 +8,7 @@ plugins {
 }
 sourceCompatibility = '13'
 targetCompatibility = '13'
-mainClassName = 'edu.wpi.teamname.Main'
+mainClassName = 'edu.wpi.N.Main'
 
 repositories {
     mavenCentral()
@@ -59,8 +59,8 @@ jar {
 }
 
 def codeCoverageExcludes = [
-        'edu.wpi.teamname.App',
-        'edu.wpi.teamname.Main',
+        'edu.wpi.N.App',
+        'edu.wpi.N.Main',
 ]
 
 jacoco {
