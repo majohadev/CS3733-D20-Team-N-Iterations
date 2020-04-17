@@ -1,6 +1,7 @@
 package edu.wpi.N.algorithms;
 
 import edu.wpi.N.database.CSVParser;
+import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.DbController;
 import edu.wpi.N.entities.DbNode;
 import java.io.File;
@@ -22,7 +23,7 @@ public class CSVParserTest {
 
   /** Tests that ParseCSV imports Nodes and Edges from csv files into Database successfully */
   @Test
-  public void testParseCSVNodes() {
+  public void testParseCSVNodes() throws DBException {
     InputStream inputNodes = getClass().getResourceAsStream("../csv/TestNodes.csv");
     CSVParser.parseCSV(inputNodes);
 
@@ -35,6 +36,7 @@ public class CSVParserTest {
         new DbNode("H130000000", 1341, 1114, 1, "MainBuil", "HALL", "HALOL", "TT", 'V');
 
     // Compare with first
+
     Assertions.assertTrue(
         new ReflectionEquals(DbController.getNode("AAAAAAAAAA")).matches(firstActual));
     // Compare center
@@ -51,7 +53,7 @@ public class CSVParserTest {
    * to the file
    */
   @Test
-  public void testParseCSVfromPathNodes() throws FileNotFoundException {
+  public void testParseCSVfromPathNodes() throws FileNotFoundException, DBException {
     File fNodes = new File("src/test/resources/edu/wpi/N/csv/TestNodes.csv");
     String path = fNodes.getAbsolutePath();
     CSVParser.parseCSVfromPath(path);
@@ -80,7 +82,7 @@ public class CSVParserTest {
    * to the file
    */
   @Test
-  public void testParseCSVfromPathNodesAndEdges() throws FileNotFoundException {
+  public void testParseCSVfromPathNodesAndEdges() throws FileNotFoundException, DBException {
     // Must parse Node CSV first, otherwise edges will not be created
     File fNodes = new File("src/test/resources/edu/wpi/N/csv/TestNodes.csv");
     File fEdges = new File("src/test/resources/edu/wpi/N/csv/TestEdges.csv");
@@ -105,7 +107,7 @@ public class CSVParserTest {
    * inputted
    */
   @Test
-  public void testParseCSVFileNotFound() {
+  public void testParseCSVFileNotFound() throws DBException {
     File f = new File("src/test/resources/edu/wpi/N/csv/MapCoor.csv");
     String path = f.getAbsolutePath();
 
@@ -115,7 +117,7 @@ public class CSVParserTest {
 
   /** Tests that parceCSVfromPath successfully parses Prototype Node file */
   @Test
-  public void testParseCSVPrototypeNode() throws FileNotFoundException {
+  public void testParseCSVPrototypeNode() throws FileNotFoundException, DBException {
     File f = new File("src/test/resources/edu/wpi/N/csv/PrototypeNodes.csv");
     String path = f.getAbsolutePath();
 
