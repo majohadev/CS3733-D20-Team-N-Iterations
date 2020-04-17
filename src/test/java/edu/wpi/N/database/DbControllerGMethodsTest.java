@@ -7,9 +7,7 @@ import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedList;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 public class DbControllerGMethodsTest {
 
@@ -183,5 +181,10 @@ public class DbControllerGMethodsTest {
     Node testNode7 = new Node(0, 0, "node7");
     Node testNode8 = new Node(3, 4, "node8");
     Assertions.assertEquals(Pathfinder.cost(testNode7, testNode8), 5, 0.0001);
+  }
+
+  @AfterAll
+  public static void clearDB() {
+    DbController.clearNodes();
   }
 }
