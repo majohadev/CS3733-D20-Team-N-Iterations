@@ -1,6 +1,7 @@
 package edu.wpi.N.algorithms;
 
 import edu.wpi.N.database.CSVParser;
+import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.DbController;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Path;
@@ -26,7 +27,7 @@ public class PathfinderMethodsTest {
 
   /** Tests that findPath returns a Path object with the best route from H9 to EEE */
   @Test
-  public void findPathNormalCase() {
+  public void findPathNormalCase() throws DBException {
     LinkedList<DbNode> actualPath = new LinkedList<DbNode>();
     actualPath.add(DbController.getNode("H100000001"));
     actualPath.add(DbController.getNode("H900000000"));
@@ -47,7 +48,7 @@ public class PathfinderMethodsTest {
    * and end nodes are neighbors
    */
   @Test
-  public void findPathStartIsNeighborWithEndNode() {
+  public void findPathStartIsNeighborWithEndNode() throws DBException {
 
     LinkedList<DbNode> actualPath = new LinkedList<DbNode>();
 
@@ -79,7 +80,7 @@ public class PathfinderMethodsTest {
   @Test
   public void findPathStartNodeHasNoEdges() {
     Assertions.assertThrows(
-        NullPointerException.class, () -> Pathfinder.findPath("NonExistentNode", "H120000000"));
+        DBException.class, () -> Pathfinder.findPath("NonExistentNode", "H120000000"));
   }
 
   /**
@@ -87,7 +88,7 @@ public class PathfinderMethodsTest {
    * Node = End Node
    */
   @Test
-  public void findPathEndIsStartNode() {
+  public void findPathEndIsStartNode() throws DBException {
     LinkedList<DbNode> actualPath = new LinkedList<DbNode>();
 
     actualPath.add(DbController.getNode("H120000000"));
