@@ -88,7 +88,8 @@ public class Pathfinder {
       // Generate and return the path in proper order
 
       return generatePath(start, end, cameFrom);
-    } catch (DBException e) {
+    } catch (Exception e) {
+      e.printStackTrace();
       return null;
     }
   }
@@ -118,7 +119,8 @@ public class Pathfinder {
       Path finalPath = new Path(path);
 
       return finalPath;
-    } catch (DBException e) {
+    } catch (Exception e) {
+      e.printStackTrace();
       return null;
     }
   }

@@ -69,8 +69,7 @@ public class PathfinderMethodsTest {
    */
   @Test
   public void findPathDestinationNotFound() {
-    Assertions.assertThrows(
-        NullPointerException.class, () -> Pathfinder.findPath("H120000000", "NonExistentNode"));
+    Assertions.assertNull(Pathfinder.findPath("H120000000", "NonExistentNode"));
   }
 
   /**
@@ -79,8 +78,7 @@ public class PathfinderMethodsTest {
    */
   @Test
   public void findPathStartNodeHasNoEdges() {
-    Assertions.assertThrows(
-        DBException.class, () -> Pathfinder.findPath("NonExistentNode", "H120000000"));
+    Assertions.assertNull(Pathfinder.findPath("NonExistentNode", "H120000000"));
   }
 
   /**

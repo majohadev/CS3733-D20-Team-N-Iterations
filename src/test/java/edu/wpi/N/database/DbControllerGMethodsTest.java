@@ -38,7 +38,7 @@ public class DbControllerGMethodsTest {
     Node testNode = new Node(2.345, 5.5657, "TESTNODE02");
     Assertions.assertEquals(DbController.getGAdjacent("TESTNODE02"), new ArrayList<Node>());
     // null for a node that is in the database but has no edges
-    DbController.addNode("TESTNODE03", 23, 345, 4, "Foisie", "sdfkjd", "fskjd", "sdfk", 'N');
+    DbController.addNode("TESTNODE03", 23, 345, 4, "Foisie", "sdfk", "fskjd", "sdfk", 'N');
     Assertions.assertEquals(DbController.getGAdjacent("TESTNODE3"), new ArrayList<Node>());
   }
 
@@ -81,8 +81,9 @@ public class DbControllerGMethodsTest {
    * Tests that addEdges(nodeID1,nodeID2) will not add a node that does not exist in the database
    */
   @Test
-  public void addInvalidEdgesTester() throws DBException {
-    Assertions.assertFalse(DbController.addEdge("CCCCCCCCCC", "NOTANODE01"));
+  public void addInvalidEdgesTester() {
+    Assertions.assertThrows(
+        DBException.class, () -> DbController.addEdge("CCCCCCCCCC", "NOTANODE01"));
   }
 
   /**
@@ -125,7 +126,7 @@ public class DbControllerGMethodsTest {
   @Test
   public void getNodeNullTester() throws DBException {
     // Change in future to reflect getting an exception/error
-    Assertions.assertNull(DbController.getGNode("test1"));
+    Assertions.assertThrows(DBException.class, () -> DbController.getGNode("test1"));
   }
 
   /**
