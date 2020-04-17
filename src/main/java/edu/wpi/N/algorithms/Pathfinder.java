@@ -102,34 +102,15 @@ public class Pathfinder {
     try {
       while (!currentID.equals(start.ID)) {
         currentID = cameFrom.get(currentID);
-        path.add(DbController.getNode(currentID));
+        path.addFirst(DbController.getNode(currentID));
       }
     } catch (NullPointerException e) {
       System.out.println("Location was not found.");
       throw e;
     }
-    // reverse the path, so it stores nodes in proper order
-    LinkedList<DbNode> reversedPath = reversePath(path);
-    Path finalPath = new Path(reversedPath);
+
+    Path finalPath = new Path(path);
 
     return finalPath;
-  }
-
-  /**
-   * Helper function that reverses a given list
-   *
-   * @param initialPath: list which needs to be reversed
-   * @return: reversed list
-   */
-  private static LinkedList<DbNode> reversePath(LinkedList<DbNode> initialPath) {
-    LinkedList<DbNode> reversedPath = new LinkedList<DbNode>();
-
-    // iterate through initial path in descending order
-    Iterator i = initialPath.descendingIterator();
-    while (i.hasNext()) {
-      // add nodes to reversed path
-      reversedPath.add((DbNode) i.next());
-    }
-    return reversedPath;
   }
 }
