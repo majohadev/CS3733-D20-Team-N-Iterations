@@ -6,8 +6,7 @@ plugins {
     id 'org.openjfx.javafxplugin' version '0.0.8'
     id "io.freefair.lombok" version "5.0.0-rc6"
 }
-sourceCompatibility = '13'
-targetCompatibility = '13'
+
 mainClassName = 'edu.wpi.N.Main'
 
 repositories {
@@ -28,19 +27,22 @@ dependencies {
 
             'org.slf4j:slf4j-api:1.7.30',
             'org.slf4j:slf4j-simple:1.7.30',
+            'com.opencsv:opencsv:5.1'
     )
 
     testImplementation(
             'org.junit.jupiter:junit-jupiter:5.6.0',
             'org.testfx:testfx-junit5:4.0.16-alpha',
     )
+    testCompile (
+            "org.mockito:mockito-core:2.+")
     testRuntimeOnly(
-            'org.testfx:openjfx-monocle:jdk-12.0.1+2',
+            'org.testfx:openjfx-monocle:jdk-11+26',
     )
 }
 
 javafx {
-    version = "13"
+    version = "11"
     modules = ['javafx.controls', 'javafx.fxml']
 }
 
