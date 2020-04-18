@@ -1,5 +1,11 @@
 package edu.wpi.N.views;
 
-public class HomeController {
+import edu.wpi.N.App;
 
+public class HomeController {
+  private App mainApp;
+
+  public void setMainApp(App mainApp) {
+    this.mainApp = mainApp;
+  }
 }
