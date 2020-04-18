@@ -444,14 +444,39 @@ public class DbController {
       ResultSet rs = null;
       String query =
           "SELECT nodeID, xcoord, ycoord FROM nodes, edges "
-              + "WHERE (edges.node1 = '"
-              + nodeID
-              + "' AND nodes.nodeID = edges.node2) OR "
-              + "(edges.node2 = '"
-              + nodeID
-              + "' AND nodes.nodeID = edges.node1)";
+              + "WHERE ((edges.node1 = ? AND nodes.nodeID = edges.node2) OR (edges.node2 = ? AND nodes.nodeID = edges.node1))";
+      PreparedStatement stmt = con.prepareStatement(query);
+      stmt.setString(1, nodeID);
+      stmt.setString(2, nodeID);
       // System.out.println(query);
-      rs = statement.executeQuery(query);
+      rs = stmt.executeQuery();
+      while (rs.next()) {
+        ret.add(new Node(rs.getInt("xcoord"), rs.getInt("ycoord"), rs.getString("nodeID")));
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown error: getGAdjacent", e);
+    }
+
+    return ret;
+  }
+
+  public static LinkedList<Node> getGAdjacent(String nodeID, int startFloor, int endFloor)
+      throws DBException {
+    LinkedList<Node> ret = new LinkedList<Node>();
+    try {
+      ResultSet rs = null;
+      String query =
+          "SELECT nodeID, xcoord, ycoord FROM nodes, edges "
+              + "WHERE ((edges.node1 = ? AND nodes.nodeID = edges.node2) OR (edges.node2 = ? AND nodes.nodeID = edges.node1)) AND "
+              + "(nodes.floor = ? OR nodes.floor = ? OR nodes.nodeType = 'ELEV' OR nodes.nodeType = 'STAI')";
+      PreparedStatement stmt = con.prepareStatement(query);
+      stmt.setString(1, nodeID);
+      stmt.setString(2, nodeID);
+      stmt.setInt(3, startFloor);
+      stmt.setInt(4, endFloor);
+      // System.out.println(query);
+      rs = stmt.executeQuery();
       while (rs.next()) {
         ret.add(new Node(rs.getInt("xcoord"), rs.getInt("ycoord"), rs.getString("nodeID")));
       }

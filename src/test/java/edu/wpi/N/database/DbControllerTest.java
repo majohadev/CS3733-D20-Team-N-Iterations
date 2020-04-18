@@ -112,6 +112,33 @@ public class DbControllerTest {
     DbController.addEdge("NHALL00104", "NHALL00204");
     DbController.addEdge("NHALL00104", "NDEPT00104");
     DbController.addEdge("NHALL00104", "NDEPT00204");
+    DbController.addNode("NELEV00X07", 1250, 850, 7, "Faulkner", "ELEV", "Elev X", "Hall 7", 'N');
+    DbController.addNode("NELEV00X06", 1250, 850, 6, "Faulkner", "ELEV", "Elev X", "Hall 7", 'N');
+    DbController.addNode("NELEV00X05", 1250, 850, 5, "Faulkner", "ELEV", "Elev X", "Hall 7", 'N');
+    DbController.addNode("NHALL00105", 1250, 850, 5, "Faulkner", "HALL", "Hall 1", "Hall 1", 'N');
+    DbController.addNode("NHALL00107", 1250, 850, 7, "Faulkner", "HALL", "Hall 1", "Hall 1", 'N');
+    DbController.addNode("NHALL00106", 1250, 850, 6, "Faulkner", "HALL", "Hall 1", "Hall 1", 'N');
+    DbController.addNode(
+        "NHALL00207", 1250, 850, 7, "Not faulkner", "HALL", "Hall 1", "Hall 1", 'N');
+    DbController.addEdge("NELEV00X07", "NELEV00X06");
+    DbController.addEdge("NELEV00X05", "NELEV00X06");
+    DbController.addEdge("NHALL00105", "NELEV00X05");
+    DbController.addEdge("NHALL00106", "NELEV00X06");
+    DbController.addEdge("NHALL00107", "NELEV00X07");
+    DbController.addEdge("NHALL00107", "NHALL00207");
+    LinkedList<Node> lst = DbController.getGAdjacent("NELEV00X06", 5, 7);
+    assertTrue(
+        lst.contains(new Node(1250, 850, "NELEV00X07"))
+            && lst.contains(new Node(1250, 850, "NELEV00X05")));
+    assertFalse(lst.contains(new Node(1250, 850, "NHALL00106")));
+
+    lst = DbController.getGAdjacent("NELEV00X07", 5, 7);
+    assertTrue(lst.contains(new Node(1250, 850, "NELEV00X06")));
+    assertTrue(lst.contains(new Node(1250, 850, "NHALL00107")));
+    lst = DbController.getGAdjacent("NELEV00X05", 5, 7);
+    assertTrue(
+        lst.contains(new Node(1250, 850, "NELEV00X06"))
+            && lst.contains(new Node(1250, 850, "NHALL00105")));
 
     LinkedList<Node> adjList = DbController.getGAdjacent("NHALL00104");
     assertNotNull(adjList); // error here
@@ -124,6 +151,13 @@ public class DbControllerTest {
     DbController.removeEdge("NHALL00104", "NHALL00204");
     DbController.removeEdge("NHALL00104", "NDEPT00104");
     DbController.removeEdge("NHALL00104", "NDEPT00204");
+    DbController.deleteNode("NELEV00X07");
+    DbController.deleteNode("NELEV00X06");
+    DbController.deleteNode("NELEV00X05");
+    DbController.deleteNode("NHALL00105");
+    DbController.deleteNode("NHALL00107");
+    DbController.deleteNode("NHALL00106");
+    DbController.deleteNode("NHALL00207");
   }
 
   // Chris
