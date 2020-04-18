@@ -13,17 +13,16 @@
       <HBox layoutX="184.0" layoutY="128.0" prefHeight="1080.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <VBox prefHeight="1080.0" prefWidth="300.0" style="-fx-background-color: BLACK;" />
-            <StackPane prefHeight="952.0" prefWidth="1308.0">
+            <StackPane layoutY="300.0" prefHeight="1080.0" prefWidth="1637.0">
                <children>
-                  <ImageView fitHeight="795.0" fitWidth="1320.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="982.0" fitWidth="1756.0" layoutX="300.0" pickOnBounds="true" preserveRatio="true" x="300.0">
                      <image>
                         <Image url="@../images/Floor4.png" />
                      </image>
                   </ImageView>
-                  <Pane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="789.0" prefWidth="1320.0" />
+                  <Pane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="982.0" prefWidth="1637.0" />
                </children>
             </StackPane>
-            <VBox prefHeight="1080.0" prefWidth="300.0" style="-fx-background-color: BLACK;" />
          </children>
       </HBox>
    </children>
