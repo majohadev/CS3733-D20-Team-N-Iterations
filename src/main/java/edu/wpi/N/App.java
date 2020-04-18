@@ -6,6 +6,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,6 +25,7 @@ public class App extends Application {
     this.primaryStage = primaryStage;
     this.primaryStage.setTitle("Brigham and Women's Hospital Kiosk Application");
     initRootLayout();
+    showHome();
   }
 
   @Override
@@ -56,21 +58,24 @@ public class App extends Application {
     }
   }
 
+  public void showHome() {
+    try {
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(getClass().getResource("views/Home.fxml"));
+      AnchorPane pane = loader.load();
+
+      Stage stage = new Stage();
+      stage.setTitle("Home Screen");
+      stage.initModality(Modality.WINDOW_MODAL);
+      stage.initOwner(primaryStage);
+
+      Scene scene = new Scene(pane);
+      stage.setScene(scene);
+
+      HomeController controller = loader.getController();
+
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
 }
-//  public void showPersonOverview() {
-//    try {
-//      FXMLLoader loader = new FXMLLoader();
-//      loader.setLocation(getClass().getResource("personOverview.fxml"));
-//      AnchorPane personOverview = (AnchorPane) loader.load();
-//      // AnchorPane personOverview = (AnchorPane) loader.load();
-//
-//      // Set person overview into the center of root layout.
-//      rootLayout.setCenter(personOverview);
-//
-//      // Give the controller access to the main app.
-//      PersonOverviewController controller = loader.getController();
-//      controller.setMainApp(this);
-//    } catch (IOException e) {
-//      e.printStackTrace();
-//    }
-//  }
