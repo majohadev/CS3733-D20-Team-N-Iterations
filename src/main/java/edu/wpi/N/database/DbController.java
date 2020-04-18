@@ -42,7 +42,7 @@ public class DbController {
       char teamAssigned)
       throws DBException {
     try {
-      String query = "INSERT INTO  nodes VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+      String query = "INSERT INTO nodes VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
       PreparedStatement stmt = con.prepareStatement(query);
       stmt.setString(1, nodeID);
       stmt.setInt(2, x);
@@ -277,6 +277,8 @@ public class DbController {
     } catch (SQLException e) {
       if (!e.getSQLState().equals("X0Y32")) throw e;
     }
+
+    ServiceController.initService();
   }
 
   /**

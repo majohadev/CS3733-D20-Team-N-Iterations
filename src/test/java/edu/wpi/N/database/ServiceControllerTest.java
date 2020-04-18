@@ -2,81 +2,76 @@ package edu.wpi.N.database;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.sql.SQLException;
-
 import edu.wpi.N.entities.Doctor;
-
-import org.junit.jupiter.api.Test;
+import java.sql.SQLException;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 public class ServiceControllerTest {
   @BeforeAll
   public static void setup() throws DBException, SQLException, ClassNotFoundException {
     DbController.initDB();
+    DbController.addNode(
+        "NDEPT00104", 1350, 950, 4, "Faulkner", "DEPT", "Cardiology", "Dept 1", 'N');
+    DbController.addNode("NHALL00104", 1250, 850, 4, "Faulkner", "HALL", "Hall 1", "Hall 1", 'N');
+    DbController.addNode(
+        "NDEPT00204", 1450, 950, 4, "Faulkner", "DEPT", "Neurology", "Dept 2", 'N');
   }
 
   @Test
   public void testGetDoctor() throws DBException {
-      DbController.addNode("NDEPT00104", 1350, 950, 4, "Faulkner", "DEPT", "Cardiology", "Dept 1", 'N');
-      Doctor wong = new Doctor(1, "Wilson Wong", DbController.getNode("NDEPT00104"), "Software Engineering");
+    Doctor wong =
+        new Doctor(1, "Wilson Wong", DbController.getNode("NDEPT00104"), "Software Engineering");
 
-      assertTrue(ServiceController.addDoctor(wong));
-      assertEquals(wong, ServiceController.getDoctor(1));
-      assertTrue(ServiceController.deleteDoctor(1));
-
-      DbController.deleteNode("NDEPT00104");
+    assertTrue(ServiceController.addDoctor(wong));
+    assertEquals(wong, ServiceController.getDoctor(1));
+    assertTrue(ServiceController.deleteDoctor(1));
   }
 
   @Test
   public void testAddDoctor() throws DBException {
-      DbController.addNode("NDEPT00104", 1350, 950, 4, "Faulkner", "DEPT", "Cardiology", "Dept 1", 'N');
-      Doctor wong = new Doctor(1, "Wilson Wong", DbController.getNode("NDEPT00104"), "Software Engineering");
+    Doctor wong =
+        new Doctor(2, "Wilson Wong", DbController.getNode("NDEPT00104"), "Software Engineering");
 
-      assertTrue(ServiceController.addDoctor(wong));
-      assertEquals(wong, ServiceController.getDoctor(1));
-      assertTrue(ServiceController.deleteDoctor(1));
+    assertTrue(ServiceController.addDoctor(wong));
+    assertEquals(wong, ServiceController.getDoctor(2));
+    assertTrue(ServiceController.deleteDoctor(2));
 
-      assertTrue(ServiceController.addDoctor(1, "Wilson Wong", DbController.getNode("NDEPT00104"), "Software Engineering"));
-      assertEquals(wong, ServiceController.getDoctor(1));
-      assertTrue(ServiceController.deleteDoctor(1));
-
-
-      DbController.deleteNode("NDEPT00104");
+    assertTrue(
+        ServiceController.addDoctor(
+            3, "Wilson Wong", DbController.getNode("NDEPT00104"), "Software Engineering"));
+    assertEquals(wong, ServiceController.getDoctor(3));
+    assertTrue(ServiceController.deleteDoctor(3));
   }
 
   @Test
   public void testRemoveDoctor() throws DBException {
-      DbController.addNode("NDEPT00104", 1350, 950, 4, "Faulkner", "DEPT", "Cardiology", "Dept 1", 'N');
-
-      ServiceController.addDoctor(1, "Wilson Wong", DbController.getNode("NDEPT00104"), "Neurology");
-      ServiceController.deleteDoctor(1);
-      assertNull(ServiceController.getDoctor(1));
-
-      DbController.deleteNode("NDEPT00104");
+    ServiceController.addDoctor(4, "Wilson Wong", DbController.getNode("NDEPT00104"), "Neurology");
+    ServiceController.deleteDoctor(4);
+    assertThrows(DBException.class, () -> ServiceController.getDoctor(4));
   }
 
   @Test
   public void testModifyDoctorFalse() throws DBException {
-      DbController.addNode("NDEPT00104", 1350, 950, 4, "Faulkner", "DEPT", "Cardiology", "Dept 1", 'N');
-      DbController.addNode("NHALL00104", 1250, 850, 4, "Faulkner", "HALL", "Hall 1", "Hall 1", 'N');
-
-      ServiceController.addDoctor(1, "Wilson Wong", DbController.getNode("NDEPT00104"), "Software Engineering");
-      assertFalse(ServiceController.modifyDoctor(1, "Wilson Wang", DbController.getNode("NHALL00104"), "Algorithms"));
-
-      DbController.deleteNode("NDEPT00104");
-      DbController.deleteNode("NHALL00104");
+    ServiceController.addDoctor(
+        5, "Wilson Wong", DbController.getNode("NDEPT00104"), "Software Engineering");
+    assertFalse(
+        ServiceController.modifyDoctor(
+            5, "Wilson Wang", DbController.getNode("NHALL00104"), "Algorithms"));
   }
 
   @Test
   public void testModifyDoctorTrue() throws DBException {
-      DbController.addNode("NDEPT00104", 1350, 950, 4, "Faulkner", "DEPT", "Cardiology", "Dept 1", 'N');
-      DbController.addNode("NDEPT00204", 1450, 950, 4, "Faulkner", "DEPT", "Neurology", "Dept 2", 'N');
+    ServiceController.addDoctor(
+        6, "Wilson Wong", DbController.getNode("NDEPT00104"), "Software Engineering");
+    assertTrue(
+        ServiceController.modifyDoctor(
+            6, "Wilson Wang", DbController.getNode("NDEPT00204"), "Algorithms"));
+  }
 
-      ServiceController.addDoctor(1, "Wilson Wong", DbController.getNode("NDEPT00104"), "Software Engineering");
-      assertFalse(ServiceController.modifyDoctor(1, "Wilson Wang", DbController.getNode("NDEPT00204"), "Algorithms"));
-
-      DbController.deleteNode("NDEPT00104");
-      DbController.deleteNode("NDEPT00204");
+  @AfterAll
+  public static void cleanup() throws DBException {
+    DbController.clearNodes();
   }
 }

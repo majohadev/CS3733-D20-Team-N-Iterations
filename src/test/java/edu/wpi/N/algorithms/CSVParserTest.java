@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.LinkedList;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -138,6 +139,11 @@ public class CSVParserTest {
     // Compare with first
     Assertions.assertTrue(
         new ReflectionEquals(DbController.getNode("BCONF00102")).matches(firstExpected));
+    DbController.clearNodes();
+  }
+
+  @AfterAll
+  public static void cleanup() throws DBException {
     DbController.clearNodes();
   }
 }

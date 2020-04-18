@@ -8,6 +8,7 @@ import edu.wpi.N.entities.Path;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.LinkedList;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -98,6 +99,10 @@ public class PathfinderMethodsTest {
     }
   }
 
+  @AfterAll
+  public static void cleanup() throws DBException {
+    DbController.clearNodes();
+  }
   // to test generatePath: uncomment the necessary test methods make the method itself public
   // just for the time of testing, then switch back to private after test
 

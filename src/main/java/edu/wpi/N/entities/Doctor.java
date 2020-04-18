@@ -6,18 +6,18 @@ public class Doctor {
   private DbNode loc;
   private String field;
 
-  public Doctor(int id, String name, DbNode loc, String field){
+  public Doctor(int id, String name, DbNode loc, String field) {
     this.id = id;
     this.name = name;
     this.loc = loc;
     this.field = field;
   }
 
-  public int getId(){
+  public int getId() {
     return id;
   }
 
-  public void setId(int id){
+  public void setId(int id) {
     this.id = id;
   }
 
@@ -45,15 +45,15 @@ public class Doctor {
     this.field = field;
   }
 
-  public boolean equals(Object o){
-    if(!(o instanceof Doctor)){
+  public boolean equals(Object o) {
+    if (!(o instanceof Doctor)) {
       return false;
     }
 
-    Doctor other = (Doctor)o;
+    Doctor other = (Doctor) o;
 
-    return this.name.equals(other.name) &&
-            this.loc.equals(other.loc) &&
-            this.field.equals(other.field);
+    return this.name.equals(other.name)
+        && this.loc.equals(other.loc)
+        && this.field.equals(other.field);
   }
 }
