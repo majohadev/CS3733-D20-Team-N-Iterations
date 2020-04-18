@@ -2,8 +2,6 @@ package edu.wpi.N.database;
 
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Node;
-import javafx.concurrent.Service;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -14,8 +12,7 @@ public class DbController {
   private static Statement statement;
   private static Connection con;
 
-
-  public static Connection getCon(){
+  public static Connection getCon() {
     return con;
   }
   /**
@@ -225,7 +222,7 @@ public class DbController {
 
   /** Initializes the database, should be run before interfacing with it. */
   // doesn't need to use prepared statements since it takes no user input
-  public static void initDB() throws ClassNotFoundException, SQLException {
+  public static void initDB() throws ClassNotFoundException, SQLException, DBException {
     Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
     String URL;
 

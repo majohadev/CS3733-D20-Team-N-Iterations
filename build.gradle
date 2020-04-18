@@ -38,6 +38,7 @@ dependencies {
     testRuntimeOnly(
             'org.testfx:openjfx-monocle:jdk-11+26',
     )
+    implementation 'junit:junit:4.12'
 }
 
 javafx {

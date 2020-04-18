@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 public class PathfinderMethodsTest {
 
   @BeforeAll
-  public static void initializeTest() throws SQLException, ClassNotFoundException {
+  public static void initializeTest() throws SQLException, ClassNotFoundException, DBException {
     DbController.initDB();
     InputStream inputNodes =
         PathfinderMethodsTest.class.getResourceAsStream("../csv/TestNodes.csv");

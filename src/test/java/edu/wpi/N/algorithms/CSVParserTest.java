@@ -17,7 +17,7 @@ import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
 public class CSVParserTest {
 
   @BeforeAll
-  public static void initializeTest() throws SQLException, ClassNotFoundException {
+  public static void initializeTest() throws SQLException, ClassNotFoundException, DBException {
     DbController.initDB();
   }
 
