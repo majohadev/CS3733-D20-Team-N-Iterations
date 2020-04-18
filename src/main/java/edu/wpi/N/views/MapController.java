@@ -4,10 +4,12 @@ import edu.wpi.N.App;
 import java.awt.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.layout.AnchorPane;
 
 public class MapController implements Controller {
   private App mainApp;
   @FXML Button btn_map;
+  @FXML AnchorPane anchorPane;
 
   public void setMainApp(App mainApp) {
     this.mainApp = mainApp;
