@@ -443,7 +443,7 @@ public class DbController {
     try {
       ResultSet rs = null;
       String query =
-          "SELECT nodeID, xcoord, ycoord FROM nodes, edges "
+          "SELECT nodeID, xcoord, ycoord FROM (SELECT nodeID, xcoord, ycoord  FROM nodes) AS nodes, edges "
               + "WHERE ((edges.node1 = ? AND nodes.nodeID = edges.node2) OR (edges.node2 = ? AND nodes.nodeID = edges.node1))";
       PreparedStatement stmt = con.prepareStatement(query);
       stmt.setString(1, nodeID);
@@ -467,14 +467,14 @@ public class DbController {
     try {
       ResultSet rs = null;
       String query =
-          "SELECT nodeID, xcoord, ycoord FROM nodes, edges "
-              + "WHERE ((edges.node1 = ? AND nodes.nodeID = edges.node2) OR (edges.node2 = ? AND nodes.nodeID = edges.node1)) AND "
-              + "(nodes.floor = ? OR nodes.floor = ? OR nodes.nodeType = 'ELEV' OR nodes.nodeType = 'STAI')";
+          "SELECT nodeID, xcoord, ycoord FROM (SELECT nodeID, xcoord, ycoord FROM nodes WHERE"
+              + " (nodes.floor = ? OR nodes.floor = ? OR nodes.nodeType = 'ELEV' OR nodes.nodeType = 'STAI')) AS nodes, edges "
+              + "WHERE ((edges.node1 = ? AND nodes.nodeID = edges.node2) OR (edges.node2 = ? AND nodes.nodeID = edges.node1))";
       PreparedStatement stmt = con.prepareStatement(query);
-      stmt.setString(1, nodeID);
-      stmt.setString(2, nodeID);
-      stmt.setInt(3, startFloor);
-      stmt.setInt(4, endFloor);
+      stmt.setString(3, nodeID);
+      stmt.setString(4, nodeID);
+      stmt.setInt(1, startFloor);
+      stmt.setInt(2, endFloor);
       // System.out.println(query);
       rs = stmt.executeQuery();
       while (rs.next()) {
