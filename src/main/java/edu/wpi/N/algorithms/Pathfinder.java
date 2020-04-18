@@ -34,7 +34,7 @@ public class Pathfinder {
   }
 
   //TODO:
-  // Change the paramaters to be Nodes
+  // Change the paramaters to be DbNodes
   /**
    * Finds the shortest path from Start to Goal node
    *
@@ -47,7 +47,7 @@ public class Pathfinder {
 
       // If not, find path to the closes elevator (prioritized) or stairs
 
-      // Check if the elevator/stairs has edge to the floor, the end floor is at
+      // Check if the elevator/stairs is connected to Nodes, the end floor is at
       // If not, find path to a "second best" elevator (prioritized) or stairs iteratively
 
       // If yes, find path from elevator to the end Node
