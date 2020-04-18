@@ -36,9 +36,10 @@ public class App extends Application {
     FXMLLoader loader = new FXMLLoader();
     loader.setLocation(getClass().getResource(path));
     Pane pane = loader.load();
+
     Scene scene = new Scene(pane);
     masterStage.setScene(scene);
-    masterStage.setFullScreen(true);
+    masterStage.setMaximized(true);
     masterStage.setFullScreenExitHint("");
     masterStage.show();
     Controller controller = loader.getController();
