@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
 <?import javafx.scene.layout.AnchorPane?>
-
+<?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.HomeController">
+
+    <children>
+        <JFXButton fx:id="btn_scanButton" alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#openQrReader" prefHeight="37.0" prefWidth="86.0" ripplerFill="#2463bc" text="Scan" textAlignment="CENTER">
+            <font>
+                <Font size="16.0" />
+            </font>
+        </JFXButton>
+    </children>
 
 </AnchorPane>

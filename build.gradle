@@ -27,7 +27,11 @@ dependencies {
 
             'org.slf4j:slf4j-api:1.7.30',
             'org.slf4j:slf4j-simple:1.7.30',
-            'com.opencsv:opencsv:5.1'
+            'com.opencsv:opencsv:5.1',
+
+            'com.github.sarxos:webcam-capture:0.3.12',
+            'com.google.zxing:core:3.4.0',
+            'com.google.zxing:javase:3.4.0'
     )
 
     testImplementation(
@@ -43,7 +47,7 @@ dependencies {
 
 javafx {
     version = "11"
-    modules = ['javafx.controls', 'javafx.fxml']
+     modules = ['javafx.controls', 'javafx.fxml', 'javafx.swing']
 }
 
 
