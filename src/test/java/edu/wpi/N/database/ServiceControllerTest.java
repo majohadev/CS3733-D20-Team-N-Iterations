@@ -14,7 +14,4 @@ public class ServiceControllerTest {
 
     @Test
     public void testModifyDoctor(){}
-
-    @Test
-    public void testFieldDoctors(){}
 }
