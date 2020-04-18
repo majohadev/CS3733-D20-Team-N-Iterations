@@ -33,6 +33,8 @@ public class Pathfinder {
     return Math.abs(end.getX() - currNode.getX()) + Math.abs(end.getY() - currNode.getY());
   }
 
+  //TODO:
+  // Change the paramaters to be Nodes
   /**
    * Finds the shortest path from Start to Goal node
    *
@@ -40,6 +42,15 @@ public class Pathfinder {
    */
   public static Path findPath(String startID, String endID) {
     try {
+      // Check if start is on the same floor as end
+
+
+      // If not, find path to the closes elevator (prioritized) or stairs
+
+      // Check if the elevator/stairs has edge to the floor, the end floor is at
+      // If not, find path to a "second best" elevator (prioritized) or stairs iteratively
+
+      // If yes, find path from elevator to the end Node
       Node start = DbController.getGNode(startID);
       Node end = DbController.getGNode(endID);
 
