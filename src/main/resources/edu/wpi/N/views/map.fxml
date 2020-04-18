@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -8,7 +9,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.MapController">
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.MapDisplayController">
    <children>
       <HBox layoutX="184.0" layoutY="128.0" prefHeight="1080.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -20,7 +21,11 @@
                         <Image url="@../images/Floor4.png" />
                      </image>
                   </ImageView>
-                  <Pane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="982.0" prefWidth="1637.0" />
+                  <Pane fx:id="pn_display" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="982.0" prefWidth="1637.0">
+                     <children>
+                        <Button fx:id="btn_find" layoutX="162.0" layoutY="395.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="103.0" text="Find Path" />
+                        <Button fx:id="btn_reset" layoutX="162.0" layoutY="466.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="103.0" text="Reset" />
+                     </children></Pane>
                </children>
             </StackPane>
          </children>
