@@ -4,11 +4,10 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import edu.wpi.N.App;
 import edu.wpi.N.entities.DbNode;
+import java.util.LinkedList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
-
-import java.util.LinkedList;
 
 public class MapDisplayController implements Controller, MapController {
   private App mainApp;
@@ -26,10 +25,10 @@ public class MapDisplayController implements Controller, MapController {
   @FXML Button btn_reset;
   @FXML Pane pn_display;
 
-  BiMap<String, String> masterNodes = HashBiMap.create(); // stores the map nodes and their respective database nodes
+  BiMap<String, String> masterNodes =
+      HashBiMap.create(); // stores the map nodes and their respective database nodes
   LinkedList<DbNode> allFloorNodes; // stores all the nodes on the floor
   LinkedList<DbNode> selectedNodes; // stores all the selected nodes on the map
-
 
   public void setMainApp(App mainApp) {
     this.mainApp = mainApp;
