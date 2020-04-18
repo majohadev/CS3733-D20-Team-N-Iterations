@@ -42,27 +42,28 @@ public class ServiceController {
 
     // Chris
     public static boolean deleteDoctor(int docID) throws DBException {
-        try{
-            String query = "DELETE FROM doctors WHERE doctorID = '"+docID+"'";
+        try {
+            String query = "DELETE FROM doctors WHERE doctorID = '" + docID + "'";
             PreparedStatement state = DbController.getCon().prepareStatement(query);
             return true;
-        }catch(SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
             throw new DBException("delete function causing error", e);
         }
     }
     // Chris
     public static boolean modifyDoctor(int docID, String n, DbNode loc, String f) throws DBException {
-        try{
-            if(loc.getNodeID().contains("DEPT")){
-                String query = "UPDATE doctors SET name = '"+n+"'," +
-                        "location = '"+loc.getNodeID()+"', field = '"+f+"' WHERE doctorID = '"+docID+"'";
+        String key = loc.getNodeID();
+        try {
+            if (key.contains("DEPT")) {
+                String query = "UPDATE doctors SET name = '" + n + "'," +
+                        "location = '" + key + "', field = '" + f + "' WHERE doctorID = '" + docID + "'";
                 PreparedStatement state = DbController.getCon().prepareStatement(query);
                 return true;
             }
             System.out.println("nodeID for the location is incorrect");
             return false;
-        }catch(SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
             throw new DBException("modify function causing error", e);
         }
