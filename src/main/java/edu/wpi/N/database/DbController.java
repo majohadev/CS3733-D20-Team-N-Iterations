@@ -225,7 +225,7 @@ public class DbController {
 
   /** Initializes the database, should be run before interfacing with it. */
   // doesn't need to use prepared statements since it takes no user input
-  public static void initDB() throws ClassNotFoundException, SQLException {
+  public static void initDB() throws ClassNotFoundException, SQLException, DBException {
     Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
     String URL;
 
@@ -280,8 +280,6 @@ public class DbController {
     } catch (SQLException e) {
       if (!e.getSQLState().equals("X0Y32")) throw e;
     }
-
-    ServiceController.initService();
   }
 
   /**
