@@ -13,7 +13,6 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
 
 public class CSVParserTest {
 
@@ -29,23 +28,20 @@ public class CSVParserTest {
     CSVParser.parseCSV(inputNodes);
 
     // Will check if first, middle and last were added to DB
-    DbNode firstActual =
+    DbNode firstExpected =
         new DbNode("AAAAAAAAAA", 171, 851, 1, "MainBuil", "OFFI", "Arnold", "AA", 'E');
-    DbNode middleActual =
+    DbNode middleExpected =
         new DbNode("H500000000", 316, 1132, 1, "MainBuil", "HALL", "HALOL", "LL", 'N');
-    DbNode lastActual =
+    DbNode lastExpected =
         new DbNode("H130000000", 1341, 1114, 1, "MainBuil", "HALL", "HALOL", "TT", 'V');
 
     // Compare with first
+    Assertions.assertEquals(firstExpected, DbController.getNode("AAAAAAAAAA"));
 
-    Assertions.assertTrue(
-        new ReflectionEquals(DbController.getNode("AAAAAAAAAA")).matches(firstActual));
     // Compare center
-    Assertions.assertTrue(
-        new ReflectionEquals(DbController.getNode("H500000000")).matches(middleActual));
+    Assertions.assertEquals(middleExpected, DbController.getNode("H500000000"));
     // Compare last
-    Assertions.assertTrue(
-        new ReflectionEquals(DbController.getNode("H130000000")).matches(lastActual));
+    Assertions.assertEquals(lastExpected, DbController.getNode("H130000000"));
     DbController.clearNodes();
   }
 
@@ -60,21 +56,18 @@ public class CSVParserTest {
     CSVParser.parseCSVfromPath(path);
 
     // Will check if first, middle and last were added to DB
-    DbNode firstActual =
+    DbNode firstExpected =
         new DbNode("AAAAAAAAAA", 171, 851, 1, "MainBuil", "OFFI", "Arnold", "AA", 'E');
-    DbNode middleActual =
+    DbNode middleExpected =
         new DbNode("H500000000", 316, 1132, 1, "MainBuil", "HALL", "HALOL", "LL", 'N');
-    DbNode lastActual =
+    DbNode lastExpected =
         new DbNode("H130000000", 1341, 1114, 1, "MainBuil", "HALL", "HALOL", "TT", 'V');
     // Compare with first
-    Assertions.assertTrue(
-        new ReflectionEquals(DbController.getNode("AAAAAAAAAA")).matches(firstActual));
+    Assertions.assertEquals(firstExpected, DbController.getNode("AAAAAAAAAA"));
     // Compare center
-    Assertions.assertTrue(
-        new ReflectionEquals(DbController.getNode("H500000000")).matches(middleActual));
+    Assertions.assertEquals(middleExpected, DbController.getNode("H500000000"));
     // Compare last
-    Assertions.assertTrue(
-        new ReflectionEquals(DbController.getNode("H130000000")).matches(lastActual));
+    Assertions.assertEquals(lastExpected, DbController.getNode("H130000000"));
     DbController.clearNodes();
   }
 
@@ -93,13 +86,18 @@ public class CSVParserTest {
     CSVParser.parseCSVfromPath(pathToEdges);
 
     LinkedList<DbNode> expectedH9 = new LinkedList<DbNode>();
+    expectedH9.add(new DbNode("CCCCCCCCCC", 776, 523, 1, "MainBuil", "OFFI", "Candie", "CC", 'G'));
     expectedH9.add(new DbNode("H800000000", 596, 794, 1, "MainBuil", "HALL", "HALOL", "OO", 'Q'));
     expectedH9.add(new DbNode("H100000001", 999, 816, 1, "MainBuil", "HALL", "HALOL", "QQ", 'S'));
-    expectedH9.add(new DbNode("CCCCCCCCCC", 776, 523, 1, "MainBuil", "OFFI", "Candie", "CC", 'G'));
     expectedH9.add(new DbNode("H120000000", 1214, 715, 1, "MainBuil", "HALL", "HALOL", "SS", 'U'));
 
-    Assertions.assertTrue(
-        new ReflectionEquals(expectedH9).matches(DbController.getAdjacent("H900000000")));
+    LinkedList<DbNode> actualEdges = DbController.getAdjacent("H900000000");
+
+    Assertions.assertTrue(expectedH9.contains(actualEdges.get(0)));
+    Assertions.assertTrue(expectedH9.contains(actualEdges.get(1)));
+    Assertions.assertTrue(expectedH9.contains(actualEdges.get(2)));
+    Assertions.assertTrue(expectedH9.contains(actualEdges.get(3)));
+
     DbController.clearNodes();
   }
 
@@ -137,8 +135,7 @@ public class CSVParserTest {
             'Z');
 
     // Compare with first
-    Assertions.assertTrue(
-        new ReflectionEquals(DbController.getNode("BCONF00102")).matches(firstExpected));
+    Assertions.assertEquals(firstExpected, DbController.getNode("BCONF00102"));
     DbController.clearNodes();
   }
 
