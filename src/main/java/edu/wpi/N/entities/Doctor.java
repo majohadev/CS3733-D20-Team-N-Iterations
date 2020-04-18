@@ -1,14 +1,24 @@
 package edu.wpi.N.entities;
 
 public class Doctor {
+  private int id;
   private String name;
   private DbNode loc;
   private String field;
 
-  public Doctor(String name, DbNode loc, String field){
+  public Doctor(int id, String name, DbNode loc, String field){
+    this.id = id;
     this.name = name;
     this.loc = loc;
     this.field = field;
+  }
+
+  public int getId(){
+    return id;
+  }
+
+  public void setId(int id){
+    this.id = id;
   }
 
   public String getName() {

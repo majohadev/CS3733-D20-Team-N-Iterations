@@ -26,14 +26,19 @@ public class ServiceController {
   }
 
   public static Doctor getDoctor(int id) {
-    return new Doctor("a", new DbNode(), "a");
+    return new Doctor(0,"a", new DbNode(), "a");
   }
 
   public static boolean addDoctor(Doctor d){
-    return false;
+      return addDoctor(d.getId(), d.getName(), d.getLoc(), d.getField());
   }
 
-    public static boolean deleteDoc(int docID) throws DBException {
+  public static boolean addDoctor(int id, String name, DbNode location, String field){
+      return false;
+  }
+
+
+    public static boolean deleteDoctor(int docID) throws DBException {
         try{
             String query = "DELETE FROM doctors WHERE doctorID = '"+docID+"'";
             PreparedStatement state = DbController.getCon().prepareStatement(query);
@@ -44,7 +49,7 @@ public class ServiceController {
         }
     }
 
-    public static boolean modifyDoc(int docID, String n, String loc, String f) throws DBException {
+    public static boolean modifyDoctor(int docID, String n, String loc, String f) throws DBException {
         try{
             if(loc.contains("DEPT")){
                 String query = "UPDATE doctors SET name = '"+n+"'," +

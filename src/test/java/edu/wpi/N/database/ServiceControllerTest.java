@@ -19,13 +19,13 @@ public class ServiceControllerTest {
   @Test
   public void testGetDoctor() throws DBException {
     DbController.addNode("NHALL00104", 1250, 850, 4, "Faulkner", "HALL", "Hall 1", "Hall 1", 'N');
-    Doctor jim = new Doctor("jim", DbController.getNode("NHALL00104"), "good");
+    Doctor jim = new Doctor(1, "jim", DbController.getNode("NHALL00104"), "good");
 
     assertTrue(ServiceController.addDoctor(jim));
 
     assertEquals(jim, ServiceController.getDoctor(1));
 
-    assertTrue(ServiceController.removeDoctor(1));
+    assertTrue(ServiceController.deleteDoctor(1));
 
     DbController.deleteNode("NHALL00104");
   }
@@ -36,19 +36,19 @@ public class ServiceControllerTest {
   @Test
   public void testRemoveDoctor() throws DBException {
       ServiceController.addDoctor(1, "Wilson Wong", "NDEPT00104", "Neurology");
-      ServiceController.deleteDoc(1);
-      assertNull(ServiceController.getDoc(1));
+      ServiceController.deleteDoctor(1);
+      assertNull(ServiceController.getDoctor(1));
   }
 
   @Test
   public void testModifyDoctorFalse() throws DBException {
       ServiceController.addDoctor(1, "Wilson Wong", "NDEPT00104", "Software Engineering");
-      assertFalse(ServiceController.modifyDoc(1, "Wilson Wang", "NHALL00104", "Algorithms"));
+      assertFalse(ServiceController.modifyDoctor(1, "Wilson Wang", "NHALL00104", "Algorithms"));
   }
 
   @Test
-  public void testModifyDoctorTrue(){
+  public void testModifyDoctorTrue() throws DBException {
       ServiceController.addDoctor(1, "Wilson Wong", "NDEPT00104", "Software Engineering");
-      assertFalse(ServiceController.modifyDoc(1, "Wilson Wang", "NDEPT00204", "Algorithms"));
+      assertFalse(ServiceController.modifyDoctor(1, "Wilson Wang", "NDEPT00204", "Algorithms"));
   }
 }
