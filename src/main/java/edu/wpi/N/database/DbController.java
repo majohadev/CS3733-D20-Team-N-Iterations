@@ -2,6 +2,8 @@ package edu.wpi.N.database;
 
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Node;
+import javafx.concurrent.Service;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -12,6 +14,10 @@ public class DbController {
   private static Statement statement;
   private static Connection con;
 
+
+  public static Connection getCon(){
+    return con;
+  }
   /**
    * Adds a node to the database including the nodeID for importing from the CSV
    *
@@ -274,6 +280,8 @@ public class DbController {
     } catch (SQLException e) {
       if (!e.getSQLState().equals("X0Y32")) throw e;
     }
+
+    ServiceController.initService();
   }
 
   /**
