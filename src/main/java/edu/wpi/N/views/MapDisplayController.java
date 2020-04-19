@@ -3,11 +3,17 @@ package edu.wpi.N.views;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import edu.wpi.N.App;
+import edu.wpi.N.Main;
+import edu.wpi.N.database.CSVParser;
+import edu.wpi.N.database.DBException;
+import edu.wpi.N.database.DbController;
 import edu.wpi.N.entities.DbNode;
+import java.io.InputStream;
 import java.util.LinkedList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Circle;
 
 public class MapDisplayController implements Controller, MapController {
   private App mainApp;
@@ -20,13 +26,14 @@ public class MapDisplayController implements Controller, MapController {
   final int MAP_HEIGHT = (MAP_WIDTH / IMAGE_WIDTH) * IMAGE_HEIGHT;
   final int HORIZONTAL_OFFSET = BAR_WIDTH;
   final int VERTICAL_OFFSET = (SCREEN_HEIGHT - IMAGE_HEIGHT) / 2;
+  final double HORIZONTAL_SCALE = MAP_WIDTH / IMAGE_WIDTH;
+  final double VERTICAL_SCALE = MAP_HEIGHT / IMAGE_HEIGHT;
 
   @FXML Button btn_find;
   @FXML Button btn_reset;
   @FXML Pane pn_display;
 
-  BiMap<String, String> masterNodes =
-      HashBiMap.create(); // stores the map nodes and their respective database nodes
+  BiMap<Circle, DbNode> masterNodes; // stores the map nodes and their respective database nodes
   LinkedList<DbNode> allFloorNodes; // stores all the nodes on the floor
   LinkedList<DbNode> selectedNodes; // stores all the selected nodes on the map
 
@@ -34,50 +41,46 @@ public class MapDisplayController implements Controller, MapController {
     this.mainApp = mainApp;
   }
 
-  public void initialize() {}
+  public void initialize() throws DBException, DBException {
+    InputStream nodes = Main.class.getResourceAsStream("csv/MapEnodes.csv");
+    InputStream edges = Main.class.getResourceAsStream("csv/MapEdges.csv");
+    CSVParser.parseCSV(nodes);
+    CSVParser.parseCSV(edges);
+    selectedNodes = new LinkedList<DbNode>();
+    allFloorNodes = DbController.floorNodes(4, "Faulkner");
+    masterNodes = HashBiMap.create();
+    //      populateMap();
+  }
+  ////
+  //  public void populateMap() {
+  //    for (DbNode node : allFloorNodes) {
+  //      Circle mapNode = makeMapNode(node);
+  //      pn_display.getChildren().add(mapNode);
+  //      masterNodes.put(mapNode, node);
+  //    }
+  //  }
+  //
+  //  public Circle makeMapNode(DbNode node) {
+  //    Circle mapNode = new Circle();
+  //    mapNode.setRadius(5);
+  //    mapNode.setLayoutX(node.getX() * HORIZONTAL_SCALE);
+  //    mapNode.setLayoutY(node.getY() * VERTICAL_SCALE);
+  //    mapNode.setFill(Color.PURPLE);
+  //    mapNode.setOnMouseClicked(mouseEvent -> this.onMapNodeClicked(mapNode));
+  //    return mapNode;
+  //  }
+  //
+  //  public void onMapNodeClicked(Circle mapNode) {
+  //    if (mapNode.getFill() == Color.PURPLE) {
+  //      mapNode.setFill(Color.RED);
+  //      selectedNodes.add(masterNodes.get(mapNode));
+  //    } else {
+  //      mapNode.setFill(Color.PURPLE);
+  //      selectedNodes.remove(masterNodes.get(mapNode));
+  //    }
+  //  }
 }
 
-//  final double SCALE = 0.55;
-//
-//  public void initialize() {
-//    //    InputStream inputNodes = Main.class.getResourceAsStream("csv/MapEnodes.csv");
-//    //    InputStream inputEdges = Main.class.getResourceAsStream("csv/MapEedges.csv");
-//    //    CSVParser.parseCSV(inputNodes);
-//    //    CSVParser.parseCSV(inputEdges);
-//    selectedNodes = new LinkedList<DbNode>();
-//    populateMap();
-//  }
-//
-//  public void populateMap() {
-//    nodesList = dbController.floorNodes(4, "Faulkner");
-//    masterNodes = new HashMap<Circle, DbNode>();
-//    Iterator iter = nodesList.iterator();
-//    while (iter.hasNext()) {
-//      DbNode newNode = (DbNode) iter.next();
-//      Circle newMapNode = makeNode(newNode);
-//      pane_nodes.getChildren().add(newMapNode);
-//      masterNodes.put(newMapNode, newNode);
-//    }
-//  }
-//
-//  public Circle makeNode(DbNode newNode) {
-//    Circle newMapNode = new Circle();
-//    newMapNode.setRadius(5);
-//    newMapNode.setLayoutX(newNode.getX() * SCALE);
-//    newMapNode.setLayoutY(newNode.getY() * SCALE);
-//    newMapNode.setFill(Color.PURPLE);
-//    newMapNode.setOnMouseClicked(
-//            mouseEvent -> {
-//              if (newMapNode.getFill() == Color.PURPLE) {
-//                newMapNode.setFill(Color.RED);
-//                selectedNodes.add(masterNodes.get(newMapNode));
-//              } else {
-//                newMapNode.setFill(Color.PURPLE);
-//                selectedNodes.remove(masterNodes.get(newMapNode));
-//              }
-//            });
-//    return newMapNode;
-//  }
 //
 //  @FXML
 //  private void onFindPathClicked(MouseEvent event) throws Exception {
