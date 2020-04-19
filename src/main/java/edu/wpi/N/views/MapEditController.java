@@ -47,6 +47,7 @@ public class MapEditController implements Controller {
   @FXML Button btn_delete_clear;
   @FXML Button btn_delete;
 
+
   HashBiMap<Circle, DbNode> masterNodes; // stores the map nodes and their respective database nodes
   LinkedList<DbNode> allFloorNodes; // stores all the nodes on the floor
   LinkedList<DbNode> selectedNodes; // stores all the selected nodes on the map
@@ -63,42 +64,54 @@ public class MapEditController implements Controller {
     masterNodes = HashBiMap.create();
     tempNode = null;
     populateMap();
-    //    accordionListener();
+    accordionListener();
   }
-  //
-  //  public void accordionListener() {
-  //    acc_modify
-  //        .expandedPaneProperty()
-  //        .addListener(
-  //            (observable, oldValue, newValue) -> {
-  //              if (newValue != null) {
-  //                if (newValue.equals(pn_nodes)) {
-  //                  accordionListenerNodes();
-  //                } else if (newValue.equals(pn_edges)) {
-  //                  System.out.println("Edges");
-  //                }
-  //              }
-  //            });
-  //  }
-  //
-  //  public void accordionListenerNodes() {
-  //    acc_nodes
-  //        .expandedPaneProperty()
-  //        .addListener(
-  //            (observable, oldValue, newValue) -> {
-  //              if (newValue != null) {
-  //                if (newValue.equals(pn_nodes_delete)) {
-  //
-  //                } else if (newValue.equals(pn_nodes_edit)) {
-  //
-  //                }
-  //              }
-  //            });
-  //  }
-  //
-  //  @FXML ListView lst_delete;
-  //  @FXML Button btn_delete_clear;
-  //  @FXML Button btn_delete;
+
+  public void accordionListener() {
+    acc_modify
+        .expandedPaneProperty()
+        .addListener(
+            (observable, oldValue, newValue) -> {
+              if (newValue != null) {
+                if (newValue.equals(pn_nodes)) {
+                  accordionListenerNodes();
+                } else if (newValue.equals(pn_edges)) {
+                  System.out.println("Edges");
+                }
+              }
+            });
+  }
+
+  public void accordionListenerNodes() {
+    acc_nodes
+        .expandedPaneProperty()
+        .addListener(
+            (observable, oldValue, newValue) -> {
+              if (newValue != null) {
+                if (newValue.equals(pn_nodes_delete) || newValue.equals(pn_nodes_edit)) {
+                  onBtnClearClicked();
+                }
+              }
+            });
+  }
+
+  public void onBtnClearClicked() {
+    for (Circle mapNode : masterNodes.keySet()) {
+      mapNode.setFill(Color.PURPLE);
+      mapNode.setDisable(false);
+    }
+    selectedNodes.clear();
+    lst_selected.getItems().clear();
+  }
+
+  public void onBtnDeleteClicked() throws DBException {
+    for (DbNode node : selectedNodes) {
+      Circle mapNode = masterNodes.inverse().remove(node);
+      pn_display.getChildren().remove(mapNode);
+      DbController.deleteNode(node.getNodeID());
+    }
+    onBtnClearClicked();
+  }
 
   public void onBtnNewNodeClicked() {
     txt_add_longName.setDisable(false);
