@@ -136,7 +136,22 @@ public class DbControllerTest {
         lst.contains(
             new DbNode(
                 "NELEV00X05", 1250, 850, 5, "Not Faulkner", "ELEV", "Elev X", "Hall 7", 'N')));
-
+    lst = DbController.searchVisNode(5, null, null, "ElEv");
+    assertFalse(
+        lst.contains(
+            new DbNode(
+                "NELEV00X07", 1250, 850, 7, "Faulkner", "ELEV", "Elevator X", "Hall 7", 'N')));
+    assertFalse(
+        lst.contains(
+            new DbNode(
+                "NELEV00X06", 1250, 850, 7, "Faulkner", "ELEV", "Elevator X", "Hall 7", 'N')));
+    assertFalse(
+        lst.contains(
+            new DbNode("NHALL00105", 1250, 850, 5, "Faulkner", "HALL", "ELEV X", "Hall 1", 'N')));
+    assertTrue(
+        lst.contains(
+            new DbNode(
+                "NELEV00X05", 1250, 850, 5, "Not Faulkner", "ELEV", "Elev X", "Hall 7", 'N')));
     DbController.deleteNode("NELEV00X07");
     DbController.deleteNode("NELEV00X06");
     DbController.deleteNode("NELEV00X05");
