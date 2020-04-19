@@ -14,17 +14,18 @@ public class DirectionsTest {
   @BeforeAll
   public static void setup() throws SQLException, ClassNotFoundException, DBException {
     DbController.initDB();
+    DbController.clearNodes();
     InputStream inputNodes =
-        PathfinderMethodsTest.class.getResourceAsStream("../csv/MapLnodesFloor2.csv");
+        PathfinderMethodsTest.class.getResourceAsStream("../csv/TeamNnodes_T.csv");
     InputStream inputEdges =
-        PathfinderMethodsTest.class.getResourceAsStream("../csv/MapLedgesFloor2.csv");
+        PathfinderMethodsTest.class.getResourceAsStream("../csv/TeamNedges_T.csv");
     CSVParser.parseCSV(inputNodes);
     CSVParser.parseCSV(inputEdges);
   }
 
   @Test
   public void directionsTester() throws DBException {
-    Path path = Pathfinder.findPath("LELEV00X02", "LSTAF00602"); // LRETL00102
+    Path path = Pathfinder.findPath("NDEPT00104", "NDEPT00604");
     ArrayList<String> directions = path.getDirections();
     for (String s : directions) {
       System.out.println(s);

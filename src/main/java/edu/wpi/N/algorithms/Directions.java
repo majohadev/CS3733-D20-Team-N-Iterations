@@ -24,19 +24,19 @@ public class Directions {
   }
 
   public Directions(LinkedList<DbNode> path) {
-    this.directions = new ArrayList<String>();
+    this.directions = new ArrayList<>();
     this.path = path;
   }
 
   /** Generates textual directions for the given path */
   private void generateDirections() throws DBException {
     DbNode currNode;
-    DbNode nextNode = null;
+    DbNode nextNode = path.getFirst();
     double distance = 0;
     boolean stateChange = true;
-    int startFloor;
     double angle = 0;
     String message = "";
+    boolean r = true;
     for (int i = 0; i <= path.size() - 1; i++) {
       currNode = path.get(i);
       if (i < path.size() - 1) {
@@ -49,19 +49,31 @@ public class Directions {
         case STARTING:
           if (!path.getFirst().getLongName().equals("HALL")) {
             message = "Start by exiting " + path.getFirst().getLongName() + " ";
-          } else {
+          } else if (!(getLandmark(nextNode) == null)) {
             message =
                 "Start towards "
                     + getLandmark(nextNode).getLongName()
                     + getDistanceString(getDistance(currNode, nextNode));
+          } else {
+            message =
+                "Start by proceeding down the corridor"
+                    + getDistanceString(getDistance(currNode, nextNode));
           }
           break;
-        case EXITING: // might not implement this yet (for change buildings)
+        case EXITING: // not implemented yet, for building change or elevators
           directions.add("Exit " + currNode.getLongName());
           break;
         case CONTINUING: // could add if passing an intersection, "continue past " + landmark
           distance += getDistance(currNode, nextNode);
-          if (stateChange) {
+          if (!message.equals("")) {
+            r = !r;
+            if (r) {
+              directions.add(message + "and proceed down the hallway");
+            } else {
+              directions.add(message + "and continue down the hallway");
+            }
+            message = "";
+          } else if (stateChange) {
             if (getLandmark(nextNode) == null) {
               message = "Continue to next corridor" + getDistanceString(distance);
             } else if (getLandmark(nextNode).equals(nextNode)) {
@@ -81,11 +93,11 @@ public class Directions {
         case TURNING:
           if (!nextNode.equals(path.get(path.size() - 1))) {
             if (!message.equals("")) {
-              directions.add(message + "and turn " + getTurnType(angle, getAngle(i - 1)));
+              directions.add(message + "and take the next " + getTurnType(angle, getAngle(i - 1)));
               message = "";
             } else if (!(getLandmark(currNode) == null)) {
               directions.add(
-                  "Continue to "
+                  "Go straight towards "
                       + getLandmark(currNode).getLongName()
                       + getDistanceString(getDistance(currNode, nextNode))
                       + "and turn "
@@ -99,15 +111,15 @@ public class Directions {
             }
           }
           break;
-        case CHANGING_FLOOR:
+        case CHANGING_FLOOR: // not implemented yet
           if (stateChange) {
             directions.add(getFloorChangeString(nextNode));
           }
           break;
         case ARRIVING:
           if (getState(i - 1).equals(TURNING)) {
-            String turnMessage = " on the " + getTurnType(angle, getAngle(i - 2));
-            directions.add("Arrive at " + currNode.getLongName() + turnMessage);
+            String turnMessage = "Turn " + getTurnType(angle, getAngle(i - 2));
+            directions.add(turnMessage + " and arrive at " + currNode.getLongName());
           } else if (!message.equals("")) {
             directions.add(message + "and arrive at destination");
           } else {
@@ -152,13 +164,14 @@ public class Directions {
     } else if (angleChange < -180) {
       angleChange += 360;
     }
-    if (angleChange > 80) {
+    if (angleChange > 60) {
       return "right"; // (" + angleChange + ") ";
-    } else if (angleChange <= -80) {
+    } else if (angleChange <= -60) {
       return "left"; // (" + angleChange + ") ";
     } else if (angleChange < 10 && angleChange > -10) {
       return "straight"; // + angleChange;
     } else {
+      System.out.println("New ANGLE: " + angleChange);
       return "other turn type";
     }
   }
@@ -220,21 +233,10 @@ public class Directions {
   }
 
   /**
-   * gets the angle between two nodes use atan2
-   *
-   * @return double, angle
-   */
-  private static double getAngle(DbNode node, DbNode nextNode) {
-    double dy = nextNode.getY() - node.getY();
-    double dx = nextNode.getX() - node.getX();
-    return Math.toDegrees(atan2(dy, dx));
-  }
-
-  /**
    * calculates the distance between two nodes using appropriate conversion factor
    *
-   * @param currNode
-   * @param nextNode
+   * @param currNode, current DbNode
+   * @param nextNode, next DbNode
    * @return double, distance between current node and next node
    */
   private static double getDistance(DbNode currNode, DbNode nextNode) {
