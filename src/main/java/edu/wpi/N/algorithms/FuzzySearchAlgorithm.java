@@ -16,7 +16,8 @@ public class FuzzySearchAlgorithm {
    * @return
    */
   public static LinkedList<String> suggestWithCorrection(String userInput) throws DBException {
-    if (userInput.length() > 1) {
+
+    if (userInput.length() > 0) {
       // initialize variables
       LinkedList<String> suggestions = new LinkedList<String>();
       // search for all nodes by long name

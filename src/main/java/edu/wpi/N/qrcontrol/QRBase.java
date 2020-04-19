@@ -102,7 +102,7 @@ public class QRBase {
 
     Thread t = new Thread(getQRCode);
     t.setDaemon(true); // Make this thread low priority
-    t.start();  // Begin thread
+    t.start(); // Begin thread
   }
 
   // Override these methods in UI controller
