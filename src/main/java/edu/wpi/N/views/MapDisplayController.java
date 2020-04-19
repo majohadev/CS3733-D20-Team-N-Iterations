@@ -8,10 +8,14 @@ import edu.wpi.N.database.CSVParser;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.DbController;
 import edu.wpi.N.entities.DbNode;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.LinkedList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -33,6 +37,12 @@ public class MapDisplayController implements Controller, MapController {
   @FXML Button btn_find;
   @FXML Button btn_reset;
   @FXML Pane pn_display;
+  @FXML TextField txt_Location;
+  @FXML TextArea txt_Notes;
+  @FXML TextField txt_Location1;
+  @FXML TextArea txt_Notes1;
+  @FXML Button btn_SubmitLaundry;
+  @FXML Button btn_SubmitTranslator;
 
   BiMap<Circle, DbNode> masterNodes; // stores the map nodes and their respective database nodes
   LinkedList<DbNode> allFloorNodes; // stores all the nodes on the floor
@@ -83,7 +93,23 @@ public class MapDisplayController implements Controller, MapController {
     }
   }
 
+  @FXML
+  public void dataHandler(MouseEvent event) throws IOException {
+    String locationDataTranslator;
+    String notesTranslator;
+    String locationDataLaundry;
+    String notesLaundry;
 
+    if (event.getSource() == btn_SubmitTranslator) {
+      locationDataTranslator = txt_Location1.getText();
+      notesTranslator = txt_Notes1.getText();
+      System.out.println("Location: " + locationDataTranslator + " Notes: " + notesTranslator);
+    } else if (event.getSource() == btn_SubmitLaundry) {
+      locationDataLaundry = txt_Location.getText();
+      notesLaundry = txt_Notes.getText();
+      System.out.println("Location: " + locationDataLaundry + " Notes: " + notesLaundry);
+    }
+  }
 }
 
 //

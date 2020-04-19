@@ -7,6 +7,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.image.Image?>
@@ -165,6 +166,66 @@
                         </GridPane>
                      </children>
                   </VBox>
+                  <Separator prefHeight="15.0" prefWidth="282.0" />
+                  <Pane prefHeight="78.0" prefWidth="282.0">
+                     <children>
+                        <Label alignment="CENTER" layoutX="5.0" layoutY="-7.0" prefHeight="85.0" prefWidth="272.0" text="Service Requests" wrapText="true">
+                           <font>
+                              <Font name="Calibri" size="24.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </Pane>
+                  <Accordion>
+                    <panes>
+                      <TitledPane animated="false" text="Laundry Service">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <content>
+                              <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <Label layoutX="114.0" layoutY="14.0" text="Location" AnchorPane.topAnchor="0.0">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField fx:id="txt_Location" layoutX="39.0" layoutY="31.0" prefHeight="29.0" prefWidth="200.0" AnchorPane.topAnchor="20.0" />
+                                    <Label layoutX="122.0" layoutY="74.0" text="Notes" AnchorPane.topAnchor="60.0">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <TextArea fx:id="txt_Notes" layoutX="40.0" layoutY="94.0" prefHeight="96.0" prefWidth="200.0" AnchorPane.topAnchor="80.0" />
+                                    <Button fx:id="btn_SubmitLaundry" layoutX="108.0" layoutY="206.0" mnemonicParsing="false" onMouseClicked="#dataHandler" text="Submit" />
+                                 </children>
+                              </AnchorPane>
+                           </content></TitledPane>
+                      <TitledPane animated="false" text="Translator Request">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <content>
+                              <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <Label layoutX="113.0" layoutY="10.0" text="Location">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField fx:id="txt_Location1" layoutX="40.0" layoutY="33.0" prefHeight="29.0" prefWidth="200.0" />
+                                    <Label layoutX="121.0" layoutY="70.0" text="Notes">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <TextArea fx:id="txt_Notes1" layoutX="40.0" layoutY="90.0" prefHeight="96.0" prefWidth="200.0" />
+                                    <Button fx:id="btn_SubmitTranslator" layoutX="110.0" layoutY="203.0" mnemonicParsing="false" onMouseClicked="#dataHandler" text="Submit" />
+                                 </children>
+                              </AnchorPane>
+                           </content></TitledPane>
+                    </panes>
+                  </Accordion>
                </children>
                <padding>
                   <Insets top="10.0" />
