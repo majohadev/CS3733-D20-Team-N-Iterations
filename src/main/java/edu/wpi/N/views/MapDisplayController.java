@@ -13,6 +13,9 @@ import java.io.InputStream;
 import java.util.LinkedList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -38,6 +41,18 @@ public class MapDisplayController implements Controller, MapController {
   @FXML Pane pn_display;
 
   HashBiMap<Circle, DbNode> masterNodes; // stores the map nodes and their respective database nodes
+
+  // Sidebar search by location initializations
+  @FXML TextField txtf_searchlocation;
+  @FXML ListView lst_locationsorted;
+  @FXML Button btn_findlocationpath;
+
+  // Sidebar search by doctor initializations
+  @FXML ComboBox cmbo_doctorname;
+  @FXML Button btn_searchdoc;
+  @FXML ListView lst_doctorlocations;
+  @FXML Button btn_findpathdoc;
+
   LinkedList<DbNode> allFloorNodes; // stores all the nodes on the floor
   LinkedList<DbNode> selectedNodes; // stores all the selected nodes on the map
 
