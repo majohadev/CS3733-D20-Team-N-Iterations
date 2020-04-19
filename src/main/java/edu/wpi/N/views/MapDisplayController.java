@@ -82,8 +82,6 @@ public class MapDisplayController implements Controller, MapController {
       selectedNodes.remove(masterNodes.get(mapNode));
     }
   }
-
-
 }
 
 //
