@@ -63,8 +63,8 @@
                                  <children>
                                     <Label layoutX="4.0" layoutY="-6.0" prefHeight="67.0" prefWidth="272.0" text="Type the Location Name and Click It In the List Below To Select It As Your Destination " textAlignment="CENTER" wrapText="true" />
                                     <ListView fx:id="lst_locationsorted" layoutX="17.0" layoutY="101.0" prefHeight="111.0" prefWidth="245.0" />
-                                    <TextField fx:id="txtf_searchlocation" layoutX="18.0" layoutY="61.0" prefHeight="30.0" prefWidth="245.0" promptText="Enter Destination Location" />
-                                    <Button fx:id="btn_findlocationpath" layoutX="40.0" layoutY="223.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" text="       Find Path To Location" textAlignment="CENTER">
+                                    <TextField fx:id="txtf_searchlocation" layoutX="18.0" layoutY="61.0" onKeyTyped="#searchByLocationTextFill" prefHeight="30.0" prefWidth="245.0" promptText="Enter Destination Location" />
+                                    <Button fx:id="btn_findlocationpath" layoutX="40.0" layoutY="223.0" mnemonicParsing="false" onMouseClicked="#onLocationPathFindClicked" prefHeight="40.0" prefWidth="200.0" text="       Find Path To Location" textAlignment="CENTER">
                                        <font>
                                           <Font name="Calibri Bold" size="14.0" />
                                        </font>
