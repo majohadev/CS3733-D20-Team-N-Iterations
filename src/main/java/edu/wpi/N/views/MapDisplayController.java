@@ -1,20 +1,23 @@
 package edu.wpi.N.views;
 
-import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import edu.wpi.N.App;
 import edu.wpi.N.Main;
+import edu.wpi.N.algorithms.Pathfinder;
 import edu.wpi.N.database.CSVParser;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.DbController;
 import edu.wpi.N.entities.DbNode;
+import edu.wpi.N.entities.Path;
 import java.io.InputStream;
 import java.util.LinkedList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 
 public class MapDisplayController implements Controller, MapController {
   private App mainApp;
@@ -34,7 +37,7 @@ public class MapDisplayController implements Controller, MapController {
   @FXML Button btn_reset;
   @FXML Pane pn_display;
 
-  BiMap<Circle, DbNode> masterNodes; // stores the map nodes and their respective database nodes
+  HashBiMap<Circle, DbNode> masterNodes; // stores the map nodes and their respective database nodes
   LinkedList<DbNode> allFloorNodes; // stores all the nodes on the floor
   LinkedList<DbNode> selectedNodes; // stores all the selected nodes on the map
 
@@ -43,10 +46,10 @@ public class MapDisplayController implements Controller, MapController {
   }
 
   public void initialize() throws DBException, DBException {
-    InputStream nodes = Main.class.getResourceAsStream("csv/MapEnodes.csv");
-    //    InputStream edges = Main.class.getResourceAsStream("csv/MapEdges.csv");
+    InputStream nodes = Main.class.getResourceAsStream("csv/TeamNFloor4Nodes.csv");
+    InputStream edges = Main.class.getResourceAsStream("csv/TeamNFloor4Edges.csv");
     CSVParser.parseCSV(nodes);
-    //    CSVParser.parseCSV(edges);
+    CSVParser.parseCSV(edges);
     selectedNodes = new LinkedList<DbNode>();
     allFloorNodes = DbController.floorNodes(4, "Faulkner");
     masterNodes = HashBiMap.create();
@@ -63,12 +66,11 @@ public class MapDisplayController implements Controller, MapController {
 
   public Circle makeMapNode(DbNode node) {
     Circle mapNode = new Circle();
-    mapNode.setRadius(5);
-    System.out.println(HORIZONTAL_SCALE);
-    System.out.println(VERTICAL_SCALE);
+    mapNode.setRadius(6);
     mapNode.setLayoutX((node.getX() * HORIZONTAL_SCALE + HORIZONTAL_OFFSET));
     mapNode.setLayoutY((node.getY() * VERTICAL_SCALE + VERTICAL_OFFSET));
     mapNode.setFill(Color.PURPLE);
+    mapNode.setOpacity(0.7);
     mapNode.setOnMouseClicked(mouseEvent -> this.onMapNodeClicked(mapNode));
     return mapNode;
   }
@@ -82,73 +84,48 @@ public class MapDisplayController implements Controller, MapController {
       selectedNodes.remove(masterNodes.get(mapNode));
     }
   }
-}
 
-//
-//  @FXML
-//  private void onFindPathClicked(MouseEvent event) throws Exception {
-//    if (selectedNodes.size() != 2) {
-//      System.out.println("Incorrect number of nodes");
-//      return;
-//    }
-//
-//    DbNode firstNode = selectedNodes.get(0);
-//    DbNode secondNode = selectedNodes.get(1);
-//    Path mapPath = Pathfinder.findPath(firstNode.getNodeID(), secondNode.getNodeID());
-//    LinkedList<DbNode> pathNodes = mapPath.getPath();
-//    drawPath(pathNodes);
-//    for (Map.Entry<Circle, DbNode> entry : masterNodes.entrySet()) {
-//      Circle mapNode = entry.getKey();
-//      mapNode.setDisable(true);
-//    }
-//  }
-//
-//  private void drawPath(LinkedList<DbNode> pathNodes) {
-//    int size = pathNodes.size();
-//    DbNode firstNode;
-//    DbNode secondNode;
-//    for (int i = 0; i < size - 1; i++) {
-//      firstNode = pathNodes.get(i);
-//      secondNode = pathNodes.get(i + 1);
-//      Line line =
-//              new Line(
-//                      firstNode.getX() * SCALE,
-//                      firstNode.getY() * SCALE,
-//                      secondNode.getX() * SCALE,
-//                      secondNode.getY() * SCALE);
-//
-//      pane_nodes.getChildren().add(line);
-//    }
-//  }
-//
-//  @FXML
-//  private void onResetClicked(MouseEvent event) throws Exception {
-//    for (Map.Entry<Circle, DbNode> entry : masterNodes.entrySet()) {
-//      Circle mapNode = entry.getKey();
-//      mapNode.setFill(Color.PURPLE);
-//      mapNode.setDisable(false);
-//    }
-//    pane_nodes.getChildren().removeIf(node -> node instanceof Line);
-//    selectedNodes.clear();
-//  }
-//
-//  @FXML
-//  private void onNavClicked(MouseEvent event) throws IOException {
-//
-//    Stage stage = null;
-//    Parent root = null;
-//    if (event.getSource() == btn_previous) {
-//      stage = (Stage) btn_previous.getScene().getWindow();
-//      root = FXMLLoader.load(getClass().getResource("nodeTableEditor.fxml"));
-//    } else {
-//      stage = (Stage) btn_next.getScene().getWindow();
-//      root = FXMLLoader.load(getClass().getResource("kioskHome.fxml"));
-//    }
-//
-//    if (stage != null && root != null) {
-//      Scene scene = new Scene(root);
-//      stage.setScene(scene);
-//      stage.show();
-//    }
-//  }
-// }
+  @FXML
+  private void onBtnFindClicked(MouseEvent event) {
+    if (selectedNodes.size() != 2) {
+      return;
+    }
+    DbNode firstNode = selectedNodes.get(0);
+    DbNode secondNode = selectedNodes.get(1);
+
+    Path path = Pathfinder.findPath(firstNode.getNodeID(), secondNode.getNodeID());
+    LinkedList<DbNode> pathNodes = path.getPath();
+    drawPath(pathNodes);
+
+    for (Circle mapNode : masterNodes.keySet()) {
+      mapNode.setDisable(true);
+    }
+  }
+
+  private void drawPath(LinkedList<DbNode> pathNodes) {
+    DbNode firstNode;
+    DbNode secondNode;
+
+    for (int i = 0; i < pathNodes.size() - 1; i++) {
+      firstNode = pathNodes.get(i);
+      secondNode = pathNodes.get(i + 1);
+      Line line =
+          new Line(
+              (firstNode.getX() * HORIZONTAL_SCALE) + HORIZONTAL_OFFSET,
+              (firstNode.getY() * VERTICAL_SCALE) + VERTICAL_OFFSET,
+              (secondNode.getX() * HORIZONTAL_SCALE) + HORIZONTAL_OFFSET,
+              (secondNode.getY() * VERTICAL_SCALE) + VERTICAL_OFFSET);
+      pn_display.getChildren().add(line);
+    }
+  }
+
+  @FXML
+  private void onResetClicked(MouseEvent event) throws Exception {
+    for (Circle mapNode : masterNodes.keySet()) {
+      mapNode.setFill(Color.PURPLE);
+      mapNode.setDisable(false);
+    }
+    pn_display.getChildren().removeIf(node -> node instanceof Line);
+    selectedNodes.clear();
+  }
+}
