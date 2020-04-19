@@ -36,34 +36,68 @@ public class Directions {
     boolean stateChange = true;
     int startFloor;
     double angle = 0;
+    String message = "";
     for (int i = 0; i <= path.size() - 1; i++) {
       currNode = path.get(i);
       if (i < path.size() - 1) {
         nextNode = path.get(i + 1);
-        angle = getAngle(i); // - angle;
+        angle = getAngle(i);
         stateChange = !getState(i + 1).equals(state);
       }
       state = getState(i);
       switch (state) {
         case STARTING:
-          directions.add(
-              "Start towards "
-                  + getLandmark(nextNode)
-                  + getDistanceString(getDistance(currNode, nextNode)));
+          if (!path.getFirst().getLongName().equals("HALL")) {
+            message = "Start by exiting " + path.getFirst().getLongName() + " ";
+          } else {
+            message =
+                "Start towards "
+                    + getLandmark(nextNode).getLongName()
+                    + getDistanceString(getDistance(currNode, nextNode));
+          }
           break;
-        case EXITING:  // might not implement this yet (for change buildings)
+        case EXITING: // might not implement this yet (for change buildings)
           directions.add("Exit " + currNode.getLongName());
           break;
         case CONTINUING: // could add if passing an intersection, "continue past " + landmark
           distance += getDistance(currNode, nextNode);
           if (stateChange) {
-            directions.add("Proceed to " + getLandmark(nextNode) + getDistanceString(distance));
+            if (getLandmark(nextNode) == null) {
+              message = "Continue to next corridor" + getDistanceString(distance);
+            } else if (getLandmark(nextNode).equals(nextNode)) {
+              message =
+                  "Proceed straight towards "
+                      + getLandmark(nextNode).getLongName()
+                      + getDistanceString(distance);
+            } else {
+              message =
+                  "Continue past "
+                      + getLandmark(currNode).getLongName()
+                      + getDistanceString(distance);
+            }
             distance = 0;
           }
           break;
         case TURNING:
-          directions.add("Turn " + getTurnType(angle, getAngle(i - 1)));
-          distance = 0;
+          if (!nextNode.equals(path.get(path.size() - 1))) {
+            if (!message.equals("")) {
+              directions.add(message + "and turn " + getTurnType(angle, getAngle(i - 1)));
+              message = "";
+            } else if (!(getLandmark(currNode) == null)) {
+              directions.add(
+                  "Continue to "
+                      + getLandmark(currNode).getLongName()
+                      + getDistanceString(getDistance(currNode, nextNode))
+                      + "and turn "
+                      + getTurnType(angle, getAngle(i - 1)));
+            } else {
+              directions.add(
+                  "Proceed to next corridor"
+                      + getDistanceString(getDistance(currNode, nextNode))
+                      + "and turn "
+                      + getTurnType(angle, getAngle(i - 1)));
+            }
+          }
           break;
         case CHANGING_FLOOR:
           if (stateChange) {
@@ -71,7 +105,14 @@ public class Directions {
           }
           break;
         case ARRIVING:
-          directions.add("Arrive at " + currNode.getLongName());
+          if (getState(i - 1).equals(TURNING)) {
+            String turnMessage = " on the " + getTurnType(angle, getAngle(i - 2));
+            directions.add("Arrive at " + currNode.getLongName() + turnMessage);
+          } else if (!message.equals("")) {
+            directions.add(message + "and arrive at destination");
+          } else {
+            directions.add("Arrive at destination");
+          }
           break;
       }
     }
@@ -111,12 +152,14 @@ public class Directions {
     } else if (angleChange < -180) {
       angleChange += 360;
     }
-    if (angleChange > 0) {
-      return "right" + angleChange;
-    } else if (angleChange <= 0) {
-      return "left" + angleChange;
+    if (angleChange > 80) {
+      return "right"; // (" + angleChange + ") ";
+    } else if (angleChange <= -80) {
+      return "left"; // (" + angleChange + ") ";
+    } else if (angleChange < 10 && angleChange > -10) {
+      return "straight"; // + angleChange;
     } else {
-      return "other turn type" + angleChange;
+      return "other turn type";
     }
   }
 
@@ -127,15 +170,25 @@ public class Directions {
    * @param node, DbNode
    * @return String, landmark for given node
    */
-  private static String getLandmark(DbNode node) throws DBException {
+  private static DbNode getLandmark(DbNode node) throws DBException {
     if (node.getNodeType().equals("HALL")) {
       for (DbNode n : DbController.getAdjacent(node.getNodeID())) {
         if (!n.getNodeType().equals("HALL")) {
-          return n.getLongName();
+          return n;
         }
       }
+      return null;
     }
-    return node.getLongName(); // change to exclude hallway nodes etc.
+    return node; // change to exclude hallway nodes etc.
+  }
+
+  /**
+   * Picks node to start directions with
+   *
+   * @return
+   */
+  private static String getStartNode() {
+    return "";
   }
 
   /**
@@ -172,9 +225,18 @@ public class Directions {
   private static double getAngle(int i) {
     double dy = path.get(i + 1).getY() - path.get(i).getY();
     double dx = path.get(i + 1).getX() - path.get(i).getX();
-    double angles = Math.toDegrees(atan2(dy, dx));
-    System.out.println("Raw angle: " + angles);
-    return angles;
+    return Math.toDegrees(atan2(dy, dx));
+  }
+
+  /**
+   * gets the angle between two nodes use atan2
+   *
+   * @return double, angle
+   */
+  private static double getAngle(DbNode node, DbNode nextNode) {
+    double dy = nextNode.getY() - node.getY();
+    double dx = nextNode.getX() - node.getX();
+    return Math.toDegrees(atan2(dy, dx));
   }
 
   /**
@@ -195,6 +257,7 @@ public class Directions {
 
   /**
    * Takes a path and returns written directions for that path
+   *
    * @return ArrayList<String>, each String is a line of directions
    */
   public ArrayList<String> getDirections() throws DBException {
