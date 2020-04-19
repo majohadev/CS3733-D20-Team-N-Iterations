@@ -27,6 +27,7 @@ public class QRTestController extends QRBase {
     createAndSetSwingContent(pane_webcamViewContainer, pane_swingNodeSpot);
   }
 
+  // When scan button is clicked
   @FXML
   public void onScanClicked() {
 
@@ -50,6 +51,8 @@ public class QRTestController extends QRBase {
     btn_scanButton.setText("Scan");
   }
 
+
+  // Put camera view into SwingNode
   private void createAndSetSwingContent(final SwingNode swingNode, final Pane pane) {
     SwingUtilities.invokeLater(
         new Runnable() {

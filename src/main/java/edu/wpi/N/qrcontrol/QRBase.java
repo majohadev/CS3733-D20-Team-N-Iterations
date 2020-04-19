@@ -4,6 +4,8 @@ package edu.wpi.N.qrcontrol;
 Original project:
 https://github.com/sarxos/webcam-capture/tree/master/webcam-capture-examples/webcam-capture-qrcode
 webcam-capture repo by sarxos, example project using ZXing barcode library
+
+Modified to fit JavaFX library
 */
 
 import com.github.sarxos.webcam.Webcam;
@@ -18,7 +20,13 @@ import javafx.concurrent.Task;
 
 public class QRBase {
 
-  // private static final long serialVersionUID = 6441489157408381878L;
+  /*
+  Every UI controller that uses QR reading functions should EXTEND this class!
+  Also need to:
+  -override onScanSucceed
+  -override onScanFail
+  -place WebcamPanel panel in SwingNode (since WebcamPanel extends JPanel)
+   */
 
   private Webcam webcam;
   private WebcamPanel panel;
@@ -33,8 +41,6 @@ public class QRBase {
 
   public QRBase() {
 
-    super();
-
     Dimension size = WebcamResolution.QVGA.getSize();
 
     webcam = Webcam.getWebcams().get(0);
@@ -46,11 +52,11 @@ public class QRBase {
     panel.setVisible(false);
   }
 
-  public WebcamPanel getWebcamView() {
+  protected WebcamPanel getWebcamView() {
     return panel;
   }
 
-  public void startScan() {
+  protected void startScan() {
 
     // Set up thread to fetch QR code
     Task<String> getQRCode =
@@ -58,12 +64,19 @@ public class QRBase {
 
           @Override
           public String call() {
+
+            // Open camera
             panel.resume();
             panel.setVisible(true);
+
+            // Look for code
             String result = fetchQRCode();
+
+            // Close camera
             panel.pause();
             panel.setVisible(false);
-            return result; // result of computation
+
+            return result;
           }
         };
 
@@ -89,7 +102,7 @@ public class QRBase {
 
     Thread t = new Thread(getQRCode);
     t.setDaemon(true); // Make this thread low priority
-    t.start();
+    t.start();  // Begin thread
   }
 
   // Override these methods in UI controller
@@ -124,12 +137,11 @@ public class QRBase {
         try {
           result = new MultiFormatReader().decode(bitmap);
         } catch (NotFoundException e) {
-          // fall thru, it means there is no QR code in image
+          // No QR code in image
         }
       }
 
       if (result != null) {
-        System.out.println("Yeehaw!!");
         return result.getText(); // Exit if code is scanned
       }
 
