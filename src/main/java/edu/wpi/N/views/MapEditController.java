@@ -47,11 +47,26 @@ public class MapEditController implements Controller {
   @FXML Button btn_delete_clear;
   @FXML Button btn_delete;
 
+  @FXML TextField txt_NodesEditLongName;
+  @FXML TextField txt_NodesEditShortName;
+  @FXML TextField txt_NodesEditType;
+  @FXML Button btn_NodesEditSave;
 
   HashBiMap<Circle, DbNode> masterNodes; // stores the map nodes and their respective database nodes
   LinkedList<DbNode> allFloorNodes; // stores all the nodes on the floor
   LinkedList<DbNode> selectedNodes; // stores all the selected nodes on the map
   Circle tempNode;
+  DbNode editingNode;
+  EditMode editMode;
+
+  public enum EditMode {
+    NOSTATE,
+    NODES_ADD,
+    NODES_DELETE,
+    NODES_EDIT,
+    EDGES_ADD,
+    EDGES_DELETE
+  }
 
   @Override
   public void setMainApp(App mainApp) {
@@ -63,6 +78,8 @@ public class MapEditController implements Controller {
     allFloorNodes = DbController.floorNodes(4, "Faulkner");
     masterNodes = HashBiMap.create();
     tempNode = null;
+    editMode = editMode.NOSTATE;
+    editingNode = null;
     populateMap();
     accordionListener();
   }
@@ -76,6 +93,7 @@ public class MapEditController implements Controller {
                 if (newValue.equals(pn_nodes)) {
                   accordionListenerNodes();
                 } else if (newValue.equals(pn_edges)) {
+                  onBtnClearClicked();
                   System.out.println("Edges");
                 }
               }
@@ -88,7 +106,14 @@ public class MapEditController implements Controller {
         .addListener(
             (observable, oldValue, newValue) -> {
               if (newValue != null) {
-                if (newValue.equals(pn_nodes_delete) || newValue.equals(pn_nodes_edit)) {
+                if (newValue.equals(pn_nodes_add)) {
+                  editMode = EditMode.NODES_ADD;
+                  onBtnClearClicked();
+                } else if (newValue.equals(pn_nodes_delete)) {
+                  editMode = EditMode.NODES_DELETE;
+                  onBtnClearClicked();
+                } else if (newValue.equals(pn_nodes_edit)) {
+                  editMode = EditMode.NODES_EDIT;
                   onBtnClearClicked();
                 }
               }
@@ -187,8 +212,8 @@ public class MapEditController implements Controller {
   public Circle makeMapNode(DbNode node) {
     Circle mapNode = new Circle();
     mapNode.setRadius(6);
-    mapNode.setLayoutX((node.getX() * HORIZONTAL_SCALE));
-    mapNode.setLayoutY((node.getY() * VERTICAL_SCALE));
+    mapNode.setCenterX((node.getX() * HORIZONTAL_SCALE));
+    mapNode.setCenterY((node.getY() * VERTICAL_SCALE));
     mapNode.setFill(Color.PURPLE);
     mapNode.setOpacity(0.7);
     mapNode.setOnMouseClicked(mouseEvent -> this.onMapNodeClicked(mapNode));
@@ -196,13 +221,41 @@ public class MapEditController implements Controller {
   }
 
   public void onMapNodeClicked(Circle mapNode) {
+    if (editMode == EditMode.NODES_ADD) {
+      return;
+    } else if (editMode == EditMode.NODES_DELETE) {
+      nodesDelete(mapNode);
+    } else if (editMode == EditMode.NODES_EDIT) {
+      nodesEdit(mapNode);
+    }
+  }
+
+  public void nodesEdit(Circle mapNode) {
+    DbNode newNode = masterNodes.get(mapNode);
+    if (editingNode != null && !(editingNode == newNode)) {
+      Circle lastMapNode = masterNodes.inverse().get(editingNode);
+      lastMapNode.setFill(Color.PURPLE);
+      lastMapNode.setCenterX(editingNode.getX() * HORIZONTAL_SCALE);
+      lastMapNode.setCenterY(editingNode.getY() * VERTICAL_SCALE);
+    }
+
+    if (mapNode.getFill() != Color.GREEN) {
+      editingNode = masterNodes.get(mapNode);
+      mapNode.setFill(Color.GREEN);
+      txt_NodesEditLongName.setText(editingNode.getLongName());
+      txt_NodesEditShortName.setText(editingNode.getShortName());
+      txt_NodesEditType.setText(editingNode.getNodeType());
+      mapNode.setOnMouseDragged(event -> this.onDragNode(event, mapNode));
+    }
+  }
+
+  public void nodesDelete(Circle mapNode) {
     if (mapNode.getFill() == Color.PURPLE) {
       mapNode.setFill(Color.RED);
       selectedNodes.add(masterNodes.get(mapNode));
       Label lbl = new Label();
       lbl.setText(masterNodes.get(mapNode).getLongName());
       lst_selected.getItems().add(lbl);
-
     } else {
       mapNode.setFill(Color.PURPLE);
       selectedNodes.remove(masterNodes.get(mapNode));

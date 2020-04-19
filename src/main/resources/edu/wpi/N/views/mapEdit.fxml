@@ -73,9 +73,9 @@
                                                       <Label layoutX="14.0" layoutY="31.0" prefHeight="25.0" prefWidth="71.0" text="Long Name:" />
                                                       <Label layoutX="14.0" layoutY="78.0" prefHeight="25.0" prefWidth="71.0" text="Short Name:" />
                                                       <TextField fx:id="txt_NodesEditLongName" layoutX="94.0" layoutY="31.0" prefHeight="25.0" prefWidth="273.0" />
-                                                      <TextField layoutX="94.0" layoutY="78.0" prefHeight="25.0" prefWidth="273.0" />
-                                                      <TextField layoutX="94.0" layoutY="122.0" prefHeight="25.0" prefWidth="273.0" />
-                                                      <Button fx:id="btn_delete1" alignment="CENTER" layoutX="270.0" layoutY="172.0" mnemonicParsing="false" onMouseClicked="#onBtnDeleteClicked" prefHeight="25.0" prefWidth="97.0" text="Save Changes" />
+                                                      <TextField fx:id="txt_NodesEditShortName" layoutX="94.0" layoutY="78.0" prefHeight="25.0" prefWidth="273.0" />
+                                                      <TextField fx:id="txt_NodesEditType" layoutX="94.0" layoutY="122.0" prefHeight="25.0" prefWidth="273.0" />
+                                                      <Button fx:id="btn_NodesEditSave" alignment="CENTER" layoutX="270.0" layoutY="172.0" mnemonicParsing="false" onMouseClicked="#onBtnDeleteClicked" prefHeight="25.0" prefWidth="97.0" text="Save Changes" />
                                                    </children></AnchorPane>
                                           </content>
                                         </TitledPane>
