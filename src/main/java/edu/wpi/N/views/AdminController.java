@@ -1,9 +1,8 @@
 package edu.wpi.N.views;
 
+import edu.wpi.N.App;
 import java.net.URL;
 import java.util.ResourceBundle;
-
-import edu.wpi.N.App;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
