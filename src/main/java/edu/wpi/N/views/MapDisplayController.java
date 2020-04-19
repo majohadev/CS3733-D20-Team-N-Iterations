@@ -3,20 +3,20 @@ package edu.wpi.N.views;
 import com.google.common.collect.HashBiMap;
 import edu.wpi.N.App;
 import edu.wpi.N.Main;
+import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
+import edu.wpi.N.algorithms.Pathfinder;
 import edu.wpi.N.database.CSVParser;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.DbController;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Path;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.LinkedList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -42,14 +42,16 @@ public class MapDisplayController implements Controller {
   @FXML Button btn_find;
   @FXML Button btn_reset;
   @FXML Pane pn_display;
-  @FXML TextField txt_Location;
+  @FXML TextField txt_translatorLocation;
   @FXML TextArea txt_Notes;
-  @FXML TextField txt_Location1;
+  @FXML TextField txt_laundryLocation;
   @FXML TextArea txt_Notes1;
   @FXML Button btn_SubmitLaundry;
   @FXML Button btn_SubmitTranslator;
   @FXML TextField txt_Language;
   @FXML Button btn_login;
+  @FXML ListView lst_laundryLocation;
+  @FXML ListView lst_translatorLocation;
 
   HashBiMap<Circle, DbNode> masterNodes; // stores the map nodes and their respective database nodes
 
@@ -82,8 +84,8 @@ public class MapDisplayController implements Controller {
   }
 
   public void initialize() throws DBException, DBException {
-    InputStream nodes = Main.class.getResourceAsStream("csv/TeamNFloor4Nodes.csv");
-    InputStream edges = Main.class.getResourceAsStream("csv/TeamNFloor4Edges.csv");
+    InputStream nodes = Main.class.getResourceAsStream("csv/MapEnodes.csv");
+    InputStream edges = Main.class.getResourceAsStream("csv/MapEedges.csv");
     CSVParser.parseCSV(nodes);
     CSVParser.parseCSV(edges);
     selectedNodes = new LinkedList<DbNode>();
@@ -172,12 +174,32 @@ public class MapDisplayController implements Controller {
   // is triggered
   @FXML
   private void searchByLocationTextFill(KeyEvent inputMethodEvent) throws DBException {
-    String currentText = txtf_searchlocation.getText();
-    fuzzySearchStringList = FuzzySearchAlgorithm.suggestWithCorrection(currentText);
-    if (fuzzySearchStringList != null)
-      fuzzySearchTextList = FXCollections.observableList(fuzzySearchStringList);
-    else fuzzySearchTextList = FXCollections.observableList(longNamesList);
-    lst_locationsorted.setItems(fuzzySearchTextList);
+    String currentText = "";
+
+    if (inputMethodEvent.getSource() == txtf_searchlocation) {
+      currentText = txtf_searchlocation.getText();
+      fuzzySearchStringList = FuzzySearchAlgorithm.suggestWithCorrection(currentText);
+      if (fuzzySearchStringList != null)
+        fuzzySearchTextList = FXCollections.observableList(fuzzySearchStringList);
+      else fuzzySearchTextList = FXCollections.observableList(longNamesList);
+      lst_locationsorted.setItems(fuzzySearchTextList);
+
+    } else if (inputMethodEvent.getSource() == txt_laundryLocation) {
+      currentText = txt_laundryLocation.getText();
+      fuzzySearchStringList = FuzzySearchAlgorithm.suggestWithCorrection(currentText);
+      if (fuzzySearchStringList != null)
+        fuzzySearchTextList = FXCollections.observableList(fuzzySearchStringList);
+      else fuzzySearchTextList = FXCollections.observableList(longNamesList);
+      lst_laundryLocation.setItems(fuzzySearchTextList);
+
+    } else if (inputMethodEvent.getSource() == txt_laundryLocation) {
+      currentText = txt_translatorLocation.getText();
+      fuzzySearchStringList = FuzzySearchAlgorithm.suggestWithCorrection(currentText);
+      if (fuzzySearchStringList != null)
+        fuzzySearchTextList = FXCollections.observableList(fuzzySearchStringList);
+      else fuzzySearchTextList = FXCollections.observableList(longNamesList);
+      lst_translatorLocation.setItems(fuzzySearchTextList);
+    }
   }
 
   // Upon clicking find path to location button call this method
@@ -192,25 +214,25 @@ public class MapDisplayController implements Controller {
     onBtnFindClicked(event);
     selectedNodes.clear();
   }
+
   /*
     public void addDataToTable(DbNode node) {
 
       node.getLongName();
     }
   */
+  @FXML
+  public void popupWindow()
+
+  /*
+  - Add to database function ->
+      - Take in a service request object
+      - Put it into the table
+      -
+   */
 
   @FXML
-  public void loginWindow(MouseEvent e) throws IOException {
-    if (e.getSource() == btn_login) {
-      Stage stage = new Stage();
-      Parent root;
-      root = FXMLLoader.load(getClass().getResource("loginWindow.fxml"));
-      stage.initModality(Modality.APPLICATION_MODAL);
-      stage.setScene(new Scene(root));
-      stage.showAndWait();
-    }
-  }
-}
+  public void loginWindow(MouseEvent e) throws IOException {}
 
   @FXML
   private void onNearestBathroomClicked(MouseEvent event) throws Exception {

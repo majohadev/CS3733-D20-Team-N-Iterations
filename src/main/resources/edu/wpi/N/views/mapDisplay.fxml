@@ -167,37 +167,29 @@
                      </children>
                   </VBox>
                   <Separator prefHeight="15.0" prefWidth="282.0" />
-                  <Pane prefHeight="78.0" prefWidth="282.0">
+                  <Pane prefHeight="47.0" prefWidth="281.0">
                      <children>
-                        <Label alignment="CENTER" layoutX="5.0" layoutY="-7.0" prefHeight="85.0" prefWidth="272.0" text="Service Requests" wrapText="true">
+                        <Label alignment="CENTER" layoutX="5.0" layoutY="-7.0" prefHeight="57.0" prefWidth="272.0" text="Service Requests" wrapText="true">
                            <font>
                               <Font name="Calibri" size="24.0" />
                            </font>
                         </Label>
+                        <Separator layoutX="1.0" layoutY="41.0" prefHeight="15.0" prefWidth="282.0" />
                      </children>
                   </Pane>
-                  <Accordion>
+                  <Accordion prefHeight="446.0" prefWidth="281.0">
                     <panes>
                       <TitledPane animated="false" text="Laundry Service">
                            <font>
                               <Font size="18.0" />
                            </font>
                            <content>
-                              <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                              <AnchorPane prefHeight="370.0" prefWidth="279.0">
                                  <children>
-                                    <Label layoutX="114.0" layoutY="14.0" text="Location" AnchorPane.topAnchor="0.0">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </Label>
-                                    <TextField fx:id="txt_Location" layoutX="39.0" layoutY="31.0" prefHeight="29.0" prefWidth="200.0" AnchorPane.topAnchor="20.0" />
-                                    <Label layoutX="122.0" layoutY="74.0" text="Notes" AnchorPane.topAnchor="60.0">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </Label>
-                                    <TextArea fx:id="txt_Notes" layoutX="40.0" layoutY="94.0" prefHeight="96.0" prefWidth="200.0" AnchorPane.topAnchor="80.0" />
-                                    <Button fx:id="btn_SubmitLaundry" layoutX="108.0" layoutY="206.0" mnemonicParsing="false" onMouseClicked="#dataHandler" text="Submit" />
+                                    <TextField fx:id="txt_laundryLocation" layoutX="40.0" layoutY="-1.0" onKeyTyped="#searchByLocationTextFill" prefHeight="29.0" prefWidth="200.0" promptText="Location" AnchorPane.topAnchor="-1.0" />
+                                    <ListView fx:id="lst_laundryLocation" layoutX="40.0" layoutY="49.0" prefHeight="121.0" prefWidth="200.0" />
+                                    <TextArea fx:id="txt_Notes" layoutX="39.0" layoutY="170.0" prefHeight="96.0" prefWidth="200.0" promptText="Additional Notes" AnchorPane.topAnchor="170.0" />
+                                    <Button fx:id="btn_SubmitLaundry" layoutX="108.0" layoutY="288.0" mnemonicParsing="false" text="Submit" />
                                  </children>
                               </AnchorPane>
                            </content></TitledPane>
@@ -206,41 +198,18 @@
                               <Font size="18.0" />
                            </font>
                            <content>
-                              <AnchorPane prefHeight="242.0" prefWidth="279.0">
+                              <AnchorPane prefHeight="403.0" prefWidth="279.0">
                                  <children>
-                                    <Label layoutX="113.0" layoutY="10.0" text="Location">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </Label>
-                                    <TextField fx:id="txt_Location1" layoutX="40.0" layoutY="33.0" prefHeight="29.0" prefWidth="200.0" />
-                                    <Label layoutX="121.0" layoutY="128.0" text="Notes">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </Label>
-                                    <TextArea fx:id="txt_Notes1" layoutX="41.0" layoutY="148.0" prefHeight="96.0" prefWidth="200.0" />
-                                    <TextField fx:id="txt_Language" layoutX="41.0" layoutY="91.0" prefHeight="29.0" prefWidth="200.0" />
-                                    <Button fx:id="btn_SubmitTranslator" layoutX="109.0" layoutY="260.0" mnemonicParsing="false" onMouseClicked="#dataHandler" text="Submit" />
-                                    <Label layoutX="110.0" layoutY="71.0" text="Language">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </Label>
+                                    <ListView fx:id="lst_translatorLocation" layoutX="40.0" layoutY="73.0" prefHeight="95.0" prefWidth="200.0" />
+                                    <TextField fx:id="txtf_translatorLocation" layoutX="40.0" layoutY="33.0" onKeyTyped="#searchByLocationTextFill" prefHeight="29.0" prefWidth="200.0" promptText="Location" />
+                                    <TextArea fx:id="txt_Notes1" layoutX="40.0" layoutY="211.0" prefHeight="62.0" prefWidth="200.0" promptText="Additional Notes" />
+                                    <TextField fx:id="txt_Language" layoutX="40.0" layoutY="176.0" prefHeight="29.0" prefWidth="200.0" promptText="Language" />
+                                    <Button fx:id="btn_SubmitTranslator" layoutX="109.0" layoutY="281.0" mnemonicParsing="false" text="Submit" />
                                  </children>
                               </AnchorPane>
                            </content></TitledPane>
                     </panes>
                   </Accordion>
-                  <Pane prefHeight="322.0" prefWidth="281.0">
-                     <children>
-                        <Button fx:id="btn_login" layoutX="112.0" layoutY="269.0" mnemonicParsing="false" onMouseClicked="#loginWindow" text="Login">
-                           <font>
-                              <Font name="Calibri" size="16.0" />
-                           </font>
-                        </Button>
-                     </children>
-                  </Pane>
                </children>
                <padding>
                   <Insets top="10.0" />
