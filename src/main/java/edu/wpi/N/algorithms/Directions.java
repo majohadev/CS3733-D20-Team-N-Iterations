@@ -183,15 +183,6 @@ public class Directions {
   }
 
   /**
-   * Picks node to start directions with
-   *
-   * @return
-   */
-  private static String getStartNode() {
-    return "";
-  }
-
-  /**
    * Generates string (Go X ft) rounds distance to whole number
    *
    * @param distance, end, dbNode start and end
