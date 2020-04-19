@@ -46,6 +46,20 @@ public class DbControllerTest {
     DbController.addNode("NHALL00204", 1350, 1250, 4, "Faulkner", "HALL", "Hall 2", "Hall 2", 'N');
   }
 
+  @Test
+  public void testSafeModifyNode() throws DBException {
+    DbController.modifyNode("NDEPT00104", 1350, 420, "Faulkner", "Cardio", "Dept X");
+    DbNode n = DbController.getNode("NDEPT00104");
+    assertEquals(1350, n.getX());
+    assertEquals(420, n.getY());
+    assertEquals("Faulkner", n.getBuilding());
+    assertEquals("Cardio", n.getLongName());
+    assertEquals("Dept X", n.getShortName());
+    DbController.deleteNode("NDEPT00104");
+    DbController.addNode(
+        "NDEPT00104", 1350, 950, 4, "Faulkner", "DEPT", "Cardiology", "Dept 1", 'N');
+  }
+
   // Noah
   @Test
   public void testMoveNode() throws DBException {

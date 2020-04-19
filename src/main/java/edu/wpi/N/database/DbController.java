@@ -154,9 +154,12 @@ public class DbController {
    * @param shortName The new node's shortName
    * @return true if the node was modified, false otherwise
    */
-  public static boolean modifyNode(String nodeID, int x, int y, String building, String longName, String shortName) throws DBException {
+  public static boolean modifyNode(
+      String nodeID, int x, int y, String building, String longName, String shortName)
+      throws DBException {
     try {
-      String query = "UPDATE nodes SET xcoord = ?, ycoord = ?, building = ?, longName = ?, shortName = ? WHERE nodeID = ?";
+      String query =
+          "UPDATE nodes SET xcoord = ?, ycoord = ?, building = ?, longName = ?, shortName = ? WHERE nodeID = ?";
       PreparedStatement stmt = con.prepareStatement(query);
 
       stmt.setInt(1, x);
