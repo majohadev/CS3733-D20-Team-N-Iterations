@@ -385,12 +385,28 @@ public class DbController {
   // Nick
   public static LinkedList<DbNode> searchNode(
       int floor, String building, String nodeType, String longName) throws DBException {
-    String query = "SELECT * FROM nodes WHERE longName LIKE ?";
+    String query = "SELECT * FROM nodes WHERE ";
+    LinkedList<String> queries = new LinkedList<String>();
+    if (floor >= 0) queries.add("floor = ? ");
+    if (building != null) queries.add("building = ? ");
+    if (nodeType != null) queries.add("nodeType = ? ");
+    if (longName != null) queries.add("UPPER(longName) LIKE ? ");
+    if (queries.size() == 0)
+      throw new DBException("Error, searchNode: You must enter at least one search term!");
+    Iterator<String> it = queries.iterator();
+    while (true) {
+      query = query + it.next();
+      if (it.hasNext()) query = query + " AND ";
+      else break;
+    }
 
     try {
       PreparedStatement st = con.prepareStatement(query);
-
-      st.setString(1, "%" + longName + "%");
+      int counter = 0;
+      if (floor >= 0) st.setInt(++counter, floor);
+      if (building != null) st.setString(++counter, building);
+      if (nodeType != null) st.setString(++counter, nodeType);
+      if (longName != null) st.setString(++counter, ("%" + longName.toUpperCase() + "%"));
 
       return getAllNodesSQL(st);
     } catch (SQLException e) {

@@ -89,6 +89,59 @@ public class DbControllerTest {
   // Chris
   @Test
   public void testSearchNode() throws DBException {
+    // need to search by floor, building, nodeType, longName.
+    DbController.addNode(
+        "NELEV00X07", 1250, 850, 7, "Faulkner", "ELEV", "Elevator X", "Hall 7", 'N');
+    DbController.addNode("NELEV00X06", 1250, 850, 7, "Faulkner", "ELEV", "Elev X", "Hall 7", 'N');
+    DbController.addNode(
+        "NELEV00X05", 1250, 850, 5, "Not Faulkner", "ELEV", "Elev X", "Hall 7", 'N');
+    DbController.addNode("NHALL00105", 1250, 850, 5, "Faulkner", "HALL", "ELEV X", "Hall 1", 'N');
+
+    LinkedList<DbNode> lst = DbController.searchNode(7, "Faulkner", "ELEV", "Elev X");
+    assertFalse(
+        lst.contains(
+            new DbNode(
+                "NELEV00X07", 1250, 850, 7, "Faulkner", "ELEV", "Elevator X", "Hall 7", 'N')));
+    assertFalse(
+        lst.contains(
+            new DbNode(
+                "NELEV00X06", 1250, 850, 7, "Faulkner", "ELEV", "Elevator X", "Hall 7", 'N')));
+    assertFalse(
+        lst.contains(
+            new DbNode("NHALL00105", 1250, 850, 5, "Faulkner", "HALL", "ELEV X", "Hall 1", 'N')));
+    lst = DbController.searchNode(-1, null, "ELEV", null);
+    assertTrue(
+        lst.contains(
+            new DbNode(
+                "NELEV00X07", 1250, 850, 7, "Faulkner", "ELEV", "Elevator X", "Hall 7", 'N')));
+    assertTrue(
+        lst.contains(
+            new DbNode("NELEV00X06", 1250, 850, 7, "Faulkner", "ELEV", "Elev X", "Hall 7", 'N')));
+    assertFalse(
+        lst.contains(
+            new DbNode("NHALL00105", 1250, 850, 5, "Faulkner", "HALL", "ELEV X", "Hall 1", 'N')));
+    lst = DbController.searchNode(5, null, null, "ElEv");
+    assertFalse(
+        lst.contains(
+            new DbNode(
+                "NELEV00X07", 1250, 850, 7, "Faulkner", "ELEV", "Elevator X", "Hall 7", 'N')));
+    assertFalse(
+        lst.contains(
+            new DbNode(
+                "NELEV00X06", 1250, 850, 7, "Faulkner", "ELEV", "Elevator X", "Hall 7", 'N')));
+    assertTrue(
+        lst.contains(
+            new DbNode("NHALL00105", 1250, 850, 5, "Faulkner", "HALL", "ELEV X", "Hall 1", 'N')));
+    assertTrue(
+        lst.contains(
+            new DbNode(
+                "NELEV00X05", 1250, 850, 5, "Not Faulkner", "ELEV", "Elev X", "Hall 7", 'N')));
+
+    DbController.deleteNode("NELEV00X07");
+    DbController.deleteNode("NELEV00X06");
+    DbController.deleteNode("NELEV00X05");
+    DbController.deleteNode("NHALL00105");
+
     assertEquals(1, DbController.searchNode(-1, null, null, "Neurology").size());
     assertTrue(
         DbController.searchNode(-1, null, null, "Cardiology")
