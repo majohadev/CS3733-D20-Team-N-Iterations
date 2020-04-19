@@ -1,8 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
 
-
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.MapEditController">
-
+<AnchorPane prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: d0e6d1;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.MapEditController">
+   <children>
+      <HBox prefHeight="1080.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <StackPane prefHeight="150.0" prefWidth="200.0">
+               <children>
+                  <ImageView fitHeight="942.0" fitWidth="1520.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/Floor4SolidBackground.png" />
+                     </image>
+                  </ImageView>
+                  <Pane fx:id="pn_display" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="912.0" prefWidth="1520.0" />
+               </children>
+            </StackPane>
+            <Accordion prefHeight="1080.0" prefWidth="400.0">
+              <panes>
+                <TitledPane fx:id="acc_nodes" animated="false" text="Nodes">
+                  <content>
+                    <AnchorPane fx:id="pn_nodes" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                  </content>
+                </TitledPane>
+                <TitledPane fx:id="acc_edges" animated="false" text="Edges">
+                  <content>
+                    <AnchorPane fx:id="pn_edges" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                  </content>
+                </TitledPane>
+              </panes>
+            </Accordion>
+         </children>
+      </HBox>
+   </children>
 </AnchorPane>

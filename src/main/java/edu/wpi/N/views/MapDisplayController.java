@@ -2,14 +2,11 @@ package edu.wpi.N.views;
 
 import com.google.common.collect.HashBiMap;
 import edu.wpi.N.App;
-import edu.wpi.N.Main;
 import edu.wpi.N.algorithms.Pathfinder;
-import edu.wpi.N.database.CSVParser;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.DbController;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Path;
-import java.io.InputStream;
 import java.util.LinkedList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -46,10 +43,6 @@ public class MapDisplayController implements Controller {
   }
 
   public void initialize() throws DBException, DBException {
-    InputStream nodes = Main.class.getResourceAsStream("csv/TeamNFloor4Nodes.csv");
-    InputStream edges = Main.class.getResourceAsStream("csv/TeamNFloor4Edges.csv");
-    CSVParser.parseCSV(nodes);
-    CSVParser.parseCSV(edges);
     selectedNodes = new LinkedList<DbNode>();
     allFloorNodes = DbController.floorNodes(4, "Faulkner");
     masterNodes = HashBiMap.create();
