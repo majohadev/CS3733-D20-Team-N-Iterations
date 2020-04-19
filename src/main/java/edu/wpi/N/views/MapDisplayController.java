@@ -162,6 +162,7 @@ public class MapDisplayController implements Controller {
     selectedNodes.clear();
   }
 
+  //mike
   // Upon changing text in the search by location UI component this method
   // is triggered
   @FXML
