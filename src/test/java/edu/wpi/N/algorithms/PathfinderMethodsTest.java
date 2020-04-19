@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
 public class PathfinderMethodsTest {
 
   @BeforeAll
-  public static void initializeTest() throws SQLException, ClassNotFoundException {
+  public static void initializeTest() throws SQLException, ClassNotFoundException, DBException {
     DbController.initDB();
     InputStream inputNodes =
         PathfinderMethodsTest.class.getResourceAsStream("../csv/TestNodes.csv");
@@ -99,6 +99,10 @@ public class PathfinderMethodsTest {
     }
   }
 
+  @AfterAll
+  public static void cleanup() throws DBException {
+    DbController.clearNodes();
+  }
   // to test generatePath: uncomment the necessary test methods make the method itself public
   // just for the time of testing, then switch back to private after test
 

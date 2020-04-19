@@ -15,7 +15,8 @@ import org.junit.jupiter.api.Test;
 public class FuzzySearchTest {
 
   @BeforeAll
-  public static void init() throws SQLException, ClassNotFoundException, FileNotFoundException {
+  public static void init()
+      throws SQLException, ClassNotFoundException, FileNotFoundException, DBException {
     DbController.initDB();
     File fNodes = new File("src/test/resources/edu/wpi/N/csv/PrototypeNodes.csv");
     String path = fNodes.getAbsolutePath();
