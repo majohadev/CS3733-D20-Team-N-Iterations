@@ -3,6 +3,7 @@ package edu.wpi.N.views;
 import com.google.common.collect.HashBiMap;
 import edu.wpi.N.App;
 import edu.wpi.N.Main;
+import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.algorithms.Pathfinder;
 import edu.wpi.N.database.CSVParser;
 import edu.wpi.N.database.DBException;
@@ -12,12 +13,15 @@ import edu.wpi.N.entities.Path;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.LinkedList;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
@@ -40,6 +44,7 @@ public class MapDisplayController implements Controller {
   final float VERTICAL_OFFSET = 8;
   final float HORIZONTAL_SCALE = (MAP_WIDTH) / IMAGE_WIDTH;
   final float VERTICAL_SCALE = (MAP_HEIGHT) / IMAGE_HEIGHT;
+  int currentFloor = 4;
 
   @FXML Button btn_find;
   @FXML Button btn_reset;
@@ -72,6 +77,16 @@ public class MapDisplayController implements Controller {
 
   LinkedList<DbNode> allFloorNodes; // stores all the nodes on the floor
   LinkedList<DbNode> selectedNodes; // stores all the selected nodes on the map
+  LinkedList<String> longNamesList = new LinkedList<>(); // Stores Floor Node names
+
+  private ObservableList<String> fuzzySearchTextList =
+      FXCollections.observableArrayList(); // List that fills TextViews
+  private LinkedList<DbNode> fuzzySearchNodeList =
+      new LinkedList<>(); // List to store output of fuzzy search functions
+
+  private DbNode defaultNode = new DbNode();
+
+  public MapDisplayController() throws DBException {}
 
   public void setMainApp(App mainApp) {
     this.mainApp = mainApp;
@@ -85,6 +100,7 @@ public class MapDisplayController implements Controller {
     selectedNodes = new LinkedList<DbNode>();
     allFloorNodes = DbController.floorNodes(4, "Faulkner");
     masterNodes = HashBiMap.create();
+    defaultNode = DbController.getNode("NHALL00804");
     populateMap();
   }
 
@@ -92,6 +108,7 @@ public class MapDisplayController implements Controller {
     for (DbNode node : allFloorNodes) {
       Circle mapNode = makeMapNode(node);
       pn_routeNodes.getChildren().add(mapNode);
+      longNamesList.add(node.getLongName());
       masterNodes.put(mapNode, node);
     }
   }
@@ -230,5 +247,43 @@ public class MapDisplayController implements Controller {
 
     pn_movableMap.setTranslateX(newTranslateX);
     pn_movableMap.setTranslateY(newTranslateY);
+  }
+  // mike
+  // Upon changing text in the search by location UI component this method
+  // is triggered
+  @FXML
+  private void searchByLocationTextFill(KeyEvent inputMethodEvent) throws DBException {
+    String currentText = txtf_searchlocation.getText();
+    fuzzySearchNodeList = FuzzySearchAlgorithm.suggestWithCorrection(currentText);
+    LinkedList<String> fuzzySearchStringList = new LinkedList<>();
+    if (fuzzySearchNodeList != null) {
+
+      for (DbNode node : fuzzySearchNodeList) {
+        fuzzySearchStringList.add(node.getLongName());
+      }
+
+      fuzzySearchTextList = FXCollections.observableList(fuzzySearchStringList);
+    } else fuzzySearchTextList = FXCollections.observableList(longNamesList);
+    lst_locationsorted.setItems(fuzzySearchTextList);
+  }
+
+  // Upon clicking find path to location button call this method
+  @FXML
+  private void onLocationPathFindClicked(MouseEvent event) throws Exception {
+    int currentSelection = lst_locationsorted.getSelectionModel().getSelectedIndex();
+    if (currentSelection >= 0) {
+      DbNode destinationNode = fuzzySearchNodeList.get(currentSelection);
+      selectedNodes.add(destinationNode);
+      if (selectedNodes.size() < 2) selectedNodes.add(defaultNode);
+      onBtnFindClicked(event);
+      selectedNodes.clear();
+    }
+  }
+
+  @FXML
+  private void onNearestBathroomClicked(MouseEvent event) throws Exception {
+    Path pathToBathroom = Pathfinder.findQuickAccess(defaultNode, "REST");
+    LinkedList<DbNode> pathNodes = pathToBathroom.getPath();
+    drawPath(pathNodes);
   }
 }
