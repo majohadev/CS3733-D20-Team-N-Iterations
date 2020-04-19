@@ -3,6 +3,7 @@ package edu.wpi.N.algorithms;
 import edu.wpi.N.database.CSVParser;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.DbController;
+import edu.wpi.N.entities.DbNode;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
@@ -25,52 +26,75 @@ public class FuzzySearchTest {
     path = null;
   }
 
+  /**
+   * Tests that string with a len of 1
+   *
+   * @throws DBException
+   */
   @Test
   public void testSearchWithCorrecitonInputIsOneLetter() throws DBException {
     String userInput = "c";
-    LinkedList<String> expected = null;
+    LinkedList<DbNode> expected = null;
 
     Assertions.assertEquals(expected, FuzzySearchAlgorithm.suggestWithCorrection(userInput));
+    Assertions.assertEquals(expected, FuzzySearchAlgorithm.suggestWithCorrection(""));
+    Assertions.assertEquals(expected, FuzzySearchAlgorithm.suggestWithCorrection(" "));
   }
 
+  /**
+   * Tests that the function outputs proper DbNode corresponding to user's input "Je"
+   *
+   * @throws DBException
+   */
   @Test
   public void testSearchWithCorrectionInputIsTwoLetters() throws DBException {
     String userInput = "Je";
     // expected output: Psych/Addiction Care, Psychiatric Inpatient Care,
-    LinkedList<String> expected = new LinkedList<String>();
-    expected.add("Jen Center for Primary Care");
+    LinkedList<DbNode> expected = new LinkedList<DbNode>();
+    expected.add(DbController.getNode("BDEPT00402"));
 
-    LinkedList<String> actual = FuzzySearchAlgorithm.suggestWithCorrection(userInput);
+    LinkedList<DbNode> actual = FuzzySearchAlgorithm.suggestWithCorrection(userInput);
 
     Assertions.assertTrue(actual.contains(expected.get(0)));
   }
 
+  /**
+   * Tests that functions returns list of nodes containing Center in their LongName
+   *
+   * @throws DBException
+   */
   @Test
   public void testSearchWithCorrectionInputIsSixLetters() throws DBException {
     String userInput = "Center";
-    LinkedList<String> expected = new LinkedList<String>();
-    expected.add("Jen Center for Primary Care");
-    expected.add("Lee Bell Breast Center");
-    expected.add("Weiner Center for Preoperative Evaluation");
-    LinkedList<String> actual = FuzzySearchAlgorithm.suggestWithCorrection(userInput);
+    LinkedList<DbNode> expected = new LinkedList<DbNode>();
+    expected.add(DbController.getNode("BDEPT00402"));
+    expected.add(DbController.getNode("BDEPT00302"));
+    expected.add(DbController.getNode("BDEPT00902"));
+    LinkedList<DbNode> actual = FuzzySearchAlgorithm.suggestWithCorrection(userInput);
     Assertions.assertTrue(actual.size() == 3);
     Assertions.assertTrue(actual.contains(expected.get(0)));
     Assertions.assertTrue(actual.contains(expected.get(1)));
     Assertions.assertTrue(actual.contains(expected.get(2)));
   }
 
+  /**
+   * Tests that function outputs list of nodes Containing Center in their longName given incorrectly
+   * spelled input
+   *
+   * @throws DBException
+   */
   @Test
   public void testSearchWithCorrectionInputSixLettersWrongSpelling() throws DBException {
     String userInput = "Centar";
 
-    LinkedList<String> expected = new LinkedList<String>();
-    expected.add("Weiner Center for Preoperative Evaluation");
-    expected.add("Lee Bell Breast Center");
-    expected.add("Jen Center for Primary Care");
+    LinkedList<DbNode> expected = new LinkedList<DbNode>();
+    expected.add(DbController.getNode("BDEPT00402"));
+    expected.add(DbController.getNode("BDEPT00302"));
+    expected.add(DbController.getNode("BDEPT00902"));
 
     long startTime = System.nanoTime();
 
-    LinkedList<String> actual = FuzzySearchAlgorithm.suggestWithCorrection(userInput);
+    LinkedList<DbNode> actual = FuzzySearchAlgorithm.suggestWithCorrection(userInput);
 
     long endTime = System.nanoTime();
 
@@ -83,51 +107,73 @@ public class FuzzySearchTest {
     Assertions.assertTrue(actual.contains(expected.get(2)));
   }
 
+  /**
+   * Tests that function returns correct DbNode given 3 words as input, One of the words was spelled
+   * incorrectly
+   *
+   * @throws DBException
+   */
   @Test
   public void testSearchWithTwoWordIncorrectInput() throws DBException {
     String userInput = "Noose and ear";
 
-    LinkedList<String> expected = new LinkedList<String>();
-    expected.add("Ear Nose & Throat");
+    LinkedList<DbNode> expected = new LinkedList<DbNode>();
+    expected.add(DbController.getNode("BDEPT00502"));
 
-    LinkedList<String> actual = FuzzySearchAlgorithm.suggestWithCorrection(userInput);
+    LinkedList<DbNode> actual = FuzzySearchAlgorithm.suggestWithCorrection(userInput);
     Assertions.assertTrue(actual.contains(expected.get(0)));
     Assertions.assertTrue(actual.size() == 1);
   }
 
+  /**
+   * Tests that function returns correct DbNode given two words as input Correctly spelled
+   *
+   * @throws DBException
+   */
   @Test
   public void testSearchWithTwoWordsCorrectInput() throws DBException {
     String userInput = "Ear Nose";
 
-    LinkedList<String> expected = new LinkedList<String>();
-    expected.add("Ear Nose & Throat");
-    LinkedList<String> actual = FuzzySearchAlgorithm.suggestWithCorrection(userInput);
+    LinkedList<DbNode> expected = new LinkedList<DbNode>();
+    expected.add(DbController.getNode("BDEPT00502"));
+    LinkedList<DbNode> actual = FuzzySearchAlgorithm.suggestWithCorrection(userInput);
     Assertions.assertTrue(actual.contains(expected.get(0)));
     Assertions.assertTrue(actual.size() == 1);
   }
 
+  /**
+   * Tests that function return empy list given dummy input
+   *
+   * @throws DBException
+   */
   @Test
   public void testSearchWithNonExistentIncorrectInput() throws DBException {
     String userInput = "Alaskan Airlines";
 
-    LinkedList<String> actual = FuzzySearchAlgorithm.suggestWithCorrection(userInput);
+    LinkedList<DbNode> actual = FuzzySearchAlgorithm.suggestWithCorrection(userInput);
     Assertions.assertTrue(actual.isEmpty());
   }
 
+  /**
+   * Tests that function returns correct DbNode given only part of the word as user input
+   *
+   * @throws DBException
+   */
   @Test
   public void testSearchCommonInputCorrectSpellingShortWordForm() throws DBException {
     String userInput = "Info";
 
-    LinkedList<String> expected = new LinkedList<String>();
-    expected.add("Information Desk Level 2");
+    LinkedList<DbNode> expected = new LinkedList<DbNode>();
+    expected.add(DbController.getNode("BINFO00102"));
 
-    LinkedList<String> actual = FuzzySearchAlgorithm.suggestWithCorrection(userInput);
+    LinkedList<DbNode> actual = FuzzySearchAlgorithm.suggestWithCorrection(userInput);
 
     Assertions.assertTrue(actual.contains(expected.get(0)));
   }
 
   //  /**
-  //   * Tests performance time given .csv of All Nodes Make sure to uncomment the test if need to measure performance
+  //   * Tests performance time given .csv of All Nodes Make sure to uncomment the test if need to
+  // measure performance
   //   *
   //   * @throws DBException
   //   * @throws FileNotFoundException
