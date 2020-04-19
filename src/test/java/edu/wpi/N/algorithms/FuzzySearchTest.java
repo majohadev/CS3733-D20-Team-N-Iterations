@@ -67,7 +67,19 @@ public class FuzzySearchTest {
     expected.add("Weiner Center for Preoperative Evaluation");
     expected.add("Lee Bell Breast Center");
     expected.add("Jen Center for Primary Care");
+
+
+    long startTime = System.nanoTime();
+
     LinkedList<String> actual = FuzzySearchAlgorithm.suggestWithCorrection(userInput);
+
+    long endTime = System.nanoTime();
+
+    long timeElapsed = endTime - startTime;
+    System.out.println("Elapsed time for FuzzySearch in milliseconds:" + timeElapsed / 1000000);
+
+    LinkedList<String> actual = FuzzySearchAlgorithm.suggestWithCorrection(userInput);
+
     Assertions.assertTrue(actual.size() == 3);
     Assertions.assertTrue(actual.contains(expected.get(0)));
     Assertions.assertTrue(actual.contains(expected.get(1)));
@@ -116,6 +128,36 @@ public class FuzzySearchTest {
 
     Assertions.assertTrue(actual.contains(expected.get(0)));
   }
+
+  //  /**
+  //   * Tests performance time given .csv of All Nodes Make sure to uncomment the test if need to
+  // measure performance
+  //   *
+  //   * @throws DBException
+  //   * @throws FileNotFoundException
+  //   */
+  //  @Test
+  //  public void testSearchMeasureTimeOnAllNode() throws DBException, FileNotFoundException {
+  //    DbController.clearNodes();
+  //
+  //    File fNodes = new File("src/test/resources/edu/wpi/N/csv/MapNAllnodes.csv");
+  //    String path = fNodes.getAbsolutePath();
+  //    CSVParser.parseCSVfromPath(path);
+  //
+  //    String userInput = "restrom";
+  //
+  //    long startTime = System.nanoTime();
+  //
+  //    LinkedList<String> actual = FuzzySearchAlgorithm.suggestWithCorrection(userInput);
+  //
+  //    long endTime = System.nanoTime();
+  //
+  //    System.out.println("Size of DB:" + DbController.allNodes().size());
+  //
+  //    long timeElapsed = endTime - startTime;
+  //    System.out.println("Elapsed time for FuzzySearch in milliseconds:" + timeElapsed / 1000000);
+  //  }
+
 
   @AfterAll
   public static void clearDB() throws DBException {
