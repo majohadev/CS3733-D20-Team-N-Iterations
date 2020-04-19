@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -8,6 +10,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
 <AnchorPane prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: d0e6d1;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.MapEditController">
    <children>
@@ -26,9 +29,36 @@
             <Accordion prefHeight="1080.0" prefWidth="400.0">
               <panes>
                 <TitledPane fx:id="acc_nodes" animated="false" text="Nodes">
-                  <content>
-                    <AnchorPane fx:id="pn_nodes" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                  </content>
+                     <content>
+                        <VBox prefHeight="200.0" prefWidth="100.0">
+                           <children>
+                              <Accordion>
+                                <panes>
+                                  <TitledPane animated="false" text="Add">
+                                    <content>
+                                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                             <children>
+                                                <Button alignment="CENTER" layoutX="10.0" layoutY="14.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="356.0" text="Add" />
+                                                <Label layoutX="10.0" layoutY="49.0" prefHeight="25.0" prefWidth="59.0" text="Label" />
+                                             </children>
+                                          </AnchorPane>
+                                    </content>
+                                  </TitledPane>
+                                  <TitledPane animated="false" text="Delete">
+                                    <content>
+                                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                    </content>
+                                  </TitledPane>
+                                  <TitledPane animated="false" text="Edit">
+                                    <content>
+                                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                    </content>
+                                  </TitledPane>
+                                </panes>
+                              </Accordion>
+                           </children>
+                        </VBox>
+                     </content>
                 </TitledPane>
                 <TitledPane fx:id="acc_edges" animated="false" text="Edges">
                   <content>
