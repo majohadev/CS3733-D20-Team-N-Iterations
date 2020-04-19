@@ -12,6 +12,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.LinkedList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -19,6 +22,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 public class MapDisplayController implements Controller, MapController {
   private App mainApp;
@@ -44,6 +49,7 @@ public class MapDisplayController implements Controller, MapController {
   @FXML Button btn_SubmitLaundry;
   @FXML Button btn_SubmitTranslator;
   @FXML TextField txt_Language;
+  @FXML Button btn_login;
 
   BiMap<Circle, DbNode> masterNodes; // stores the map nodes and their respective database nodes
   LinkedList<DbNode> allFloorNodes; // stores all the nodes on the floor
@@ -55,9 +61,9 @@ public class MapDisplayController implements Controller, MapController {
 
   public void initialize() throws DBException, DBException {
     InputStream nodes = Main.class.getResourceAsStream("csv/MapEnodes.csv");
-    //    InputStream edges = Main.class.getResourceAsStream("csv/MapEdges.csv");
+    InputStream edges = Main.class.getResourceAsStream("csv/MapEdges.csv");
     CSVParser.parseCSV(nodes);
-    //    CSVParser.parseCSV(edges);
+    CSVParser.parseCSV(edges);
     selectedNodes = new LinkedList<DbNode>();
     allFloorNodes = DbController.floorNodes(4, "Faulkner");
     masterNodes = HashBiMap.create();
@@ -117,6 +123,25 @@ public class MapDisplayController implements Controller, MapController {
       locationDataLaundry = txt_Location.getText();
       notesLaundry = txt_Notes.getText();
       System.out.println("Location: " + locationDataLaundry + " Notes: " + notesLaundry);
+    }
+  }
+
+  /*
+    public void addDataToTable(DbNode node) {
+
+      node.getLongName();
+    }
+  */
+
+  @FXML
+  public void loginWindow(MouseEvent e) throws IOException {
+    if (e.getSource() == btn_login) {
+      Stage stage = new Stage();
+      Parent root;
+      root = FXMLLoader.load(getClass().getResource("loginWindow.fxml"));
+      stage.initModality(Modality.APPLICATION_MODAL);
+      stage.setScene(new Scene(root));
+      stage.showAndWait();
     }
   }
 }

@@ -232,6 +232,15 @@
                            </content></TitledPane>
                     </panes>
                   </Accordion>
+                  <Pane prefHeight="322.0" prefWidth="281.0">
+                     <children>
+                        <Button fx:id="btn_login" layoutX="112.0" layoutY="269.0" mnemonicParsing="false" onMouseClicked="#loginWindow" text="Login">
+                           <font>
+                              <Font name="Calibri" size="16.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </Pane>
                </children>
                <padding>
                   <Insets top="10.0" />
