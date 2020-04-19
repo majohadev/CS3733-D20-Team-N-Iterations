@@ -37,12 +37,12 @@ public class MapDisplayController implements Controller, MapController {
   @FXML Button btn_reset;
   @FXML Pane pn_display;
 
-  //Sidebar search by location initializations
+  // Sidebar search by location initializations
   @FXML TextField txtf_searchlocation;
   @FXML ListView lst_locationsorted;
   @FXML Button btn_findlocationpath;
 
-  //Sidebar search by doctor initializations
+  // Sidebar search by doctor initializations
   @FXML ComboBox cmbo_doctorname;
   @FXML Button btn_searchdoc;
   @FXML ListView lst_doctorlocations;
