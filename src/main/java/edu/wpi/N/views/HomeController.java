@@ -1,23 +1,30 @@
 package edu.wpi.N.views;
 
+import com.jfoenix.controls.JFXButton;
 import edu.wpi.N.App;
 import java.io.IOException;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.input.MouseEvent;
 
-public class HomeController implements Controller {
+public class HomeController {
+
+  @FXML JFXButton btn_openQR;
+
   private App mainApp;
-  @FXML Button btn_map;
 
   public void setMainApp(App mainApp) {
     this.mainApp = mainApp;
   }
 
-  public void onBtnMapClicked() throws IOException {
-    this.mainApp.switchScene("views/mapDisplay.fxml");
-  }
-
-  public void onBtnEditClicked() throws IOException {
-    this.mainApp.switchScene("");
+  @FXML
+  private void openQrReader(MouseEvent e) {
+    try {
+      Parent root = FXMLLoader.load(getClass().getResource("/edu/wpi/N/views/QRTest.fxml"));
+      mainApp.getPrimaryStage().getScene().setRoot(root);
+    } catch (IOException ex) {
+      ex.printStackTrace();
+    }
   }
 }
