@@ -43,6 +43,7 @@ public class MapDisplayController implements Controller, MapController {
   @FXML TextArea txt_Notes1;
   @FXML Button btn_SubmitLaundry;
   @FXML Button btn_SubmitTranslator;
+  @FXML TextField txt_Language;
 
   BiMap<Circle, DbNode> masterNodes; // stores the map nodes and their respective database nodes
   LinkedList<DbNode> allFloorNodes; // stores all the nodes on the floor
@@ -99,11 +100,19 @@ public class MapDisplayController implements Controller, MapController {
     String notesTranslator;
     String locationDataLaundry;
     String notesLaundry;
+    String language;
 
     if (event.getSource() == btn_SubmitTranslator) {
       locationDataTranslator = txt_Location1.getText();
       notesTranslator = txt_Notes1.getText();
-      System.out.println("Location: " + locationDataTranslator + " Notes: " + notesTranslator);
+      language = txt_Language.getText();
+      System.out.println(
+          "Location: "
+              + locationDataTranslator
+              + " Notes: "
+              + notesTranslator
+              + " Language: "
+              + language);
     } else if (event.getSource() == btn_SubmitLaundry) {
       locationDataLaundry = txt_Location.getText();
       notesLaundry = txt_Notes.getText();

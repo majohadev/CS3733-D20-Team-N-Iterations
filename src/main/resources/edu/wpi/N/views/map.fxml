@@ -206,7 +206,7 @@
                               <Font size="18.0" />
                            </font>
                            <content>
-                              <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                              <AnchorPane prefHeight="242.0" prefWidth="279.0">
                                  <children>
                                     <Label layoutX="113.0" layoutY="10.0" text="Location">
                                        <font>
@@ -214,13 +214,19 @@
                                        </font>
                                     </Label>
                                     <TextField fx:id="txt_Location1" layoutX="40.0" layoutY="33.0" prefHeight="29.0" prefWidth="200.0" />
-                                    <Label layoutX="121.0" layoutY="70.0" text="Notes">
+                                    <Label layoutX="121.0" layoutY="128.0" text="Notes">
                                        <font>
                                           <Font size="14.0" />
                                        </font>
                                     </Label>
-                                    <TextArea fx:id="txt_Notes1" layoutX="40.0" layoutY="90.0" prefHeight="96.0" prefWidth="200.0" />
-                                    <Button fx:id="btn_SubmitTranslator" layoutX="110.0" layoutY="203.0" mnemonicParsing="false" onMouseClicked="#dataHandler" text="Submit" />
+                                    <TextArea fx:id="txt_Notes1" layoutX="41.0" layoutY="148.0" prefHeight="96.0" prefWidth="200.0" />
+                                    <TextField fx:id="txt_Language" layoutX="41.0" layoutY="91.0" prefHeight="29.0" prefWidth="200.0" />
+                                    <Button fx:id="btn_SubmitTranslator" layoutX="109.0" layoutY="260.0" mnemonicParsing="false" onMouseClicked="#dataHandler" text="Submit" />
+                                    <Label layoutX="110.0" layoutY="71.0" text="Language">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
                                  </children>
                               </AnchorPane>
                            </content></TitledPane>
