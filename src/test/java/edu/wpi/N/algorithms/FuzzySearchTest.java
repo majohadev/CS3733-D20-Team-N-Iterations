@@ -21,8 +21,8 @@ public class FuzzySearchTest {
     File fNodes = new File("src/test/resources/edu/wpi/N/csv/PrototypeNodes.csv");
     String path = fNodes.getAbsolutePath();
     CSVParser.parseCSVfromPath(path);
-    // fNodes = null;
-    // path = null;
+    fNodes = null;
+    path = null;
   }
 
   @Test
