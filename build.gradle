@@ -28,7 +28,11 @@ dependencies {
             'org.slf4j:slf4j-api:1.7.30',
             'org.slf4j:slf4j-simple:1.7.30',
             'com.opencsv:opencsv:5.1'
+
     )
+
+
+    compile group: 'com.google.guava', name: 'guava', version: '23.5-jre'
 
     testImplementation(
             'org.junit.jupiter:junit-jupiter:5.6.0',
@@ -74,6 +78,7 @@ jar {
 def codeCoverageExcludes = [
         'edu.wpi.N.App',
         'edu.wpi.N.Main',
+        'edu.wpi.N.views.*'
 ]
 
 jacoco {
