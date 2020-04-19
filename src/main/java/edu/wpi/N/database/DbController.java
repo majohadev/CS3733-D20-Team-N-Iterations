@@ -149,25 +149,22 @@ public class DbController {
    * @param nodeID the ID of the node you wish to change
    * @param x The new x coordinate of the node
    * @param y The new y coordinate of the node
-   * @param building The new building the node is in
    * @param longName The new node's longName
    * @param shortName The new node's shortName
    * @return true if the node was modified, false otherwise
    */
-  public static boolean modifyNode(
-      String nodeID, int x, int y, String building, String longName, String shortName)
+  public static boolean modifyNode(String nodeID, int x, int y, String longName, String shortName)
       throws DBException {
     try {
       String query =
-          "UPDATE nodes SET xcoord = ?, ycoord = ?, building = ?, longName = ?, shortName = ? WHERE nodeID = ?";
+          "UPDATE nodes SET xcoord = ?, ycoord = ?, longName = ?, shortName = ? WHERE nodeID = ?";
       PreparedStatement stmt = con.prepareStatement(query);
 
       stmt.setInt(1, x);
       stmt.setInt(2, y);
-      stmt.setString(3, building);
-      stmt.setString(4, longName);
-      stmt.setString(5, shortName);
-      stmt.setString(6, nodeID);
+      stmt.setString(3, longName);
+      stmt.setString(4, shortName);
+      stmt.setString(5, nodeID);
 
       return stmt.executeUpdate() > 0;
     } catch (SQLException e) {

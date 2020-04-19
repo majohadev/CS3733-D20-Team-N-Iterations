@@ -48,7 +48,7 @@ public class DbControllerTest {
 
   @Test
   public void testSafeModifyNode() throws DBException {
-    DbController.modifyNode("NDEPT00104", 1350, 420, "Faulkner", "Cardio", "Dept X");
+    DbController.modifyNode("NDEPT00104", 1350, 420, "Cardio", "Dept X");
     DbNode n = DbController.getNode("NDEPT00104");
     assertEquals(1350, n.getX());
     assertEquals(420, n.getY());
