@@ -29,7 +29,7 @@ public class CSVParserTest {
 
     // Will check if first, middle and last were added to DB
     DbNode firstExpected =
-        new DbNode("AAAAAAAAAA", 171, 851, 1, "MainBuil", "OFFI", "Arnold", "AA", 'E');
+        new DbNode("AAAAAAAAAA", 171, 851, 1, "MainBuil", "CONF", "Arnold", "AA", 'E');
     DbNode middleExpected =
         new DbNode("H500000000", 316, 1132, 1, "MainBuil", "HALL", "HALOL", "LL", 'N');
     DbNode lastExpected =
@@ -57,7 +57,7 @@ public class CSVParserTest {
 
     // Will check if first, middle and last were added to DB
     DbNode firstExpected =
-        new DbNode("AAAAAAAAAA", 171, 851, 1, "MainBuil", "OFFI", "Arnold", "AA", 'E');
+        new DbNode("AAAAAAAAAA", 171, 851, 1, "MainBuil", "CONF", "Arnold", "AA", 'E');
     DbNode middleExpected =
         new DbNode("H500000000", 316, 1132, 1, "MainBuil", "HALL", "HALOL", "LL", 'N');
     DbNode lastExpected =
@@ -86,7 +86,7 @@ public class CSVParserTest {
     CSVParser.parseCSVfromPath(pathToEdges);
 
     LinkedList<DbNode> expectedH9 = new LinkedList<DbNode>();
-    expectedH9.add(new DbNode("CCCCCCCCCC", 776, 523, 1, "MainBuil", "OFFI", "Candie", "CC", 'G'));
+    expectedH9.add(new DbNode("CCCCCCCCCC", 776, 523, 1, "MainBuil", "CONF", "Candie", "CC", 'G'));
     expectedH9.add(new DbNode("H800000000", 596, 794, 1, "MainBuil", "HALL", "HALOL", "OO", 'Q'));
     expectedH9.add(new DbNode("H100000001", 999, 816, 1, "MainBuil", "HALL", "HALOL", "QQ", 'S'));
     expectedH9.add(new DbNode("H120000000", 1214, 715, 1, "MainBuil", "HALL", "HALOL", "SS", 'U'));
