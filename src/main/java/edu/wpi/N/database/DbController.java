@@ -374,7 +374,7 @@ public class DbController {
 
   /**
    * Searches nodes by floor, building, nodeType and longName. All must be exact except longName,
-   * which is a substring and case-insensitive.
+   * which is a substring.
    *
    * @param floor the floor you want the nodes on
    * @param building the building in which you want the nodes
@@ -385,42 +385,7 @@ public class DbController {
   // Nick
   public static LinkedList<DbNode> searchNode(
       int floor, String building, String nodeType, String longName) throws DBException {
-    return searchNode(floor, building, nodeType, longName, false);
-  }
-
-  /**
-   * Searches nodes by floor, building, nodeType and longName. All must be exact except longName,
-   * which is a substring and case-insensitive. only returns visible nodes; basically, excludes hall
-   * nodes.
-   *
-   * @param floor the floor you want the nodes on
-   * @param building the building in which you want the nodes
-   * @param nodeType the type of node you want (must be length 4)
-   * @param longName the longname you want to search for
-   * @return A linked list of DbNodes which matches the search query
-   */
-  public static LinkedList<DbNode> searchVisNode(
-      int floor, String building, String nodeType, String longName) throws DBException {
-    return searchNode(floor, building, nodeType, longName, true);
-  }
-
-  /**
-   * Searches nodes by floor, building, nodeType, longName, and can exclude invisible (HALL) nodes.
-   * All must be exact except longName, which is a substring and case-insensitive.
-   *
-   * @param floor the floor you want the nodes on
-   * @param building the building in which you want the nodes
-   * @param nodeType the type of node you want (must be length 4)
-   * @param longName the longname you want to search for
-   * @param visOnly True if you want to exclude hall nodes, false otherwise.
-   * @return A linked list of DbNodes which matches the search query
-   */
-  // Nick
-  private static LinkedList<DbNode> searchNode(
-      int floor, String building, String nodeType, String longName, boolean visOnly)
-      throws DBException {
     String query = "SELECT * FROM nodes WHERE ";
-    if (visOnly) query = query + "(NOT nodeType = 'HALL') AND ";
     LinkedList<String> queries = new LinkedList<String>();
     if (floor >= 0) queries.add("floor = ? ");
     if (building != null) queries.add("building = ? ");
