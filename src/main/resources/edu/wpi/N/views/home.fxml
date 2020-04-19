@@ -5,6 +5,6 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.HomeController">
    <children>
-      <Button fx:id="btn_Swap" layoutX="274.0" layoutY="188.0" mnemonicParsing="false" onMouseClicked="#swapToData" text="Swap" />
+      <Button fx:id="btn_map" layoutX="134.0" layoutY="144.0" mnemonicParsing="false" onMouseClicked="#onBtnMapClicked" text="Map" />
    </children>
 </AnchorPane>
