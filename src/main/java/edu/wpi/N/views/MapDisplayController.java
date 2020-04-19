@@ -19,7 +19,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 
-public class MapDisplayController implements Controller, MapController {
+public class MapDisplayController implements Controller {
   private App mainApp;
   final float BAR_WIDTH = 300;
   final float IMAGE_WIDTH = 2475;
@@ -115,6 +115,7 @@ public class MapDisplayController implements Controller, MapController {
               (firstNode.getY() * VERTICAL_SCALE) + VERTICAL_OFFSET,
               (secondNode.getX() * HORIZONTAL_SCALE) + HORIZONTAL_OFFSET,
               (secondNode.getY() * VERTICAL_SCALE) + VERTICAL_OFFSET);
+      line.setStrokeWidth(5);
       pn_display.getChildren().add(line);
     }
   }
