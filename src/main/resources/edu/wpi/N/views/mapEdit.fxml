@@ -3,6 +3,7 @@
 <?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -26,30 +27,35 @@
                   <Pane fx:id="pn_display" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="912.0" prefWidth="1520.0" />
                </children>
             </StackPane>
-            <Accordion prefHeight="1080.0" prefWidth="400.0">
+            <Accordion fx:id="acc_modify" prefHeight="1080.0" prefWidth="400.0">
               <panes>
-                <TitledPane fx:id="acc_nodes" animated="false" text="Nodes">
+                <TitledPane fx:id="pn_nodes" animated="false" text="Nodes">
                      <content>
                         <VBox prefHeight="200.0" prefWidth="100.0">
                            <children>
-                              <Accordion>
+                              <Accordion fx:id="acc_nodes">
                                 <panes>
-                                  <TitledPane animated="false" text="Add">
+                                  <TitledPane fx:id="pn_nodes_add" animated="false" text="Add">
                                     <content>
                                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                              <children>
                                                 <Button alignment="CENTER" layoutX="10.0" layoutY="14.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="356.0" text="Add" />
-                                                <Label layoutX="10.0" layoutY="49.0" prefHeight="25.0" prefWidth="59.0" text="Label" />
+                                                <Label layoutX="10.0" layoutY="56.0" prefHeight="25.0" prefWidth="71.0" text="Long Name:" />
+                                                <Label layoutX="10.0" layoutY="90.0" prefHeight="25.0" prefWidth="71.0" text="Short Name:" />
+                                                <Label layoutX="10.0" layoutY="126.0" prefHeight="25.0" prefWidth="71.0" text="Short Name:" />
+                                                <TextField layoutX="91.0" layoutY="56.0" prefHeight="25.0" prefWidth="274.0" />
+                                                <TextField layoutX="91.0" layoutY="90.0" prefHeight="25.0" prefWidth="273.0" />
+                                                <TextField layoutX="91.0" layoutY="126.0" prefHeight="25.0" prefWidth="273.0" />
                                              </children>
                                           </AnchorPane>
                                     </content>
                                   </TitledPane>
-                                  <TitledPane animated="false" text="Delete">
+                                  <TitledPane fx:id="pn_nodes_delete" animated="false" text="Delete">
                                     <content>
                                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                                     </content>
                                   </TitledPane>
-                                  <TitledPane animated="false" text="Edit">
+                                  <TitledPane fx:id="pn_nodes_edit" animated="false" text="Edit">
                                     <content>
                                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                                     </content>
@@ -60,9 +66,9 @@
                         </VBox>
                      </content>
                 </TitledPane>
-                <TitledPane fx:id="acc_edges" animated="false" text="Edges">
+                <TitledPane fx:id="pn_edges" animated="false" text="Edges">
                   <content>
-                    <AnchorPane fx:id="pn_edges" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                   </content>
                 </TitledPane>
               </panes>
