@@ -177,8 +177,12 @@ public class PathfinderMethodsTest {
   //    Assertions.assertThrows(
   //        NullPointerException.class, () -> Pathfinder.generatePath(start, end, cameFrom));
   //  }
+
   @AfterAll
   public static void cleanup() throws DBException {
+
+  @AfterAll
+  public static void clearDB() throws DBException {
     DbController.clearNodes();
   }
 }

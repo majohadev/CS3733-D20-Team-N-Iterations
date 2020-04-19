@@ -3,6 +3,7 @@ package edu.wpi.N.views;
 import com.google.common.collect.HashBiMap;
 import edu.wpi.N.App;
 import edu.wpi.N.Main;
+import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.algorithms.Pathfinder;
 import edu.wpi.N.database.CSVParser;
 import edu.wpi.N.database.DBException;
@@ -11,8 +12,14 @@ import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Path;
 import java.io.InputStream;
 import java.util.LinkedList;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -32,14 +39,37 @@ public class MapDisplayController implements Controller, MapController {
   final float VERTICAL_OFFSET = 8;
   final float HORIZONTAL_SCALE = (MAP_WIDTH) / IMAGE_WIDTH;
   final float VERTICAL_SCALE = (MAP_HEIGHT) / IMAGE_HEIGHT;
+  int currentFloor = 4;
 
   @FXML Button btn_find;
   @FXML Button btn_reset;
   @FXML Pane pn_display;
 
   HashBiMap<Circle, DbNode> masterNodes; // stores the map nodes and their respective database nodes
+
+  // Sidebar search by location initializations
+  @FXML TextField txtf_searchlocation;
+  @FXML ListView lst_locationsorted;
+  @FXML Button btn_findlocationpath;
+
+  // Sidebar search by doctor initializations
+  @FXML ComboBox cmbo_doctorname;
+  @FXML Button btn_searchdoc;
+  @FXML ListView lst_doctorlocations;
+  @FXML Button btn_findpathdoc;
+
   LinkedList<DbNode> allFloorNodes; // stores all the nodes on the floor
   LinkedList<DbNode> selectedNodes; // stores all the selected nodes on the map
+  LinkedList<String> longNamesList = new LinkedList<>(); // Stores Floor Node names
+
+  private ObservableList<String> fuzzySearchTextList =
+      FXCollections.observableArrayList(); // List that fills TextViews
+  private LinkedList<String> fuzzySearchStringList =
+      new LinkedList<>(); // List to store output of fuzzy search functions
+
+  private DbNode defaultNode = new DbNode();
+
+  public MapDisplayController() throws DBException {}
 
   public void setMainApp(App mainApp) {
     this.mainApp = mainApp;
@@ -53,12 +83,14 @@ public class MapDisplayController implements Controller, MapController {
     selectedNodes = new LinkedList<DbNode>();
     allFloorNodes = DbController.floorNodes(4, "Faulkner");
     masterNodes = HashBiMap.create();
+    defaultNode = DbController.getNode("NHALL00804");
     populateMap();
   }
 
   public void populateMap() {
     for (DbNode node : allFloorNodes) {
       Circle mapNode = makeMapNode(node);
+      longNamesList.add(node.getLongName());
       pn_display.getChildren().add(mapNode);
       masterNodes.put(mapNode, node);
     }
@@ -126,6 +158,33 @@ public class MapDisplayController implements Controller, MapController {
       mapNode.setDisable(false);
     }
     pn_display.getChildren().removeIf(node -> node instanceof Line);
+    selectedNodes.clear();
+  }
+
+  // Upon changing text in the search by location UI component this method
+  // is triggered
+  @FXML
+  private void searchByLocationTextFill(KeyEvent inputMethodEvent) throws DBException {
+    String currentText = txtf_searchlocation.getText();
+    fuzzySearchStringList = FuzzySearchAlgorithm.suggestWithCorrection(currentText);
+    if (fuzzySearchStringList != null)
+      fuzzySearchTextList = FXCollections.observableList(fuzzySearchStringList);
+    else fuzzySearchTextList = FXCollections.observableList(longNamesList);
+    lst_locationsorted.setItems(fuzzySearchTextList);
+  }
+
+  // Upon clicking find path to location button call this method
+  @FXML
+  private void onLocationPathFindClicked(MouseEvent event) throws Exception {
+    int currentSelection = lst_locationsorted.getSelectionModel().getSelectedIndex();
+    String destinationNodeLongName = fuzzySearchTextList.get(currentSelection);
+    LinkedList<DbNode> destinationNode =
+        DbController.searchVisNode(currentFloor, null, null, destinationNodeLongName);
+    selectedNodes.add(destinationNode.getFirst());
+    System.out.println(selectedNodes.size());
+    if (selectedNodes.size() < 2) selectedNodes.add(defaultNode);
+    System.out.println(selectedNodes);
+    onBtnFindClicked(event);
     selectedNodes.clear();
   }
 }

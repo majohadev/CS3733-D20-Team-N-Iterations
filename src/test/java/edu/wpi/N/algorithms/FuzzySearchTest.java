@@ -68,6 +68,7 @@ public class FuzzySearchTest {
     expected.add("Lee Bell Breast Center");
     expected.add("Jen Center for Primary Care");
 
+
     long startTime = System.nanoTime();
 
     LinkedList<String> actual = FuzzySearchAlgorithm.suggestWithCorrection(userInput);
@@ -76,6 +77,8 @@ public class FuzzySearchTest {
 
     long timeElapsed = endTime - startTime;
     System.out.println("Elapsed time for FuzzySearch in milliseconds:" + timeElapsed / 1000000);
+
+    LinkedList<String> actual = FuzzySearchAlgorithm.suggestWithCorrection(userInput);
 
     Assertions.assertTrue(actual.size() == 3);
     Assertions.assertTrue(actual.contains(expected.get(0)));
@@ -154,6 +157,7 @@ public class FuzzySearchTest {
   //    long timeElapsed = endTime - startTime;
   //    System.out.println("Elapsed time for FuzzySearch in milliseconds:" + timeElapsed / 1000000);
   //  }
+
 
   @AfterAll
   public static void clearDB() throws DBException {

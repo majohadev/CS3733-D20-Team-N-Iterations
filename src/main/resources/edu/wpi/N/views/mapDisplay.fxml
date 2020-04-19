@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.MapDisplayController">
+   <children>
+      <HBox layoutX="184.0" layoutY="128.0" prefHeight="1080.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <VBox prefHeight="1080.0" prefWidth="300.0" style="-fx-background-color: #cccccc; -fx-border-color: #004a80;">
+               <children>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <ImageView fitHeight="119.0" fitWidth="95.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/Brigham_and_Womens_Hospital_logo.svg.png" />
+                           </image>
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                        </ImageView>
+                        <Label alignment="CENTER" prefHeight="111.0" prefWidth="163.0" text="BWH Pathfinding" textAlignment="CENTER" wrapText="true">
+                           <font>
+                              <Font name="Calibri" size="32.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <Separator prefHeight="15.0" prefWidth="282.0" />
+                  <Pane prefHeight="78.0" prefWidth="282.0">
+                     <children>
+                        <Label layoutX="5.0" layoutY="-3.0" prefHeight="85.0" prefWidth="272.0" text="Please click a location on the map or use the search options below to specify where you would like to be directed within the hospital" textAlignment="CENTER" wrapText="true">
+                           <font>
+                              <Font name="Calibri" size="15.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </Pane>
+                  <Separator prefHeight="15.0" prefWidth="282.0" />
+                  <Accordion>
+                    <panes>
+                      <TitledPane animated="false" text="Search By Location">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="275.0" prefWidth="200.0">
+                                 <children>
+                                    <Label layoutX="4.0" layoutY="-6.0" prefHeight="67.0" prefWidth="272.0" text="Type the Location Name and Click It In the List Below To Select It As Your Destination " textAlignment="CENTER" wrapText="true" />
+                                    <ListView fx:id="lst_locationsorted" layoutX="17.0" layoutY="101.0" prefHeight="111.0" prefWidth="245.0" />
+                                    <TextField fx:id="txtf_searchlocation" layoutX="18.0" layoutY="61.0" onKeyTyped="#searchByLocationTextFill" prefHeight="30.0" prefWidth="245.0" promptText="Enter Destination Location" />
+                                    <Button fx:id="btn_findlocationpath" layoutX="40.0" layoutY="223.0" mnemonicParsing="false" onMouseClicked="#onLocationPathFindClicked" prefHeight="40.0" prefWidth="200.0" text="       Find Path To Location" textAlignment="CENTER">
+                                       <font>
+                                          <Font name="Calibri Bold" size="14.0" />
+                                       </font>
+                                    </Button>
+                                    <ImageView fitHeight="24.0" fitWidth="26.0" layoutX="48.0" layoutY="231.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../images/Search%20Map.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children></AnchorPane>
+                        </content>
+                           <font>
+                              <Font name="Calibri" size="18.0" />
+                           </font>
+                      </TitledPane>
+                      <TitledPane animated="false" text="Search By Doctor's Name">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="275.0" prefWidth="200.0">
+                                 <children>
+                                    <Label layoutX="4.0" prefHeight="59.0" prefWidth="272.0" text="Type in doctors name and press the search button to the right, then select the office or department you would like to visit related to that doctor" textAlignment="CENTER" wrapText="true" />
+                                    <ComboBox fx:id="cmbo_doctorname" editable="true" layoutX="10.0" layoutY="71.0" prefHeight="40.0" prefWidth="210.0" promptText="Enter Doctors Name" />
+                                    <Button fx:id="btn_searchdoc" layoutX="231.0" layoutY="71.0" maxHeight="40.0" maxWidth="40.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" />
+                                    <ImageView fitHeight="28.0" fitWidth="29.0" layoutX="237.0" layoutY="77.0" mouseTransparent="true" opacity="0.97" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../images/Find%20Profile.png" />
+                                       </image>
+                                    </ImageView>
+                                    <Label layoutX="7.0" layoutY="119.0" prefHeight="18.0" prefWidth="266.0" text="Select destination from list below after searching" />
+                                    <ListView fx:id="lst_doctorlocations" layoutX="17.0" layoutY="144.0" prefHeight="67.0" prefWidth="246.0" />
+                                    <Button fx:id="btn_findpathdoc" layoutX="40.0" layoutY="223.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" text="   Find Path To Location" textAlignment="CENTER">
+                                       <font>
+                                          <Font name="Calibri Bold" size="14.0" />
+                                       </font>
+                                       <graphic>
+                                          <ImageView fitHeight="24.0" fitWidth="26.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../images/Search%20Map.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                    </Button>
+                                 </children></AnchorPane>
+                        </content>
+                           <font>
+                              <Font name="Calibri" size="18.0" />
+                           </font>
+                      </TitledPane>
+                    </panes>
+                  </Accordion>
+                  <Separator prefHeight="20.0" prefWidth="282.0" />
+                  <VBox prefHeight="264.0" prefWidth="282.0" spacing="20.0">
+                     <children>
+                        <Label alignment="CENTER" prefHeight="65.0" prefWidth="282.0" text="Click An Icon Below To Navigate To Popular Locations" textAlignment="CENTER" wrapText="true">
+                           <font>
+                              <Font name="Calibri" size="18.0" />
+                           </font>
+                        </Label>
+                        <GridPane alignment="CENTER" prefHeight="196.0" prefWidth="282.0">
+                          <columnConstraints>
+                            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="136.19998168945312" minWidth="10.0" prefWidth="87.39999389648438" />
+                            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="212.20001220703125" minWidth="10.0" prefWidth="194.60000610351562" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <Button fx:id="btn_bathroom" mnemonicParsing="false" prefHeight="55.0" prefWidth="55.0">
+                                 <graphic>
+                                    <ImageView fitHeight="55.0" fitWidth="41.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../images/bathroom.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Label alignment="CENTER" text="Nearest Bathroom" GridPane.columnIndex="1">
+                                 <font>
+                                    <Font name="Calibri" size="18.0" />
+                                 </font>
+                              </Label>
+                              <Button fx:id="btn_cafeteria" mnemonicParsing="false" prefHeight="55.0" prefWidth="55.0" GridPane.rowIndex="1">
+                                 <graphic>
+                                    <ImageView fitHeight="31.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../images/food.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                              </Button>
+                              <Label text="Cafeteria" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                 <font>
+                                    <Font name="Calibri" size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </GridPane>
+                     </children>
+                  </VBox>
+               </children>
+               <padding>
+                  <Insets top="10.0" />
+               </padding></VBox>
+            <StackPane layoutY="300.0" prefHeight="1080.0" prefWidth="1637.0" style="-fx-background-color: #d0e6d1;">
+               <children>
+                  <ImageView fitHeight="982.0" fitWidth="1756.0" layoutX="300.0" pickOnBounds="true" preserveRatio="true" x="300.0">
+                     <image>
+                        <Image url="@../images/Floor4SolidBackground.png" />
+                     </image>
+                  </ImageView>
+                  <Pane fx:id="pn_display" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="982.0" prefWidth="1637.0">
+                     <children>
+                        <Button fx:id="btn_find" layoutX="162.0" layoutY="395.0" mnemonicParsing="false" onMouseClicked="#onBtnFindClicked" prefHeight="43.0" prefWidth="103.0" text="Find Path" />
+                        <Button fx:id="btn_reset" layoutX="162.0" layoutY="466.0" mnemonicParsing="false" onMouseClicked="#onResetClicked" prefHeight="43.0" prefWidth="103.0" text="Reset" />
+                     </children></Pane>
+               </children>
+            </StackPane>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>
