@@ -12,101 +12,128 @@ import com.github.sarxos.webcam.WebcamResolution;
 import com.google.zxing.*;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.HybridBinarizer;
-
 import java.awt.Dimension;
-import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
+import javafx.concurrent.Task;
 
-public class QRBase implements Runnable, ThreadFactory {
+public class QRBase {
 
-    private static final long serialVersionUID = 6441489157408381878L;
+  // private static final long serialVersionUID = 6441489157408381878L;
 
-    private Executor executor = Executors.newSingleThreadExecutor(this);
+  private Webcam webcam;
+  private WebcamPanel panel;
 
-    private Webcam webcam;
-    private WebcamPanel panel;
-    private String lastScanned = "";
-    private int maxReaderCycles;  // Number of times reader thread should run before timing out
-    private int threadSleepDelay = 100;  // Thread sleep duration in milliseconds
+  private final int THREAD_SLEEP_DELAY = 100; // Thread sleep duration in milliseconds
+  private final int TIMEOUT_THRESHOLD = 60; // Timeout threshold in seconds
+  private final int MAX_CYCLES =
+      TIMEOUT_THRESHOLD
+          * 1000
+          / THREAD_SLEEP_DELAY; // # of times reader thread should run before timing out
+  protected final String ERR_CODE = "NO_CODE";
 
-    public QRBase() {
-        super();
+  public QRBase() {
 
-        Dimension size = WebcamResolution.QVGA.getSize();
+    super();
 
-        webcam = Webcam.getWebcams().get(0);
-        webcam.setViewSize(size);
+    Dimension size = WebcamResolution.QVGA.getSize();
 
-        panel = new WebcamPanel(webcam);
-        panel.setPreferredSize(size);
-        //panel.setFPSDisplayed(true);
+    webcam = Webcam.getWebcams().get(0);
+    webcam.setViewSize(size);
 
-    }
+    panel = new WebcamPanel(webcam);
+    panel.setPreferredSize(size);
+    panel.pause();
+    panel.setVisible(false);
+  }
 
-    public WebcamPanel getWebcamView () {
-        return panel;
-    }
+  public WebcamPanel getWebcamView() {
+    return panel;
+  }
 
-    public String startScan(int timeout) {
-        maxReaderCycles = timeout/threadSleepDelay;
-        executor.execute(this);
-        return lastScanned;
-    }
+  public void startScan() {
 
-    public String startScan() {
-        maxReaderCycles = 900000/threadSleepDelay; // 900000 ms = 15 minutes
-        executor.execute(this);
-        return lastScanned;
-    }
+    // Set up thread to fetch QR code
+    Task<String> getQRCode =
+        new Task<String>() {
 
-    @Override
-    public void run() {
+          @Override
+          public String call() {
+            panel.resume();
+            panel.setVisible(true);
+            String result = fetchQRCode();
+            panel.pause();
+            panel.setVisible(false);
+            return result; // result of computation
+          }
+        };
 
-        Result result = null;
-        BufferedImage image;
-        int cycles = 0;
-        lastScanned = "";
+    getQRCode.setOnSucceeded(
+        e -> {
+          String result = getQRCode.getValue();
+          if (result == ERR_CODE) {
+            onScanFail();
+          } else {
+            onScanSucceed(result);
+          }
+        });
 
-        do {
-            try {
-                Thread.sleep(threadSleepDelay);
-                cycles++;
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+    getQRCode.setOnCancelled(
+        e -> {
+          onScanFail();
+        });
 
-            if (webcam.isOpen()) {
+    getQRCode.setOnFailed(
+        e -> {
+          onScanFail();
+        });
 
-                if ((image = webcam.getImage()) == null) {
-                    continue;
-                }
+    Thread t = new Thread(getQRCode);
+    t.setDaemon(true); // Make this thread low priority
+    t.start();
+  }
 
-                LuminanceSource source = new BufferedImageLuminanceSource(image);
-                BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+  // Override these methods in UI controller
+  protected void onScanSucceed(String result) {}
 
-                try {
-                    result = new MultiFormatReader().decode(bitmap);
-                } catch (NotFoundException e) {
-                    // fall thru, it means there is no QR code in image
-                }
-            }
+  protected void onScanFail() {}
 
-            if (result != null) {
-                lastScanned = result.getText();  // Exit if code is scanned
-                return;
-            }
+  // Attempts to get a QR code until timeout is reached
+  protected String fetchQRCode() {
 
-        } while (cycles < maxReaderCycles);  // Exit if timed out
-    }
+    Result result = null;
+    BufferedImage image;
+    int cycles = 0;
 
-    @Override
-    public Thread newThread(Runnable r) {
-        Thread t = new Thread(r, "example-runner");
-        t.setDaemon(true);
-        return t;
-    }
+    do {
+      try {
+        Thread.sleep(THREAD_SLEEP_DELAY);
+        cycles++;
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
 
+      if (webcam.isOpen()) {
+
+        if ((image = webcam.getImage()) == null) {
+          continue;
+        }
+
+        LuminanceSource source = new BufferedImageLuminanceSource(image);
+        BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+
+        try {
+          result = new MultiFormatReader().decode(bitmap);
+        } catch (NotFoundException e) {
+          // fall thru, it means there is no QR code in image
+        }
+      }
+
+      if (result != null) {
+        System.out.println("Yeehaw!!");
+        return result.getText(); // Exit if code is scanned
+      }
+
+    } while (cycles < MAX_CYCLES); // Exit if timed out
+    return ERR_CODE;
+  }
 }

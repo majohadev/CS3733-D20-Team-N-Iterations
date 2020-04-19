@@ -1,55 +1,63 @@
 package edu.wpi.N.views;
 
+import com.github.sarxos.webcam.WebcamPanel;
 import com.jfoenix.controls.JFXButton;
 import edu.wpi.N.qrcontrol.QRBase;
+import java.awt.*;
 import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javax.swing.*;
 
-public class QRTestController {
+public class QRTestController extends QRBase {
 
-    @FXML
-    JFXButton btn_scanButton;
-    @FXML
-    Label lbl_output;
-    @FXML
-    SwingNode pane_swingNode;
+  @FXML JFXButton btn_scanButton;
+  @FXML Label lbl_output;
+  @FXML AnchorPane pane_swingNodeSpot;
 
-    private QRBase qrBase;
+  // SceneBuilder gets whiny if you try to add a SwingNode before runtime
+  private SwingNode pane_webcamViewContainer;
 
-    @FXML
-    public void initialize () {
-        qrBase = new QRBase();
-        createAndSetSwingContent(pane_swingNode);
-    }
+  @FXML
+  public void initialize() {
+    pane_webcamViewContainer = new SwingNode();
+    pane_swingNodeSpot.getChildren().add(pane_webcamViewContainer);
+    createAndSetSwingContent(pane_webcamViewContainer, pane_swingNodeSpot);
+  }
 
-    @FXML
-    public void onScanClicked() {
+  @FXML
+  public void onScanClicked() {
 
-        if (qrBase != null) {
-            String dataOut = qrBase.startScan(); // Start scan with default timeout
-            if (dataOut != "") {
-                lbl_output.setText("Key: " + dataOut);
-                onScanSuccess(dataOut);
-            } else lbl_output.setText("No code found");
-        } else {
-            lbl_output.setText("QR reader not initialized");
-        }
-    }
+    btn_scanButton.setDisable(true);
+    lbl_output.setText("Make sure QR code is clearly within view.");
+    btn_scanButton.setText("Scanning...");
+    startScan();
+  }
 
-    private void onScanSuccess(String key) {
-        System.out.println("Scan successful! Key: " + key);
-    }
+  @Override
+  public void onScanSucceed(String readKey) {
+    lbl_output.setText("Scan successful! Key: " + readKey);
+    btn_scanButton.setDisable(false);
+    btn_scanButton.setText("Scan");
+  }
 
-    private void createAndSetSwingContent(final SwingNode swingNode) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                swingNode.setContent(qrBase.getWebcamView());
-            }
+  @Override
+  public void onScanFail() {
+    lbl_output.setText("Scan timed out.");
+    btn_scanButton.setDisable(false);
+    btn_scanButton.setText("Scan");
+  }
+
+  private void createAndSetSwingContent(final SwingNode swingNode, final Pane pane) {
+    SwingUtilities.invokeLater(
+        new Runnable() {
+          @Override
+          public void run() {
+            WebcamPanel wp = getWebcamView();
+            swingNode.setContent(wp);
+          }
         });
-    }
-
+  }
 }

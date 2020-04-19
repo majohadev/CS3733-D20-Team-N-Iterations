@@ -55,7 +55,6 @@ public class App extends Application {
       e.printStackTrace();
     }
   }
-
 }
 //  public void showPersonOverview() {
 //    try {
