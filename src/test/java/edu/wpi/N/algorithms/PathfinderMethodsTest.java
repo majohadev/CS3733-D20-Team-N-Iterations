@@ -129,6 +129,7 @@ public class PathfinderMethodsTest {
   public void findQuickAccessNoPathTester() throws DBException {
     DbController.addNode("NHALL00104", 1250, 850, 1, "MainBuil", "ABCD", "Hall 1", "Hall 1", 'N');
     Assertions.assertNull(Pathfinder.findQuickAccess(DbController.getNode("H700000000"), "ABCD"));
+    DbController.deleteNode("NHALL00104");
   }
 
   // to test generatePath: uncomment the necessary test methods make the method itself public
