@@ -133,9 +133,9 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <Button fx:id="btn_bathroom" mnemonicParsing="false" prefHeight="55.0" prefWidth="55.0">
+                              <Button fx:id="btn_bathroom" mnemonicParsing="false" onMouseClicked="#onNearestBathroomClicked" prefHeight="55.0" prefWidth="55.0">
                                  <graphic>
-                                    <ImageView fitHeight="55.0" fitWidth="41.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fitHeight="55.0" fitWidth="41.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@../images/bathroom.png" />
                                        </image>

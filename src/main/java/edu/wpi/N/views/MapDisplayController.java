@@ -181,10 +181,15 @@ public class MapDisplayController implements Controller, MapController {
     LinkedList<DbNode> destinationNode =
         DbController.searchVisNode(currentFloor, null, null, destinationNodeLongName);
     selectedNodes.add(destinationNode.getFirst());
-    System.out.println(selectedNodes.size());
     if (selectedNodes.size() < 2) selectedNodes.add(defaultNode);
-    System.out.println(selectedNodes);
     onBtnFindClicked(event);
     selectedNodes.clear();
+  }
+
+  @FXML
+  private void onNearestBathroomClicked(MouseEvent event) throws Exception {
+    Path pathToBathroom = Pathfinder.findQuickAccess(defaultNode, "REST");
+    LinkedList<DbNode> pathNodes = pathToBathroom.getPath();
+    drawPath(pathNodes);
   }
 }
