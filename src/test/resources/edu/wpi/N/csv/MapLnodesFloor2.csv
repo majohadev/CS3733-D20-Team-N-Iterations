@@ -1,0 +1,43 @@
+nodeID,xcoord,ycoord,floor,building,nodeType,longName,shortName,teamAssigned
+LDEPT00102,757,1122,2,Faulkner,DEPT,Biomedical Engineering,DEPT L2001,L
+LDEPT00302,737,840,2,Faulkner,DEPT,Morgue,DEPT L2003,L
+LDEPT00402,1450,1066,2,Faulkner,DEPT,Occupational Therapy,DEPT L2004,L
+LDEPT00502,1166,288,2,Faulkner,DEPT,Otolaryngology,DEPT L2005,L
+LDEPT00602,757,713,2,Faulkner,DEPT,Pharmacy,DEPT L2006,L
+LDEPT00702,1450,861,2,Faulkner,DEPT,Physical Therapy,DEPT L2007,L
+LDEPT00802,1363,474,2,Faulkner,DEPT,Plastic Surgery,DEPT L2008,L
+LDEPT00902,1200,1234,2,Faulkner,DEPT,Psych/Addiction Care,DEPT L2009,L
+LDEPT01002,1626,1205,2,Faulkner,DEPT,Psychiatric Inpatient Care,DEPT L2010,L
+LELEV00X02,1211,410,2,Faulkner,ELEV,Elevator 3 Level 2,ELEV L2003,L
+LELEV00Y02,1151,1184,2,Faulkner,ELEV,Elevator 1 Level 2,ELEV L2001,L
+LELEV00Z02,1380,1124,2,Faulkner,ELEV,Elevator 2 Level 2,ELEV L2002,L
+LHALL00102,747,658,2,Faulkner,HALL,Hallway Intersection 1 Level 2,HALL L2001,L
+LHALL00202,747,713,2,Faulkner,HALL,Hallway Intersection 2 Level 2,HALL L2002,L
+LHALL00302,747,840,2,Faulkner,HALL,Hallway Intersection 3 Level 2,HALL L2003,L
+LHALL00402,747,937,2,Faulkner,HALL,Hallway Intersection 4 Level 2,HALL L2004,L
+LHALL00502,747,981,2,Faulkner,HALL,Hallway Intersection 5 Level 2,HALL L2005,L
+LHALL00602,747,1122,2,Faulkner,HALL,Hallway Intersection 6 Level 2,HALL L2006,L
+LHALL00702,747,1205,2,Faulkner,HALL,Hallway Intersection 7 Level 2,HALL L2007,L
+LHALL00802,1151,1205,2,Faulkner,HALL,Hallway Intersection 8 Level 2,HALL L2008,L
+LHALL00902,1200,1205,2,Faulkner,HALL,Hallway Intersection 9 Level 2,HALL L2009,L
+LHALL01002,1433,1205,2,Faulkner,HALL,Hallway Intersection 10 Level 2,HALL L2010,L
+LHALL01102,1433,1124,2,Faulkner,HALL,Hallway Intersection 11 Level 2,HALL L2011,L
+LHALL01202,1433,1066,2,Faulkner,HALL,Hallway Intersection 12 Level 2,HALL L2012,L
+LHALL01302,1433,944,2,Faulkner,HALL,Hallway Intersection 13 Level 2,HALL L2013,L
+LHALL01402,1433,861,2,Faulkner,HALL,Hallway Intersection 14 Level 2,HALL L2014,L
+LHALL01502,1433,501,2,Faulkner,HALL,Hallway Intersection 15 Level 2,HALL L2015,L
+LHALL01602,1349,501,2,Faulkner,HALL,Hallway Intersection 16 Level 2,HALL L2016,L
+LHALL01702,1349,474,2,Faulkner,HALL,Hallway Intersection 17 Level 2,HALL L2017,L
+LHALL01802,1349,288,2,Faulkner,HALL,Hallway Intersection 18 Level 2,HALL L2018,L
+LHALL01902,1250,288,2,Faulkner,HALL,Hallway Intersection 19 Level 2,HALL L2019,L
+LHALL02002,1250,410,2,Faulkner,HALL,Hallway Intersection 20 Level 2,HALL L2020,L
+LHALL02102,1250,474,2,Faulkner,HALL,Hallway Intersection 21 Level 2,HALL L2021,L
+LREST00102,1450,1124,2,Faulkner,REST,Restroom 1 Level 2,REST L2001,L
+LRETL00102,1349,507,2,Faulkner,RETL,Food Service,FOOD L2001,L
+LSTAF00102,737,713,2,Faulkner,STAF,Facilities 1,STAFF L2001,L
+LSTAF00202,757,937,2,Faulkner,STAF,Central Sterile Supply,STAFF L2002,L
+LSTAF00302,737,981,2,Faulkner,STAF,Facilities 2,STAFF L2003,L
+LSTAF00402,1423,944,2,Faulkner,STAF,Central Sterile Supply 2,STAFF L2004,L
+LSTAF00502,747,646,2,Faulkner,STAF,Material Management,STAFF L2005,L
+LSTAF00602,667,1205,2,Faulkner,STAF,Mechanical Space,STAFF L2006,L
+LSTAI00102,1290,410,2,Faulkner,STAI,Staircase 1 Level 2,STAIR L2001,L

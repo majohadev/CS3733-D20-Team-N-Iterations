@@ -1,6 +1,5 @@
 package edu.wpi.N.algorithms;
 
-import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.DbController;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Node;
