@@ -64,7 +64,7 @@ public class MapDisplayController implements Controller {
 
   private ObservableList<String> fuzzySearchTextList =
       FXCollections.observableArrayList(); // List that fills TextViews
-  private LinkedList<String> fuzzySearchStringList =
+  private LinkedList<DbNode> fuzzySearchNodeList =
       new LinkedList<>(); // List to store output of fuzzy search functions
 
   private DbNode defaultNode = new DbNode();
@@ -162,15 +162,21 @@ public class MapDisplayController implements Controller {
     selectedNodes.clear();
   }
 
+  // mike
   // Upon changing text in the search by location UI component this method
   // is triggered
   @FXML
   private void searchByLocationTextFill(KeyEvent inputMethodEvent) throws DBException {
     String currentText = txtf_searchlocation.getText();
-    fuzzySearchStringList = FuzzySearchAlgorithm.suggestWithCorrection(currentText);
-    if (fuzzySearchStringList != null) {
+    fuzzySearchNodeList = FuzzySearchAlgorithm.suggestWithCorrection(currentText);
+    LinkedList<String> fuzzySearchStringList = new LinkedList<>();
+    if (fuzzySearchNodeList != null) {
+
+      for (DbNode node : fuzzySearchNodeList) {
+        fuzzySearchStringList.add(node.getLongName());
+      }
+
       fuzzySearchTextList = FXCollections.observableList(fuzzySearchStringList);
-      System.out.println(fuzzySearchStringList);
     } else fuzzySearchTextList = FXCollections.observableList(longNamesList);
     lst_locationsorted.setItems(fuzzySearchTextList);
   }
@@ -179,13 +185,13 @@ public class MapDisplayController implements Controller {
   @FXML
   private void onLocationPathFindClicked(MouseEvent event) throws Exception {
     int currentSelection = lst_locationsorted.getSelectionModel().getSelectedIndex();
-    String destinationNodeLongName = fuzzySearchTextList.get(currentSelection);
-    LinkedList<DbNode> destinationNode =
-        DbController.searchVisNode(currentFloor, null, null, destinationNodeLongName);
-    selectedNodes.add(destinationNode.getFirst());
-    if (selectedNodes.size() < 2) selectedNodes.add(defaultNode);
-    onBtnFindClicked(event);
-    selectedNodes.clear();
+    if (currentSelection >= 0) {
+      DbNode destinationNode = fuzzySearchNodeList.get(currentSelection);
+      selectedNodes.add(destinationNode);
+      if (selectedNodes.size() < 2) selectedNodes.add(defaultNode);
+      onBtnFindClicked(event);
+      selectedNodes.clear();
+    }
   }
 
   @FXML

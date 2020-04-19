@@ -15,16 +15,16 @@ public class FuzzySearchAlgorithm {
    * @param userInput
    * @return
    */
-  public static LinkedList<String> suggestWithCorrection(String userInput) throws DBException {
+  public static LinkedList<DbNode> suggestWithCorrection(String userInput) throws DBException {
+    if (userInput.length() > 1) {
 
-    if (userInput.length() > 0) {
       // initialize variables
-      LinkedList<String> suggestions = new LinkedList<String>();
+      LinkedList<DbNode> suggestions = new LinkedList<DbNode>();
       // search for all nodes by long name
       LinkedList<DbNode> suggestedNodes = DbController.searchVisNode(-1, null, null, userInput);
       if (suggestedNodes.size() != 0) {
         for (DbNode node : suggestedNodes) {
-          suggestions.add(node.getLongName());
+          suggestions.add(node);
         }
       } else {
         // if 5 or more letters in user's input
@@ -45,9 +45,9 @@ public class FuzzySearchAlgorithm {
    * @param userInput: incorrect User input
    * @return: suggestions based on corrected user's input
    */
-  private static LinkedList<String> performFuzzySearch(String userInput) throws DBException {
+  private static LinkedList<DbNode> performFuzzySearch(String userInput) throws DBException {
     userInput = userInput.toLowerCase();
-    LinkedList<String> suggestions = new LinkedList<String>();
+    LinkedList<DbNode> suggestions = new LinkedList<DbNode>();
 
     double ratio = 0.8;
 
@@ -68,7 +68,7 @@ public class FuzzySearchAlgorithm {
           // calculate ratio
           double lensum = s.length() + userInput.length();
           if ((lensum - d) / (lensum) >= ratio) {
-            suggestions.add(fullLongName);
+            suggestions.add(node);
           }
         }
       }
