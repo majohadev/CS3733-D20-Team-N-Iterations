@@ -34,6 +34,7 @@ public class FuzzySearchTest {
   @Test
   public void testSearchWithCorrecitonInputIsOneLetter() throws DBException {
     String userInput = "c";
+
     LinkedList<DbNode> expected = null;
 
     Assertions.assertEquals(expected, FuzzySearchAlgorithm.suggestWithCorrection(userInput));
@@ -100,6 +101,8 @@ public class FuzzySearchTest {
 
     long timeElapsed = endTime - startTime;
     System.out.println("Elapsed time for FuzzySearch in milliseconds:" + timeElapsed / 1000000);
+
+    // LinkedList<String> actual = FuzzySearchAlgorithm.suggestWithCorrection(userInput);
 
     Assertions.assertTrue(actual.size() == 3);
     Assertions.assertTrue(actual.contains(expected.get(0)));
