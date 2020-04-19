@@ -28,5 +28,6 @@ public class AdminController implements Initializable {
     tbMockData.setItems(mockData);
   }
 
-  private ObservableList<MockData> mockData = FXCollections.observableArrayList(new MockData("Hello"), new MockData("Goodbye"));
+  private ObservableList<MockData> mockData =
+      FXCollections.observableArrayList(new MockData("Hello"), new MockData("Goodbye"));
 }

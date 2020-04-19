@@ -16,6 +16,9 @@ import java.util.LinkedList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -23,6 +26,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 public class MapDisplayController implements Controller {
   private App mainApp;
@@ -185,18 +190,22 @@ public class MapDisplayController implements Controller {
       lst_locationsorted.setItems(fuzzySearchTextList);
 
     } else if (inputMethodEvent.getSource() == txt_laundryLocation) {
+      LinkedList<String> fuzzySearchStringListLaundry =
+          new LinkedList<>(); // List to store output of fuzzy search functions
       currentText = txt_laundryLocation.getText();
-      fuzzySearchStringList = FuzzySearchAlgorithm.suggestWithCorrection(currentText);
-      if (fuzzySearchStringList != null)
-        fuzzySearchTextList = FXCollections.observableList(fuzzySearchStringList);
+      fuzzySearchStringListLaundry = FuzzySearchAlgorithm.suggestWithCorrection(currentText);
+      if (fuzzySearchStringListLaundry != null)
+        fuzzySearchTextList = FXCollections.observableList(fuzzySearchStringListLaundry);
       else fuzzySearchTextList = FXCollections.observableList(longNamesList);
       lst_laundryLocation.setItems(fuzzySearchTextList);
 
     } else if (inputMethodEvent.getSource() == txt_laundryLocation) {
+      LinkedList<String> fuzzySearchStringListTranslator =
+          new LinkedList<>(); // List to store output of fuzzy search functions
       currentText = txt_translatorLocation.getText();
-      fuzzySearchStringList = FuzzySearchAlgorithm.suggestWithCorrection(currentText);
-      if (fuzzySearchStringList != null)
-        fuzzySearchTextList = FXCollections.observableList(fuzzySearchStringList);
+      fuzzySearchStringListTranslator = FuzzySearchAlgorithm.suggestWithCorrection(currentText);
+      if (fuzzySearchStringListTranslator != null)
+        fuzzySearchTextList = FXCollections.observableList(fuzzySearchStringListTranslator);
       else fuzzySearchTextList = FXCollections.observableList(longNamesList);
       lst_translatorLocation.setItems(fuzzySearchTextList);
     }
@@ -221,8 +230,15 @@ public class MapDisplayController implements Controller {
       node.getLongName();
     }
   */
-  @FXML
-  public void popupWindow()
+  public void popupWindow(String path) throws IOException {
+    Stage stage = new Stage();
+    Parent root;
+    root = FXMLLoader.load(getClass().getResource(path));
+    Scene scene = new Scene(root);
+    stage.setScene(scene);
+    stage.initModality(Modality.APPLICATION_MODAL);
+    stage.showAndWait();
+  }
 
   /*
   - Add to database function ->
