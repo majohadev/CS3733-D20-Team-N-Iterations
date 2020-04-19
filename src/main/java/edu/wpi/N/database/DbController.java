@@ -721,16 +721,33 @@ public class DbController {
   public static boolean addEdge(String nodeID1, String nodeID2) throws DBException {
     String edgeID = nodeID1 + "_" + nodeID2;
     try {
-      // Look in to a more efficient way to do this, but it's probably OK for now
-      String query =
-          "SELECT * FROM edges WHERE (node1 = ? AND node2 = ?) OR (node2 = ? AND node1 = ?)";
-
+      String query = "SELECT floor, nodeType FROM nodes WHERE (nodeID = ?) OR (nodeID = ?)";
       PreparedStatement st = con.prepareStatement(query);
+      st.setString(1, nodeID1);
+      st.setString(2, nodeID2);
+      ResultSet result = st.executeQuery();
+      result.next();
+      String floor1 = result.getString("floor");
+      String type1 = result.getString("nodeType");
+      result.next();
+      String floor2 = result.getString("floor");
+      String type2 = result.getString("nodeType");
+
+      if (!floor1.equals(floor2)) {
+        if (!type1.equals(type2) || !(type1.equals("STAI") || type1.equals("ELEV"))) {
+          throw new DBException("Cannot add edge between " + nodeID1 + " and " + nodeID2);
+        }
+      }
+
+      // Look in to a more efficient way to do this, but it's probably OK for now
+      query = "SELECT * FROM edges WHERE (node1 = ? AND node2 = ?) OR (node2 = ? AND node1 = ?)";
+
+      st = con.prepareStatement(query);
       st.setString(1, nodeID1);
       st.setString(2, nodeID2);
       st.setString(3, nodeID1);
       st.setString(4, nodeID2);
-      ResultSet result = st.executeQuery();
+      result = st.executeQuery();
 
       if (result.next()) {
         return false;
