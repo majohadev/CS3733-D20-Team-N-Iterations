@@ -37,13 +37,27 @@ public class DbControllerTest {
   @Test
   public void testModifyNode() throws DBException {
     DbController.addEdge("NHALL00204", "NHALL00104");
-    DbController.modifyNode("NHALL00204", 123, 771, 3, "Faulkner", "SEXY", "DEPT 3", "Dept 3", 'N');
+    DbController.modifyNode("NHALL00204", 123, 771, 4, "Faulkner", "SEXY", "DEPT 3", "Dept 3", 'N');
     // DbTester.printDB();
-    DbNode n = DbController.getNode("NSEXY00103");
+    DbNode n = DbController.getNode("NSEXY00104");
     assertEquals(123, n.getX());
     assertEquals("SEXY", n.getNodeType());
-    DbController.deleteNode("NSEXY00103");
+    DbController.deleteNode("NSEXY00104");
     DbController.addNode("NHALL00204", 1350, 1250, 4, "Faulkner", "HALL", "Hall 2", "Hall 2", 'N');
+  }
+
+  @Test
+  public void testSafeModifyNode() throws DBException {
+    DbController.modifyNode("NDEPT00104", 1350, 420, "Cardio", "Dept X");
+    DbNode n = DbController.getNode("NDEPT00104");
+    assertEquals(1350, n.getX());
+    assertEquals(420, n.getY());
+    assertEquals("Faulkner", n.getBuilding());
+    assertEquals("Cardio", n.getLongName());
+    assertEquals("Dept X", n.getShortName());
+    DbController.deleteNode("NDEPT00104");
+    DbController.addNode(
+        "NDEPT00104", 1350, 950, 4, "Faulkner", "DEPT", "Cardiology", "Dept 1", 'N');
   }
 
   // Noah
@@ -89,6 +103,74 @@ public class DbControllerTest {
   // Chris
   @Test
   public void testSearchNode() throws DBException {
+    // need to search by floor, building, nodeType, longName.
+    DbController.addNode(
+        "NELEV00X07", 1250, 850, 7, "Faulkner", "ELEV", "Elevator X", "Hall 7", 'N');
+    DbController.addNode("NELEV00X06", 1250, 850, 7, "Faulkner", "ELEV", "Elev X", "Hall 7", 'N');
+    DbController.addNode(
+        "NELEV00X05", 1250, 850, 5, "Not Faulkner", "ELEV", "Elev X", "Hall 7", 'N');
+    DbController.addNode("NHALL00105", 1250, 850, 5, "Faulkner", "HALL", "ELEV X", "Hall 1", 'N');
+
+    LinkedList<DbNode> lst = DbController.searchNode(7, "Faulkner", "ELEV", "Elev X");
+    assertFalse(
+        lst.contains(
+            new DbNode(
+                "NELEV00X07", 1250, 850, 7, "Faulkner", "ELEV", "Elevator X", "Hall 7", 'N')));
+    assertFalse(
+        lst.contains(
+            new DbNode(
+                "NELEV00X06", 1250, 850, 7, "Faulkner", "ELEV", "Elevator X", "Hall 7", 'N')));
+    assertFalse(
+        lst.contains(
+            new DbNode("NHALL00105", 1250, 850, 5, "Faulkner", "HALL", "ELEV X", "Hall 1", 'N')));
+    lst = DbController.searchNode(-1, null, "ELEV", null);
+    assertTrue(
+        lst.contains(
+            new DbNode(
+                "NELEV00X07", 1250, 850, 7, "Faulkner", "ELEV", "Elevator X", "Hall 7", 'N')));
+    assertTrue(
+        lst.contains(
+            new DbNode("NELEV00X06", 1250, 850, 7, "Faulkner", "ELEV", "Elev X", "Hall 7", 'N')));
+    assertFalse(
+        lst.contains(
+            new DbNode("NHALL00105", 1250, 850, 5, "Faulkner", "HALL", "ELEV X", "Hall 1", 'N')));
+    lst = DbController.searchNode(5, null, null, "ElEv");
+    assertFalse(
+        lst.contains(
+            new DbNode(
+                "NELEV00X07", 1250, 850, 7, "Faulkner", "ELEV", "Elevator X", "Hall 7", 'N')));
+    assertFalse(
+        lst.contains(
+            new DbNode(
+                "NELEV00X06", 1250, 850, 7, "Faulkner", "ELEV", "Elevator X", "Hall 7", 'N')));
+    assertTrue(
+        lst.contains(
+            new DbNode("NHALL00105", 1250, 850, 5, "Faulkner", "HALL", "ELEV X", "Hall 1", 'N')));
+    assertTrue(
+        lst.contains(
+            new DbNode(
+                "NELEV00X05", 1250, 850, 5, "Not Faulkner", "ELEV", "Elev X", "Hall 7", 'N')));
+    lst = DbController.searchVisNode(5, null, null, "ElEv");
+    assertFalse(
+        lst.contains(
+            new DbNode(
+                "NELEV00X07", 1250, 850, 7, "Faulkner", "ELEV", "Elevator X", "Hall 7", 'N')));
+    assertFalse(
+        lst.contains(
+            new DbNode(
+                "NELEV00X06", 1250, 850, 7, "Faulkner", "ELEV", "Elevator X", "Hall 7", 'N')));
+    assertFalse(
+        lst.contains(
+            new DbNode("NHALL00105", 1250, 850, 5, "Faulkner", "HALL", "ELEV X", "Hall 1", 'N')));
+    assertTrue(
+        lst.contains(
+            new DbNode(
+                "NELEV00X05", 1250, 850, 5, "Not Faulkner", "ELEV", "Elev X", "Hall 7", 'N')));
+    DbController.deleteNode("NELEV00X07");
+    DbController.deleteNode("NELEV00X06");
+    DbController.deleteNode("NELEV00X05");
+    DbController.deleteNode("NHALL00105");
+
     assertEquals(1, DbController.searchNode(-1, null, null, "Neurology").size());
     assertTrue(
         DbController.searchNode(-1, null, null, "Cardiology")
@@ -112,6 +194,33 @@ public class DbControllerTest {
     DbController.addEdge("NHALL00104", "NHALL00204");
     DbController.addEdge("NHALL00104", "NDEPT00104");
     DbController.addEdge("NHALL00104", "NDEPT00204");
+    DbController.addNode("NELEV00X07", 1250, 850, 7, "Faulkner", "ELEV", "Elev X", "Hall 7", 'N');
+    DbController.addNode("NELEV00X06", 1250, 850, 6, "Faulkner", "ELEV", "Elev X", "Hall 7", 'N');
+    DbController.addNode("NELEV00X05", 1250, 850, 5, "Faulkner", "ELEV", "Elev X", "Hall 7", 'N');
+    DbController.addNode("NHALL00105", 1250, 850, 5, "Faulkner", "HALL", "Hall 1", "Hall 1", 'N');
+    DbController.addNode("NHALL00107", 1250, 850, 7, "Faulkner", "HALL", "Hall 1", "Hall 1", 'N');
+    DbController.addNode("NHALL00106", 1250, 850, 6, "Faulkner", "HALL", "Hall 1", "Hall 1", 'N');
+    DbController.addNode(
+        "NHALL00207", 1250, 850, 7, "Not faulkner", "HALL", "Hall 1", "Hall 1", 'N');
+    DbController.addEdge("NELEV00X07", "NELEV00X06");
+    DbController.addEdge("NELEV00X05", "NELEV00X06");
+    DbController.addEdge("NHALL00105", "NELEV00X05");
+    DbController.addEdge("NHALL00106", "NELEV00X06");
+    DbController.addEdge("NHALL00107", "NELEV00X07");
+    DbController.addEdge("NHALL00107", "NHALL00207");
+    LinkedList<Node> lst = DbController.getGAdjacent("NELEV00X06", 5, 7);
+    assertTrue(
+        lst.contains(new Node(1250, 850, "NELEV00X07"))
+            && lst.contains(new Node(1250, 850, "NELEV00X05")));
+    assertFalse(lst.contains(new Node(1250, 850, "NHALL00106")));
+
+    lst = DbController.getGAdjacent("NELEV00X07", 5, 7);
+    assertTrue(lst.contains(new Node(1250, 850, "NELEV00X06")));
+    assertTrue(lst.contains(new Node(1250, 850, "NHALL00107")));
+    lst = DbController.getGAdjacent("NELEV00X05", 5, 7);
+    assertTrue(
+        lst.contains(new Node(1250, 850, "NELEV00X06"))
+            && lst.contains(new Node(1250, 850, "NHALL00105")));
 
     LinkedList<Node> adjList = DbController.getGAdjacent("NHALL00104");
     assertNotNull(adjList); // error here
@@ -124,6 +233,13 @@ public class DbControllerTest {
     DbController.removeEdge("NHALL00104", "NHALL00204");
     DbController.removeEdge("NHALL00104", "NDEPT00104");
     DbController.removeEdge("NHALL00104", "NDEPT00204");
+    DbController.deleteNode("NELEV00X07");
+    DbController.deleteNode("NELEV00X06");
+    DbController.deleteNode("NELEV00X05");
+    DbController.deleteNode("NHALL00105");
+    DbController.deleteNode("NHALL00107");
+    DbController.deleteNode("NHALL00106");
+    DbController.deleteNode("NHALL00207");
   }
 
   // Chris
