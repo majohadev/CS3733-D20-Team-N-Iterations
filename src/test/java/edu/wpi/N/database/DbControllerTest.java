@@ -37,12 +37,12 @@ public class DbControllerTest {
   @Test
   public void testModifyNode() throws DBException {
     DbController.addEdge("NHALL00204", "NHALL00104");
-    DbController.modifyNode("NHALL00204", 123, 771, 3, "Faulkner", "SEXY", "DEPT 3", "Dept 3", 'N');
+    DbController.modifyNode("NHALL00204", 123, 771, 4, "Faulkner", "SEXY", "DEPT 3", "Dept 3", 'N');
     // DbTester.printDB();
-    DbNode n = DbController.getNode("NSEXY00103");
+    DbNode n = DbController.getNode("NSEXY00104");
     assertEquals(123, n.getX());
     assertEquals("SEXY", n.getNodeType());
-    DbController.deleteNode("NSEXY00103");
+    DbController.deleteNode("NSEXY00104");
     DbController.addNode("NHALL00204", 1350, 1250, 4, "Faulkner", "HALL", "Hall 2", "Hall 2", 'N');
   }
 
