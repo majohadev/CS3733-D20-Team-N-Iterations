@@ -8,7 +8,10 @@ import edu.wpi.N.entities.DbNode;
 import java.util.LinkedList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Accordion;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -36,9 +39,17 @@ public class MapEditController implements Controller {
   @FXML TitledPane pn_nodes_delete;
   @FXML TitledPane pn_nodes_edit;
 
+  @FXML TextField txt_add_longName;
+  @FXML TextField txt_add_shortName;
+  @FXML TextField txt_add_type;
+  @FXML Button btn_add_newNode;
+  @FXML Button btn_add_cancel;
+  @FXML Button btn_add_save;
+
   HashBiMap<Circle, DbNode> masterNodes; // stores the map nodes and their respective database nodes
   LinkedList<DbNode> allFloorNodes; // stores all the nodes on the floor
   LinkedList<DbNode> selectedNodes; // stores all the selected nodes on the map
+  Circle tempNode;
 
   @Override
   public void setMainApp(App mainApp) {
@@ -49,6 +60,7 @@ public class MapEditController implements Controller {
     selectedNodes = new LinkedList<DbNode>();
     allFloorNodes = DbController.floorNodes(4, "Faulkner");
     masterNodes = HashBiMap.create();
+    tempNode = null;
     populateMap();
     accordionListener();
   }
@@ -58,7 +70,7 @@ public class MapEditController implements Controller {
         .expandedPaneProperty()
         .addListener(
             (observable, oldValue, newValue) -> {
-              if (!newValue.equals(null)) {
+              if (newValue != null) {
                 if (newValue.equals(pn_nodes)) {
                   accordionListenerNodes();
                 } else if (newValue.equals(pn_edges)) {
@@ -69,22 +81,68 @@ public class MapEditController implements Controller {
   }
 
   public void accordionListenerNodes() {
-    acc_nodes.expandedPaneProperty().addListener((observable, oldValue, newValue) -> {
-      if (!newValue.equals(null)) {
-        if (newValue.equals(pn_nodes_add)) {
+    acc_nodes
+        .expandedPaneProperty()
+        .addListener(
+            (observable, oldValue, newValue) -> {
+              if (newValue != null) {
+                if (newValue.equals(pn_nodes_delete)) {
 
-        }
-        else if (newValue.equals(pn_nodes_delete)) {
+                } else if (newValue.equals(pn_nodes_edit)) {
 
-        }
-        else if (newValue.equals(pn_nodes_edit)) {
-
-        }
-      }
-    });
+                }
+              }
+            });
   }
 
+  public void onBtnNewNodeClicked() {
+    txt_add_longName.setDisable(false);
+    txt_add_shortName.setDisable(false);
+    txt_add_type.setDisable(false);
+    btn_add_cancel.setDisable(false);
+    btn_add_save.setDisable(false);
+    btn_add_newNode.setDisable(true);
 
+    tempNode = new Circle();
+    tempNode.setRadius(6);
+    tempNode.setLayoutX(IMAGE_WIDTH / 2);
+    tempNode.setLayoutY(SCREEN_HEIGHT / 2);
+    tempNode.setFill(Color.BLACK);
+    tempNode.setOpacity(0.7);
+    tempNode.setOnMouseDragged(event -> this.onDragNode(event, tempNode));
+    pn_display.getChildren().add(tempNode);
+  }
+
+  public void onBtnCancelClicked() {
+    pn_display.getChildren().remove(tempNode);
+    tempNode = null;
+    txt_add_longName.clear();
+    txt_add_shortName.clear();
+    txt_add_type.clear();
+    txt_add_longName.setDisable(true);
+    txt_add_shortName.setDisable(true);
+    txt_add_type.setDisable(true);
+    btn_add_newNode.setDisable(false);
+    btn_add_save.setDisable(true);
+    btn_add_cancel.setDisable(true);
+  }
+
+  public void onBtnSaveClicked() throws DBException {
+    String longName = txt_add_longName.getText();
+    String shortName = txt_add_longName.getText();
+    String type = txt_add_type.getText();
+    if (longName == null || shortName == null || type == null) {
+      return;
+    }
+    int x = (int) (tempNode.getCenterX() / HORIZONTAL_SCALE);
+    int y = (int) (tempNode.getCenterY() / VERTICAL_SCALE);
+    DbController.addNode(x, y, 4, "Faulkner", type, longName, shortName);
+  }
+
+  public void onDragNode(MouseEvent event, Circle tempNode) {
+    tempNode.setCenterX(event.getX());
+    tempNode.setCenterY(event.getY());
+  }
 
   public void populateMap() {
     for (DbNode node : allFloorNodes) {
