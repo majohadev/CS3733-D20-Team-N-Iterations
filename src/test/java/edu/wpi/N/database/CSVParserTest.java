@@ -32,11 +32,11 @@ public class CSVParserTest {
     DbNode lastExpected =
         new DbNode("H130000000", 1341, 1114, 1, "MainBuil", "LABS", "HALOL", "TT", 'V');
 
-    new DbNode("AAAAAAAAAA", 171, 851, 1, "MainBuil", "OFFI", "Arnold", "AA", 'E');
+    /*new DbNode("AAAAAAAAAA", 171, 851, 1, "MainBuil", "OFFI", "Arnold", "AA", 'E');
     DbNode middleExpected =
         new DbNode("H500000000", 316, 1132, 1, "MainBuil", "HALL", "HALOL", "LL", 'N');
     DbNode lastExpected =
-        new DbNode("H130000000", 1341, 1114, 1, "MainBuil", "HALL", "HALOL", "TT", 'V');
+        new DbNode("H130000000", 1341, 1114, 1, "MainBuil", "HALL", "HALOL", "TT", 'V');*/
 
     // Compare with first
     Assertions.assertEquals(firstExpected, DbController.getNode("AAAAAAAAAA"));
@@ -66,11 +66,11 @@ public class CSVParserTest {
     DbNode lastExpected =
         new DbNode("H130000000", 1341, 1114, 1, "MainBuil", "LABS", "HALOL", "TT", 'V');
 
-    new DbNode("AAAAAAAAAA", 171, 851, 1, "MainBuil", "OFFI", "Arnold", "AA", 'E');
+    /*new DbNode("AAAAAAAAAA", 171, 851, 1, "MainBuil", "OFFI", "Arnold", "AA", 'E');
     DbNode middleExpected =
         new DbNode("H500000000", 316, 1132, 1, "MainBuil", "HALL", "HALOL", "LL", 'N');
     DbNode lastExpected =
-        new DbNode("H130000000", 1341, 1114, 1, "MainBuil", "HALL", "HALOL", "TT", 'V');
+        new DbNode("H130000000", 1341, 1114, 1, "MainBuil", "HALL", "HALOL", "TT", 'V');*/
 
     // Compare with first
     Assertions.assertEquals(firstExpected, DbController.getNode("AAAAAAAAAA"));

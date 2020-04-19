@@ -168,9 +168,10 @@ public class MapDisplayController implements Controller {
   private void searchByLocationTextFill(KeyEvent inputMethodEvent) throws DBException {
     String currentText = txtf_searchlocation.getText();
     fuzzySearchStringList = FuzzySearchAlgorithm.suggestWithCorrection(currentText);
-    if (fuzzySearchStringList != null)
+    if (fuzzySearchStringList != null) {
       fuzzySearchTextList = FXCollections.observableList(fuzzySearchStringList);
-    else fuzzySearchTextList = FXCollections.observableList(longNamesList);
+      System.out.println(fuzzySearchStringList);
+    } else fuzzySearchTextList = FXCollections.observableList(longNamesList);
     lst_locationsorted.setItems(fuzzySearchTextList);
   }
 
