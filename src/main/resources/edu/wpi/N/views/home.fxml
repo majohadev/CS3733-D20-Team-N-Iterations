@@ -1,20 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXDrawer?>
-<?import javafx.scene.control.Button?>
+<<<<<<<<< Temporary merge branch 1:src/main/resources/edu/wpi/N/views/Home.fxml
 <?import javafx.scene.control.Label?>
+=========
+<?import javafx.scene.control.Button?>
+>>>>>>>>> Temporary merge branch 2:src/main/resources/edu/wpi/N/views/home.fxml
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.HomeController">
    <children>
-      <Button fx:id="btn_map" layoutX="280.0" layoutY="217.0" mnemonicParsing="false" onMouseClicked="#onBtnMapClicked" text="Map" />
-      <Label layoutX="107.0" layoutY="170.0" text="Welcome to Brigham and Womens Hospital">
+<<<<<<<<< Temporary merge branch 1:src/main/resources/edu/wpi/N/views/Home.fxml
+      <Label layoutX="5.0" layoutY="147.0" text="Welcome to Brigham and Womens Hospital" textAlignment="CENTER" wrapText="true">
          <font>
-            <Font size="20.0" />
+            <Font name="Calibri" size="36.0" />
          </font>
       </Label>
-      <Label layoutX="255.0" layoutY="200.0" text="Click to Continue" />
-      <JFXDrawer fx:id="homeDrawer" layoutY="42.0" prefHeight="60.0" prefWidth="100.0" />
+      <Label layoutX="263.0" layoutY="189.0" text="Click to Continue" textAlignment="CENTER">
+         <font>
+            <Font name="Calibri" size="18.0" />
+         </font>
+      </Label>
+=========
+      <Button fx:id="btn_map" layoutX="134.0" layoutY="144.0" mnemonicParsing="false" onMouseClicked="#onBtnMapClicked" text="Map" />
+>>>>>>>>> Temporary merge branch 2:src/main/resources/edu/wpi/N/views/home.fxml
    </children>
 </AnchorPane>

@@ -64,8 +64,8 @@
                                  <children>
                                     <Label layoutX="4.0" layoutY="-6.0" prefHeight="67.0" prefWidth="272.0" text="Type the Location Name and Click It In the List Below To Select It As Your Destination " textAlignment="CENTER" wrapText="true" />
                                     <ListView fx:id="lst_locationsorted" layoutX="17.0" layoutY="101.0" prefHeight="111.0" prefWidth="245.0" />
-                                    <TextField fx:id="txtf_searchlocation" layoutX="18.0" layoutY="61.0" prefHeight="30.0" prefWidth="245.0" promptText="Enter Destination Location" />
-                                    <Button fx:id="btn_findlocationpath" layoutX="40.0" layoutY="223.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="200.0" text="       Find Path To Location" textAlignment="CENTER">
+                                    <TextField fx:id="txtf_searchlocation" layoutX="18.0" layoutY="61.0" onKeyTyped="#searchByLocationTextFill" prefHeight="30.0" prefWidth="245.0" promptText="Enter Destination Location" />
+                                    <Button fx:id="btn_findlocationpath" layoutX="40.0" layoutY="223.0" mnemonicParsing="false" onMouseClicked="#onLocationPathFindClicked" prefHeight="40.0" prefWidth="200.0" text="       Find Path To Location" textAlignment="CENTER">
                                        <font>
                                           <Font name="Calibri Bold" size="14.0" />
                                        </font>
@@ -134,9 +134,9 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <Button fx:id="btn_bathroom" mnemonicParsing="false" prefHeight="55.0" prefWidth="55.0">
+                              <Button fx:id="btn_bathroom" mnemonicParsing="false" onMouseClicked="#onNearestBathroomClicked" prefHeight="55.0" prefWidth="55.0">
                                  <graphic>
-                                    <ImageView fitHeight="55.0" fitWidth="41.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fitHeight="55.0" fitWidth="41.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@../images/bathroom.png" />
                                        </image>
@@ -254,8 +254,8 @@
                   </ImageView>
                   <Pane fx:id="pn_display" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="982.0" prefWidth="1637.0">
                      <children>
-                        <Button fx:id="btn_find" layoutX="162.0" layoutY="395.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="103.0" text="Find Path" />
-                        <Button fx:id="btn_reset" layoutX="162.0" layoutY="466.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="103.0" text="Reset" />
+                        <Button fx:id="btn_find" layoutX="162.0" layoutY="395.0" mnemonicParsing="false" onMouseClicked="#onBtnFindClicked" prefHeight="43.0" prefWidth="103.0" text="Find Path" />
+                        <Button fx:id="btn_reset" layoutX="162.0" layoutY="466.0" mnemonicParsing="false" onMouseClicked="#onResetClicked" prefHeight="43.0" prefWidth="103.0" text="Reset" />
                      </children></Pane>
                </children>
             </StackPane>

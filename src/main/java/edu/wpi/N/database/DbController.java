@@ -144,6 +144,36 @@ public class DbController {
   }
 
   /**
+   * Modifies a Node in the database. Does not change the nodeID.
+   *
+   * @param nodeID the ID of the node you wish to change
+   * @param x The new x coordinate of the node
+   * @param y The new y coordinate of the node
+   * @param longName The new node's longName
+   * @param shortName The new node's shortName
+   * @return true if the node was modified, false otherwise
+   */
+  public static boolean modifyNode(String nodeID, int x, int y, String longName, String shortName)
+      throws DBException {
+    try {
+      String query =
+          "UPDATE nodes SET xcoord = ?, ycoord = ?, longName = ?, shortName = ? WHERE nodeID = ?";
+      PreparedStatement stmt = con.prepareStatement(query);
+
+      stmt.setInt(1, x);
+      stmt.setInt(2, y);
+      stmt.setString(3, longName);
+      stmt.setString(4, shortName);
+      stmt.setString(5, nodeID);
+
+      return stmt.executeUpdate() > 0;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown error: modifyNode", e);
+    }
+  }
+
+  /**
    * Moves a node to a new location
    *
    * @param nodeID the node ID of the node you wish to move
@@ -374,7 +404,7 @@ public class DbController {
 
   /**
    * Searches nodes by floor, building, nodeType and longName. All must be exact except longName,
-   * which is a substring.
+   * which is a substring and case-insensitive.
    *
    * @param floor the floor you want the nodes on
    * @param building the building in which you want the nodes
@@ -385,12 +415,63 @@ public class DbController {
   // Nick
   public static LinkedList<DbNode> searchNode(
       int floor, String building, String nodeType, String longName) throws DBException {
-    String query = "SELECT * FROM nodes WHERE longName LIKE ?";
+    return searchNode(floor, building, nodeType, longName, false);
+  }
+
+  /**
+   * Searches nodes by floor, building, nodeType and longName. All must be exact except longName,
+   * which is a substring and case-insensitive. only returns visible nodes; basically, excludes hall
+   * nodes.
+   *
+   * @param floor the floor you want the nodes on
+   * @param building the building in which you want the nodes
+   * @param nodeType the type of node you want (must be length 4)
+   * @param longName the longname you want to search for
+   * @return A linked list of DbNodes which matches the search query
+   */
+  public static LinkedList<DbNode> searchVisNode(
+      int floor, String building, String nodeType, String longName) throws DBException {
+    return searchNode(floor, building, nodeType, longName, true);
+  }
+
+  /**
+   * Searches nodes by floor, building, nodeType, longName, and can exclude invisible (HALL) nodes.
+   * All must be exact except longName, which is a substring and case-insensitive.
+   *
+   * @param floor the floor you want the nodes on
+   * @param building the building in which you want the nodes
+   * @param nodeType the type of node you want (must be length 4)
+   * @param longName the longname you want to search for
+   * @param visOnly True if you want to exclude hall nodes, false otherwise.
+   * @return A linked list of DbNodes which matches the search query
+   */
+  // Nick
+  private static LinkedList<DbNode> searchNode(
+      int floor, String building, String nodeType, String longName, boolean visOnly)
+      throws DBException {
+    String query = "SELECT * FROM nodes WHERE ";
+    if (visOnly) query = query + "(NOT nodeType = 'HALL') AND ";
+    LinkedList<String> queries = new LinkedList<String>();
+    if (floor >= 0) queries.add("floor = ? ");
+    if (building != null) queries.add("building = ? ");
+    if (nodeType != null) queries.add("nodeType = ? ");
+    if (longName != null) queries.add("UPPER(longName) LIKE ? ");
+    if (queries.size() == 0)
+      throw new DBException("Error, searchNode: You must enter at least one search term!");
+    Iterator<String> it = queries.iterator();
+    while (true) {
+      query = query + it.next();
+      if (it.hasNext()) query = query + " AND ";
+      else break;
+    }
 
     try {
       PreparedStatement st = con.prepareStatement(query);
-
-      st.setString(1, "%" + longName + "%");
+      int counter = 0;
+      if (floor >= 0) st.setInt(++counter, floor);
+      if (building != null) st.setString(++counter, building);
+      if (nodeType != null) st.setString(++counter, nodeType);
+      if (longName != null) st.setString(++counter, ("%" + longName.toUpperCase() + "%"));
 
       return getAllNodesSQL(st);
     } catch (SQLException e) {
@@ -443,15 +524,40 @@ public class DbController {
     try {
       ResultSet rs = null;
       String query =
-          "SELECT nodeID, xcoord, ycoord FROM nodes, edges "
-              + "WHERE (edges.node1 = '"
-              + nodeID
-              + "' AND nodes.nodeID = edges.node2) OR "
-              + "(edges.node2 = '"
-              + nodeID
-              + "' AND nodes.nodeID = edges.node1)";
+          "SELECT nodeID, xcoord, ycoord FROM (SELECT nodeID, xcoord, ycoord  FROM nodes) AS nodes, edges "
+              + "WHERE ((edges.node1 = ? AND nodes.nodeID = edges.node2) OR (edges.node2 = ? AND nodes.nodeID = edges.node1))";
+      PreparedStatement stmt = con.prepareStatement(query);
+      stmt.setString(1, nodeID);
+      stmt.setString(2, nodeID);
       // System.out.println(query);
-      rs = statement.executeQuery(query);
+      rs = stmt.executeQuery();
+      while (rs.next()) {
+        ret.add(new Node(rs.getInt("xcoord"), rs.getInt("ycoord"), rs.getString("nodeID")));
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown error: getGAdjacent", e);
+    }
+
+    return ret;
+  }
+
+  public static LinkedList<Node> getGAdjacent(String nodeID, int startFloor, int endFloor)
+      throws DBException {
+    LinkedList<Node> ret = new LinkedList<Node>();
+    try {
+      ResultSet rs = null;
+      String query =
+          "SELECT nodeID, xcoord, ycoord FROM (SELECT nodeID, xcoord, ycoord FROM nodes WHERE"
+              + " (nodes.floor = ? OR nodes.floor = ? OR nodes.nodeType = 'ELEV' OR nodes.nodeType = 'STAI')) AS nodes, edges "
+              + "WHERE ((edges.node1 = ? AND nodes.nodeID = edges.node2) OR (edges.node2 = ? AND nodes.nodeID = edges.node1))";
+      PreparedStatement stmt = con.prepareStatement(query);
+      stmt.setString(3, nodeID);
+      stmt.setString(4, nodeID);
+      stmt.setInt(1, startFloor);
+      stmt.setInt(2, endFloor);
+      // System.out.println(query);
+      rs = stmt.executeQuery();
       while (rs.next()) {
         ret.add(new Node(rs.getInt("xcoord"), rs.getInt("ycoord"), rs.getString("nodeID")));
       }
@@ -612,16 +718,33 @@ public class DbController {
   public static boolean addEdge(String nodeID1, String nodeID2) throws DBException {
     String edgeID = nodeID1 + "_" + nodeID2;
     try {
-      // Look in to a more efficient way to do this, but it's probably OK for now
-      String query =
-          "SELECT * FROM edges WHERE (node1 = ? AND node2 = ?) OR (node2 = ? AND node1 = ?)";
-
+      String query = "SELECT floor, nodeType FROM nodes WHERE (nodeID = ?) OR (nodeID = ?)";
       PreparedStatement st = con.prepareStatement(query);
+      st.setString(1, nodeID1);
+      st.setString(2, nodeID2);
+      ResultSet result = st.executeQuery();
+      result.next();
+      String floor1 = result.getString("floor");
+      String type1 = result.getString("nodeType");
+      result.next();
+      String floor2 = result.getString("floor");
+      String type2 = result.getString("nodeType");
+
+      if (!floor1.equals(floor2)) {
+        if (!type1.equals(type2) || !(type1.equals("STAI") || type1.equals("ELEV"))) {
+          throw new DBException("Cannot add edge between " + nodeID1 + " and " + nodeID2);
+        }
+      }
+
+      // Look in to a more efficient way to do this, but it's probably OK for now
+      query = "SELECT * FROM edges WHERE (node1 = ? AND node2 = ?) OR (node2 = ? AND node1 = ?)";
+
+      st = con.prepareStatement(query);
       st.setString(1, nodeID1);
       st.setString(2, nodeID2);
       st.setString(3, nodeID1);
       st.setString(4, nodeID2);
-      ResultSet result = st.executeQuery();
+      result = st.executeQuery();
 
       if (result.next()) {
         return false;

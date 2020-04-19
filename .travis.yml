@@ -1,5 +1,5 @@
 language: java
-jdk: openjdk11git
+jdk: openjdk11
 os: linux
 dist: xenial
 
