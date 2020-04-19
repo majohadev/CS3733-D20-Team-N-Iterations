@@ -1,8 +1,5 @@
-package edu.wpi.N.algorithms;
+package edu.wpi.N.database;
 
-import edu.wpi.N.database.CSVParser;
-import edu.wpi.N.database.DBException;
-import edu.wpi.N.database.DbController;
 import edu.wpi.N.entities.DbNode;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -140,7 +137,7 @@ public class CSVParserTest {
   }
 
   @AfterAll
-  public static void cleanup() throws DBException {
+  public static void clearDb() throws DBException {
     DbController.clearNodes();
   }
 }
