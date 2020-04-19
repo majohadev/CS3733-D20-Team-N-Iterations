@@ -1,14 +1,12 @@
-package edu.wpi.N.algorithms;
+package edu.wpi.N.database;
 
-import edu.wpi.N.database.CSVParser;
-import edu.wpi.N.database.DBException;
-import edu.wpi.N.database.DbController;
 import edu.wpi.N.entities.DbNode;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.LinkedList;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -135,6 +133,11 @@ public class CSVParserTest {
 
     // Compare with first
     Assertions.assertEquals(firstExpected, DbController.getNode("BCONF00102"));
+    DbController.clearNodes();
+  }
+
+  @AfterAll
+  public static void clearDb() throws DBException {
     DbController.clearNodes();
   }
 }
