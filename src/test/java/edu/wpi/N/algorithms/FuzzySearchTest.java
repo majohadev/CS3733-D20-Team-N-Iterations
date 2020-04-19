@@ -28,9 +28,11 @@ public class FuzzySearchTest {
   @Test
   public void testSearchWithCorrecitonInputIsOneLetter() throws DBException {
     String userInput = "c";
-    LinkedList<String> expected = null;
-
-    Assertions.assertEquals(expected, FuzzySearchAlgorithm.suggestWithCorrection(userInput));
+    LinkedList<String> expected = new LinkedList<String>();
+    expected.add("Comprehensive Breast Heath");
+    LinkedList<String> actual = FuzzySearchAlgorithm.suggestWithCorrection(userInput);
+    // Assertions.assertEquals(expected, FuzzySearchAlgorithm.suggestWithCorrection(userInput));
+    Assertions.assertTrue(actual.contains(expected.get(0)));
   }
 
   @Test
@@ -76,6 +78,8 @@ public class FuzzySearchTest {
 
     long timeElapsed = endTime - startTime;
     System.out.println("Elapsed time for FuzzySearch in milliseconds:" + timeElapsed / 1000000);
+
+    // LinkedList<String> actual = FuzzySearchAlgorithm.suggestWithCorrection(userInput);
 
     Assertions.assertTrue(actual.size() == 3);
     Assertions.assertTrue(actual.contains(expected.get(0)));
@@ -127,7 +131,8 @@ public class FuzzySearchTest {
   }
 
   //  /**
-  //   * Tests performance time given .csv of All Nodes Make sure to uncomment the test if need to measure performance
+  //   * Tests performance time given .csv of All Nodes Make sure to uncomment the test if need to
+  // measure performance
   //   *
   //   * @throws DBException
   //   * @throws FileNotFoundException
