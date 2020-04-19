@@ -126,34 +126,33 @@ public class FuzzySearchTest {
     Assertions.assertTrue(actual.contains(expected.get(0)));
   }
 
-
-  /**
-   * Tests performance time given .csv of All Nodes
-   * Make sure to put this test at the end of the Test class since it clears Nodes in DB
-   * @throws DBException
-   * @throws FileNotFoundException
-   */
-  @Test
-  public void testSearchMeasureTimeOnAllNode() throws DBException, FileNotFoundException {
-    DbController.clearNodes();
-
-    File fNodes = new File("src/test/resources/edu/wpi/N/csv/MapNAllnodes.csv");
-    String path = fNodes.getAbsolutePath();
-    CSVParser.parseCSVfromPath(path);
-
-    String userInput = "restrom";
-
-    long startTime = System.nanoTime();
-
-    LinkedList<String> actual = FuzzySearchAlgorithm.suggestWithCorrection(userInput);
-
-    long endTime = System.nanoTime();
-
-    System.out.println("Size of DB:" + DbController.allNodes().size());
-
-    long timeElapsed = endTime - startTime;
-    System.out.println("Elapsed time for FuzzySearch in milliseconds:" + timeElapsed / 1000000);
-  }
+  //  /**
+  //   * Tests performance time given .csv of All Nodes Make sure to uncomment the test if need to measure performance
+  //   *
+  //   * @throws DBException
+  //   * @throws FileNotFoundException
+  //   */
+  //  @Test
+  //  public void testSearchMeasureTimeOnAllNode() throws DBException, FileNotFoundException {
+  //    DbController.clearNodes();
+  //
+  //    File fNodes = new File("src/test/resources/edu/wpi/N/csv/MapNAllnodes.csv");
+  //    String path = fNodes.getAbsolutePath();
+  //    CSVParser.parseCSVfromPath(path);
+  //
+  //    String userInput = "restrom";
+  //
+  //    long startTime = System.nanoTime();
+  //
+  //    LinkedList<String> actual = FuzzySearchAlgorithm.suggestWithCorrection(userInput);
+  //
+  //    long endTime = System.nanoTime();
+  //
+  //    System.out.println("Size of DB:" + DbController.allNodes().size());
+  //
+  //    long timeElapsed = endTime - startTime;
+  //    System.out.println("Elapsed time for FuzzySearch in milliseconds:" + timeElapsed / 1000000);
+  //  }
 
   @AfterAll
   public static void clearDB() throws DBException {
