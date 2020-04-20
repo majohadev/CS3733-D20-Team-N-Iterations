@@ -339,12 +339,33 @@ public class EmployeeController {
    * @return a linked list of all the translators who speak a specified language
    */
   public static LinkedList<Translator> getTransLang(String lang) throws DBException {
-    LinkedList<Translator> list = getTranslators();
-    LinkedList<Translator> special = new LinkedList<Translator>();
-    for (int i = 1; i < list.size(); i++) {
-      if (list.get(i).getLanguages().equals(lang)) special.add(list.get(i));
+    try{
+      String query = "SELECT id, name, language FROM translator, (SELECT * FROM language where language = ?) AS language WHERE translator.t_employeeID = language.t_employeeID ORDER BY id";
+      PreparedStatement stmt = con.prepareStatement(query);
+      stmt.setString(1, lang);
+      ResultSet rs = stmt.executeQuery();
+      LinkedList<Translator> translators = new LinkedList<Translator>();
+      while(rs.next()){
+        LinkedList<String> langs = new LinkedList<String>();
+        int id = rs.getInt("t_employeeID");
+        String name = rs.getString("name");
+        while(rs.getInt("t_employeeID") == id){
+          langs.add(rs.getString("language"));
+          rs.next();
+        }
+        translators.add(new Translator(id, name, langs));
+      }
+      return translators;
+    }catch(SQLException e){
+      e.printStackTrace();
+      throw new DBException("Unknown error: getTransLang, lang :" + lang, e);
     }
-    return special;
+//    LinkedList<Translator> list = getTranslators();
+//    LinkedList<Translator> special = new LinkedList<Translator>();
+//    for (int i = 1; i < list.size(); i++) {
+//      if (list.get(i).getLanguages().equals(lang)) special.add(list.get(i));
+//    }
+//    return special;
   }
 
   // Nick
