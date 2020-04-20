@@ -364,7 +364,23 @@ public class EmployeeController {
    * @param name the laundry employee's name
    * @return true if successful, false otherwise
    */
-  public static void addLaundry(String name) {}
+  public static void addLaundry(String name) throws DBException{
+    try{
+      String query = "INSERT INTO employees (name, serviceType) VALUES (?, 'Laundry')";
+      PreparedStatement stmt = con.prepareStatement(query);
+      stmt.setString(1, name);
+      stmt.executeUpdate();
+      ResultSet rs = stmt.getGeneratedKeys();
+      rs.next();
+      query = "INSERT INTO Laundry VALUES (?)";
+      stmt = con.prepareStatement(query);
+      stmt.setInt(1, rs.getInt("employeeID"));
+      stmt.executeUpdate();
+    }catch (SQLException e){
+      e.printStackTrace();
+      throw new DBException("Unknown error: addLaundry , name = " + name, e);
+    }
+  }
 
   // Chris
   /**
