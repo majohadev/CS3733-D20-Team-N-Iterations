@@ -69,7 +69,15 @@ public class EmployeeControllerTest {
   }
 
   @Test
-  public void testaddTransReq() {}
+  public void testaddTransReq() throws DBException {
+    EmployeeController.addTransReq("Need a Korean translator for prescription", "NDEPT00104", "Korean");
+    assertEquals("NDEPT00104", EmployeeController.getRequests().get(0).getNodeID());
+  }
+
+  @Test
+  public void testcompleteRequest(){
+
+  }
 
   @Test
   public void testCompleteRequest() throws DBException {
