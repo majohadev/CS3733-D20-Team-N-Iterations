@@ -2,10 +2,8 @@ package edu.wpi.N.database;
 
 import edu.wpi.N.entities.*;
 import java.sql.*;
-import java.util.Calendar;
+import java.util.*;
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.LinkedList;
 
 public class EmployeeController {
   private static Connection con = DbController.getCon();
@@ -392,8 +390,8 @@ public class EmployeeController {
    */
   public static int addTranslator(String name, LinkedList<String> languages) throws DBException {
     try {
-      String query = "INSERT INTO employees VALUES (?, 'Translator')";
-      PreparedStatement st = con.prepareStatement(query);
+      String query = "INSERT INTO employees (name, serviceType) VALUES (?, 'Translator')";
+      PreparedStatement st = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
       st.setString(1, name);
       st.executeUpdate();
       ResultSet rs = st.getGeneratedKeys();
@@ -403,6 +401,13 @@ public class EmployeeController {
       int id = rs.getInt("employeeID");
       st.setInt(1, id);
       st.executeUpdate();
+      Iterator<String> langIt = languages.iterator();
+      while (langIt.hasNext()) {
+        query = "INSERT INTO language VALUES (?, ?)";
+        st = con.prepareStatement(query);
+        st.setInt(1, id);
+        st.setString(2, langIt.next());
+      }
       return id;
     } catch (SQLException e) {
       e.printStackTrace();
