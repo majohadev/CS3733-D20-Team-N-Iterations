@@ -309,6 +309,7 @@ public class DbController {
     }
 
     ServiceController.initService();
+    DoctorController.initDoctor();
   }
 
   /**

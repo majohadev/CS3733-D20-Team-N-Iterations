@@ -10,7 +10,7 @@ import java.sql.SQLException;
 public class DoctorController {
     private static Connection con = DbController.getCon();
 
-    public static void initService() throws DBException {
+    public static void initDoctor() throws DBException {
         try {
             String query =
                     "CREATE TABLE doctors ("
@@ -25,7 +25,7 @@ public class DoctorController {
         } catch (SQLException e) {
             if (!e.getSQLState().equals("X0Y32")) {
                 e.printStackTrace();
-                throw new DBException("Unknown error: initService", e);
+                throw new DBException("Unknown error: initDoctor", e);
             }
         }
     }
