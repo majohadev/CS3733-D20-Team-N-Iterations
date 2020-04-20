@@ -25,7 +25,7 @@ public class DirectionsTest {
 
   @Test
   public void directionsTester() throws DBException {
-    Path path = Pathfinder.findPath("NDEPT00104", "NDEPT00604");
+    Path path = Pathfinder.findPath("NHALL00504", "NHALL00604");
     ArrayList<String> directions = path.getDirections();
     for (String s : directions) {
       System.out.println(s);

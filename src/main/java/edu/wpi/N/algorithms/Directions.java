@@ -47,7 +47,7 @@ public class Directions {
       state = getState(i);
       switch (state) {
         case STARTING:
-          if (!path.getFirst().getLongName().equals("HALL")) {
+          if (!path.getFirst().getNodeType().equals("HALL")) {
             message = "Start by exiting " + path.getFirst().getLongName() + " ";
           } else if (!(getLandmark(nextNode) == null)) {
             message =
@@ -93,7 +93,12 @@ public class Directions {
         case TURNING:
           if (!nextNode.equals(path.get(path.size() - 1))) {
             if (!message.equals("")) {
-              directions.add(message + "and take the next " + getTurnType(angle, getAngle(i - 1)));
+              if (i == 1) {
+                directions.add(message + "and turning " + getTurnType(angle, getAngle(i - 1)));
+              } else {
+                directions.add(
+                    message + "and take the next " + getTurnType(angle, getAngle(i - 1)));
+              }
               message = "";
             } else if (!(getLandmark(currNode) == null)) {
               directions.add(
@@ -101,7 +106,8 @@ public class Directions {
                       + getLandmark(currNode).getLongName()
                       + getDistanceString(getDistance(currNode, nextNode))
                       + "and turn "
-                      + getTurnType(angle, getAngle(i - 1)));
+                      + getTurnType(angle, getAngle(i - 1))
+                      + " at the next corridor");
             } else {
               directions.add(
                   "Proceed to next corridor"
