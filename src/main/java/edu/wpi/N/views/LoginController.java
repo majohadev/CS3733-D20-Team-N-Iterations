@@ -58,9 +58,4 @@ public class LoginController implements Controller {
     ((Node) (e.getSource())).getScene().getWindow().hide();
     System.out.println(loggedin);
   }
-
-  public void getControllerMethod() {
-    FXMLLoader loader = new FXMLLoader(getClass().getResource("adminRequestScreen.fxml"));
-    loader.getController(); // Controller State is saved
-  }
 }

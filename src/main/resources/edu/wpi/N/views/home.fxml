@@ -2,6 +2,8 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -10,6 +12,11 @@
    <children>
       <VBox alignment="CENTER" layoutX="640.0" layoutY="519.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
+            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/Brigham_and_Womens_Hospital_logo.svg.png" />
+               </image>
+            </ImageView>
             <Label minHeight="-Infinity" text="Welcome to Brigham and Womens Hospital" textAlignment="CENTER" wrapText="true">
                <font>
                   <Font name="Calibri" size="36.0" />
