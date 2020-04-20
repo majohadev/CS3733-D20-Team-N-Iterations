@@ -14,7 +14,7 @@
                 <Font name="Calibri" size="32.0" />
             </font>
         </Label>
-        <Button layoutX="679.0" layoutY="635.0" mnemonicParsing="false" text="Deny" AnchorPane.rightAnchor="27.0" />
+        <Button fx:id="btn_Deny" layoutX="679.0" layoutY="635.0" mnemonicParsing="false" onMouseClicked="#acceptRow" text="Deny" AnchorPane.rightAnchor="27.0" />
         <Button fx:id="btn_Accept" layoutX="612.0" layoutY="635.0" mnemonicParsing="false" onMouseClicked="#acceptRow" text="Accept" AnchorPane.rightAnchor="85.0" />
         <Button fx:id="btn_logout" layoutX="39.0" layoutY="635.0" mnemonicParsing="false" onMouseClicked="#closeScreen" text="Logout" AnchorPane.leftAnchor="25.0" />
         <TableView fx:id="tbMockData" layoutX="334.0" layoutY="61.0" maxWidth="401.0" minWidth="400.0" prefHeight="500.0" prefWidth="401.0" AnchorPane.leftAnchor="322.0" AnchorPane.rightAnchor="27.0" AnchorPane.topAnchor="61.0" />

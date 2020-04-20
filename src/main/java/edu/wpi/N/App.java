@@ -1,5 +1,6 @@
 package edu.wpi.N;
 
+import edu.wpi.N.controllerData.AdminDataStorage;
 import edu.wpi.N.views.Controller;
 import java.io.IOException;
 import javafx.application.Application;
@@ -12,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class App extends Application {
   private Stage masterStage;
+  public static AdminDataStorage adminDataStorage = new AdminDataStorage();
 
   @Override
   public void init() {

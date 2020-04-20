@@ -16,6 +16,8 @@ import javafx.stage.Stage;
 
 public class LoginController implements Controller {
   private App mainApp;
+  private static LoginController controller;
+  public AdminController adminController;
 
   Boolean loggedin = false;
 
@@ -55,5 +57,10 @@ public class LoginController implements Controller {
   public void checkCredentials(MouseEvent e) throws IOException {
     ((Node) (e.getSource())).getScene().getWindow().hide();
     System.out.println(loggedin);
+  }
+
+  public void getControllerMethod() {
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("adminRequestScreen.fxml"));
+    loader.getController(); // Controller State is saved
   }
 }
