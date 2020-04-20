@@ -48,6 +48,8 @@ public class MapDisplayController implements Controller {
   final float VERTICAL_SCALE = (MAP_HEIGHT) / IMAGE_HEIGHT;
   int currentFloor = 4;
 
+  Boolean loggedin = false;
+
   @FXML Button btn_find;
   @FXML Button btn_reset;
   @FXML Pane pn_path, pn_routeNodes;
@@ -329,21 +331,26 @@ public class MapDisplayController implements Controller {
     lst_translatorSearchBox.setItems(fuzzySearchTextList);
   }
 
-  /*
-    public void addDataToTable(DbNode node) {
-
-      node.getLongName();
-    }
-  */
   @FXML
   public void popupWindow() throws IOException {
-    Stage stage = new Stage();
-    Parent root;
-    root = FXMLLoader.load(getClass().getResource("loginWindow.fxml"));
-    Scene scene = new Scene(root);
-    stage.setScene(scene);
-    stage.initModality(Modality.APPLICATION_MODAL);
-    stage.showAndWait();
+    if (loggedin == false) {
+      loggedin = true;
+      Stage stage = new Stage();
+      Parent root;
+      root = FXMLLoader.load(getClass().getResource("loginWindow.fxml"));
+      Scene scene = new Scene(root);
+      stage.setScene(scene);
+      stage.initModality(Modality.APPLICATION_MODAL);
+      stage.showAndWait();
+    } else if (loggedin == true) {
+      Stage stage = new Stage();
+      Parent root;
+      root = FXMLLoader.load(getClass().getResource("adminRequestScreen.fxml"));
+      Scene scene = new Scene(root);
+      stage.setScene(scene);
+      stage.initModality(Modality.APPLICATION_MODAL);
+      stage.showAndWait();
+    }
   }
 
   /*
