@@ -1,22 +1,31 @@
 package edu.wpi.N.entities;
 
-import java.sql.Time;
+import java.sql.Timestamp;
 
 public class Employee {
   private int id;
   private String name;
   private int yearsofExperience;
-  private String lang;
   private char gender;
-  private Time available;
+  private Timestamp start, end;
+  private String type;
 
-  public Employee(int id, String name, int date, String lang, char gender, Time available) {
+  public Employee(
+      int id,
+      String name,
+      int date,
+      String lang,
+      char gender,
+      Timestamp start,
+      Timestamp end,
+      String type) {
     this.id = id;
     this.name = name;
     this.yearsofExperience = date;
-    this.lang = lang;
     this.gender = gender;
-    this.available = available;
+    this.start = start;
+    this.end = end;
+    this.type = type;
   }
 
   public int getId() {
@@ -43,14 +52,6 @@ public class Employee {
     this.yearsofExperience = yearsofExperience;
   }
 
-  public String getLang() {
-    return lang;
-  }
-
-  public void setLang(String lang) {
-    this.lang = lang;
-  }
-
   public char getGender() {
     return gender;
   }
@@ -59,11 +60,27 @@ public class Employee {
     this.gender = gender;
   }
 
-  public Time getAvailable() {
-    return available;
+  public String getType() {
+    return type;
   }
 
-  public void setAvailable(Time available) {
-    this.available = available;
+  public void setType(String type) {
+    this.type = type;
+  }
+
+  public Timestamp getStart() {
+    return start;
+  }
+
+  public void setStart(Timestamp start) {
+    this.start = start;
+  }
+
+  public Timestamp getEnd() {
+    return end;
+  }
+
+  public void setEnd(Timestamp end) {
+    this.end = end;
   }
 }
