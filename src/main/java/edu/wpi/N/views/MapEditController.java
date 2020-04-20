@@ -73,6 +73,14 @@ public class MapEditController implements Controller {
   @FXML Button btn_return;
   @FXML Button btn_EdgesAdd;
 
+  // EDGES REMOVE
+  @FXML TextField txt_EdgesDeleteNode;
+  @FXML TextField txt_EdgesDeleteEdge;
+  @FXML Button btn_EdgesDelete;
+  Line line_EdgesDeleteSelected;
+  DbNode db_EdgesDeleteFirstSelected;
+  DbNode db_EdgesDeleteSecondSelected;
+
   HashBiMap<Circle, DbNode> masterNodes; // stores the map nodes and their respective database nodes
   LinkedList<DbNode> allFloorNodes; // stores all the nodes on the floor
   LinkedList<DbNode> selectedNodes; // stores all the selected nodes on the map
@@ -99,6 +107,9 @@ public class MapEditController implements Controller {
     editMode = editMode.NOSTATE;
     editingNode = null;
     edgeNodes = new DbNode[2];
+    line_EdgesDeleteSelected = null;
+    db_EdgesDeleteFirstSelected = null;
+    db_EdgesDeleteSecondSelected = null;
     populateMap();
     accordionListener();
   }
@@ -203,6 +214,11 @@ public class MapEditController implements Controller {
     chk_EdgesAddShowSecond.setSelected(false);
     chk_EdgesAddShowFirst.setDisable(true);
     chk_EdgesAddShowSecond.setDisable(true);
+    pn_firstEdges.getChildren().clear();
+    pn_secondEdges.getChildren().clear();
+
+    // RESET EDGES DELETE
+    resetEdgesDelete();
   }
 
   public void onBtnClearClicked() {
@@ -258,7 +274,7 @@ public class MapEditController implements Controller {
 
   public void onBtnSaveClicked() throws DBException {
     String longName = txt_add_longName.getText();
-    String shortName = txt_add_longName.getText();
+    String shortName = txt_add_shortName.getText();
     String type = txt_add_type.getText().toUpperCase();
     if (longName.equals("") || shortName.equals("") || type.equals("") || type.length() != 4) {
       return;
@@ -318,11 +334,18 @@ public class MapEditController implements Controller {
     mapNode.setCenterY((node.getY() * VERTICAL_SCALE));
     mapNode.setFill(Color.PURPLE);
     mapNode.setOpacity(0.7);
-    mapNode.setOnMouseClicked(mouseEvent -> this.onMapNodeClicked(mapNode));
+    mapNode.setOnMouseClicked(
+        mouseEvent -> {
+          try {
+            this.onMapNodeClicked(mapNode);
+          } catch (DBException e) {
+            e.printStackTrace();
+          }
+        });
     return mapNode;
   }
 
-  public void onMapNodeClicked(Circle mapNode) {
+  public void onMapNodeClicked(Circle mapNode) throws DBException {
     if (editMode == EditMode.NODES_ADD) {
       return;
     } else if (editMode == EditMode.NODES_DELETE) {
@@ -330,8 +353,9 @@ public class MapEditController implements Controller {
     } else if (editMode == EditMode.NODES_EDIT) {
       nodesEdit(mapNode);
     } else if (editMode == EditMode.EDGES_ADD) {
-      System.out.println("Hello");
       edgesAdd(mapNode);
+    } else if (editMode == EditMode.EDGES_DELETE) {
+      edgesDeleteNodeClick(mapNode);
     }
   }
 
@@ -436,8 +460,6 @@ public class MapEditController implements Controller {
     }
   }
 
-  public void onAddEdgeClicked() {}
-
   public void checkBoxListener(CheckBox chk) {
     chk.selectedProperty()
         .addListener(
@@ -489,6 +511,86 @@ public class MapEditController implements Controller {
       DbController.addEdge(edgeNodes[0].getNodeID(), edgeNodes[1].getNodeID());
       resetPanes();
     }
+  }
+
+  //  // EDGES REMOVE
+  //  @FXML TextField txt_EdgesRemoveNode;
+  //  @FXML TextField txt_EdgesRemoveEdge;
+  //  @FXML Button btn_EdgesRemove;
+  // EDGES REMOVE METHODS
+
+  /**
+   * Executes when a node on the map is clicked in EDGE DELETE mode Displays all edges of the node
+   * and makes then clickable
+   *
+   * @param mapNode the clicked circle on the map
+   */
+  public void edgesDeleteNodeClick(Circle mapNode) throws DBException {
+    if (txt_EdgesDeleteNode.isFocused()) {
+      if (db_EdgesDeleteFirstSelected != null) {
+        masterNodes.inverse().get(db_EdgesDeleteFirstSelected).setFill(Color.PURPLE);
+        db_EdgesDeleteSecondSelected = null;
+        line_EdgesDeleteSelected = null;
+        pn_display.getChildren().removeIf(node -> node instanceof Line);
+        txt_EdgesDeleteEdge.setText("");
+      }
+      db_EdgesDeleteFirstSelected = masterNodes.get(mapNode);
+      displayAdjacentEdges(db_EdgesDeleteFirstSelected, mapNode);
+      mapNode.setFill(Color.GREEN);
+      txt_EdgesDeleteNode.setText(db_EdgesDeleteFirstSelected.getShortName());
+    }
+  }
+
+  /**
+   * Displays all edges of a node and makes them clickable if in correct edit mode
+   *
+   * @param centerNode
+   * @param centerMapNode
+   * @throws DBException
+   */
+  public void displayAdjacentEdges(DbNode centerNode, Circle centerMapNode) throws DBException {
+    LinkedList<DbNode> adjacentNodes = DbController.getAdjacent(centerNode.getNodeID());
+    for (DbNode adjacentNode : adjacentNodes) {
+      double x1 = centerMapNode.getCenterX();
+      double y1 = centerMapNode.getCenterY();
+      float x2 = adjacentNode.getX() * HORIZONTAL_SCALE;
+      float y2 = adjacentNode.getY() * VERTICAL_SCALE;
+      Line line = new Line(x1, y1, x2, y2);
+      line.setStrokeWidth(3);
+      if (editMode == EditMode.EDGES_DELETE) {
+        line.setOnMouseClicked(
+            mouseEvent -> {
+              if (line_EdgesDeleteSelected != null) {
+                line_EdgesDeleteSelected.setStroke(Color.BLACK);
+              }
+              line_EdgesDeleteSelected = line;
+              line.setStroke(Color.RED);
+              txt_EdgesDeleteEdge.setText(adjacentNode.getShortName());
+              db_EdgesDeleteSecondSelected = adjacentNode;
+            });
+      }
+      pn_display.getChildren().add(line);
+    }
+  }
+
+  public void resetEdgesDelete() {
+    if (db_EdgesDeleteFirstSelected != null) {
+      masterNodes.inverse().get(db_EdgesDeleteFirstSelected).setFill(Color.PURPLE);
+    }
+    db_EdgesDeleteSecondSelected = null;
+    line_EdgesDeleteSelected = null;
+    pn_display.getChildren().removeIf(node -> node instanceof Line);
+    txt_EdgesDeleteEdge.setText("");
+    txt_EdgesDeleteNode.setText("");
+  }
+
+  public void onBtnEdgesDeleteClicked() throws DBException {
+    DbController.removeEdge(
+        db_EdgesDeleteFirstSelected.getNodeID(), db_EdgesDeleteSecondSelected.getNodeID());
+    DbNode node = db_EdgesDeleteFirstSelected;
+    resetEdgesDelete();
+    txt_EdgesDeleteNode.requestFocus();
+    edgesDeleteNodeClick(masterNodes.inverse().get(node));
   }
 
   public void onReturnClicked() throws IOException {
