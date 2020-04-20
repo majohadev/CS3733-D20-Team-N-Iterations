@@ -35,3 +35,6 @@ H073000000,758,514,3,Main,HALL,Long Name,short,N
 CCCCCCCCCC,754,172,3,Main,DEPT,Long Name,short,N
 H083000000,1196,514,3,Main,HALL,Long Name,short,N
 STAI013000,1196,895,3,Main,STAI,Long Name,short,N
+ELEV033000,1196,172,3,Main,ELEV,Long Name,short,N
+ELEV034000,1196,172,4,Main,ELEV,Long Name,short,N
+DDDDDDDDDD,754,172,4,Main,DEPT,Long Name,short,N

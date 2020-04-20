@@ -156,25 +156,6 @@ public class CSVParserTest {
   }
 
   /**
-   * Tests that Test Nodes CSV with multiple floors gets parsed correctly
-   *
-   * @throws DBException
-   */
-  @Test
-  public void testParsedAllNodesCorrectly() throws DBException {
-
-    DbController.clearNodes();
-
-    InputStream inputNodes =
-        PathfinderMethodsTest.class.getResourceAsStream("../csv/ThreeFloorsTestNode.csv");
-    CSVParser.parseCSV(inputNodes);
-
-    Assertions.assertTrue(DbController.allNodes().size() == 36);
-
-    DbController.clearNodes();
-  }
-
-  /**
    * Tests that Nodes and Edges CSV with multiple floors get parsed correctly
    *
    * @throws DBException
