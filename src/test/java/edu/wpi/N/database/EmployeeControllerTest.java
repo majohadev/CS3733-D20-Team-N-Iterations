@@ -71,14 +71,13 @@ public class EmployeeControllerTest {
 
   @Test
   public void testaddTransReq() throws DBException {
-    EmployeeController.addTransReq("Need a Korean translator for prescription", "NDEPT00104", "Korean");
+    EmployeeController.addTransReq(
+        "Need a Korean translator for prescription", "NDEPT00104", "Korean");
     assertEquals("NDEPT00104", EmployeeController.getRequests().get(0).getNodeID());
   }
 
   @Test
-  public void testcompleteRequest(){
-
-  }
+  public void testcompleteRequest() {}
 
   @Test
   public void testCompleteRequest() throws DBException {
@@ -90,10 +89,13 @@ public class EmployeeControllerTest {
   @Test
   public void testGetEmployee() throws DBException {
     LinkedList<String> langs = new LinkedList<>();
-    langs.add("Gnomish");
-    langs.add("Lojban");
-    assertEquals(new Translator(1, "Felix Bignoodle", langs), EmployeeController.getEmployee(1));
-    assertEquals(new Laundry(3, "Snaps McKraken"), EmployeeController.getEmployee(3));
+    Translator felix = (Translator) EmployeeController.getEmployee(1);
+    Laundry snaps = (Laundry) EmployeeController.getEmployee(3);
+    assertEquals(1, felix.getID());
+    assertTrue(felix.getName().equals("Felix Bignoodle"));
+    assertTrue(felix.getLanguages().contains("Lojban"));
+    assertTrue(felix.getLanguages().contains("Gnomish"));
+    assertEquals(new Laundry(3, "Snaps McKraken"), snaps);
   }
 
   @Test

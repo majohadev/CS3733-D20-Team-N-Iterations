@@ -132,6 +132,7 @@ public class EmployeeController {
       if (rs.getString("serviceType").equals("Translator")) {
         String name = rs.getString("name");
         query = "SELECT language FROM language WHERE t_EmployeeID = ?";
+        stmt = con.prepareStatement(query);
         stmt.setInt(1, id);
         rs = stmt.executeQuery();
         LinkedList<String> languages = new LinkedList<String>();
@@ -396,9 +397,6 @@ public class EmployeeController {
       st.executeUpdate();
       ResultSet rs = st.getGeneratedKeys();
       rs.next();
-      ResultSetMetaData rsmd = rs.getMetaData();
-      System.out.println("hi");
-      System.out.println(rsmd.getColumnLabel(1));
       query = "INSERT INTO translator VALUES(?)";
       st = con.prepareStatement(query);
       int id = rs.getInt("1");
@@ -410,6 +408,7 @@ public class EmployeeController {
         st = con.prepareStatement(query);
         st.setInt(1, id);
         st.setString(2, langIt.next());
+        st.executeUpdate();
       }
       return id;
     } catch (SQLException e) {
@@ -524,8 +523,8 @@ public class EmployeeController {
     try {
       String query = "UPDATE request SET status = 'DONE', timeCompleted = ? WHERE requestID = ?";
       PreparedStatement stmt = con.prepareStatement(query);
-      stmt.setInt(1, requestID);
-      stmt.setTimestamp(2, new Timestamp(new Date().getTime()));
+      stmt.setTimestamp(1, new Timestamp(new Date().getTime()));
+      stmt.setInt(2, requestID);
       stmt.executeUpdate();
     } catch (SQLException e) {
       e.printStackTrace();
