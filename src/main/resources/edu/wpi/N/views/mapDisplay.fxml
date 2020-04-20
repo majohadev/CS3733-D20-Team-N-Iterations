@@ -8,6 +8,7 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.image.Image?>
@@ -118,20 +119,19 @@
                            </panes>
                         </Accordion>
                         <Separator prefHeight="20.0" prefWidth="282.0" />
-                        <VBox prefHeight="264.0" prefWidth="282.0" spacing="20.0">
+                        <VBox prefHeight="236.0" prefWidth="281.0" spacing="20.0">
                            <children>
                               <Label alignment="CENTER" prefHeight="65.0" prefWidth="282.0" text="Click An Icon Below To Navigate To Popular Locations" textAlignment="CENTER" wrapText="true">
                                  <font>
                                     <Font name="Calibri" size="18.0" />
                                  </font>
                               </Label>
-                              <GridPane alignment="CENTER" prefHeight="196.0" prefWidth="282.0">
+                              <GridPane alignment="CENTER" prefHeight="138.0" prefWidth="281.0">
                                  <columnConstraints>
                                     <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="136.19998168945312" minWidth="10.0" prefWidth="87.39999389648438" />
                                     <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="212.20001220703125" minWidth="10.0" prefWidth="194.60000610351562" />
                                  </columnConstraints>
                                  <rowConstraints>
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
@@ -166,8 +166,57 @@
                                     </Label>
                                  </children>
                               </GridPane>
+                              <Separator prefHeight="15.0" prefWidth="282.0" />
                            </children>
                         </VBox>
+                        <Pane prefHeight="47.0" prefWidth="281.0">
+                           <children>
+                              <Label alignment="CENTER" layoutX="5.0" layoutY="-7.0" prefHeight="57.0" prefWidth="272.0" text="Service Requests" wrapText="true">
+                                 <font>
+                                    <Font name="Calibri" size="24.0" />
+                                 </font>
+                              </Label>
+                              <Separator layoutX="1.0" layoutY="41.0" prefHeight="15.0" prefWidth="282.0" />
+                           </children>
+                        </Pane>
+                        <Accordion>
+                           <panes>
+                              <TitledPane animated="false" text="Laundry Service">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                                 <content>
+                                    <AnchorPane>
+                                       <children>
+                                          <TextField fx:id="txtf_laundryLocation" layoutX="40.0" layoutY="14.0" onKeyTyped="#fuzzySearchLaundryRequest" prefHeight="22.0" prefWidth="200.0" promptText="Location" AnchorPane.topAnchor="14.0" />
+                                          <ListView fx:id="lst_laundryLocation" layoutX="40.0" layoutY="69.0" prefHeight="101.0" prefWidth="200.0" />
+                                          <TextArea fx:id="txt_Notes" layoutX="39.0" layoutY="170.0" prefHeight="96.0" prefWidth="200.0" promptText="Additional Notes" AnchorPane.topAnchor="170.0" />
+                                          <Button fx:id="btn_SubmitLaundry" layoutX="108.0" layoutY="288.0" mnemonicParsing="false" text="Submit" />
+                                       </children>
+                                    </AnchorPane>
+                                 </content></TitledPane>
+                              <TitledPane animated="false" text="Translator Request">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                                 <content>
+                                    <AnchorPane prefHeight="275.0">
+                                       <children>
+                                          <TextField fx:id="txtf_translatorLocation" layoutX="40.0" layoutY="33.0" onKeyTyped="#fuzzySearchTranslatorRequest" prefHeight="29.0" prefWidth="200.0" promptText="Location" />
+                                          <ListView fx:id="lst_translatorSearchBox" layoutX="40.0" layoutY="73.0" prefHeight="95.0" prefWidth="200.0" />
+                                          <TextArea fx:id="txt_Notes1" layoutX="40.0" layoutY="211.0" prefHeight="62.0" prefWidth="200.0" promptText="Additional Notes" />
+                                          <TextField fx:id="txt_Language" layoutX="40.0" layoutY="176.0" prefHeight="29.0" prefWidth="200.0" promptText="Language" />
+                                          <Button fx:id="btn_SubmitTranslator" layoutX="109.0" layoutY="281.0" mnemonicParsing="false" text="Submit" />
+                                       </children>
+                                    </AnchorPane>
+                                 </content></TitledPane>
+                           </panes>
+                        </Accordion>
+                        <AnchorPane>
+                           <children>
+                              <Button fx:id="btn_Login" layoutX="115.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#popupWindow" text="Login" AnchorPane.topAnchor="5.0" />
+                           </children>
+                        </AnchorPane>
                      </children>
                      <padding>
                         <Insets top="10.0" />
@@ -211,15 +260,15 @@
                            </children>
                         </GridPane>
                         <GridPane alignment="CENTER" layoutX="78.0" layoutY="473.0">
-                          <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                          </columnConstraints>
-                          <rowConstraints>
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                          </rowConstraints>
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
                            <children>
-                            <Button fx:id="btn_zoomIn" minWidth="100.0" mnemonicParsing="false" onMouseClicked="#zoomToolHandler" text="+" textAlignment="CENTER">
+                              <Button fx:id="btn_zoomIn" minWidth="100.0" mnemonicParsing="false" onMouseClicked="#zoomToolHandler" text="+" textAlignment="CENTER">
                                  <font>
                                     <Font name="System Bold" size="24.0" />
                                  </font>

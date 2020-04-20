@@ -18,7 +18,7 @@ import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import javafx.concurrent.Task;
 
-public class QRBase {
+public abstract class QRReader {
 
   /*
   Every UI controller that uses QR reading functions should EXTEND this class!
@@ -39,7 +39,7 @@ public class QRBase {
           / THREAD_SLEEP_DELAY; // # of times reader thread should run before timing out
   protected final String ERR_CODE = "NO_CODE";
 
-  public QRBase() {
+  public QRReader() {
 
     Dimension size = WebcamResolution.QVGA.getSize();
 
