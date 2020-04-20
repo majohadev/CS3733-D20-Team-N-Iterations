@@ -46,9 +46,18 @@ public class Pathfinder {
       // Check if start is on the same floor as end
       if (startNode.getFloor() != endNode.getFloor()) {
         // If not, find path to the closes elevator (prioritized) or stairs
-
         // Check if the elevator/stairs is connected to Nodes, the end floor is at
         // If not, find path to a "second best" elevator (prioritized) or stairs iteratively
+        DbNode bestFloorChange = getFloorChange(startNode, endNode);
+        LinkedList<DbNode> pathToFloorChange = findPath(startNode, bestFloorChange).getPath();
+
+        DbNode floorChangeNode =
+            getFloorChangeNode(bestFloorChange, bestFloorChange.getFloor(), endNode.getFloor());
+        LinkedList<DbNode> pathToEndNode = findPath(floorChangeNode, endNode).getPath();
+
+        pathToFloorChange.addAll(pathToEndNode);
+        Path path = new Path(pathToFloorChange);
+        return path;
       }
 
       // If yes, find path from elevator to the end Node
@@ -179,18 +188,22 @@ public class Pathfinder {
    * @return: Elevator or Stair node
    * @throws DBException
    */
-  private DbNode getFloorChange(DbNode startNode, DbNode endNode) throws DBException {
+  private static DbNode getFloorChange(DbNode startNode, DbNode endNode) throws DBException {
     Pair<DbNode, Double> bestElevator = getBestElevator(startNode, endNode);
     Pair<DbNode, Double> bestStair = getBestStair(startNode, endNode);
 
     if (bestElevator.getKey() == null && bestStair.getKey() == null) {
       return null;
+
     } else if (bestElevator.getKey() == null) {
       return bestStair.getKey();
+
     } else if (bestStair.getKey() == null) {
       return bestElevator.getKey();
+
     } else if (bestElevator.getValue() <= bestStair.getValue() * 1.5) {
       return bestElevator.getKey();
+
     } else return bestStair.getKey();
   }
 
@@ -202,21 +215,23 @@ public class Pathfinder {
    * @return: Elevator node and its score
    * @throws DBException
    */
-  private Pair<DbNode, Double> getBestElevator(DbNode startNode, DbNode endNode)
+  private static Pair<DbNode, Double> getBestElevator(DbNode startNode, DbNode endNode)
       throws DBException {
     LinkedList<DbNode> elevators =
         DbController.searchNode(startNode.getFloor(), startNode.getBuilding(), "ELEV", "");
     DbNode lowestSoFar = null;
     double score = 1000000;
     for (DbNode currentElevator : elevators) {
-      Node elevator = DbController.getGNode(currentElevator.getNodeID());
-      double currentCost = cost(DbController.getGNode(startNode.getNodeID()), elevator);
-      double currentScore =
-          currentCost + heuristic(elevator, DbController.getGNode(endNode.getNodeID()));
+      if (isEligibleFloorChange(currentElevator, currentElevator.getFloor(), endNode.getFloor())) {
+        Node elevator = DbController.getGNode(currentElevator.getNodeID());
+        double currentCost = cost(DbController.getGNode(startNode.getNodeID()), elevator);
+        double currentScore =
+            currentCost + heuristic(elevator, DbController.getGNode(endNode.getNodeID()));
 
-      if (currentScore < score) {
-        lowestSoFar = currentElevator;
-        score = currentScore;
+        if (currentScore < score) {
+          lowestSoFar = currentElevator;
+          score = currentScore;
+        }
       }
     }
     return new Pair<DbNode, Double>(lowestSoFar, score);
@@ -230,22 +245,104 @@ public class Pathfinder {
    * @return: Stair node and its score
    * @throws DBException
    */
-  private Pair<DbNode, Double> getBestStair(DbNode startNode, DbNode endNode) throws DBException {
+  private static Pair<DbNode, Double> getBestStair(DbNode startNode, DbNode endNode)
+      throws DBException {
     LinkedList<DbNode> stairs =
         DbController.searchNode(startNode.getFloor(), startNode.getBuilding(), "STAI", "");
     DbNode lowestSoFar = null;
     double score = 1000000;
     for (DbNode currentStair : stairs) {
-      Node stair = DbController.getGNode(currentStair.getNodeID());
-      double currentCost = cost(DbController.getGNode(startNode.getNodeID()), stair);
-      double currentScore =
-          currentCost + heuristic(stair, DbController.getGNode(endNode.getNodeID()));
+      if (isEligibleFloorChange(currentStair, currentStair.getFloor(), endNode.getFloor())) {
+        Node stair = DbController.getGNode(currentStair.getNodeID());
+        double currentCost = cost(DbController.getGNode(startNode.getNodeID()), stair);
+        double currentScore =
+            currentCost + heuristic(stair, DbController.getGNode(endNode.getNodeID()));
 
-      if (currentScore < score) {
-        lowestSoFar = currentStair;
-        score = currentScore;
+        if (currentScore < score) {
+          lowestSoFar = currentStair;
+          score = currentScore;
+        }
       }
     }
     return new Pair<DbNode, Double>(lowestSoFar, score);
+  }
+
+  /**
+   * Determines if a elevator or stair node can reach the goal floor
+   *
+   * @param floorChange: Elevator or Stair Node
+   * @param currentFloor: Current floor
+   * @param floorGoal: Goal floor
+   * @return: True if elevator or stair can reach the goal floor, false otherwise
+   * @throws DBException
+   */
+  public static boolean isEligibleFloorChange(DbNode floorChange, int currentFloor, int floorGoal)
+      throws DBException {
+    LinkedList<DbNode> adjacentNodes = DbController.getAdjacent(floorChange.getNodeID());
+    String floorType = floorChange.getNodeType();
+
+    // Going up
+    if (floorGoal - currentFloor > 0) {
+      for (DbNode currentNode : adjacentNodes) {
+        int currentNodeFloor = currentNode.getFloor();
+        if (currentNode.getNodeType().equals(floorType)
+            && currentNodeFloor > currentFloor
+            && floorGoal >= currentNodeFloor) {
+          return isEligibleFloorChange(currentNode, currentNodeFloor, floorGoal);
+        }
+      }
+      return false;
+    }
+    // Going down
+    else if (floorGoal - currentFloor < 0) {
+      for (DbNode currentNode : adjacentNodes) {
+        int currentNodeFloor = currentNode.getFloor();
+        if (currentNode.getNodeType().equals(floorType)
+            && currentNodeFloor < currentFloor
+            && floorGoal <= currentNodeFloor) {
+          return isEligibleFloorChange(currentNode, currentNodeFloor, floorGoal);
+        }
+      }
+      return false;
+    }
+    // On same floor
+    else {
+      return true;
+    }
+  }
+
+  public static DbNode getFloorChangeNode(DbNode floorChange, int currentFloor, int floorGoal)
+      throws DBException {
+    LinkedList<DbNode> adjacentNodes = DbController.getAdjacent(floorChange.getNodeID());
+    String floorType = floorChange.getNodeType();
+
+    // Going up
+    if (floorGoal - currentFloor > 0) {
+      for (DbNode currentNode : adjacentNodes) {
+        int currentNodeFloor = currentNode.getFloor();
+        if (currentNode.getNodeType().equals(floorType)
+            && currentNodeFloor > currentFloor
+            && floorGoal >= currentNodeFloor) {
+          return getFloorChangeNode(currentNode, currentNodeFloor, floorGoal);
+        }
+      }
+      return null;
+    }
+    // Going down
+    else if (floorGoal - currentFloor < 0) {
+      for (DbNode currentNode : adjacentNodes) {
+        int currentNodeFloor = currentNode.getFloor();
+        if (currentNode.getNodeType().equals(floorType)
+            && currentNodeFloor < currentFloor
+            && floorGoal <= currentNodeFloor) {
+          return getFloorChangeNode(currentNode, currentNodeFloor, floorGoal);
+        }
+      }
+      return null;
+    }
+    // On same floor
+    else {
+      return floorChange;
+    }
   }
 }
