@@ -176,7 +176,7 @@
             </AnchorPane>
             <AnchorPane fx:id="pn_mapFrame" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" onScroll="#mapScrollHandler" prefHeight="600.0" prefWidth="600.0" style="-fx-background-color: #d0e6d1;" SplitPane.resizableWithParent="false">
                <children>
-                  <StackPane fx:id="pn_movableMap" onMouseDragged="#mapDragHandler" onMousePressed="#mapClickHandler" translateX="-20.0">
+                  <StackPane fx:id="pn_movableMap" onMouseDragged="#mapDragHandler" onMousePressed="#mapClickHandler" onScroll="#mapScrollHandler" translateX="-20.0">
                      <children>
                         <ImageView fx:id="img_map" fitHeight="982.0" fitWidth="1756.0" pickOnBounds="true" preserveRatio="true">
                            <image>
