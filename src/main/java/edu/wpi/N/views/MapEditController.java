@@ -108,25 +108,41 @@ public class MapEditController implements Controller {
               if (newValue != null) {
                 if (newValue.equals(pn_nodes_add)) {
                   editMode = EditMode.NODES_ADD;
-                  onBtnClearClicked();
+                  resetPanes();
                 } else if (newValue.equals(pn_nodes_delete)) {
                   editMode = EditMode.NODES_DELETE;
-                  onBtnClearClicked();
+                  resetPanes();
                 } else if (newValue.equals(pn_nodes_edit)) {
                   editMode = EditMode.NODES_EDIT;
-                  onBtnClearClicked();
+                  resetPanes();
                 }
               }
             });
   }
 
-  public void onBtnClearClicked() {
+  public void resetPanes() {
+    // RESET DELETE
     for (Circle mapNode : masterNodes.keySet()) {
       mapNode.setFill(Color.PURPLE);
       mapNode.setDisable(false);
     }
     selectedNodes.clear();
     lst_selected.getItems().clear();
+    // RESET ADD
+    if (tempNode != null) {
+      pn_display.getChildren().remove(tempNode);
+      tempNode = null;
+    }
+    txt_add_longName.setDisable(true);
+    txt_add_longName.clear();
+    txt_add_shortName.setDisable(true);
+    txt_add_shortName.clear();
+    txt_add_type.setDisable(true);
+    txt_add_type.clear();
+    btn_add_newNode.setDisable(false);
+    btn_add_cancel.setDisable(true);
+    btn_add_save.setDisable(true);
+    // RESET EDIT
     if (editingNode != null) {
       Circle lastMapNode = masterNodes.inverse().get(editingNode);
       lastMapNode.setFill(Color.PURPLE);
@@ -134,6 +150,20 @@ public class MapEditController implements Controller {
       lastMapNode.setCenterY(editingNode.getY() * VERTICAL_SCALE);
       editingNode = null;
     }
+    txt_NodesEditLongName.setDisable(true);
+    txt_NodesEditLongName.clear();
+    txt_NodesEditShortName.setDisable(true);
+    txt_NodesEditShortName.clear();
+  }
+
+  public void onBtnClearClicked() {
+    for (Circle mapNode : masterNodes.keySet()) {
+      mapNode.setFill(Color.PURPLE);
+      mapNode.setDisable(false);
+    }
+
+    selectedNodes.clear();
+    lst_selected.getItems().clear();
   }
 
   public void onBtnDeleteClicked() throws DBException {
@@ -252,6 +282,8 @@ public class MapEditController implements Controller {
 
   public void nodesEdit(Circle mapNode) {
     btn_NodesEditSave.setDisable(false);
+    txt_NodesEditShortName.setDisable(false);
+    txt_NodesEditLongName.setDisable(false);
     DbNode newNode = masterNodes.get(mapNode);
     if (editingNode != null && !(editingNode == newNode)) {
       Circle lastMapNode = masterNodes.inverse().get(editingNode);
