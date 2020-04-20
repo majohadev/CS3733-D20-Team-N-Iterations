@@ -7,7 +7,6 @@ import edu.wpi.N.algorithms.Pathfinder;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.DbController;
 import edu.wpi.N.entities.DbNode;
-import edu.wpi.N.entities.Laundry;
 import edu.wpi.N.entities.Path;
 import java.io.IOException;
 import java.util.LinkedList;
@@ -360,9 +359,11 @@ public class MapDisplayController implements Controller {
     }
   }
 
+  /*
   @FXML
   public void createNewLaundry(){
     Laundry newLaundry = new Laundry()
   }
+   */
 
 }
