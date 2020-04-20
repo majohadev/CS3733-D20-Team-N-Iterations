@@ -294,7 +294,7 @@ public class EmployeeController {
    */
   public static LinkedList<Translator> getTranslators() throws DBException{
     try{
-      String query = "SELECT * from employees, translators where employeeID = t_employeeID";
+      String query = "SELECT * from employees, translator where employeeID = t_employeeID";
       PreparedStatement stmt = con.prepareStatement(query);
       ResultSet rs = stmt.executeQuery();
       LinkedList<Translator> translators = new LinkedList<Translator>();
@@ -315,8 +315,20 @@ public class EmployeeController {
    *
    * @return a linked list of all people who can do laundry in the database
    */
-  public static LinkedList<Laundry> getLaundrys() {
-    return null;
+  public static LinkedList<Laundry> getLaundrys() throws DBException{
+    try{
+      String query = "SELECT * from employees, laundry where employeeID = l_employeeID";
+      PreparedStatement stmt = con.prepareStatement(query);
+      ResultSet rs = stmt.executeQuery();
+      LinkedList<Laundry> laundrys = new LinkedList<Laundry>();
+      while(rs.next()){
+        laundrys.add((Laundry) getEmployee(rs.getInt("l_employeeID")));
+      }
+      return laundrys;
+    } catch(SQLException e){
+      e.printStackTrace();
+      throw new DBException("Unknown error: getLaundrys", e);
+    }
   }
 
   // Chris
