@@ -8,6 +8,7 @@
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.image.Image?>
@@ -22,7 +23,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<?import javafx.scene.control.TextArea?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.MapDisplayController">
    <children>
       <SplitPane dividerPositions="0.1617497456765005" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: WHITE;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -202,8 +202,8 @@
                                  <content>
                                     <AnchorPane prefHeight="275.0">
                                        <children>
-                                          <ListView fx:id="lst_translatorLocation" layoutX="40.0" layoutY="73.0" prefHeight="95.0" prefWidth="200.0" />
                                           <TextField fx:id="txtf_translatorLocation" layoutX="40.0" layoutY="33.0" onKeyTyped="#fuzzySearchTranslatorRequest" prefHeight="29.0" prefWidth="200.0" promptText="Location" />
+                                          <ListView fx:id="lst_translatorSearchBox" layoutX="40.0" layoutY="73.0" prefHeight="95.0" prefWidth="200.0" />
                                           <TextArea fx:id="txt_Notes1" layoutX="40.0" layoutY="211.0" prefHeight="62.0" prefWidth="200.0" promptText="Additional Notes" />
                                           <TextField fx:id="txt_Language" layoutX="40.0" layoutY="176.0" prefHeight="29.0" prefWidth="200.0" promptText="Language" />
                                           <Button fx:id="btn_SubmitTranslator" layoutX="109.0" layoutY="281.0" mnemonicParsing="false" text="Submit" />

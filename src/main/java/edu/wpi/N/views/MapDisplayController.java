@@ -80,7 +80,7 @@ public class MapDisplayController implements Controller {
   @FXML TextField txtf_translatorLocation;
   @FXML TextField txtf_laundryLocation;
   @FXML ListView lst_laundryLocation;
-  @FXML ListView lst_translatorLocation;
+  @FXML ListView lst_translatorSearchBox;
 
   LinkedList<DbNode> allFloorNodes; // stores all the nodes on the floor
   LinkedList<DbNode> selectedNodes; // stores all the selected nodes on the map
@@ -300,11 +300,11 @@ public class MapDisplayController implements Controller {
   @FXML
   public void fuzzySearchLaundryRequest(KeyEvent keyInput) throws DBException {
     String currentText = txtf_laundryLocation.getText();
-    fuzzySearchNodeListTranslator = FuzzySearchAlgorithm.suggestWithCorrection(currentText);
+    fuzzySearchNodeListLaundry = FuzzySearchAlgorithm.suggestWithCorrection(currentText);
     LinkedList<String> fuzzySearchStringList = new LinkedList<>();
-    if (fuzzySearchNodeListTranslator != null) {
+    if (fuzzySearchNodeListLaundry != null) {
 
-      for (DbNode node : fuzzySearchNodeListTranslator) {
+      for (DbNode node : fuzzySearchNodeListLaundry) {
         fuzzySearchStringList.add(node.getLongName());
       }
 
@@ -318,15 +318,15 @@ public class MapDisplayController implements Controller {
     String currentText = txtf_translatorLocation.getText();
     fuzzySearchNodeListTranslator = FuzzySearchAlgorithm.suggestWithCorrection(currentText);
     LinkedList<String> fuzzySearchStringList = new LinkedList<>();
-    if (fuzzySearchNodeListLaundry != null) {
+    if (fuzzySearchNodeListTranslator != null) {
 
-      for (DbNode node : fuzzySearchNodeListLaundry) {
+      for (DbNode node : fuzzySearchNodeListTranslator) {
         fuzzySearchStringList.add(node.getLongName());
       }
 
       fuzzySearchTextList = FXCollections.observableList(fuzzySearchStringList);
     } else fuzzySearchTextList = FXCollections.observableList(longNamesList);
-    lst_translatorLocation.setItems(fuzzySearchTextList);
+    lst_translatorSearchBox.setItems(fuzzySearchTextList);
   }
 
   /*
