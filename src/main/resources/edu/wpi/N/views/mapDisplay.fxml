@@ -89,7 +89,7 @@
                                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="275.0" prefWidth="200.0">
                                        <children>
                                           <Label layoutX="4.0" prefHeight="59.0" prefWidth="272.0" text="Type in doctors name and press the search button to the right, then select the office or department you would like to visit related to that doctor" textAlignment="CENTER" wrapText="true" />
-                                          <ComboBox fx:id="cmbo_doctorname" editable="true" layoutX="10.0" layoutY="71.0" prefHeight="40.0" prefWidth="210.0" promptText="Enter Doctors Name" />
+                                          <ComboBox fx:id="cmbo_doctorname" editable="true" layoutX="10.0" layoutY="71.0" onKeyTyped="#searchByDoctorTextFill" prefHeight="40.0" prefWidth="210.0" promptText="Enter Doctors Name" />
                                           <Button fx:id="btn_searchdoc" layoutX="231.0" layoutY="71.0" maxHeight="40.0" maxWidth="40.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="40.0" />
                                           <ImageView fitHeight="28.0" fitWidth="29.0" layoutX="237.0" layoutY="77.0" mouseTransparent="true" opacity="0.97" pickOnBounds="true" preserveRatio="true">
                                              <image>

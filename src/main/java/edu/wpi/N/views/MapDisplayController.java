@@ -6,7 +6,9 @@ import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.algorithms.Pathfinder;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.DbController;
+import edu.wpi.N.database.DoctorController;
 import edu.wpi.N.entities.DbNode;
+import edu.wpi.N.entities.Doctor;
 import edu.wpi.N.entities.Path;
 import java.io.IOException;
 import java.util.LinkedList;
@@ -92,6 +94,8 @@ public class MapDisplayController implements Controller {
       FXCollections.observableArrayList(); // List that fills TextViews
   private LinkedList<DbNode> fuzzySearchNodeList =
       new LinkedList<>(); // List to store output of fuzzy search functions
+  private ObservableList<String> fuzzySearchDoctorList =
+      FXCollections.observableArrayList(); // List that fills TextViews
 
   private LinkedList<DbNode> fuzzySearchNodeListLaundry = new LinkedList<>();
   private LinkedList<DbNode> fuzzySearchNodeListTranslator = new LinkedList<>();
@@ -111,6 +115,10 @@ public class MapDisplayController implements Controller {
     masterNodes = HashBiMap.create();
     defaultNode = DbController.getNode("NHALL00804");
     if (defaultNode == null) defaultNode = allFloorNodes.getFirst();
+    LinkedList<DbNode> offices = new LinkedList<DbNode>();
+    offices.add(DbController.getNode("NDEPT00104"));
+    offices.add(DbController.getNode("NHALL00104"));
+    DoctorController.addDoctor("Wong", "Softeng", offices);
     populateMap();
   }
 
@@ -303,6 +311,13 @@ public class MapDisplayController implements Controller {
   @FXML
   private void searchByDoctorTextFill(KeyEvent inputMethodEvent) throws DBException {
     String currentText = cmbo_doctorname.getValue().toString();
+    if (currentText.length() > 1) {
+      LinkedList<Doctor> searchedDoc = FuzzySearchAlgorithm.suggestDoctors(currentText);
+      for (Doctor doctors : searchedDoc) {
+        fuzzySearchDoctorList.add(doctors.getName());
+      }
+      cmbo_doctorname.setItems(fuzzySearchDoctorList);
+    }
   }
 
   public void fuzzySearchLaundryRequest(KeyEvent keyInput) throws DBException {
