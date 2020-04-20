@@ -18,5 +18,6 @@
             <Font name="Calibri" size="18.0" />
          </font>
       </Label>
+      <Button fx:id="btn_edit" layoutX="928.0" layoutY="650.0" mnemonicParsing="false" onMouseClicked="#onBtnEditClicked" text="Edit Map" />
    </children>
 </AnchorPane>

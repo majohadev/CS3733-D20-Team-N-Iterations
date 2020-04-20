@@ -40,6 +40,7 @@ public class DbControllerGMethodsTest {
     // null for a node that is in the database but has no edges
     DbController.addNode("TESTNODE03", 23, 345, 4, "Foisie", "REST", "fskjd", "sdfk", 'N');
     Assertions.assertEquals(DbController.getGAdjacent("TESTNODE3"), new ArrayList<Node>());
+    DbController.deleteNode("TESTNODE03");
   }
 
   /**
@@ -60,6 +61,7 @@ public class DbControllerGMethodsTest {
     hall13Edges.add(DbController.getGNode("H100000000"));
     hall13Edges.add(DbController.getGNode("H120000000"));
     Assertions.assertEquals(DbController.getGAdjacent("H130000000"), hall13Edges);
+    DbController.removeEdge("H100000000", "H130000000");
   }
 
   /**

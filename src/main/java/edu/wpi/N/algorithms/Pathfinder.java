@@ -1,5 +1,6 @@
 package edu.wpi.N.algorithms;
 
+import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.DbController;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Node;
@@ -119,6 +120,40 @@ public class Pathfinder {
 
       return finalPath;
     } catch (Exception e) {
+      e.printStackTrace();
+      return null;
+    }
+  }
+
+  /**
+   * @param start, DbNode of starting node
+   * @param nodeType, String the type of node you want (must be length 4)
+   * @return Path, path from start node to closest (eucledian) end node of requested type
+   * @throws DBException
+   */
+  public static Path findQuickAccess(DbNode start, String nodeType) throws DBException {
+    try {
+      LinkedList<DbNode> nodes =
+          DbController.searchNode(start.getFloor(), start.getBuilding(), nodeType, "");
+      if (!nodes.isEmpty()) {
+        double closest =
+            cost(
+                DbController.getGNode(start.getNodeID()),
+                DbController.getGNode(nodes.getFirst().getNodeID()));
+        DbNode end = nodes.getFirst();
+        for (DbNode n : nodes) {
+          double cost =
+              cost(DbController.getGNode(start.getNodeID()), DbController.getGNode(n.getNodeID()));
+          if (cost <= closest) {
+            closest = cost;
+            end = n;
+          }
+        }
+        return findPath(start.getNodeID(), end.getNodeID());
+      } else {
+        return null;
+      }
+    } catch (DBException e) {
       e.printStackTrace();
       return null;
     }

@@ -99,10 +99,39 @@ public class PathfinderMethodsTest {
     }
   }
 
-  @AfterAll
-  public static void cleanup() throws DBException {
-    DbController.clearNodes();
+  /** Tests that findQuickAccess chooses finds the path to the closest node of the given nodeType */
+  @Test
+  public void findQuickAccessTester1() throws DBException {
+    Path path = Pathfinder.findQuickAccess(DbController.getNode("H200000000"), "REST");
+    Assertions.assertEquals(path.getPath().getLast(), DbController.getNode("AAAAAAAAAA"));
   }
+
+  /** Tests that findQuickAccess chooses finds the path to the closest node of the given nodeType */
+  @Test
+  public void findQuickAccessTester2() throws DBException {
+    Path path = Pathfinder.findQuickAccess(DbController.getNode("H700000000"), "LABS");
+    Assertions.assertEquals(path.getPath().getLast(), DbController.getNode("BBBBBBBBBB"));
+  }
+
+  /**
+   * Tests that findQuickAccess returns null if the given nodeType does not exist on the given floor
+   */
+  @Test
+  public void findQuickAccessNullTester() throws DBException {
+    Assertions.assertNull(Pathfinder.findQuickAccess(DbController.getNode("H700000000"), "ELEV"));
+  }
+
+  /**
+   * Tests that findQuickAccess returns null if there is no path to a node of the given nodeType,
+   * even though the node is present on the floor
+   */
+  @Test
+  public void findQuickAccessNoPathTester() throws DBException {
+    DbController.addNode("NHALL00104", 1250, 850, 1, "MainBuil", "ELEV", "Hall 1", "Hall 1", 'N');
+    Assertions.assertNull(Pathfinder.findQuickAccess(DbController.getNode("H700000000"), "ELEV"));
+    DbController.deleteNode("NHALL00104");
+  }
+
   // to test generatePath: uncomment the necessary test methods make the method itself public
   // just for the time of testing, then switch back to private after test
 
@@ -148,4 +177,12 @@ public class PathfinderMethodsTest {
   //    Assertions.assertThrows(
   //        NullPointerException.class, () -> Pathfinder.generatePath(start, end, cameFrom));
   //  }
+
+  @AfterAll
+  public static void cleanup() throws DBException {}
+
+  @AfterAll
+  public static void clearDB() throws DBException {
+    DbController.clearNodes();
+  }
 }
