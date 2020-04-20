@@ -3,6 +3,7 @@ package edu.wpi.N.database;
 import edu.wpi.N.entities.*;
 import java.sql.*;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
 
@@ -266,7 +267,7 @@ public class EmployeeController {
                 rs.getString("language")));
       }
       query =
-          "SELECT * FROM request, lrequest WHERE rquest.requestID = lrequest.requestID AND status = 'OPEN'";
+          "SELECT * FROM request, lrequest WHERE request.requestID = lrequest.requestID AND status = 'OPEN'";
       stmt = con.prepareStatement(query);
       rs = stmt.executeQuery();
       while (rs.next()) {
@@ -416,18 +417,20 @@ public class EmployeeController {
    */
   public static int addTransReq(String notes, String nodeID, String language) throws DBException {
     try {
-      String query = "INSERT INTO request (note, nodeID) VALUES (?, ?)";
+      String query = "INSERT INTO request (timeRequested, notes, serviceType, nodeID, status) VALUES (?, ?, ?, ?, ?, ?)";
       PreparedStatement stmt = con.prepareStatement(query);
-      stmt.setString(1, notes);
-      stmt.setString(2, nodeID);
+      stmt.setTimestamp(1, new Timestamp(new Date().getTime()));
+      stmt.setString(2, notes);
+      stmt.setString(3, "Translator");
+      stmt.setString(4, nodeID);
+      stmt.setString(5, "OPEN");
       stmt.execute();
       ResultSet rs = stmt.getGeneratedKeys();
       rs.next();
-      query = "INSERT INTO trequest (language) VALUES (?)";
+      query = "INSERT INTO trequest (language) VALUES (?) WHERE ";
       stmt = con.prepareStatement(query);
       stmt.setString(1, language);
       stmt.executeUpdate();
-      return 0;
     } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Error: addTransReq");
