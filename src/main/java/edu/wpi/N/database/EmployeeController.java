@@ -248,7 +248,7 @@ public class EmployeeController {
   public static LinkedList<Request> getOpenRequests() throws DBException {
     try {
       String query =
-          "SELECT * FROM request, trequest WHERE requestID = requestID AND status='OPEN'";
+          "SELECT * FROM request, trequest WHERE request.requestID = trequest.requestID AND status='OPEN'";
       PreparedStatement stmt = con.prepareStatement(query);
       LinkedList<Request> openList = new LinkedList<Request>();
 
@@ -265,7 +265,7 @@ public class EmployeeController {
                 rs.getString("status"),
                 rs.getString("language")));
       }
-      query = "SELECT * FROM request, lrequest WHERE requestID = requestID AND status = 'OPEN'";
+      query = "SELECT * FROM request, lrequest WHERE rquest.requestID = lrequest.requestID AND status = 'OPEN'";
       stmt = con.prepareStatement(query);
       rs = stmt.executeQuery();
       while (rs.next()) {
@@ -292,8 +292,21 @@ public class EmployeeController {
    *
    * @return a linked list of all translators in the database
    */
-  public static LinkedList<Translator> getTranslators() {
-    return null;
+  public static LinkedList<Translator> getTranslators() throws DBException{
+    try{
+      String query = "SELECT * from employees, translators where employeeID = t_employeeID";
+      PreparedStatement stmt = con.prepareStatement(query);
+      ResultSet rs = stmt.executeQuery();
+      LinkedList<Translator> translators = new LinkedList<Translator>();
+      while(rs.next()){
+        translators.add((Translator) getEmployee(rs.getInt("t_employeeID")));
+      }
+      return translators;
+    } catch(SQLException e){
+      e.printStackTrace();
+      throw new DBException("Unknown error: getTranslators", e);
+    }
+
   }
 
   // Noah
@@ -313,7 +326,7 @@ public class EmployeeController {
    * @param lang the language that you want the translators to speak
    * @return a linked list of all the translators who speak a specified language
    */
-  public static LinkedList<Translator> getTransLang(String lang) {
+  public static LinkedList<Translator> getTransLang(String lang) throws DBException{
     LinkedList<Translator> list = getTranslators();
     LinkedList<Translator> special = new LinkedList<Translator>();
     for (int i = 1; i < list.size(); i++) {
