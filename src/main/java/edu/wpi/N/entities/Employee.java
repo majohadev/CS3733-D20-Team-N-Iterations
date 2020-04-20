@@ -9,7 +9,6 @@ public class Employee {
   private int id;
   private String name;
   private int yearsofExperience;
-  private String lang;
   private char gender;
   private Timestamp start, end;
   private String type;
@@ -18,7 +17,6 @@ public class Employee {
     this.id = id;
     this.name = name;
     this.yearsofExperience = date;
-    this.lang = lang;
     this.gender = gender;
     this.start = start;
     this.end = end;
@@ -47,14 +45,6 @@ public class Employee {
 
   public void setYearsofExperience(int yearsofExperience) {
     this.yearsofExperience = yearsofExperience;
-  }
-
-  public String getLang() {
-    return lang;
-  }
-
-  public void setLang(String lang) {
-    this.lang = lang;
   }
 
   public char getGender() {
