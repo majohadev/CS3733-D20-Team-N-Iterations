@@ -7,6 +7,7 @@ import edu.wpi.N.entities.Path;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -135,5 +136,10 @@ public class DirectionsTest {
       // System.out.println(s);
     }
     Assertions.assertEquals(directions, path.getDirections());
+  }
+
+  @AfterAll
+  public static void clearDB() throws DBException {
+    DbController.clearNodes();
   }
 }
