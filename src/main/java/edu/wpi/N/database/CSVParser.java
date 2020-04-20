@@ -95,7 +95,6 @@ public class CSVParser {
       File initialFile = new File(pathToFile);
       InputStream input = new FileInputStream(initialFile);
 
-      CSVParser csvParser = new CSVParser();
       CSVParser.parseCSV(input);
     } catch (FileNotFoundException e) {
       e.printStackTrace();
