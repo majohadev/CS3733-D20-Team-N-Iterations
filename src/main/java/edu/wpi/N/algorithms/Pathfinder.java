@@ -34,8 +34,6 @@ public class Pathfinder {
     return Math.abs(end.getX() - currNode.getX()) + Math.abs(end.getY() - currNode.getY());
   }
 
-  // TODO:
-  // Change the paramaters to be DbNodes
   /**
    * Finds the shortest path from Start to Goal node
    *
@@ -45,19 +43,21 @@ public class Pathfinder {
     try {
       // Check if start is on the same floor as end
       if (startNode.getFloor() != endNode.getFloor()) {
-        // If not, find path to the closes elevator (prioritized) or stairs
-        // Check if the elevator/stairs is connected to Nodes, the end floor is at
-        // If not, find path to a "second best" elevator (prioritized) or stairs iteratively
+        // If not, find path to the closes elevator (prioritized) or stairs which is connected to
+        // endNode floor
         DbNode bestFloorChange = getFloorChange(startNode, endNode);
-        LinkedList<DbNode> pathToFloorChange = findPath(startNode, bestFloorChange).getPath();
 
+        // Get path from start to elevator / stairs
+        Path pathSoFar = findPath(startNode, bestFloorChange);
+
+        // Get corresponding elevator/stair node on goal node's floor
         DbNode floorChangeNode =
             getFloorChangeNode(bestFloorChange, bestFloorChange.getFloor(), endNode.getFloor());
-        LinkedList<DbNode> pathToEndNode = findPath(floorChangeNode, endNode).getPath();
 
-        pathToFloorChange.addAll(pathToEndNode);
-        Path path = new Path(pathToFloorChange);
-        return path;
+        // Add path from elevator on goal node's floor to the goal node
+        pathSoFar.getPath().addAll(findPath(floorChangeNode, endNode).getPath());
+
+        return pathSoFar;
       }
 
       // If yes, find path from elevator to the end Node
@@ -311,6 +311,16 @@ public class Pathfinder {
     }
   }
 
+  /**
+   * Returns respective elevator or stair node on the Goal Node's floor corresponding to given
+   * elevator or stair if exist
+   *
+   * @param floorChange: Elevator or Stair Node
+   * @param currentFloor: Current floor
+   * @param floorGoal: Goal floor
+   * @return: True if elevator or stair can reach the goal floor, false otherwise
+   * @throws DBException
+   */
   public static DbNode getFloorChangeNode(DbNode floorChange, int currentFloor, int floorGoal)
       throws DBException {
     LinkedList<DbNode> adjacentNodes = DbController.getAdjacent(floorChange.getNodeID());
