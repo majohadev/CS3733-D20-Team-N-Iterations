@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
@@ -18,24 +19,26 @@
    <children>
       <HBox prefHeight="1080.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <StackPane prefHeight="150.0" prefWidth="200.0">
+            <StackPane prefHeight="983.0" prefWidth="1520.0">
                <children>
                   <ImageView fitHeight="942.0" fitWidth="1520.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../images/Floor4SolidBackground.png" />
                      </image>
                   </ImageView>
-                  <Pane fx:id="pn_display" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="912.0" prefWidth="1520.0">
+                  <Pane fx:id="pn_secondEdges" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="910.0" prefWidth="1520.0" />
+                  <Pane fx:id="pn_firstEdges" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="910.0" prefWidth="1520.0" />
+                  <Pane fx:id="pn_display" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="910.0" prefWidth="1520.0">
                      <children>
-                        <Button fx:id="btn_return" layoutX="109.0" layoutY="339.0" mnemonicParsing="false" onMouseClicked="#onReturnClicked" prefHeight="52.0" prefWidth="122.0" text="Return" />
+                        <Button fx:id="btn_return" layoutX="142.0" layoutY="350.0" mnemonicParsing="false" onMouseClicked="#onReturnClicked" prefHeight="41.0" prefWidth="124.0" text="Return" />
                      </children></Pane>
                </children>
             </StackPane>
-            <Pane prefHeight="1080.0" prefWidth="521.0" style="-fx-background-color: WHITE;">
+            <Pane prefHeight="818.0" prefWidth="400.0" style="-fx-background-color: WHITE;">
                <children>
                   <Accordion fx:id="acc_modify" prefHeight="1080.0" prefWidth="400.0">
                     <panes>
-                      <TitledPane fx:id="pn_nodes" animated="false" text="Nodes">
+                      <TitledPane fx:id="pn_nodes" animated="false" prefHeight="787.0" prefWidth="400.0" text="Nodes">
                            <content>
                               <VBox prefHeight="200.0" prefWidth="100.0">
                                  <children>
@@ -88,7 +91,52 @@
                       </TitledPane>
                       <TitledPane fx:id="pn_edges" animated="false" text="Edges">
                         <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <Accordion fx:id="acc_edges" layoutX="14.0" layoutY="14.0" prefHeight="721.0" prefWidth="371.0">
+                                      <panes>
+                                        <TitledPane fx:id="pn_edges_add" animated="false" prefHeight="516.0" prefWidth="371.0" text="Add">
+                                          <content>
+                                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="272.0" prefWidth="369.0">
+                                                   <children>
+                                                      <TextField fx:id="txt_EdgesAddFirstLocation" editable="false" layoutX="15.0" layoutY="72.0" onMouseClicked="#onTxtEdgesAddChooseFirstClicked" prefHeight="25.0" prefWidth="344.0" />
+                                                      <TextField fx:id="txt_EdgesAddSecondLocation" editable="false" layoutX="14.0" layoutY="165.0" onMouseClicked="#onTxtEdgesAddChooseSecondClicked" prefHeight="25.0" prefWidth="342.0" />
+                                                      <CheckBox fx:id="chk_EdgesAddShowFirst" disable="true" layoutX="160.0" layoutY="34.0" mnemonicParsing="false" text="Show First Location Edges" />
+                                                      <CheckBox fx:id="chk_EdgesAddShowSecond" disable="true" layoutX="160.0" layoutY="124.0" mnemonicParsing="false" text="Show Second Location Edges" />
+                                                      <Button fx:id="btn_EdgesAdd" layoutX="259.0" layoutY="213.0" mnemonicParsing="false" onMouseClicked="#onBtnAddEdgeClicked" prefHeight="41.0" prefWidth="96.0" text="Add Edge" />
+                                                   </children>
+                                                </AnchorPane>
+                                          </content>
+                                        </TitledPane>
+                                        <TitledPane fx:id="pn_edges_delete" animated="false" text="Delete">
+                                          <content>
+                                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                   <children>
+                                                      <TextField fx:id="txt_EdgesDeleteNode" editable="false" layoutX="13.0" layoutY="36.0" prefHeight="25.0" prefWidth="344.0" />
+                                                      <Label layoutX="14.0" layoutY="14.0" prefHeight="19.0" prefWidth="96.0" text="Selected Node:" />
+                                                      <Label layoutX="14.0" layoutY="76.0" prefHeight="15.0" prefWidth="81.0" text="Selected Edge:" />
+                                                      <TextField fx:id="txt_EdgesDeleteEdge" editable="false" layoutX="13.0" layoutY="100.0" prefHeight="25.0" prefWidth="344.0" />
+                                                      <Button fx:id="btn_EdgesDelete" layoutX="295.0" layoutY="144.0" mnemonicParsing="false" onMouseClicked="#onBtnEdgesDeleteClicked" text="Delete" />
+                                                   </children></AnchorPane>
+                                          </content>
+                                        </TitledPane>
+                                          <TitledPane fx:id="pn_edges_edit" animated="false" text="Edit">
+                                            <content>
+                                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                   <children>
+                                                      <Label layoutX="14.0" layoutY="14.0" text="Select Starting Node" />
+                                                      <Label layoutX="14.0" layoutY="78.0" text="Select Edge" />
+                                                      <Label layoutX="14.0" layoutY="149.0" text="Select Ending Node" />
+                                                      <TextField fx:id="txt_EdgesEditStartNode" layoutX="14.0" layoutY="42.0" prefHeight="25.0" prefWidth="344.0" />
+                                                      <TextField fx:id="txt_EdgesEditEdge" layoutX="14.0" layoutY="106.0" prefHeight="25.0" prefWidth="344.0" />
+                                                      <TextField fx:id="txt_EdgesEditEndNode" layoutX="13.0" layoutY="174.0" prefHeight="25.0" prefWidth="344.0" />
+                                                      <Button fx:id="btn_EdgesEditConfirm" layoutX="296.0" layoutY="224.0" mnemonicParsing="false" onMouseClicked="#onBtnEdgesEditDeleteClicked" text="Confirm" />
+                                                   </children></AnchorPane>
+                                            </content>
+                                          </TitledPane>
+                                      </panes>
+                                    </Accordion>
+                                 </children></AnchorPane>
                         </content>
                       </TitledPane>
                     </panes>
