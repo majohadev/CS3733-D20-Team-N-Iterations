@@ -7,6 +7,7 @@ import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.DbController;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Path;
+import java.io.IOException;
 import java.util.LinkedList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -121,5 +122,9 @@ public class MapDisplayController implements Controller {
     }
     pn_display.getChildren().removeIf(node -> node instanceof Line);
     selectedNodes.clear();
+  }
+
+  public void onReturnClicked() throws IOException {
+    mainApp.switchScene("views/home.fxml");
   }
 }

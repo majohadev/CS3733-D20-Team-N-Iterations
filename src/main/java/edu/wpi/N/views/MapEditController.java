@@ -5,6 +5,7 @@ import edu.wpi.N.App;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.DbController;
 import edu.wpi.N.entities.DbNode;
+import java.io.IOException;
 import java.util.LinkedList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -49,7 +50,6 @@ public class MapEditController implements Controller {
 
   @FXML TextField txt_NodesEditLongName;
   @FXML TextField txt_NodesEditShortName;
-  @FXML TextField txt_NodesEditType;
   @FXML Button btn_NodesEditSave;
 
   HashBiMap<Circle, DbNode> masterNodes; // stores the map nodes and their respective database nodes
@@ -196,6 +196,19 @@ public class MapEditController implements Controller {
     btn_add_cancel.setDisable(true);
   }
 
+  public void onBtnNodesEditSaveClicked() throws DBException {
+    int x = (int) ((float) masterNodes.inverse().get(editingNode).getCenterX() / HORIZONTAL_SCALE);
+    int y = (int) ((float) masterNodes.inverse().get(editingNode).getCenterY() / VERTICAL_SCALE);
+    String longName = txt_NodesEditLongName.getText();
+    String shortName = txt_NodesEditShortName.getText();
+    DbController.modifyNode(editingNode.getNodeID(), x, y, longName, shortName);
+    masterNodes.inverse().get(editingNode).setFill(Color.PURPLE);
+    txt_NodesEditShortName.clear();
+    txt_NodesEditLongName.clear();
+    btn_NodesEditSave.setDisable(true);
+    editingNode = null;
+  }
+
   public void onDragNode(MouseEvent event, Circle tempNode) {
     tempNode.setCenterX(event.getX());
     tempNode.setCenterY(event.getY());
@@ -231,6 +244,7 @@ public class MapEditController implements Controller {
   }
 
   public void nodesEdit(Circle mapNode) {
+    btn_NodesEditSave.setDisable(false);
     DbNode newNode = masterNodes.get(mapNode);
     if (editingNode != null && !(editingNode == newNode)) {
       Circle lastMapNode = masterNodes.inverse().get(editingNode);
@@ -244,7 +258,6 @@ public class MapEditController implements Controller {
       mapNode.setFill(Color.GREEN);
       txt_NodesEditLongName.setText(editingNode.getLongName());
       txt_NodesEditShortName.setText(editingNode.getShortName());
-      txt_NodesEditType.setText(editingNode.getNodeType());
       mapNode.setOnMouseDragged(event -> this.onDragNode(event, mapNode));
     }
   }
@@ -263,5 +276,9 @@ public class MapEditController implements Controller {
           .getItems()
           .removeIf(n -> ((Label) n).getText().equals(masterNodes.get(mapNode).getLongName()));
     }
+  }
+
+  public void onReturnClicked() throws IOException {
+    mainApp.switchScene("views/home.fxml");
   }
 }

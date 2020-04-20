@@ -79,6 +79,7 @@
                      <children>
                         <Button fx:id="btn_find" layoutX="162.0" layoutY="395.0" mnemonicParsing="false" onMouseClicked="#onBtnFindClicked" prefHeight="43.0" prefWidth="103.0" text="Find Path" />
                         <Button fx:id="btn_reset" layoutX="162.0" layoutY="466.0" mnemonicParsing="false" onMouseClicked="#onResetClicked" prefHeight="43.0" prefWidth="103.0" text="Reset" />
+                        <Button fx:id="btn_return" layoutX="166.0" layoutY="531.0" mnemonicParsing="false" onMouseClicked="#onReturnClicked" prefHeight="50.0" prefWidth="95.0" text="Return" />
                      </children></Pane>
                </children>
             </StackPane>
