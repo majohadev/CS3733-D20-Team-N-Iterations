@@ -442,7 +442,7 @@ public class EmployeeController {
    * @param nodeID The ID of the node in which these services are requested
    * @return the id of the created request
    */
-  public static int addLaundReq(String notes, String nodeID) {}
+  public static int addLaundReq(String notes, String nodeID) {return 0;}
 
   // Noah
   /**
