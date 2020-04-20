@@ -6,6 +6,7 @@ import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.DbController;
 import edu.wpi.N.entities.DbNode;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.LinkedList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -13,9 +14,15 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 
 public class MapEditController implements Controller {
   App mainApp = null;
+
+  @Override
+  public void setMainApp(App mainApp) {
+    this.mainApp = mainApp;
+  }
 
   final float BAR_WIDTH = 400;
   final float IMAGE_WIDTH = 2475;
@@ -61,16 +68,18 @@ public class MapEditController implements Controller {
   @FXML TextField txt_EdgesAddSecondLocation;
   @FXML CheckBox chk_EdgesAddShowFirst;
   @FXML CheckBox chk_EdgesAddShowSecond;
-  @FXML Button btn_EdgesAddChooseFirst;
-  @FXML Button btn_EdgesAddChooseSecond;
+  @FXML Pane pn_firstEdges;
+  @FXML Pane pn_secondEdges;
+  @FXML Button btn_return;
+  @FXML Button btn_EdgesAdd;
 
   HashBiMap<Circle, DbNode> masterNodes; // stores the map nodes and their respective database nodes
   LinkedList<DbNode> allFloorNodes; // stores all the nodes on the floor
   LinkedList<DbNode> selectedNodes; // stores all the selected nodes on the map
+  DbNode[] edgeNodes;
   Circle tempNode;
   DbNode editingNode;
   EditMode editMode;
-  NodeNum nodeNum;
 
   public enum EditMode {
     NOSTATE,
@@ -82,17 +91,6 @@ public class MapEditController implements Controller {
     EDGES_EDIT
   }
 
-  public enum NodeNum {
-    NOSTATE,
-    FIRST,
-    SECOND
-  }
-
-  @Override
-  public void setMainApp(App mainApp) {
-    this.mainApp = mainApp;
-  }
-
   public void initialize() throws DBException, DBException {
     selectedNodes = new LinkedList<DbNode>();
     allFloorNodes = DbController.floorNodes(4, "Faulkner");
@@ -100,7 +98,7 @@ public class MapEditController implements Controller {
     tempNode = null;
     editMode = editMode.NOSTATE;
     editingNode = null;
-    nodeNum = NodeNum.NOSTATE;
+    edgeNodes = new DbNode[2];
     populateMap();
     accordionListener();
   }
@@ -129,13 +127,13 @@ public class MapEditController implements Controller {
               if (newValue != null) {
                 if (newValue.equals(pn_nodes_add)) {
                   editMode = EditMode.NODES_ADD;
-                  onBtnClearClicked();
+                  resetPanes();
                 } else if (newValue.equals(pn_nodes_delete)) {
                   editMode = EditMode.NODES_DELETE;
-                  onBtnClearClicked();
+                  resetPanes();
                 } else if (newValue.equals(pn_nodes_edit)) {
                   editMode = EditMode.NODES_EDIT;
-                  onBtnClearClicked();
+                  resetPanes();
                 }
               }
             });
@@ -148,17 +146,63 @@ public class MapEditController implements Controller {
             (observable, oldValue, newValue) -> {
               if (newValue != null) {
                 if (newValue.equals(pn_edges_add)) {
+                  resetPanes();
                   editMode = EditMode.EDGES_ADD;
-                  onBtnClearClicked();
+                  checkBoxListener(chk_EdgesAddShowFirst);
+                  checkBoxListener(chk_EdgesAddShowSecond);
                 } else if (newValue.equals(pn_edges_delete)) {
                   editMode = EditMode.EDGES_DELETE;
-                  onBtnClearClicked();
+                  resetPanes();
                 } else if (newValue.equals(pn_edges_edit)) {
                   editMode = EditMode.EDGES_EDIT;
-                  onBtnClearClicked();
+                  resetPanes();
                 }
               }
             });
+  }
+
+  public void resetPanes() {
+    // RESET DELETE
+    for (Circle mapNode : masterNodes.keySet()) {
+      mapNode.setFill(Color.PURPLE);
+      mapNode.setDisable(false);
+    }
+    selectedNodes.clear();
+    lst_selected.getItems().clear();
+    // RESET ADD
+    if (tempNode != null) {
+      pn_display.getChildren().remove(tempNode);
+      tempNode = null;
+    }
+    txt_add_longName.setDisable(true);
+    txt_add_longName.clear();
+    txt_add_shortName.setDisable(true);
+    txt_add_shortName.clear();
+    txt_add_type.setDisable(true);
+    txt_add_type.clear();
+    btn_add_newNode.setDisable(false);
+    btn_add_cancel.setDisable(true);
+    btn_add_save.setDisable(true);
+    // RESET EDIT
+    if (editingNode != null) {
+      Circle lastMapNode = masterNodes.inverse().get(editingNode);
+      lastMapNode.setFill(Color.PURPLE);
+      lastMapNode.setCenterX(editingNode.getX() * HORIZONTAL_SCALE);
+      lastMapNode.setCenterY(editingNode.getY() * VERTICAL_SCALE);
+      editingNode = null;
+    }
+    txt_NodesEditLongName.setDisable(true);
+    txt_NodesEditLongName.clear();
+    txt_NodesEditShortName.setDisable(true);
+    txt_NodesEditShortName.clear();
+    // RESET EDGES ADD
+    Arrays.fill(edgeNodes, null);
+    txt_EdgesAddFirstLocation.clear();
+    txt_EdgesAddSecondLocation.clear();
+    chk_EdgesAddShowFirst.setSelected(false);
+    chk_EdgesAddShowSecond.setSelected(false);
+    chk_EdgesAddShowFirst.setDisable(true);
+    chk_EdgesAddShowSecond.setDisable(true);
   }
 
   public void onBtnClearClicked() {
@@ -166,6 +210,7 @@ public class MapEditController implements Controller {
       mapNode.setFill(Color.PURPLE);
       mapNode.setDisable(false);
     }
+
     selectedNodes.clear();
     lst_selected.getItems().clear();
   }
@@ -285,14 +330,15 @@ public class MapEditController implements Controller {
     } else if (editMode == EditMode.NODES_EDIT) {
       nodesEdit(mapNode);
     } else if (editMode == EditMode.EDGES_ADD) {
+      System.out.println("Hello");
       edgesAdd(mapNode);
     }
   }
 
-  public void edgesAdd(Circle mapNode) {}
-
   public void nodesEdit(Circle mapNode) {
     btn_NodesEditSave.setDisable(false);
+    txt_NodesEditShortName.setDisable(false);
+    txt_NodesEditLongName.setDisable(false);
     DbNode newNode = masterNodes.get(mapNode);
     if (editingNode != null && !(editingNode == newNode)) {
       Circle lastMapNode = masterNodes.inverse().get(editingNode);
@@ -326,7 +372,124 @@ public class MapEditController implements Controller {
     }
   }
 
-  public void onBtnEdgesAddChooseFirstClicked() {}
+  // EDGES ADD METHODS
+  public void onTxtEdgesAddChooseFirstClicked() {
+    txt_EdgesAddFirstLocation.requestFocus();
+  }
+
+  public void onTxtEdgesAddChooseSecondClicked() {
+    txt_EdgesAddSecondLocation.requestFocus();
+  }
+
+  public void edgesAdd(Circle mapNode) {
+    System.out.println("Hello");
+    if (txt_EdgesAddFirstLocation.isFocused()) {
+      if (masterNodes.get(mapNode) == edgeNodes[1]) {
+        return;
+      }
+      pn_display.getChildren().removeIf(node -> node instanceof Line);
+      chk_EdgesAddShowFirst.setSelected(false);
+      txt_EdgesAddFirstLocation.setText(masterNodes.get(mapNode).getShortName());
+      chk_EdgesAddShowFirst.setDisable(false);
+      if (edgeNodes[0] != null) {
+        masterNodes.inverse().get(edgeNodes[0]).setFill(Color.PURPLE);
+      }
+      edgeNodes[0] = masterNodes.get(mapNode);
+      mapNode.setFill(Color.GREEN);
+      if (edgeNodes[1] != null) {
+        DbNode firstNode = edgeNodes[0];
+        DbNode secondNode = edgeNodes[1];
+        Line line =
+            new Line(
+                firstNode.getX() * HORIZONTAL_SCALE,
+                firstNode.getY() * VERTICAL_SCALE,
+                secondNode.getX() * HORIZONTAL_SCALE,
+                secondNode.getY() * VERTICAL_SCALE);
+        line.setFill(Color.RED);
+        pn_display.getChildren().add(line);
+      }
+    } else if (txt_EdgesAddSecondLocation.isFocused()) {
+      if (masterNodes.get(mapNode) == edgeNodes[0]) {
+        return;
+      }
+      pn_display.getChildren().removeIf(node -> node instanceof Line);
+      chk_EdgesAddShowSecond.setSelected(false);
+      txt_EdgesAddSecondLocation.setText(masterNodes.get(mapNode).getShortName());
+      chk_EdgesAddShowSecond.setDisable(false);
+      if (edgeNodes[1] != null) {
+        masterNodes.inverse().get(edgeNodes[1]).setFill(Color.PURPLE);
+      }
+      edgeNodes[1] = masterNodes.get(mapNode);
+      mapNode.setFill(Color.GREEN);
+      if (edgeNodes[0] != null) {
+        DbNode firstNode = edgeNodes[0];
+        DbNode secondNode = edgeNodes[1];
+        Line line =
+            new Line(
+                firstNode.getX() * HORIZONTAL_SCALE,
+                firstNode.getY() * VERTICAL_SCALE,
+                secondNode.getX() * HORIZONTAL_SCALE,
+                secondNode.getY() * VERTICAL_SCALE);
+        line.setStroke(Color.RED);
+        pn_display.getChildren().add(line);
+      }
+    }
+  }
+
+  public void onAddEdgeClicked() {}
+
+  public void checkBoxListener(CheckBox chk) {
+    chk.selectedProperty()
+        .addListener(
+            (observable, oldValue, newValue) -> {
+              if (newValue) {
+                if (chk == chk_EdgesAddShowFirst) {
+                  displayPaths(0);
+                } else if (chk == chk_EdgesAddShowSecond) {
+                  displayPaths(1);
+                }
+              }
+              if (!newValue) {
+                if (chk == chk_EdgesAddShowFirst) {
+                  pn_firstEdges.getChildren().clear();
+                } else if (chk == chk_EdgesAddShowSecond) {
+                  pn_secondEdges.getChildren().clear();
+                }
+              }
+            });
+  };
+
+  public void displayPaths(int index) {
+    LinkedList<DbNode> adjacentNodes = null;
+    try {
+      adjacentNodes = DbController.getAdjacent(edgeNodes[index].getNodeID());
+    } catch (DBException e) {
+      e.printStackTrace();
+    }
+    Circle firstMapNode = masterNodes.inverse().get(edgeNodes[index]);
+    for (DbNode node : adjacentNodes) {
+      Line line =
+          new Line(
+              firstMapNode.getCenterX(),
+              firstMapNode.getCenterY(),
+              node.getX() * HORIZONTAL_SCALE,
+              node.getY() * VERTICAL_SCALE);
+      if (index == 0) {
+        pn_firstEdges.getChildren().add(line);
+      } else {
+        pn_secondEdges.getChildren().add(line);
+      }
+    }
+  }
+
+  public void onBtnAddEdgeClicked() throws DBException {
+    if (!txt_EdgesAddFirstLocation.getText().equals("")
+        && (!txt_EdgesAddSecondLocation.getText().equals(""))) {
+      pn_display.getChildren().removeIf(node -> node instanceof Line);
+      DbController.addEdge(edgeNodes[0].getNodeID(), edgeNodes[1].getNodeID());
+      resetPanes();
+    }
+  }
 
   public void onReturnClicked() throws IOException {
     mainApp.switchScene("views/home.fxml");

@@ -19,24 +19,26 @@
    <children>
       <HBox prefHeight="1080.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <StackPane prefHeight="150.0" prefWidth="200.0">
+            <StackPane prefHeight="983.0" prefWidth="1520.0">
                <children>
                   <ImageView fitHeight="942.0" fitWidth="1520.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../images/Floor4SolidBackground.png" />
                      </image>
                   </ImageView>
-                  <Pane fx:id="pn_display" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="912.0" prefWidth="1520.0">
+                  <Pane fx:id="pn_secondEdges" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="910.0" prefWidth="1520.0" />
+                  <Pane fx:id="pn_firstEdges" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="910.0" prefWidth="1520.0" />
+                  <Pane fx:id="pn_display" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="910.0" prefWidth="1520.0">
                      <children>
-                        <Button fx:id="btn_return" layoutX="109.0" layoutY="339.0" mnemonicParsing="false" onMouseClicked="#onReturnClicked" prefHeight="52.0" prefWidth="122.0" text="Return" />
+                        <Button fx:id="btn_return" layoutX="142.0" layoutY="350.0" mnemonicParsing="false" onMouseClicked="#onReturnClicked" prefHeight="41.0" prefWidth="124.0" text="Return" />
                      </children></Pane>
                </children>
             </StackPane>
-            <Pane prefHeight="1080.0" prefWidth="521.0" style="-fx-background-color: WHITE;">
+            <Pane prefHeight="818.0" prefWidth="400.0" style="-fx-background-color: WHITE;">
                <children>
                   <Accordion fx:id="acc_modify" prefHeight="1080.0" prefWidth="400.0">
                     <panes>
-                      <TitledPane fx:id="pn_nodes" animated="false" text="Nodes">
+                      <TitledPane fx:id="pn_nodes" animated="false" prefHeight="787.0" prefWidth="400.0" text="Nodes">
                            <content>
                               <VBox prefHeight="200.0" prefWidth="100.0">
                                  <children>
@@ -97,12 +99,11 @@
                                           <content>
                                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="272.0" prefWidth="369.0">
                                                    <children>
-                                                      <TextField fx:id="txt_EdgesAddFirstLocation" disable="true" layoutX="15.0" layoutY="72.0" prefHeight="25.0" prefWidth="344.0" />
-                                                      <TextField fx:id="txt_EdgesAddSecondLocation" disable="true" layoutX="14.0" layoutY="165.0" prefHeight="25.0" prefWidth="342.0" />
-                                                      <CheckBox fx:id="chk_EdgesAddShowFirst" layoutX="160.0" layoutY="34.0" mnemonicParsing="false" text="Show First Location Edges" />
-                                                      <CheckBox fx:id="chk_EdgesAddShowSecond" layoutX="160.0" layoutY="124.0" mnemonicParsing="false" text="Show Second Location Edges" />
-                                                      <Button fx:id="btn_EdgesAddChooseFirst" layoutX="14.0" layoutY="30.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="104.0" text="First Location" />
-                                                      <Button fx:id="btn_EdgesAddChooseSecond" layoutX="14.0" layoutY="120.0" mnemonicParsing="false" text="Second Location" />
+                                                      <TextField fx:id="txt_EdgesAddFirstLocation" editable="false" layoutX="15.0" layoutY="72.0" onMouseClicked="#onTxtEdgesAddChooseFirstClicked" prefHeight="25.0" prefWidth="344.0" />
+                                                      <TextField fx:id="txt_EdgesAddSecondLocation" editable="false" layoutX="14.0" layoutY="165.0" onMouseClicked="#onTxtEdgesAddChooseSecondClicked" prefHeight="25.0" prefWidth="342.0" />
+                                                      <CheckBox fx:id="chk_EdgesAddShowFirst" disable="true" layoutX="160.0" layoutY="34.0" mnemonicParsing="false" text="Show First Location Edges" />
+                                                      <CheckBox fx:id="chk_EdgesAddShowSecond" disable="true" layoutX="160.0" layoutY="124.0" mnemonicParsing="false" text="Show Second Location Edges" />
+                                                      <Button fx:id="btn_EdgesAdd" layoutX="259.0" layoutY="213.0" mnemonicParsing="false" onMouseClicked="#onBtnAddEdgeClicked" prefHeight="41.0" prefWidth="96.0" text="Add Edge" />
                                                    </children>
                                                 </AnchorPane>
                                           </content>
