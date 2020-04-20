@@ -67,6 +67,6 @@ public abstract class Request {
             notes.equals(other.notes) &&
             nodeID.equals(other.nodeID) &&
             timeRequested.toString().equals(other.timeRequested.toString()) &&
-            timeCompleted.toString().equals(other.timeCompleted,toString());
+            timeCompleted.toString().equals(other.timeCompleted.toString());
   }
 }
