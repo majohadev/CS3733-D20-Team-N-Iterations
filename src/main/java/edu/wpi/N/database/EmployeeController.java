@@ -340,7 +340,7 @@ public class EmployeeController {
    */
   public static LinkedList<Translator> getTransLang(String lang) throws DBException {
     try{
-      String query = "SELECT id, name, language FROM translator, (SELECT * FROM language where language = ?) AS language WHERE translator.t_employeeID = language.t_employeeID ORDER BY id";
+      String query = "SELECT id, name, language FROM translator, (SELECT * FROM language WHERE language = ?) AS language WHERE translator.t_employeeID = language.t_employeeID ORDER BY id";
       PreparedStatement stmt = con.prepareStatement(query);
       stmt.setString(1, lang);
       ResultSet rs = stmt.executeQuery();
