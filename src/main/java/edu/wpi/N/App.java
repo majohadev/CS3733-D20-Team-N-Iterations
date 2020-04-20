@@ -29,6 +29,10 @@ public class App extends Application {
     masterStage.setMaximized(true);
   }
 
+  public Stage getStage() {
+    return this.masterStage;
+  }
+
   @Override
   public void stop() {
     log.info("Shutting Down");

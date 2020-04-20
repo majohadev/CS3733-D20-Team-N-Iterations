@@ -299,7 +299,9 @@ public class MapEditController implements Controller {
     String longName = txt_add_longName.getText();
     String shortName = txt_add_shortName.getText();
     String type = (String) cb_NodesAddType.getValue();
-    if (longName.equals("") || shortName.equals("") || type.equals("")) {
+    System.out.println(type);
+    if (longName.equals("") || shortName.equals("") || type == null) {
+      displayErrorMessage("Invalid Input");
       return;
     }
     int x = (int) ((float) tempNode.getCenterX() / HORIZONTAL_SCALE);
@@ -326,6 +328,9 @@ public class MapEditController implements Controller {
     int y = (int) ((float) masterNodes.inverse().get(editingNode).getCenterY() / VERTICAL_SCALE);
     String longName = txt_NodesEditLongName.getText();
     String shortName = txt_NodesEditShortName.getText();
+    if (longName.equals("") || shortName.equals("")) {
+      displayErrorMessage("Invalid Input");
+    }
     DbController.modifyNode(editingNode.getNodeID(), x, y, longName, shortName);
     DbNode newNode = DbController.getNode(editingNode.getNodeID());
     // CHECK
@@ -679,6 +684,13 @@ public class MapEditController implements Controller {
     txt_EdgesEditStartNode.setText("");
     txt_EdgesEditEndNode.setText("");
     pn_firstEdges.getChildren().clear();
+  }
+
+  public void displayErrorMessage(String str) {
+    Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+    errorAlert.setHeaderText("Invalid input");
+    errorAlert.setContentText(str);
+    errorAlert.showAndWait();
   }
 
   public void onReturnClicked() throws IOException {
