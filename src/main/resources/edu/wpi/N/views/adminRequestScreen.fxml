@@ -20,10 +20,10 @@
         <Button fx:id="btn_logout" layoutX="39.0" layoutY="635.0" mnemonicParsing="false" text="Logout" AnchorPane.leftAnchor="25.0" />
         <TableView layoutX="334.0" layoutY="61.0" maxWidth="401.0" minWidth="400.0" prefHeight="500.0" prefWidth="401.0" AnchorPane.leftAnchor="322.0" AnchorPane.rightAnchor="27.0" AnchorPane.topAnchor="61.0">
             <columns>
-                <TableColumn maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Time" />
-                <TableColumn maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Type" />
-                <TableColumn maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Location" />
-                <TableColumn maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Language" />
+                <TableColumn fx:id="tv_time" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Time" />
+                <TableColumn fx:id="tv_type" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Type" />
+                <TableColumn fx:id="tv_location" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Location" />
+                <TableColumn fx:id="tv_language" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Language" />
             </columns>
         </TableView>
         <Line endX="100.0" layoutX="135.0" layoutY="51.0" startX="-100.0" AnchorPane.leftAnchor="37.5" AnchorPane.topAnchor="60.0" />
