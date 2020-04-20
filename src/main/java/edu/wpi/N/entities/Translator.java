@@ -13,5 +13,4 @@ public class Translator extends Employee {
   public LinkedList<String> getLanguages() {
     return languages;
   }
-
 }
