@@ -353,18 +353,18 @@ public class EmployeeController {
    *
    * @param name the translator's name
    * @param languages the languages that this translator is capable of speaking
-   * @return true if successful, false otherwise
+   * @return id of created request
    */
-  public static void addTranslator(String name, LinkedList<String> languages) {}
+  public static int addTranslator(String name, LinkedList<String> languages) {return 0;}
 
   // Noah
   /**
    * Adds a laundry employee to the database
    *
    * @param name the laundry employee's name
-   * @return true if successful, false otherwise
+   * @return id of created request
    */
-  public static void addLaundry(String name) throws DBException{
+  public static int addLaundry(String name) throws DBException{
     try{
       String query = "INSERT INTO employees (name, serviceType) VALUES (?, 'Laundry')";
       PreparedStatement stmt = con.prepareStatement(query);
@@ -374,8 +374,10 @@ public class EmployeeController {
       rs.next();
       query = "INSERT INTO Laundry VALUES (?)";
       stmt = con.prepareStatement(query);
-      stmt.setInt(1, rs.getInt("employeeID"));
+      int id = rs.getInt("employeeID");
+      stmt.setInt(1, id);
       stmt.executeUpdate();
+      return id;
     }catch (SQLException e){
       e.printStackTrace();
       throw new DBException("Unknown error: addLaundry , name = " + name, e);
@@ -389,9 +391,9 @@ public class EmployeeController {
    * @param notes some notes for the translator request
    * @param nodeID The ID of the node in which these services are requested
    * @param language the language that the translator is requested for
-   * @return true on success, false otherwise.
+   * @return the id of the created request
    */
-  public static void addTransReq(String notes, String nodeID, String language) throws DBException {
+  public static int addTransReq(String notes, String nodeID, String language) throws DBException {
     try {
       String query = "INSERT INTO trequest VALUES (?, ?)";
       PreparedStatement stmt = con.prepareStatement(query);
@@ -409,9 +411,9 @@ public class EmployeeController {
    *
    * @param notes some notes for the laundry request
    * @param nodeID The ID of the node in which these services are requested
-   * @return true on success, false otherwise.
+   * @return the id of the created request
    */
-  public static void addLaundReq(String notes, String nodeID) {}
+  public static int addLaundReq(String notes, String nodeID) {}
 
   // Noah
   /**
