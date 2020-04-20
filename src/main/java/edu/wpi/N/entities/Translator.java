@@ -1,17 +1,18 @@
 package edu.wpi.N.entities;
 
-import java.sql.Timestamp;
-
 public class Translator extends Employee {
-  public Translator(
-      int id,
-      String name,
-      int date,
-      String lang,
-      char gender,
-      Timestamp start,
-      Timestamp end,
-      String type) {
-    super(id, name, date, lang, gender, start, end, "Translator");
+  private String language;
+
+  public Translator(int id, String name, String lang) {
+    super(id, name);
+    this.language = lang;
+  }
+
+  public String getLanguage() {
+    return language;
+  }
+
+  public void setLanguage(String language) {
+    this.language = language;
   }
 }
