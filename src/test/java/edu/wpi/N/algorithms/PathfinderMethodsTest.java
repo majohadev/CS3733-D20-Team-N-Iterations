@@ -36,7 +36,8 @@ public class PathfinderMethodsTest {
     actualPath.add(DbController.getNode("H130000000"));
     actualPath.add(DbController.getNode("EEEEEEEEEE"));
 
-    Path testingPath = Pathfinder.findPath("H100000001", "EEEEEEEEEE");
+    Path testingPath =
+        Pathfinder.findPath(DbController.getNode("H100000001"), DbController.getNode("EEEEEEEEEE"));
 
     for (int i = 0; i < actualPath.size(); i++) {
       Assertions.assertEquals(
@@ -56,7 +57,8 @@ public class PathfinderMethodsTest {
     actualPath.add(DbController.getNode("H120000000"));
     actualPath.add(DbController.getNode("H130000000"));
 
-    Path testingPath = Pathfinder.findPath("H120000000", "H130000000");
+    Path testingPath =
+        Pathfinder.findPath(DbController.getNode("H120000000"), DbController.getNode("H130000000"));
 
     for (int i = 0; i < actualPath.size(); i++) {
       Assertions.assertEquals(
@@ -69,8 +71,10 @@ public class PathfinderMethodsTest {
    * any node
    */
   @Test
-  public void findPathDestinationNotFound() {
-    Assertions.assertNull(Pathfinder.findPath("H120000000", "NonExistentNode"));
+  public void findPathDestinationNotFound() throws DBException {
+    Assertions.assertNull(
+        Pathfinder.findPath(
+            DbController.getNode("H120000000"), DbController.getNode("NonExistentNode")));
   }
 
   /**
@@ -78,8 +82,9 @@ public class PathfinderMethodsTest {
    * to any node (including end node)
    */
   @Test
-  public void findPathStartNodeHasNoEdges() {
-    Assertions.assertNull(Pathfinder.findPath("NonExistentNode", "H120000000"));
+  public void findPathStartNodeHasNoEdges() throws DBException {
+    DbNode nonExistentNode = new DbNode();
+    Assertions.assertNull(Pathfinder.findPath(nonExistentNode, DbController.getNode("H120000000")));
   }
 
   /**
@@ -91,7 +96,8 @@ public class PathfinderMethodsTest {
     LinkedList<DbNode> actualPath = new LinkedList<DbNode>();
 
     actualPath.add(DbController.getNode("H120000000"));
-    Path testingPath = Pathfinder.findPath("H120000000", "H120000000");
+    Path testingPath =
+        Pathfinder.findPath(DbController.getNode("H120000000"), DbController.getNode("H120000000"));
 
     for (int i = 0; i < actualPath.size(); i++) {
       Assertions.assertEquals(

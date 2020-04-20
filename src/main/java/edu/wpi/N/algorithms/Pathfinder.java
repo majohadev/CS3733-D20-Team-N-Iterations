@@ -5,6 +5,8 @@ import edu.wpi.N.database.DbController;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Node;
 import edu.wpi.N.entities.Path;
+import org.bridj.util.Pair;
+
 import java.util.*;
 
 public class Pathfinder {
@@ -40,18 +42,20 @@ public class Pathfinder {
    *
    * @return Path object indicating the shortest path to the goal Node from Start Node
    */
-  public static Path findPath(String startID, String endID) {
+  public static Path findPath(DbNode startNode, DbNode endNode) {
     try {
       // Check if start is on the same floor as end
+      if(startNode.getFloor() != endNode.getFloor()) {
+        // If not, find path to the closes elevator (prioritized) or stairs
 
-      // If not, find path to the closes elevator (prioritized) or stairs
 
-      // Check if the elevator/stairs is connected to Nodes, the end floor is at
-      // If not, find path to a "second best" elevator (prioritized) or stairs iteratively
+        // Check if the elevator/stairs is connected to Nodes, the end floor is at
+        // If not, find path to a "second best" elevator (prioritized) or stairs iteratively
+      }
 
       // If yes, find path from elevator to the end Node
-      Node start = DbController.getGNode(startID);
-      Node end = DbController.getGNode(endID);
+      Node start = DbController.getGNode(startNode.getNodeID());
+      Node end = DbController.getGNode(endNode.getNodeID());
 
       // Initialize variables
       PriorityQueue<Node> frontier = new PriorityQueue<Node>();
@@ -159,7 +163,7 @@ public class Pathfinder {
             end = n;
           }
         }
-        return findPath(start.getNodeID(), end.getNodeID());
+        return findPath(start, end);
       } else {
         return null;
       }
@@ -168,4 +172,86 @@ public class Pathfinder {
       return null;
     }
   }
+
+  /**
+   * Determines if elevators or stairs lead to a better path
+   *
+   * @param startNode: Starting node
+   * @param endNode: End Node
+   * @return: Elevator or Stair node
+   * @throws DBException
+   */
+  private DbNode getFloorChange(DbNode startNode, DbNode endNode) throws DBException {
+    Pair<DbNode, Double> bestElevator = getBestElevator(startNode, endNode);
+    Pair<DbNode, Double> bestStair = getBestStair(startNode, endNode);
+
+    if(bestElevator.getKey() == null && bestStair.getKey() == null) {
+      return null;
+    }
+
+    else if(bestElevator.getKey() == null) {
+      return bestStair.getKey();
+    }
+
+    else if(bestStair.getKey() == null) {
+      return bestElevator.getKey();
+    }
+
+    else if(bestElevator.getValue() <= bestStair.getValue()*1.5) {
+      return bestElevator.getKey();
+    }
+
+    else return bestStair.getKey();
+  }
+
+  /**
+   * Finds the best elevator to take based on score
+   *
+   * @param startNode: Starting Node
+   * @param endNode: End Node
+   * @return: Elevator node and its score
+   * @throws DBException
+   */
+  private Pair<DbNode, Double> getBestElevator(DbNode startNode, DbNode endNode) throws DBException {
+    LinkedList<DbNode> elevators = DbController.searchNode(startNode.getFloor(), startNode.getBuilding(), "ELEV", "");
+    DbNode lowestSoFar = null;
+    double score = 1000000;
+    for(DbNode currentElevator : elevators) {
+      Node elevator = DbController.getGNode(currentElevator.getNodeID());
+      double currentCost = cost(DbController.getGNode(startNode.getNodeID()), elevator);
+      double currentScore = currentCost + heuristic(elevator, DbController.getGNode(endNode.getNodeID()));
+
+      if(currentScore < score) {
+        lowestSoFar = currentElevator;
+        score = currentScore;
+      }
+    }
+    return new Pair<DbNode, Double>(lowestSoFar, score);;
+  }
+
+  /**
+   * Finds the best stairs to take based on score
+   *
+   * @param startNode: Starting Node
+   * @param endNode: End Node
+   * @return: Stair node and its score
+   * @throws DBException
+   */
+  private  Pair<DbNode, Double> getBestStair(DbNode startNode, DbNode endNode) throws DBException {
+    LinkedList<DbNode> stairs = DbController.searchNode(startNode.getFloor(), startNode.getBuilding(), "STAI", "");
+    DbNode lowestSoFar = null;
+    double score = 1000000;
+    for(DbNode currentStair : stairs) {
+      Node stair = DbController.getGNode(currentStair.getNodeID());
+      double currentCost = cost(DbController.getGNode(startNode.getNodeID()), stair);
+      double currentScore = currentCost + heuristic(stair, DbController.getGNode(endNode.getNodeID()));
+
+      if(currentScore < score) {
+        lowestSoFar = currentStair;
+        score = currentScore;
+      }
+    }
+    return new Pair<DbNode, Double>(lowestSoFar, score);
+  }
+
 }

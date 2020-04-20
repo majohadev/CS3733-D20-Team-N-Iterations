@@ -125,7 +125,7 @@ public class MapDisplayController implements Controller {
     DbNode firstNode = selectedNodes.get(0);
     DbNode secondNode = selectedNodes.get(1);
 
-    Path path = Pathfinder.findPath(firstNode.getNodeID(), secondNode.getNodeID());
+    Path path = Pathfinder.findPath(firstNode, secondNode);
     LinkedList<DbNode> pathNodes = path.getPath();
     drawPath(pathNodes);
 
