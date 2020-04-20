@@ -396,9 +396,12 @@ public class EmployeeController {
       st.executeUpdate();
       ResultSet rs = st.getGeneratedKeys();
       rs.next();
+      ResultSetMetaData rsmd = rs.getMetaData();
+      System.out.println("hi");
+      System.out.println(rsmd.getColumnLabel(1));
       query = "INSERT INTO translator VALUES(?)";
       st = con.prepareStatement(query);
-      int id = rs.getInt("employeeID");
+      int id = rs.getInt("1");
       st.setInt(1, id);
       st.executeUpdate();
       Iterator<String> langIt = languages.iterator();
@@ -410,7 +413,7 @@ public class EmployeeController {
       }
       return id;
     } catch (SQLException e) {
-      e.printStackTrace();
+      // e.printStackTrace();
       throw new DBException("Unknown error: addTranslator", e);
     }
   }
@@ -432,7 +435,7 @@ public class EmployeeController {
       rs.next(); // NullPointerException
       query = "INSERT INTO Laundry VALUES (?)";
       stmt = con.prepareStatement(query);
-      int id = rs.getInt("employeeID");
+      int id = rs.getInt("1");
       stmt.setInt(1, id);
       stmt.executeUpdate();
       return id;
@@ -466,7 +469,7 @@ public class EmployeeController {
       rs.next();
       query = "INSERT INTO trequest (t_employeeID, language) VALUES (?, ?)";
       stmt = con.prepareStatement(query);
-      int id = rs.getInt("employeeID");
+      int id = rs.getInt("1");
       stmt.setInt(1, id);
       stmt.setString(2, language);
       stmt.executeUpdate();
