@@ -2,9 +2,8 @@ package edu.wpi.N.database;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import edu.wpi.N.entities.Laundry;
-import edu.wpi.N.entities.Service;
-import edu.wpi.N.entities.Translator;
+import edu.wpi.N.entities.*;
+
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
@@ -28,6 +27,37 @@ public class EmployeeControllerTest {
 
     laundReqID = EmployeeController.addLaundReq("wash", "ZHALL00101");
   }
+  @Test
+  public void testgetlistEmployees() throws DBException {
+    LinkedList<Employee> list = EmployeeController.getEmployees();
+    assertEquals(1, list.size());
+    EmployeeController.addLaundry("Joshua Aloeface");
+    assertEquals("Joshua Aloeface", list.get(1).getName());
+  }
+
+  @Test
+  public void testgetOpenRequest() throws DBException {
+    EmployeeController.addLaundReq("Make it extra clean", "NSERV00104");
+    EmployeeController.addTransReq("Need a translator for medicine description", "NDEPT00302", "Korean");
+    LinkedList<Request> list = EmployeeController.getOpenRequests();
+    assertEquals(2, list.size());
+    assertEquals("Korean", ((TranslatorRequest)list.get(1)).getLanguage());
+  }
+
+  @Test
+  public void testgetTranslang() throws DBException {
+    LinkedList<String> list = new LinkedList<String>();
+    list.add("Korean");
+    list.add("English");
+    EmployeeController.addTranslator("Chris Lee", list);
+    EmployeeController.addTranslator("Wilson Wong", list);
+    LinkedList<Translator> result = EmployeeController.getTransLang("Korean");
+    assertEquals(2, result.size());
+    assertEquals("Wilson Wong", result.get(1).getName());
+  }
+
+  @Test
+  public void testaddTransReq()
 
   @Test
   public void testGetEmployee() throws DBException {
