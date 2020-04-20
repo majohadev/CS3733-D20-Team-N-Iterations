@@ -45,12 +45,14 @@ public class Directions {
         angle = getAngle(i);
         stateChange = !getState(i + 1).equals(state);
       }
-      boolean spag = atIntersection(currNode);
       state = getState(i);
       switch (state) {
         case STARTING:
           if (!path.getFirst().getNodeType().equals("HALL")) {
-            message = "Start by exiting " + path.getFirst().getLongName() + " ";
+            message =
+                "Start by exiting "
+                    + path.getFirst().getLongName()
+                    + " "; // sometimes this produces an extra space
           } else if (!(getLandmark(nextNode) == null)) {
             message =
                 "Start towards "
@@ -77,8 +79,7 @@ public class Directions {
           } else if (stateChange || atIntersection(currNode)) {
             if (getLandmark(nextNode) == null) {
               message = "Continue to next corridor" + getDistanceString(distance);
-            } else if (getLandmark(nextNode)
-                .equals(nextNode)) { // need to check that its not a turn, check angle for pulmonary
+            } else if (getLandmark(nextNode).equals(nextNode)) {
               message =
                   "Proceed straight towards "
                       + getLandmark(nextNode).getLongName()
@@ -151,15 +152,14 @@ public class Directions {
     } else if (i == path.size() - 1) {
       return ARRIVING;
     } else if (Math.abs(getAngle(i) - getAngle(i - 1)) >= TURN_THRESHOLD) {
-      System.out.println(Math.abs(getAngle(i) - getAngle(i - 1)));
+      // System.out.println(Math.abs(getAngle(i) - getAngle(i - 1)));
       return TURNING;
     } else if (path.get(i).getFloor() != path.get(i + 1).getFloor()) {
       return CHANGING_FLOOR;
     } else if (!path.get(i).getBuilding().equals(path.get(i + 1).getBuilding())) {
       return EXITING;
     } else {
-      System.out.println(Math.abs(getAngle(i) - getAngle(i - 1)));
-
+      // System.out.println(Math.abs(getAngle(i) - getAngle(i - 1)));
       return CONTINUING;
     }
   }
@@ -178,13 +178,13 @@ public class Directions {
       angleChange += 360;
     }
     if (angleChange >= TURN_THRESHOLD) {
-      return "right"; // (" + angleChange + ") ";
+      return "right";
     } else if (angleChange <= -1 * TURN_THRESHOLD) {
-      return "left"; // (" + angleChange + ") ";
-    } else if (angleChange < TURN_THRESHOLD && angleChange > -TURN_THRESHOLD) {
-      return "straight"; // + angleChange;
+      return "left";
+    } else if (angleChange < TURN_THRESHOLD
+        && angleChange > -TURN_THRESHOLD) { // eventually will add slight turns
+      return "straight";
     } else {
-      System.out.println("New ANGLE: " + angleChange);
       return "other turn type";
     }
   }

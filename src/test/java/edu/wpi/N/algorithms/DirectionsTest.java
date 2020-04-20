@@ -84,7 +84,7 @@ public class DirectionsTest {
     Path path = Pathfinder.findPath("NDEPT01304", "NHALL02204");
     ArrayList<String> directions = path.getDirections();
     for (String s : directions) {
-      System.out.println(s);
+      // System.out.println(s);
     }
     Assertions.assertEquals(directions, path.getDirections());
   }
@@ -99,7 +99,7 @@ public class DirectionsTest {
     Path path = Pathfinder.findPath("NDEPT01204", "NDEPT00204");
     ArrayList<String> directions = path.getDirections();
     for (String s : directions) {
-      System.out.println(s);
+      // System.out.println(s);
     }
     Assertions.assertEquals(directions, path.getDirections());
   }
@@ -115,14 +115,15 @@ public class DirectionsTest {
     Path path = Pathfinder.findPath("NREST00204", "NDEPT02104");
     ArrayList<String> directions = path.getDirections();
     for (String s : directions) {
-      System.out.println(s);
+      // System.out.println(s);
     }
     Assertions.assertEquals(directions, path.getDirections());
   }
 
   /**
    * Directions for path from Rheumatology Center to Pulmonary Services Pulmonary services not Works
-   * (4.5/5), had to reduce turn threshold to 20 deg
+   * (2.5/5), doesn't detect turn into Pulmonary unless turn threshold is 20 deg Best solution is
+   * probably to just move that hallway node closer to Pulmonary
    *
    * @throws DBException
    */
