@@ -4,6 +4,7 @@ import edu.wpi.N.entities.*;
 import java.sql.*;
 import java.util.GregorianCalendar;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 public class EmployeeController {
@@ -116,8 +117,12 @@ public class EmployeeController {
    * Returns a list of all employees in the database
    * @return a linked list of all employees in the database
    */
-  public static LinkedList<Employee> getEmployees(){
-    return null;
+  public static LinkedList<Employee> getEmployees() throws DBException {
+      LinkedList<Employee> allEmployee = new LinkedList<Employee>();
+      allEmployee.addAll(getTranslators());
+      allEmployee.addAll(getLaundrys());
+      return allEmployee;
+
   }
 
   //Nick
@@ -141,10 +146,52 @@ public class EmployeeController {
   //Chris
   /**
    * Gets all the open requests (not completed requests) in the database
-   * @return a linked list of all open seervice requests in the database
+   * @return a linked list of all open service requests in the database
    */
-  public static LinkedList<Request> getOpenRequests(){
-    return null;
+  public static LinkedList<Request> getOpenRequests() throws DBException {
+    try {
+        String query = "SELECT * FROM request, trequest WHERE requestID = requestID AND status='OPEN'";
+        PreparedStatement stmt = con.prepareStatement(query);
+        LinkedList<Request> openList = new LinkedList<Request>();
+
+        ResultSet rs = stmt.executeQuery();
+        while(rs.next()) {
+          openList.add(
+                  new TranslatorRequest(
+                          rs.getInt("requestID"),
+                          rs.getInt("emp_assigned"),
+                          rs.getString("notes"),
+                          rs.getString("nodeID"),
+                          rs.getString("serviceType"),
+                          getJavatime(rs.getTimestamp("timeRequested")),
+                          getJavatime(rs.getTimestamp("timeCompleted")),
+                          rs.getString("status"),
+                          rs.getString("language")));
+
+
+        }
+        query = "SELECT * FROM request, lrequest WHERE requestID = requestID AND status = 'OPEN'";
+        stmt = con.prepareStatement(query);
+        rs = stmt.executeQuery();
+        while(rs.next()){
+          openList.add(
+                  new LaundryRequest(
+                          rs.getInt("requestID"),
+                          rs.getInt("emp_assigned"),
+                          rs.getString("notes"),
+                          rs.getString("nodeID"),
+                          rs.getString("serviceType"),
+                          getJavatime(rs.getTimestamp("timeRequested")),
+                          getJavatime(rs.getTimestamp("timeCompleted")),
+                          rs.getString("status")
+                  )
+          );
+        }
+        return openList;
+      } catch (SQLException ex) {
+      ex.printStackTrace();
+      throw new DBException("Error: getOpenRequest", ex);
+    }
   }
 
   //Nick
@@ -172,7 +219,13 @@ public class EmployeeController {
    * @return a linked list of all the translators who speak a specified language
    */
   public static LinkedList<Translator> getTransLang(String lang){
-    return null;
+    LinkedList<Translator> list = getTranslators();
+    LinkedList<Translator> special = new LinkedList<Translator>();
+    for(int i = 1; i<list.size(); i++){
+      if(list.get(i).getLanguages().equals(lang))
+        special.add(list.get(i));
+    }
+    return special;
   }
 
   //Nick
@@ -206,7 +259,17 @@ public class EmployeeController {
    * @param language the language that the translator is requested for
    * @return true on success, false otherwise.
    */
-  public static void addTransReq(String notes, String nodeID, String language){
+  public static void addTransReq(String notes, String nodeID, String language) throws DBException {
+    try{
+      String query = "INSERT INTO trequest VALUES (?, ?)";
+      PreparedStatement stmt = con.prepareStatement(query);
+      stmt.setString(1, nodeID);
+      stmt.setString(2, language);
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Error: addTransReq");
+    }
+
   }
 
   //Nick
@@ -236,6 +299,15 @@ public class EmployeeController {
    * @return true on sucess, false otherwise
    */
   public static void completeRequest(int requestID) throws DBException{
+    try{
+      String query = "UPDATE request SET status = ?";
+      PreparedStatement stmt = con.prepareStatement(query);
+      stmt.setInt(1, requestID);
+      stmt.execute();
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Error: completeRequest", e);
+    }
   }
 
   //Nick
@@ -266,6 +338,15 @@ public class EmployeeController {
    * @throws DBException if the employee isn't a translator
    */
   public static void removeLanguage(int employeeID, String language) throws DBException{
+    try{
+      String query = "DELETE FROM language WHERE employeeID = ? AND language = ?";
+      PreparedStatement stmt = con.prepareStatement(query);
+      stmt.setInt(1, employeeID);
+      stmt.setString(2, language);
+      stmt.executeUpdate();
+    }catch(SQLException e){
+        throw new DBException("Unknown Error: removeLanguage not working");
+    }
   }
 
   //Nick
