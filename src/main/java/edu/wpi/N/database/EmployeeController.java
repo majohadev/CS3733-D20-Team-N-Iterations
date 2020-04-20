@@ -530,7 +530,7 @@ public class EmployeeController {
    */
   public static void removeLanguage(int employeeID, String language) throws DBException {
     try {
-      String query = "DELETE FROM language WHERE employeeID = ? AND language = ?";
+      String query = "DELETE FROM language WHERE t_employeeID = ? AND language = ?";
       PreparedStatement stmt = con.prepareStatement(query);
       stmt.setInt(1, employeeID);
       stmt.setString(2, language);
