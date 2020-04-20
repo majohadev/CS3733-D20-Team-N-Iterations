@@ -3,7 +3,6 @@ package edu.wpi.N.database;
 import static org.junit.jupiter.api.Assertions.*;
 
 import edu.wpi.N.entities.*;
-
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
@@ -12,7 +11,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 public class EmployeeControllerTest {
-  static int laundReqID;
+  static int laundReqID1, transReqID1;
   static Translator felix;
   static Translator fats;
   static Laundry snaps;
@@ -35,8 +34,10 @@ public class EmployeeControllerTest {
     EmployeeController.addLaundry("Snaps McKraken");
     snaps = new Laundry(3, "Snaps McKraken");
 
-    laundReqID = EmployeeController.addLaundReq("wash", "ZHALL00101");
+    laundReqID1 = EmployeeController.addLaundReq("wash", "ZHALL00101");
+    transReqID1 = EmployeeController.addTransReq("speak", "ZHALL00102", "Gnomish");
   }
+
   @Test
   public void testgetlistEmployees() throws DBException {
     LinkedList<Employee> list = EmployeeController.getEmployees();
@@ -48,10 +49,11 @@ public class EmployeeControllerTest {
   @Test
   public void testgetOpenRequest() throws DBException {
     EmployeeController.addLaundReq("Make it extra clean", "NSERV00104");
-    EmployeeController.addTransReq("Need a translator for medicine description", "NDEPT00302", "Korean");
+    EmployeeController.addTransReq(
+        "Need a translator for medicine description", "NDEPT00302", "Korean");
     LinkedList<Request> list = EmployeeController.getOpenRequests();
     assertEquals(2, list.size());
-    assertEquals("Korean", ((TranslatorRequest)list.get(1)).getLanguage());
+    assertEquals("Korean", ((TranslatorRequest) list.get(1)).getLanguage());
   }
 
   @Test
@@ -67,7 +69,14 @@ public class EmployeeControllerTest {
   }
 
   @Test
-  public void testaddTransReq()
+  public void testaddTransReq() {}
+
+  @Test
+  public void testCompleteRequest() throws DBException {
+    EmployeeController.completeRequest(transReqID1);
+    Request req = EmployeeController.getRequest(transReqID1);
+    assertNotNull(req.getTimeCompleted());
+  }
 
   @Test
   public void testGetEmployee() throws DBException {
@@ -80,8 +89,8 @@ public class EmployeeControllerTest {
 
   @Test
   public void testGetRequest() throws DBException {
-    assertEquals("wash", EmployeeController.getRequest(laundReqID).getNotes());
-    assertEquals("ZHALL00101", EmployeeController.getRequest(laundReqID).getNodeID());
+    assertEquals("wash", EmployeeController.getRequest(laundReqID1).getNotes());
+    assertEquals("ZHALL00101", EmployeeController.getRequest(laundReqID1).getNodeID());
   }
 
   @Test

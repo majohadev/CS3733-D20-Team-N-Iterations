@@ -515,7 +515,7 @@ public class EmployeeController {
    * Marks a request as completed and done at the time that this function was called
    *
    * @param requestID the ID of the request to be marked as completed
-   * @return true on sucess, false otherwise
+   * @return true on success, false otherwise
    */
   public static void completeRequest(int requestID) throws DBException {
     try {
