@@ -471,7 +471,18 @@ public class EmployeeController {
    * @param language The language to be added
    * @throws DBException if the employee isn't a translator
    */
-  public static void addLanguage(int employeeID, String language) throws DBException {}
+  public static void addLanguage(int employeeID, String language) throws DBException {
+    try{
+      String query = "INSERT INTO language VALUES(?, ?)";
+      PreparedStatement stmt = con.prepareStatement(query);
+      stmt.setInt(1, employeeID);
+      stmt.setString(2, language);
+      if(stmt.executeUpdate() <= 0) throw new DBException("That translator doesn't exist");
+    }catch(SQLException e){
+      e.printStackTrace();
+      throw new DBException("Unknown error: addLanguage, eid = " + employeeID, e);
+    }
+  }
 
   // Chris
   /**
