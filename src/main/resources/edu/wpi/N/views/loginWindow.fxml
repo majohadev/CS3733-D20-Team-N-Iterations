@@ -15,10 +15,10 @@
          </font>
       </Label>
       <Label layoutX="14.0" layoutY="39.0" text="Username:" />
-      <TextField fx:id="txt_username" layoutX="79.0" layoutY="35.0" />
+      <TextField fx:id="txtf_username" layoutX="79.0" layoutY="35.0" />
       <Label layoutX="16.0" layoutY="76.0" text="Password:" />
       <PasswordField fx:id="pwf_password" layoutX="79.0" layoutY="72.0" />
-      <Button fx:id="btn_loginSubmit" layoutX="234.0" layoutY="111.0" mnemonicParsing="false" text="Submit" />
+      <Button fx:id="btn_loginSubmit" layoutX="234.0" layoutY="111.0" mnemonicParsing="false" onMouseClicked="#login" text="Submit" />
       <Button fx:id="btn_cancel" layoutX="176.0" layoutY="111.0" mnemonicParsing="false" text="Cancel" />
    </children>
 </AnchorPane>
