@@ -284,7 +284,7 @@ public class DbController {
               + "ycoord INT NOT NULL, "
               + "floor INT NOT NULL, "
               + "building VARCHAR(255) NOT NULL, "
-              + "nodeType CHAR(4) NOT NULL, "
+              + "nodeType CHAR(4) NOT NULL CONSTRAINT TYPE_CK CHECK (nodeType IN ('HALL', 'ELEV', 'REST', 'STAI', 'DEPT', 'LABS', 'INFO', 'CONF', 'EXIT', 'RETL', 'SERV')), "
               + "longName VARCHAR(255) NOT NULL, "
               + "shortName VARCHAR(255) NOT NULL, "
               + "teamAssigned CHAR(1) NOT NULL"
@@ -308,7 +308,9 @@ public class DbController {
       if (!e.getSQLState().equals("X0Y32")) throw e;
     }
 
-    ServiceController.initService();
+    // ServiceController.initService();
+    DoctorController.initDoctor();
+    // EmployeeController.initEmployee();
   }
 
   /**

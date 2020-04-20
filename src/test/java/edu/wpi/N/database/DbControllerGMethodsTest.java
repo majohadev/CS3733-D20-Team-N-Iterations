@@ -38,7 +38,7 @@ public class DbControllerGMethodsTest {
     Node testNode = new Node(2.345, 5.5657, "TESTNODE02");
     Assertions.assertEquals(DbController.getGAdjacent("TESTNODE02"), new ArrayList<Node>());
     // null for a node that is in the database but has no edges
-    DbController.addNode("TESTNODE03", 23, 345, 4, "Foisie", "sdfk", "fskjd", "sdfk", 'N');
+    DbController.addNode("TESTNODE03", 23, 345, 4, "Foisie", "REST", "fskjd", "sdfk", 'N');
     Assertions.assertEquals(DbController.getGAdjacent("TESTNODE3"), new ArrayList<Node>());
     DbController.deleteNode("TESTNODE03");
   }
@@ -138,7 +138,7 @@ public class DbControllerGMethodsTest {
   @Test
   public void addNodeTester() throws DBException {
     Node testNode5 = new Node(25, 30, "testNodeT5");
-    DbController.addNode("testNodeT5", 25, 30, 4, "Buil", "OFFI", "TESTNODE5", "T5", 'Z');
+    DbController.addNode("testNodeT5", 25, 30, 4, "Buil", "CONF", "TESTNODE5", "T5", 'Z');
     Assertions.assertEquals(DbController.getGNode("testNodeT5"), testNode5);
     DbController.deleteNode("testNodeT5");
   }
@@ -150,7 +150,7 @@ public class DbControllerGMethodsTest {
   @Test
   public void addNodeTester2() throws DBException {
     Node testNode6 = new Node(108, 55, "testNodeT6");
-    DbController.addNode("testNodeT6", 108, 55, 4, "Buil", "OFFI", "TESTNODE6", "T6", 'Z');
+    DbController.addNode("testNodeT6", 108, 55, 4, "Buil", "CONF", "TESTNODE6", "T6", 'Z');
     Assertions.assertEquals(DbController.getGNode("testNodeT6"), testNode6);
     DbController.deleteNode("testNodeT6");
   }

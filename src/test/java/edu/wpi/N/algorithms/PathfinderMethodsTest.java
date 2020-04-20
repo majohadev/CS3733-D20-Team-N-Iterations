@@ -118,7 +118,7 @@ public class PathfinderMethodsTest {
    */
   @Test
   public void findQuickAccessNullTester() throws DBException {
-    Assertions.assertNull(Pathfinder.findQuickAccess(DbController.getNode("H700000000"), "ABCD"));
+    Assertions.assertNull(Pathfinder.findQuickAccess(DbController.getNode("H700000000"), "ELEV"));
   }
 
   /**
@@ -127,8 +127,8 @@ public class PathfinderMethodsTest {
    */
   @Test
   public void findQuickAccessNoPathTester() throws DBException {
-    DbController.addNode("NHALL00104", 1250, 850, 1, "MainBuil", "ABCD", "Hall 1", "Hall 1", 'N');
-    Assertions.assertNull(Pathfinder.findQuickAccess(DbController.getNode("H700000000"), "ABCD"));
+    DbController.addNode("NHALL00104", 1250, 850, 1, "MainBuil", "ELEV", "Hall 1", "Hall 1", 'N');
+    Assertions.assertNull(Pathfinder.findQuickAccess(DbController.getNode("H700000000"), "ELEV"));
     DbController.deleteNode("NHALL00104");
   }
 

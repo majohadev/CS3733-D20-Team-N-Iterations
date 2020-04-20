@@ -27,7 +27,7 @@ public class FuzzySearchLocationsTest {
   }
 
   /**
-   * Tests that string with a len of 1
+   * Tests with input string with a len of 1. Returns empty List
    *
    * @throws DBException
    */
@@ -35,12 +35,11 @@ public class FuzzySearchLocationsTest {
   public void testSearchWithCorrecitonInputIsOneLetter() throws DBException {
     String userInput = "c";
 
-    LinkedList<DbNode> expected = null;
+    LinkedList<DbNode> expected = new LinkedList<DbNode>();
 
-    Assertions.assertEquals(
-        expected, FuzzySearchAlgorithm.suggestLocationsWithCorrection(userInput));
-    Assertions.assertEquals(expected, FuzzySearchAlgorithm.suggestLocationsWithCorrection(""));
-    Assertions.assertEquals(expected, FuzzySearchAlgorithm.suggestLocationsWithCorrection(" "));
+    Assertions.assertEquals(expected, FuzzySearchAlgorithm.suggestLocations(userInput));
+    Assertions.assertEquals(expected, FuzzySearchAlgorithm.suggestLocations(""));
+    Assertions.assertEquals(expected, FuzzySearchAlgorithm.suggestLocations(" "));
   }
 
   /**
@@ -55,7 +54,7 @@ public class FuzzySearchLocationsTest {
     LinkedList<DbNode> expected = new LinkedList<DbNode>();
     expected.add(DbController.getNode("BDEPT00402"));
 
-    LinkedList<DbNode> actual = FuzzySearchAlgorithm.suggestLocationsWithCorrection(userInput);
+    LinkedList<DbNode> actual = FuzzySearchAlgorithm.suggestLocations(userInput);
 
     Assertions.assertTrue(actual.contains(expected.get(0)));
   }
@@ -72,7 +71,7 @@ public class FuzzySearchLocationsTest {
     expected.add(DbController.getNode("BDEPT00402"));
     expected.add(DbController.getNode("BDEPT00302"));
     expected.add(DbController.getNode("BDEPT00902"));
-    LinkedList<DbNode> actual = FuzzySearchAlgorithm.suggestLocationsWithCorrection(userInput);
+    LinkedList<DbNode> actual = FuzzySearchAlgorithm.suggestLocations(userInput);
     Assertions.assertTrue(actual.size() == 3);
     Assertions.assertTrue(actual.contains(expected.get(0)));
     Assertions.assertTrue(actual.contains(expected.get(1)));
@@ -96,14 +95,14 @@ public class FuzzySearchLocationsTest {
 
     long startTime = System.nanoTime();
 
-    LinkedList<DbNode> actual = FuzzySearchAlgorithm.suggestLocationsWithCorrection(userInput);
+    LinkedList<DbNode> actual = FuzzySearchAlgorithm.suggestLocations(userInput);
 
     long endTime = System.nanoTime();
 
     long timeElapsed = endTime - startTime;
     System.out.println("Elapsed time for FuzzySearch in milliseconds:" + timeElapsed / 1000000);
 
-    // LinkedList<String> actual = FuzzySearchAlgorithm.suggestLocationsWithCorrection(userInput);
+    // LinkedList<String> actual = FuzzySearchAlgorithm.suggestLocations(userInput);
 
     Assertions.assertTrue(actual.size() == 3);
     Assertions.assertTrue(actual.contains(expected.get(0)));
@@ -124,7 +123,7 @@ public class FuzzySearchLocationsTest {
     LinkedList<DbNode> expected = new LinkedList<DbNode>();
     expected.add(DbController.getNode("BDEPT00502"));
 
-    LinkedList<DbNode> actual = FuzzySearchAlgorithm.suggestLocationsWithCorrection(userInput);
+    LinkedList<DbNode> actual = FuzzySearchAlgorithm.suggestLocations(userInput);
     Assertions.assertTrue(actual.contains(expected.get(0)));
     Assertions.assertTrue(actual.size() == 1);
   }
@@ -140,7 +139,7 @@ public class FuzzySearchLocationsTest {
 
     LinkedList<DbNode> expected = new LinkedList<DbNode>();
     expected.add(DbController.getNode("BDEPT00502"));
-    LinkedList<DbNode> actual = FuzzySearchAlgorithm.suggestLocationsWithCorrection(userInput);
+    LinkedList<DbNode> actual = FuzzySearchAlgorithm.suggestLocations(userInput);
     Assertions.assertTrue(actual.contains(expected.get(0)));
     Assertions.assertTrue(actual.size() == 1);
   }
@@ -154,7 +153,7 @@ public class FuzzySearchLocationsTest {
   public void testSearchWithNonExistentIncorrectInput() throws DBException {
     String userInput = "Alaskan Airlines";
 
-    LinkedList<DbNode> actual = FuzzySearchAlgorithm.suggestLocationsWithCorrection(userInput);
+    LinkedList<DbNode> actual = FuzzySearchAlgorithm.suggestLocations(userInput);
     Assertions.assertTrue(actual.isEmpty());
   }
 
@@ -170,7 +169,7 @@ public class FuzzySearchLocationsTest {
     LinkedList<DbNode> expected = new LinkedList<DbNode>();
     expected.add(DbController.getNode("BINFO00102"));
 
-    LinkedList<DbNode> actual = FuzzySearchAlgorithm.suggestLocationsWithCorrection(userInput);
+    LinkedList<DbNode> actual = FuzzySearchAlgorithm.suggestLocations(userInput);
 
     Assertions.assertTrue(actual.contains(expected.get(0)));
   }
@@ -194,7 +193,7 @@ public class FuzzySearchLocationsTest {
   //
   //    long startTime = System.nanoTime();
   //
-  //    LinkedList<String> actual = FuzzySearchAlgorithm.suggestLocationsWithCorrection(userInput);
+  //    LinkedList<String> actual = FuzzySearchAlgorithm.suggestLocations(userInput);
   //
   //    long endTime = System.nanoTime();
   //

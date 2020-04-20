@@ -2,6 +2,7 @@ package edu.wpi.N.algorithms;
 
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.DbController;
+import edu.wpi.N.database.DoctorController;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Doctor;
 import java.util.LinkedList;
@@ -16,12 +17,12 @@ public class FuzzySearchAlgorithm {
    * @param userInput
    * @return list of suggested DbNodes (locations)
    */
-  public static LinkedList<DbNode> suggestLocations(String userInput)
-      throws DBException {
+  public static LinkedList<DbNode> suggestLocations(String userInput) throws DBException {
+    // initialize variables
+    LinkedList<DbNode> suggestions = new LinkedList<DbNode>();
+
     if (userInput.length() > 1) {
 
-      // initialize variables
-      LinkedList<DbNode> suggestions = new LinkedList<DbNode>();
       // search for all nodes by long name
       LinkedList<DbNode> suggestedNodes = DbController.searchVisNode(-1, null, null, userInput);
       if (suggestedNodes.size() != 0) {
@@ -37,8 +38,8 @@ public class FuzzySearchAlgorithm {
           suggestions = performFuzzySearchOnLocations(inputWord);
         }
       }
-      return suggestions;
-    } else return null;
+    }
+    return suggestions;
   }
 
   /**
@@ -103,14 +104,14 @@ public class FuzzySearchAlgorithm {
    * @param userInput
    * @return List of suggested doctors
    */
-  public static LinkedList<Doctor> suggestDoctors(String userInput)
-      throws DBException {
-    if (userInput.length() > 1) {
+  public static LinkedList<Doctor> suggestDoctors(String userInput) throws DBException {
 
-      // initialize variables
-      LinkedList<Doctor> suggestions = new LinkedList<Doctor>();
+    // initialize variables
+    LinkedList<Doctor> suggestions = new LinkedList<Doctor>();
+
+    if (userInput.length() > 1) {
       // search for all nodes by long name
-      LinkedList<Doctor> suggestedDoctors = new LinkedList<Doctor>();//searchDoctors(userInput);
+      LinkedList<Doctor> suggestedDoctors = DoctorController.searchDoctors(userInput);
       if (suggestedDoctors.size() != 0) {
         for (Doctor doc : suggestedDoctors) {
           suggestions.add(doc);
@@ -124,8 +125,8 @@ public class FuzzySearchAlgorithm {
           suggestions = performFuzzySearchOnDoctors(inputWord);
         }
       }
-      return suggestions;
-    } else return null;
+    }
+    return suggestions;
   }
 
   /**
@@ -137,16 +138,16 @@ public class FuzzySearchAlgorithm {
   private static LinkedList<Doctor> performFuzzySearchOnDoctors(String userInput)
       throws DBException {
     userInput = userInput.toLowerCase();
-    LinkedList<DbNode> suggestions = new LinkedList<DbNode>();
+    LinkedList<Doctor> suggestions = new LinkedList<Doctor>();
 
     double ratio = 0.8;
 
     // Get all the visible nodes from DB
-    for (DbNode node : DbController.searchVisNode(-1, null, null, "")) {
-      String fullLongName = node.getLongName();
+    for (Doctor doc : DoctorController.searchDoctors("")) {
+      String fullName = doc.getName();
 
       // Iterate through Long Name's words
-      for (String s : fullLongName.toLowerCase().split(" ")) {
+      for (String s : fullName.toLowerCase().split(" ")) {
 
         // Check that the word is >= than (user's word size - 2)
         if (userInput.length() - 2 <= s.length()) {
@@ -158,13 +159,12 @@ public class FuzzySearchAlgorithm {
           // calculate ratio
           double lensum = s.length() + userInput.length();
           if ((lensum - d) / (lensum) >= ratio) {
-            suggestions.add(node);
+            suggestions.add(doc);
           }
         }
       }
     }
     // suggestions
-    return null;
+    return suggestions;
   }
-
 }
