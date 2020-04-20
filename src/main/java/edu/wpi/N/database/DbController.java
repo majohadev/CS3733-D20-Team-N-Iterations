@@ -809,7 +809,7 @@ public class DbController {
       ResultSet rs = con.prepareStatement(query).executeQuery();
       while (rs.next()) {
         edges.add(
-            rs.getString("edgeID") + ", " + rs.getString("node1") + ", " + rs.getString("node2"));
+            rs.getString("edgeID") + "," + rs.getString("node1") + "," + rs.getString("node2"));
       }
       return edges;
     } catch (SQLException e) {

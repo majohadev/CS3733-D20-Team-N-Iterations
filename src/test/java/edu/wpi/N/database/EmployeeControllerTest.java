@@ -33,7 +33,8 @@ public class EmployeeControllerTest {
 
     EmployeeController.addLaundry("Snaps McKraken");
     snaps = new Laundry(3, "Snaps McKraken");
-
+    DbController.addNode("ZHALL00101", 10, 10, 1, "Faulkner", "HALL", "HALLZ1", "HALLZ1", 'Z');
+    DbController.addNode("ZHALL00102", 10, 10, 2, "Faulkner", "HALL", "HALLZ2", "HALLZ2", 'Z');
     laundReqID1 = EmployeeController.addLaundReq("wash", "ZHALL00101");
     transReqID1 = EmployeeController.addTransReq("speak", "ZHALL00102", "Gnomish");
   }
@@ -128,6 +129,7 @@ public class EmployeeControllerTest {
 
   @AfterAll
   public static void cleanup() throws DBException {
+    DbController.clearNodes();
     EmployeeController.removeEmployee(1);
     EmployeeController.removeEmployee(2);
   }

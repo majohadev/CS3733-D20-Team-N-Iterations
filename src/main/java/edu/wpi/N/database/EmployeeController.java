@@ -92,7 +92,7 @@ public class EmployeeController {
               + "notes VARCHAR(255),"
               + "assigned_eID INT REFERENCES employees(employeeID),"
               + "serviceType VARCHAR(255) NOT NULL REFERENCES service(serviceType),"
-              + "nodeID CHAR(10) NOT NULL REFERENCES nodes(nodeID),"
+              + "nodeID CHAR(10) REFERENCES nodes(nodeID) ON DELETE SET NULL,"
               + "status CHAR(4) NOT NULL CONSTRAINT STAT_CK CHECK (status IN ('OPEN', 'DENY', 'DONE')))";
       PreparedStatement state = con.prepareStatement(query);
       state.execute();
@@ -457,7 +457,7 @@ public class EmployeeController {
   public static int addTransReq(String notes, String nodeID, String language) throws DBException {
     try {
       String query =
-          "INSERT INTO request (timeRequested, notes, serviceType, nodeID, status) VALUES (?, ?, ?, ?, ?, ?)";
+          "INSERT INTO request (timeRequested, notes, serviceType, nodeID, status) VALUES (?, ?, ?, ?, ?)";
       PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
       stmt.setTimestamp(1, new Timestamp(new Date().getTime()));
       stmt.setString(2, notes);
@@ -467,7 +467,7 @@ public class EmployeeController {
       stmt.execute();
       ResultSet rs = stmt.getGeneratedKeys();
       rs.next();
-      query = "INSERT INTO trequest (t_employeeID, language) VALUES (?, ?)";
+      query = "INSERT INTO trequest (requestID, language) VALUES (?, ?)";
       stmt = con.prepareStatement(query);
       int id = rs.getInt("1");
       stmt.setInt(1, id);
@@ -476,7 +476,7 @@ public class EmployeeController {
       return id;
     } catch (SQLException e) {
       e.printStackTrace();
-      throw new DBException("Error: addTransReq");
+      throw new DBException("Error: addTransReq", e);
     }
   }
 
