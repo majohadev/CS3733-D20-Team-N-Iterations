@@ -73,7 +73,7 @@ public class EmployeeController {
     try {
       String query =
           "CREATE TABLE laundry("
-              + "l_employeeID INT NOT NULL References employees(employeeID),"
+              + "l_employeeID INT NOT NULL References employees(employeeID) ON DELETE CASCADE,"
               + "PRIMARY KEY(l_employeeID))";
       PreparedStatement state = con.prepareStatement(query);
       state.execute();
@@ -90,7 +90,7 @@ public class EmployeeController {
               + "timeRequested TIMESTAMP NOT NULL,"
               + "timeCompleted TIMESTAMP,"
               + "notes VARCHAR(255),"
-              + "assigned_eID INT REFERENCES employees(employeeID),"
+              + "assigned_eID INT REFERENCES employees(employeeID) ON DELETE SET NULL,"
               + "serviceType VARCHAR(255) NOT NULL REFERENCES service(serviceType),"
               + "nodeID CHAR(10) REFERENCES nodes(nodeID) ON DELETE SET NULL,"
               + "status CHAR(4) NOT NULL CONSTRAINT STAT_CK CHECK (status IN ('OPEN', 'DENY', 'DONE')))";
@@ -98,12 +98,12 @@ public class EmployeeController {
       state.execute();
       query =
           "CREATE TABLE lrequest("
-              + "requestID INT NOT NULL PRIMARY KEY REFERENCES request(requestID))";
+              + "requestID INT NOT NULL PRIMARY KEY REFERENCES request(requestID) ON DELETE CASCADE)";
       state = con.prepareStatement(query);
       state.execute();
       query =
           "CREATE TABLE trequest("
-              + "requestID INT NOT NULL PRIMARY KEY REFERENCES request(requestID),"
+              + "requestID INT NOT NULL PRIMARY KEY REFERENCES request(requestID) ON DELETE CASCADE,"
               + "language VARCHAR(255) NOT NULL)";
       state = con.prepareStatement(query);
       state.execute();
@@ -540,7 +540,7 @@ public class EmployeeController {
    */
   public static void removeEmployee(int employeeID) throws DBException {
     try {
-      String query = "DELETE FROM employess WHERE employeeID = ?";
+      String query = "DELETE FROM employees WHERE employeeID = ?";
       PreparedStatement stmt = con.prepareStatement(query);
       stmt.setInt(1, employeeID);
       if (stmt.executeUpdate() <= 0) throw new DBException("That employeeID is invalid!");

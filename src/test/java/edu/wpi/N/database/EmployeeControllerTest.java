@@ -42,9 +42,12 @@ public class EmployeeControllerTest {
   @Test
   public void testgetlistEmployees() throws DBException {
     LinkedList<Employee> list = EmployeeController.getEmployees();
-    assertEquals(1, list.size());
-    EmployeeController.addLaundry("Joshua Aloeface");
-    assertEquals("Joshua Aloeface", list.get(1).getName());
+    assertEquals(3, list.size());
+    int id = EmployeeController.addLaundry("Joshua Aloeface");
+    list = EmployeeController.getEmployees();
+    assertEquals(4, list.size());
+    assertTrue(list.contains(new Laundry(id, "Joshua Aloeface")));
+    EmployeeController.removeEmployee(id);
   }
 
   @Test
