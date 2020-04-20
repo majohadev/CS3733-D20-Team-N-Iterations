@@ -368,5 +368,4 @@ public class MapDisplayController implements Controller {
 
   @FXML
   public void loginWindow(MouseEvent e) throws IOException {}
-
 }
