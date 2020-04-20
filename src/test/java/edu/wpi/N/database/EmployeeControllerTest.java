@@ -2,6 +2,7 @@ package edu.wpi.N.database;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import edu.wpi.N.entities.Laundry;
 import edu.wpi.N.entities.Service;
 import edu.wpi.N.entities.Translator;
 import java.sql.SQLException;
@@ -12,6 +13,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 public class EmployeeControllerTest {
+  static int laundReqID;
+
   @BeforeAll
   public static void setup() throws DBException, SQLException, ClassNotFoundException {
     DbController.initDB();
@@ -21,7 +24,9 @@ public class EmployeeControllerTest {
     langs.add("Lojban");
     EmployeeController.addTranslator("Felix Bignoodle", langs);
 
-    // EmployeeController.addLaundry("Snaps McKraken");
+    EmployeeController.addLaundry("Snaps McKraken");
+
+    laundReqID = EmployeeController.addLaundReq("wash", "ZHALL00101");
   }
 
   @Test
@@ -30,7 +35,13 @@ public class EmployeeControllerTest {
     langs.add("Gnomish");
     langs.add("Lojban");
     assertEquals(new Translator(1, "Felix Bignoodle", langs), EmployeeController.getEmployee(1));
-    // assertEquals(new Laundry(2, "Snaps McKraken"), EmployeeController.getEmployee(2));
+    assertEquals(new Laundry(2, "Snaps McKraken"), EmployeeController.getEmployee(2));
+  }
+
+  @Test
+  public void testGetRequest() throws DBException {
+    assertEquals("wash", EmployeeController.getRequest(laundReqID).getNotes());
+    assertEquals("ZHALL00101", EmployeeController.getRequest(laundReqID).getNodeID());
   }
 
   @Test

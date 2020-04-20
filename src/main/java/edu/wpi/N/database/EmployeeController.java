@@ -195,6 +195,18 @@ public class EmployeeController {
     }
   }
 
+  public static Request getRequest(int id) throws DBException {
+    LinkedList<Request> requests = getRequests();
+
+    for (Request req : requests) {
+      if (req.getRequestID() == id) {
+        return req;
+      }
+    }
+
+    throw new DBException("getRequest: There is not a request with id " + id);
+  }
+
   // Noah
   /**
    * Gets all the requests in the database
@@ -340,33 +352,34 @@ public class EmployeeController {
    * @return a linked list of all the translators who speak a specified language
    */
   public static LinkedList<Translator> getTransLang(String lang) throws DBException {
-    try{
-      String query = "SELECT id, name, language FROM translator, (SELECT * FROM language WHERE language = ?) AS language WHERE translator.t_employeeID = language.t_employeeID ORDER BY id";
+    try {
+      String query =
+          "SELECT id, name, language FROM translator, (SELECT * FROM language where language = ?) AS language WHERE translator.t_employeeID = language.t_employeeID ORDER BY id";
       PreparedStatement stmt = con.prepareStatement(query);
       stmt.setString(1, lang);
       ResultSet rs = stmt.executeQuery();
       LinkedList<Translator> translators = new LinkedList<Translator>();
-      while(rs.next()){
+      while (rs.next()) {
         LinkedList<String> langs = new LinkedList<String>();
         int id = rs.getInt("t_employeeID");
         String name = rs.getString("name");
-        while(rs.getInt("t_employeeID") == id){
+        while (rs.getInt("t_employeeID") == id) {
           langs.add(rs.getString("language"));
           rs.next();
         }
         translators.add(new Translator(id, name, langs));
       }
       return translators;
-    }catch(SQLException e){
+    } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Unknown error: getTransLang, lang :" + lang, e);
     }
-//    LinkedList<Translator> list = getTranslators();
-//    LinkedList<Translator> special = new LinkedList<Translator>();
-//    for (int i = 1; i < list.size(); i++) {
-//      if (list.get(i).getLanguages().equals(lang)) special.add(list.get(i));
-//    }
-//    return special;
+    //    LinkedList<Translator> list = getTranslators();
+    //    LinkedList<Translator> special = new LinkedList<Translator>();
+    //    for (int i = 1; i < list.size(); i++) {
+    //      if (list.get(i).getLanguages().equals(lang)) special.add(list.get(i));
+    //    }
+    //    return special;
   }
 
   // Nick
@@ -377,7 +390,25 @@ public class EmployeeController {
    * @param languages the languages that this translator is capable of speaking
    * @return id of created request
    */
-  public static int addTranslator(String name, LinkedList<String> languages) {return 0;}
+  public static int addTranslator(String name, LinkedList<String> languages) throws DBException {
+    try{
+      String query = "INSERT INTO employees VALUES (?, 'Translator')";
+      PreparedStatement st = con.prepareStatement(query);
+      st.setString(1, name);
+      st.executeUpdate();
+      ResultSet rs = st.getGeneratedKeys();
+      rs.next();
+      query = "INSERT INTO translator VALUES(?)";
+      st = con.prepareStatement(query);
+      int id = rs.getInt("employeeID");
+      st.setInt(1, id);
+      st.executeUpdate();
+      return id;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown error: addTranslator", e);
+    }
+  }
 
   // Noah
   /**
@@ -386,8 +417,8 @@ public class EmployeeController {
    * @param name the laundry employee's name
    * @return id of created request
    */
-  public static int addLaundry(String name) throws DBException{
-    try{
+  public static int addLaundry(String name) throws DBException {
+    try {
       String query = "INSERT INTO employees (name, serviceType) VALUES (?, 'Laundry')";
       PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
       stmt.setString(1, name);
@@ -400,7 +431,7 @@ public class EmployeeController {
       stmt.setInt(1, id);
       stmt.executeUpdate();
       return id;
-    }catch (SQLException e){
+    } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Unknown error: addLaundry , name = " + name, e);
     }
@@ -448,7 +479,9 @@ public class EmployeeController {
    * @param nodeID The ID of the node in which these services are requested
    * @return the id of the created request
    */
-  public static int addLaundReq(String notes, String nodeID) {return 0;}
+  public static int addLaundReq(String notes, String nodeID) {
+    return 0;
+  }
 
   // Noah
   /**
@@ -458,14 +491,14 @@ public class EmployeeController {
    * @param requestID The ID of the request to which they will be assigned.
    * @return
    */
-  public static void assignToRequest(int employeeID, int requestID) throws DBException{
-    try{
+  public static void assignToRequest(int employeeID, int requestID) throws DBException {
+    try {
       String query = "UPDATE request SET assigned_eID = ? WHERE requestID = ?";
       PreparedStatement stmt = con.prepareStatement(query);
       stmt.setInt(1, employeeID);
       stmt.setInt(2, requestID);
-      if(stmt.executeUpdate() <= 0) throw new DBException("That requestID is invalid!");
-    }catch(SQLException e){
+      if (stmt.executeUpdate() <= 0) throw new DBException("That requestID is invalid!");
+    } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Unknown error: assignToRequest", e);
     }
@@ -518,13 +551,13 @@ public class EmployeeController {
    * @throws DBException if the employee isn't a translator
    */
   public static void addLanguage(int employeeID, String language) throws DBException {
-    try{
+    try {
       String query = "INSERT INTO language VALUES(?, ?)";
       PreparedStatement stmt = con.prepareStatement(query);
       stmt.setInt(1, employeeID);
       stmt.setString(2, language);
-      if(stmt.executeUpdate() <= 0) throw new DBException("That translator doesn't exist");
-    }catch(SQLException e){
+      if (stmt.executeUpdate() <= 0) throw new DBException("That translator doesn't exist");
+    } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Unknown error: addLanguage, eid = " + employeeID, e);
     }
