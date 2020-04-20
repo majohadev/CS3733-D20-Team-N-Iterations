@@ -421,7 +421,18 @@ public class EmployeeController {
    * @param requestID The ID of the request to which they will be assigned.
    * @return
    */
-  public static void assignToRequest(int employeeID, int requestID) {}
+  public static void assignToRequest(int employeeID, int requestID) throws DBException{
+    try{
+      String query = "UPDATE request SET assigned_eID = ? WHERE requestID = ?";
+      PreparedStatement stmt = con.prepareStatement(query);
+      stmt.setInt(1, employeeID);
+      stmt.setInt(2, requestID);
+      if(stmt.executeUpdate() <= 0) throw new DBException("That requestID is invalid!");
+    }catch(SQLException e){
+      e.printStackTrace();
+      throw new DBException("Unknown error: assignToRequest", e);
+    }
+  }
 
   // Chris
   /**
