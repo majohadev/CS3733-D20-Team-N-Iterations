@@ -206,7 +206,6 @@ public class EmployeeController {
                           rs.getInt("emp_assigned"),
                           rs.getString("notes"),
                           rs.getString("nodeID"),
-                          rs.getString("serviceType"),
                           getJavatime(rs.getTimestamp("timeRequested")),
                           getJavatime(rs.getTimestamp("timeCompleted")),
                           rs.getString("status"),
@@ -224,7 +223,6 @@ public class EmployeeController {
                           rs.getInt("emp_assigned"),
                           rs.getString("notes"),
                           rs.getString("nodeID"),
-                          rs.getString("serviceType"),
                           getJavatime(rs.getTimestamp("timeRequested")),
                           getJavatime(rs.getTimestamp("timeCompleted")),
                           rs.getString("status")
