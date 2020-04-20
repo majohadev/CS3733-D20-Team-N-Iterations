@@ -799,18 +799,20 @@ public class DbController {
 
   /**
    * Exports all the edges for CSV purposes
+   *
    * @return a linked list of each edge in CSV format
    */
-  public static LinkedList<String> exportEdges() throws DBException{
-    try{
+  public static LinkedList<String> exportEdges() throws DBException {
+    try {
       LinkedList<String> edges = new LinkedList<String>();
       String query = "SELECT * FROM edges";
       ResultSet rs = con.prepareStatement(query).executeQuery();
-      while(rs.next()){
-        edges.add(rs.getString("edgeID") + ", " + rs.getString("node1") + ", " + rs.getString("node2"));
+      while (rs.next()) {
+        edges.add(
+            rs.getString("edgeID") + ", " + rs.getString("node1") + ", " + rs.getString("node2"));
       }
       return edges;
-    }catch(SQLException e){
+    } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Unknown error: exportEdges", e);
     }
