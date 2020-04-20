@@ -55,7 +55,7 @@ public class EmployeeControllerTest {
   }
 
   @Test
-  public void testTransLang() throws DBException {
+  public void testGetTransLang() throws DBException {
     LinkedList<Translator> translators = EmployeeController.getTransLang("Gnomish");
     assertEquals(2, translators.size());
     assertTrue(translators.contains(felix));
