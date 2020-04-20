@@ -2,8 +2,7 @@ package edu.wpi.N.views;
 
 import com.github.sarxos.webcam.WebcamPanel;
 import com.jfoenix.controls.JFXButton;
-import edu.wpi.N.qrcontrol.QRBase;
-import java.awt.*;
+import edu.wpi.N.qrcontrol.QRReader;
 import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -11,7 +10,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javax.swing.*;
 
-public class QRTestController extends QRBase {
+public class QRReadTestController extends QRReader {
 
   @FXML JFXButton btn_scanButton;
   @FXML Label lbl_output;
