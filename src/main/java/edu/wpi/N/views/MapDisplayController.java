@@ -2,20 +2,20 @@ package edu.wpi.N.views;
 
 import com.google.common.collect.HashBiMap;
 import edu.wpi.N.App;
-import edu.wpi.N.Main;
 import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.algorithms.Pathfinder;
-import edu.wpi.N.database.CSVParser;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.DbController;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Path;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.LinkedList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
@@ -30,6 +30,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 public class MapDisplayController implements Controller {
   private App mainApp;
@@ -45,6 +47,8 @@ public class MapDisplayController implements Controller {
   final float HORIZONTAL_SCALE = (MAP_WIDTH) / IMAGE_WIDTH;
   final float VERTICAL_SCALE = (MAP_HEIGHT) / IMAGE_HEIGHT;
   int currentFloor = 4;
+
+  Boolean loggedin = false;
 
   @FXML Button btn_find;
   @FXML Button btn_reset;
@@ -75,6 +79,11 @@ public class MapDisplayController implements Controller {
   private final double ZOOM_STEP_SCROLL = 0.01;
   private final double ZOOM_STEP_BUTTON = 0.1;
 
+  @FXML TextField txtf_translatorLocation;
+  @FXML TextField txtf_laundryLocation;
+  @FXML ListView lst_laundryLocation;
+  @FXML ListView lst_translatorSearchBox;
+
   LinkedList<DbNode> allFloorNodes; // stores all the nodes on the floor
   LinkedList<DbNode> selectedNodes; // stores all the selected nodes on the map
   LinkedList<String> longNamesList = new LinkedList<>(); // Stores Floor Node names
@@ -83,6 +92,10 @@ public class MapDisplayController implements Controller {
       FXCollections.observableArrayList(); // List that fills TextViews
   private LinkedList<DbNode> fuzzySearchNodeList =
       new LinkedList<>(); // List to store output of fuzzy search functions
+
+  private LinkedList<DbNode> fuzzySearchNodeListLaundry = new LinkedList<>();
+  private LinkedList<DbNode> fuzzySearchNodeListTranslator = new LinkedList<>();
+  private LinkedList<DbNode> getFuzzySearchNodeList;
 
   private DbNode defaultNode = new DbNode();
 
@@ -93,10 +106,6 @@ public class MapDisplayController implements Controller {
   }
 
   public void initialize() throws DBException {
-    InputStream nodes = Main.class.getResourceAsStream("csv/TeamNFloor4Nodes.csv");
-    InputStream edges = Main.class.getResourceAsStream("csv/TeamNFloor4Edges.csv");
-    CSVParser.parseCSV(nodes);
-    CSVParser.parseCSV(edges);
     selectedNodes = new LinkedList<DbNode>();
     allFloorNodes = DbController.floorNodes(4, "Faulkner");
     masterNodes = HashBiMap.create();
@@ -179,6 +188,9 @@ public class MapDisplayController implements Controller {
     selectedNodes.clear();
   }
 
+  public void onReturnClicked() throws IOException {
+    mainApp.switchScene("views/home.fxml");
+  }
   // Zoom controls
 
   // Get zoom button input
@@ -270,20 +282,90 @@ public class MapDisplayController implements Controller {
   // Upon clicking find path to location button call this method
   @FXML
   private void onLocationPathFindClicked(MouseEvent event) throws Exception {
+    pn_path.getChildren().removeIf(node -> node instanceof Line);
     int currentSelection = lst_locationsorted.getSelectionModel().getSelectedIndex();
-    if (currentSelection >= 0) {
-      DbNode destinationNode = fuzzySearchNodeList.get(currentSelection);
-      selectedNodes.add(destinationNode);
-      if (selectedNodes.size() < 2) selectedNodes.add(defaultNode);
-      onBtnFindClicked(event);
-      selectedNodes.clear();
-    }
+    String destinationNodeLongName = fuzzySearchTextList.get(currentSelection);
+    LinkedList<DbNode> destinationNode =
+        DbController.searchVisNode(currentFloor, null, null, destinationNodeLongName);
+    selectedNodes.add(destinationNode.getFirst());
+    if (selectedNodes.size() < 2) selectedNodes.add(defaultNode);
+    onBtnFindClicked(event);
+    selectedNodes.clear();
   }
 
   @FXML
   private void onNearestBathroomClicked(MouseEvent event) throws Exception {
+    onResetClicked(event);
     Path pathToBathroom = Pathfinder.findQuickAccess(defaultNode, "REST");
     LinkedList<DbNode> pathNodes = pathToBathroom.getPath();
     drawPath(pathNodes);
   }
+
+  @FXML
+  private void searchByDoctorTextFill(KeyEvent inputMethodEvent) throws DBException {
+    String currentText = cmbo_doctorname.getValue().toString();
+  }
+
+  public void fuzzySearchLaundryRequest(KeyEvent keyInput) throws DBException {
+    String currentText = txtf_laundryLocation.getText();
+    fuzzySearchNodeListLaundry = FuzzySearchAlgorithm.suggestWithCorrection(currentText);
+    LinkedList<String> fuzzySearchStringList = new LinkedList<>();
+    if (fuzzySearchNodeListLaundry != null) {
+
+      for (DbNode node : fuzzySearchNodeListLaundry) {
+        fuzzySearchStringList.add(node.getLongName());
+      }
+
+      fuzzySearchTextList = FXCollections.observableList(fuzzySearchStringList);
+    } else fuzzySearchTextList = FXCollections.observableList(longNamesList);
+    lst_laundryLocation.setItems(fuzzySearchTextList);
+  }
+
+  @FXML
+  public void fuzzySearchTranslatorRequest(KeyEvent keyInput) throws DBException {
+    String currentText = txtf_translatorLocation.getText();
+    fuzzySearchNodeListTranslator = FuzzySearchAlgorithm.suggestWithCorrection(currentText);
+    LinkedList<String> fuzzySearchStringList = new LinkedList<>();
+    if (fuzzySearchNodeListTranslator != null) {
+
+      for (DbNode node : fuzzySearchNodeListTranslator) {
+        fuzzySearchStringList.add(node.getLongName());
+      }
+
+      fuzzySearchTextList = FXCollections.observableList(fuzzySearchStringList);
+    } else fuzzySearchTextList = FXCollections.observableList(longNamesList);
+    lst_translatorSearchBox.setItems(fuzzySearchTextList);
+  }
+
+  @FXML
+  public void popupWindow() throws IOException {
+    if (loggedin == false) {
+      loggedin = true;
+      Stage stage = new Stage();
+      Parent root;
+      root = FXMLLoader.load(getClass().getResource("loginWindow.fxml"));
+      Scene scene = new Scene(root);
+      stage.setScene(scene);
+      stage.initModality(Modality.APPLICATION_MODAL);
+      stage.showAndWait();
+    } else if (loggedin == true) {
+      Stage stage = new Stage();
+      Parent root;
+      root = FXMLLoader.load(getClass().getResource("adminRequestScreen.fxml"));
+      Scene scene = new Scene(root);
+      stage.setScene(scene);
+      stage.initModality(Modality.APPLICATION_MODAL);
+      stage.showAndWait();
+    }
+  }
+
+  /*
+  - Add to database function ->
+      - Take in a service request object
+      - Put it into the table
+      -
+   */
+
+  @FXML
+  public void loginWindow(MouseEvent e) throws IOException {}
 }
