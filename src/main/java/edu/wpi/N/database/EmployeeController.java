@@ -389,7 +389,7 @@ public class EmployeeController {
   public static int addLaundry(String name) throws DBException{
     try{
       String query = "INSERT INTO employees (name, serviceType) VALUES (?, 'Laundry')";
-      PreparedStatement stmt = con.prepareStatement(query);
+      PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
       stmt.setString(1, name);
       stmt.executeUpdate();
       ResultSet rs = stmt.getGeneratedKeys();
@@ -418,7 +418,7 @@ public class EmployeeController {
   public static int addTransReq(String notes, String nodeID, String language) throws DBException {
     try {
       String query = "INSERT INTO request (timeRequested, notes, serviceType, nodeID, status) VALUES (?, ?, ?, ?, ?, ?)";
-      PreparedStatement stmt = con.prepareStatement(query);
+      PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
       stmt.setTimestamp(1, new Timestamp(new Date().getTime()));
       stmt.setString(2, notes);
       stmt.setString(3, "Translator");
