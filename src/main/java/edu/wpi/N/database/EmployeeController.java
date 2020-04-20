@@ -393,10 +393,17 @@ public class EmployeeController {
    */
   public static void addTransReq(String notes, String nodeID, String language) throws DBException {
     try {
-      String query = "INSERT INTO trequest VALUES (?, ?)";
+      String query = "INSERT INTO request (note, nodeID) VALUES (?, ?)";
       PreparedStatement stmt = con.prepareStatement(query);
-      stmt.setString(1, nodeID);
-      stmt.setString(2, language);
+      stmt.setString(1, notes);
+      stmt.setString(2, nodeID);
+      stmt.execute();
+      ResultSet rs = stmt.getGeneratedKeys();
+      rs.next();
+      query = "INSERT INTO trequest (language) VALUES (?)";
+      stmt = con.prepareStatement(query);
+      stmt.setString(1, language);
+      stmt.executeUpdate();
     } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Error: addTransReq");
