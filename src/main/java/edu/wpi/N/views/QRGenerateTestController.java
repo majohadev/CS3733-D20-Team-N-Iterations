@@ -2,9 +2,9 @@ package edu.wpi.N.views;
 
 import com.jfoenix.controls.JFXButton;
 import edu.wpi.N.qrcontrol.QRGenerator;
+import java.util.ArrayList;
 import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
-import java.util.ArrayList;
 
 public class QRGenerateTestController extends QRGenerator {
 
@@ -21,5 +21,4 @@ public class QRGenerateTestController extends QRGenerator {
     lines.add("good.");
     qrDisplay.setImage(generateImage(lines, false));
   }
-
 }
