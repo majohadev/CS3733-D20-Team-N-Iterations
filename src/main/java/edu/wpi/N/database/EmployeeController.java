@@ -265,7 +265,8 @@ public class EmployeeController {
                 rs.getString("status"),
                 rs.getString("language")));
       }
-      query = "SELECT * FROM request, lrequest WHERE rquest.requestID = lrequest.requestID AND status = 'OPEN'";
+      query =
+          "SELECT * FROM request, lrequest WHERE rquest.requestID = lrequest.requestID AND status = 'OPEN'";
       stmt = con.prepareStatement(query);
       rs = stmt.executeQuery();
       while (rs.next()) {
@@ -292,21 +293,20 @@ public class EmployeeController {
    *
    * @return a linked list of all translators in the database
    */
-  public static LinkedList<Translator> getTranslators() throws DBException{
-    try{
+  public static LinkedList<Translator> getTranslators() throws DBException {
+    try {
       String query = "SELECT * from employees, translator where employeeID = t_employeeID";
       PreparedStatement stmt = con.prepareStatement(query);
       ResultSet rs = stmt.executeQuery();
       LinkedList<Translator> translators = new LinkedList<Translator>();
-      while(rs.next()){
+      while (rs.next()) {
         translators.add((Translator) getEmployee(rs.getInt("t_employeeID")));
       }
       return translators;
-    } catch(SQLException e){
+    } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Unknown error: getTranslators", e);
     }
-
   }
 
   // Noah
@@ -315,17 +315,17 @@ public class EmployeeController {
    *
    * @return a linked list of all people who can do laundry in the database
    */
-  public static LinkedList<Laundry> getLaundrys() throws DBException{
-    try{
+  public static LinkedList<Laundry> getLaundrys() throws DBException {
+    try {
       String query = "SELECT * from employees, laundry where employeeID = l_employeeID";
       PreparedStatement stmt = con.prepareStatement(query);
       ResultSet rs = stmt.executeQuery();
       LinkedList<Laundry> laundrys = new LinkedList<Laundry>();
-      while(rs.next()){
+      while (rs.next()) {
         laundrys.add((Laundry) getEmployee(rs.getInt("l_employeeID")));
       }
       return laundrys;
-    } catch(SQLException e){
+    } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Unknown error: getLaundrys", e);
     }
@@ -338,7 +338,7 @@ public class EmployeeController {
    * @param lang the language that you want the translators to speak
    * @return a linked list of all the translators who speak a specified language
    */
-  public static LinkedList<Translator> getTransLang(String lang) throws DBException{
+  public static LinkedList<Translator> getTransLang(String lang) throws DBException {
     LinkedList<Translator> list = getTranslators();
     LinkedList<Translator> special = new LinkedList<Translator>();
     for (int i = 1; i < list.size(); i++) {
@@ -371,7 +371,7 @@ public class EmployeeController {
       stmt.setString(1, name);
       stmt.executeUpdate();
       ResultSet rs = stmt.getGeneratedKeys();
-      rs.next();
+      rs.next(); // NullPointerException
       query = "INSERT INTO Laundry VALUES (?)";
       stmt = con.prepareStatement(query);
       int id = rs.getInt("employeeID");
@@ -395,10 +395,18 @@ public class EmployeeController {
    */
   public static int addTransReq(String notes, String nodeID, String language) throws DBException {
     try {
-      String query = "INSERT INTO trequest VALUES (?, ?)";
+      String query = "INSERT INTO request (note, nodeID) VALUES (?, ?)";
       PreparedStatement stmt = con.prepareStatement(query);
-      stmt.setString(1, nodeID);
-      stmt.setString(2, language);
+      stmt.setString(1, notes);
+      stmt.setString(2, nodeID);
+      stmt.execute();
+      ResultSet rs = stmt.getGeneratedKeys();
+      rs.next();
+      query = "INSERT INTO trequest (language) VALUES (?)";
+      stmt = con.prepareStatement(query);
+      stmt.setString(1, language);
+      stmt.executeUpdate();
+      return 0;
     } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Error: addTransReq");
