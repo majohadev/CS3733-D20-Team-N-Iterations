@@ -226,7 +226,7 @@ public class Pathfinder {
         score = currentScore;
       }
     }
-    return new Pair<DbNode, Double>(lowestSoFar, score);;
+    return new Pair<DbNode, Double>(lowestSoFar, score);
   }
 
   /**
