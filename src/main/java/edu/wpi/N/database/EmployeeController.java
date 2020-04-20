@@ -427,10 +427,13 @@ public class EmployeeController {
       stmt.execute();
       ResultSet rs = stmt.getGeneratedKeys();
       rs.next();
-      query = "INSERT INTO trequest (language) VALUES (?) WHERE ";
+      query = "INSERT INTO trequest (t_employeeID, language) VALUES (?, ?)";
       stmt = con.prepareStatement(query);
-      stmt.setString(1, language);
+      int id = rs.getInt("employeeID");
+      stmt.setInt(1, id);
+      stmt.setString(2, language);
       stmt.executeUpdate();
+      return id;
     } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Error: addTransReq");
