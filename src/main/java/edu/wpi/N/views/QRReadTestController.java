@@ -2,6 +2,7 @@ package edu.wpi.N.views;
 
 import com.github.sarxos.webcam.WebcamPanel;
 import com.jfoenix.controls.JFXButton;
+import edu.wpi.N.App;
 import edu.wpi.N.qrcontrol.QRReader;
 import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
@@ -10,7 +11,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javax.swing.*;
 
-public class QRReadTestController extends QRReader {
+public class QRReadTestController extends QRReader implements Controller {
 
   @FXML JFXButton btn_scanButton;
   @FXML Label lbl_output;
@@ -18,6 +19,12 @@ public class QRReadTestController extends QRReader {
 
   // SceneBuilder gets whiny if you try to add a SwingNode before runtime
   private SwingNode pane_webcamViewContainer;
+
+  private App mainApp;
+
+  public void setMainApp(App mainApp) {
+    this.mainApp = mainApp;
+  }
 
   @FXML
   public void initialize() {
