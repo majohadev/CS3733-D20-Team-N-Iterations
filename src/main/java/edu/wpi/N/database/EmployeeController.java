@@ -480,10 +480,11 @@ public class EmployeeController {
    */
   public static void completeRequest(int requestID) throws DBException {
     try {
-      String query = "UPDATE request SET status = ?";
+      String query = "UPDATE request SET status = ? WHERE requestID = ?";
       PreparedStatement stmt = con.prepareStatement(query);
-      stmt.setInt(1, requestID);
-      stmt.execute();
+      stmt.setString(1, "Done");
+      stmt.setInt(2, requestID);
+      stmt.executeUpdate();
     } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Error: completeRequest", e);
