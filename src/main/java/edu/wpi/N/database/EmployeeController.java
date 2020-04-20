@@ -391,7 +391,7 @@ public class EmployeeController {
    * @return id of created request
    */
   public static int addTranslator(String name, LinkedList<String> languages) throws DBException {
-    try{
+    try {
       String query = "INSERT INTO employees VALUES (?, 'Translator')";
       PreparedStatement st = con.prepareStatement(query);
       st.setString(1, name);
@@ -448,7 +448,8 @@ public class EmployeeController {
    */
   public static int addTransReq(String notes, String nodeID, String language) throws DBException {
     try {
-      String query = "INSERT INTO request (timeRequested, notes, serviceType, nodeID, status) VALUES (?, ?, ?, ?, ?, ?)";
+      String query =
+          "INSERT INTO request (timeRequested, notes, serviceType, nodeID, status) VALUES (?, ?, ?, ?, ?, ?)";
       PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
       stmt.setTimestamp(1, new Timestamp(new Date().getTime()));
       stmt.setString(2, notes);
@@ -531,12 +532,12 @@ public class EmployeeController {
    * @param employeeID the id of the employee to be excised
    */
   public static void removeEmployee(int employeeID) throws DBException {
-    try{
+    try {
       String query = "DELETE FROM employess WHERE employeeID = ?";
       PreparedStatement stmt = con.prepareStatement(query);
       stmt.setInt(1, employeeID);
-      if(stmt.executeUpdate() <= 0) throw new DBException("That employeeID is invalid!");
-    } catch(SQLException e){
+      if (stmt.executeUpdate() <= 0) throw new DBException("That employeeID is invalid!");
+    } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Unknown error: removeEmployee", e);
     }

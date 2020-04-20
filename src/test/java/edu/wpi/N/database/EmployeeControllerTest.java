@@ -14,6 +14,9 @@ import org.junit.jupiter.api.Test;
 
 public class EmployeeControllerTest {
   static int laundReqID;
+  static Translator felix;
+  static Translator fats;
+  static Laundry snaps;
 
   @BeforeAll
   public static void setup() throws DBException, SQLException, ClassNotFoundException {
@@ -23,8 +26,15 @@ public class EmployeeControllerTest {
     langs.add("Gnomish");
     langs.add("Lojban");
     EmployeeController.addTranslator("Felix Bignoodle", langs);
+    felix = new Translator(1, "Felix Bignoodle", langs);
+
+    langs.clear();
+    langs.add("Gnomish");
+    EmployeeController.addTranslator("Fats Rumbuckle", langs);
+    fats = new Translator(2, "Fats Rumbuckle", langs);
 
     EmployeeController.addLaundry("Snaps McKraken");
+    snaps = new Laundry(3, "Snaps McKraken");
 
     laundReqID = EmployeeController.addLaundReq("wash", "ZHALL00101");
   }
@@ -35,13 +45,25 @@ public class EmployeeControllerTest {
     langs.add("Gnomish");
     langs.add("Lojban");
     assertEquals(new Translator(1, "Felix Bignoodle", langs), EmployeeController.getEmployee(1));
-    assertEquals(new Laundry(2, "Snaps McKraken"), EmployeeController.getEmployee(2));
+    assertEquals(new Laundry(3, "Snaps McKraken"), EmployeeController.getEmployee(3));
   }
 
   @Test
   public void testGetRequest() throws DBException {
     assertEquals("wash", EmployeeController.getRequest(laundReqID).getNotes());
     assertEquals("ZHALL00101", EmployeeController.getRequest(laundReqID).getNodeID());
+  }
+
+  @Test
+  public void testTransLang() throws DBException {
+    LinkedList<Translator> translators = EmployeeController.getTransLang("Gnomish");
+    assertEquals(2, translators.size());
+    assertTrue(translators.contains(felix));
+    assertTrue(translators.contains(fats));
+
+    translators = EmployeeController.getTransLang("Lojban");
+    assertEquals(1, translators.size());
+    assertTrue(translators.contains(felix));
   }
 
   @Test
