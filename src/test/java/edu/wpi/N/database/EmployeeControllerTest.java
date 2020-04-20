@@ -51,7 +51,23 @@ public class EmployeeControllerTest {
   }
 
   @Test
+  public void testaddLanguage() throws DBException {
+
+    EmployeeController.addLanguage(2, "Chinese");
+    // assertEquals("Chinese", fats.getLanguages().get(1));
+    assertTrue(fats.getLanguages().contains("Chinese"));
+  }
+
+  @Test
+  public void testremoveLanguage() throws DBException {
+    EmployeeController.removeLanguage(1, "Gnomish");
+    assertNull(felix.getLanguages().get(0));
+    assertTrue(!felix.getLanguages().contains("Gnomish"));
+  }
+
+  @Test
   public void testgetOpenRequest() throws DBException {
+    DbController.addNode("NSERV00104", 11, 11, 4, "Faulkner", "DEPT", "Longname", "ShortName", 'N');
     EmployeeController.addLaundReq("Make it extra clean", "NSERV00104");
     EmployeeController.addTransReq(
         "Need a translator for medicine description", "NDEPT00302", "Korean");
@@ -78,9 +94,6 @@ public class EmployeeControllerTest {
         "Need a Korean translator for prescription", "NDEPT00104", "Korean");
     assertEquals("NDEPT00104", EmployeeController.getRequests().get(0).getNodeID());
   }
-
-  @Test
-  public void testcompleteRequest() {}
 
   @Test
   public void testCompleteRequest() throws DBException {
