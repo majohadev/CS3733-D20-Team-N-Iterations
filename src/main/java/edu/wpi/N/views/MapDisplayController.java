@@ -282,6 +282,7 @@ public class MapDisplayController implements Controller {
   // Upon clicking find path to location button call this method
   @FXML
   private void onLocationPathFindClicked(MouseEvent event) throws Exception {
+    pn_path.getChildren().removeIf(node -> node instanceof Line);
     int currentSelection = lst_locationsorted.getSelectionModel().getSelectedIndex();
     String destinationNodeLongName = fuzzySearchTextList.get(currentSelection);
     LinkedList<DbNode> destinationNode =
@@ -294,12 +295,17 @@ public class MapDisplayController implements Controller {
 
   @FXML
   private void onNearestBathroomClicked(MouseEvent event) throws Exception {
+    onResetClicked(event);
     Path pathToBathroom = Pathfinder.findQuickAccess(defaultNode, "REST");
     LinkedList<DbNode> pathNodes = pathToBathroom.getPath();
     drawPath(pathNodes);
   }
 
   @FXML
+  private void searchByDoctorTextFill(KeyEvent inputMethodEvent) throws DBException {
+    String currentText = cmbo_doctorname.getValue().toString();
+  }
+
   public void fuzzySearchLaundryRequest(KeyEvent keyInput) throws DBException {
     String currentText = txtf_laundryLocation.getText();
     fuzzySearchNodeListLaundry = FuzzySearchAlgorithm.suggestWithCorrection(currentText);
@@ -362,4 +368,5 @@ public class MapDisplayController implements Controller {
 
   @FXML
   public void loginWindow(MouseEvent e) throws IOException {}
+
 }
