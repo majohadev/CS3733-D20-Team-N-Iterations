@@ -15,6 +15,6 @@ public class HomeController implements Controller {
   }
 
   public void onBtnEditClicked() throws IOException {
-    this.mainApp.switchScene("");
+    this.mainApp.switchScene("views/mapEdit.fxml");
   }
 }

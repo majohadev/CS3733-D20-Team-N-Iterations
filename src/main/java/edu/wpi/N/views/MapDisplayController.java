@@ -2,10 +2,8 @@ package edu.wpi.N.views;
 
 import com.google.common.collect.HashBiMap;
 import edu.wpi.N.App;
-import edu.wpi.N.Main;
 import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.algorithms.Pathfinder;
-import edu.wpi.N.database.CSVParser;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.DbController;
 import edu.wpi.N.entities.DbNode;
@@ -23,14 +21,16 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 public class MapDisplayController implements Controller {
   private App mainApp;
@@ -49,7 +49,10 @@ public class MapDisplayController implements Controller {
 
   @FXML Button btn_find;
   @FXML Button btn_reset;
-  @FXML Pane pn_display;
+  @FXML Pane pn_path, pn_routeNodes;
+  @FXML StackPane pn_movableMap;
+  @FXML AnchorPane pn_mapFrame;
+  @FXML ImageView img_map;
 
   HashBiMap<Circle, DbNode> masterNodes; // stores the map nodes and their respective database nodes
 
@@ -63,6 +66,15 @@ public class MapDisplayController implements Controller {
   @FXML Button btn_searchdoc;
   @FXML ListView lst_doctorlocations;
   @FXML Button btn_findpathdoc;
+
+  // Map Controls
+  @FXML Button btn_zoomIn, btn_zoomOut;
+  private double mapScaleAlpha;
+  private double clickStartX, clickStartY;
+  private final double MIN_MAP_SCALE = 1;
+  private final double MAX_MAP_SCALE = 3;
+  private final double ZOOM_STEP_SCROLL = 0.01;
+  private final double ZOOM_STEP_BUTTON = 0.1;
 
   @FXML TextField txtf_translatorLocation;
   @FXML TextField txtf_laundryLocation;
@@ -90,11 +102,7 @@ public class MapDisplayController implements Controller {
     this.mainApp = mainApp;
   }
 
-  public void initialize() throws DBException, DBException {
-    InputStream nodes = Main.class.getResourceAsStream("csv/TeamNFloor4Nodes.csv");
-    InputStream edges = Main.class.getResourceAsStream("csv/TeamNFloor4Edges.csv");
-    CSVParser.parseCSV(nodes);
-    CSVParser.parseCSV(edges);
+  public void initialize() throws DBException {
     selectedNodes = new LinkedList<DbNode>();
     allFloorNodes = DbController.floorNodes(4, "Faulkner");
     masterNodes = HashBiMap.create();
@@ -105,8 +113,8 @@ public class MapDisplayController implements Controller {
   public void populateMap() {
     for (DbNode node : allFloorNodes) {
       Circle mapNode = makeMapNode(node);
+      pn_routeNodes.getChildren().add(mapNode);
       longNamesList.add(node.getLongName());
-      pn_display.getChildren().add(mapNode);
       masterNodes.put(mapNode, node);
     }
   }
@@ -163,7 +171,7 @@ public class MapDisplayController implements Controller {
               (secondNode.getX() * HORIZONTAL_SCALE) + HORIZONTAL_OFFSET,
               (secondNode.getY() * VERTICAL_SCALE) + VERTICAL_OFFSET);
       line.setStrokeWidth(5);
-      pn_display.getChildren().add(line);
+      pn_path.getChildren().add(line);
     }
   }
 
@@ -173,10 +181,82 @@ public class MapDisplayController implements Controller {
       mapNode.setFill(Color.PURPLE);
       mapNode.setDisable(false);
     }
-    pn_display.getChildren().removeIf(node -> node instanceof Line);
+    pn_path.getChildren().removeIf(node -> node instanceof Line);
     selectedNodes.clear();
   }
 
+  public void onReturnClicked() throws IOException {
+    mainApp.switchScene("views/home.fxml");
+  }
+  // Zoom controls
+
+  // Get zoom button input
+  @FXML
+  private void zoomToolHandler(MouseEvent event) throws IOException {
+
+    if (event.getSource() == btn_zoomIn) {
+      zoom(ZOOM_STEP_BUTTON);
+    } else if (event.getSource() == btn_zoomOut) {
+      zoom(-ZOOM_STEP_BUTTON);
+    }
+  }
+
+  // When user scrolls mouse over map
+  @FXML
+  private void mapScrollHandler(ScrollEvent event) throws IOException {
+    if (event.getSource() == pn_movableMap) {
+      double deltaY = event.getDeltaY();
+      zoom(deltaY * ZOOM_STEP_SCROLL);
+    }
+  }
+
+  // Scale map pane, clamping between MIN_MAP_SCALE and MAX_MAP_SCALE
+  private void zoom(double percent) {
+
+    mapScaleAlpha = Math.max(0, Math.min(1, mapScaleAlpha + percent));
+
+    // Maps 0-1 value (alpha) to min-max value
+    double lerpedScale = MIN_MAP_SCALE + mapScaleAlpha * (MAX_MAP_SCALE - MIN_MAP_SCALE);
+    pn_movableMap.setScaleX(lerpedScale);
+    pn_movableMap.setScaleY(lerpedScale);
+    clampPanning(0, 0);
+  }
+
+  // Panning controls
+
+  @FXML
+  private void mapClickHandler(MouseEvent event) throws IOException {
+    if (event.getSource() == pn_movableMap) {
+      clickStartX = event.getSceneX();
+      clickStartY = event.getSceneY();
+    }
+  }
+
+  @FXML
+  private void mapDragHandler(MouseEvent event) throws IOException {
+    if (event.getSource() == pn_movableMap) {
+      double dragDeltaX = event.getSceneX() - clickStartX;
+      double dragDeltaY = event.getSceneY() - clickStartY;
+
+      clampPanning(dragDeltaX, dragDeltaY);
+
+      clickStartX = event.getSceneX();
+      clickStartY = event.getSceneY();
+    }
+  }
+
+  private void clampPanning(double deltaX, double deltaY) {
+    double xLimit = (pn_movableMap.getScaleX() - MIN_MAP_SCALE) * MAP_WIDTH / 2;
+    double yLimit = (pn_movableMap.getScaleY() - MIN_MAP_SCALE) * MAP_HEIGHT / 2;
+
+    double newTranslateX =
+        Math.min(Math.max(pn_movableMap.getTranslateX() + deltaX, -xLimit), xLimit);
+    double newTranslateY =
+        Math.min(Math.max(pn_movableMap.getTranslateY() + deltaY, -yLimit), yLimit);
+
+    pn_movableMap.setTranslateX(newTranslateX);
+    pn_movableMap.setTranslateY(newTranslateY);
+  }
   // mike
   // Upon changing text in the search by location UI component this method
   // is triggered
