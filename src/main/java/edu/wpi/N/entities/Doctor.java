@@ -1,12 +1,14 @@
 package edu.wpi.N.entities;
 
+import java.util.LinkedList;
+
 public class Doctor {
   private int id;
   private String name;
-  private DbNode loc;
+  private LinkedList<DbNode> loc;
   private String field;
 
-  public Doctor(int id, String name, DbNode loc, String field) {
+  public Doctor(int id, String name, LinkedList<DbNode> loc, String field) {
     this.id = id;
     this.name = name;
     this.loc = loc;
@@ -29,11 +31,11 @@ public class Doctor {
     this.name = name;
   }
 
-  public DbNode getLoc() {
+  public LinkedList<DbNode> getLoc() {
     return loc;
   }
 
-  public void setLoc(DbNode loc) {
+  public void setLoc(LinkedList<DbNode> loc) {
     this.loc = loc;
   }
 
