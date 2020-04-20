@@ -5,9 +5,9 @@ import edu.wpi.N.Main;
 import edu.wpi.N.database.CSVParser;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.DbController;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import edu.wpi.N.entities.DbNode;
+import java.io.*;
+import java.util.LinkedList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -96,7 +96,69 @@ public class DataEditorController implements Controller {
   }
 
   @FXML
-  public void onDownloadNodesClicked() throws IOException {}
+  public void onDownloadNodesClicked() throws IOException, DBException {
+
+    FileChooser fileChooser = new FileChooser();
+
+    // Set extension filter for csv files
+    FileChooser.ExtensionFilter extFilter =
+        new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv");
+    fileChooser.getExtensionFilters().add(extFilter);
+
+    // Show save file dialog
+    File file = fileChooser.showSaveDialog(null);
+
+    if (file != null) {
+      FileWriter fileWriter = new FileWriter(file.getAbsoluteFile(), true);
+      BufferedWriter csvWriter = new BufferedWriter(fileWriter);
+
+      // nodeID,xcoord,ycoord,floor,building,nodeType,longName,shortName,teamAssigned
+      csvWriter.append("nodeID");
+      csvWriter.append(",");
+      csvWriter.append("xcoord");
+      csvWriter.append(",");
+      csvWriter.append("ycoord");
+      csvWriter.append(",");
+      csvWriter.append("floor");
+      csvWriter.append(",");
+      csvWriter.append("building");
+      csvWriter.append(",");
+      csvWriter.append("nodeType");
+      csvWriter.append(",");
+      csvWriter.append("longName");
+      csvWriter.append(",");
+      csvWriter.append("shortName");
+      csvWriter.append(",");
+      csvWriter.append("teamAssigned");
+      csvWriter.append("\n");
+
+      LinkedList<DbNode> csvNodeList = DbController.allNodes();
+
+      for (int index = 0; index < csvNodeList.size(); index++) {
+        DbNode indexNode = csvNodeList.get(index);
+        csvWriter.append(indexNode.getNodeID());
+        csvWriter.append(",");
+        csvWriter.append(Integer.toString(indexNode.getX()));
+        csvWriter.append(",");
+        csvWriter.append(Integer.toString(indexNode.getY()));
+        csvWriter.append(",");
+        csvWriter.append(Integer.toString(indexNode.getFloor()));
+        csvWriter.append(",");
+        csvWriter.append(indexNode.getBuilding());
+        csvWriter.append(",");
+        csvWriter.append(indexNode.getNodeType());
+        csvWriter.append(",");
+        csvWriter.append(indexNode.getLongName());
+        csvWriter.append(",");
+        csvWriter.append(indexNode.getShortName());
+        csvWriter.append(",");
+        csvWriter.append(indexNode.getTeamAssigned());
+        csvWriter.append("\n");
+      }
+      csvWriter.flush();
+      csvWriter.close();
+    }
+  }
 
   @FXML
   public void onDownloadEdgesClicked() throws IOException {}

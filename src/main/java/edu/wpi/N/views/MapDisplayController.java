@@ -110,6 +110,7 @@ public class MapDisplayController implements Controller {
     allFloorNodes = DbController.floorNodes(4, "Faulkner");
     masterNodes = HashBiMap.create();
     defaultNode = DbController.getNode("NHALL00804");
+    if (defaultNode == null) defaultNode = allFloorNodes.getFirst();
     populateMap();
   }
 
