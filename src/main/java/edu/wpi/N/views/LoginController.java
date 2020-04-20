@@ -34,7 +34,7 @@ public class LoginController implements Controller {
     String username = txtf_username.getText();
     String password = pwf_password.getText();
 
-  if (username.equals("admin")
+    if (username.equals("admin")
         && password.equals("1234")
         && event.getSource() == btn_loginSubmit) {
       loggedin = true;
@@ -45,7 +45,7 @@ public class LoginController implements Controller {
       Scene scene = new Scene(root);
       stage.setScene(scene);
       stage.initModality(Modality.APPLICATION_MODAL);
-      stage.showAndWait();
+      stage.show();
     } else if (event.getSource() == btn_cancel) {
       ((Node) (event.getSource())).getScene().getWindow().hide();
       loggedin = false;
