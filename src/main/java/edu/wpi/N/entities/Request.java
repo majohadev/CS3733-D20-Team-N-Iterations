@@ -9,7 +9,8 @@ public abstract class Request {
     String serviceType;
     GregorianCalendar timeRequested;
     GregorianCalendar timeCompleted;
-    Request(int requestID, int emp_assigned, String notes, String nodeID, String serviceType, GregorianCalendar timeRequested, GregorianCalendar timeCompleted){
+    String status;
+    Request(int requestID, int emp_assigned, String notes, String nodeID, String serviceType, GregorianCalendar timeRequested, GregorianCalendar timeCompleted, String status){
         this.requestID = requestID;
         this.emp_assigned = emp_assigned;
         this.notes = notes;
@@ -17,6 +18,7 @@ public abstract class Request {
         this.serviceType = serviceType;
         this.timeCompleted = timeCompleted;
         this.timeRequested = timeRequested;
+        this.status = status;
     }
 
     public int getRequestID() {

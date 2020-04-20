@@ -4,8 +4,8 @@ import java.util.GregorianCalendar;
 
 public class TranslatorRequest extends Request{
     private String language;
-    public TranslatorRequest(int requestID, int emp_assigned, String notes, String nodeID, String serviceType, GregorianCalendar timeRequested, GregorianCalendar timeCompleted, String language){
-        super(requestID,  emp_assigned,  notes, nodeID, serviceType, timeRequested, timeCompleted);
+    public TranslatorRequest(int requestID, int emp_assigned, String notes, String nodeID, String serviceType, GregorianCalendar timeRequested, GregorianCalendar timeCompleted, String status, String language){
+        super(requestID,  emp_assigned,  notes, nodeID, serviceType, timeRequested, timeCompleted, status);
         this.language = language;
     }
 
