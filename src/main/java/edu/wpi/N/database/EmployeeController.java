@@ -1,19 +1,39 @@
 package edu.wpi.N.database;
 
-import edu.wpi.N.entities.Employee;
-import edu.wpi.N.entities.Translator;
+import edu.wpi.N.entities.*;
 import java.sql.*;
-import java.util.*;
+import java.util.GregorianCalendar;
+import java.util.Calendar;
+import java.util.LinkedList;
 
 public class EmployeeController {
   private static Connection con = DbController.getCon();
 
   public static void initEmployee() throws DBException {
+    try{
+      String query = "CREATE TABLE service (" +
+              "serviceType VARCHAR(255) NOT NULL PRIMARY KEY," +
+              "timeStart CHAR(5)," +
+              "timeEnd CHAR(5)," +
+              "description VARCHAR(255))";
+      PreparedStatement state = con.prepareStatement(query);
+      state.execute();
+      query = "INSERT INTO service VALUES ('Translator', '00:00', '00:00', 'Make a request for our translation services!')";
+
+      query = "INSERT INTO service VALUES ('Translator', '00:00', '00:00', 'Make a request for our translation services!')";
+    } catch (SQLException e){
+      if (!e.getSQLState().equals("X0Y32")) {
+        e.printStackTrace();
+        throw new DBException("Unknown error: initEmployee", e);
+      }
+    }
     try {
       String query =
           "CREATE TABLE employees ("
-              + "employeeID INT NOT NULL PRIMARY KEY, "
-              + "name VARCHAR(255) NOT NULL)";
+              + "employeeID INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY, "
+              + "name VARCHAR(255) NOT NULL," +
+                  "serviceType VARCHAR(255) NOT NULL," +
+                  "FOREIGN KEY (serviceType) REFERENCES service (serviceType))";
 
       PreparedStatement state = con.prepareStatement(query);
       state.execute();
@@ -27,9 +47,15 @@ public class EmployeeController {
       String query =
           "CREATE TABLE translator ("
               + "t_employeeID INT NOT NULL PRIMARY KEY,"
-              + "language VARCHAR(255) NOT NULL,"
               + "FOREIGN KEY (t_employeeID) REFERENCES employees(employeeID) ON DELETE CASCADE)";
       PreparedStatement state = con.prepareStatement(query);
+      state.execute();
+      query = "CREATE TABLE language (" +
+              "t_employeeID INT NOT NULL, " +
+              "language VARCHAR(255) NOT NULL, +" +
+              "CONSTRAINT LANG_PK PRIMARY KEY (t_employeeID, language)," +
+              "FOREIGN KEY (t_employeeID) REFERENCES translator (t_employeeID) ON DELETE CASCADE)";
+      state = con.prepareStatement(query);
       state.execute();
     } catch (SQLException e) {
       e.printStackTrace();
@@ -46,145 +72,218 @@ public class EmployeeController {
       e.printStackTrace();
       throw new DBException("Unknown error: intiEmployee creating laundry table", e);
     }
-  }
-
-  public static Employee getEmployee(int id) throws DBException {
-    try {
-      String query = "SELECT * FROM employees WHERE employeeID = ?";
-      PreparedStatement state = con.prepareStatement(query);
-      ResultSet rs = state.executeQuery();
-
-      if (rs.next()) {
-        return new Employee(rs.getInt("id"), rs.getString("name"));
-      } else throw new DBException("Employee not in Database");
-    } catch (SQLException e) {
-      e.printStackTrace();
-      throw new DBException("getEmployee not found", e);
-    }
-  }
-
-  public static Employee getTranslator(int id) throws DBException {
     try {
       String query =
-          "SELECT * FROM translator WHERE t_employeeID = ? JOIN employees ON t_employeeID = employeeID";
+              "CREATE TABLE request("
+                      + "requestID INT NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY," +
+                      "timeRequested TIMESTAMP NOT NULL," +
+                      "timeCompleted TIMESTAMP," +
+                      "notes VARCHAR(255)," +
+                      "assigned_eID INT REFERENCES employees(employeeID)," +
+                      "serviceType VARCHAR(255) NOT NULL REFERENCES service(serviceType)," +
+                      "nodeID CHAR(10) NOT NULL REFERENCES nodes(nodeID)," +
+                      "status CHAR(4) NOT NULL CONSTRAINT STAT_CK CHECK (status IN ('OPEN', 'DENY', 'DONE')))";
       PreparedStatement state = con.prepareStatement(query);
-      state.setInt(1, id);
-      ResultSet rs = state.executeQuery();
-
-      if (rs.next()) {
-        return new Translator(rs.getInt("id"), rs.getString("name"), rs.getString("language"));
-      } else throw new DBException("Translator not in Database");
+      state.execute();
+      query = "CREATE TABLE lrequest(" +
+              "requestID INT NOT NULL PRIMARY KEY REFERENCES request(requestID))";
+      state = con.prepareStatement(query);
+      state.execute();
+      query = "CREATE TABLE trequest(" +
+              "requestID INT NOT NULL PRIMARY KEY REFERENCES request(requestID)," +
+              "language VARCHAR(255) NOT NULL)";
+      state = con.prepareStatement(query);
+      state.execute();
     } catch (SQLException e) {
       e.printStackTrace();
-      throw new DBException("Unknown error: getTranslator", e);
+      throw new DBException("Unknown error: intiEmployee creating Request table", e);
     }
+
   }
 
-  public static boolean addEmployee(int id, String name) throws DBException {
-    try {
-      String query = "INSERT INTO employees VALUES (?, ?)";
-      PreparedStatement state = con.prepareStatement(query);
-      state.setInt(1, id);
-      state.setString(2, name);
-      return state.executeUpdate() > 0;
-    } catch (SQLException e) {
-      e.printStackTrace();
-      throw new DBException("Unknown error: addEmployee method", e);
-    }
+  //Noah
+  /**
+   * Returns the employee specified by the given ID
+   * @param id The employee's ID
+   * @return an employee entity representing that employee
+   */
+  public static Employee getEmployee(int id){
+    return null;
   }
 
-  public static boolean addTranslator(int id, String lang) throws DBException {
-    try {
-      String query = "INSERT INTO translator VALUES (?, ?)";
-      PreparedStatement state = con.prepareStatement(query);
-      state.setInt(1, id);
-      state.setString(2, lang);
-      return true;
-    } catch (SQLException e) {
-      e.printStackTrace();
-      throw new DBException("Unknown error: addTranslator method", e);
-    }
+  //Chris
+  /**
+   * Returns a list of all employees in the database
+   * @return a linked list of all employees in the database
+   */
+  public static LinkedList<Employee> getEmployees(){
+    return null;
   }
 
-  public static boolean deleteEmployee(int id) throws DBException {
-    try {
-      String query = "DELETE FROM employees WHERE (employeeID = ?)";
-      PreparedStatement state = con.prepareStatement(query);
-      state.setInt(1, id);
-      return state.executeUpdate() > 0;
-    } catch (SQLException e) {
-      e.printStackTrace();
-      throw new DBException("Error: deleteEmployee is unavailable", e);
-    }
+  //Nick
+  /**
+   * Gets all services in the database
+   * @return a linked list of all services in the database
+   */
+  public static LinkedList<Service> getServices(){
+    return null;
   }
 
-  public static boolean modifyEmployee(int id, String name) throws DBException {
-    try {
-      String query = "UPDATE employees SET employeeID = ?, name = ?";
-      PreparedStatement state = con.prepareStatement(query);
-      state.setInt(1, id);
-      state.setString(2, name);
-      return true;
-    } catch (SQLException e) {
-      e.printStackTrace();
-      throw new DBException("Error: modifyEmployee not working", e);
-    }
+  //Noah
+  /**
+   * Gets all the requests in the database
+   * @return a linked list of all service requests in the database
+   */
+  public static LinkedList<Request> getRequests(){
+    return null;
   }
 
-  public static boolean modifyLanguage(int id, String name, String lang) throws DBException {
-    try {
-      String query = "UPDATE translator SET t_employeeID = ?, name = ?, language = ?";
-      PreparedStatement state = con.prepareStatement(query);
-      state.setInt(1, id);
-      state.setString(2, name);
-      state.setString(3, lang);
-      return true;
-    } catch (SQLException e) {
-      e.printStackTrace();
-      throw new DBException("modify language not working properly", e);
-    }
+  //Chris
+  /**
+   * Gets all the open requests (not completed requests) in the database
+   * @return a linked list of all open seervice requests in the database
+   */
+  public static LinkedList<Request> getOpenRequests(){
+    return null;
   }
 
-  public static List<Employee> searchbyLang(String lang) throws DBException {
-    String query = "SELECT * FROM employees WHERE";
-    LinkedList<String> queries = new LinkedList<String>();
-    if (lang != null) {
-      queries.add("lang = ?");
-    }
-    if (queries.size() == 0) throw new DBException("Error: size is wrong in searchbyLang method");
-    Iterator<String> it = queries.iterator();
-    while (true) {
-      query = query + it.next();
-      if (it.hasNext()) query = query + "AND";
-      else break;
-    }
-    try {
-      PreparedStatement state = con.prepareStatement(query);
-      int ct = 0;
-      if (lang != null) {
-        state.setString(++ct, lang);
-      }
-      return getallTranslator(state);
-
-    } catch (SQLException e) {
-      e.printStackTrace();
-      throw new DBException("Error: Unknown error in searchbyLang", e);
-    }
+  //Nick
+  /**
+   * Gets all the translators in the database
+   * @return a linked list of all translators in the database
+   */
+  public static LinkedList<Translator> getTranslators(){
+    return null;
   }
 
-  public static LinkedList<Employee> getallTranslator(PreparedStatement stmt) throws SQLException {
-    LinkedList<Employee> transList = new LinkedList<Employee>();
-    ResultSet rs = stmt.executeQuery();
-    while (rs.next()) {
-      transList.add(new Employee(rs.getInt("employeeID"), rs.getString("name")));
-    }
-    return transList;
+  //Noah
+  /**
+   * Gets all the laundrys in the database
+   * @return a linked list of all people who can do laundry in the database
+   */
+  public static LinkedList<Laundry> getLaundrys(){
+    return null;
   }
 
-  public static Calendar getJavatime(Timestamp time) {
+  //Chris
+  /**
+   * Returns a list of all translators who speak a specified langauge
+   * @param lang the language that you want the translators to speak
+   * @return a linked list of all the translators who speak a specified language
+   */
+  public static LinkedList<Translator> getTransLang(String lang){
+    return null;
+  }
+
+  //Nick
+  /**
+   * Adds a translator to the database
+   * @param name the translator's name
+   * @param languages the languages that this translator is capable of speaking
+   * @return true if successful, false otherwise
+   */
+  public static void addTranslator(String name, LinkedList<String> languages) {
+
+  }
+
+
+  //Noah
+  /**
+   * Adds a laundry employee to the database
+   * @param name the laundry employee's name
+   * @return true if successful, false otherwise
+   */
+  public static void addLaundry(String name) {
+
+  }
+
+
+  //Chris
+  /**
+   * Adds a request for a translator
+   * @param notes some notes for the translator request
+   * @param nodeID The ID of the node in which these services are requested
+   * @param language the language that the translator is requested for
+   * @return true on success, false otherwise.
+   */
+  public static void addTransReq(String notes, String nodeID, String language){
+  }
+
+  //Nick
+  /**
+   * Adds a request for laundry
+   * @param notes some notes for the laundry request
+   * @param nodeID The ID of the node in which these services are requested
+   * @return true on success, false otherwise.
+   */
+  public static void addLaundReq(String notes, String nodeID){
+  }
+
+  //Noah
+  /**
+   * Assigns an employee to a request; the employee must be able to fulfil that request
+   * @param employeeID the ID of the employee to be assigned
+   * @param requestID The ID of the request to which they will be assigned.
+   * @return
+   */
+  public static void assignToRequest(int employeeID, int requestID){
+  }
+
+  //Chris
+  /**
+   * Marks a request as completed and done at the time that this function was called
+   * @param requestID the ID of the request to be marked as completed
+   * @return true on sucess, false otherwise
+   */
+  public static void completeRequest(int requestID) throws DBException{
+  }
+
+  //Nick
+  /**
+   * Removes an employee from the database
+   * @param employeeID the id of the employee to be excised
+   */
+  public static void removeEmployee(int employeeID) throws DBException{
+
+  }
+
+  //regEx
+  /**
+   * Adds a language to the translator with the specified employee ID
+   * @param employeeID The ID of the employee who will speak this new language
+   * @param language The language to be added
+   * @throws DBException if the employee isn't a translator
+   */
+  public static void addLanguage(int employeeID, String language) throws DBException{
+
+  }
+
+  //Chris
+  /**
+   * Removes a language to the translator with the specified employee ID
+   * @param employeeID The ID of the employee who no longer speaks the given language
+   * @param language The language to be removed
+   * @throws DBException if the employee isn't a translator
+   */
+  public static void removeLanguage(int employeeID, String language) throws DBException{
+  }
+
+  //Nick
+  /**
+   * Denies a given request
+   * @param requestID The request id of an open request to deny
+   * @throws DBException on unsuccess
+   */
+  public static void denyRequest(int requestID) throws DBException{
+  }
+
+
+
+
+  public static GregorianCalendar getJavatime(Timestamp time) {
     Calendar cal = GregorianCalendar.getInstance();
     cal.setTime(time);
-    return cal;
+    return (GregorianCalendar) cal;
   }
 
   public static Timestamp getSqltime(GregorianCalendar cal) {

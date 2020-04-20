@@ -1,18 +1,17 @@
 package edu.wpi.N.entities;
 
+import java.util.LinkedList;
+
 public class Translator extends Employee {
-  private String language;
+  private LinkedList<String> languages;
 
-  public Translator(int id, String name, String lang) {
+  public Translator(int id, String name, LinkedList<String> langs) {
     super(id, name);
-    this.language = lang;
+    this.languages = langs;
   }
 
-  public String getLanguage() {
-    return language;
+  public LinkedList<String> getLanguages() {
+    return languages;
   }
 
-  public void setLanguage(String language) {
-    this.language = language;
-  }
 }
