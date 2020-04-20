@@ -9,7 +9,6 @@ import edu.wpi.N.database.DbController;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Path;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.LinkedList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -31,6 +30,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 public class MapDisplayController implements Controller {
   private App mainApp;
