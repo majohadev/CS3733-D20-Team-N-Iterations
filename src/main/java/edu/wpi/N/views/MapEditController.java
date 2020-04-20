@@ -37,6 +37,11 @@ public class MapEditController implements Controller {
   @FXML TitledPane pn_nodes_delete;
   @FXML TitledPane pn_nodes_edit;
 
+  @FXML Accordion acc_edges;
+  @FXML TitledPane pn_edges_add;
+  @FXML TitledPane pn_edges_delete;
+  @FXML TitledPane pn_edges_edit;
+
   @FXML TextField txt_add_longName;
   @FXML TextField txt_add_shortName;
   @FXML TextField txt_add_type;
@@ -52,12 +57,20 @@ public class MapEditController implements Controller {
   @FXML TextField txt_NodesEditShortName;
   @FXML Button btn_NodesEditSave;
 
+  @FXML TextField txt_EdgesAddFirstLocation;
+  @FXML TextField txt_EdgesAddSecondLocation;
+  @FXML CheckBox chk_EdgesAddShowFirst;
+  @FXML CheckBox chk_EdgesAddShowSecond;
+  @FXML Button btn_EdgesAddChooseFirst;
+  @FXML Button btn_EdgesAddChooseSecond;
+
   HashBiMap<Circle, DbNode> masterNodes; // stores the map nodes and their respective database nodes
   LinkedList<DbNode> allFloorNodes; // stores all the nodes on the floor
   LinkedList<DbNode> selectedNodes; // stores all the selected nodes on the map
   Circle tempNode;
   DbNode editingNode;
   EditMode editMode;
+  NodeNum nodeNum;
 
   public enum EditMode {
     NOSTATE,
@@ -65,7 +78,14 @@ public class MapEditController implements Controller {
     NODES_DELETE,
     NODES_EDIT,
     EDGES_ADD,
-    EDGES_DELETE
+    EDGES_DELETE,
+    EDGES_EDIT
+  }
+
+  public enum NodeNum {
+    NOSTATE,
+    FIRST,
+    SECOND
   }
 
   @Override
@@ -80,6 +100,7 @@ public class MapEditController implements Controller {
     tempNode = null;
     editMode = editMode.NOSTATE;
     editingNode = null;
+    nodeNum = NodeNum.NOSTATE;
     populateMap();
     accordionListener();
   }
@@ -94,7 +115,7 @@ public class MapEditController implements Controller {
                   accordionListenerNodes();
                 } else if (newValue.equals(pn_edges)) {
                   onBtnClearClicked();
-                  System.out.println("Edges");
+                  accordionListenerEdges();
                 }
               }
             });
@@ -114,6 +135,26 @@ public class MapEditController implements Controller {
                   onBtnClearClicked();
                 } else if (newValue.equals(pn_nodes_edit)) {
                   editMode = EditMode.NODES_EDIT;
+                  onBtnClearClicked();
+                }
+              }
+            });
+  }
+
+  public void accordionListenerEdges() {
+    acc_edges
+        .expandedPaneProperty()
+        .addListener(
+            (observable, oldValue, newValue) -> {
+              if (newValue != null) {
+                if (newValue.equals(pn_edges_add)) {
+                  editMode = EditMode.EDGES_ADD;
+                  onBtnClearClicked();
+                } else if (newValue.equals(pn_edges_delete)) {
+                  editMode = EditMode.EDGES_DELETE;
+                  onBtnClearClicked();
+                } else if (newValue.equals(pn_edges_edit)) {
+                  editMode = EditMode.EDGES_EDIT;
                   onBtnClearClicked();
                 }
               }
@@ -202,7 +243,10 @@ public class MapEditController implements Controller {
     String longName = txt_NodesEditLongName.getText();
     String shortName = txt_NodesEditShortName.getText();
     DbController.modifyNode(editingNode.getNodeID(), x, y, longName, shortName);
-    masterNodes.inverse().get(editingNode).setFill(Color.PURPLE);
+    DbNode newNode = DbController.getNode(editingNode.getNodeID());
+    // CHECK
+    masterNodes.replace(masterNodes.inverse().get(editingNode), newNode);
+    masterNodes.inverse().get(newNode).setFill(Color.PURPLE);
     txt_NodesEditShortName.clear();
     txt_NodesEditLongName.clear();
     btn_NodesEditSave.setDisable(true);
@@ -240,8 +284,12 @@ public class MapEditController implements Controller {
       nodesDelete(mapNode);
     } else if (editMode == EditMode.NODES_EDIT) {
       nodesEdit(mapNode);
+    } else if (editMode == EditMode.EDGES_ADD) {
+      edgesAdd(mapNode);
     }
   }
+
+  public void edgesAdd(Circle mapNode) {}
 
   public void nodesEdit(Circle mapNode) {
     btn_NodesEditSave.setDisable(false);
@@ -277,6 +325,8 @@ public class MapEditController implements Controller {
           .removeIf(n -> ((Label) n).getText().equals(masterNodes.get(mapNode).getLongName()));
     }
   }
+
+  public void onBtnEdgesAddChooseFirstClicked() {}
 
   public void onReturnClicked() throws IOException {
     mainApp.switchScene("views/home.fxml");

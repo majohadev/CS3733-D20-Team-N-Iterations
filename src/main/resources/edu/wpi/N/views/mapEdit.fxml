@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
@@ -88,7 +89,37 @@
                       </TitledPane>
                       <TitledPane fx:id="pn_edges" animated="false" text="Edges">
                         <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <Accordion fx:id="acc_edges" layoutX="14.0" layoutY="14.0" prefHeight="721.0" prefWidth="371.0">
+                                      <panes>
+                                        <TitledPane fx:id="pn_edges_add" animated="false" prefHeight="516.0" prefWidth="371.0" text="Add">
+                                          <content>
+                                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="272.0" prefWidth="369.0">
+                                                   <children>
+                                                      <TextField fx:id="txt_EdgesAddFirstLocation" disable="true" layoutX="15.0" layoutY="72.0" prefHeight="25.0" prefWidth="344.0" />
+                                                      <TextField fx:id="txt_EdgesAddSecondLocation" disable="true" layoutX="14.0" layoutY="165.0" prefHeight="25.0" prefWidth="342.0" />
+                                                      <CheckBox fx:id="chk_EdgesAddShowFirst" layoutX="160.0" layoutY="34.0" mnemonicParsing="false" text="Show First Location Edges" />
+                                                      <CheckBox fx:id="chk_EdgesAddShowSecond" layoutX="160.0" layoutY="124.0" mnemonicParsing="false" text="Show Second Location Edges" />
+                                                      <Button fx:id="btn_EdgesAddChooseFirst" layoutX="14.0" layoutY="30.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="104.0" text="First Location" />
+                                                      <Button fx:id="btn_EdgesAddChooseSecond" layoutX="14.0" layoutY="120.0" mnemonicParsing="false" text="Second Location" />
+                                                   </children>
+                                                </AnchorPane>
+                                          </content>
+                                        </TitledPane>
+                                        <TitledPane fx:id="pn_edges_delete" animated="false" text="Remove">
+                                          <content>
+                                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                          </content>
+                                        </TitledPane>
+                                          <TitledPane fx:id="pn_edges_edit" animated="false" text="Edit">
+                                            <content>
+                                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                                            </content>
+                                          </TitledPane>
+                                      </panes>
+                                    </Accordion>
+                                 </children></AnchorPane>
                         </content>
                       </TitledPane>
                     </panes>
