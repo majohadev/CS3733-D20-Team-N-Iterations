@@ -12,7 +12,7 @@ public class MockData {
 
   String data;
 
-  MockData(String data) {
+  public MockData(String data) {
     this.data = data;
   }
 }
