@@ -3,7 +3,11 @@ package edu.wpi.N.entities;
 import java.util.GregorianCalendar;
 
 public class LaundryRequest extends Request{
-    public LaundryRequest(int requestID, int emp_assigned, String notes, String nodeID, String serviceType, GregorianCalendar timeRequested, GregorianCalendar timeCompleted, String status){
-        super(requestID,  emp_assigned,  notes, nodeID, serviceType, timeRequested, timeCompleted, status);
+    public LaundryRequest(int requestID, int emp_assigned, String notes, String nodeID, GregorianCalendar timeRequested, GregorianCalendar timeCompleted, String status){
+        super(requestID,  emp_assigned,  notes, nodeID, timeRequested, timeCompleted, status);
+    }
+
+    public String getServiceType(){
+        return "Laundry";
     }
 }

@@ -20,7 +20,7 @@ public class EmployeeController {
       state.execute();
       query = "INSERT INTO service VALUES ('Translator', '00:00', '00:00', 'Make a request for our translation services!')";
 
-      query = "INSERT INTO service VALUES ('Translator', '00:00', '00:00', 'Make a request for our translation services!')";
+      query = "INSERT INTO service VALUES ('Laundry', '00:00', '00:00', 'Make a request for laundry services!')";
     } catch (SQLException e){
       if (!e.getSQLState().equals("X0Y32")) {
         e.printStackTrace();
@@ -107,8 +107,34 @@ public class EmployeeController {
    * @param id The employee's ID
    * @return an employee entity representing that employee
    */
-  public static Employee getEmployee(int id){
-    return null;
+  public static Employee getEmployee(int id) throws DBException {
+    try{
+      String query = "SELECT * FROM employees WHERE employeeID = ?";
+      PreparedStatement stmt = con.prepareStatement(query);
+      stmt.setInt(1, id);
+      ResultSet rs = stmt.executeQuery();
+      rs.next();
+      if(rs.getString("serviceType").equals("Translator")){
+        String name = rs.getString("name");
+        query = "SELECT language FROM language WHERE t_EmployeeID = ?";
+        stmt.setInt(1, id);
+        rs = stmt.executeQuery();
+        LinkedList<String> languages = new LinkedList<String>();
+        while(rs.next()){
+          languages.add(rs.getString("language"));
+        }
+        return new Translator(id, name, languages);
+
+      }
+      else if(rs.getString("serviceType").equals("Laundry")){
+        return new Laundry(id, rs.getString("name"));
+      }
+      else throw new DBException("Invalid employee in table employees! ID: " + id + "Name: " + rs.getString("name"));
+
+    } catch(SQLException e){
+      e.printStackTrace();
+      throw new DBException("Unknown error: getEmployee. ID: "+ id , e);
+    }
   }
 
   //Chris
@@ -134,8 +160,26 @@ public class EmployeeController {
    * Gets all the requests in the database
    * @return a linked list of all service requests in the database
    */
-  public static LinkedList<Request> getRequests(){
-    return null;
+  public static LinkedList<Request> getRequests() throws DBException{
+    try {
+      LinkedList<Request> requests = new LinkedList<Request>();
+      String query = "SELECT * FROM request WHERE serviceType = 'Laundry'";
+      PreparedStatement stmt = con.prepareStatement(query);
+      ResultSet rs = stmt.executeQuery();
+      while(rs.next()){
+        requests.add(new LaundryRequest(rs.getInt("requestID"), rs.getInt("assigned_eID"), rs.getString("notes"), rs.getString("nodeID"), getJavatime(rs.getTimestamp("timeRequested")), getJavatime(rs.getTimestamp("timeCompleted")), rs.getString("status")));
+      }
+      query = "SELECT * from request, trequest WHERE request.requestID = trequest.requestID";
+      stmt = con.prepareStatement(query);
+      rs = stmt.executeQuery();
+      while(rs.next()){
+        requests.add(new TranslatorRequest(rs.getInt("requestID"), rs.getInt("assigned_eID"), rs.getString("notes"), rs.getString("nodeID"), getJavatime(rs.getTimestamp("timeRequested")), getJavatime(rs.getTimestamp("timeCompleted")), rs.getString("status"), rs.getString("language")));
+      }
+      return requests;
+    } catch(SQLException e){
+      e.printStackTrace();
+      throw new DBException("Unknown error: getRequests", e);
+    }
   }
 
   //Chris
