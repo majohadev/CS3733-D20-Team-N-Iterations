@@ -310,7 +310,7 @@ public class DbController {
 
     // ServiceController.initService();
     DoctorController.initDoctor();
-    EmployeeController.initEmployee();
+    // EmployeeController.initEmployee();
   }
 
   /**
