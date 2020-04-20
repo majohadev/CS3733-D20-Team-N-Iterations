@@ -81,6 +81,16 @@ public class MapEditController implements Controller {
   DbNode db_EdgesDeleteFirstSelected;
   DbNode db_EdgesDeleteSecondSelected;
 
+  // EDGES EDIT
+  @FXML TextField txt_EdgesEditStartNode;
+  @FXML TextField txt_EdgesEditEdge;
+  @FXML TextField txt_EdgesEditEndNode;
+  @FXML Button btn_EdgesEditConfirm;
+  Line line_EdgesEditSelected;
+  DbNode db_EdgesEditFirstSelected;
+  DbNode db_EdgesEditSecondSelected;
+  DbNode db_EdgesEditSecondSelectedOld;
+
   HashBiMap<Circle, DbNode> masterNodes; // stores the map nodes and their respective database nodes
   LinkedList<DbNode> allFloorNodes; // stores all the nodes on the floor
   LinkedList<DbNode> selectedNodes; // stores all the selected nodes on the map
@@ -219,6 +229,9 @@ public class MapEditController implements Controller {
 
     // RESET EDGES DELETE
     resetEdgesDelete();
+
+    // RESET EDGES EDIT
+    resetEdgesEdit();
   }
 
   public void onBtnClearClicked() {
@@ -356,6 +369,8 @@ public class MapEditController implements Controller {
       edgesAdd(mapNode);
     } else if (editMode == EditMode.EDGES_DELETE) {
       edgesDeleteNodeClick(mapNode);
+    } else if (editMode == EditMode.EDGES_EDIT) {
+      edgesEditNodeClick(mapNode);
     }
   }
 
@@ -513,12 +528,6 @@ public class MapEditController implements Controller {
     }
   }
 
-  //  // EDGES REMOVE
-  //  @FXML TextField txt_EdgesRemoveNode;
-  //  @FXML TextField txt_EdgesRemoveEdge;
-  //  @FXML Button btn_EdgesRemove;
-  // EDGES REMOVE METHODS
-
   /**
    * Executes when a node on the map is clicked in EDGE DELETE mode Displays all edges of the node
    * and makes then clickable
@@ -568,7 +577,22 @@ public class MapEditController implements Controller {
               txt_EdgesDeleteEdge.setText(adjacentNode.getShortName());
               db_EdgesDeleteSecondSelected = adjacentNode;
             });
+      } else if (editMode == EditMode.EDGES_EDIT) {
+        line.setOnMouseClicked(
+            mouseEvent -> {
+              if (txt_EdgesEditEdge.isFocused()) {
+                if (line_EdgesEditSelected != null) {
+                  line_EdgesEditSelected.setStroke(Color.BLACK);
+                }
+                db_EdgesEditSecondSelectedOld = adjacentNode;
+                line_EdgesEditSelected = line;
+                line.setStroke(Color.RED);
+                line.setOpacity(0.5);
+                txt_EdgesEditEdge.setText(adjacentNode.getShortName());
+              }
+            });
       }
+
       pn_display.getChildren().add(line);
     }
   }
@@ -591,6 +615,62 @@ public class MapEditController implements Controller {
     resetEdgesDelete();
     txt_EdgesDeleteNode.requestFocus();
     edgesDeleteNodeClick(masterNodes.inverse().get(node));
+  }
+
+  // EDIT EDGES METHODS
+  public void edgesEditNodeClick(Circle mapNode) throws DBException {
+    if (txt_EdgesEditStartNode.isFocused()) {
+      if (db_EdgesEditFirstSelected != null) {
+        resetEdgesEdit();
+      }
+      db_EdgesEditFirstSelected = masterNodes.get(mapNode);
+      displayAdjacentEdges(db_EdgesEditFirstSelected, mapNode);
+      mapNode.setFill(Color.GREEN);
+      txt_EdgesEditStartNode.setText(db_EdgesEditFirstSelected.getShortName());
+    } else if (txt_EdgesEditEndNode.isFocused()) {
+      db_EdgesEditSecondSelected = masterNodes.get(mapNode);
+      mapNode.setFill(Color.SADDLEBROWN);
+      txt_EdgesEditEndNode.setText(db_EdgesEditSecondSelected.getShortName());
+      double x1 = masterNodes.inverse().get(db_EdgesEditFirstSelected).getCenterX();
+      double y1 = masterNodes.inverse().get(db_EdgesEditFirstSelected).getCenterY();
+      double x2 = mapNode.getCenterX();
+      double y2 = mapNode.getCenterY();
+      pn_firstEdges.getChildren().clear();
+      Line line = new Line(x1, y1, x2, y2);
+      pn_display.getChildren().remove(line_EdgesEditSelected);
+      line.setStroke(Color.MAGENTA);
+      line.setStrokeWidth(2);
+      pn_firstEdges.getChildren().add(line);
+    }
+  }
+
+  public void onBtnEdgesEditDeleteClicked() throws DBException {
+    DbController.removeEdge(
+        db_EdgesEditFirstSelected.getNodeID(), db_EdgesEditSecondSelectedOld.getNodeID());
+    DbController.addEdge(
+        db_EdgesEditFirstSelected.getNodeID(), db_EdgesEditSecondSelected.getNodeID());
+    DbNode node = db_EdgesEditFirstSelected;
+    resetEdgesEdit();
+    txt_EdgesEditStartNode.requestFocus();
+    edgesEditNodeClick(masterNodes.inverse().get(node));
+  }
+
+  public void resetEdgesEdit() {
+    if (db_EdgesEditFirstSelected != null) {
+      masterNodes.inverse().get(db_EdgesEditFirstSelected).setFill(Color.PURPLE);
+    }
+    if (db_EdgesEditSecondSelected != null) {
+      masterNodes.inverse().get(db_EdgesEditSecondSelected).setFill(Color.PURPLE);
+    }
+    db_EdgesEditSecondSelected = null;
+    db_EdgesEditFirstSelected = null;
+    db_EdgesEditSecondSelectedOld = null;
+    line_EdgesEditSelected = null;
+    pn_display.getChildren().removeIf(node -> node instanceof Line);
+    txt_EdgesEditEdge.setText("");
+    txt_EdgesEditStartNode.setText("");
+    txt_EdgesEditEndNode.setText("");
+    pn_firstEdges.getChildren().clear();
   }
 
   public void onReturnClicked() throws IOException {
