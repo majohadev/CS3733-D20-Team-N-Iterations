@@ -267,7 +267,7 @@ public class MapDisplayController implements Controller {
   @FXML
   private void searchByLocationTextFill(KeyEvent inputMethodEvent) throws DBException {
     String currentText = txtf_searchlocation.getText();
-    fuzzySearchNodeList = FuzzySearchAlgorithm.suggestWithCorrection(currentText);
+    fuzzySearchNodeList = FuzzySearchAlgorithm.suggestLocations(currentText);
     LinkedList<String> fuzzySearchStringList = new LinkedList<>();
     if (fuzzySearchNodeList != null) {
 
@@ -307,7 +307,7 @@ public class MapDisplayController implements Controller {
 
   public void fuzzySearchLaundryRequest(KeyEvent keyInput) throws DBException {
     String currentText = txtf_laundryLocation.getText();
-    fuzzySearchNodeListLaundry = FuzzySearchAlgorithm.suggestWithCorrection(currentText);
+    fuzzySearchNodeListLaundry = FuzzySearchAlgorithm.suggestLocations(currentText);
     LinkedList<String> fuzzySearchStringList = new LinkedList<>();
     if (fuzzySearchNodeListLaundry != null) {
 
@@ -323,7 +323,7 @@ public class MapDisplayController implements Controller {
   @FXML
   public void fuzzySearchTranslatorRequest(KeyEvent keyInput) throws DBException {
     String currentText = txtf_translatorLocation.getText();
-    fuzzySearchNodeListTranslator = FuzzySearchAlgorithm.suggestWithCorrection(currentText);
+    fuzzySearchNodeListTranslator = FuzzySearchAlgorithm.suggestLocations(currentText);
     LinkedList<String> fuzzySearchStringList = new LinkedList<>();
     if (fuzzySearchNodeListTranslator != null) {
 
