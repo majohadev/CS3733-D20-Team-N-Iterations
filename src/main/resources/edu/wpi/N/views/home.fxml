@@ -5,9 +5,12 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.HomeController">
+<AnchorPane onMouseClicked="#onBtnFileClicked" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.HomeController">
    <children>
-      <Button fx:id="btn_map" layoutX="940.0" layoutY="615.0" mnemonicParsing="false" onMouseClicked="#onBtnMapClicked" text="Map" />
+      <Button fx:id="btn_map" layoutX="940.0" layoutY="615.0" mnemonicParsing="false" onMouseClicked="#onBtnMapClicked" text="Map">
+         <font>
+            <Font size="14.0" />
+         </font></Button>
       <Label layoutX="640.0" layoutY="519.0" minHeight="-Infinity" text="Welcome to Brigham and Womens Hospital" textAlignment="CENTER" wrapText="true">
          <font>
             <Font name="Calibri" size="36.0" />
@@ -18,6 +21,14 @@
             <Font name="Calibri" size="18.0" />
          </font>
       </Label>
-      <Button fx:id="btn_edit" layoutX="928.0" layoutY="650.0" mnemonicParsing="false" onMouseClicked="#onBtnEditClicked" text="Edit Map" />
+      <Button fx:id="btn_edit" layoutX="928.0" layoutY="650.0" mnemonicParsing="false" onMouseClicked="#onBtnEditClicked" text="Edit Map">
+         <font>
+            <Font size="14.0" />
+         </font></Button>
+      <Button fx:id="btn_filemanager" layoutX="866.0" layoutY="687.0" mnemonicParsing="false" onMouseClicked="#onBtnFileClicked" text="Upload / Download CSV Files">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>

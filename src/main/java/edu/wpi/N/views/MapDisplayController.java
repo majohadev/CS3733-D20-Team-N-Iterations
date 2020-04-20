@@ -284,10 +284,8 @@ public class MapDisplayController implements Controller {
   private void onLocationPathFindClicked(MouseEvent event) throws Exception {
     pn_path.getChildren().removeIf(node -> node instanceof Line);
     int currentSelection = lst_locationsorted.getSelectionModel().getSelectedIndex();
-    String destinationNodeLongName = fuzzySearchTextList.get(currentSelection);
-    LinkedList<DbNode> destinationNode =
-        DbController.searchVisNode(currentFloor, null, null, destinationNodeLongName);
-    selectedNodes.add(destinationNode.getFirst());
+    DbNode destinationNode = fuzzySearchNodeList.get(currentSelection);
+    selectedNodes.add(destinationNode);
     if (selectedNodes.size() < 2) selectedNodes.add(defaultNode);
     onBtnFindClicked(event);
     selectedNodes.clear();
