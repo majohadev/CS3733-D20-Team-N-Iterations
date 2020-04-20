@@ -513,10 +513,10 @@ public class EmployeeController {
    */
   public static void completeRequest(int requestID) throws DBException {
     try {
-      String query = "UPDATE request SET status = ? WHERE requestID = ?";
+      String query = "UPDATE request SET status = 'DONE', timeCompleted = ? WHERE requestID = ?";
       PreparedStatement stmt = con.prepareStatement(query);
-      stmt.setString(1, "Done");
-      stmt.setInt(2, requestID);
+      stmt.setInt(1, requestID);
+      stmt.setTimestamp(2, new Timestamp(new Date().getTime()));
       stmt.executeUpdate();
     } catch (SQLException e) {
       e.printStackTrace();
@@ -530,7 +530,17 @@ public class EmployeeController {
    *
    * @param employeeID the id of the employee to be excised
    */
-  public static void removeEmployee(int employeeID) throws DBException {}
+  public static void removeEmployee(int employeeID) throws DBException {
+    try{
+      String query = "DELETE FROM employess WHERE employeeID = ?";
+      PreparedStatement stmt = con.prepareStatement(query);
+      stmt.setInt(1, employeeID);
+      if(stmt.executeUpdate() <= 0) throw new DBException("That employeeID is invalid!");
+    } catch(SQLException e){
+      e.printStackTrace();
+      throw new DBException("Unknown error: removeEmployee", e);
+    }
+  }
 
   // regEx
   /**
@@ -580,7 +590,18 @@ public class EmployeeController {
    * @param requestID The request id of an open request to deny
    * @throws DBException on unsuccess
    */
-  public static void denyRequest(int requestID) throws DBException {}
+  public static void denyRequest(int requestID) throws DBException {
+    try {
+      String query = "UPDATE request SET status = 'DENY', timeCompleted = ? WHERE requestID = ?";
+      PreparedStatement stmt = con.prepareStatement(query);
+      stmt.setInt(1, requestID);
+      stmt.setTimestamp(2, new Timestamp(new Date().getTime()));
+      stmt.executeUpdate();
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Error: completeRequest", e);
+    }
+  }
 
   public static GregorianCalendar getJavatime(Timestamp time) {
     Calendar cal = GregorianCalendar.getInstance();
