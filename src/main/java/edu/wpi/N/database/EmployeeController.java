@@ -265,7 +265,8 @@ public class EmployeeController {
                 rs.getString("status"),
                 rs.getString("language")));
       }
-      query = "SELECT * FROM request, lrequest WHERE rquest.requestID = lrequest.requestID AND status = 'OPEN'";
+      query =
+          "SELECT * FROM request, lrequest WHERE rquest.requestID = lrequest.requestID AND status = 'OPEN'";
       stmt = con.prepareStatement(query);
       rs = stmt.executeQuery();
       while (rs.next()) {
@@ -292,21 +293,20 @@ public class EmployeeController {
    *
    * @return a linked list of all translators in the database
    */
-  public static LinkedList<Translator> getTranslators() throws DBException{
-    try{
+  public static LinkedList<Translator> getTranslators() throws DBException {
+    try {
       String query = "SELECT * from employees, translator where employeeID = t_employeeID";
       PreparedStatement stmt = con.prepareStatement(query);
       ResultSet rs = stmt.executeQuery();
       LinkedList<Translator> translators = new LinkedList<Translator>();
-      while(rs.next()){
+      while (rs.next()) {
         translators.add((Translator) getEmployee(rs.getInt("t_employeeID")));
       }
       return translators;
-    } catch(SQLException e){
+    } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Unknown error: getTranslators", e);
     }
-
   }
 
   // Noah
@@ -315,17 +315,17 @@ public class EmployeeController {
    *
    * @return a linked list of all people who can do laundry in the database
    */
-  public static LinkedList<Laundry> getLaundrys() throws DBException{
-    try{
+  public static LinkedList<Laundry> getLaundrys() throws DBException {
+    try {
       String query = "SELECT * from employees, laundry where employeeID = l_employeeID";
       PreparedStatement stmt = con.prepareStatement(query);
       ResultSet rs = stmt.executeQuery();
       LinkedList<Laundry> laundrys = new LinkedList<Laundry>();
-      while(rs.next()){
+      while (rs.next()) {
         laundrys.add((Laundry) getEmployee(rs.getInt("l_employeeID")));
       }
       return laundrys;
-    } catch(SQLException e){
+    } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Unknown error: getLaundrys", e);
     }
@@ -338,7 +338,7 @@ public class EmployeeController {
    * @param lang the language that you want the translators to speak
    * @return a linked list of all the translators who speak a specified language
    */
-  public static LinkedList<Translator> getTransLang(String lang) throws DBException{
+  public static LinkedList<Translator> getTransLang(String lang) throws DBException {
     LinkedList<Translator> list = getTranslators();
     LinkedList<Translator> special = new LinkedList<Translator>();
     for (int i = 1; i < list.size(); i++) {
@@ -364,19 +364,19 @@ public class EmployeeController {
    * @param name the laundry employee's name
    * @return true if successful, false otherwise
    */
-  public static void addLaundry(String name) throws DBException{
-    try{
+  public static void addLaundry(String name) throws DBException {
+    try {
       String query = "INSERT INTO employees (name, serviceType) VALUES (?, 'Laundry')";
       PreparedStatement stmt = con.prepareStatement(query);
       stmt.setString(1, name);
       stmt.executeUpdate();
       ResultSet rs = stmt.getGeneratedKeys();
-      rs.next();
+      rs.next(); // NullPointerException
       query = "INSERT INTO Laundry VALUES (?)";
       stmt = con.prepareStatement(query);
       stmt.setInt(1, rs.getInt("employeeID"));
       stmt.executeUpdate();
-    }catch (SQLException e){
+    } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Unknown error: addLaundry , name = " + name, e);
     }

@@ -13,4 +13,17 @@ public class Translator extends Employee {
   public LinkedList<String> getLanguages() {
     return languages;
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (!(o instanceof Translator)) {
+      return false;
+    }
+
+    Translator other = (Translator) o;
+
+    return getID() == other.getID()
+        && getName().equals(other.getName())
+        && languages.equals(other.languages);
+  }
 }

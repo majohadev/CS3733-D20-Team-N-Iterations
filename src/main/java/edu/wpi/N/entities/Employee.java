@@ -9,11 +9,22 @@ public abstract class Employee {
     this.name = name;
   }
 
-  public int getId() {
+  public int getID() {
     return id;
   }
 
   public String getName() {
     return name;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (!(o instanceof Employee)) {
+      return false;
+    }
+
+    Employee other = (Employee) o;
+
+    return id == other.id && name.equals(other.name);
   }
 }
