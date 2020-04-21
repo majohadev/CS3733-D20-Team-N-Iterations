@@ -143,7 +143,7 @@ public class FuzzySearchAlgorithm {
     double ratio = 0.8;
 
     // Get all the visible nodes from DB
-    for (Doctor doc : DoctorController.searchDoctors("")) {
+    for (Doctor doc : DoctorController.getDoctors()) {
       String fullName = doc.getName();
 
       // Iterate through Long Name's words

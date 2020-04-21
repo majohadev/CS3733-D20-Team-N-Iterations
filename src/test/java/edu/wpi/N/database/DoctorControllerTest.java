@@ -26,19 +26,19 @@ public class DoctorControllerTest {
     LinkedList<DbNode> offices = new LinkedList<DbNode>();
     offices.add(DbController.getNode("NDEPT00104"));
     offices.add(DbController.getNode("NHALL00104"));
-    DoctorController.addDoctor("Wong", "Softeng", offices);
-    Doctor wong = DoctorController.getDoctor("Wong");
+    int wongID = DoctorController.addDoctor("Wong", "Softeng", offices);
+    Doctor wong = DoctorController.getDoctor(wongID);
     assertTrue(wong.getField().equals("Softeng"));
     assertTrue(wong.getLoc().get(0).equals(DbController.getNode("NDEPT00104")));
     assertTrue(wong.getLoc().get(1).equals(DbController.getNode("NHALL00104")));
     assertFalse(wong.getLoc().contains(DbController.getNode("NDEPT00204")));
-    DoctorController.addOffice("Wong", DbController.getNode("NDEPT00204"));
-    wong = DoctorController.getDoctor("Wong");
+    DoctorController.addOffice(wongID, DbController.getNode("NDEPT00204"));
+    wong = DoctorController.getDoctor(wongID);
     assertTrue(wong.getLoc().get(2).equals(DbController.getNode("NDEPT00204")));
-    DoctorController.removeOffice("Wong", DbController.getNode("NHALL00104"));
-    wong = DoctorController.getDoctor("Wong");
+    DoctorController.removeOffice(wongID, DbController.getNode("NHALL00104"));
+    wong = DoctorController.getDoctor(wongID);
     assertTrue(wong.getLoc().get(1).equals(DbController.getNode("NDEPT00204")));
-    DoctorController.deleteDoctor("Wong");
+    DoctorController.deleteDoctor(wongID);
   }
 
   @Test
@@ -46,13 +46,13 @@ public class DoctorControllerTest {
     LinkedList<DbNode> offices = new LinkedList<DbNode>();
     offices.add(DbController.getNode("NDEPT00104"));
     offices.add(DbController.getNode("NHALL00104"));
-    DoctorController.addDoctor("Wong", "Softeng", offices);
+    int wongID = DoctorController.addDoctor("Wong", "Softeng", offices);
     offices.pop();
     offices.add(DbController.getNode("NDEPT00204"));
-    DoctorController.addDoctor("Kong", "History", offices);
+    int kongID = DoctorController.addDoctor("Kong", "History", offices);
     LinkedList<Doctor> drs = DoctorController.searchDoctors("oNg");
-    Doctor wong = DoctorController.getDoctor("Wong");
-    Doctor kong = DoctorController.getDoctor("Kong");
+    Doctor wong = DoctorController.getDoctor(wongID);
+    Doctor kong = DoctorController.getDoctor(kongID);
     assertTrue(drs.contains(wong));
     assertTrue(drs.contains(kong));
     drs = DoctorController.searchDoctors("ko");
@@ -61,8 +61,8 @@ public class DoctorControllerTest {
     drs = DoctorController.getDoctors();
     assertTrue(drs.contains(wong));
     assertTrue(drs.contains(kong));
-    DoctorController.deleteDoctor("Wong");
-    DoctorController.deleteDoctor("Kong");
+    DoctorController.deleteDoctor(wongID);
+    DoctorController.deleteDoctor(kongID);
   }
 
   @AfterAll
