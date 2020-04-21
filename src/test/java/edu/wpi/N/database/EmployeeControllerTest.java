@@ -164,6 +164,7 @@ public class EmployeeControllerTest {
             new Service("00:00", "00:00", "Laundry", "Make a request for laundry services!")));
   }
 
+  /*
   @Test
   public void testassigntoRequest() throws DBException {
     EmployeeController.assignToRequest(felix.getID(), transReqID1);
@@ -175,6 +176,7 @@ public class EmployeeControllerTest {
         });
     assertEquals(0, EmployeeController.getRequest(laundReqID1).getEmp_assigned());
   }
+  */
 
   @Test
   public void testAllLangs() throws DBException {
@@ -186,7 +188,18 @@ public class EmployeeControllerTest {
   @AfterAll
   public static void cleanup() throws DBException {
     DbController.clearNodes();
-    EmployeeController.removeEmployee(1);
-    EmployeeController.removeEmployee(2);
+    for (int i : getAllEmployeeIds()) {
+      EmployeeController.removeEmployee(i);
+    }
+  }
+
+  private static LinkedList<Integer> getAllEmployeeIds() throws DBException {
+    LinkedList<Integer> ids = new LinkedList<Integer>();
+
+    for (Employee employee : EmployeeController.getEmployees()) {
+      ids.add(employee.getID());
+    }
+
+    return ids;
   }
 }

@@ -20,6 +20,11 @@ public abstract class Employee {
   public abstract String getServiceType();
 
   @Override
+  public String toString() {
+    return name + " (" + this.getServiceType() + ")";
+  }
+
+  @Override
   public boolean equals(Object o) {
     if (!(o instanceof Employee)) {
       return false;

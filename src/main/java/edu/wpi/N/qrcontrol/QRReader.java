@@ -29,7 +29,7 @@ public abstract class QRReader {
    */
 
   private Webcam webcam;
-  private WebcamPanel panel;
+  protected WebcamPanel panel;
 
   private final int THREAD_SLEEP_DELAY = 100; // Thread sleep duration in milliseconds
   private final int TIMEOUT_THRESHOLD = 60; // Timeout threshold in seconds
@@ -38,6 +38,81 @@ public abstract class QRReader {
           * 1000
           / THREAD_SLEEP_DELAY; // # of times reader thread should run before timing out
   protected final String ERR_CODE = "NO_CODE";
+
+  private Thread currentThread;
+  private boolean blockTimeOut = false;
+
+  // Set up thread to fetch QR code
+  private Task<String> getQRCode =
+      new Task<String>() {
+
+        @Override
+        public String call() {
+
+          System.out.println("Starting!");
+
+          int cycles = 0;
+          String result = ERR_CODE;
+
+          // Continue while:
+          // - Thread is not cancelled
+          // - Timeout hasn't been reached (if timeout is used)
+          // - result == ERR_CODE
+
+          do {
+
+            try {
+              Thread.sleep(100);
+              if (!blockTimeOut) {
+                cycles++;
+              }
+            } catch (InterruptedException interrupted) {
+              if (isCancelled()) {
+                updateMessage("Cancelled");
+                break;
+              }
+            }
+
+            result = fetchQRCode();
+
+            if (result != ERR_CODE) {
+              break;
+            }
+
+            if (isCancelled()) {
+              updateMessage("Cancelled");
+              break;
+            }
+
+          } while (cycles < MAX_CYCLES);
+          return result;
+        }
+
+        @Override
+        protected void succeeded() {
+          super.succeeded();
+          updateMessage("Scanning thread complete!");
+          if (getValue() == ERR_CODE) {
+            onScanFail();
+          } else {
+            onScanSucceed(getValue());
+          }
+        }
+
+        @Override
+        protected void cancelled() {
+          super.cancelled();
+          updateMessage("Scanning thread cancelled!");
+          onScanFail();
+        }
+
+        @Override
+        protected void failed() {
+          super.failed();
+          updateMessage("Scanning thread failed!");
+          onScanFail();
+        }
+      };
 
   public QRReader() {
 
@@ -52,57 +127,18 @@ public abstract class QRReader {
     panel.setVisible(false);
   }
 
-  protected WebcamPanel getWebcamView() {
-    return panel;
+  public void cancelScan() {
+    if (currentThread != null && getQRCode.isRunning()) {
+      getQRCode.cancel();
+    }
   }
 
-  protected void startScan() {
-
-    // Set up thread to fetch QR code
-    Task<String> getQRCode =
-        new Task<String>() {
-
-          @Override
-          public String call() {
-
-            // Open camera
-            panel.resume();
-            panel.setVisible(true);
-
-            // Look for code
-            String result = fetchQRCode();
-
-            // Close camera
-            panel.pause();
-            panel.setVisible(false);
-
-            return result;
-          }
-        };
-
-    getQRCode.setOnSucceeded(
-        e -> {
-          String result = getQRCode.getValue();
-          if (result == ERR_CODE) {
-            onScanFail();
-          } else {
-            onScanSucceed(result);
-          }
-        });
-
-    getQRCode.setOnCancelled(
-        e -> {
-          onScanFail();
-        });
-
-    getQRCode.setOnFailed(
-        e -> {
-          onScanFail();
-        });
-
-    Thread t = new Thread(getQRCode);
-    t.setDaemon(true); // Make this thread low priority
-    t.start(); // Begin thread
+  // Begin looking for QR codes
+  public void startScan(boolean blockTimeOut) {
+    this.blockTimeOut = blockTimeOut;
+    currentThread = new Thread(getQRCode);
+    currentThread.setDaemon(true); // Make this thread low priority
+    currentThread.start(); // Begin thread
   }
 
   // Override these methods in UI controller
@@ -110,42 +146,31 @@ public abstract class QRReader {
 
   protected void onScanFail() {}
 
-  // Attempts to get a QR code until timeout is reached
-  protected String fetchQRCode() {
+  // Attempts to get a QR code
+  private String fetchQRCode() {
 
     Result result = null;
     BufferedImage image;
-    int cycles = 0;
 
-    do {
+    if (webcam.isOpen()) {
+
+      if ((image = webcam.getImage()) == null) {
+        return ERR_CODE;
+      }
+
+      LuminanceSource source = new BufferedImageLuminanceSource(image);
+      BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+
       try {
-        Thread.sleep(THREAD_SLEEP_DELAY);
-        cycles++;
-      } catch (InterruptedException e) {
-        e.printStackTrace();
+        result = new MultiFormatReader().decode(bitmap);
+      } catch (NotFoundException e) {
+        // No QR code in image
       }
+    }
 
-      if (webcam.isOpen()) {
-
-        if ((image = webcam.getImage()) == null) {
-          continue;
-        }
-
-        LuminanceSource source = new BufferedImageLuminanceSource(image);
-        BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-
-        try {
-          result = new MultiFormatReader().decode(bitmap);
-        } catch (NotFoundException e) {
-          // No QR code in image
-        }
-      }
-
-      if (result != null) {
-        return result.getText(); // Exit if code is scanned
-      }
-
-    } while (cycles < MAX_CYCLES); // Exit if timed out
+    if (result != null) {
+      return result.getText(); // Exit if code is scanned
+    }
     return ERR_CODE;
   }
 }
