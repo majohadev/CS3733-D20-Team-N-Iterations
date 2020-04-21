@@ -130,7 +130,7 @@
                                                       <Label layoutX="14.0" layoutY="149.0" text="Select Ending Node" />
                                                       <TextField fx:id="txt_EdgesEditStartNode" editable="false" layoutX="14.0" layoutY="42.0" prefHeight="25.0" prefWidth="344.0" />
                                                       <TextField fx:id="txt_EdgesEditEdge" editable="false" layoutX="14.0" layoutY="106.0" prefHeight="25.0" prefWidth="344.0" />
-                                                      <TextField fx:id="txt_EdgesEditEndNode" editable="false" layoutX="13.0" layoutY="174.0" prefHeight="25.0" prefWidth="344.0" />
+                                                      <TextField fx:id="txt_EdgesEditEndNode" disable="true" editable="false" layoutX="13.0" layoutY="174.0" prefHeight="25.0" prefWidth="344.0" />
                                                       <Button fx:id="btn_EdgesEditConfirm" layoutX="296.0" layoutY="224.0" mnemonicParsing="false" onMouseClicked="#onBtnEdgesEditDeleteClicked" text="Confirm" />
                                                    </children></AnchorPane>
                                             </content>
