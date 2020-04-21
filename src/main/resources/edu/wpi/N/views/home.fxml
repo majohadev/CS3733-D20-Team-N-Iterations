@@ -29,11 +29,26 @@
                   <Font name="Calibri" size="18.0" />
                </font>
             </Label>
-            <Button fx:id="btn_map" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#onBtnMapClicked" text="Map" />
-            <Button fx:id="btn_edit" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#onBtnEditClicked" text="Edit Map" />
-            <Button fx:id="btn_scanTest" contentDisplay="CENTER" layoutX="950.0" layoutY="567.0" mnemonicParsing="false" onMouseClicked="#onBtnScanClicked" text="QR - Scan" />
-            <Button fx:id="btn_generateTest" contentDisplay="CENTER" layoutX="938.0" layoutY="612.0" mnemonicParsing="false" onMouseClicked="#onBtnGenerateClicked" text="QR - Generate" />
-             <Button fx:id="btn_filemanager" contentDisplay="CENTER" layoutX="866.0" layoutY="687.0" mnemonicParsing="false" onMouseClicked="#onBtnFileClicked" text="Upload / Download CSV Files" />
+            <Button fx:id="btn_map" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#onBtnMapClicked" style="-fx-background-radius: 10;" text="Map">
+               <font>
+                  <Font name="Calibri" size="14.0" />
+               </font></Button>
+            <Button fx:id="btn_edit" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#onBtnEditClicked" style="-fx-background-radius: 10;" text="Edit Map">
+               <font>
+                  <Font name="Calibri" size="14.0" />
+               </font></Button>
+            <Button fx:id="btn_scanTest" contentDisplay="CENTER" layoutX="950.0" layoutY="567.0" mnemonicParsing="false" onMouseClicked="#onBtnScanClicked" style="-fx-background-radius: 10;" text="QR - Scan">
+               <font>
+                  <Font name="Calibri" size="14.0" />
+               </font></Button>
+            <Button fx:id="btn_generateTest" contentDisplay="CENTER" layoutX="938.0" layoutY="612.0" mnemonicParsing="false" onMouseClicked="#onBtnGenerateClicked" style="-fx-background-radius: 10;" text="QR - Generate">
+               <font>
+                  <Font name="Calibri" size="14.0" />
+               </font></Button>
+             <Button fx:id="btn_filemanager" contentDisplay="CENTER" layoutX="866.0" layoutY="687.0" mnemonicParsing="false" onMouseClicked="#onBtnFileClicked" style="-fx-background-radius: 10;" text="Upload / Download CSV Files">
+               <font>
+                  <Font name="Calibri" size="14.0" />
+               </font></Button>
          </children>
       </VBox>
    </children>
