@@ -126,6 +126,8 @@ public class MapEditController implements Controller {
     populateMap();
     accordionListener();
     populateComboBox(cb_NodesAddType, types);
+    accordionListenerNodes();
+    accordionListenerEdges();
   }
 
   public void populateComboBox(ComboBox cb, String[] ar) {
@@ -141,10 +143,17 @@ public class MapEditController implements Controller {
             (observable, oldValue, newValue) -> {
               if (newValue != null) {
                 if (newValue.equals(pn_nodes)) {
-                  accordionListenerNodes();
-                } else if (newValue.equals(pn_edges)) {
                   onBtnClearClicked();
-                  accordionListenerEdges();
+                  resetPanes();
+                  for (TitledPane pane : acc_edges.getPanes()) {
+                    pane.setExpanded(false);
+                  }
+                } else if (newValue.equals(pn_edges)) {
+                  for (TitledPane pane : acc_nodes.getPanes()) {
+                    pane.setExpanded(false);
+                  }
+                  onBtnClearClicked();
+                  resetPanes();
                 }
               }
             });
@@ -157,12 +166,15 @@ public class MapEditController implements Controller {
             (observable, oldValue, newValue) -> {
               if (newValue != null) {
                 if (newValue.equals(pn_nodes_add)) {
+                  System.out.println("NODES ADD");
                   editMode = EditMode.NODES_ADD;
                   resetPanes();
                 } else if (newValue.equals(pn_nodes_delete)) {
+                  System.out.println("NODES DELETE");
                   editMode = EditMode.NODES_DELETE;
                   resetPanes();
                 } else if (newValue.equals(pn_nodes_edit)) {
+                  System.out.println("NODES EDIT");
                   editMode = EditMode.NODES_EDIT;
                   resetPanes();
                 }
@@ -178,13 +190,16 @@ public class MapEditController implements Controller {
               if (newValue != null) {
                 if (newValue.equals(pn_edges_add)) {
                   resetPanes();
+                  System.out.println("EDGES ADD");
                   editMode = EditMode.EDGES_ADD;
                   checkBoxListener(chk_EdgesAddShowFirst);
                   checkBoxListener(chk_EdgesAddShowSecond);
                 } else if (newValue.equals(pn_edges_delete)) {
+                  System.out.println("EDGES DELETE");
                   editMode = EditMode.EDGES_DELETE;
                   resetPanes();
                 } else if (newValue.equals(pn_edges_edit)) {
+                  System.out.println("EDGES EDIT");
                   editMode = EditMode.EDGES_EDIT;
                   resetPanes();
                 }
@@ -193,7 +208,7 @@ public class MapEditController implements Controller {
   }
 
   public void resetPanes() {
-    // RESET DELETE
+    //    // RESET DELETE
     for (Circle mapNode : masterNodes.keySet()) {
       mapNode.setFill(Color.PURPLE);
       mapNode.setDisable(false);
