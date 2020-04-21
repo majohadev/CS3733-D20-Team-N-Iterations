@@ -186,6 +186,12 @@ public class MapDisplayController extends QRGenerator implements Controller {
       LinkedList<DbNode> pathNodes = path.getPath();
       drawPath(pathNodes);
       GenerateQRDirections(path);
+    } else {
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setHeaderText("Invalid input");
+      errorAlert.setContentText("No existing paths to this node");
+      errorAlert.showAndWait();
+      return;
     }
 
     ArrayList<String> directions = path.getDirections();
