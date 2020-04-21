@@ -282,11 +282,11 @@ public class EmployeeController {
    * @return a linked list of all open service requests in the database
    */
   public static LinkedList<Request> getOpenRequests() throws DBException {
+    LinkedList<Request> openList = new LinkedList<>();
     try {
       String query =
           "SELECT * FROM request, trequest WHERE request.requestID = trequest.requestID AND status='OPEN'";
       PreparedStatement stmt = con.prepareStatement(query);
-      LinkedList<Request> openList = new LinkedList<Request>();
 
       ResultSet rs = stmt.executeQuery();
       while (rs.next()) {
@@ -309,7 +309,7 @@ public class EmployeeController {
         openList.add(
             new LaundryRequest(
                 rs.getInt("requestID"),
-                rs.getInt("emp_assigned"),
+                rs.getInt("assigned_eID"),
                 rs.getString("notes"),
                 rs.getString("nodeID"),
                 getJavatime(rs.getTimestamp("timeRequested")),
