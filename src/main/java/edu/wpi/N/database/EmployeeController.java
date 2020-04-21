@@ -195,15 +195,43 @@ public class EmployeeController {
   }
 
   public static Request getRequest(int id) throws DBException {
-    LinkedList<Request> requests = getRequests();
-
-    for (Request req : requests) {
-      if (req.getRequestID() == id) {
-        return req;
+    try{
+      String query = "SELECT * FROM request WHERE requestID = ?";
+      PreparedStatement stmt = con.prepareStatement(query);
+      stmt.setInt(1, id);
+      ResultSet rs = stmt.executeQuery();
+      if(rs.getString("serviceType").equals("Laundry")){
+        return new LaundryRequest(
+                rs.getInt("requestID"),
+                rs.getInt("assigned_eID"),
+                rs.getString("notes"),
+                rs.getString("nodeID"),
+                getJavatime(rs.getTimestamp("timeRequested")),
+                getJavatime(rs.getTimestamp("timeCompleted")),
+                rs.getString("status"));
       }
-    }
+      else if(rs.getString("serviceType").equals("Translator")) {
+        int rid = rs.getInt("requestID");
+        int empId = rs.getInt("assigned_eID");
+        String notes = rs.getString("notes");
+        String nodeID = rs.getString("nodeID");
+        GregorianCalendar timeReq = getJavatime(rs.getTimestamp("timeRequested"));
+        GregorianCalendar timeComp = getJavatime(rs.getTimestamp("timeCompleted"));
+        String status = rs.getString("status");
+        query = "SELECT language FROM trequest WHERE requestID = ?";
+        stmt = con.prepareStatement(query);
+        stmt.setInt(1, id);
+        rs = stmt.executeQuery();
+        return new TranslatorRequest(rid, empId, notes, nodeID, timeReq, timeComp, status, rs.getString("language"));
+      }
 
-    throw new DBException("getRequest: There is not a request with id " + id);
+
+
+    }catch(SQLException e){
+        e.printStackTrace();
+      }
+      throw new DBException("Unknown error: getRequest", e);
+    }
   }
 
   // Noah
