@@ -45,7 +45,7 @@
                <font>
                   <Font name="Calibri" size="14.0" />
                </font></Button>
-             <Button fx:id="btn_filemanager" contentDisplay="CENTER" layoutX="866.0" layoutY="687.0" mnemonicParsing="false" onMouseClicked="#onBtnFileClicked" style="-fx-background-radius: 10;" text="Upload / Download CSV Files">
+            <Button fx:id="btn_filemanager" contentDisplay="CENTER" layoutX="866.0" layoutY="687.0" mnemonicParsing="false" onMouseClicked="#onBtnFileClicked" style="-fx-background-radius: 10;" text="Upload / Download CSV Files">
                <font>
                   <Font name="Calibri" size="14.0" />
                </font></Button>

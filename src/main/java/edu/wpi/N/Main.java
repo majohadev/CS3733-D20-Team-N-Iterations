@@ -1,9 +1,6 @@
 package edu.wpi.N;
 
-import edu.wpi.N.database.CSVParser;
-import edu.wpi.N.database.DBException;
-import edu.wpi.N.database.DbController;
-import edu.wpi.N.database.DoctorController;
+import edu.wpi.N.database.*;
 import edu.wpi.N.entities.DbNode;
 import java.io.InputStream;
 import java.sql.SQLException;
@@ -28,6 +25,23 @@ public class Main {
     LinkedList<DbNode> offices2 = new LinkedList();
     offices2.add(DbController.getNode("NDEPT00704"));
     offices2.add(DbController.getNode("NDEPT01004"));
+    DoctorController.addDoctor("Dr.Seymour Butts", "Ligma", offices2);
+    LinkedList<String> languagesA = new LinkedList<>();
+    languagesA.add("English");
+    LinkedList<String> languagesB = new LinkedList<>();
+    languagesB.add("English");
+    languagesB.add("Mandarin");
+    LinkedList<String> languagesC = new LinkedList<>();
+    languagesC.add("English");
+    languagesC.add("Spanish");
+    languagesC.add("Russian");
+
+    EmployeeController.addLaundry("Joe");
+    EmployeeController.addLaundry("Randy");
+    EmployeeController.addLaundry("Wilson");
+    EmployeeController.addTranslator("Bob", languagesA);
+    EmployeeController.addTranslator("Andy", languagesB);
+    EmployeeController.addTranslator("Camille", languagesC);
     DoctorController.addDoctor("Dr.Seymour Seymourson", "Ligma", offices2);
     LinkedList<DbNode> offices3 = new LinkedList();
     offices3.add(DbController.getNode("NDEPT00304"));
