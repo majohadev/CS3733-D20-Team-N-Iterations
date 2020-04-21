@@ -189,12 +189,27 @@ public class MapDisplayController extends QRGenerator implements Controller {
       return;
     }
 
+    if (DbController.getAdjacent(firstNode.getNodeID()).size() == 0
+        || DbController.getAdjacent(secondNode.getNodeID()).size() == 0) {
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setHeaderText("Invalid input");
+      errorAlert.setContentText("No existing paths to this node");
+      errorAlert.showAndWait();
+      return;
+    }
+
     Path path = Pathfinder.findPath(firstNode.getNodeID(), secondNode.getNodeID());
 
     if (path != null) {
       LinkedList<DbNode> pathNodes = path.getPath();
       drawPath(pathNodes);
       GenerateQRDirections(path);
+    } else {
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setHeaderText("Invalid input");
+      errorAlert.setContentText("No existing paths to this node");
+      errorAlert.showAndWait();
+      return;
     }
 
     ArrayList<String> directions = path.getDirections();

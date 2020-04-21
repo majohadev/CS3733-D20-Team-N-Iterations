@@ -175,7 +175,11 @@ public class AdminController implements Initializable, Controller {
           LinkedList<Request> reqs = EmployeeController.getRequests();
           tableData.setAll(reqs);
         }
-      } else if (e.getSource() == btn_Deny) { // This case needs a status check
+      } else if (e.getSource() == btn_Deny
+          && EmployeeController.getRequest(
+                      tbMockData.getSelectionModel().getSelectedItems().get(0).getRequestID())
+                  .getStatus()
+              == "DONE") { // This case needs a status check
         EmployeeController.denyRequest(
             tbMockData.getSelectionModel().getSelectedItems().get(0).getRequestID());
 
