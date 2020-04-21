@@ -3,6 +3,7 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Separator?>
@@ -194,8 +195,8 @@
                                        <children>
                                           <TextField fx:id="txtf_laundryLocation" layoutX="40.0" layoutY="14.0" onKeyTyped="#fuzzySearchLaundryRequest" prefHeight="22.0" prefWidth="200.0" promptText="Location" AnchorPane.topAnchor="14.0" />
                                           <ListView fx:id="lst_laundryLocation" layoutX="40.0" layoutY="69.0" prefHeight="101.0" prefWidth="200.0" />
-                                          <TextArea fx:id="txt_Notes" layoutX="39.0" layoutY="170.0" prefHeight="96.0" prefWidth="200.0" promptText="Additional Notes" AnchorPane.topAnchor="170.0" />
-                                          <Button fx:id="btn_SubmitLaundry" layoutX="108.0" layoutY="288.0" mnemonicParsing="false" style="-fx-background-radius: 10;" text="Submit">
+                                          <TextArea fx:id="txtf_laundryNotes" layoutX="39.0" layoutY="170.0" prefHeight="96.0" prefWidth="200.0" promptText="Additional Notes" AnchorPane.topAnchor="170.0" />
+                                          <Button fx:id="btn_SubmitLaundry" layoutX="108.0" layoutY="288.0" mnemonicParsing="false" onMouseClicked="#createNewLaundry" style="-fx-background-radius: 10;" text="Submit">
                                              <font>
                                                 <Font name="Calibri" size="14.0" />
                                              </font></Button>
@@ -211,12 +212,12 @@
                                        <children>
                                           <TextField fx:id="txtf_translatorLocation" layoutX="40.0" layoutY="33.0" onKeyTyped="#fuzzySearchTranslatorRequest" prefHeight="29.0" prefWidth="200.0" promptText="Location" />
                                           <ListView fx:id="lst_translatorSearchBox" layoutX="40.0" layoutY="73.0" prefHeight="95.0" prefWidth="200.0" />
-                                          <TextArea fx:id="txt_Notes1" layoutX="40.0" layoutY="211.0" prefHeight="62.0" prefWidth="200.0" promptText="Additional Notes" />
-                                          <TextField fx:id="txt_Language" layoutX="40.0" layoutY="176.0" prefHeight="29.0" prefWidth="200.0" promptText="Language" />
-                                          <Button fx:id="btn_SubmitTranslator" layoutX="109.0" layoutY="281.0" mnemonicParsing="false" style="-fx-background-radius: 10;" text="Submit">
+                                          <TextArea fx:id="txtf_translatorNotes" layoutX="40.0" layoutY="211.0" prefHeight="62.0" prefWidth="200.0" promptText="Additional Notes" />
+                                          <Button fx:id="btn_SubmitTranslator" layoutX="109.0" layoutY="281.0" mnemonicParsing="false" onMouseClicked="#createNewTranslator" style="-fx-background-radius: 10;" text="Submit">
                                              <font>
                                                 <Font name="Calibri" size="14.0" />
                                              </font></Button>
+                                          <ComboBox fx:id="cb_languages" layoutX="65.0" layoutY="175.0" prefWidth="150.0" />
                                        </children>
                                     </AnchorPane>
                                  </content></TitledPane>

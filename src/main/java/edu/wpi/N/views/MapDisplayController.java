@@ -4,15 +4,14 @@ import com.google.common.collect.HashBiMap;
 import edu.wpi.N.App;
 import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.algorithms.Pathfinder;
-import edu.wpi.N.controllerData.AdminDataStorage;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.DbController;
+import edu.wpi.N.database.EmployeeController;
 import edu.wpi.N.entities.*;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Doctor;
 import edu.wpi.N.entities.Path;
 import java.io.IOException;
-import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -60,6 +59,7 @@ public class MapDisplayController implements Controller {
   @FXML StackPane pn_movableMap;
   @FXML AnchorPane pn_mapFrame;
   @FXML ImageView img_map;
+  @FXML ComboBox<String> cb_languages;
 
   HashBiMap<Circle, DbNode> masterNodes; // stores the map nodes and their respective database nodes
 
@@ -124,6 +124,8 @@ public class MapDisplayController implements Controller {
     defaultNode = DbController.getNode("NHALL00804");
     if (defaultNode == null) defaultNode = allFloorNodes.getFirst();
     populateMap();
+
+    LinkedList<String> languages = EmployeeController.getLanguages();
   }
 
   public void populateMap() {
@@ -406,66 +408,26 @@ public class MapDisplayController implements Controller {
     }
   }
 
+
+
   @FXML
-  public void createNewLaundry() {
+  public void createNewLaundry() throws DBException {
     int currentSelection = lst_laundryLocation.getSelectionModel().getSelectedIndex();
-    String destinationNodeLongName = fuzzySearchTextList.get(currentSelection);
 
-    GregorianCalendar timeGetter = new GregorianCalendar();
-    timeGetter.getTime();
-    int requestID = 0;
-    int emp_assigned = 0;
+    String nodeID = fuzzySearchNodeListLaundry.get(currentSelection).getNodeID();
     String notes = txtf_laundryNotes.getText();
-    String nodeID = destinationNodeLongName;
-    GregorianCalendar timeRequested = timeGetter;
-    GregorianCalendar timeCompleted = timeGetter;
-    String status = "";
-
-    LaundryRequest newLaundry =
-        new LaundryRequest(
-            requestID, emp_assigned, notes, nodeID, timeRequested, timeCompleted, status);
-    System.out.println("Request ID: " + requestID);
-    System.out.println("Employee: " + emp_assigned);
-    System.out.println("Notes: " + notes);
-    System.out.println("Location: " + nodeID);
-    System.out.println("Time Req: " + timeRequested.toString());
-    System.out.println("Time Comp: " + timeCompleted.toString());
-    System.out.println("Status: " + status);
-    if (newLaundry != null) {
-      App.adminDataStorage.addToList(newLaundry);
-    } else {
-      System.out.println("is null");
-    }
+    int laundryRequest = EmployeeController.addLaundReq(notes, nodeID);
+    App.adminDataStorage.addToList(laundryRequest);
   }
 
   @FXML
-  public void createNewTranslator() {
+  public void createNewTranslator() throws DBException {
     int currentSelection = lst_translatorSearchBox.getSelectionModel().getSelectedIndex();
-    String destinationNodeLongName = fuzzySearchTextList.get(currentSelection);
 
-    GregorianCalendar timeGetter = new GregorianCalendar();
-    timeGetter.getTime();
-    int requestID = 0;
-    int emp_assigned = 0;
+    String nodeID = fuzzySearchNodeListTranslator.get(currentSelection).getNodeID();
     String notes = txtf_translatorNotes.getText();
-    String nodeID = destinationNodeLongName;
-    GregorianCalendar timeRequested = timeGetter;
-    GregorianCalendar timeCompleted = timeGetter;
-    String status = "";
-    String language = txtf_translatorLocation.getText();
-
-    for (DbNode node : allFloorNodes) {
-      if (node.getLongName() == destinationNodeLongName) {
-        nodeID = node.getLongName();
-        break;
-      }
-    }
-    TranslatorRequest translatorRequest =
-        new TranslatorRequest(
-            requestID, emp_assigned, notes, nodeID, timeRequested, timeCompleted, status, language);
-    App.adminDataStorage.addToList(translatorRequest);
+    String language = txtf_language.getText();
+    int transReq = EmployeeController.addTransReq(notes, nodeID, language);
+    App.adminDataStorage.addToList(transReq);
   }
-
-  @FXML
-  public void loginWindow(MouseEvent e) throws IOException {}
 }
