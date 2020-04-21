@@ -133,14 +133,13 @@ public class EmployeeControllerTest {
   @Test
   public void testGetTransLang() throws DBException {
     LinkedList<Translator> translators = EmployeeController.getTransLang("Gnomish");
-    assertEquals(1, translators.size());
-    assertTrue(translators.get(0).getName().equals(fats.getName()));
-    //    assertTrue(
-    //        translators.get(0).getName().equals(fats.getName())
-    //            || translators.get(1).getName().equals(fats.getName()));
+    assertEquals(2, translators.size());
+    assertTrue(translators.contains(felix));
+    assertTrue(translators.contains(fats));
 
     translators = EmployeeController.getTransLang("Lojban");
     assertEquals(1, translators.size());
+    assertTrue(translators.contains(felix));
     // assertTrue(translators.contains(felix));
   }
 
