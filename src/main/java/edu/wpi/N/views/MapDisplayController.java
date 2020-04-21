@@ -9,12 +9,15 @@ import edu.wpi.N.database.DbController;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Doctor;
 import edu.wpi.N.entities.Path;
+import edu.wpi.N.qrcontrol.QRGenerator;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -33,7 +36,7 @@ import javafx.scene.shape.Line;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class MapDisplayController implements Controller {
+public class MapDisplayController extends QRGenerator implements Controller {
   private App mainApp;
   final float BAR_WIDTH = 300;
   final float IMAGE_WIDTH = 2475;
@@ -85,6 +88,10 @@ public class MapDisplayController implements Controller {
   @FXML ListView lst_laundryLocation;
   @FXML ListView lst_translatorSearchBox;
 
+  // QR directions
+  @FXML ImageView img_qrDirections;
+  @FXML Pane pn_directionsBox;
+
   LinkedList<DbNode> allFloorNodes; // stores all the nodes on the floor
   LinkedList<DbNode> selectedNodes; // stores all the selected nodes on the map
   LinkedList<String> longNamesList = new LinkedList<>(); // Stores Floor Node names
@@ -111,6 +118,7 @@ public class MapDisplayController implements Controller {
   }
 
   public void initialize() throws DBException {
+    clampPanning(0, 0);
     selectedNodes = new LinkedList<DbNode>();
     allFloorNodes = DbController.floorNodes(4, "Faulkner");
     masterNodes = HashBiMap.create();
@@ -136,6 +144,7 @@ public class MapDisplayController implements Controller {
     mapNode.setFill(Color.PURPLE);
     mapNode.setOpacity(0.7);
     mapNode.setOnMouseClicked(mouseEvent -> this.onMapNodeClicked(mapNode));
+    mapNode.setCursor(Cursor.HAND); // Cursor points when over nodes
     return mapNode;
   }
 
@@ -158,8 +167,11 @@ public class MapDisplayController implements Controller {
     DbNode secondNode = selectedNodes.get(1);
 
     Path path = Pathfinder.findPath(firstNode.getNodeID(), secondNode.getNodeID());
-    LinkedList<DbNode> pathNodes = path.getPath();
-    drawPath(pathNodes);
+    if (path != null) {
+      LinkedList<DbNode> pathNodes = path.getPath();
+      drawPath(pathNodes);
+      GenerateQRDirections(path);
+    }
 
     for (Circle mapNode : masterNodes.keySet()) {
       mapNode.setDisable(true);
@@ -186,6 +198,7 @@ public class MapDisplayController implements Controller {
 
   @FXML
   private void onResetClicked(MouseEvent event) throws Exception {
+    pn_directionsBox.setVisible(false);
     for (Circle mapNode : masterNodes.keySet()) {
       mapNode.setFill(Color.PURPLE);
       mapNode.setDisable(false);
@@ -236,6 +249,7 @@ public class MapDisplayController implements Controller {
   @FXML
   private void mapClickHandler(MouseEvent event) throws IOException {
     if (event.getSource() == pn_movableMap) {
+      pn_movableMap.setCursor(Cursor.CLOSED_HAND);
       clickStartX = event.getSceneX();
       clickStartY = event.getSceneY();
     }
@@ -244,6 +258,7 @@ public class MapDisplayController implements Controller {
   @FXML
   private void mapDragHandler(MouseEvent event) throws IOException {
     if (event.getSource() == pn_movableMap) {
+
       double dragDeltaX = event.getSceneX() - clickStartX;
       double dragDeltaY = event.getSceneY() - clickStartY;
 
@@ -252,6 +267,11 @@ public class MapDisplayController implements Controller {
       clickStartX = event.getSceneX();
       clickStartY = event.getSceneY();
     }
+  }
+
+  @FXML
+  private void mapReleaseHandler(MouseEvent event) throws IOException {
+    pn_movableMap.setCursor(Cursor.OPEN_HAND);
   }
 
   private void clampPanning(double deltaX, double deltaY) {
@@ -301,8 +321,11 @@ public class MapDisplayController implements Controller {
   private void onNearestBathroomClicked(MouseEvent event) throws Exception {
     onResetClicked(event);
     Path pathToBathroom = Pathfinder.findQuickAccess(defaultNode, "REST");
-    LinkedList<DbNode> pathNodes = pathToBathroom.getPath();
-    drawPath(pathNodes);
+    if (pathToBathroom != null) {
+      LinkedList<DbNode> pathNodes = pathToBathroom.getPath();
+      drawPath(pathNodes);
+      GenerateQRDirections(pathToBathroom);
+    }
   }
 
   @FXML
@@ -408,4 +431,14 @@ public class MapDisplayController implements Controller {
 
   @FXML
   public void loginWindow(MouseEvent e) throws IOException {}
+
+  private void GenerateQRDirections(Path path) {
+    try {
+      ArrayList<String> directions = path.getDirections();
+      img_qrDirections.setImage(generateImage(directions, false));
+      pn_directionsBox.setVisible(true);
+    } catch (DBException e) {
+      e.printStackTrace();
+    }
+  }
 }

@@ -61,8 +61,8 @@ public class LoginController extends QRReader implements Controller {
     } else if (event.getSource() == btn_cancel) {
 
       cancelScan();
-      panel.pause();
-      panel.setVisible(false);
+      panel.stop();
+      panel.getWebcam().close();
 
       ((Node) (event.getSource())).getScene().getWindow().hide();
       loggedin = false;
@@ -76,8 +76,8 @@ public class LoginController extends QRReader implements Controller {
       pn_swingSpot.getScene().getWindow().hide();
 
       cancelScan();
-      panel.pause();
-      panel.setVisible(false);
+      panel.stop();
+      panel.getWebcam().close();
 
       try {
         Stage stage = new Stage();
