@@ -58,8 +58,14 @@ public class AdminController implements Initializable, Controller {
   @Override
   public void initialize(URL location, ResourceBundle resourceBundle) {
     if (App.adminDataStorage.newData != null) {
-      LinkedList<Request> reqs = EmployeeController.getOpenRequests();
-      tableData.setAll(reqs);
+      try {
+        LinkedList<Request> reqs = EmployeeController.getOpenRequests();
+        tableData.setAll(reqs);
+      } catch (DBException e) {
+        Alert newAlert = new Alert(Alert.AlertType.ERROR);
+        newAlert.setContentText(e.getMessage());
+        newAlert.show();
+      }
 
       TableColumn<Request, Integer> requestID = new TableColumn<>("ID");
       TableColumn<Request, Employee> emp_assigned = new TableColumn<>("Assigned");
