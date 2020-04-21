@@ -124,6 +124,7 @@ public class EmployeeController {
    */
   public static Employee getEmployee(int id) throws DBException {
     try {
+      if (id <= 0) return null; // handle case of unassigned employee without printing anything
       String query = "SELECT * FROM employees WHERE employeeID = ?";
       PreparedStatement stmt = con.prepareStatement(query);
       stmt.setInt(1, id);
@@ -581,8 +582,16 @@ public class EmployeeController {
    */
   public static void completeRequest(int requestID) throws DBException {
     try {
-      String query = "UPDATE request SET status = 'DONE', timeCompleted = ? WHERE requestID = ?";
+      String query = "SELECT status FROM request WHERE requestID = ?";
       PreparedStatement stmt = con.prepareStatement(query);
+      stmt.setInt(1, requestID);
+      ResultSet rs = stmt.executeQuery();
+      rs.next();
+      if (!rs.getString("status").equals("OPEN")) {
+        throw new DBException("That request isn't open!");
+      }
+      query = "UPDATE request SET status = 'DONE', timeCompleted = ? WHERE requestID = ?";
+      stmt = con.prepareStatement(query);
       stmt.setTimestamp(1, new Timestamp(new Date().getTime()));
       stmt.setInt(2, requestID);
       stmt.executeUpdate();
@@ -662,8 +671,17 @@ public class EmployeeController {
    */
   public static void denyRequest(int requestID) throws DBException {
     try {
-      String query = "UPDATE request SET status = 'DENY', timeCompleted = ? WHERE requestID = ?";
+      String query = "SELECT status FROM request WHERE requestID = ?";
       PreparedStatement stmt = con.prepareStatement(query);
+      stmt.setInt(1, requestID);
+      ResultSet rs = stmt.executeQuery();
+      rs.next();
+      if (!rs.getString("status").equals("OPEN")) {
+        throw new DBException("That request isn't open!");
+      }
+
+      query = "UPDATE request SET status = 'DENY', timeCompleted = ? WHERE requestID = ?";
+      stmt = con.prepareStatement(query);
       stmt.setTimestamp(1, new Timestamp(new Date().getTime()));
       stmt.setInt(2, requestID);
       stmt.executeUpdate();

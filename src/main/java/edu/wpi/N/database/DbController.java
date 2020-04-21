@@ -50,8 +50,10 @@ public class DbController {
       stmt.setInt(4, floor);
       stmt.setString(5, building);
       stmt.setString(6, nodeType);
-      stmt.setString(7, longName.replace("\'", "\\'"));
-      stmt.setString(8, shortName.replace("\'", "\\'"));
+      // stmt.setString(7, longName.replace("\'", "\\'"));
+      // stmt.setString(8, shortName.replace("\'", "\\'"));
+      stmt.setString(7, longName);
+      stmt.setString(8, shortName);
       stmt.setString(9, String.valueOf(teamAssigned));
       stmt.executeUpdate();
       // System.out.println("Values Inserted");
@@ -377,25 +379,21 @@ public class DbController {
     try {
       String nodeID =
           "I" + nodeType.toUpperCase() + nextAvailNum(nodeType) + String.format("%02d", floor);
-      String query =
-          "INSERT INTO nodes VALUES ('"
-              + nodeID
-              + "', "
-              + x
-              + ","
-              + y
-              + ","
-              + floor
-              + ",'"
-              + building
-              + "','"
-              + nodeType
-              + "','"
-              + longName.replace("'", "\\'")
-              + "','"
-              + shortName.replace("'", "\\'")
-              + "','I')";
-      statement.execute(query);
+      String query = "INSERT INTO nodes VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+      PreparedStatement stmt = con.prepareStatement(query);
+      stmt.setString(1, nodeID);
+      stmt.setInt(2, x);
+      stmt.setInt(3, y);
+      stmt.setInt(4, floor);
+      stmt.setString(5, building);
+      stmt.setString(6, nodeType);
+      // stmt.setString(7, longName.replace("\'", "\\'"));
+      // stmt.setString(8, shortName.replace("\'", "\\'"));
+      stmt.setString(7, longName);
+      stmt.setString(8, shortName);
+      stmt.setString(9, "I");
+      stmt.executeUpdate();
+      // System.out.println("Values Inserted");
       return getNode(nodeID);
     } catch (SQLException e) {
       e.printStackTrace();
