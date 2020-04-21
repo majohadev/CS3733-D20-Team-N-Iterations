@@ -163,6 +163,7 @@ public class Directions {
       return EXITING;
     } else {
       // System.out.println(Math.abs(getAngle(i) - getAngle(i - 1)));
+
       return CONTINUING;
     }
   }
