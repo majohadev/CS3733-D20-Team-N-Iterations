@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="462.0" maxWidth="742.0" prefHeight="462.0" prefWidth="742.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.DataEditorController">
+   <children>
+      <Button fx:id="btn_select" layoutX="109.0" layoutY="81.0" mnemonicParsing="false" onMouseClicked="#onSelectClicked" text="Select File">
+         <font>
+            <Font name="Calibri" size="14.0" />
+         </font></Button>
+      <Label layoutX="336.0" layoutY="45.0" prefHeight="26.0" prefWidth="131.0" text="Import Node CSV FIle">
+         <font>
+            <Font name="Calibri" size="14.0" />
+         </font></Label>
+      <Label fx:id="lbl_filePath" disable="true" layoutX="218.0" layoutY="82.0" prefHeight="25.0" prefWidth="368.0" style="-fx-border-color: BLACK;" text="File Path" />
+      <Button fx:id="btn_done" layoutX="647.0" layoutY="404.0" mnemonicParsing="false" onMouseClicked="#onDoneClicked" prefHeight="25.0" prefWidth="62.0" text="Close" />
+      <Label layoutX="338.0" layoutY="148.0" prefHeight="26.0" prefWidth="131.0" text="Import Edge CSV File">
+         <font>
+            <Font name="Calibri" size="14.0" />
+         </font></Label>
+      <Button fx:id="btn_select_edges" layoutX="109.0" layoutY="188.0" mnemonicParsing="false" onMouseClicked="#onSelectEdgesClicked" text="Select File">
+         <font>
+            <Font name="Calibri" size="14.0" />
+         </font></Button>
+      <Label fx:id="lbl_filePath_edges" disable="true" layoutX="220.0" layoutY="188.0" prefHeight="25.0" prefWidth="368.0" style="-fx-border-color: BLACK;" text="File Path" />
+      <Button fx:id="btn_default" layoutX="300.0" layoutY="257.0" mnemonicParsing="false" onMouseClicked="#onDefaultClicked" prefHeight="27.0" prefWidth="175.0" text="Reset FIle Paths To Default">
+         <font>
+            <Font name="Calibri" size="14.0" />
+         </font></Button>
+      <Button fx:id="btn_uploadnode" layoutX="625.0" layoutY="81.0" mnemonicParsing="false" onMouseClicked="#onUploadNodesClicked" text="Upload">
+         <font>
+            <Font name="Calibri" size="14.0" />
+         </font>
+      </Button>
+      <Button fx:id="btn_uploadedge" layoutX="625.0" layoutY="187.0" mnemonicParsing="false" onMouseClicked="#onUploadEdgesClicked" text="Upload">
+         <font>
+            <Font name="Calibri" size="14.0" />
+         </font>
+      </Button>
+      <Label layoutX="374.0" layoutY="326.0">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <Label layoutX="48.0" layoutY="346.0" prefHeight="26.0" prefWidth="198.0" text="Download Current Node CSV File">
+         <font>
+            <Font name="Calibri" size="14.0" />
+         </font>
+      </Label>
+      <Button fx:id="btn_downloadnode" layoutX="96.0" layoutY="390.0" mnemonicParsing="false" onMouseClicked="#onDownloadNodesClicked" text="Download">
+         <font>
+            <Font name="Calibri" size="14.0" />
+         </font>
+      </Button>
+      <Label layoutX="288.0" layoutY="346.0" prefHeight="26.0" prefWidth="198.0" text="Download Current Edge CSV File">
+         <font>
+            <Font name="Calibri" size="14.0" />
+         </font>
+      </Label>
+      <Button fx:id="btn_downloadedge" layoutX="348.0" layoutY="390.0" mnemonicParsing="false" onMouseClicked="#onDownloadEdgesClicked" text="Download">
+         <font>
+            <Font name="Calibri" size="14.0" />
+         </font>
+      </Button>
+      <ImageView fitHeight="88.0" fitWidth="86.0" layoutX="9.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/Brigham_and_Womens_Hospital_logo.svg.png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>

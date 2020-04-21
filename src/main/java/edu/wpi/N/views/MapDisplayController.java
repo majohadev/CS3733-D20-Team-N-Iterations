@@ -7,6 +7,7 @@ import edu.wpi.N.algorithms.Pathfinder;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.DbController;
 import edu.wpi.N.entities.DbNode;
+import edu.wpi.N.entities.Doctor;
 import edu.wpi.N.entities.Path;
 import java.io.IOException;
 import java.util.LinkedList;
@@ -17,7 +18,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
@@ -65,7 +65,8 @@ public class MapDisplayController implements Controller {
   @FXML Button btn_findlocationpath;
 
   // Sidebar search by doctor initializations
-  @FXML ComboBox cmbo_doctorname;
+  @FXML TextField txtf_doctorname;
+  @FXML ListView lst_doctornames;
   @FXML Button btn_searchdoc;
   @FXML ListView lst_doctorlocations;
   @FXML Button btn_findpathdoc;
@@ -92,10 +93,14 @@ public class MapDisplayController implements Controller {
       FXCollections.observableArrayList(); // List that fills TextViews
   private LinkedList<DbNode> fuzzySearchNodeList =
       new LinkedList<>(); // List to store output of fuzzy search functions
+  private ObservableList<String> fuzzySearchDoctorList =
+      FXCollections.observableArrayList(); // List that fills TextViews
 
   private LinkedList<DbNode> fuzzySearchNodeListLaundry = new LinkedList<>();
   private LinkedList<DbNode> fuzzySearchNodeListTranslator = new LinkedList<>();
   private LinkedList<DbNode> getFuzzySearchNodeList;
+  private LinkedList<Doctor> searchedDoc = new LinkedList<>();
+  private LinkedList<DbNode> doctorNodes = new LinkedList<>();
 
   private DbNode defaultNode = new DbNode();
 
@@ -110,6 +115,7 @@ public class MapDisplayController implements Controller {
     allFloorNodes = DbController.floorNodes(4, "Faulkner");
     masterNodes = HashBiMap.create();
     defaultNode = DbController.getNode("NHALL00804");
+    if (defaultNode == null) defaultNode = allFloorNodes.getFirst();
     populateMap();
   }
 
@@ -284,10 +290,8 @@ public class MapDisplayController implements Controller {
   private void onLocationPathFindClicked(MouseEvent event) throws Exception {
     pn_path.getChildren().removeIf(node -> node instanceof Line);
     int currentSelection = lst_locationsorted.getSelectionModel().getSelectedIndex();
-    String destinationNodeLongName = fuzzySearchTextList.get(currentSelection);
-    LinkedList<DbNode> destinationNode =
-        DbController.searchVisNode(currentFloor, null, null, destinationNodeLongName);
-    selectedNodes.add(destinationNode.getFirst());
+    DbNode destinationNode = fuzzySearchNodeList.get(currentSelection);
+    selectedNodes.add(destinationNode);
     if (selectedNodes.size() < 2) selectedNodes.add(defaultNode);
     onBtnFindClicked(event);
     selectedNodes.clear();
@@ -302,8 +306,44 @@ public class MapDisplayController implements Controller {
   }
 
   @FXML
-  private void searchByDoctorTextFill(KeyEvent inputMethodEvent) throws DBException {
-    String currentText = cmbo_doctorname.getValue().toString();
+  private void searchByDoctorTextFill(KeyEvent keyEvent) throws DBException {
+    String currentText = txtf_doctorname.getText();
+    if (currentText.length() > 1) {
+      searchedDoc = FuzzySearchAlgorithm.suggestDoctors(currentText);
+      LinkedList<String> fuzzySearchStringList = new LinkedList<>();
+      for (Doctor doctors : searchedDoc) {
+        fuzzySearchStringList.add(doctors.getName());
+      }
+      fuzzySearchDoctorList = FXCollections.observableList(fuzzySearchStringList);
+      lst_doctornames.setItems(fuzzySearchDoctorList);
+    }
+  }
+
+  @FXML
+  private void onFindDoctorClicked(MouseEvent event) throws Exception {
+    int currentSelection = lst_doctornames.getSelectionModel().getSelectedIndex();
+    System.out.println(currentSelection);
+    Doctor selectedDoc = searchedDoc.get(currentSelection);
+    System.out.println(selectedDoc);
+    doctorNodes = selectedDoc.getLoc();
+    LinkedList<String> docNames = new LinkedList<>();
+    for (DbNode nodes : doctorNodes) {
+      docNames.add(nodes.getLongName());
+    }
+    ObservableList<String> doctorsLocations = FXCollections.observableList(docNames);
+    lst_doctorlocations.setItems(doctorsLocations);
+  }
+
+  // Upon clicking find path to location button call this method
+  @FXML
+  private void onDoctorPathFindClicked(MouseEvent event) throws Exception {
+    pn_path.getChildren().removeIf(node -> node instanceof Line);
+    int currentSelection = lst_doctorlocations.getSelectionModel().getSelectedIndex();
+    DbNode destinationNode = doctorNodes.get(currentSelection);
+    selectedNodes.add(destinationNode);
+    if (selectedNodes.size() < 2) selectedNodes.add(defaultNode);
+    onBtnFindClicked(event);
+    selectedNodes.clear();
   }
 
   public void fuzzySearchLaundryRequest(KeyEvent keyInput) throws DBException {
