@@ -44,6 +44,8 @@ public class CSVParseEmployeesTest {
     languages.add("Spanish");
     Translator annie = new Translator(2, "Annie Fan", languages);
 
+    Assertions.assertTrue(actualTranslatorEmployees.size() == 6);
+
     // The test itself. Find translator with expected name
     boolean foundExpectedName = false;
     for (Translator translator : actualTranslatorEmployees) {
@@ -74,6 +76,7 @@ public class CSVParseEmployeesTest {
     Laundry landrEmployeeName = new Laundry(6, "Mike Laks");
 
     Assertions.assertTrue(actualLandries.contains(landrEmployeeName));
+    Assertions.assertTrue(actualLandries.size() == 4);
   }
 
   @AfterAll
