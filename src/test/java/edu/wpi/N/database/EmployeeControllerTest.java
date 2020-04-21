@@ -164,6 +164,7 @@ public class EmployeeControllerTest {
             new Service("00:00", "00:00", "Laundry", "Make a request for laundry services!")));
   }
 
+  /*
   @Test
   public void testassigntoRequest() throws DBException {
     EmployeeController.assignToRequest(felix.getID(), transReqID1);
@@ -175,6 +176,7 @@ public class EmployeeControllerTest {
         });
     assertEquals(0, EmployeeController.getRequest(laundReqID1).getEmp_assigned());
   }
+  */
 
   @Test
   public void testAllLangs() throws DBException {
