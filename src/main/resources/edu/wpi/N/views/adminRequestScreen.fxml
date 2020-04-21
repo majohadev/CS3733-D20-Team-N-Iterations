@@ -2,6 +2,8 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -9,17 +11,17 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxWidth="-Infinity" minWidth="-Infinity" prefHeight="622.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.AdminController">
+<AnchorPane maxWidth="-Infinity" minWidth="-Infinity" prefHeight="553.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.AdminController">
     <children>
         <Label layoutX="413.0" layoutY="14.0" text="Service Requests" AnchorPane.leftAnchor="413.0">
             <font>
                 <Font name="Calibri" size="32.0" />
             </font>
         </Label>
-        <Button fx:id="btn_Deny" layoutX="679.0" layoutY="579.0" mnemonicParsing="false" onMouseClicked="#acceptRow" text="Deny" AnchorPane.rightAnchor="27.0" />
-        <Button fx:id="btn_Accept" layoutX="606.0" layoutY="579.0" mnemonicParsing="false" onMouseClicked="#acceptRow" text="Accept" AnchorPane.rightAnchor="91.0" />
-        <Button fx:id="btn_logout" layoutX="28.0" layoutY="579.0" mnemonicParsing="false" onMouseClicked="#closeScreen" text="Logout" AnchorPane.leftAnchor="28.0" />
-        <TableView fx:id="tbMockData" layoutX="334.0" layoutY="61.0" maxWidth="401.0" minWidth="400.0" prefHeight="500.0" prefWidth="401.0" AnchorPane.leftAnchor="322.0" AnchorPane.rightAnchor="27.0" AnchorPane.topAnchor="61.0" />
+        <Button fx:id="btn_Deny" layoutX="679.0" layoutY="513.0" mnemonicParsing="false" onMouseClicked="#acceptRow" text="Deny" AnchorPane.rightAnchor="27.0" />
+        <Button fx:id="btn_Accept" layoutX="606.0" layoutY="513.0" mnemonicParsing="false" onMouseClicked="#acceptRow" text="Accept" AnchorPane.rightAnchor="91.0" />
+        <Button fx:id="btn_logout" layoutX="38.0" layoutY="513.0" mnemonicParsing="false" onMouseClicked="#closeScreen" text="Logout" AnchorPane.leftAnchor="38.0" />
+        <TableView fx:id="tbMockData" layoutX="334.0" layoutY="61.0" maxWidth="401.0" minWidth="400.0" prefHeight="441.0" prefWidth="401.0" AnchorPane.leftAnchor="322.0" AnchorPane.rightAnchor="27.0" AnchorPane.topAnchor="61.0" />
         <Line endX="100.0" layoutX="138.0" layoutY="173.0" startX="-100.0" AnchorPane.leftAnchor="37.5" AnchorPane.topAnchor="172.5" />
       <Button fx:id="btn_editMap" layoutX="43.0" layoutY="182.0" mnemonicParsing="false" onMouseClicked="#editMap" prefHeight="50.0" prefWidth="190.0" text="Edit Map">
          <font>
@@ -31,5 +33,17 @@
             <Image url="@../images/Brigham_and_Womens_Hospital_logo.svg.png" />
          </image>
       </ImageView>
+      <MenuButton layoutX="96.0" layoutY="245.0" mnemonicParsing="false" text="Translator">
+        <items>
+          <MenuItem mnemonicParsing="false" text="Action 1" />
+          <MenuItem mnemonicParsing="false" text="Action 2" />
+        </items>
+      </MenuButton>
+      <MenuButton fx:id="mnu_Employee" layoutX="97.0" layoutY="286.0" mnemonicParsing="false" text="Employee">
+        <items>
+          <MenuItem mnemonicParsing="false" text="Action 1" />
+          <MenuItem mnemonicParsing="false" text="Action 2" />
+        </items>
+      </MenuButton>
     </children>
 </AnchorPane>

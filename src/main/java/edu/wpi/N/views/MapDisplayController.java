@@ -16,10 +16,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -81,6 +78,9 @@ public class MapDisplayController implements Controller {
 
   @FXML TextField txtf_translatorLocation;
   @FXML TextField txtf_laundryLocation;
+  @FXML TextArea txtf_laundryNotes;
+  @FXML TextArea txtf_translatorNotes;
+  @FXML TextField txtf_language;
   @FXML ListView lst_laundryLocation;
   @FXML ListView lst_translatorSearchBox;
 
@@ -361,9 +361,60 @@ public class MapDisplayController implements Controller {
 
   /*
   @FXML
-  public void createNewLaundry(){
-    Laundry newLaundry = new Laundry()
+  public Laundry createNewLaundry() {
+    GregorianCalendar timeGetter = new GregorianCalendar();
+    timeGetter.getTime();
+    int requestID = 0;
+    int emp_assigned = 0;
+    String notes = txtf_laundryNotes.getText();
+    String nodeID;
+    GregorianCalendar timeRequested = timeGetter;
+    GregorianCalendar timeCompleted = null;
+    String status = null;
+
+    for (DbNode node : allFloorNodes) {
+      if (node.getLongName() == txtf_laundryLocationLocation.getText()) {
+        nodeID = node.getLongName();
+        break;
+      }
+    }
+
+    Laundry newLaundry =
+        new Laundry(requestID, emp_assigned, notes, nodeID, timeRequested, timeCompleted, status);
+    return newLandry;
+  }
+
+  @FXML
+  public Translator createNewTranslator() {
+    GregorianCalendar timeGetter = new GregorianCalendar();
+    timeGetter.getTime();
+    int requestID = 0;
+    int emp_assigned = 0;
+    String notes = txtf_translatorNotes.getText();
+    String nodeID;
+    GregorianCalendar timeRequested = timeGetter;
+    GregorianCalendar timeCompleted = null;
+    String status = null;
+    String language = txtf_translatorLocation.getText();
+
+    for (DbNode node : allFloorNodes) {
+      if (node.getLongName() == txtf_translatorLocation.getText()) {
+        nodeID = node.getLongName();
+        break;
+      }
+    }
+    Translator newTranslator =
+        new Translator(
+            requestID, emp_assigned, notes, nodeID, timeRequested, timeCompleted, status, language);
+    return newTranslator;
   }
    */
 
+  public void createNewTranslator(){
+
+  }
+
+  public void createNewLaundry(){
+
+  }
 }

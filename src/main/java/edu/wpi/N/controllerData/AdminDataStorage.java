@@ -7,8 +7,8 @@ import java.util.ArrayList;
 public class AdminDataStorage {
 
   public AdminDataStorage() {
-    newData.add(new MockData("Hello"));
-    newData.add(new MockData("Goodbye"));
+    newData.add(new MockData(0, 0, "", "location", null, null, "", ""));
+    newData.add(new MockData(10, 24, "", "location", null, null, "", ""));
   }
 
   public ArrayList<MockData> newData = new ArrayList<MockData>();
@@ -16,5 +16,12 @@ public class AdminDataStorage {
   public AdminController storeAdminController(AdminController controller) {
     AdminController newController = controller;
     return newController;
+  }
+
+  public ArrayList<MockData> addToList(){
+    ArrayList<MockData> updatedData = new ArrayList<MockData>();
+
+
+    return updatedData;
   }
 }
