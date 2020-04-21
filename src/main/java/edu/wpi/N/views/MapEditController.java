@@ -166,15 +166,12 @@ public class MapEditController implements Controller {
             (observable, oldValue, newValue) -> {
               if (newValue != null) {
                 if (newValue.equals(pn_nodes_add)) {
-                  System.out.println("NODES ADD");
                   editMode = EditMode.NODES_ADD;
                   resetPanes();
                 } else if (newValue.equals(pn_nodes_delete)) {
-                  System.out.println("NODES DELETE");
                   editMode = EditMode.NODES_DELETE;
                   resetPanes();
                 } else if (newValue.equals(pn_nodes_edit)) {
-                  System.out.println("NODES EDIT");
                   editMode = EditMode.NODES_EDIT;
                   resetPanes();
                 }
@@ -190,16 +187,13 @@ public class MapEditController implements Controller {
               if (newValue != null) {
                 if (newValue.equals(pn_edges_add)) {
                   resetPanes();
-                  System.out.println("EDGES ADD");
                   editMode = EditMode.EDGES_ADD;
                   checkBoxListener(chk_EdgesAddShowFirst);
                   checkBoxListener(chk_EdgesAddShowSecond);
                 } else if (newValue.equals(pn_edges_delete)) {
-                  System.out.println("EDGES DELETE");
                   editMode = EditMode.EDGES_DELETE;
                   resetPanes();
                 } else if (newValue.equals(pn_edges_edit)) {
-                  System.out.println("EDGES EDIT");
                   editMode = EditMode.EDGES_EDIT;
                   resetPanes();
                 }
@@ -314,7 +308,6 @@ public class MapEditController implements Controller {
     String longName = txt_add_longName.getText();
     String shortName = txt_add_shortName.getText();
     String type = (String) cb_NodesAddType.getValue();
-    System.out.println(type);
     if (longName.equals("") || shortName.equals("") || type == null) {
       displayErrorMessage("Invalid Input");
       return;
