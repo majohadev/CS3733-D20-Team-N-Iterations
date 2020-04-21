@@ -176,6 +176,13 @@ public class EmployeeControllerTest {
     assertEquals(0, EmployeeController.getRequest(laundReqID1).getEmp_assigned());
   }
 
+  @Test
+  public void testAllLangs() throws DBException {
+    LinkedList<String> langs = EmployeeController.getLanguages();
+    assertTrue(langs.contains("Gnomish"));
+    assertTrue(langs.contains("Lojban"));
+  }
+
   @AfterAll
   public static void cleanup() throws DBException {
     DbController.clearNodes();

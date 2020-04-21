@@ -306,7 +306,7 @@ public class Directions {
   /**
    * Takes a path and returns written directions for that path
    *
-   * @return ArrayList<String>, each String is a line of directions
+   * @return ArrayList of strings, each String is a line of directions
    */
   public ArrayList<String> getDirections() throws DBException {
     this.generateDirections();
