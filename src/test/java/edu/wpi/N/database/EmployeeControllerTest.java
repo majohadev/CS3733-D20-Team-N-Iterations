@@ -82,13 +82,13 @@ public class EmployeeControllerTest {
   @Test
   public void testaddTransReq() throws DBException {
     DbController.addNode(
-        "NDEPT00104", 100, 100, 4, "Faulkner", "DEPT", "Longname", "shortname", 'N');
-    EmployeeController.addTransReq(
-        "Need a Korean translator for prescription",
-        DbController.getNode("NDEPT00104").getNodeID(),
-        "Korean");
-    assertEquals("NDEPT00104", EmployeeController.getRequests().get(1).getNodeID());
-    DbController.deleteNode("NDEPT00104");
+        "NDEPT00104", 100, 100, 4, "Faulkner", "DEPT", "Longname", "shortname", 'N');git
+    int id =
+        EmployeeController.addTransReq(
+            "Need a Korean translator for prescription",
+            DbController.getNode("NDEPT00104").getNodeID(),
+            "Korean");
+    assertEquals("NDEPT00104", EmployeeController.getRequest(id).getNodeID());
   }
 
   @Test
