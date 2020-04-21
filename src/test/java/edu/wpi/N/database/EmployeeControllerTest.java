@@ -88,6 +88,7 @@ public class EmployeeControllerTest {
         DbController.getNode("NDEPT00104").getNodeID(),
         "Korean");
     assertEquals("NDEPT00104", EmployeeController.getRequests().get(1).getNodeID());
+    DbController.deleteNode("NDEPT00104");
   }
 
   @Test
