@@ -29,13 +29,13 @@ public class FuzzySearchDoctorsTest {
     LinkedList<DbNode> ivanLocations = new LinkedList<DbNode>();
     ivanLocations.add(DbController.getNode("BHALL03802"));
     ivanLocations.add(DbController.getNode("BDEPT00202"));
-    Doctor ivan = new Doctor("Ivan Eroshenko", "Prostate Specialist", ivanLocations);
+    Doctor ivan = new Doctor(1, "Ivan Eroshenko", "Prostate Specialist", ivanLocations);
 
     // Create Other Doctors
-    Doctor annie = new Doctor("Annie Eroshenko", "Sleep Technologist", new LinkedList<DbNode>());
-    Doctor mike = new Doctor("Michael Laks", "Sex Surrogate", ivanLocations);
-    Doctor chris = new Doctor("Chris Lee", "Traveling Phlebotomist", new LinkedList<DbNode>());
-    Doctor evan = new Doctor("Evan Llewellyn", "Egg-Broker", null);
+    Doctor annie = new Doctor(2, "Annie Eroshenko", "Sleep Technologist", new LinkedList<DbNode>());
+    Doctor mike = new Doctor(3, "Michael Laks", "Sex Surrogate", ivanLocations);
+    Doctor chris = new Doctor(4, "Chris Lee", "Traveling Phlebotomist", new LinkedList<DbNode>());
+    Doctor evan = new Doctor(5, "Evan Llewellyn", "Egg-Broker", null);
 
     DoctorController.addDoctor(ivan.getName(), ivan.getField(), ivan.getLoc());
     DoctorController.addDoctor(annie.getName(), annie.getField(), annie.getLoc());
@@ -52,13 +52,13 @@ public class FuzzySearchDoctorsTest {
     LinkedList<DbNode> ivanLocations = new LinkedList<DbNode>();
     ivanLocations.add(DbController.getNode("BHALL03802"));
     ivanLocations.add(DbController.getNode("BDEPT00202"));
-    Doctor ivan = new Doctor("Ivan Eroshenko", "Prostate Specialist", ivanLocations);
+    Doctor ivan = new Doctor(1, "Ivan Eroshenko", "Prostate Specialist", ivanLocations);
 
     // Create Other Doctors
-    Doctor annie = new Doctor("Annie Eroshenko", "Sleep Technologist", new LinkedList<DbNode>());
-    Doctor mike = new Doctor("Michael Laks", "Sex Surrogate", ivanLocations);
-    Doctor chris = new Doctor("Chris Lee", "Traveling Phlebotomist", new LinkedList<DbNode>());
-    Doctor evan = new Doctor("Evan Llewellyn", "Egg-Broker", null);
+    Doctor annie = new Doctor(2, "Annie Eroshenko", "Sleep Technologist", new LinkedList<DbNode>());
+    Doctor mike = new Doctor(3, "Michael Laks", "Sex Surrogate", ivanLocations);
+    Doctor chris = new Doctor(4, "Chris Lee", "Traveling Phlebotomist", new LinkedList<DbNode>());
+    Doctor evan = new Doctor(5, "Evan Llewellyn", "Egg-Broker", null);
 
     testDoctors.add(ivan);
     testDoctors.add(annie);
