@@ -64,97 +64,80 @@ public class DbController {
     }
   }
 
-  /**
-   * Standardizes all of the nodeIDs in the database
-   */
+  /** Standardizes all of the nodeIDs in the database */
   // Noah
   public static void fixNodes() throws DBException {
-    try{
+    try {
+      String query = "SELECT nodeID, floor, nodeType, teamAssigned FROM nodes";
+      PreparedStatement state = con.prepareStatement(query);
+      ResultSet nodes = state.executeQuery();
+      while (nodes.next()) {
         LinkedList<DbNode> edges = new LinkedList<DbNode>();
-        String query = "SELECT * FROM nodes";
-        PreparedStatement state = con.prepareStatement(query);
-        ResultSet nodes = state.executeQuery();
-        while(nodes.next()) {
-          String nodeID = nodes.getString("nodeID");
-          int x = nodes.getInt("xcoord");
-          int y = nodes.getInt("ycoord");
-          int floor = nodes.getInt("floor");
-          String building = nodes.getString("building");
-          String nodeType = nodes.getString("nodeType");
-          String longName = nodes.getString("longName");
-          String shortName = nodes.getString("shortName");
-          String teamAssigned = nodes.getString("teamAssigned");
-          String newID;
-          con.setAutoCommit(false);
-          if (!(nodeID.substring(0, 5) + nodeID.substring(8))
-                  .equals(teamAssigned + nodeType.toUpperCase() + String.format("%02d", floor))) {
-            if (nodeID.substring(1, 5).equals(nodeType)) {
-              newID = teamAssigned + nodeID.substring(1, 8) + String.format("%02d", floor);
-            } else {
-              newID = teamAssigned + nodeType.toUpperCase() + nextAvailNum(nodeType) + "0" + floor;
-            }
-          } else newID = nodeID;
-          if (!newID.equals(nodeID)) {
-            edges = getAdjacent(nodeID);
-            query = "DELETE FROM EDGES WHERE node1 = ? OR node2 = ?";
-            PreparedStatement stmt = con.prepareStatement(query);
-            stmt.setString(1, nodeID);
-            stmt.setString(2, nodeID);
-            stmt.executeUpdate();
+        String nodeID = nodes.getString("nodeID");
+        int floor = nodes.getInt("floor");
+        String nodeType = nodes.getString("nodeType");
+        String teamAssigned = nodes.getString("teamAssigned");
+        String newID;
+        con.setAutoCommit(false);
+        if (!(nodeID.substring(0, 5) + nodeID.substring(8))
+            .equals(teamAssigned + nodeType.toUpperCase() + String.format("%02d", floor))) {
+          if (nodeID.substring(1, 5).equals(nodeType)) {
+            newID = teamAssigned + nodeID.substring(1, 8) + String.format("%02d", floor);
+          } else {
+            newID = teamAssigned + nodeType.toUpperCase() + nextAvailNum(nodeType) + "0" + floor;
           }
-          query =
-                  "UPDATE nodes SET nodeID = ?, xcoord = ?, ycoord = ?, floor = ?, building = ?,"
-                          + " nodeType = ?, longName = ?, shortName = ?, teamAssigned = ? WHERE nodeID = ?";
+        } else newID = nodeID;
+        if (!newID.equals(nodeID)) {
+          edges = getAdjacent(nodeID);
+          query = "DELETE FROM EDGES WHERE node1 = ? OR node2 = ?";
           PreparedStatement stmt = con.prepareStatement(query);
-          stmt.setString(1, newID);
-          stmt.setInt(2, x);
-          stmt.setInt(3, y);
-          stmt.setInt(4, floor);
-          stmt.setString(5, building);
-          stmt.setString(6, nodeType);
-          stmt.setString(7, longName;
-          stmt.setString(8, shortName);
-          stmt.setString(9, teamAssigned);
-          stmt.setString(10, nodeID);
+          stmt.setString(1, nodeID);
+          stmt.setString(2, nodeID);
           stmt.executeUpdate();
-          Iterator<DbNode> it = edges.iterator();
-          while (it.hasNext()) {
-            addEdge(newID, it.next().getNodeID());
-          }
-          con.commit();
-          con.setAutoCommit(true);
         }
-      } catch (SQLException e) {
-        e.printStackTrace();
-        try {
-          con.rollback();
-          con.setAutoCommit(true);
-        } catch (SQLException ex) {
-          ex.printStackTrace();
-          throw new DBException("Unknown error: modifyNode", ex);
+        query = "UPDATE nodes SET nodeID = ? WHERE nodeID = ?";
+        PreparedStatement stmt = con.prepareStatement(query);
+        stmt.setString(1, newID);
+        stmt.setString(2, nodeID);
+        stmt.executeUpdate();
+        Iterator<DbNode> it = edges.iterator();
+        while (it.hasNext()) {
+          addEdge(newID, it.next().getNodeID());
         }
-        throw new DBException("Unknown error: modifyNode", e);
+        con.commit();
+        con.setAutoCommit(true);
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+      try {
+        con.rollback();
+        con.setAutoCommit(true);
+      } catch (SQLException ex) {
+        ex.printStackTrace();
+        throw new DBException("Unknown error: modifyNode", ex);
+      }
+      throw new DBException("Unknown error: modifyNode", e);
     }
   }
 
   public static boolean modifyNode(
-          String nodeID,
-          int x,
-          int y,
-          int floor,
-          String building,
-          String nodeType,
-          String longName,
-          String shortName,
-          char teamAssigned)
-          throws DBException {
+      String nodeID,
+      int x,
+      int y,
+      int floor,
+      String building,
+      String nodeType,
+      String longName,
+      String shortName,
+      char teamAssigned)
+      throws DBException {
     String newID;
     LinkedList<DbNode> edges = new LinkedList<DbNode>();
     String query;
     try {
       con.setAutoCommit(false);
       if (!(nodeID.substring(0, 5) + nodeID.substring(8))
-              .equals(teamAssigned + nodeType.toUpperCase() + String.format("%02d", floor))) {
+          .equals(teamAssigned + nodeType.toUpperCase() + String.format("%02d", floor))) {
         if (nodeID.substring(1, 5).equals(nodeType)) {
           newID = teamAssigned + nodeID.substring(1, 8) + String.format("%02d", floor);
         } else {
@@ -170,8 +153,8 @@ public class DbController {
         stmt.executeUpdate();
       }
       query =
-              "UPDATE nodes SET nodeID = ?, xcoord = ?, ycoord = ?, floor = ?, building = ?,"
-                      + " nodeType = ?, longName = ?, shortName = ?, teamAssigned = ? WHERE nodeID = ?";
+          "UPDATE nodes SET nodeID = ?, xcoord = ?, ycoord = ?, floor = ?, building = ?,"
+              + " nodeType = ?, longName = ?, shortName = ?, teamAssigned = ? WHERE nodeID = ?";
       PreparedStatement stmt = con.prepareStatement(query);
       stmt.setString(1, newID);
       stmt.setInt(2, x);
