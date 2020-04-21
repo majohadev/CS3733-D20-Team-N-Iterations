@@ -555,10 +555,11 @@ public class EmployeeController {
         throw new DBException(
             "Invalid kind of employee! That employee isn't authorized for that kind of job!");
       }
-      if(req instanceof TranslatorRequest){
+      if (req instanceof TranslatorRequest) {
         String language = ((TranslatorRequest) req).getLanguage();
-        if(!((Translator) emp).getLanguages().contains(language)){
-          throw new DBException("Invalid selection: That translator can't speak the requested langauge");
+        if (!((Translator) emp).getLanguages().contains(language)) {
+          throw new DBException(
+              "Invalid selection: That translator can't speak the requested langauge");
         }
       }
       String query = "UPDATE request SET assigned_eID = ? WHERE requestID = ?";

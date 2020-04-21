@@ -37,6 +37,7 @@ public class AdminController implements Initializable, Controller {
   @FXML ChoiceBox<Employee> cb_Employee;
   @FXML TableView<Request> tbMockData = new TableView<Request>();
   @FXML TableView<String> tb_languages = new TableView<String>();
+  @FXML CheckBox ch_requestFilter;
 
   ObservableList<Request> tableData = FXCollections.observableArrayList();
   ObservableList<String> languageData = FXCollections.observableArrayList();
@@ -68,9 +69,11 @@ public class AdminController implements Initializable, Controller {
       TableColumn<Request, GregorianCalendar> timeCompleted = new TableColumn<>("Time Completed");
       TableColumn<Request, String> status = new TableColumn<>("Status");
       TableColumn<Request, String> language = new TableColumn<>("Language");
+      TableColumn<Request, String> service = new TableColumn<>("Service");
 
       TableColumn<String, String> languages = new TableColumn<>("Languages");
-      languages.setMinWidth(100);
+      languages.setMinWidth(150);
+      language.setMaxWidth(150);
       languages.setCellValueFactory(new selfFactory<String>());
 
       requestID.setMinWidth(20);
@@ -92,9 +95,12 @@ public class AdminController implements Initializable, Controller {
           new PropertyValueFactory<Request, GregorianCalendar>("timeCompleted"));
       status.setCellValueFactory(new PropertyValueFactory<Request, String>("status"));
       language.setCellValueFactory(new PropertyValueFactory<Request, String>("language"));
+      service.setCellValueFactory(new PropertyValueFactory<Request, String>("serviceType"));
 
       tbMockData.setItems(tableData);
-      tbMockData.getColumns().addAll(requestID, emp_assigned, notes, nodeID, status, language);
+      tbMockData
+          .getColumns()
+          .addAll(requestID, service, emp_assigned, notes, nodeID, status, language);
       tb_languages.setItems(languageData);
       tb_languages.getColumns().addAll(languages);
       populateChoiceBox();
@@ -105,7 +111,25 @@ public class AdminController implements Initializable, Controller {
                 if (emp instanceof Translator) {
                   languageData.setAll(((Translator) emp).getLanguages());
                 } else {
-                  languageData.removeAll();
+                  languageData.setAll(new LinkedList<String>());
+                }
+              });
+      ch_requestFilter
+          .selectedProperty()
+          .addListener(
+              (ov, old, val) -> {
+                try {
+                  if (val) {
+                    LinkedList<Request> rqs = EmployeeController.getOpenRequests();
+                    tableData.setAll(rqs);
+                  } else {
+                    LinkedList<Request> rqs = EmployeeController.getRequests();
+                    tableData.setAll(rqs);
+                  }
+                } catch (DBException e) {
+                  Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                  errorAlert.setContentText(e.getMessage());
+                  errorAlert.show();
                 }
               });
 
@@ -131,15 +155,53 @@ public class AdminController implements Initializable, Controller {
   }
 
   @FXML
-  private void acceptRow(MouseEvent e) throws DBException {
-    if (e.getSource() == btn_Accept) {
-      EmployeeController.completeRequest(
-          tbMockData.getSelectionModel().getSelectedItems().get(0).getRequestID());
-      tbMockData.getItems().removeAll(tbMockData.getSelectionModel().getSelectedItem());
-    } else if (e.getSource() == btn_Deny) {
-      EmployeeController.denyRequest(
-          tbMockData.getSelectionModel().getSelectedItems().get(0).getRequestID());
-      tbMockData.getItems().removeAll(tbMockData.getSelectionModel().getSelectedItem());
+  private void acceptRow(MouseEvent e) {
+    try {
+      if (e.getSource() == btn_Accept
+          && (EmployeeController.getRequest(
+                      tbMockData.getSelectionModel().getSelectedItems().get(0).getRequestID())
+                  .getEmp_assigned()
+              != null)) {
+        EmployeeController.completeRequest(
+            tbMockData.getSelectionModel().getSelectedItems().get(0).getRequestID());
+
+        Alert acceptReq = new Alert(Alert.AlertType.CONFIRMATION);
+        acceptReq.setContentText("Request Accepted");
+        acceptReq.show();
+
+        if (ch_requestFilter.isSelected()) {
+          tbMockData.getItems().removeAll(tbMockData.getSelectionModel().getSelectedItem());
+        } else {
+          LinkedList<Request> reqs = EmployeeController.getRequests();
+          tableData.setAll(reqs);
+        }
+      } else if (e.getSource() == btn_Deny) { // This case needs a status check
+        EmployeeController.denyRequest(
+            tbMockData.getSelectionModel().getSelectedItems().get(0).getRequestID());
+
+        Alert denyReq = new Alert(Alert.AlertType.WARNING);
+        denyReq.setContentText("Request Denied");
+        denyReq.show();
+
+        if (ch_requestFilter.isSelected()) {
+          tbMockData.getItems().removeAll(tbMockData.getSelectionModel().getSelectedItem());
+        } else {
+          LinkedList<Request> reqs = EmployeeController.getRequests();
+          tableData.setAll(reqs);
+        }
+      } else if (e.getSource() == btn_Accept
+          && (EmployeeController.getRequest(
+                      tbMockData.getSelectionModel().getSelectedItems().get(0).getRequestID())
+                  .getEmp_assigned())
+              == null) {
+        Alert needEmp = new Alert(Alert.AlertType.ERROR);
+        needEmp.setContentText("Needs an Assigned Employee");
+        needEmp.show();
+      }
+    } catch (DBException ex) {
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setContentText(ex.getMessage());
+      errorAlert.show();
     }
   }
 
@@ -154,11 +216,17 @@ public class AdminController implements Initializable, Controller {
   }
 
   private void assignEmployeeToRequest(int employee, int ID) {
+    Alert confAlert = new Alert(Alert.AlertType.CONFIRMATION);
     try {
       EmployeeController.assignToRequest(employee, ID);
+      confAlert.setContentText(
+          cb_Employee.getSelectionModel().getSelectedItem().getName()
+              + " was assigned to the request");
+      confAlert.show();
     } catch (DBException e) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
       errorAlert.setContentText(e.getMessage());
+      errorAlert.show();
     }
   }
 
@@ -167,9 +235,16 @@ public class AdminController implements Initializable, Controller {
     int eID = cb_Employee.getSelectionModel().getSelectedItem().getID();
     int rID = tbMockData.getSelectionModel().getSelectedItem().getRequestID();
     assignEmployeeToRequest(eID, rID);
+
     try {
-      LinkedList<Request> reqs = EmployeeController.getOpenRequests();
-      tableData.setAll(reqs);
+      if (ch_requestFilter.isSelected()) {
+        LinkedList<Request> reqs = EmployeeController.getOpenRequests();
+        tableData.setAll(reqs);
+      } else {
+        LinkedList<Request> reqs = EmployeeController.getRequests();
+        tableData.setAll(reqs);
+      }
+
     } catch (DBException ev) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
       errorAlert.setContentText(ev.getMessage());

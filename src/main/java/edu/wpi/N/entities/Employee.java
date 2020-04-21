@@ -21,7 +21,7 @@ public abstract class Employee {
 
   @Override
   public String toString() {
-    return name;
+    return name + " (" + this.getServiceType() + ")";
   }
 
   @Override

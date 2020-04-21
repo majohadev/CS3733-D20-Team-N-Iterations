@@ -60,6 +60,7 @@ public class MapDisplayController implements Controller {
   @FXML AnchorPane pn_mapFrame;
   @FXML ImageView img_map;
   @FXML ComboBox<String> cb_languages;
+  @FXML Button btn_Login;
 
   HashBiMap<Circle, DbNode> masterNodes; // stores the map nodes and their respective database nodes
 
@@ -126,6 +127,8 @@ public class MapDisplayController implements Controller {
     populateMap();
 
     LinkedList<String> languages = EmployeeController.getLanguages();
+    ObservableList<String> obvList = FXCollections.observableList(languages);
+    cb_languages.setItems(obvList);
   }
 
   public void populateMap() {
@@ -390,16 +393,15 @@ public class MapDisplayController implements Controller {
   }
 
   @FXML
-  public void popupWindow() throws IOException {
-    if (loggedin == false) {
-      loggedin = true;
+  public void popupWindow(MouseEvent e) throws IOException {
+    if (loggedin == false && e.getSource() == btn_Login) {
       Stage stage = new Stage();
       Parent root;
       root = FXMLLoader.load(getClass().getResource("loginWindow.fxml"));
       Scene scene = new Scene(root);
       stage.setScene(scene);
       stage.initModality(Modality.APPLICATION_MODAL);
-      stage.showAndWait();
+      stage.show();
     } else if (loggedin == true) {
       Stage stage = new Stage();
       Parent root;
@@ -411,8 +413,6 @@ public class MapDisplayController implements Controller {
     }
   }
 
-
-
   @FXML
   public void createNewLaundry() throws DBException {
     int currentSelection = lst_laundryLocation.getSelectionModel().getSelectedIndex();
@@ -421,6 +421,14 @@ public class MapDisplayController implements Controller {
     String notes = txtf_laundryNotes.getText();
     int laundryRequest = EmployeeController.addLaundReq(notes, nodeID);
     App.adminDataStorage.addToList(laundryRequest);
+
+    txtf_laundryLocation.clear();
+    txtf_laundryNotes.clear();
+    lst_laundryLocation.getItems().clear();
+
+    Alert confAlert = new Alert(Alert.AlertType.CONFIRMATION);
+    confAlert.setContentText("Request Recieved");
+    confAlert.show();
   }
 
   @FXML
@@ -429,8 +437,17 @@ public class MapDisplayController implements Controller {
 
     String nodeID = fuzzySearchNodeListTranslator.get(currentSelection).getNodeID();
     String notes = txtf_translatorNotes.getText();
-    String language = txtf_language.getText();
+    String language = cb_languages.getSelectionModel().getSelectedItem();
     int transReq = EmployeeController.addTransReq(notes, nodeID, language);
     App.adminDataStorage.addToList(transReq);
+
+    txtf_translatorLocation.clear();
+    txtf_translatorNotes.clear();
+    cb_languages.cancelEdit();
+    lst_translatorSearchBox.getItems().clear();
+
+    Alert confAlert = new Alert(Alert.AlertType.CONFIRMATION);
+    confAlert.setContentText("Request Recieved");
+    confAlert.show();
   }
 }
