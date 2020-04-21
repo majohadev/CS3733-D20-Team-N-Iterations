@@ -318,7 +318,8 @@ public class Pathfinder {
    * @param floorChange: Elevator or Stair Node
    * @param currentFloor: Current floor
    * @param floorGoal: Goal floor
-   * @return: True if elevator or stair can reach the goal floor, false otherwise
+   * @return: The elevator or stair node on the goal floor that is accessible by the given elevator
+   *     or stair node, null if none
    * @throws DBException
    */
   public static DbNode getFloorChangeNode(DbNode floorChange, int currentFloor, int floorGoal)
