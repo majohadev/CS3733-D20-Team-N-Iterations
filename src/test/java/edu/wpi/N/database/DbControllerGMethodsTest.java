@@ -4,7 +4,6 @@ import edu.wpi.N.Main;
 import edu.wpi.N.algorithms.Pathfinder;
 import edu.wpi.N.entities.Node;
 import java.io.InputStream;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import org.junit.jupiter.api.*;
@@ -22,7 +21,7 @@ public class DbControllerGMethodsTest {
 
   /** Tests that getGAdjacent(nodeID) returns the correct list of edges for a given node */
   @Test
-  public void getGAdjacentTester() {
+  public void getGAdjacentTester() throws DBException {
     LinkedList<Node> hall3Edges = new LinkedList<Node>();
     hall3Edges.add(DbController.getGNode("H200000000"));
     hall3Edges.add(DbController.getGNode("H400000000"));
@@ -34,13 +33,14 @@ public class DbControllerGMethodsTest {
    * node does not have any edges
    */
   @Test
-  public void getGAdjacentNullTester() throws SQLException {
+  public void getGAdjacentNullTester() throws DBException {
     // null for a node that is not in the database
     Node testNode = new Node(2.345, 5.5657, "TESTNODE02");
     Assertions.assertEquals(DbController.getGAdjacent("TESTNODE02"), new ArrayList<Node>());
     // null for a node that is in the database but has no edges
-    DbController.addNode("TESTNODE03", 23, 345, 4, "Foisie", "sdfkjd", "fskjd", "sdfk", 'N');
+    DbController.addNode("TESTNODE03", 23, 345, 4, "Foisie", "REST", "fskjd", "sdfk", 'N');
     Assertions.assertEquals(DbController.getGAdjacent("TESTNODE3"), new ArrayList<Node>());
+    DbController.deleteNode("TESTNODE03");
   }
 
   /**
@@ -48,7 +48,7 @@ public class DbControllerGMethodsTest {
    * given nodes
    */
   @Test
-  public void addEdgesTester() {
+  public void addEdgesTester() throws DBException {
     LinkedList<Node> hall1Edges = new LinkedList<Node>();
     hall1Edges.add(DbController.getGNode("H200000000"));
     hall1Edges.add(DbController.getGNode("H130000000"));
@@ -61,6 +61,7 @@ public class DbControllerGMethodsTest {
     hall13Edges.add(DbController.getGNode("H100000000"));
     hall13Edges.add(DbController.getGNode("H120000000"));
     Assertions.assertEquals(DbController.getGAdjacent("H130000000"), hall13Edges);
+    DbController.removeEdge("H100000000", "H130000000");
   }
 
   /**
@@ -83,7 +84,8 @@ public class DbControllerGMethodsTest {
    */
   @Test
   public void addInvalidEdgesTester() {
-    Assertions.assertFalse(DbController.addEdge("CCCCCCCCCC", "NOTANODE01"));
+    Assertions.assertThrows(
+        DBException.class, () -> DbController.addEdge("CCCCCCCCCC", "NOTANODE01"));
   }
 
   /**
@@ -91,13 +93,13 @@ public class DbControllerGMethodsTest {
    * that already exists
    */
   @Test
-  public void addEdgeAlreadyThereTester() {
+  public void addEdgeAlreadyThereTester() throws DBException {
     Assertions.assertFalse(DbController.addEdge("H500000000", "H600000000"));
   }
 
   /** Tests that heuristic(currNode, endNode) returns the correct calculated value */
   @Test
-  public void heuristicTester() {
+  public void heuristicTester() throws DBException {
     Assertions.assertEquals(
         Pathfinder.heuristic(
             DbController.getGNode("AAAAAAAAAA"), DbController.getGNode("BBBBBBBBBB")),
@@ -110,23 +112,23 @@ public class DbControllerGMethodsTest {
    * database
    */
   @Test
-  public void getNodeTester() throws SQLException {
+  public void getNodeTester() throws DBException {
     Node testNode3 = new Node(447, 672, "BBBBBBBBBB");
     Assertions.assertEquals(DbController.getGNode("BBBBBBBBBB"), testNode3);
   }
 
   /** Second test for getGNode(nodeID) */
   @Test
-  public void getNodeTester2() throws SQLException {
+  public void getNodeTester2() throws DBException {
     Node testNode4 = new Node(517, 904, "H700000000");
     Assertions.assertEquals(DbController.getGNode("H700000000"), testNode4);
   }
 
   /** Tests that getGNode(nodeID) returns null when given an nodeID that isn't in the database */
   @Test
-  public void getNodeNullTester() {
+  public void getNodeNullTester() throws DBException {
     // Change in future to reflect getting an exception/error
-    Assertions.assertNull(DbController.getGNode("test1"));
+    Assertions.assertThrows(DBException.class, () -> DbController.getGNode("test1"));
   }
 
   /**
@@ -134,9 +136,9 @@ public class DbControllerGMethodsTest {
    * takes the given information and makes it into a node in the database
    */
   @Test
-  public void addNodeTester() throws SQLException {
+  public void addNodeTester() throws DBException {
     Node testNode5 = new Node(25, 30, "testNodeT5");
-    DbController.addNode("testNodeT5", 25, 30, 4, "Buil", "OFFI", "TESTNODE5", "T5", 'Z');
+    DbController.addNode("testNodeT5", 25, 30, 4, "Buil", "CONF", "TESTNODE5", "T5", 'Z');
     Assertions.assertEquals(DbController.getGNode("testNodeT5"), testNode5);
     DbController.deleteNode("testNodeT5");
   }
@@ -146,9 +148,9 @@ public class DbControllerGMethodsTest {
    * teamAssigned)
    */
   @Test
-  public void addNodeTester2() throws SQLException {
+  public void addNodeTester2() throws DBException {
     Node testNode6 = new Node(108, 55, "testNodeT6");
-    DbController.addNode("testNodeT6", 108, 55, 4, "Buil", "OFFI", "TESTNODE6", "T6", 'Z');
+    DbController.addNode("testNodeT6", 108, 55, 4, "Buil", "CONF", "TESTNODE6", "T6", 'Z');
     Assertions.assertEquals(DbController.getGNode("testNodeT6"), testNode6);
     DbController.deleteNode("testNodeT6");
   }
@@ -165,7 +167,7 @@ public class DbControllerGMethodsTest {
    * Tests that cost(currNode, nextNode) returns the correct cost value for nodes in the database
    */
   @Test
-  public void costTester() {
+  public void costTester() throws DBException {
     Assertions.assertEquals(
         Pathfinder.cost(DbController.getGNode("AAAAAAAAAA"), DbController.getGNode("EEEEEEEEEE")),
         1196.75,
@@ -184,7 +186,7 @@ public class DbControllerGMethodsTest {
   }
 
   @AfterAll
-  public static void clearDB() {
+  public static void clearDB() throws DBException {
     DbController.clearNodes();
   }
 }
