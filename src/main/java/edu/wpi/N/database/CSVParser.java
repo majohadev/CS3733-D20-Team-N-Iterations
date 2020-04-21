@@ -2,6 +2,8 @@ package edu.wpi.N.database;
 
 import com.opencsv.CSVReader;
 import java.io.*;
+import java.util.Arrays;
+import java.util.LinkedList;
 
 public class CSVParser {
 
@@ -55,7 +57,7 @@ public class CSVParser {
       String endNodeId = row[2];
 
       DbController.addEdge(startNodeId, endNodeId);
-    } catch (Exception e){
+    } catch (Exception e) {
       // for debugging purposes
       System.out.println(row[0]);
       throw (e);
@@ -109,9 +111,9 @@ public class CSVParser {
     }
   }
 
-
   /**
    * Parses CSV with employees from given path and adds them to database
+   *
    * @param pathToFile: full path to file as a string
    * @throws FileNotFoundException
    */
@@ -120,13 +122,12 @@ public class CSVParser {
       File initialFile = new File(pathToFile);
       InputStream input = new FileInputStream(initialFile);
 
-      CSVParser.parseCSV(input);
+      CSVParser.parseCSVEmployees(input);
     } catch (FileNotFoundException e) {
       e.printStackTrace();
       throw (e);
     }
   }
-
 
   /**
    * Parse Employees CSV file and add entries to Database
@@ -142,8 +143,6 @@ public class CSVParser {
       // Read header
       String[] nextLine = csvReader.readNext();
 
-
-
       while ((nextLine = csvReader.readNext()) != null) {
         parseEmployeeRow(nextLine);
       }
@@ -155,26 +154,22 @@ public class CSVParser {
 
   /**
    * Parses a row with an employee and adds an employee to database
+   *
    * @param row
    * @throws Exception
    */
-  private static void parseEmployeeRow(String[] row) throws Exception{
+  private static void parseEmployeeRow(String[] row) throws Exception {
     try {
-      String nodeID = row[0];
-      int xcoord = Integer.parseInt(row[1]);
-      int ycoord = Integer.parseInt(row[2]);
-      int floor = Integer.parseInt(row[3]);
-      String building = row[4];
-      String nodeType = row[5];
-      String longName = row[6];
-      String shortName = row[7];
-      char teamAssigned = 'Z';
-      if (row.length == 9) {
-        teamAssigned = row[8].charAt(0);
-      }
+      String name = row[1].trim();
+      String serviceType = row[2];
 
-      DbController.addNode(
-              nodeID, xcoord, ycoord, floor, building, nodeType, longName, shortName, teamAssigned);
+      if (serviceType.toLowerCase().equals("translator")) {
+        String[] languages = row[3].replaceAll("\\s+", "").split(",");
+
+        EmployeeController.addTranslator(name, new LinkedList<String>(Arrays.asList(languages)));
+      } else {
+        EmployeeController.addLaundry(name);
+      }
 
     } catch (Exception e) {
       // for debugging purposes
