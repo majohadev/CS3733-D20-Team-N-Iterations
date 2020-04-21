@@ -73,13 +73,6 @@ public class CSVParseEmployeesTest {
   public void testParseCSVLandrySuccessful() throws DBException {
     LinkedList<Laundry> actualLandries = EmployeeController.getLaundrys();
 
-    // Check if list lf laundry workes has employee with expected name
-    for (Laundry laundry : actualLandries) {
-      if (laundry.getName().equals("Mike Laks")) {
-        Assertions.assertTrue(true);
-      }
-    }
-
     Assertions.assertTrue(actualLandries.size() == 4);
   }
 
