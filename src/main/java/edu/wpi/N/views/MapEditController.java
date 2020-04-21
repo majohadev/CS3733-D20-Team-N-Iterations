@@ -551,6 +551,11 @@ public class MapEditController implements Controller {
   }
 
   public void onBtnAddEdgeClicked() throws DBException {
+    if (txt_EdgesAddFirstLocation.getText().equals("")
+        || txt_EdgesAddSecondLocation.getText().equals("")) {
+      displayErrorMessage("Invalid Input");
+      return;
+    }
     if (!txt_EdgesAddFirstLocation.getText().equals("")
         && (!txt_EdgesAddSecondLocation.getText().equals(""))) {
       pn_display.getChildren().removeIf(node -> node instanceof Line);
@@ -615,6 +620,8 @@ public class MapEditController implements Controller {
                 if (line_EdgesEditSelected != null) {
                   line_EdgesEditSelected.setStroke(Color.BLACK);
                 }
+                // ???????????????????????????????
+                txt_EdgesEditEndNode.setDisable(false);
                 db_EdgesEditSecondSelectedOld = adjacentNode;
                 line_EdgesEditSelected = line;
                 line.setStroke(Color.RED);
@@ -640,6 +647,10 @@ public class MapEditController implements Controller {
   }
 
   public void onBtnEdgesDeleteClicked() throws DBException {
+    if (txt_EdgesDeleteEdge.getText().equals("") || txt_EdgesDeleteNode.getText().equals("")) {
+      displayErrorMessage("Invalid Input");
+      return;
+    }
     DbController.removeEdge(
         db_EdgesDeleteFirstSelected.getNodeID(), db_EdgesDeleteSecondSelected.getNodeID());
     DbNode node = db_EdgesDeleteFirstSelected;
@@ -652,8 +663,10 @@ public class MapEditController implements Controller {
   public void edgesEditNodeClick(Circle mapNode) throws DBException {
     if (txt_EdgesEditStartNode.isFocused()) {
       if (db_EdgesEditFirstSelected != null) {
+
         resetEdgesEdit();
       }
+      txt_EdgesEditEndNode.setDisable(true);
       db_EdgesEditFirstSelected = masterNodes.get(mapNode);
       displayAdjacentEdges(db_EdgesEditFirstSelected, mapNode);
       mapNode.setFill(Color.GREEN);
@@ -675,6 +688,12 @@ public class MapEditController implements Controller {
   }
 
   public void onBtnEdgesEditDeleteClicked() throws DBException {
+    if (txt_EdgesEditStartNode.getText().equals("")
+        || txt_EdgesEditEndNode.getText().equals("")
+        || txt_EdgesEditEdge.getText().equals("")) {
+      displayErrorMessage("Invalid Input");
+      return;
+    }
     DbController.removeEdge(
         db_EdgesEditFirstSelected.getNodeID(), db_EdgesEditSecondSelectedOld.getNodeID());
     DbController.addEdge(
@@ -686,6 +705,7 @@ public class MapEditController implements Controller {
   }
 
   public void resetEdgesEdit() {
+    txt_EdgesEditEndNode.setDisable(true);
     if (db_EdgesEditFirstSelected != null) {
       masterNodes.inverse().get(db_EdgesEditFirstSelected).setFill(Color.PURPLE);
     }
