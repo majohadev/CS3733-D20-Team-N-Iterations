@@ -1,69 +1,32 @@
 package edu.wpi.N.entities;
 
-import java.sql.Time;
-
-public class Employee {
+public abstract class Employee {
   private int id;
   private String name;
-  private int yearsofExperience;
-  private String lang;
-  private char gender;
-  private Time available;
 
-  public Employee(int id, String name, int date, String lang, char gender, Time available) {
+  public Employee(int id, String name) {
     this.id = id;
     this.name = name;
-    this.yearsofExperience = date;
-    this.lang = lang;
-    this.gender = gender;
-    this.available = available;
   }
 
-  public int getId() {
+  public int getID() {
     return id;
-  }
-
-  public void setId(int id) {
-    this.id = id;
   }
 
   public String getName() {
     return name;
   }
 
-  public void setName(String name) {
-    this.name = name;
-  }
+  public abstract String getServiceType();
 
-  public int getYearsofExperience() {
-    return yearsofExperience;
-  }
+  @Override
+  public boolean equals(Object o) {
+    if (!(o instanceof Employee)) {
+      return false;
+    }
 
-  public void setYearsofExperience(int yearsofExperience) {
-    this.yearsofExperience = yearsofExperience;
-  }
+    Employee other = (Employee) o;
 
-  public String getLang() {
-    return lang;
-  }
-
-  public void setLang(String lang) {
-    this.lang = lang;
-  }
-
-  public char getGender() {
-    return gender;
-  }
-
-  public void setGender(char gender) {
-    this.gender = gender;
-  }
-
-  public Time getAvailable() {
-    return available;
-  }
-
-  public void setAvailable(Time available) {
-    this.available = available;
+    return id == other.id && name.equals(other.name);
   }
 }

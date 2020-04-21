@@ -284,7 +284,7 @@ public class DbController {
               + "ycoord INT NOT NULL, "
               + "floor INT NOT NULL, "
               + "building VARCHAR(255) NOT NULL, "
-              + "nodeType CHAR(4) NOT NULL, "
+              + "nodeType CHAR(4) NOT NULL CONSTRAINT TYPE_CK CHECK (nodeType IN ('HALL', 'ELEV', 'REST', 'STAI', 'DEPT', 'LABS', 'INFO', 'CONF', 'EXIT', 'RETL', 'SERV')), "
               + "longName VARCHAR(255) NOT NULL, "
               + "shortName VARCHAR(255) NOT NULL, "
               + "teamAssigned CHAR(1) NOT NULL"
@@ -308,7 +308,9 @@ public class DbController {
       if (!e.getSQLState().equals("X0Y32")) throw e;
     }
 
-    ServiceController.initService();
+    // ServiceController.initService();
+    DoctorController.initDoctor();
+    EmployeeController.initEmployee();
   }
 
   /**
@@ -792,6 +794,27 @@ public class DbController {
     } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Unknown error: removeEdge", e);
+    }
+  }
+
+  /**
+   * Exports all the edges for CSV purposes
+   *
+   * @return a linked list of each edge in CSV format
+   */
+  public static LinkedList<String> exportEdges() throws DBException {
+    try {
+      LinkedList<String> edges = new LinkedList<String>();
+      String query = "SELECT * FROM edges";
+      ResultSet rs = con.prepareStatement(query).executeQuery();
+      while (rs.next()) {
+        edges.add(
+            rs.getString("edgeID") + "," + rs.getString("node1") + "," + rs.getString("node2"));
+      }
+      return edges;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown error: exportEdges", e);
     }
   }
 
