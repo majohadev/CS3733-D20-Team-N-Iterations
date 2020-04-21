@@ -174,7 +174,7 @@ public class MapDisplayController extends QRGenerator implements Controller {
   }
 
   @FXML
-  private void onBtnFindClicked(MouseEvent event) {
+  private void onBtnFindClicked(MouseEvent event) throws DBException {
     if (selectedNodes.size() != 2) {
       return;
     }
@@ -187,6 +187,12 @@ public class MapDisplayController extends QRGenerator implements Controller {
       drawPath(pathNodes);
       GenerateQRDirections(path);
     }
+
+    ArrayList<String> directions = path.getDirections();
+    for (String s : directions) {
+      System.out.println(s);
+    }
+    System.out.println(" ");
 
     for (Circle mapNode : masterNodes.keySet()) {
       mapNode.setDisable(true);

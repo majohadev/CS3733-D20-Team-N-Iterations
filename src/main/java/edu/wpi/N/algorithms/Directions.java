@@ -49,18 +49,16 @@ public class Directions {
       switch (state) {
         case STARTING:
           if (!path.getFirst().getNodeType().equals("HALL")) {
-            message =
-                "Start by exiting "
-                    + path.getFirst().getLongName()
-                    + " "; // sometimes this produces an extra space
+            message = "Start by exiting " + path.getFirst().getLongName();
           } else if (!(getLandmark(nextNode) == null)) {
             message =
                 "Start towards "
                     + getLandmark(nextNode).getLongName()
+                    + " "
                     + getDistanceString(getDistance(currNode, nextNode));
           } else {
             message =
-                "Start by proceeding down the corridor"
+                "Start by proceeding down the corridor "
                     + getDistanceString(getDistance(currNode, nextNode));
           }
           break;
@@ -71,25 +69,27 @@ public class Directions {
           distance += getDistance(currNode, nextNode);
           if (!message.equals("")) {
             if (atEndOfHall(nextNode)) {
-              directions.add(message + "and proceed to the end of the hallway");
+              directions.add(message + " and proceed to the end of the hallway");
             } else {
-              directions.add(message + "and proceed down the hallway");
+              directions.add(message + " and proceed down the hallway");
             }
             message = "";
           } else if (stateChange || atIntersection(currNode)) {
             if (getLandmark(nextNode) == null) {
-              message = "Continue to next corridor" + getDistanceString(distance);
+              message = "Continue to next intersection " + getDistanceString(distance);
             } else if (getLandmark(nextNode).equals(nextNode)) {
               message =
                   "Proceed straight towards "
                       + getLandmark(nextNode).getLongName()
+                      + " "
                       + getDistanceString(distance);
             } else if (atEndOfHall(nextNode)) {
-              message = "Continue to the end of the hallway" + getDistanceString(distance);
+              message = "Continue to the end of the hallway " + getDistanceString(distance);
             } else {
               message =
                   "Continue past "
                       + getLandmark(currNode).getLongName()
+                      + " "
                       + getDistanceString(distance);
             }
             distance = 0;
@@ -99,25 +99,25 @@ public class Directions {
           if (!nextNode.equals(path.get(path.size() - 1))) {
             if (!message.equals("")) {
               if (i == 1) {
-                directions.add(message + "and turning " + getTurnType(angle, getAngle(i - 1)));
+                directions.add(message + " and turn " + getTurnType(angle, getAngle(i - 1)));
               } else {
-                directions.add(
-                    message + "and take the next " + getTurnType(angle, getAngle(i - 1)));
+                directions.add(message + " and turn " + getTurnType(angle, getAngle(i - 1)));
               }
               message = "";
             } else if (!(getLandmark(currNode) == null)) {
               directions.add(
                   "Go straight towards "
                       + getLandmark(currNode).getLongName()
+                      + " "
                       + getDistanceString(getDistance(currNode, nextNode))
-                      + "and turn "
+                      + " and turn "
                       + getTurnType(angle, getAngle(i - 1))
-                      + " at the next corridor");
+                      + " at the intersection");
             } else {
               directions.add(
-                  "Proceed to next corridor"
+                  "Proceed to next intersection "
                       + getDistanceString(getDistance(currNode, nextNode))
-                      + "and turn "
+                      + " and turn "
                       + getTurnType(angle, getAngle(i - 1)));
             }
           }
@@ -132,7 +132,7 @@ public class Directions {
             String turnMessage = "Turn " + getTurnType(angle, getAngle(i - 2));
             directions.add(turnMessage + " and arrive at " + currNode.getLongName());
           } else if (!message.equals("")) {
-            directions.add(message + "and arrive at destination");
+            directions.add(message + " and arrive at destination");
           } else {
             directions.add("Arrive at destination");
           }
@@ -147,11 +147,14 @@ public class Directions {
    * @return int, State
    */
   private static State getState(int i) {
+
     if (i == 0) {
       return STARTING;
     } else if (i == path.size() - 1) {
       return ARRIVING;
-    } else if (Math.abs(getAngle(i) - getAngle(i - 1)) >= TURN_THRESHOLD) {
+    } else if (Math.abs(getAngle(i) - getAngle(i - 1)) > TURN_THRESHOLD
+        && Math.abs(getAngle(i) - getAngle(i - 1)) < 360 - TURN_THRESHOLD) {
+      double angleChange = Math.abs(getAngle(i) - getAngle(i - 1));
       // System.out.println(Math.abs(getAngle(i) - getAngle(i - 1)));
       return TURNING;
     } else if (path.get(i).getFloor() != path.get(i + 1).getFloor()) {
@@ -160,6 +163,7 @@ public class Directions {
       return EXITING;
     } else {
       // System.out.println(Math.abs(getAngle(i) - getAngle(i - 1)));
+
       return CONTINUING;
     }
   }
@@ -172,9 +176,9 @@ public class Directions {
    */
   private static String getTurnType(double angle, double prevAngle) {
     double angleChange = angle - prevAngle;
-    if (angleChange > 180) {
+    if (angleChange > 175) {
       angleChange -= 360;
-    } else if (angleChange < -180) {
+    } else if (angleChange < -175) {
       angleChange += 360;
     }
     if (angleChange >= TURN_THRESHOLD) {
@@ -183,7 +187,7 @@ public class Directions {
       return "left";
     } else if (angleChange < TURN_THRESHOLD
         && angleChange > -TURN_THRESHOLD) { // eventually will add slight turns
-      return "straight";
+      return "straight" + angleChange;
     } else {
       return "other turn type";
     }
@@ -215,7 +219,7 @@ public class Directions {
    * @return String, how far in feet between nodes
    */
   private static String getDistanceString(double distance) {
-    return " (Go " + Math.round(distance) + " ft) ";
+    return "(Go " + Math.round(distance) + " ft)";
   }
 
   /**
