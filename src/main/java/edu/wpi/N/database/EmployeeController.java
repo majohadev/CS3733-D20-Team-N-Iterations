@@ -200,6 +200,7 @@ public class EmployeeController {
       PreparedStatement stmt = con.prepareStatement(query);
       stmt.setInt(1, id);
       ResultSet rs = stmt.executeQuery();
+      rs.next();
       if (rs.getString("serviceType").equals("Laundry")) {
         return new LaundryRequest(
             rs.getInt("requestID"),
@@ -221,6 +222,7 @@ public class EmployeeController {
         stmt = con.prepareStatement(query);
         stmt.setInt(1, id);
         rs = stmt.executeQuery();
+        rs.next();
         return new TranslatorRequest(
             rid, empId, notes, nodeID, timeReq, timeComp, status, rs.getString("language"));
       } else throw new DBException("Invalid request! ID = " + id);
