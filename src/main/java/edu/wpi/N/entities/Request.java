@@ -11,6 +11,10 @@ public abstract class Request {
   GregorianCalendar timeCompleted;
   String status;
 
+  public String getStatus() {
+    return status;
+  }
+
   Request(
       int requestID,
       int emp_assigned,

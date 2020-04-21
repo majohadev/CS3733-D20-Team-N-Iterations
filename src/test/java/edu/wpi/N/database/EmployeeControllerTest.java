@@ -80,18 +80,6 @@ public class EmployeeControllerTest {
   }
 
   @Test
-  public void testgetTranslang() throws DBException {
-    LinkedList<String> list = new LinkedList<String>();
-    list.add("Korean");
-    list.add("English");
-    EmployeeController.addTranslator("Chris Lee", list);
-    EmployeeController.addTranslator("Wilson Wong", list);
-    LinkedList<Translator> result = EmployeeController.getTransLang("Korean");
-    assertEquals(2, result.size());
-    assertEquals("Wilson Wong", result.get(1).getName());
-  }
-
-  @Test
   public void testaddTransReq() throws DBException {
     DbController.addNode(
         "NDEPT00104", 100, 100, 4, "Faulkner", "DEPT", "Longname", "shortname", 'N');
@@ -107,6 +95,14 @@ public class EmployeeControllerTest {
     EmployeeController.completeRequest(transReqID1);
     Request req = EmployeeController.getRequest(transReqID1);
     assertNotNull(req.getTimeCompleted());
+  }
+
+  @Test
+  public void testDenyRequest() throws DBException {
+    EmployeeController.denyRequest(transReqID1);
+    Request req = EmployeeController.getRequest(transReqID1);
+    assertNotNull(req.getTimeCompleted());
+    assertEquals("DENY", req.getStatus());
   }
 
   @Test
