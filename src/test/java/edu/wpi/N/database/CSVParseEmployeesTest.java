@@ -79,6 +79,7 @@ public class CSVParseEmployeesTest {
     Assertions.assertTrue(actualLandries.size() == 4);
   }
 
+
   @AfterAll
   public static void clearDb() throws DBException {
     DbController.clearNodes();
