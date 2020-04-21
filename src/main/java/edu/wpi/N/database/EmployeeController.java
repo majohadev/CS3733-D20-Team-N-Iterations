@@ -546,7 +546,6 @@ public class EmployeeController {
    *
    * @param employeeID the ID of the employee to be assigned
    * @param requestID The ID of the request to which they will be assigned.
-   * @return
    */
   public static void assignToRequest(int employeeID, int requestID) throws DBException {
     try {
@@ -572,7 +571,6 @@ public class EmployeeController {
    * Marks a request as completed and done at the time that this function was called
    *
    * @param requestID the ID of the request to be marked as completed
-   * @return true on success, false otherwise
    */
   public static void completeRequest(int requestID) throws DBException {
     try {
@@ -665,6 +663,27 @@ public class EmployeeController {
     } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Error: completeRequest", e);
+    }
+  }
+
+  /**
+   * Returns all the languages that are currently available
+   *
+   * @return a linked list of strings representing all the languages available
+   */
+  public static LinkedList<String> getLanguages() throws DBException {
+    try {
+      String query = "SELECT DISTINCT language FROM language";
+      PreparedStatement stmt = con.prepareStatement(query);
+      ResultSet rs = stmt.executeQuery();
+      LinkedList<String> langs = new LinkedList<String>();
+      while (rs.next()) {
+        langs.add(rs.getString("language"));
+      }
+      return langs;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown error: getlanguages", e);
     }
   }
 
