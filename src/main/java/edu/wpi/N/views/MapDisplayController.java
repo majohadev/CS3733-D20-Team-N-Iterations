@@ -7,8 +7,7 @@ import edu.wpi.N.algorithms.Pathfinder;
 import edu.wpi.N.controllerData.AdminDataStorage;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.DbController;
-import edu.wpi.N.entities.DbNode;
-import edu.wpi.N.entities.Path;
+import edu.wpi.N.entities.*;
 import java.io.IOException;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
@@ -48,7 +47,7 @@ public class MapDisplayController implements Controller {
   int currentFloor = 4;
 
   Boolean loggedin = false;
-  AdminDataStorage dataStorage;
+  AdminDataStorage dataStorage = new AdminDataStorage();
 
   @FXML Button btn_find;
   @FXML Button btn_reset;
@@ -362,63 +361,79 @@ public class MapDisplayController implements Controller {
     }
   }
 
-  /*
   @FXML
-  public Laundry createNewLaundry() {
+  public void createNewLaundry() {
+    int currentSelection = lst_laundryLocation.getSelectionModel().getSelectedIndex();
+    String destinationNodeLongName = fuzzySearchTextList.get(currentSelection);
+
     GregorianCalendar timeGetter = new GregorianCalendar();
     timeGetter.getTime();
     int requestID = 0;
     int emp_assigned = 0;
     String notes = txtf_laundryNotes.getText();
-    String nodeID;
+    String nodeID = destinationNodeLongName;
     GregorianCalendar timeRequested = timeGetter;
-    GregorianCalendar timeCompleted = null;
-    String status = null;
+    GregorianCalendar timeCompleted = timeGetter;
+    String status = "";
 
-    for (DbNode node : allFloorNodes) {
-      if (node.getLongName() == txtf_laundryLocationLocation.getText()) {
-        nodeID = node.getLongName();
-        break;
-      }
+    LaundryRequest newLaundry =
+        new LaundryRequest(
+            requestID, emp_assigned, notes, nodeID, timeRequested, timeCompleted, status);
+    System.out.println("Request ID: " + requestID);
+    System.out.println("Employee: " + emp_assigned);
+    System.out.println("Notes: " + notes);
+    System.out.println("Location: " + nodeID);
+    System.out.println("Time Req: " + timeRequested.toString());
+    System.out.println("Time Comp: " + timeCompleted.toString());
+    System.out.println("Status: " + status);
+    if (newLaundry != null) {
+      App.adminDataStorage.addToList(newLaundry);
+    } else {
+      System.out.println("is null");
     }
-
-    Laundry newLaundry =
-        new Laundry(requestID, emp_assigned, notes, nodeID, timeRequested, timeCompleted, status);
-    dataStorage.addToList(newLaundry);
-    return newLandry;
   }
 
   @FXML
-  public Translator createNewTranslator() {
+  public void createNewTranslator() {
+    int currentSelection = lst_translatorSearchBox.getSelectionModel().getSelectedIndex();
+    String destinationNodeLongName = fuzzySearchTextList.get(currentSelection);
+
     GregorianCalendar timeGetter = new GregorianCalendar();
     timeGetter.getTime();
     int requestID = 0;
     int emp_assigned = 0;
     String notes = txtf_translatorNotes.getText();
-    String nodeID;
+    String nodeID = destinationNodeLongName;
     GregorianCalendar timeRequested = timeGetter;
-    GregorianCalendar timeCompleted = null;
-    String status = null;
+    GregorianCalendar timeCompleted = timeGetter;
+    String status = "";
     String language = txtf_translatorLocation.getText();
 
     for (DbNode node : allFloorNodes) {
-      if (node.getLongName() == txtf_translatorLocation.getText()) {
+      if (node.getLongName() == destinationNodeLongName) {
         nodeID = node.getLongName();
         break;
       }
     }
-    Translator newTranslator =
-        new Translator(
+    TranslatorRequest translatorRequest =
+        new TranslatorRequest(
             requestID, emp_assigned, notes, nodeID, timeRequested, timeCompleted, status, language);
-    dataStorage.addToList(newTranslator);
-    return newTranslator;
-  }
-   */
-  public void createNewTranslator(){
-
+    App.adminDataStorage.addToList(translatorRequest);
   }
 
-  public void createNewLaundry(){
+  @FXML
+  private void searchByLocationTextFillTranslator(KeyEvent inputMethodEvent) throws DBException {
+    String currentText = txtf_translatorLocation.getText();
+    fuzzySearchNodeList = FuzzySearchAlgorithm.suggestLocations(currentText);
+    LinkedList<String> fuzzySearchStringList = new LinkedList<>();
+    if (fuzzySearchNodeList != null) {
 
+      for (DbNode node : fuzzySearchNodeList) {
+        fuzzySearchStringList.add(node.getLongName());
+      }
+
+      fuzzySearchTextList = FXCollections.observableList(fuzzySearchStringList);
+    } else fuzzySearchTextList = FXCollections.observableList(longNamesList);
+    lst_translatorSearchBox.setItems(fuzzySearchTextList);
   }
 }

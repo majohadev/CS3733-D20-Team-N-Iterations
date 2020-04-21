@@ -1,6 +1,7 @@
 package edu.wpi.N.views;
 
 import edu.wpi.N.App;
+import edu.wpi.N.entities.Request;
 import java.io.IOException;
 import java.net.URL;
 import java.util.GregorianCalendar;
@@ -18,55 +19,53 @@ public class AdminController implements Initializable, Controller {
 
   private App mainApp;
   // public LoginController controller;
-  int initalSetup = 0;
 
   @FXML Button btn_logout;
   @FXML Button btn_laundryReq;
   @FXML Button btn_transReq;
   @FXML Button btn_Accept;
   @FXML Button btn_Deny;
-  @FXML TableView<MockData> tbMockData = new TableView<MockData>();
-  @FXML TableColumn<MockData, String> currentData = new TableColumn<>("Data");
+  @FXML TableView<Request> tbMockData = new TableView<Request>();
+  @FXML TableColumn<Request, String> currentData = new TableColumn<>("Data");
 
-  // @FXML TableColumn<MockData, String> data;
-  ObservableList<MockData> newData = FXCollections.observableArrayList();
+  ObservableList<Request> tableData = FXCollections.observableArrayList();
 
   Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
 
   @Override
   public void initialize(URL location, ResourceBundle resourceBundle) {
     if (App.adminDataStorage.newData != null) {
-      TableColumn<MockData, Integer> requestID = new TableColumn<>("ID");
-      TableColumn<MockData, Integer> emp_assigned = new TableColumn<>("Assigned");
-      TableColumn<MockData, String> notes = new TableColumn<>("Notes");
-      TableColumn<MockData, String> nodeID = new TableColumn<>("Location");
-      TableColumn<MockData, GregorianCalendar> timeRequested = new TableColumn<>("Time Started");
-      TableColumn<MockData, GregorianCalendar> timeCompleted = new TableColumn<>("Time Completed");
-      TableColumn<MockData, String> status = new TableColumn<>("Status");
-      TableColumn<MockData, String> language = new TableColumn<>("Language");
+      TableColumn<Request, Integer> requestID = new TableColumn<>("ID");
+      TableColumn<Request, Integer> emp_assigned = new TableColumn<>("Assigned");
+      TableColumn<Request, String> notes = new TableColumn<>("Notes");
+      TableColumn<Request, String> nodeID = new TableColumn<>("Location");
+      TableColumn<Request, GregorianCalendar> timeRequested = new TableColumn<>("Time Started");
+      TableColumn<Request, GregorianCalendar> timeCompleted = new TableColumn<>("Time Completed");
+      TableColumn<Request, String> status = new TableColumn<>("Status");
+      TableColumn<Request, String> language = new TableColumn<>("Language");
 
-      requestID.setMinWidth(100);
+      requestID.setMinWidth(20);
       emp_assigned.setMinWidth(100);
-      notes.setMinWidth(100);
+      notes.setMinWidth(75);
       nodeID.setMinWidth(100);
       timeRequested.setMinWidth(100);
       timeCompleted.setMinWidth(100);
       status.setMinWidth(100);
       language.setMinWidth(100);
 
-      requestID.setCellValueFactory(new PropertyValueFactory<MockData, Integer>("requestID"));
-      emp_assigned.setCellValueFactory(new PropertyValueFactory<MockData, Integer>("emp_assigned"));
-      notes.setCellValueFactory(new PropertyValueFactory<MockData, String>("notes"));
-      nodeID.setCellValueFactory(new PropertyValueFactory<MockData, String>("nodeID"));
+      requestID.setCellValueFactory(new PropertyValueFactory<Request, Integer>("requestID"));
+      emp_assigned.setCellValueFactory(new PropertyValueFactory<Request, Integer>("emp_assigned"));
+      notes.setCellValueFactory(new PropertyValueFactory<Request, String>("notes"));
+      nodeID.setCellValueFactory(new PropertyValueFactory<Request, String>("nodeID"));
       timeRequested.setCellValueFactory(
-          new PropertyValueFactory<MockData, GregorianCalendar>("timeRequested"));
+          new PropertyValueFactory<Request, GregorianCalendar>("timeRequested"));
       timeCompleted.setCellValueFactory(
-          new PropertyValueFactory<MockData, GregorianCalendar>("timeCompleted"));
-      status.setCellValueFactory(new PropertyValueFactory<MockData, String>("status"));
-      language.setCellValueFactory(new PropertyValueFactory<MockData, String>("language"));
+          new PropertyValueFactory<Request, GregorianCalendar>("timeCompleted"));
+      status.setCellValueFactory(new PropertyValueFactory<Request, String>("status"));
+      language.setCellValueFactory(new PropertyValueFactory<Request, String>("language"));
 
-      newData.setAll(App.adminDataStorage.newData);
-      tbMockData.setItems(newData);
+      tableData.setAll(App.adminDataStorage.newData);
+      tbMockData.setItems(tableData);
       tbMockData
           .getColumns()
           .addAll(
@@ -78,6 +77,8 @@ public class AdminController implements Initializable, Controller {
               timeCompleted,
               status,
               language);
+    } else {
+      System.out.println("is null");
     }
   }
 
