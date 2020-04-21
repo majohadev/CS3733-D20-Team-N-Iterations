@@ -444,9 +444,4 @@ public class MapDisplayController extends QRGenerator implements Controller {
       e.printStackTrace();
     }
   }
-  public void createNewLaundry(){
-    Laundry newLaundry = new Laundry()
-  }
-   */
-
 }
