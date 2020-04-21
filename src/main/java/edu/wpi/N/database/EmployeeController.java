@@ -195,22 +195,21 @@ public class EmployeeController {
   }
 
   public static Request getRequest(int id) throws DBException {
-    try{
+    try {
       String query = "SELECT * FROM request WHERE requestID = ?";
       PreparedStatement stmt = con.prepareStatement(query);
       stmt.setInt(1, id);
       ResultSet rs = stmt.executeQuery();
-      if(rs.getString("serviceType").equals("Laundry")){
+      if (rs.getString("serviceType").equals("Laundry")) {
         return new LaundryRequest(
-                rs.getInt("requestID"),
-                rs.getInt("assigned_eID"),
-                rs.getString("notes"),
-                rs.getString("nodeID"),
-                getJavatime(rs.getTimestamp("timeRequested")),
-                getJavatime(rs.getTimestamp("timeCompleted")),
-                rs.getString("status"));
-      }
-      else if(rs.getString("serviceType").equals("Translator")) {
+            rs.getInt("requestID"),
+            rs.getInt("assigned_eID"),
+            rs.getString("notes"),
+            rs.getString("nodeID"),
+            getJavatime(rs.getTimestamp("timeRequested")),
+            getJavatime(rs.getTimestamp("timeCompleted")),
+            rs.getString("status"));
+      } else if (rs.getString("serviceType").equals("Translator")) {
         int rid = rs.getInt("requestID");
         int empId = rs.getInt("assigned_eID");
         String notes = rs.getString("notes");
@@ -222,14 +221,11 @@ public class EmployeeController {
         stmt = con.prepareStatement(query);
         stmt.setInt(1, id);
         rs = stmt.executeQuery();
-        return new TranslatorRequest(rid, empId, notes, nodeID, timeReq, timeComp, status, rs.getString("language"));
-      }
-
-
-
-    }catch(SQLException e){
-        e.printStackTrace();
-      }
+        return new TranslatorRequest(
+            rid, empId, notes, nodeID, timeReq, timeComp, status, rs.getString("language"));
+      } else throw new DBException("Invalid request! ID = " + id);
+    } catch (SQLException e) {
+      e.printStackTrace();
       throw new DBException("Unknown error: getRequest", e);
     }
   }
