@@ -52,17 +52,18 @@ public class EmployeeControllerTest {
 
   @Test
   public void testaddLanguage() throws DBException {
-
-    EmployeeController.addLanguage(2, "Chinese");
+    EmployeeController.addLanguage(fats.getID(), "Chinese");
     // assertEquals("Chinese", fats.getLanguages().get(1));
+    fats = (Translator) EmployeeController.getEmployee(fats.getID());
     assertTrue(fats.getLanguages().contains("Chinese"));
   }
 
   @Test
   public void testremoveLanguage() throws DBException {
-    EmployeeController.removeLanguage(1, "Gnomish");
-    assertNull(felix.getLanguages().get(0));
-    assertTrue(!felix.getLanguages().contains("Gnomish"));
+    EmployeeController.removeLanguage(felix.getID(), "Gnomish");
+    // assertNull(felix.getLanguages().get(0));
+    felix = (Translator) EmployeeController.getEmployee(felix.getID());
+    assertFalse(felix.getLanguages().contains("Gnomish"));
   }
 
   @Test
@@ -82,7 +83,7 @@ public class EmployeeControllerTest {
   @Test
   public void testaddTransReq() throws DBException {
     DbController.addNode(
-        "NDEPT00104", 100, 100, 4, "Faulkner", "DEPT", "Longname", "shortname", 'N');git
+        "NDEPT00104", 100, 100, 4, "Faulkner", "DEPT", "Longname", "shortname", 'N');
     int id =
         EmployeeController.addTransReq(
             "Need a Korean translator for prescription",

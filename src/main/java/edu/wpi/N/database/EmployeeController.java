@@ -634,9 +634,11 @@ public class EmployeeController {
       PreparedStatement stmt = con.prepareStatement(query);
       stmt.setInt(1, employeeID);
       stmt.setString(2, language);
-      stmt.executeUpdate();
+      if (stmt.executeUpdate() <= 0) throw new DBException("That translator doesn't exist");
     } catch (SQLException e) {
-      throw new DBException("Unknown Error: removeLanguage not working");
+      e.printStackTrace();
+      throw new DBException(
+          "Unknown Error: removeLanguaguage, ID: " + employeeID + " Lang: " + language, e);
     }
   }
 
