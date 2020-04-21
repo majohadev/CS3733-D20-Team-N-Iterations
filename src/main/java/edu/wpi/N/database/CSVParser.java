@@ -62,21 +62,26 @@ public class CSVParser {
    * @param row: a row to parse data from
    */
   private static void parseNodeRow(String[] row) throws Exception {
-    String nodeID = row[0];
-    int xcoord = Integer.parseInt(row[1]);
-    int ycoord = Integer.parseInt(row[2]);
-    int floor = Integer.parseInt(row[3]);
-    String building = row[4];
-    String nodeType = row[5];
-    String longName = row[6];
-    String shortName = row[7];
-    char teamAssigned = 'Z';
-    if (row.length == 9) {
-      teamAssigned = row[8].charAt(0);
-    }
+    try {
+      String nodeID = row[0];
+      int xcoord = Integer.parseInt(row[1]);
+      int ycoord = Integer.parseInt(row[2]);
+      int floor = Integer.parseInt(row[3]);
+      String building = row[4];
+      String nodeType = row[5];
+      String longName = row[6];
+      String shortName = row[7];
+      char teamAssigned = 'Z';
+      if (row.length == 9) {
+        teamAssigned = row[8].charAt(0);
+      }
 
-    DbController.addNode(
-        nodeID, xcoord, ycoord, floor, building, nodeType, longName, shortName, teamAssigned);
+      DbController.addNode(
+          nodeID, xcoord, ycoord, floor, building, nodeType, longName, shortName, teamAssigned);
+    } catch (Exception e) {
+      System.out.println(row[0]);
+      throw (e);
+    }
   }
 
   /**
@@ -90,7 +95,6 @@ public class CSVParser {
       File initialFile = new File(pathToFile);
       InputStream input = new FileInputStream(initialFile);
 
-      CSVParser csvParser = new CSVParser();
       CSVParser.parseCSV(input);
     } catch (FileNotFoundException e) {
       e.printStackTrace();

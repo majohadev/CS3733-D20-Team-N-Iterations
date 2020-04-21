@@ -50,6 +50,8 @@ public abstract class Request {
 
   public abstract String getServiceType();
 
+  public abstract String getLanguage();
+
   public GregorianCalendar getTimeRequested() {
     return timeRequested;
   }

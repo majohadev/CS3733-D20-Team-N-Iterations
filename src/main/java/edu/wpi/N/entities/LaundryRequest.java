@@ -17,4 +17,8 @@ public class LaundryRequest extends Request {
   public String getServiceType() {
     return "Laundry";
   }
+
+  public String getLanguage() {
+    return "N/A";
+  }
 }
