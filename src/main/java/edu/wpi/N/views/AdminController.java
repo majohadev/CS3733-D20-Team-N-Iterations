@@ -258,8 +258,14 @@ public class AdminController implements Initializable, Controller {
   }
 
   public void populateChoiceBox() throws DBException {
-    LinkedList<Employee> empList = EmployeeController.getEmployees();
-    ObservableList<Employee> empObv = FXCollections.observableArrayList(empList);
-    cb_Employee.setItems(empObv);
+    try {
+      LinkedList<Employee> empList = EmployeeController.getEmployees();
+      ObservableList<Employee> empObv = FXCollections.observableArrayList(empList);
+      cb_Employee.setItems(empObv);
+    } catch (DBException e) {
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setContentText(e.getMessage());
+      errorAlert.show();
+    }
   }
 }
