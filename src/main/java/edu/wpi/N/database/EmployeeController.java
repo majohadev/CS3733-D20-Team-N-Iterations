@@ -297,7 +297,7 @@ public class EmployeeController {
         openList.add(
             new TranslatorRequest(
                 rs.getInt("requestID"),
-                rs.getInt("emp_assigned"),
+                rs.getInt("assigned_eID"),
                 rs.getString("notes"),
                 rs.getString("nodeID"),
                 getJavatime(rs.getTimestamp("timeRequested")),
@@ -642,6 +642,9 @@ public class EmployeeController {
   }
 
   public static GregorianCalendar getJavatime(Timestamp time) {
+    if (time == null) {
+      return null;
+    }
     Calendar cal = GregorianCalendar.getInstance();
     cal.setTime(time);
     return (GregorianCalendar) cal;

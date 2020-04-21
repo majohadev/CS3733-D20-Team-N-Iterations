@@ -67,13 +67,16 @@ public class EmployeeControllerTest {
 
   @Test
   public void testgetOpenRequest() throws DBException {
-    DbController.addNode("NSERV00104", 11, 11, 4, "Faulkner", "DEPT", "Longname", "ShortName", 'N');
-    EmployeeController.addLaundReq("Make it extra clean", "NSERV00104");
+    // DbController.addNode("NSERV00104", 11, 11, 4, "Faulkner", "SERV", "Longname", "ShortName",
+    // 'N');
+    DbController.addNode(
+        "NDEPT00302", 22, 22, 2, "Faulkner", "DEPT", "Longname1", "Shortname1", 'N');
+    // EmployeeController.addLaundReq("Make it extra clean", "NSERV00104");
     EmployeeController.addTransReq(
         "Need a translator for medicine description", "NDEPT00302", "Korean");
     LinkedList<Request> list = EmployeeController.getOpenRequests();
     assertEquals(2, list.size());
-    assertEquals("Korean", ((TranslatorRequest) list.get(1)).getLanguage());
+    assertTrue((list.contains(EmployeeController.getRequest(transReqID1))));
   }
 
   @Test
@@ -90,9 +93,13 @@ public class EmployeeControllerTest {
 
   @Test
   public void testaddTransReq() throws DBException {
+    DbController.addNode(
+        "NDEPT00104", 100, 100, 4, "Faulkner", "DEPT", "Longname", "shortname", 'N');
     EmployeeController.addTransReq(
-        "Need a Korean translator for prescription", "NDEPT00104", "Korean");
-    assertEquals("NDEPT00104", EmployeeController.getRequests().get(0).getNodeID());
+        "Need a Korean translator for prescription",
+        DbController.getNode("NDEPT00104").getNodeID(),
+        "Korean");
+    assertEquals("NDEPT00104", EmployeeController.getRequests().get(1).getNodeID());
   }
 
   @Test
