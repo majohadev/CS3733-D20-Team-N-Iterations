@@ -158,7 +158,7 @@
                                     </Label>
                                     <Button fx:id="btn_cafeteria" mnemonicParsing="false" prefHeight="55.0" prefWidth="55.0" style="-fx-background-radius: 10;" GridPane.rowIndex="1">
                                        <graphic>
-                                          <ImageView fitHeight="31.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView disable="true" fitHeight="31.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../images/food.png" />
                                              </image>
