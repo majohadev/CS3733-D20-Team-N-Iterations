@@ -64,17 +64,24 @@ public class CSVParseEmployeesTest {
     }
   }
 
-  /**
-   * Tests that Laundry employee was inputted correctly
-   *
-   * @throws DBException
-   */
-  @Test
-  public void testParseCSVLandrySuccessful() throws DBException {
-    LinkedList<Laundry> actualLandries = EmployeeController.getLaundrys();
-
-    Assertions.assertTrue(actualLandries.size() == 4);
-  }
+//  /**
+//   * Tests that Laundry employee was inputted correctly
+//   *
+//   * @throws DBException
+//   */
+//  @Test
+//  public void testParseCSVLandrySuccessful() throws DBException {
+//    LinkedList<Laundry> actualLandries = EmployeeController.getLaundrys();
+//
+//    // Check if list lf laundry workes has employee with expected name
+//    for (Laundry laundry : actualLandries) {
+//      if (laundry.getName().equals("Mike Laks")) {
+//        Assertions.assertTrue(true);
+//      }
+//    }
+//
+//    Assertions.assertTrue(actualLandries.size() == 4);
+//  }
 
   @AfterAll
   public static void cleanup() throws DBException {
