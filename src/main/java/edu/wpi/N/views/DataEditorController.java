@@ -34,8 +34,8 @@ public class DataEditorController implements Controller {
   @FXML Button btn_downloadnode;
   @FXML Button btn_downloadedge;
 
-  final String DEFAULT_NODES = "csv/MapEnodes.csv";
-  final String DEFAULT_PATHS = "csv/MapEedges.csv";
+  final String DEFAULT_NODES = "csv/UPDATEDTeamNnodes.csv";
+  final String DEFAULT_PATHS = "csv/UPDATEDTeamNedges.csv";
   final InputStream INPUT_NODES_DEFAULT = Main.class.getResourceAsStream(DEFAULT_NODES);;
   final InputStream INPUT_EDGES_DEFAULT = Main.class.getResourceAsStream(DEFAULT_PATHS);
 
@@ -73,6 +73,12 @@ public class DataEditorController implements Controller {
   @FXML
   public void onUploadNodesClicked() throws IOException, DBException {
 
+  }
+
+  @FXML
+  public void onUploadEdgesClicked() throws IOException, DBException {
+
+    DbController.clearEdges();
     DbController.clearNodes();
 
     String path = lbl_filePath.getText();
@@ -81,10 +87,6 @@ public class DataEditorController implements Controller {
     } else {
       CSVParser.parseCSVfromPath(path);
     }
-  }
-
-  @FXML
-  public void onUploadEdgesClicked() throws IOException {
 
     // For edges
     String path_edges = lbl_filePath_edges.getText();
@@ -93,6 +95,7 @@ public class DataEditorController implements Controller {
     } else {
       CSVParser.parseCSVfromPath(path_edges);
     }
+
   }
 
   @FXML
