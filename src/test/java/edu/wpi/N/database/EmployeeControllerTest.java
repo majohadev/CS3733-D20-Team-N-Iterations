@@ -179,7 +179,18 @@ public class EmployeeControllerTest {
   @AfterAll
   public static void cleanup() throws DBException {
     DbController.clearNodes();
-    EmployeeController.removeEmployee(1);
-    EmployeeController.removeEmployee(2);
+    for (int i : getAllEmployeeIds()) {
+      EmployeeController.removeEmployee(i);
+    }
+  }
+
+  private static LinkedList<Integer> getAllEmployeeIds() throws DBException {
+    LinkedList<Integer> ids = new LinkedList<Integer>();
+
+    for (Employee employee : EmployeeController.getEmployees()) {
+      ids.add(employee.getID());
+    }
+
+    return ids;
   }
 }
