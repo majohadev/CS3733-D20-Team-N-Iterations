@@ -3,11 +3,13 @@ package edu.wpi.N.entities;
 import java.util.LinkedList;
 
 public class Doctor {
+  private int id;
   private String name;
   private LinkedList<DbNode> loc;
   private String field;
 
-  public Doctor(String name, String field, LinkedList<DbNode> loc) {
+  public Doctor(int id, String name, String field, LinkedList<DbNode> loc) {
+    this.id = id;
     this.name = name;
     this.loc = loc;
     this.field = field;
@@ -23,6 +25,10 @@ public class Doctor {
 
   public String getField() {
     return field;
+  }
+
+  public int getID() {
+    return id;
   }
 
   public boolean equals(Object o) {
