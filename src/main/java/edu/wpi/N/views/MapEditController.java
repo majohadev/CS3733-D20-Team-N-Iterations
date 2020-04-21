@@ -8,8 +8,12 @@ import edu.wpi.N.entities.DbNode;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedList;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -36,6 +40,8 @@ public class MapEditController implements Controller {
   String[] types = {
     "HALL", "ELEV", "REST", "STAI", "DEPT", "LABS", "INFO", "CONF", "EXIT", "RETL", "SERV"
   };
+
+  ObservableList<String> floors = FXCollections.observableArrayList("1", "2", "3", "4", "5");
 
   @FXML Pane pn_display;
   @FXML Accordion acc_modify;
@@ -101,6 +107,12 @@ public class MapEditController implements Controller {
   Circle tempNode;
   DbNode editingNode;
   EditMode editMode;
+  int currentFloor = 4;
+
+  // CHANGE FLOOR
+  @FXML ChoiceBox cb_ChangeFloor;
+  @FXML Button btn_ChangeFloorConfirm;
+  @FXML ImageView img_master;
 
   public enum EditMode {
     NOSTATE,
@@ -126,6 +138,7 @@ public class MapEditController implements Controller {
     populateMap();
     accordionListener();
     populateComboBox(cb_NodesAddType, types);
+    cb_ChangeFloor.setItems(floors);
     accordionListenerNodes();
     accordionListenerEdges();
   }
@@ -133,6 +146,32 @@ public class MapEditController implements Controller {
   public void populateComboBox(ComboBox cb, String[] ar) {
     for (String el : ar) {
       cb.getItems().add(el);
+    }
+  }
+
+  public void onBtnChangeFloorClicked() {
+    resetPanes();
+    String floorNum = cb_ChangeFloor.getSelectionModel().getSelectedItem().toString();
+    if (floorNum.equals("1")) {
+      currentFloor = 1;
+      Image img = new Image(getClass().getResourceAsStream("images/Floor1TeamN.png"));
+      img_master.setImage(img);
+    } else if (floorNum.equals("2")) {
+      currentFloor = 2;
+      Image img = new Image(getClass().getResourceAsStream("images/Floor2TeamN.png"));
+      img_master.setImage(img);
+    } else if (floorNum.equals("3")) {
+      currentFloor = 3;
+      Image img = new Image(getClass().getResourceAsStream("images/Floor3TeamN.png"));
+      img_master.setImage(img);
+    } else if (floorNum.equals("4")) {
+      currentFloor = 4;
+      Image img = new Image(getClass().getResourceAsStream("images/Floor4SolidBackground.png"));
+      img_master.setImage(img);
+    } else if (floorNum.equals("5")) {
+      currentFloor = 5;
+      Image img = new Image(getClass().getResourceAsStream("images/Floor5TeamN.png"));
+      img_master.setImage(img);
     }
   }
 

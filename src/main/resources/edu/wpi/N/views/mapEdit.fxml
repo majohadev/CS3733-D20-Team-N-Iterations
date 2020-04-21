@@ -3,6 +3,7 @@
 <?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
@@ -23,7 +24,7 @@
          <children>
             <StackPane prefHeight="983.0" prefWidth="1520.0">
                <children>
-                  <ImageView fitHeight="942.0" fitWidth="1520.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="img_master" fitHeight="942.0" fitWidth="1520.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../images/Floor4SolidBackground.png" />
                      </image>
@@ -42,6 +43,8 @@
                               <Image url="@../images/Home.png" />
                            </image>
                         </ImageView>
+                        <Button fx:id="btn_ChangeFloorConfirm" layoutX="90.0" layoutY="443.0" mnemonicParsing="false" onMouseClicked="#onBtnChangeFloorClicked" prefHeight="41.0" prefWidth="81.0" text="Confirm" />
+                        <ChoiceBox fx:id="cb_ChangeFloor" layoutX="193.0" layoutY="451.0" prefWidth="150.0" />
                      </children>
                   </Pane>
                </children>
