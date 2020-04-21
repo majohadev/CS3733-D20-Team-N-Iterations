@@ -23,7 +23,7 @@ public class HomeController implements Controller {
   }
 
   public void onBtnScanClicked() throws IOException {
-    this.mainApp.switchScene("views/qrReadTest.fxml");
+    this.mainApp.switchScene("views/loginWindow.fxml");
   }
 
   public void onBtnGenerateClicked() throws IOException {

@@ -126,6 +126,8 @@ public class MapEditController implements Controller {
     populateMap();
     accordionListener();
     populateComboBox(cb_NodesAddType, types);
+    accordionListenerNodes();
+    accordionListenerEdges();
   }
 
   public void populateComboBox(ComboBox cb, String[] ar) {
@@ -142,10 +144,17 @@ public class MapEditController implements Controller {
             (observable, oldValue, newValue) -> {
               if (newValue != null) {
                 if (newValue.equals(pn_nodes)) {
-                  accordionListenerNodes();
-                } else if (newValue.equals(pn_edges)) {
                   onBtnClearClicked();
-                  accordionListenerEdges();
+                  resetPanes();
+                  for (TitledPane pane : acc_edges.getPanes()) {
+                    pane.setExpanded(false);
+                  }
+                } else if (newValue.equals(pn_edges)) {
+                  for (TitledPane pane : acc_nodes.getPanes()) {
+                    pane.setExpanded(false);
+                  }
+                  onBtnClearClicked();
+                  resetPanes();
                 }
               }
             });
@@ -202,7 +211,7 @@ public class MapEditController implements Controller {
   }
 
   public void resetPanes() {
-    // RESET DELETE
+    //    // RESET DELETE
     for (Circle mapNode : masterNodes.keySet()) {
       mapNode.setFill(Color.PURPLE);
       mapNode.setDisable(false);
@@ -308,7 +317,6 @@ public class MapEditController implements Controller {
     String longName = txt_add_longName.getText();
     String shortName = txt_add_shortName.getText();
     String type = (String) cb_NodesAddType.getValue();
-    System.out.println(type);
     if (longName.equals("") || shortName.equals("") || type == null) {
       displayErrorMessage("Invalid Input");
       return;

@@ -40,11 +40,21 @@ public class QRReadTestController extends QRReader implements Controller {
     btn_scanButton.setDisable(true);
     lbl_output.setText("Make sure QR code is clearly within view.");
     btn_scanButton.setText("Scanning...");
-    startScan();
+
+    // Open camera
+    panel.resume();
+    panel.setVisible(true);
+
+    startScan(false);
   }
 
   @Override
   public void onScanSucceed(String readKey) {
+
+    // Close camera
+    panel.pause();
+    panel.setVisible(false);
+
     lbl_output.setText("Scan successful! Key: " + readKey);
     btn_scanButton.setDisable(false);
     btn_scanButton.setText("Scan");
@@ -52,6 +62,11 @@ public class QRReadTestController extends QRReader implements Controller {
 
   @Override
   public void onScanFail() {
+
+    // Close camera
+    panel.pause();
+    panel.setVisible(false);
+
     lbl_output.setText("Scan timed out.");
     btn_scanButton.setDisable(false);
     btn_scanButton.setText("Scan");
@@ -63,7 +78,7 @@ public class QRReadTestController extends QRReader implements Controller {
         new Runnable() {
           @Override
           public void run() {
-            WebcamPanel wp = getWebcamView();
+            WebcamPanel wp = panel;
             swingNode.setContent(wp);
           }
         });
