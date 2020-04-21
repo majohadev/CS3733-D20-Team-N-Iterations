@@ -15,7 +15,7 @@ public class Pathfinder {
    *
    * @param currNode: current Node
    * @param nextNode: next Node
-   * @return: Euclidean distance from the start
+   * @return Euclidean distance from the start
    */
   public static double cost(Node currNode, Node nextNode) {
     return Math.sqrt(
@@ -27,7 +27,7 @@ public class Pathfinder {
    * Function calculates Manhatten distance between goal and current Node
    *
    * @param currNode: current Node
-   * @return: Manhattan distance to the goal Node
+   * @return Manhattan distance to the goal Node
    */
   public static double heuristic(Node currNode, Node end) {
     return Math.abs(end.getX() - currNode.getX()) + Math.abs(end.getY() - currNode.getY());

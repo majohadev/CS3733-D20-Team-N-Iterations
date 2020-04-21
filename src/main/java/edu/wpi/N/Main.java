@@ -1,6 +1,9 @@
 package edu.wpi.N;
 
-import edu.wpi.N.database.*;
+import edu.wpi.N.database.CSVParser;
+import edu.wpi.N.database.DBException;
+import edu.wpi.N.database.DbController;
+import edu.wpi.N.database.DoctorController;
 import edu.wpi.N.entities.DbNode;
 import java.io.InputStream;
 import java.sql.SQLException;
@@ -21,7 +24,7 @@ public class Main {
     LinkedList<DbNode> offices1 = new LinkedList();
     offices1.add(DbController.getNode("NDEPT00104"));
     offices1.add(DbController.getNode("NDEPT00604"));
-    DoctorController.addDoctor("Dr.Hue Jass", "Ligma", offices);
+    DoctorController.addDoctor("Dr.Hue Jace", "Ligma", offices);
     LinkedList<DbNode> offices2 = new LinkedList();
     offices2.add(DbController.getNode("NDEPT00704"));
     offices2.add(DbController.getNode("NDEPT01004"));
@@ -42,6 +45,17 @@ public class Main {
     EmployeeController.addTranslator("Bob", languagesA);
     EmployeeController.addTranslator("Andy", languagesB);
     EmployeeController.addTranslator("Camille", languagesC);
+    DoctorController.addDoctor("Dr.Seymour Seymourson", "Ligma", offices2);
+    LinkedList<DbNode> offices3 = new LinkedList();
+    offices3.add(DbController.getNode("NDEPT00304"));
+    offices3.add(DbController.getNode("NDEPT01004"));
+    DoctorController.addDoctor("Dr.Doolittle", "Ligma", offices3);
+    DoctorController.addDoctor("Dr.Dre", "Ligma", offices3);
+    DoctorController.addDoctor("Dr.Who", "Ligma", offices3);
+    DoctorController.addDoctor("Dr.Oz", "Ligma", offices3);
+    DoctorController.addDoctor("Dr.Zoidberg", "Ligma", offices3);
+    DoctorController.addDoctor("Doc Brown", "Ligma", offices3);
+    DoctorController.addDoctor("Dr.Suess", "Ligma", offices3);
     App.launch(App.class, args);
   }
 }

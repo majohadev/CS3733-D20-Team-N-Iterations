@@ -117,7 +117,7 @@ public class CSVParser {
    * @param pathToFile: full path to file as a string
    * @throws FileNotFoundException
    */
-  public static void parserCSVEmployeesFromPath(String pathToFile) throws FileNotFoundException {
+  public static void parseCSVEmployeesFromPath(String pathToFile) throws FileNotFoundException {
     try {
       File initialFile = new File(pathToFile);
       InputStream input = new FileInputStream(initialFile);
@@ -134,7 +134,7 @@ public class CSVParser {
    *
    * @param pathToFile: path to the CSV file as an InputStream
    */
-  public static void parseCSVEmployees(InputStream pathToFile) {
+  private static void parseCSVEmployees(InputStream pathToFile) {
     try {
 
       // create csvReader object passing
