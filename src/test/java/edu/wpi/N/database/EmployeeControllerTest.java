@@ -26,10 +26,10 @@ public class EmployeeControllerTest {
     EmployeeController.addTranslator("Felix Bignoodle", langs);
     felix = new Translator(1, "Felix Bignoodle", langs);
 
-    langs.clear();
-    langs.add("Gnomish");
-    EmployeeController.addTranslator("Fats Rumbuckle", langs);
-    fats = new Translator(2, "Fats Rumbuckle", langs);
+    LinkedList<String> langs2 = new LinkedList<>();
+    langs2.add("Gnomish");
+    EmployeeController.addTranslator("Fats Rumbuckle", langs2);
+    fats = new Translator(2, "Fats Rumbuckle", langs2);
 
     EmployeeController.addLaundry("Snaps McKraken");
     snaps = new Laundry(3, "Snaps McKraken");
