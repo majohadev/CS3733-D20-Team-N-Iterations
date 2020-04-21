@@ -417,7 +417,7 @@ public class MapDisplayController extends QRGenerator implements Controller {
 
   @FXML
   public void popupWindow(MouseEvent e) throws IOException {
-    if (loggedin == false && e.getSource() == btn_Login) {
+    if (loggedin == false) {
       Stage stage = new Stage();
       Parent root;
       root = FXMLLoader.load(getClass().getResource("loginWindow.fxml"));
@@ -425,6 +425,7 @@ public class MapDisplayController extends QRGenerator implements Controller {
       stage.setScene(scene);
       stage.initModality(Modality.APPLICATION_MODAL);
       stage.show();
+      loggedin = true;
     } else if (loggedin == true) {
       Stage stage = new Stage();
       Parent root;
@@ -452,7 +453,7 @@ public class MapDisplayController extends QRGenerator implements Controller {
     Alert confAlert = new Alert(Alert.AlertType.CONFIRMATION);
     confAlert.setContentText("Request Recieved");
     confAlert.show();
-  public void loginWindow(MouseEvent e) throws IOException {}
+  }
 
   private void GenerateQRDirections(Path path) {
     try {

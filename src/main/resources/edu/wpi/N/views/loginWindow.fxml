@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane onKeyPressed="#login" prefHeight="150.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.LoginController">
 <AnchorPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.LoginController">
    <children>
       <VBox alignment="CENTER" layoutX="14.0" layoutY="5.0" spacing="20.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="20.0">
@@ -18,8 +22,8 @@
                </font>
             </Label>
             <SplitPane dividerPositions="0.5" prefHeight="160.0" prefWidth="300.0">
-              <items>
-                <AnchorPane maxWidth="-Infinity" prefWidth="200.0">
+               <items>
+                  <AnchorPane maxWidth="-Infinity" prefWidth="200.0">
                      <children>
                         <VBox alignment="CENTER" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                            <children>
@@ -47,12 +51,12 @@
                         </VBox>
                      </children>
                   </AnchorPane>
-                <AnchorPane minHeight="-Infinity" minWidth="-Infinity" SplitPane.resizableWithParent="false">
+                  <AnchorPane minHeight="-Infinity" minWidth="-Infinity" SplitPane.resizableWithParent="false">
                      <children>
                         <Pane fx:id="pn_swingSpot" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
                      </children>
                   </AnchorPane>
-              </items>
+               </items>
             </SplitPane>
             <Button fx:id="btn_cancel" mnemonicParsing="false" onMouseClicked="#login" text="Cancel">
                <font>

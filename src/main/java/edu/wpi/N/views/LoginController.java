@@ -75,7 +75,7 @@ public class LoginController extends QRReader implements Controller {
   private boolean tryLogin(String user, String pass) {
 
     if (user.equals(USER) && pass.equals(PASS)) {
-      mdc.loggedin = true;
+      // mdc.loggedin = true;
       pn_swingSpot.getScene().getWindow().hide();
 
       cancelScan();

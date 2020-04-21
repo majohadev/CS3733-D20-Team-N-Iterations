@@ -15,13 +15,12 @@
    <children>
       <VBox alignment="CENTER" layoutX="640.0" layoutY="519.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <ImageView fitHeight="233.0" fitWidth="298.0" pickOnBounds="true" preserveRatio="true">
             <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../images/Brigham_and_Womens_Hospital_logo.svg.png" />
                </image>
             </ImageView>
-            <Label minHeight="-Infinity" text="Welcome to Brigham and Womens Hospital" textAlignment="CENTER" wrapText="true">
+            <Label minHeight="-Infinity" text="Welcome to Brigham and Womens Hospital" textAlignment="CENTER" wrapText="true"></Label>
             <ImageView fitHeight="233.0" fitWidth="298.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../images/Brigham_and_Womens_Hospital_logo.svg.png" />
@@ -54,7 +53,7 @@
                <font>
                   <Font name="Calibri" size="14.0" />
                </font></Button>
-             <Button fx:id="btn_filemanager" contentDisplay="CENTER" layoutX="866.0" layoutY="687.0" mnemonicParsing="false" onMouseClicked="#onBtnFileClicked" style="-fx-background-radius: 10;" text="Upload / Download CSV Files">
+            <Button fx:id="btn_filemanager" contentDisplay="CENTER" layoutX="866.0" layoutY="687.0" mnemonicParsing="false" onMouseClicked="#onBtnFileClicked" style="-fx-background-radius: 10;" text="Upload / Download CSV Files">
                <font>
                   <Font name="Calibri" size="14.0" />
                </font></Button>
