@@ -4,11 +4,13 @@ import com.google.common.collect.HashBiMap;
 import edu.wpi.N.App;
 import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.algorithms.Pathfinder;
+import edu.wpi.N.controllerData.AdminDataStorage;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.DbController;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Path;
 import java.io.IOException;
+import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -46,6 +48,7 @@ public class MapDisplayController implements Controller {
   int currentFloor = 4;
 
   Boolean loggedin = false;
+  AdminDataStorage dataStorage;
 
   @FXML Button btn_find;
   @FXML Button btn_reset;
@@ -381,6 +384,7 @@ public class MapDisplayController implements Controller {
 
     Laundry newLaundry =
         new Laundry(requestID, emp_assigned, notes, nodeID, timeRequested, timeCompleted, status);
+    dataStorage.addToList(newLaundry);
     return newLandry;
   }
 
@@ -406,10 +410,10 @@ public class MapDisplayController implements Controller {
     Translator newTranslator =
         new Translator(
             requestID, emp_assigned, notes, nodeID, timeRequested, timeCompleted, status, language);
+    dataStorage.addToList(newTranslator);
     return newTranslator;
   }
    */
-
   public void createNewTranslator(){
 
   }

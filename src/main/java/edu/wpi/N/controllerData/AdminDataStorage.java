@@ -18,10 +18,12 @@ public class AdminDataStorage {
     return newController;
   }
 
-  public ArrayList<MockData> addToList(){
+  /*
+  public ArrayList<MockData> addToList(ServiceRequest request){
     ArrayList<MockData> updatedData = new ArrayList<MockData>();
-
-
+    updatedData.add(request);
     return updatedData;
   }
+   */
+
 }
