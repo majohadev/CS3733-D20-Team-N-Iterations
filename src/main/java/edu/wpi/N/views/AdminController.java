@@ -27,6 +27,7 @@ import lombok.SneakyThrows;
 public class AdminController implements Initializable, Controller {
 
   private App mainApp;
+  private HomeController homeController;
   // public LoginController controller;
   @FXML Button btn_logout;
   @FXML Button btn_laundryReq;
@@ -151,8 +152,8 @@ public class AdminController implements Initializable, Controller {
 
   @FXML
   public void editMap(MouseEvent e) throws IOException {
-    this.mainApp.switchScene("mapEdit.fxml");
-    ((Node) (e.getSource())).getScene().getWindow().hide();
+    this.mainApp.switchScene("editMap.fxml");
+    // ((Node) (e.getSource())).getScene().getWindow().hide();
   }
 
   @Override

@@ -450,7 +450,6 @@ public class MapDisplayController extends QRGenerator implements Controller {
   @FXML
   public void createNewLaundry() throws DBException {
     int currentSelection = lst_laundryLocation.getSelectionModel().getSelectedIndex();
-
     String nodeID = fuzzySearchNodeListLaundry.get(currentSelection).getNodeID();
     String notes = txtf_laundryNotes.getText();
     int laundryRequest = EmployeeController.addLaundReq(notes, nodeID);
