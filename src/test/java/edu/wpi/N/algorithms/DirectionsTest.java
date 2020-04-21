@@ -39,9 +39,9 @@ public class DirectionsTest {
   public void directionsTester() throws DBException {
     Path path = Pathfinder.findPath("NREST00104", "NDEPT00704");
     ArrayList<String> directions = path.getDirections();
-    for (String s : directions) {
-      // System.out.println(s);
-    }
+    //    for (String s : directions) {
+    //      // System.out.println(s);
+    //    }
     Assertions.assertEquals(directions, path.getDirections());
   }
 
@@ -54,9 +54,9 @@ public class DirectionsTest {
   public void directionsTester2() throws DBException {
     Path path = Pathfinder.findPath("NSTAI00104", "NELEV00Y04");
     ArrayList<String> directions = path.getDirections();
-    for (String s : directions) {
-      // System.out.println(s);
-    }
+    //    for (String s : directions) {
+    //      // System.out.println(s);
+    //    }
     Assertions.assertEquals(directions, path.getDirections());
   }
 
@@ -69,9 +69,9 @@ public class DirectionsTest {
   public void directionsTester3() throws DBException {
     Path path = Pathfinder.findPath("NHALL00704", "NHALL01504");
     ArrayList<String> directions = path.getDirections();
-    for (String s : directions) {
-      // System.out.println(s);
-    }
+    //    for (String s : directions) {
+    //      // System.out.println(s);
+    //    }
     Assertions.assertEquals(directions, path.getDirections());
   }
 
@@ -84,9 +84,9 @@ public class DirectionsTest {
   public void directionsTester4() throws DBException {
     Path path = Pathfinder.findPath("NDEPT01304", "NHALL02204");
     ArrayList<String> directions = path.getDirections();
-    for (String s : directions) {
-      // System.out.println(s);
-    }
+    //    for (String s : directions) {
+    //      // System.out.println(s);
+    //    }
     Assertions.assertEquals(directions, path.getDirections());
   }
 
@@ -99,9 +99,9 @@ public class DirectionsTest {
   public void directionsTester5() throws DBException {
     Path path = Pathfinder.findPath("NDEPT01204", "NDEPT00204");
     ArrayList<String> directions = path.getDirections();
-    for (String s : directions) {
-      // System.out.println(s);
-    }
+    //    for (String s : directions) {
+    //      // System.out.println(s);
+    //    }
     Assertions.assertEquals(directions, path.getDirections());
   }
 
@@ -115,9 +115,9 @@ public class DirectionsTest {
   public void directionsTester6() throws DBException {
     Path path = Pathfinder.findPath("NREST00204", "NDEPT02104");
     ArrayList<String> directions = path.getDirections();
-    for (String s : directions) {
-      // System.out.println(s);
-    }
+    //    for (String s : directions) {
+    //      // System.out.println(s);
+    //    }
     Assertions.assertEquals(directions, path.getDirections());
   }
 
@@ -132,9 +132,9 @@ public class DirectionsTest {
   public void directionsTester7() throws DBException {
     Path path = Pathfinder.findPath("NDEPT00904", "NDEPT01104");
     ArrayList<String> directions = path.getDirections();
-    for (String s : directions) {
-      // System.out.println(s);
-    }
+    //    for (String s : directions) {
+    //      // System.out.println(s);
+    //    }
     Assertions.assertEquals(directions, path.getDirections());
   }
 
