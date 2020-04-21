@@ -9,9 +9,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.HomeController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.HomeController">
    <children>
-      <VBox alignment="CENTER" layoutX="640.0" layoutY="519.0" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox alignment="CENTER" layoutX="640.0" layoutY="519.0" spacing="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <ImageView fitHeight="233.0" fitWidth="298.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -26,28 +26,20 @@
             <Separator maxWidth="500.0" prefWidth="200.0" />
             <Label contentDisplay="CENTER" text="Click to Continue" textAlignment="CENTER">
                <font>
-                  <Font name="Calibri" size="18.0" />
+                  <Font name="Calibri" size="24.0" />
                </font>
             </Label>
-            <Button fx:id="btn_map" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#onBtnMapClicked" style="-fx-background-radius: 10;" text="Map">
+            <Button fx:id="btn_map" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#onBtnMapClicked" style="-fx-background-radius: 10;" text="View Map">
                <font>
-                  <Font name="Calibri" size="14.0" />
+                  <Font name="Calibri" size="24.0" />
                </font></Button>
             <Button fx:id="btn_edit" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#onBtnEditClicked" style="-fx-background-radius: 10;" text="Edit Map">
                <font>
-                  <Font name="Calibri" size="14.0" />
+                  <Font name="Calibri" size="24.0" />
                </font></Button>
-            <Button fx:id="btn_scanTest" contentDisplay="CENTER" layoutX="950.0" layoutY="567.0" mnemonicParsing="false" onMouseClicked="#onBtnScanClicked" style="-fx-background-radius: 10;" text="QR - Scan">
+            <Button fx:id="btn_filemanager" contentDisplay="CENTER" layoutX="866.0" layoutY="687.0" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#onBtnFileClicked" style="-fx-background-radius: 10;" text="Upload / Download CSV Files">
                <font>
-                  <Font name="Calibri" size="14.0" />
-               </font></Button>
-            <Button fx:id="btn_generateTest" contentDisplay="CENTER" layoutX="938.0" layoutY="612.0" mnemonicParsing="false" onMouseClicked="#onBtnGenerateClicked" style="-fx-background-radius: 10;" text="QR - Generate">
-               <font>
-                  <Font name="Calibri" size="14.0" />
-               </font></Button>
-            <Button fx:id="btn_filemanager" contentDisplay="CENTER" layoutX="866.0" layoutY="687.0" mnemonicParsing="false" onMouseClicked="#onBtnFileClicked" style="-fx-background-radius: 10;" text="Upload / Download CSV Files">
-               <font>
-                  <Font name="Calibri" size="14.0" />
+                  <Font name="Calibri" size="16.0" />
                </font></Button>
          </children>
       </VBox>
