@@ -18,12 +18,14 @@ import javafx.scene.input.MouseEvent;
 public class AdminController implements Initializable, Controller {
 
   private App mainApp;
+  // public LoginController controller;
   int initalSetup = 0;
 
   @FXML Button btn_logout;
   @FXML Button btn_laundryReq;
   @FXML Button btn_transReq;
   @FXML Button btn_Accept;
+  @FXML Button btn_Deny;
   @FXML TableView<MockData> tbMockData = new TableView<MockData>();
   @FXML TableColumn<MockData, String> currentData = new TableColumn<>("Data");
 
@@ -32,42 +34,20 @@ public class AdminController implements Initializable, Controller {
 
   @Override
   public void initialize(URL location, ResourceBundle resourceBundle) {
-    if (initalSetup == 0) {
+    if (App.adminDataStorage.newData != null) {
       TableColumn<MockData, String> data = new TableColumn<>("Data");
       data.setMinWidth(100);
       data.setCellValueFactory(new PropertyValueFactory<MockData, String>("data"));
-      tbMockData.setItems(getMockDataFunc());
-      tbMockData.getColumns().addAll(data);
-      System.out.println(initalSetup);
-      initalSetup = 1;
-    } else if (initalSetup == 1) {
-      TableColumn<MockData, String> updatedData = new TableColumn<>("Data");
-      updatedData.setMinWidth(100);
-      updatedData.setCellValueFactory(new PropertyValueFactory<MockData, String>("data"));
+      newData.setAll(App.adminDataStorage.newData);
       tbMockData.setItems(newData);
-      tbMockData.getColumns().addAll(updatedData);
-      System.out.println(initalSetup);
+      tbMockData.getColumns().addAll(data);
     }
-  }
-
-  // Gets the initial list to populate the table (in final implementation this method will most
-  // likely not exist)
-  public ObservableList<MockData> getMockDataFunc() {
-    ObservableList<MockData> data = FXCollections.observableArrayList();
-    data.add(new MockData("Hello"));
-    data.add(new MockData("Goodbye"));
-    return data;
-  }
-
-  // Pulls data from the table to
-  public ObservableList<MockData> getUpdatedDataFunc(TableView<MockData> table) {
-    ObservableList<MockData> newData = FXCollections.observableArrayList();
-    newData.addAll(table.getItems());
-    return newData;
   }
 
   @FXML
   public void closeScreen(MouseEvent event) {
+    App.adminDataStorage.newData.clear();
+    App.adminDataStorage.newData.addAll(tbMockData.getItems());
     ((Node) (event.getSource())).getScene().getWindow().hide();
   }
 
@@ -84,14 +64,10 @@ public class AdminController implements Initializable, Controller {
 
   @FXML
   public void acceptRow(MouseEvent e) {
-    if (e.getSource()
-        == btn_Accept) { // Checks if the request is getting accepted into the database
-      // Get selected item and send it to the database with the updated information
-      tbMockData
-          .getItems()
-          .removeAll(tbMockData.getSelectionModel().getSelectedItem()); // Removes the selected item
-      // Needs to repopulate a NEW list with the updated components | Function returns a new
-      newData.addAll(tbMockData.getItems());
+    if (e.getSource() == btn_Accept) {
+      tbMockData.getItems().removeAll(tbMockData.getSelectionModel().getSelectedItem());
+    } else if (e.getSource() == btn_Deny) {
+      tbMockData.getItems().removeAll(tbMockData.getSelectionModel().getSelectedItem());
     }
   }
 }

@@ -33,6 +33,9 @@ public class MapEditController implements Controller {
   final float MAP_HEIGHT = (MAP_WIDTH / IMAGE_WIDTH) * IMAGE_HEIGHT;
   final float HORIZONTAL_SCALE = (MAP_WIDTH) / IMAGE_WIDTH;
   final float VERTICAL_SCALE = (MAP_HEIGHT) / IMAGE_HEIGHT;
+  String[] types = {
+    "HALL", "ELEV", "REST", "STAI", "DEPT", "LABS", "INFO", "CONF", "EXIT", "RETL", "SERV"
+  };
 
   @FXML Pane pn_display;
   @FXML Accordion acc_modify;
@@ -51,10 +54,10 @@ public class MapEditController implements Controller {
 
   @FXML TextField txt_add_longName;
   @FXML TextField txt_add_shortName;
-  @FXML TextField txt_add_type;
   @FXML Button btn_add_newNode;
   @FXML Button btn_add_cancel;
   @FXML Button btn_add_save;
+  @FXML ComboBox cb_NodesAddType;
 
   @FXML ListView lst_selected;
   @FXML Button btn_delete_clear;
@@ -122,6 +125,13 @@ public class MapEditController implements Controller {
     db_EdgesDeleteSecondSelected = null;
     populateMap();
     accordionListener();
+    populateComboBox(cb_NodesAddType, types);
+  }
+
+  public void populateComboBox(ComboBox cb, String[] ar) {
+    for (String el : ar) {
+      cb.getItems().add(el);
+    }
   }
 
   public void accordionListener() {
@@ -199,8 +209,8 @@ public class MapEditController implements Controller {
     txt_add_longName.clear();
     txt_add_shortName.setDisable(true);
     txt_add_shortName.clear();
-    txt_add_type.setDisable(true);
-    txt_add_type.clear();
+    cb_NodesAddType.setDisable(true);
+    cb_NodesAddType.getSelectionModel().clearSelection();
     btn_add_newNode.setDisable(false);
     btn_add_cancel.setDisable(true);
     btn_add_save.setDisable(true);
@@ -256,7 +266,7 @@ public class MapEditController implements Controller {
   public void onBtnNewNodeClicked() {
     txt_add_longName.setDisable(false);
     txt_add_shortName.setDisable(false);
-    txt_add_type.setDisable(false);
+    cb_NodesAddType.setDisable(false);
     btn_add_cancel.setDisable(false);
     btn_add_save.setDisable(false);
     btn_add_newNode.setDisable(true);
@@ -276,10 +286,10 @@ public class MapEditController implements Controller {
     tempNode = null;
     txt_add_longName.clear();
     txt_add_shortName.clear();
-    txt_add_type.clear();
+    cb_NodesAddType.getSelectionModel().clearSelection();
     txt_add_longName.setDisable(true);
     txt_add_shortName.setDisable(true);
-    txt_add_type.setDisable(true);
+    cb_NodesAddType.setDisable(true);
     btn_add_newNode.setDisable(false);
     btn_add_save.setDisable(true);
     btn_add_cancel.setDisable(true);
@@ -288,8 +298,10 @@ public class MapEditController implements Controller {
   public void onBtnSaveClicked() throws DBException {
     String longName = txt_add_longName.getText();
     String shortName = txt_add_shortName.getText();
-    String type = txt_add_type.getText().toUpperCase();
-    if (longName.equals("") || shortName.equals("") || type.equals("") || type.length() != 4) {
+    String type = (String) cb_NodesAddType.getValue();
+    System.out.println(type);
+    if (longName.equals("") || shortName.equals("") || type == null) {
+      displayErrorMessage("Invalid Input");
       return;
     }
     int x = (int) ((float) tempNode.getCenterX() / HORIZONTAL_SCALE);
@@ -302,10 +314,10 @@ public class MapEditController implements Controller {
     masterNodes.put(mapNode, newNode);
     txt_add_longName.clear();
     txt_add_shortName.clear();
-    txt_add_type.clear();
+    cb_NodesAddType.getSelectionModel().clearSelection();
     txt_add_longName.setDisable(true);
     txt_add_shortName.setDisable(true);
-    txt_add_type.setDisable(true);
+    cb_NodesAddType.setDisable(true);
     btn_add_newNode.setDisable(false);
     btn_add_save.setDisable(true);
     btn_add_cancel.setDisable(true);
@@ -316,6 +328,9 @@ public class MapEditController implements Controller {
     int y = (int) ((float) masterNodes.inverse().get(editingNode).getCenterY() / VERTICAL_SCALE);
     String longName = txt_NodesEditLongName.getText();
     String shortName = txt_NodesEditShortName.getText();
+    if (longName.equals("") || shortName.equals("")) {
+      displayErrorMessage("Invalid Input");
+    }
     DbController.modifyNode(editingNode.getNodeID(), x, y, longName, shortName);
     DbNode newNode = DbController.getNode(editingNode.getNodeID());
     // CHECK
@@ -421,7 +436,6 @@ public class MapEditController implements Controller {
   }
 
   public void edgesAdd(Circle mapNode) {
-    System.out.println("Hello");
     if (txt_EdgesAddFirstLocation.isFocused()) {
       if (masterNodes.get(mapNode) == edgeNodes[1]) {
         return;
@@ -444,7 +458,7 @@ public class MapEditController implements Controller {
                 firstNode.getY() * VERTICAL_SCALE,
                 secondNode.getX() * HORIZONTAL_SCALE,
                 secondNode.getY() * VERTICAL_SCALE);
-        line.setFill(Color.RED);
+        line.setStroke(Color.RED);
         pn_display.getChildren().add(line);
       }
     } else if (txt_EdgesAddSecondLocation.isFocused()) {
@@ -629,7 +643,6 @@ public class MapEditController implements Controller {
       txt_EdgesEditStartNode.setText(db_EdgesEditFirstSelected.getShortName());
     } else if (txt_EdgesEditEndNode.isFocused()) {
       db_EdgesEditSecondSelected = masterNodes.get(mapNode);
-      mapNode.setFill(Color.SADDLEBROWN);
       txt_EdgesEditEndNode.setText(db_EdgesEditSecondSelected.getShortName());
       double x1 = masterNodes.inverse().get(db_EdgesEditFirstSelected).getCenterX();
       double y1 = masterNodes.inverse().get(db_EdgesEditFirstSelected).getCenterY();
@@ -671,6 +684,13 @@ public class MapEditController implements Controller {
     txt_EdgesEditStartNode.setText("");
     txt_EdgesEditEndNode.setText("");
     pn_firstEdges.getChildren().clear();
+  }
+
+  public void displayErrorMessage(String str) {
+    Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+    errorAlert.setHeaderText("Invalid input");
+    errorAlert.setContentText(str);
+    errorAlert.showAndWait();
   }
 
   public void onReturnClicked() throws IOException {
