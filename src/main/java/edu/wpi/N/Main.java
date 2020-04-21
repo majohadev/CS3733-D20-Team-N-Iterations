@@ -24,7 +24,7 @@ public class Main {
     LinkedList<DbNode> offices1 = new LinkedList();
     offices1.add(DbController.getNode("NDEPT00104"));
     offices1.add(DbController.getNode("NDEPT00604"));
-    DoctorController.addDoctor("Dr.Hue Jass", "Ligma", offices1);
+    DoctorController.addDoctor("Dr.Hue Jass", "Ligma", offices);
     LinkedList<DbNode> offices2 = new LinkedList();
     offices2.add(DbController.getNode("NDEPT00704"));
     offices2.add(DbController.getNode("NDEPT01004"));
