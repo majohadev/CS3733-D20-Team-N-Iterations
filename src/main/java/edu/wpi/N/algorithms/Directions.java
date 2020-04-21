@@ -37,7 +37,6 @@ public class Directions {
     boolean stateChange = true;
     double angle = 0;
     String message = "";
-    boolean r = true;
     for (int i = 0; i <= path.size() - 1; i++) {
       currNode = path.get(i);
       if (i < path.size() - 1) {
@@ -58,7 +57,7 @@ public class Directions {
                     + getDistanceString(getDistance(currNode, nextNode));
           } else {
             message =
-                "Start by proceeding down the corridor "
+                "Start by proceeding down the hall "
                     + getDistanceString(getDistance(currNode, nextNode));
           }
           break;
@@ -69,9 +68,9 @@ public class Directions {
           distance += getDistance(currNode, nextNode);
           if (!message.equals("")) {
             if (atEndOfHall(nextNode)) {
-              directions.add(message + " and proceed to the end of the hallway");
+              directions.add(message + " and proceed to the end of the hall");
             } else {
-              directions.add(message + " and proceed down the hallway");
+              directions.add(message); // + " and proceed down the hall");
             }
             message = "";
           } else if (stateChange || atIntersection(currNode)) {
@@ -79,7 +78,7 @@ public class Directions {
               message = "Continue to next intersection " + getDistanceString(distance);
             } else if (getLandmark(nextNode).equals(nextNode)) {
               message =
-                  "Proceed straight towards "
+                  "Go towards " // "Proceed straight towards "
                       + getLandmark(nextNode).getLongName()
                       + " "
                       + getDistanceString(distance);
@@ -88,7 +87,7 @@ public class Directions {
             } else {
               message =
                   "Continue past "
-                      + getLandmark(currNode).getLongName()
+                      + getLandmark(nextNode).getLongName()
                       + " "
                       + getDistanceString(distance);
             }
@@ -106,7 +105,7 @@ public class Directions {
               message = "";
             } else if (!(getLandmark(currNode) == null)) {
               directions.add(
-                  "Go straight towards "
+                  "Go towards " // "Go straight towards "
                       + getLandmark(currNode).getLongName()
                       + " "
                       + getDistanceString(getDistance(currNode, nextNode))
@@ -219,8 +218,8 @@ public class Directions {
    * @return String, how far in feet between nodes
    */
   private static String getDistanceString(double distance) {
-    return "(Go " + Math.round(distance) + " ft)";
-  }
+    return "(" + Math.round(distance) + " ft)";
+  } // "(Go " + Math.round(distance) + " ft)"
 
   /**
    * generates a string "Take ___ to floor __" using floor number and nodeType
@@ -307,13 +306,33 @@ public class Directions {
     return false;
   }
 
+  /** @return directions with numbers at beginning of each line */
+  private ArrayList<String> getNumberedDirection() {
+    ArrayList<String> newDirections = new ArrayList<String>();
+    int index = 1;
+    if (!this.directions.isEmpty()) {
+      for (String s : this.directions) {
+        newDirections.add(index + ". " + s);
+        index++;
+      }
+    } else {
+      return null;
+    }
+    return newDirections;
+  }
+
   /**
    * Takes a path and returns written directions for that path
    *
    * @return ArrayList of strings, each String is a line of directions
    */
   public ArrayList<String> getDirections() throws DBException {
-    this.generateDirections();
-    return this.directions;
+    if (!(this.path == null)) {
+      this.generateDirections();
+      // this.directions;
+      return this.getNumberedDirection();
+    } else {
+      return null;
+    }
   }
 }
