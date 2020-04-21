@@ -820,7 +820,17 @@ public class DbController {
     try {
       String query = "DELETE FROM nodes";
       statement.executeUpdate(query);
-      query = "DELETE FROM edges";
+      // unneccessary to explicitly delete from edges due to on delete cascade in foreign keys
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown error: clearNodes", e);
+    }
+  }
+
+  /** Clears all of the edges from the database */
+  public static void clearEdges() throws DBException {
+    try {
+      String query = "DELETE FROM edges";
       statement.executeUpdate(query);
     } catch (SQLException e) {
       e.printStackTrace();
