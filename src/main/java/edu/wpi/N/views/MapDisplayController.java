@@ -140,6 +140,10 @@ public class MapDisplayController implements Controller {
   }
 
   public void onMapNodeClicked(Circle mapNode) {
+    if (selectedNodes.size() > 1) {
+      masterNodes.inverse().get(selectedNodes.getFirst()).setFill(Color.PURPLE);
+      selectedNodes.removeFirst();
+    }
     if (mapNode.getFill() == Color.PURPLE) {
       mapNode.setFill(Color.RED);
       selectedNodes.add(masterNodes.get(mapNode));
