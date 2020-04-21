@@ -78,7 +78,7 @@ public class Directions {
             message = "";
           } else if (stateChange || atIntersection(currNode)) {
             if (getLandmark(nextNode) == null) {
-              message = "Continue to next corridor" + getDistanceString(distance);
+              message = "Continue to next intersection" + getDistanceString(distance);
             } else if (getLandmark(nextNode).equals(nextNode)) {
               message =
                   "Proceed straight towards "
@@ -101,8 +101,7 @@ public class Directions {
               if (i == 1) {
                 directions.add(message + "and turning " + getTurnType(angle, getAngle(i - 1)));
               } else {
-                directions.add(
-                    message + "and take the next " + getTurnType(angle, getAngle(i - 1)));
+                directions.add(message + "and turn " + getTurnType(angle, getAngle(i - 1)));
               }
               message = "";
             } else if (!(getLandmark(currNode) == null)) {
@@ -112,10 +111,10 @@ public class Directions {
                       + getDistanceString(getDistance(currNode, nextNode))
                       + "and turn "
                       + getTurnType(angle, getAngle(i - 1))
-                      + " at the next corridor");
+                      + " at the next intersection");
             } else {
               directions.add(
-                  "Proceed to next corridor"
+                  "Proceed to next intersection"
                       + getDistanceString(getDistance(currNode, nextNode))
                       + "and turn "
                       + getTurnType(angle, getAngle(i - 1)));
