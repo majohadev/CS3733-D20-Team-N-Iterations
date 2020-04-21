@@ -23,6 +23,6 @@ public class TranslatorRequest extends Request {
   }
 
   public String getServiceType() {
-    return "Laundry";
+    return "Translator";
   }
 }

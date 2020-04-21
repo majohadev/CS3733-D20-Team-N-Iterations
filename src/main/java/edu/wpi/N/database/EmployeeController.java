@@ -513,8 +513,29 @@ public class EmployeeController {
    * @param nodeID The ID of the node in which these services are requested
    * @return the id of the created request
    */
-  public static int addLaundReq(String notes, String nodeID) {
-    return 0;
+  public static int addLaundReq(String notes, String nodeID) throws DBException {
+    try {
+      String query =
+          "INSERT INTO request (timeRequested, notes, serviceType, nodeID, status) VALUES (?, ?, ?, ?, ?)";
+      PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+      stmt.setTimestamp(1, new Timestamp(new Date().getTime()));
+      stmt.setString(2, notes);
+      stmt.setString(3, "Laundry");
+      stmt.setString(4, nodeID);
+      stmt.setString(5, "OPEN");
+      stmt.execute();
+      ResultSet rs = stmt.getGeneratedKeys();
+      rs.next();
+      query = "INSERT INTO lrequest (requestID) VALUES (?)";
+      stmt = con.prepareStatement(query);
+      int id = rs.getInt("1");
+      stmt.setInt(1, id);
+      stmt.executeUpdate();
+      return id;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Error: addTransReq", e);
+    }
   }
 
   // Noah
