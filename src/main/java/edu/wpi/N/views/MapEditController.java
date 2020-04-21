@@ -126,6 +126,8 @@ public class MapEditController implements Controller {
     populateMap();
     accordionListener();
     populateComboBox(cb_NodesAddType, types);
+    accordionListenerNodes();
+    accordionListenerEdges();
   }
 
   public void populateComboBox(ComboBox cb, String[] ar) {
@@ -135,22 +137,31 @@ public class MapEditController implements Controller {
   }
 
   public void accordionListener() {
+    System.out.println("Accoedian listener called");
     acc_modify
         .expandedPaneProperty()
         .addListener(
             (observable, oldValue, newValue) -> {
               if (newValue != null) {
                 if (newValue.equals(pn_nodes)) {
-                  accordionListenerNodes();
-                } else if (newValue.equals(pn_edges)) {
                   onBtnClearClicked();
-                  accordionListenerEdges();
+                  resetPanes();
+                  for (TitledPane pane : acc_edges.getPanes()) {
+                    pane.setExpanded(false);
+                  }
+                } else if (newValue.equals(pn_edges)) {
+                  for (TitledPane pane : acc_nodes.getPanes()) {
+                    pane.setExpanded(false);
+                  }
+                  onBtnClearClicked();
+                  resetPanes();
                 }
               }
             });
   }
 
   public void accordionListenerNodes() {
+    System.out.println("nodes accordian listener");
     acc_nodes
         .expandedPaneProperty()
         .addListener(
@@ -158,12 +169,15 @@ public class MapEditController implements Controller {
               if (newValue != null) {
                 if (newValue.equals(pn_nodes_add)) {
                   editMode = EditMode.NODES_ADD;
+                  System.out.println("Listener Equals Nodes Add:" + "/n" + "State:" + editMode);
                   resetPanes();
                 } else if (newValue.equals(pn_nodes_delete)) {
                   editMode = EditMode.NODES_DELETE;
+                  System.out.println("Listener Equals Nodes Delete:" + "/n" + "State:" + editMode);
                   resetPanes();
                 } else if (newValue.equals(pn_nodes_edit)) {
                   editMode = EditMode.NODES_EDIT;
+                  System.out.println("Listener Equals Nodes Edit:" + "/n" + "State:" + editMode);
                   resetPanes();
                 }
               }
@@ -171,6 +185,7 @@ public class MapEditController implements Controller {
   }
 
   public void accordionListenerEdges() {
+    System.out.println("accordion listener edges called");
     acc_edges
         .expandedPaneProperty()
         .addListener(
@@ -179,13 +194,16 @@ public class MapEditController implements Controller {
                 if (newValue.equals(pn_edges_add)) {
                   resetPanes();
                   editMode = EditMode.EDGES_ADD;
+                  System.out.println("Listener Equals Edges Add:" + "/n" + "State:" + editMode);
                   checkBoxListener(chk_EdgesAddShowFirst);
                   checkBoxListener(chk_EdgesAddShowSecond);
                 } else if (newValue.equals(pn_edges_delete)) {
                   editMode = EditMode.EDGES_DELETE;
+                  System.out.println("Listener Equals Edges Delete:" + "/n" + "State:" + editMode);
                   resetPanes();
                 } else if (newValue.equals(pn_edges_edit)) {
                   editMode = EditMode.EDGES_EDIT;
+                  System.out.println("Listener Equals Edges Edit:" + "/n" + "State:" + editMode);
                   resetPanes();
                 }
               }
@@ -193,7 +211,7 @@ public class MapEditController implements Controller {
   }
 
   public void resetPanes() {
-    // RESET DELETE
+    //    // RESET DELETE
     for (Circle mapNode : masterNodes.keySet()) {
       mapNode.setFill(Color.PURPLE);
       mapNode.setDisable(false);
@@ -299,7 +317,6 @@ public class MapEditController implements Controller {
     String longName = txt_add_longName.getText();
     String shortName = txt_add_shortName.getText();
     String type = (String) cb_NodesAddType.getValue();
-    System.out.println(type);
     if (longName.equals("") || shortName.equals("") || type == null) {
       displayErrorMessage("Invalid Input");
       return;
@@ -534,6 +551,11 @@ public class MapEditController implements Controller {
   }
 
   public void onBtnAddEdgeClicked() throws DBException {
+    if (txt_EdgesAddFirstLocation.getText().equals("")
+        || txt_EdgesAddSecondLocation.getText().equals("")) {
+      displayErrorMessage("Invalid Input");
+      return;
+    }
     if (!txt_EdgesAddFirstLocation.getText().equals("")
         && (!txt_EdgesAddSecondLocation.getText().equals(""))) {
       pn_display.getChildren().removeIf(node -> node instanceof Line);
@@ -598,6 +620,8 @@ public class MapEditController implements Controller {
                 if (line_EdgesEditSelected != null) {
                   line_EdgesEditSelected.setStroke(Color.BLACK);
                 }
+                // ???????????????????????????????
+                txt_EdgesEditEndNode.setDisable(false);
                 db_EdgesEditSecondSelectedOld = adjacentNode;
                 line_EdgesEditSelected = line;
                 line.setStroke(Color.RED);
@@ -623,6 +647,10 @@ public class MapEditController implements Controller {
   }
 
   public void onBtnEdgesDeleteClicked() throws DBException {
+    if (txt_EdgesDeleteEdge.getText().equals("") || txt_EdgesDeleteNode.getText().equals("")) {
+      displayErrorMessage("Invalid Input");
+      return;
+    }
     DbController.removeEdge(
         db_EdgesDeleteFirstSelected.getNodeID(), db_EdgesDeleteSecondSelected.getNodeID());
     DbNode node = db_EdgesDeleteFirstSelected;
@@ -635,8 +663,10 @@ public class MapEditController implements Controller {
   public void edgesEditNodeClick(Circle mapNode) throws DBException {
     if (txt_EdgesEditStartNode.isFocused()) {
       if (db_EdgesEditFirstSelected != null) {
+
         resetEdgesEdit();
       }
+      txt_EdgesEditEndNode.setDisable(true);
       db_EdgesEditFirstSelected = masterNodes.get(mapNode);
       displayAdjacentEdges(db_EdgesEditFirstSelected, mapNode);
       mapNode.setFill(Color.GREEN);
@@ -658,17 +688,24 @@ public class MapEditController implements Controller {
   }
 
   public void onBtnEdgesEditDeleteClicked() throws DBException {
+    if (txt_EdgesEditStartNode.getText().equals("")
+        || txt_EdgesEditEndNode.getText().equals("")
+        || txt_EdgesEditEdge.getText().equals("")) {
+      displayErrorMessage("Invalid Input");
+      return;
+    }
     DbController.removeEdge(
         db_EdgesEditFirstSelected.getNodeID(), db_EdgesEditSecondSelectedOld.getNodeID());
     DbController.addEdge(
         db_EdgesEditFirstSelected.getNodeID(), db_EdgesEditSecondSelected.getNodeID());
-    DbNode node = db_EdgesEditFirstSelected;
+    // DbNode node = db_EdgesEditFirstSelected;
     resetEdgesEdit();
-    txt_EdgesEditStartNode.requestFocus();
-    edgesEditNodeClick(masterNodes.inverse().get(node));
+    // txt_EdgesEditStartNode.requestFocus();
+    // edgesEditNodeClick(masterNodes.inverse().get(node));
   }
 
   public void resetEdgesEdit() {
+    txt_EdgesEditEndNode.setDisable(true);
     if (db_EdgesEditFirstSelected != null) {
       masterNodes.inverse().get(db_EdgesEditFirstSelected).setFill(Color.PURPLE);
     }
