@@ -154,7 +154,6 @@ public class MapEditController implements Controller {
     line_EdgesDeleteSelected = null;
     db_EdgesDeleteFirstSelected = null;
     db_EdgesDeleteSecondSelected = null;
-    System.out.println(allFloorNodes.size());
     populateMap();
   }
 
@@ -165,7 +164,14 @@ public class MapEditController implements Controller {
   }
 
   public void onBtnChangeFloorClicked() throws DBException {
-    String floorNum = cb_ChangeFloor.getSelectionModel().getSelectedItem().toString();
+
+    Object floorNumObject = cb_ChangeFloor.getSelectionModel().getSelectedItem();
+    if (floorNumObject == null) {
+      displayErrorMessage("Invalid input");
+      return;
+    }
+    String floorNum = floorNumObject.toString();
+
     if (floorNum.equals("1")) {
       currentFloor = 1;
       Image img = new Image(getClass().getResourceAsStream("/edu/wpi/N/images/Floor1TeamN.png"));
