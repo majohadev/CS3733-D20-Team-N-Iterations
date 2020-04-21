@@ -161,7 +161,39 @@ public class DataEditorController implements Controller {
   }
 
   @FXML
-  public void onDownloadEdgesClicked() throws IOException {}
+  public void onDownloadEdgesClicked() throws IOException, DBException {
+
+    FileChooser fileChooser = new FileChooser();
+
+    // Set extension filter for csv files
+    FileChooser.ExtensionFilter extFilter =
+        new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv");
+    fileChooser.getExtensionFilters().add(extFilter);
+
+    // Show save file dialog
+    File file = fileChooser.showSaveDialog(null);
+
+    if (file != null) {
+      FileWriter fileWriter = new FileWriter(file.getAbsoluteFile(), true);
+      BufferedWriter csvWriter = new BufferedWriter(fileWriter);
+      csvWriter.append("edgeID");
+      csvWriter.append(",");
+      csvWriter.append("startNode");
+      csvWriter.append(",");
+      csvWriter.append("endNode");
+      csvWriter.append("\n");
+
+      LinkedList<String> edgesList = DbController.exportEdges();
+
+      for (String str : edgesList) {
+        csvWriter.append(str);
+        csvWriter.append("\n");
+      }
+
+      csvWriter.flush();
+      csvWriter.close();
+    }
+  }
 
   @FXML
   public void onDoneClicked() throws IOException {
