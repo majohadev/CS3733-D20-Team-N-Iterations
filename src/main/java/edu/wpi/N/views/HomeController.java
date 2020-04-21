@@ -21,12 +21,4 @@ public class HomeController implements Controller {
   public void onBtnFileClicked() throws IOException {
     this.mainApp.switchScene("views/fileManagementScreen.fxml");
   }
-
-  public void onBtnScanClicked() throws IOException {
-    this.mainApp.switchScene("views/loginWindow.fxml");
-  }
-
-  public void onBtnGenerateClicked() throws IOException {
-    this.mainApp.switchScene("views/qrGenerateTest.fxml");
-  }
 }

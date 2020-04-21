@@ -174,19 +174,40 @@ public class MapDisplayController extends QRGenerator implements Controller {
   }
 
   @FXML
-  private void onBtnFindClicked(MouseEvent event) {
+  private void onBtnFindClicked(MouseEvent event) throws DBException {
     if (selectedNodes.size() != 2) {
       return;
     }
     DbNode firstNode = selectedNodes.get(0);
     DbNode secondNode = selectedNodes.get(1);
 
+    if (DbController.getAdjacent(firstNode.getNodeID()).size() == 0
+        || DbController.getAdjacent(secondNode.getNodeID()).size() == 0) {
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setHeaderText("Invalid input");
+      errorAlert.setContentText("No existing paths to this node");
+      errorAlert.showAndWait();
+      return;
+    }
+
     Path path = Pathfinder.findPath(firstNode.getNodeID(), secondNode.getNodeID());
     if (path != null) {
       LinkedList<DbNode> pathNodes = path.getPath();
       drawPath(pathNodes);
       GenerateQRDirections(path);
+    } else {
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setHeaderText("Invalid input");
+      errorAlert.setContentText("No existing paths to this node");
+      errorAlert.showAndWait();
+      return;
     }
+
+    ArrayList<String> directions = path.getDirections();
+    for (String s : directions) {
+      System.out.println(s);
+    }
+    System.out.println(" ");
 
     for (Circle mapNode : masterNodes.keySet()) {
       mapNode.setDisable(true);
