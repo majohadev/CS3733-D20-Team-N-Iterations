@@ -6,7 +6,7 @@ import java.io.*;
 public class CSVParser {
 
   /**
-   * Parse NodeCSV file and add entries to Database
+   * Parse NodeCSV or EdgeCSV file and add entries to Database
    *
    * @param pathToFile: path to the CSV file as an InputStream
    */
@@ -49,11 +49,17 @@ public class CSVParser {
    * @param row: a row to parse data from
    */
   private static void parseEdgesRow(String[] row) throws Exception {
-    // String edgeID = row[0];
-    String startNodeId = row[1];
-    String endNodeId = row[2];
+    try {
+      // String edgeID = row[0];
+      String startNodeId = row[1];
+      String endNodeId = row[2];
 
-    DbController.addEdge(startNodeId, endNodeId);
+      DbController.addEdge(startNodeId, endNodeId);
+    } catch (Exception e){
+      // for debugging purposes
+      System.out.println(row[0]);
+      throw (e);
+    }
   }
 
   /**
@@ -79,6 +85,7 @@ public class CSVParser {
       DbController.addNode(
           nodeID, xcoord, ycoord, floor, building, nodeType, longName, shortName, teamAssigned);
     } catch (Exception e) {
+      // for debugging purposes
       System.out.println(row[0]);
       throw (e);
     }
@@ -98,6 +105,80 @@ public class CSVParser {
       CSVParser.parseCSV(input);
     } catch (FileNotFoundException e) {
       e.printStackTrace();
+      throw (e);
+    }
+  }
+
+
+  /**
+   * Parses CSV with employees from given path and adds them to database
+   * @param pathToFile: full path to file as a string
+   * @throws FileNotFoundException
+   */
+  public static void parserCSVEmployeesFromPath(String pathToFile) throws FileNotFoundException {
+    try {
+      File initialFile = new File(pathToFile);
+      InputStream input = new FileInputStream(initialFile);
+
+      CSVParser.parseCSV(input);
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+      throw (e);
+    }
+  }
+
+
+  /**
+   * Parse Employees CSV file and add entries to Database
+   *
+   * @param pathToFile: path to the CSV file as an InputStream
+   */
+  public static void parseCSVEmployees(InputStream pathToFile) {
+    try {
+
+      // create csvReader object passing
+      CSVReader csvReader = new CSVReader(new InputStreamReader(pathToFile, "UTF-8"));
+
+      // Read header
+      String[] nextLine = csvReader.readNext();
+
+
+
+      while ((nextLine = csvReader.readNext()) != null) {
+        parseEmployeeRow(nextLine);
+      }
+
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * Parses a row with an employee and adds an employee to database
+   * @param row
+   * @throws Exception
+   */
+  private static void parseEmployeeRow(String[] row) throws Exception{
+    try {
+      String nodeID = row[0];
+      int xcoord = Integer.parseInt(row[1]);
+      int ycoord = Integer.parseInt(row[2]);
+      int floor = Integer.parseInt(row[3]);
+      String building = row[4];
+      String nodeType = row[5];
+      String longName = row[6];
+      String shortName = row[7];
+      char teamAssigned = 'Z';
+      if (row.length == 9) {
+        teamAssigned = row[8].charAt(0);
+      }
+
+      DbController.addNode(
+              nodeID, xcoord, ycoord, floor, building, nodeType, longName, shortName, teamAssigned);
+
+    } catch (Exception e) {
+      // for debugging purposes
+      System.out.println(row[0]);
       throw (e);
     }
   }
