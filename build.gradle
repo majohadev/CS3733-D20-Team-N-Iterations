@@ -7,7 +7,7 @@ plugins {
     id "io.freefair.lombok" version "5.0.0-rc6"
 }
 
-mainClassName = 'EmployeeControllerTest'
+mainClassName = 'edu.wpi.N.Main'
 
 repositories {
     mavenCentral()
@@ -83,7 +83,8 @@ def codeCoverageExcludes = [
         'edu.wpi.N.Main',
         'edu.wpi.N.entities.*',
         'edu.wpi.N.views.*',
-        'edu.wpi.N.qrcontrol.*'
+        'edu.wpi.N.qrcontrol.*',
+        'edu.wpi.N.controllerData.*'
 ]
 
 jacoco {

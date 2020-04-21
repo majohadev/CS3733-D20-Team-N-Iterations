@@ -308,7 +308,6 @@ public class DbController {
       if (!e.getSQLState().equals("X0Y32")) throw e;
     }
 
-    // ServiceController.initService();
     DoctorController.initDoctor();
     EmployeeController.initEmployee();
   }
