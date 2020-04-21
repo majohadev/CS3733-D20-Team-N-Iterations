@@ -55,14 +55,17 @@ public class EmployeeControllerTest {
 
     EmployeeController.addLanguage(2, "Chinese");
     // assertEquals("Chinese", fats.getLanguages().get(1));
-    assertTrue(fats.getLanguages().contains("Chinese"));
+    assertTrue(((Translator) EmployeeController.getEmployee(2)).getLanguages().contains("Chinese"));
+    EmployeeController.removeLanguage(2, "Chinese");
   }
 
   @Test
   public void testremoveLanguage() throws DBException {
     EmployeeController.removeLanguage(1, "Gnomish");
-    assertNull(felix.getLanguages().get(0));
-    assertTrue(!felix.getLanguages().contains("Gnomish"));
+    assertEquals("Lojban", ((Translator) EmployeeController.getEmployee(1)).getLanguages().get(0));
+    assertFalse(
+        ((Translator) EmployeeController.getEmployee(1)).getLanguages().contains("Gnomish"));
+    EmployeeController.addLanguage(1, "Gnomish");
   }
 
   @Test
@@ -82,7 +85,7 @@ public class EmployeeControllerTest {
   @Test
   public void testaddTransReq() throws DBException {
     DbController.addNode(
-        "NDEPT00104", 100, 100, 4, "Faulkner", "DEPT", "Longname", "shortname", 'N');git
+        "NDEPT00104", 100, 100, 4, "Faulkner", "DEPT", "Longname", "shortname", 'N');
     int id =
         EmployeeController.addTransReq(
             "Need a Korean translator for prescription",
@@ -127,8 +130,9 @@ public class EmployeeControllerTest {
   @Test
   public void testGetTransLang() throws DBException {
     LinkedList<Translator> translators = EmployeeController.getTransLang("Gnomish");
-    assertEquals(1, translators.size());
-    assertTrue(translators.get(0).getName().equals(felix.getName()));
+    assertEquals(2, translators.get(0).getLanguages());
+    assertTrue(translators.contains(felix));
+    assertTrue(translators.contains(fats));
     //    assertTrue(
     //        translators.get(0).getName().equals(fats.getName())
     //            || translators.get(1).getName().equals(fats.getName()));
