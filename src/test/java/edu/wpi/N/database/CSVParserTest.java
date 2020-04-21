@@ -98,7 +98,6 @@ public class CSVParserTest {
 
     LinkedList<DbNode> expectedH9 = new LinkedList<DbNode>();
     expectedH9.add(new DbNode("CCCCCCCCCC", 776, 523, 1, "MainBuil", "LABS", "Candie", "CC", 'G'));
-
     expectedH9.add(new DbNode("H800000000", 596, 794, 1, "MainBuil", "HALL", "HALOL", "OO", 'Q'));
     expectedH9.add(new DbNode("H100000001", 999, 816, 1, "MainBuil", "HALL", "HALOL", "QQ", 'S'));
     expectedH9.add(new DbNode("H120000000", 1214, 715, 1, "MainBuil", "HALL", "HALOL", "SS", 'U'));
