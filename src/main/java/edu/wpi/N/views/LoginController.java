@@ -10,6 +10,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -25,6 +26,7 @@ public class LoginController extends QRReader implements Controller {
   public AdminController adminController;
 
   Boolean loggedin = false;
+  MapDisplayController mdc;
 
   private final String USER = "admin"; // Username
   private final String PASS = "1234"; // Password
@@ -61,23 +63,24 @@ public class LoginController extends QRReader implements Controller {
     } else if (event.getSource() == btn_cancel) {
 
       cancelScan();
-      panel.pause();
-      panel.setVisible(false);
+      panel.stop();
+      panel.getWebcam().close();
 
       ((Node) (event.getSource())).getScene().getWindow().hide();
       loggedin = false;
     }
+    loggedin = false;
   }
 
   private boolean tryLogin(String user, String pass) {
 
     if (user.equals(USER) && pass.equals(PASS)) {
-      loggedin = true;
+      // mdc.loggedin = true;
       pn_swingSpot.getScene().getWindow().hide();
 
       cancelScan();
-      panel.pause();
-      panel.setVisible(false);
+      panel.stop();
+      panel.getWebcam().close();
 
       try {
         Stage stage = new Stage();
@@ -92,8 +95,11 @@ public class LoginController extends QRReader implements Controller {
       }
     } else {
       loggedin = false;
-      txtf_username.setText("");
-      pwf_password.setText("");
+      txtf_username.clear();
+      pwf_password.clear();
+      Alert errorLogin = new Alert(Alert.AlertType.ERROR);
+      errorLogin.setContentText("Invalid Credentials");
+      errorLogin.show();
     }
     return loggedin;
   }
@@ -123,10 +129,5 @@ public class LoginController extends QRReader implements Controller {
             swingNode.setContent(panel);
           }
         });
-  }
-
-  public void getControllerMethod() {
-    FXMLLoader loader = new FXMLLoader(getClass().getResource("adminRequestScreen.fxml"));
-    loader.getController(); // Controller State is saved
   }
 }

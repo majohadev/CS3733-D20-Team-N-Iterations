@@ -32,7 +32,7 @@ public abstract class QRGenerator {
   private final int MAX_CHARS = 500;
 
   // How large to make the exported image
-  private final int IMAGE_SIZE = 350;
+  private final int IMAGE_SIZE = 300;
 
   // Generate QR code as JavaFX Image using concatenated list of strings, optionally storing the
   // result
@@ -50,7 +50,7 @@ public abstract class QRGenerator {
       }
 
       String trimmedText = sb.toString();
-
+      System.out.println(trimmedText.length() + " chars of max " + MAX_CHARS);
       if (trimmedText.length() > MAX_CHARS) {
         System.out.println("Too many characters in QR code!");
         return null;
