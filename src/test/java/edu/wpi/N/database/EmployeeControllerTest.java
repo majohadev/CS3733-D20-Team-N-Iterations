@@ -161,6 +161,14 @@ public class EmployeeControllerTest {
             new Service("00:00", "00:00", "Laundry", "Make a request for laundry services!")));
   }
 
+  @Test
+  public void testassigntoRequest() throws DBException {
+    EmployeeController.assignToRequest(felix.getID(), transReqID1);
+    assertEquals(1, EmployeeController.getRequest(transReqID1).getEmp_assigned());
+    EmployeeController.assignToRequest(fats.getID(), laundReqID1);
+    assertNull(EmployeeController.getRequest(laundReqID1).getRequestID());
+  }
+
   @AfterAll
   public static void cleanup() throws DBException {
     DbController.clearNodes();
