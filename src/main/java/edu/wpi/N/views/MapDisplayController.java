@@ -6,6 +6,8 @@ import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.algorithms.Pathfinder;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.DbController;
+import edu.wpi.N.database.EmployeeController;
+import edu.wpi.N.entities.*;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Doctor;
 import edu.wpi.N.entities.Path;
@@ -20,6 +22,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -59,6 +62,8 @@ public class MapDisplayController extends QRGenerator implements Controller {
   @FXML StackPane pn_movableMap;
   @FXML AnchorPane pn_mapFrame;
   @FXML ImageView img_map;
+  @FXML ComboBox<String> cb_languages;
+  @FXML Button btn_Login;
 
   HashBiMap<Circle, DbNode> masterNodes; // stores the map nodes and their respective database nodes
 
@@ -85,6 +90,9 @@ public class MapDisplayController extends QRGenerator implements Controller {
 
   @FXML TextField txtf_translatorLocation;
   @FXML TextField txtf_laundryLocation;
+  @FXML TextArea txtf_laundryNotes;
+  @FXML TextArea txtf_translatorNotes;
+  @FXML TextField txtf_language;
   @FXML ListView lst_laundryLocation;
   @FXML ListView lst_translatorSearchBox;
 
@@ -125,6 +133,10 @@ public class MapDisplayController extends QRGenerator implements Controller {
     defaultNode = DbController.getNode("NHALL00804");
     if (defaultNode == null) defaultNode = allFloorNodes.getFirst();
     populateMap();
+
+    LinkedList<String> languages = EmployeeController.getLanguages();
+    ObservableList<String> obvList = FXCollections.observableList(languages);
+    cb_languages.setItems(obvList);
   }
 
   public void populateMap() {
@@ -404,16 +416,15 @@ public class MapDisplayController extends QRGenerator implements Controller {
   }
 
   @FXML
-  public void popupWindow() throws IOException {
-    if (loggedin == false) {
-      loggedin = true;
+  public void popupWindow(MouseEvent e) throws IOException {
+    if (loggedin == false && e.getSource() == btn_Login) {
       Stage stage = new Stage();
       Parent root;
       root = FXMLLoader.load(getClass().getResource("loginWindow.fxml"));
       Scene scene = new Scene(root);
       stage.setScene(scene);
       stage.initModality(Modality.APPLICATION_MODAL);
-      stage.showAndWait();
+      stage.show();
     } else if (loggedin == true) {
       Stage stage = new Stage();
       Parent root;
@@ -425,14 +436,22 @@ public class MapDisplayController extends QRGenerator implements Controller {
     }
   }
 
-  /*
-  - Add to database function ->
-      - Take in a service request object
-      - Put it into the table
-      -
-   */
-
   @FXML
+  public void createNewLaundry() throws DBException {
+    int currentSelection = lst_laundryLocation.getSelectionModel().getSelectedIndex();
+
+    String nodeID = fuzzySearchNodeListLaundry.get(currentSelection).getNodeID();
+    String notes = txtf_laundryNotes.getText();
+    int laundryRequest = EmployeeController.addLaundReq(notes, nodeID);
+    App.adminDataStorage.addToList(laundryRequest);
+
+    txtf_laundryLocation.clear();
+    txtf_laundryNotes.clear();
+    lst_laundryLocation.getItems().clear();
+
+    Alert confAlert = new Alert(Alert.AlertType.CONFIRMATION);
+    confAlert.setContentText("Request Recieved");
+    confAlert.show();
   public void loginWindow(MouseEvent e) throws IOException {}
 
   private void GenerateQRDirections(Path path) {
@@ -443,5 +462,25 @@ public class MapDisplayController extends QRGenerator implements Controller {
     } catch (DBException e) {
       e.printStackTrace();
     }
+  }
+
+  @FXML
+  public void createNewTranslator() throws DBException {
+    int currentSelection = lst_translatorSearchBox.getSelectionModel().getSelectedIndex();
+
+    String nodeID = fuzzySearchNodeListTranslator.get(currentSelection).getNodeID();
+    String notes = txtf_translatorNotes.getText();
+    String language = cb_languages.getSelectionModel().getSelectedItem();
+    int transReq = EmployeeController.addTransReq(notes, nodeID, language);
+    App.adminDataStorage.addToList(transReq);
+
+    txtf_translatorLocation.clear();
+    txtf_translatorNotes.clear();
+    cb_languages.cancelEdit();
+    lst_translatorSearchBox.getItems().clear();
+
+    Alert confAlert = new Alert(Alert.AlertType.CONFIRMATION);
+    confAlert.setContentText("Request Recieved");
+    confAlert.show();
   }
 }
