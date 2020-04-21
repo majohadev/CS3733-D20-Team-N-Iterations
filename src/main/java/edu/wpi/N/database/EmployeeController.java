@@ -550,6 +550,12 @@ public class EmployeeController {
    */
   public static void assignToRequest(int employeeID, int requestID) throws DBException {
     try {
+      Employee emp = getEmployee(employeeID);
+      Request req = getRequest(requestID);
+      if (!emp.getServiceType().equals(req.getServiceType())) {
+        throw new DBException(
+            "Invalid kind of employee! That employee isn't authorized for that kind of job!");
+      }
       String query = "UPDATE request SET assigned_eID = ? WHERE requestID = ?";
       PreparedStatement stmt = con.prepareStatement(query);
       stmt.setInt(1, employeeID);

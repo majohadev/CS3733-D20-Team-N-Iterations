@@ -15,6 +15,11 @@ public class Translator extends Employee {
   }
 
   @Override
+  public String getServiceType() {
+    return "Translator";
+  }
+
+  @Override
   public boolean equals(Object o) {
     if (!(o instanceof Translator)) {
       return false;

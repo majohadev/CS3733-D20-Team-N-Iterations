@@ -17,6 +17,8 @@ public abstract class Employee {
     return name;
   }
 
+  public abstract String getServiceType();
+
   @Override
   public boolean equals(Object o) {
     if (!(o instanceof Employee)) {

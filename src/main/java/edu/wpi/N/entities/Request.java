@@ -66,11 +66,6 @@ public abstract class Request {
 
     Request other = (Request) o;
 
-    return requestID == other.requestID
-        && emp_assigned == other.emp_assigned
-        && notes.equals(other.notes)
-        && nodeID.equals(other.nodeID)
-        && timeRequested.toString().equals(other.timeRequested.toString())
-        && timeCompleted.toString().equals(other.timeCompleted.toString());
+    return requestID == other.requestID;
   }
 }

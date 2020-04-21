@@ -77,7 +77,8 @@ public class EmployeeControllerTest {
         "Need a translator for medicine description", "NDEPT00302", "Korean");
     LinkedList<Request> list = EmployeeController.getOpenRequests();
     assertEquals(3, list.size());
-    assertTrue((list.contains(EmployeeController.getRequest(transReqID1))));
+    assertFalse((list.contains(EmployeeController.getRequest(transReqID1))));
+    assertTrue((list.contains(EmployeeController.getRequest(laundReqID1))));
   }
 
   @Test
@@ -128,8 +129,8 @@ public class EmployeeControllerTest {
   @Test
   public void testGetTransLang() throws DBException {
     LinkedList<Translator> translators = EmployeeController.getTransLang("Gnomish");
-    assertEquals(2, translators.size());
-    assertTrue(translators.get(0).getName().equals(felix.getName()));
+    assertEquals(1, translators.size());
+    assertTrue(translators.get(0).getName().equals(fats.getName()));
     //    assertTrue(
     //        translators.get(0).getName().equals(fats.getName())
     //            || translators.get(1).getName().equals(fats.getName()));
