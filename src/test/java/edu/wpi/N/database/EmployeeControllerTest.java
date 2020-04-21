@@ -82,7 +82,7 @@ public class EmployeeControllerTest {
   @Test
   public void testaddTransReq() throws DBException {
     DbController.addNode(
-        "NDEPT00104", 100, 100, 4, "Faulkner", "DEPT", "Longname", "shortname", 'N');
+        "NDEPT00104", 100, 100, 4, "Faulkner", "DEPT", "Longname", "shortname", 'N');git
     int id =
         EmployeeController.addTransReq(
             "Need a Korean translator for prescription",

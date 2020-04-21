@@ -651,8 +651,8 @@ public class EmployeeController {
     try {
       String query = "UPDATE request SET status = 'DENY', timeCompleted = ? WHERE requestID = ?";
       PreparedStatement stmt = con.prepareStatement(query);
-      stmt.setInt(1, requestID);
-      stmt.setTimestamp(2, new Timestamp(new Date().getTime()));
+      stmt.setTimestamp(1, new Timestamp(new Date().getTime()));
+      stmt.setInt(2, requestID);
       stmt.executeUpdate();
     } catch (SQLException e) {
       e.printStackTrace();
