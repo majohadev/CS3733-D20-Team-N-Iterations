@@ -10,6 +10,7 @@ import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Doctor;
 import edu.wpi.N.entities.Path;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -153,7 +154,7 @@ public class MapDisplayController implements Controller {
   }
 
   @FXML
-  private void onBtnFindClicked(MouseEvent event) {
+  private void onBtnFindClicked(MouseEvent event) throws DBException {
     if (selectedNodes.size() != 2) {
       return;
     }
@@ -163,6 +164,12 @@ public class MapDisplayController implements Controller {
     Path path = Pathfinder.findPath(firstNode.getNodeID(), secondNode.getNodeID());
     LinkedList<DbNode> pathNodes = path.getPath();
     drawPath(pathNodes);
+
+    ArrayList<String> directions = path.getDirections();
+    for (String s : directions) {
+      System.out.println(s);
+    }
+    System.out.println(" ");
 
     for (Circle mapNode : masterNodes.keySet()) {
       mapNode.setDisable(true);
