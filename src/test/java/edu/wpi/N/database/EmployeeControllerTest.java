@@ -56,6 +56,8 @@ public class EmployeeControllerTest {
     // assertEquals("Chinese", fats.getLanguages().get(1));
     fats = (Translator) EmployeeController.getEmployee(fats.getID());
     assertTrue(fats.getLanguages().contains("Chinese"));
+    EmployeeController.removeLanguage(fats.getID(), "Chinese");
+    fats = (Translator) EmployeeController.getEmployee(fats.getID());
   }
 
   @Test
@@ -64,6 +66,8 @@ public class EmployeeControllerTest {
     // assertNull(felix.getLanguages().get(0));
     felix = (Translator) EmployeeController.getEmployee(felix.getID());
     assertFalse(felix.getLanguages().contains("Gnomish"));
+    EmployeeController.addLanguage(felix.getID(), "Gnomish");
+    felix = (Translator) EmployeeController.getEmployee(felix.getID());
   }
 
   @Test
@@ -165,8 +169,12 @@ public class EmployeeControllerTest {
   public void testassigntoRequest() throws DBException {
     EmployeeController.assignToRequest(felix.getID(), transReqID1);
     assertEquals(1, EmployeeController.getRequest(transReqID1).getEmp_assigned());
-    EmployeeController.assignToRequest(fats.getID(), laundReqID1);
-    assertNull(EmployeeController.getRequest(laundReqID1).getRequestID());
+    assertThrows(
+        DBException.class,
+        () -> {
+          EmployeeController.assignToRequest(fats.getID(), laundReqID1);
+        });
+    assertEquals(0, EmployeeController.getRequest(laundReqID1).getEmp_assigned());
   }
 
   @AfterAll
