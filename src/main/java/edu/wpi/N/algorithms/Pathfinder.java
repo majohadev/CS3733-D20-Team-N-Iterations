@@ -40,6 +40,12 @@ public class Pathfinder {
    */
   public static Path findPath(String startID, String endID) {
     try {
+      DbNode startDb = DbController.getNode(startID);
+      DbNode endDb = DbController.getNode(endID);
+
+      int floorNumStart = startDb.getFloor();
+      int floorNumEnd = endDb.getFloor();
+
       Node start = DbController.getGNode(startID);
       Node end = DbController.getGNode(endID);
 
@@ -62,7 +68,8 @@ public class Pathfinder {
         }
 
         // for every node (next node), current node has edge to:
-        LinkedList<Node> adjacentToCurrent = DbController.getGAdjacent(current.ID);
+        LinkedList<Node> adjacentToCurrent =
+            DbController.getGAdjacent(current.ID, floorNumStart, floorNumEnd);
         for (Node nextNode : adjacentToCurrent) {
           String nextNodeID = nextNode.ID;
 
