@@ -154,6 +154,12 @@ public class MapEditController implements Controller {
     line_EdgesDeleteSelected = null;
     db_EdgesDeleteFirstSelected = null;
     db_EdgesDeleteSecondSelected = null;
+    for (TitledPane pane : acc_edges.getPanes()) {
+      pane.setExpanded(false);
+    }
+    for (TitledPane pane : acc_nodes.getPanes()) {
+      pane.setExpanded(false);
+    }
     populateMap();
   }
 
