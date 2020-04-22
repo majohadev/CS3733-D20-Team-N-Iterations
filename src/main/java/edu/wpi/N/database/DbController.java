@@ -65,19 +65,20 @@ public class DbController {
   }
 
   /**
-   * Modifies a Node in the database. May change NodeID
+   * Modifies a node unsafely. Probably shouldn't ever use. Can mess with nodeID
    *
-   * @param nodeID the ID of the node you wish to change
-   * @param x The new x coordinate of the node
-   * @param y The new y coordinate of the node
-   * @param floor The new floor of the node
-   * @param building The new building the node is in
-   * @param longName The new node's longName
-   * @param shortName The new node's shortName
-   * @param teamAssigned The new team assigned to the Node
-   * @return true if the node was modified, false otherwise
+   * @param nodeID the nodeID of the node you want to modify
+   * @param x the new x value
+   * @param y the new y value
+   * @param floor the new floor
+   * @param building the new building
+   * @param nodeType the new nodeType
+   * @param longName the new longName
+   * @param shortName the new shortName
+   * @param teamAssigned the new teamAssigned
+   * @return
+   * @throws DBException
    */
-  // Noah
   public static boolean modifyNode(
       String nodeID,
       int x,
@@ -99,7 +100,8 @@ public class DbController {
         if (nodeID.substring(1, 5).equals(nodeType)) {
           newID = teamAssigned + nodeID.substring(1, 8) + String.format("%02d", floor);
         } else {
-          newID = teamAssigned + nodeType.toUpperCase() + nextAvailNum(nodeType) + "0" + floor;
+          newID =
+              teamAssigned + nodeType.toUpperCase() + nextAvailNum(nodeType, floor) + "0" + floor;
         }
       } else newID = nodeID;
       if (!newID.equals(nodeID)) {
@@ -322,10 +324,11 @@ public class DbController {
    * @throws SQLException if something goes wrong with the sql
    */
   // Chris
-  private static String nextAvailNum(String nodeType) throws SQLException {
-    String query = "SELECT nodeID FROM nodes WHERE nodeType = ?";
+  private static String nextAvailNum(String nodeType, int floor) throws SQLException {
+    String query = "SELECT nodeID FROM nodes WHERE nodeType = ? AND floor = ?";
     PreparedStatement stmt = con.prepareStatement(query);
     stmt.setString(1, nodeType);
+    stmt.setInt(2, floor);
     ResultSet rs = stmt.executeQuery();
     ArrayList<Integer> nums = new ArrayList<Integer>();
     while (rs.next()) {
@@ -378,7 +381,10 @@ public class DbController {
       throws DBException {
     try {
       String nodeID =
-          "I" + nodeType.toUpperCase() + nextAvailNum(nodeType) + String.format("%02d", floor);
+          "I"
+              + nodeType.toUpperCase()
+              + nextAvailNum(nodeType, floor)
+              + String.format("%02d", floor);
       String query = "INSERT INTO nodes VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
       PreparedStatement stmt = con.prepareStatement(query);
       stmt.setString(1, nodeID);
