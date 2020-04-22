@@ -31,8 +31,8 @@ public class DataEditorController implements Controller {
   @FXML Button btn_downloadnode;
   @FXML Button btn_downloadedge;
 
-  final String DEFAULT_NODES = "csv/MapEnodes.csv";
-  final String DEFAULT_PATHS = "csv/MapEedges.csv";
+  final String DEFAULT_NODES = "csv/UPDATEDTeamNnodes.csv";
+  final String DEFAULT_PATHS = "csv/UPDATEDTeamNedges.csv";
   final InputStream INPUT_NODES_DEFAULT = Main.class.getResourceAsStream(DEFAULT_NODES);;
   final InputStream INPUT_EDGES_DEFAULT = Main.class.getResourceAsStream(DEFAULT_PATHS);
 
