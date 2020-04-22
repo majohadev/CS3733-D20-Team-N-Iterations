@@ -60,7 +60,7 @@ public class AdminController implements Initializable, Controller {
   public void initialize(URL location, ResourceBundle resourceBundle) {
     if (App.adminDataStorage.newData != null) {
       try {
-        LinkedList<Request> reqs = EmployeeController.getOpenRequests();
+        LinkedList<Request> reqs = EmployeeController.getRequests();
         tableData.setAll(reqs);
       } catch (DBException e) {
         Alert newAlert = new Alert(Alert.AlertType.ERROR);
