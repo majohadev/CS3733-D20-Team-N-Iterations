@@ -369,8 +369,10 @@ public class MapDisplayController extends QRGenerator implements Controller {
 
   @FXML
   private void onNearestBathroomClicked(MouseEvent event) throws Exception {
+    DbNode startNode = defaultNode;
+    if (selectedNodes.size() > 0) startNode = selectedNodes.getFirst();
     onResetClicked(event);
-    Path pathToBathroom = Pathfinder.findQuickAccess(defaultNode, "REST");
+    Path pathToBathroom = Pathfinder.findQuickAccess(startNode, "REST");
     if (pathToBathroom != null) {
       LinkedList<DbNode> pathNodes = pathToBathroom.getPath();
       drawPath(pathNodes);
