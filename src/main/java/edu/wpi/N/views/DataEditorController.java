@@ -86,6 +86,7 @@ public class DataEditorController implements Controller {
       CSVParser.parseCSVfromPath(path_edges);
     }
 
+    if(DbController.getNode("NDEPT01804") != null){
     LinkedList<DbNode> offices = new LinkedList();
     offices.add(DbController.getNode("NDEPT01804"));
     offices.add(DbController.getNode("NDEPT00604"));
@@ -125,6 +126,7 @@ public class DataEditorController implements Controller {
     DoctorController.addDoctor("Dr.Zoidberg", "Ligma", offices3);
     DoctorController.addDoctor("Doc Brown", "Ligma", offices3);
     DoctorController.addDoctor("Dr.Suess", "Ligma", offices3);
+    }
   }
 
   @FXML
