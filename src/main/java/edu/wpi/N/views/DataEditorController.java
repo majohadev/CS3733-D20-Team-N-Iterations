@@ -71,14 +71,11 @@ public class DataEditorController implements Controller {
   }
 
   @FXML
-  public void onUploadNodesClicked() throws IOException, DBException {
-
-  }
+  public void onUploadNodesClicked() throws IOException, DBException {}
 
   @FXML
   public void onUploadEdgesClicked() throws IOException, DBException {
 
-    DbController.clearEdges();
     DbController.clearNodes();
 
     String path = lbl_filePath.getText();
@@ -95,7 +92,7 @@ public class DataEditorController implements Controller {
     } else {
       CSVParser.parseCSVfromPath(path_edges);
     }
-
+    DbController.fixNodes();
   }
 
   @FXML
