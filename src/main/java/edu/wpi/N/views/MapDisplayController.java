@@ -2,8 +2,10 @@ package edu.wpi.N.views;
 
 import com.google.common.collect.HashBiMap;
 import edu.wpi.N.App;
+import edu.wpi.N.Main;
 import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.algorithms.Pathfinder;
+import edu.wpi.N.database.CSVParser;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.DbController;
 import edu.wpi.N.database.EmployeeController;
@@ -13,6 +15,7 @@ import edu.wpi.N.entities.Doctor;
 import edu.wpi.N.entities.Path;
 import edu.wpi.N.qrcontrol.QRGenerator;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import javafx.collections.FXCollections;
@@ -126,6 +129,11 @@ public class MapDisplayController extends QRGenerator implements Controller {
   }
 
   public void initialize() throws DBException {
+    DbController.clearNodes();
+    InputStream nodes = Main.class.getResourceAsStream("csv/UPDATEDTeamNnodes.csv");
+    InputStream edges = Main.class.getResourceAsStream("csv/UPDATEDTeamNedges.csv");
+    CSVParser.parseCSV(nodes);
+    CSVParser.parseCSV(edges);
     clampPanning(0, 0);
     selectedNodes = new LinkedList<DbNode>();
     allFloorNodes = DbController.floorNodes(4, "Faulkner");

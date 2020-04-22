@@ -69,8 +69,6 @@ public class DataEditorController implements Controller {
     }
   }
 
-
-
   @FXML
   public void onUploadEdgesClicked() throws IOException, DBException {
     DbController.clearNodes();
