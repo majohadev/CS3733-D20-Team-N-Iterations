@@ -15,7 +15,7 @@ public class CSVParserTest {
 
   @BeforeAll
   public static void initializeTest() throws SQLException, ClassNotFoundException, DBException {
-    DbController.initDB();
+    MapDB.initDB();
   }
 
   /** Tests that ParseCSV imports Nodes and Edges from csv files into Database successfully */
@@ -39,13 +39,13 @@ public class CSVParserTest {
         new DbNode("H130000000", 1341, 1114, 1, "MainBuil", "HALL", "HALOL", "TT", 'V');*/
 
     // Compare with first
-    Assertions.assertEquals(firstExpected, DbController.getNode("AAAAAAAAAA"));
+    Assertions.assertEquals(firstExpected, MapDB.getNode("AAAAAAAAAA"));
 
     // Compare center
-    Assertions.assertEquals(middleExpected, DbController.getNode("H500000000"));
+    Assertions.assertEquals(middleExpected, MapDB.getNode("H500000000"));
     // Compare last
-    Assertions.assertEquals(lastExpected, DbController.getNode("H130000000"));
-    DbController.clearNodes();
+    Assertions.assertEquals(lastExpected, MapDB.getNode("H130000000"));
+    MapDB.clearNodes();
   }
 
   /**
@@ -74,12 +74,12 @@ public class CSVParserTest {
             new DbNode("H130000000", 1341, 1114, 1, "MainBuil", "HALL", "HALOL", "TT", 'V');*/
 
     // Compare with first
-    Assertions.assertEquals(firstExpected, DbController.getNode("AAAAAAAAAA"));
+    Assertions.assertEquals(firstExpected, MapDB.getNode("AAAAAAAAAA"));
     // Compare center
-    Assertions.assertEquals(middleExpected, DbController.getNode("H500000000"));
+    Assertions.assertEquals(middleExpected, MapDB.getNode("H500000000"));
     // Compare last
-    Assertions.assertEquals(lastExpected, DbController.getNode("H130000000"));
-    DbController.clearNodes();
+    Assertions.assertEquals(lastExpected, MapDB.getNode("H130000000"));
+    MapDB.clearNodes();
   }
 
   /**
@@ -102,14 +102,14 @@ public class CSVParserTest {
     expectedH9.add(new DbNode("H100000001", 999, 816, 1, "MainBuil", "HALL", "HALOL", "QQ", 'S'));
     expectedH9.add(new DbNode("H120000000", 1214, 715, 1, "MainBuil", "HALL", "HALOL", "SS", 'U'));
 
-    LinkedList<DbNode> actualEdges = DbController.getAdjacent("H900000000");
+    LinkedList<DbNode> actualEdges = MapDB.getAdjacent("H900000000");
 
     Assertions.assertTrue(expectedH9.contains(actualEdges.get(0)));
     Assertions.assertTrue(expectedH9.contains(actualEdges.get(1)));
     Assertions.assertTrue(expectedH9.contains(actualEdges.get(2)));
     Assertions.assertTrue(expectedH9.contains(actualEdges.get(3)));
 
-    DbController.clearNodes();
+    MapDB.clearNodes();
   }
 
   /**
@@ -122,7 +122,7 @@ public class CSVParserTest {
     String path = f.getAbsolutePath();
 
     Assertions.assertThrows(Exception.class, () -> CSVParser.parseCSVfromPath(path));
-    DbController.clearNodes();
+    MapDB.clearNodes();
   }
 
   /** Tests that parceCSVfromPath successfully parses Prototype Node file */
@@ -138,7 +138,7 @@ public class CSVParserTest {
             "BCONF00102",
             2150,
             1025,
-            2,
+            4,
             "45 Francis",
             "CONF",
             "Duncan Reid Conference Room",
@@ -146,12 +146,12 @@ public class CSVParserTest {
             'Z');
 
     // Compare with first
-    Assertions.assertEquals(firstExpected, DbController.getNode("BCONF00102"));
-    DbController.clearNodes();
+    Assertions.assertEquals(firstExpected, MapDB.getNode("BCONF00102"));
+    MapDB.clearNodes();
   }
 
   @AfterAll
   public static void clearDb() throws DBException {
-    DbController.clearNodes();
+    MapDB.clearNodes();
   }
 }

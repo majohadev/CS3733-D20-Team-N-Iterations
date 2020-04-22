@@ -1,10 +1,12 @@
 package edu.wpi.N.entities;
 
+import edu.wpi.N.database.DBException;
+import edu.wpi.N.database.ServiceDB;
 import java.util.GregorianCalendar;
 
 public abstract class Request {
   int requestID;
-  int emp_assigned;
+  Employee emp_assigned;
   String notes;
   String nodeID;
   GregorianCalendar timeRequested;
@@ -24,7 +26,11 @@ public abstract class Request {
       GregorianCalendar timeCompleted,
       String status) {
     this.requestID = requestID;
-    this.emp_assigned = emp_assigned;
+    try {
+      this.emp_assigned = ServiceDB.getEmployee(emp_assigned);
+    } catch (DBException e) {
+      this.emp_assigned = null;
+    }
     this.notes = notes;
     this.nodeID = nodeID;
     this.timeCompleted = timeCompleted;
@@ -36,7 +42,7 @@ public abstract class Request {
     return requestID;
   }
 
-  public int getEmp_assigned() {
+  public Employee getEmp_assigned() {
     return emp_assigned;
   }
 

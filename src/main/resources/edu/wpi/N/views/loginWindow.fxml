@@ -22,8 +22,8 @@
                </font>
             </Label>
             <SplitPane dividerPositions="0.5" prefHeight="160.0" prefWidth="300.0">
-              <items>
-                <AnchorPane maxWidth="-Infinity" prefWidth="200.0">
+               <items>
+                  <AnchorPane maxWidth="-Infinity" prefWidth="200.0">
                      <children>
                         <VBox alignment="CENTER" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                            <children>
@@ -51,12 +51,12 @@
                         </VBox>
                      </children>
                   </AnchorPane>
-                <AnchorPane minHeight="-Infinity" minWidth="-Infinity" SplitPane.resizableWithParent="false">
+                  <AnchorPane minHeight="-Infinity" minWidth="-Infinity" SplitPane.resizableWithParent="false">
                      <children>
                         <Pane fx:id="pn_swingSpot" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
                      </children>
                   </AnchorPane>
-              </items>
+               </items>
             </SplitPane>
             <Button fx:id="btn_cancel" mnemonicParsing="false" onMouseClicked="#login" text="Cancel">
                <font>

@@ -2,14 +2,11 @@ package edu.wpi.N.views;
 
 import edu.wpi.N.App;
 import edu.wpi.N.Main;
-import edu.wpi.N.database.CSVParser;
-import edu.wpi.N.database.DBException;
-import edu.wpi.N.database.DbController;
+import edu.wpi.N.database.*;
 import edu.wpi.N.entities.DbNode;
 import java.io.*;
 import java.util.LinkedList;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
@@ -29,13 +26,12 @@ public class DataEditorController implements Controller {
   @FXML Button btn_select_edges;
   @FXML Label lbl_filePath_edges;
   @FXML Button btn_default;
-  @FXML Button btn_uploadnode;
   @FXML Button btn_uploadedge;
   @FXML Button btn_downloadnode;
   @FXML Button btn_downloadedge;
 
-  final String DEFAULT_NODES = "csv/MapEnodes.csv";
-  final String DEFAULT_PATHS = "csv/MapEedges.csv";
+  final String DEFAULT_NODES = "csv/UPDATEDTeamNnodes.csv";
+  final String DEFAULT_PATHS = "csv/UPDATEDTeamNedges.csv";
   final InputStream INPUT_NODES_DEFAULT = Main.class.getResourceAsStream(DEFAULT_NODES);;
   final InputStream INPUT_EDGES_DEFAULT = Main.class.getResourceAsStream(DEFAULT_PATHS);
 
@@ -71,9 +67,8 @@ public class DataEditorController implements Controller {
   }
 
   @FXML
-  public void onUploadNodesClicked() throws IOException, DBException {
-
-    DbController.clearNodes();
+  public void onUploadEdgesClicked() throws IOException, DBException {
+    MapDB.clearNodes();
 
     String path = lbl_filePath.getText();
     if (path.equals(DEFAULT_NODES)) {
@@ -81,10 +76,6 @@ public class DataEditorController implements Controller {
     } else {
       CSVParser.parseCSVfromPath(path);
     }
-  }
-
-  @FXML
-  public void onUploadEdgesClicked() throws IOException {
 
     // For edges
     String path_edges = lbl_filePath_edges.getText();
@@ -92,6 +83,48 @@ public class DataEditorController implements Controller {
       CSVParser.parseCSV(INPUT_EDGES_DEFAULT);
     } else {
       CSVParser.parseCSVfromPath(path_edges);
+    }
+
+    if (MapDB.getNode("NDEPT01804") != null) {
+      LinkedList<DbNode> offices = new LinkedList();
+      offices.add(MapDB.getNode("NDEPT01804"));
+      offices.add(MapDB.getNode("NDEPT00604"));
+      DoctorDB.addDoctor("Dr.Wilson Wong", "Softeng", offices);
+      LinkedList<DbNode> offices1 = new LinkedList();
+      offices1.add(MapDB.getNode("NDEPT00104"));
+      offices1.add(MapDB.getNode("NDEPT00604"));
+      DoctorDB.addDoctor("Dr.Hue Jace", "Ligma", offices);
+      LinkedList<DbNode> offices2 = new LinkedList();
+      offices2.add(MapDB.getNode("NDEPT00704"));
+      offices2.add(MapDB.getNode("NDEPT01004"));
+      DoctorDB.addDoctor("Dr.Seymour Butts", "Ligma", offices2);
+      LinkedList<String> languagesA = new LinkedList<>();
+      languagesA.add("English");
+      LinkedList<String> languagesB = new LinkedList<>();
+      languagesB.add("English");
+      languagesB.add("Mandarin");
+      LinkedList<String> languagesC = new LinkedList<>();
+      languagesC.add("English");
+      languagesC.add("Spanish");
+      languagesC.add("Russian");
+
+      ServiceDB.addLaundry("Joe");
+      ServiceDB.addLaundry("Randy");
+      ServiceDB.addLaundry("Wilson");
+      ServiceDB.addTranslator("Bob", languagesA);
+      ServiceDB.addTranslator("Andy", languagesB);
+      ServiceDB.addTranslator("Camille", languagesC);
+      DoctorDB.addDoctor("Dr.Seymour Seymourson", "Ligma", offices2);
+      LinkedList<DbNode> offices3 = new LinkedList();
+      offices3.add(MapDB.getNode("NDEPT00304"));
+      offices3.add(MapDB.getNode("NDEPT01004"));
+      DoctorDB.addDoctor("Dr.Doolittle", "Ligma", offices3);
+      DoctorDB.addDoctor("Dr.Dre", "Ligma", offices3);
+      DoctorDB.addDoctor("Dr.Who", "Ligma", offices3);
+      DoctorDB.addDoctor("Dr.Oz", "Ligma", offices3);
+      DoctorDB.addDoctor("Dr.Zoidberg", "Ligma", offices3);
+      DoctorDB.addDoctor("Doc Brown", "Ligma", offices3);
+      DoctorDB.addDoctor("Dr.Suess", "Ligma", offices3);
     }
   }
 
@@ -132,7 +165,7 @@ public class DataEditorController implements Controller {
       csvWriter.append("teamAssigned");
       csvWriter.append("\n");
 
-      LinkedList<DbNode> csvNodeList = DbController.allNodes();
+      LinkedList<DbNode> csvNodeList = MapDB.allNodes();
 
       for (int index = 0; index < csvNodeList.size(); index++) {
         DbNode indexNode = csvNodeList.get(index);
@@ -183,7 +216,7 @@ public class DataEditorController implements Controller {
       csvWriter.append("endNode");
       csvWriter.append("\n");
 
-      LinkedList<String> edgesList = DbController.exportEdges();
+      LinkedList<String> edgesList = MapDB.exportEdges();
 
       for (String str : edgesList) {
         csvWriter.append(str);

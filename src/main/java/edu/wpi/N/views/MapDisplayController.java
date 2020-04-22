@@ -5,18 +5,23 @@ import edu.wpi.N.App;
 import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.algorithms.Pathfinder;
 import edu.wpi.N.database.DBException;
-import edu.wpi.N.database.DbController;
+import edu.wpi.N.database.MapDB;
+import edu.wpi.N.database.ServiceDB;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Doctor;
 import edu.wpi.N.entities.Path;
+import edu.wpi.N.qrcontrol.QRGenerator;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -33,7 +38,7 @@ import javafx.scene.shape.Line;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class MapDisplayController implements Controller {
+public class MapDisplayController extends QRGenerator implements Controller {
   private App mainApp;
   final float BAR_WIDTH = 300;
   final float IMAGE_WIDTH = 2475;
@@ -56,6 +61,8 @@ public class MapDisplayController implements Controller {
   @FXML StackPane pn_movableMap;
   @FXML AnchorPane pn_mapFrame;
   @FXML ImageView img_map;
+  @FXML ComboBox<String> cb_languages;
+  @FXML Button btn_Login;
 
   HashBiMap<Circle, DbNode> masterNodes; // stores the map nodes and their respective database nodes
 
@@ -82,8 +89,15 @@ public class MapDisplayController implements Controller {
 
   @FXML TextField txtf_translatorLocation;
   @FXML TextField txtf_laundryLocation;
+  @FXML TextArea txtf_laundryNotes;
+  @FXML TextArea txtf_translatorNotes;
+  @FXML TextField txtf_language;
   @FXML ListView lst_laundryLocation;
   @FXML ListView lst_translatorSearchBox;
+
+  // QR directions
+  @FXML ImageView img_qrDirections;
+  @FXML Pane pn_directionsBox;
 
   LinkedList<DbNode> allFloorNodes; // stores all the nodes on the floor
   LinkedList<DbNode> selectedNodes; // stores all the selected nodes on the map
@@ -111,12 +125,22 @@ public class MapDisplayController implements Controller {
   }
 
   public void initialize() throws DBException {
+    // MapDB.clearNodes();
+    // InputStream nodes = Main.class.getResourceAsStream("csv/UPDATEDTeamNnodes.csv");
+    // InputStream edges = Main.class.getResourceAsStream("csv/UPDATEDTeamNedges.csv");
+    // CSVParser.parseCSV(nodes);
+    // CSVParser.parseCSV(edges);
+    clampPanning(0, 0);
     selectedNodes = new LinkedList<DbNode>();
-    allFloorNodes = DbController.floorNodes(4, "Faulkner");
+    allFloorNodes = MapDB.floorNodes(4, "Faulkner");
     masterNodes = HashBiMap.create();
-    defaultNode = DbController.getNode("NHALL00804");
+    defaultNode = MapDB.getNode("NHALL00804");
     if (defaultNode == null) defaultNode = allFloorNodes.getFirst();
     populateMap();
+
+    LinkedList<String> languages = ServiceDB.getLanguages();
+    ObservableList<String> obvList = FXCollections.observableList(languages);
+    cb_languages.setItems(obvList);
   }
 
   public void populateMap() {
@@ -136,6 +160,7 @@ public class MapDisplayController implements Controller {
     mapNode.setFill(Color.PURPLE);
     mapNode.setOpacity(0.7);
     mapNode.setOnMouseClicked(mouseEvent -> this.onMapNodeClicked(mapNode));
+    mapNode.setCursor(Cursor.HAND); // Cursor points when over nodes
     return mapNode;
   }
 
@@ -153,16 +178,49 @@ public class MapDisplayController implements Controller {
   }
 
   @FXML
-  private void onBtnFindClicked(MouseEvent event) {
+  private void onBtnFindClicked(MouseEvent event) throws DBException {
     if (selectedNodes.size() != 2) {
       return;
     }
     DbNode firstNode = selectedNodes.get(0);
     DbNode secondNode = selectedNodes.get(1);
+    if (MapDB.getAdjacent(firstNode.getNodeID()).size() == 0
+        || MapDB.getAdjacent(secondNode.getNodeID()).size() == 0) {
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setHeaderText("Invalid input");
+      errorAlert.setContentText("No existing paths to this node");
+      errorAlert.showAndWait();
+      return;
+    }
+
+    if (MapDB.getAdjacent(firstNode.getNodeID()).size() == 0
+        || MapDB.getAdjacent(secondNode.getNodeID()).size() == 0) {
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setHeaderText("Invalid input");
+      errorAlert.setContentText("No existing paths to this node");
+      errorAlert.showAndWait();
+      return;
+    }
 
     Path path = Pathfinder.findPath(firstNode.getNodeID(), secondNode.getNodeID());
-    LinkedList<DbNode> pathNodes = path.getPath();
-    drawPath(pathNodes);
+
+    if (path != null) {
+      LinkedList<DbNode> pathNodes = path.getPath();
+      drawPath(pathNodes);
+      GenerateQRDirections(path);
+    } else {
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setHeaderText("Invalid input");
+      errorAlert.setContentText("No existing paths to this node");
+      errorAlert.showAndWait();
+      return;
+    }
+
+    //    ArrayList<String> directions = path.getDirections();
+    //    for (String s : directions) {
+    //      System.out.println(s);
+    //    }
+    //    System.out.println(" ");
 
     for (Circle mapNode : masterNodes.keySet()) {
       mapNode.setDisable(true);
@@ -189,6 +247,7 @@ public class MapDisplayController implements Controller {
 
   @FXML
   private void onResetClicked(MouseEvent event) throws Exception {
+    pn_directionsBox.setVisible(false);
     for (Circle mapNode : masterNodes.keySet()) {
       mapNode.setFill(Color.PURPLE);
       mapNode.setDisable(false);
@@ -239,6 +298,7 @@ public class MapDisplayController implements Controller {
   @FXML
   private void mapClickHandler(MouseEvent event) throws IOException {
     if (event.getSource() == pn_movableMap) {
+      pn_movableMap.setCursor(Cursor.CLOSED_HAND);
       clickStartX = event.getSceneX();
       clickStartY = event.getSceneY();
     }
@@ -247,6 +307,7 @@ public class MapDisplayController implements Controller {
   @FXML
   private void mapDragHandler(MouseEvent event) throws IOException {
     if (event.getSource() == pn_movableMap) {
+
       double dragDeltaX = event.getSceneX() - clickStartX;
       double dragDeltaY = event.getSceneY() - clickStartY;
 
@@ -255,6 +316,11 @@ public class MapDisplayController implements Controller {
       clickStartX = event.getSceneX();
       clickStartY = event.getSceneY();
     }
+  }
+
+  @FXML
+  private void mapReleaseHandler(MouseEvent event) throws IOException {
+    pn_movableMap.setCursor(Cursor.OPEN_HAND);
   }
 
   private void clampPanning(double deltaX, double deltaY) {
@@ -294,18 +360,23 @@ public class MapDisplayController implements Controller {
     pn_path.getChildren().removeIf(node -> node instanceof Line);
     int currentSelection = lst_locationsorted.getSelectionModel().getSelectedIndex();
     DbNode destinationNode = fuzzySearchNodeList.get(currentSelection);
+    if (selectedNodes.size() < 1) selectedNodes.add(defaultNode);
     selectedNodes.add(destinationNode);
-    if (selectedNodes.size() < 2) selectedNodes.add(defaultNode);
     onBtnFindClicked(event);
     selectedNodes.clear();
   }
 
   @FXML
   private void onNearestBathroomClicked(MouseEvent event) throws Exception {
+    DbNode startNode = defaultNode;
+    if (selectedNodes.size() > 0) startNode = selectedNodes.getFirst();
     onResetClicked(event);
-    Path pathToBathroom = Pathfinder.findQuickAccess(defaultNode, "REST");
-    LinkedList<DbNode> pathNodes = pathToBathroom.getPath();
-    drawPath(pathNodes);
+    Path pathToBathroom = Pathfinder.findQuickAccess(startNode, "REST");
+    if (pathToBathroom != null) {
+      LinkedList<DbNode> pathNodes = pathToBathroom.getPath();
+      drawPath(pathNodes);
+      GenerateQRDirections(pathToBathroom);
+    }
   }
 
   @FXML
@@ -343,8 +414,9 @@ public class MapDisplayController implements Controller {
     pn_path.getChildren().removeIf(node -> node instanceof Line);
     int currentSelection = lst_doctorlocations.getSelectionModel().getSelectedIndex();
     DbNode destinationNode = doctorNodes.get(currentSelection);
+    if (selectedNodes.size() < 1) selectedNodes.add(defaultNode);
     selectedNodes.add(destinationNode);
-    if (selectedNodes.size() < 2) selectedNodes.add(defaultNode);
+    // if (selectedNodes.size() < 2) selectedNodes.add(defaultNode);
     onBtnFindClicked(event);
     selectedNodes.clear();
   }
@@ -381,34 +453,82 @@ public class MapDisplayController implements Controller {
   }
 
   @FXML
-  public void popupWindow() throws IOException {
-    if (loggedin == false) {
-      loggedin = true;
-      Stage stage = new Stage();
-      Parent root;
-      root = FXMLLoader.load(getClass().getResource("loginWindow.fxml"));
-      Scene scene = new Scene(root);
-      stage.setScene(scene);
-      stage.initModality(Modality.APPLICATION_MODAL);
-      stage.showAndWait();
-    } else if (loggedin == true) {
-      Stage stage = new Stage();
-      Parent root;
-      root = FXMLLoader.load(getClass().getResource("adminRequestScreen.fxml"));
-      Scene scene = new Scene(root);
-      stage.setScene(scene);
-      stage.initModality(Modality.APPLICATION_MODAL);
-      stage.showAndWait();
+  public void popupWindow(MouseEvent e) throws IOException {
+    Stage stage = new Stage();
+    Parent root;
+    root = FXMLLoader.load(getClass().getResource("adminRequestScreen.fxml"));
+    Scene scene = new Scene(root);
+    stage.setScene(scene);
+    stage.initModality(Modality.APPLICATION_MODAL);
+    stage.show();
+  }
+
+  @FXML
+  public void createNewLaundry() throws DBException {
+    int currentSelection = lst_laundryLocation.getSelectionModel().getSelectedIndex();
+    String nodeID;
+    try {
+      nodeID = fuzzySearchNodeListLaundry.get(currentSelection).getNodeID();
+    } catch (IndexOutOfBoundsException e) {
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setContentText("Please select a location for your service request!");
+      errorAlert.show();
+      return;
+    }
+    String notes = txtf_laundryNotes.getText();
+    int laundryRequest = ServiceDB.addLaundReq(notes, nodeID);
+    App.adminDataStorage.addToList(laundryRequest);
+
+    txtf_laundryLocation.clear();
+    txtf_laundryNotes.clear();
+    lst_laundryLocation.getItems().clear();
+
+    Alert confAlert = new Alert(Alert.AlertType.CONFIRMATION);
+    confAlert.setContentText("Request Recieved");
+    confAlert.show();
+  }
+
+  private void GenerateQRDirections(Path path) {
+    try {
+      ArrayList<String> directions = path.getDirections();
+      img_qrDirections.setImage(generateImage(directions, false));
+      pn_directionsBox.setVisible(true);
+    } catch (DBException e) {
+      e.printStackTrace();
     }
   }
 
-  /*
-  - Add to database function ->
-      - Take in a service request object
-      - Put it into the table
-      -
-   */
-
   @FXML
-  public void loginWindow(MouseEvent e) throws IOException {}
+  public void createNewTranslator() throws DBException {
+    int currentSelection = lst_translatorSearchBox.getSelectionModel().getSelectedIndex();
+
+    String nodeID;
+    try {
+      nodeID = fuzzySearchNodeListTranslator.get(currentSelection).getNodeID();
+    } catch (IndexOutOfBoundsException e) {
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setContentText("Please select a location for your service request!");
+      errorAlert.show();
+      return;
+    }
+    String notes = txtf_translatorNotes.getText();
+    String language = cb_languages.getSelectionModel().getSelectedItem();
+    if (language == null) {
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setContentText("Please select a language for your translation request!");
+      errorAlert.show();
+      return;
+    }
+    int transReq = ServiceDB.addTransReq(notes, nodeID, language);
+    App.adminDataStorage.addToList(transReq);
+
+    txtf_translatorLocation.clear();
+    txtf_translatorNotes.clear();
+    cb_languages.cancelEdit();
+    lst_translatorSearchBox.getItems().clear();
+
+    Alert confAlert = new Alert(Alert.AlertType.CONFIRMATION);
+    confAlert.setContentText("Request Recieved");
+    confAlert.show();
+  }
 }

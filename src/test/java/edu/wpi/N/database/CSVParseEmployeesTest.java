@@ -5,7 +5,7 @@ public class CSVParseEmployeesTest {
   //  @BeforeAll
   //  public static void initialize()
   //      throws FileNotFoundException, SQLException, DBException, ClassNotFoundException {
-  //    DbController.initDB();
+  //    MapDB.initDB();
   //    File fNodes = new File("src/test/resources/edu/wpi/N/csv/Employees.csv");
   //    String path = fNodes.getAbsolutePath();
   //    CSVParser.parserCSVEmployeesFromPath(path);
@@ -14,7 +14,7 @@ public class CSVParseEmployeesTest {
   //  /** Tests that the function parses the inputted CSV successfully */
   //  @Test
   //  public void testParseEmployees() throws DBException {
-  //    LinkedList<Employee> actualEmployees = EmployeeController.getEmployees();
+  //    LinkedList<Employee> actualEmployees = ServiceDB.getEmployees();
   //    Assertions.assertTrue(actualEmployees.size() >= 10);
   //  }
   //
@@ -25,7 +25,7 @@ public class CSVParseEmployeesTest {
   //   */
   //  @Test
   //  public void testParseTranslatorEmployeeLanguagesAdded() throws DBException {
-  //    LinkedList<Translator> actualTranslatorEmployees = EmployeeController.getTranslators();
+  //    LinkedList<Translator> actualTranslatorEmployees = ServiceDB.getTranslators();
   //
   //    LinkedList<String> languages = new LinkedList<String>();
   //    languages.add("Cambodian");
@@ -59,7 +59,7 @@ public class CSVParseEmployeesTest {
   //     */
   //    @Test
   //    public void testParseCSVLandrySuccessful() throws DBException {
-  //      LinkedList<Laundry> actualLandries = EmployeeController.getLaundrys();
+  //      LinkedList<Laundry> actualLandries = ServiceDB.getLaundrys();
   //
   //      // Check if list lf laundry workes has employee with expected name
   //      for (Laundry laundry : actualLandries) {
@@ -73,16 +73,16 @@ public class CSVParseEmployeesTest {
   //
   //  @AfterAll
   //  public static void cleanup() throws DBException {
-  //    DbController.clearNodes();
+  //    MapDB.clearNodes();
   //    for (int i : getAllEmployeeIds()) {
-  //      EmployeeController.removeEmployee(i);
+  //      ServiceDB.removeEmployee(i);
   //    }
   //  }
   //
   //  private static LinkedList<Integer> getAllEmployeeIds() throws DBException {
   //    LinkedList<Integer> ids = new LinkedList<Integer>();
   //
-  //    for (Employee employee : EmployeeController.getEmployees()) {
+  //    for (Employee employee : ServiceDB.getEmployees()) {
   //      ids.add(employee.getID());
   //    }
   //
