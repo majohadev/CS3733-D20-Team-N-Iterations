@@ -22,7 +22,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
-import lombok.SneakyThrows;
 
 public class AdminController implements Initializable, Controller {
 
@@ -55,7 +54,6 @@ public class AdminController implements Initializable, Controller {
     }
   }
 
-  @SneakyThrows
   @Override
   public void initialize(URL location, ResourceBundle resourceBundle) {
     if (App.adminDataStorage.newData != null) {
@@ -110,7 +108,13 @@ public class AdminController implements Initializable, Controller {
           .addAll(requestID, service, emp_assigned, notes, nodeID, status, language);
       tb_languages.setItems(languageData);
       tb_languages.getColumns().addAll(languages);
-      populateChoiceBox();
+      try {
+        populateChoiceBox();
+      } catch (DBException e) {
+        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+        errorAlert.setContentText(e.getMessage());
+        errorAlert.show();
+      }
       cb_Employee
           .valueProperty()
           .addListener(
