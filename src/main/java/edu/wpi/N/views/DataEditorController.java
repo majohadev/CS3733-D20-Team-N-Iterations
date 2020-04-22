@@ -7,7 +7,6 @@ import edu.wpi.N.entities.DbNode;
 import java.io.*;
 import java.util.LinkedList;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
@@ -69,7 +68,7 @@ public class DataEditorController implements Controller {
 
   @FXML
   public void onUploadEdgesClicked() throws IOException, DBException {
-    DbController.clearNodes();
+    MapDB.clearNodes();
 
     String path = lbl_filePath.getText();
     if (path.equals(DEFAULT_NODES)) {
@@ -86,19 +85,19 @@ public class DataEditorController implements Controller {
       CSVParser.parseCSVfromPath(path_edges);
     }
 
-    if (DbController.getNode("NDEPT01804") != null) {
+    if (MapDB.getNode("NDEPT01804") != null) {
       LinkedList<DbNode> offices = new LinkedList();
-      offices.add(DbController.getNode("NDEPT01804"));
-      offices.add(DbController.getNode("NDEPT00604"));
-      DoctorController.addDoctor("Dr.Wilson Wong", "Softeng", offices);
+      offices.add(MapDB.getNode("NDEPT01804"));
+      offices.add(MapDB.getNode("NDEPT00604"));
+      DoctorDB.addDoctor("Dr.Wilson Wong", "Softeng", offices);
       LinkedList<DbNode> offices1 = new LinkedList();
-      offices1.add(DbController.getNode("NDEPT00104"));
-      offices1.add(DbController.getNode("NDEPT00604"));
-      DoctorController.addDoctor("Dr.Hue Jace", "Ligma", offices);
+      offices1.add(MapDB.getNode("NDEPT00104"));
+      offices1.add(MapDB.getNode("NDEPT00604"));
+      DoctorDB.addDoctor("Dr.Hue Jace", "Ligma", offices);
       LinkedList<DbNode> offices2 = new LinkedList();
-      offices2.add(DbController.getNode("NDEPT00704"));
-      offices2.add(DbController.getNode("NDEPT01004"));
-      DoctorController.addDoctor("Dr.Seymour Butts", "Ligma", offices2);
+      offices2.add(MapDB.getNode("NDEPT00704"));
+      offices2.add(MapDB.getNode("NDEPT01004"));
+      DoctorDB.addDoctor("Dr.Seymour Butts", "Ligma", offices2);
       LinkedList<String> languagesA = new LinkedList<>();
       languagesA.add("English");
       LinkedList<String> languagesB = new LinkedList<>();
@@ -109,23 +108,23 @@ public class DataEditorController implements Controller {
       languagesC.add("Spanish");
       languagesC.add("Russian");
 
-      EmployeeController.addLaundry("Joe");
-      EmployeeController.addLaundry("Randy");
-      EmployeeController.addLaundry("Wilson");
-      EmployeeController.addTranslator("Bob", languagesA);
-      EmployeeController.addTranslator("Andy", languagesB);
-      EmployeeController.addTranslator("Camille", languagesC);
-      DoctorController.addDoctor("Dr.Seymour Seymourson", "Ligma", offices2);
+      ServiceDB.addLaundry("Joe");
+      ServiceDB.addLaundry("Randy");
+      ServiceDB.addLaundry("Wilson");
+      ServiceDB.addTranslator("Bob", languagesA);
+      ServiceDB.addTranslator("Andy", languagesB);
+      ServiceDB.addTranslator("Camille", languagesC);
+      DoctorDB.addDoctor("Dr.Seymour Seymourson", "Ligma", offices2);
       LinkedList<DbNode> offices3 = new LinkedList();
-      offices3.add(DbController.getNode("NDEPT00304"));
-      offices3.add(DbController.getNode("NDEPT01004"));
-      DoctorController.addDoctor("Dr.Doolittle", "Ligma", offices3);
-      DoctorController.addDoctor("Dr.Dre", "Ligma", offices3);
-      DoctorController.addDoctor("Dr.Who", "Ligma", offices3);
-      DoctorController.addDoctor("Dr.Oz", "Ligma", offices3);
-      DoctorController.addDoctor("Dr.Zoidberg", "Ligma", offices3);
-      DoctorController.addDoctor("Doc Brown", "Ligma", offices3);
-      DoctorController.addDoctor("Dr.Suess", "Ligma", offices3);
+      offices3.add(MapDB.getNode("NDEPT00304"));
+      offices3.add(MapDB.getNode("NDEPT01004"));
+      DoctorDB.addDoctor("Dr.Doolittle", "Ligma", offices3);
+      DoctorDB.addDoctor("Dr.Dre", "Ligma", offices3);
+      DoctorDB.addDoctor("Dr.Who", "Ligma", offices3);
+      DoctorDB.addDoctor("Dr.Oz", "Ligma", offices3);
+      DoctorDB.addDoctor("Dr.Zoidberg", "Ligma", offices3);
+      DoctorDB.addDoctor("Doc Brown", "Ligma", offices3);
+      DoctorDB.addDoctor("Dr.Suess", "Ligma", offices3);
     }
   }
 
@@ -166,7 +165,7 @@ public class DataEditorController implements Controller {
       csvWriter.append("teamAssigned");
       csvWriter.append("\n");
 
-      LinkedList<DbNode> csvNodeList = DbController.allNodes();
+      LinkedList<DbNode> csvNodeList = MapDB.allNodes();
 
       for (int index = 0; index < csvNodeList.size(); index++) {
         DbNode indexNode = csvNodeList.get(index);
@@ -217,7 +216,7 @@ public class DataEditorController implements Controller {
       csvWriter.append("endNode");
       csvWriter.append("\n");
 
-      LinkedList<String> edgesList = DbController.exportEdges();
+      LinkedList<String> edgesList = MapDB.exportEdges();
 
       for (String str : edgesList) {
         csvWriter.append(str);

@@ -5,8 +5,8 @@ import java.sql.*;
 import java.util.*;
 import java.util.Date;
 
-public class EmployeeController {
-  private static Connection con = DbController.getCon();
+public class ServiceDB {
+  private static Connection con = MapDB.getCon();
 
   public static void initEmployee() throws DBException {
     try {

@@ -3,7 +3,7 @@ package edu.wpi.N.views;
 import com.google.common.collect.HashBiMap;
 import edu.wpi.N.App;
 import edu.wpi.N.database.DBException;
-import edu.wpi.N.database.DbController;
+import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
 import java.io.IOException;
 import java.util.Arrays;
@@ -126,7 +126,7 @@ public class MapEditController implements Controller {
 
   public void initialize() throws DBException, DBException {
     selectedNodes = new LinkedList<DbNode>();
-    allFloorNodes = DbController.floorNodes(currentFloor, "Faulkner");
+    allFloorNodes = MapDB.floorNodes(currentFloor, "Faulkner");
     masterNodes = HashBiMap.create();
     tempNode = null;
     editMode = editMode.NOSTATE;
@@ -145,7 +145,7 @@ public class MapEditController implements Controller {
 
   public void changeFloorReset() throws DBException {
     selectedNodes = new LinkedList<DbNode>();
-    allFloorNodes = DbController.floorNodes(currentFloor, "Faulkner");
+    allFloorNodes = MapDB.floorNodes(currentFloor, "Faulkner");
     masterNodes = HashBiMap.create();
     tempNode = null;
     editMode = editMode.NOSTATE;
@@ -360,7 +360,7 @@ public class MapEditController implements Controller {
     for (DbNode node : selectedNodes) {
       Circle mapNode = masterNodes.inverse().remove(node);
       pn_display.getChildren().remove(mapNode);
-      DbController.deleteNode(node.getNodeID());
+      MapDB.deleteNode(node.getNodeID());
     }
     onBtnClearClicked();
   }
@@ -408,8 +408,7 @@ public class MapEditController implements Controller {
     int x = (int) ((float) tempNode.getCenterX() / HORIZONTAL_SCALE);
     int y = (int) ((float) tempNode.getCenterY() / VERTICAL_SCALE);
 
-    DbNode newNode =
-        DbController.addNode(x, y, currentFloor, "Faulkner", type, longName, shortName);
+    DbNode newNode = MapDB.addNode(x, y, currentFloor, "Faulkner", type, longName, shortName);
     Circle mapNode = makeMapNode(newNode);
     pn_display.getChildren().remove(tempNode);
     pn_display.getChildren().add(mapNode);
@@ -433,8 +432,8 @@ public class MapEditController implements Controller {
     if (longName.equals("") || shortName.equals("")) {
       displayErrorMessage("Invalid Input");
     }
-    DbController.modifyNode(editingNode.getNodeID(), x, y, longName, shortName);
-    DbNode newNode = DbController.getNode(editingNode.getNodeID());
+    MapDB.modifyNode(editingNode.getNodeID(), x, y, longName, shortName);
+    DbNode newNode = MapDB.getNode(editingNode.getNodeID());
     // CHECK
     masterNodes.replace(masterNodes.inverse().get(editingNode), newNode);
     masterNodes.inverse().get(newNode).setFill(Color.PURPLE);
@@ -615,7 +614,7 @@ public class MapEditController implements Controller {
   public void displayPaths(int index) {
     LinkedList<DbNode> adjacentNodes = null;
     try {
-      adjacentNodes = DbController.getAdjacent(edgeNodes[index].getNodeID());
+      adjacentNodes = MapDB.getAdjacent(edgeNodes[index].getNodeID());
     } catch (DBException e) {
       e.printStackTrace();
     }
@@ -644,7 +643,7 @@ public class MapEditController implements Controller {
     if (!txt_EdgesAddFirstLocation.getText().equals("")
         && (!txt_EdgesAddSecondLocation.getText().equals(""))) {
       pn_display.getChildren().removeIf(node -> node instanceof Line);
-      DbController.addEdge(edgeNodes[0].getNodeID(), edgeNodes[1].getNodeID());
+      MapDB.addEdge(edgeNodes[0].getNodeID(), edgeNodes[1].getNodeID());
       resetPanes();
     }
   }
@@ -679,7 +678,7 @@ public class MapEditController implements Controller {
    * @throws DBException
    */
   public void displayAdjacentEdges(DbNode centerNode, Circle centerMapNode) throws DBException {
-    LinkedList<DbNode> adjacentNodes = DbController.getAdjacent(centerNode.getNodeID());
+    LinkedList<DbNode> adjacentNodes = MapDB.getAdjacent(centerNode.getNodeID());
     for (DbNode adjacentNode : adjacentNodes) {
       double x1 = centerMapNode.getCenterX();
       double y1 = centerMapNode.getCenterY();
@@ -736,7 +735,7 @@ public class MapEditController implements Controller {
       displayErrorMessage("Invalid Input");
       return;
     }
-    DbController.removeEdge(
+    MapDB.removeEdge(
         db_EdgesDeleteFirstSelected.getNodeID(), db_EdgesDeleteSecondSelected.getNodeID());
     DbNode node = db_EdgesDeleteFirstSelected;
     resetEdgesDelete();
@@ -779,10 +778,9 @@ public class MapEditController implements Controller {
       displayErrorMessage("Invalid Input");
       return;
     }
-    DbController.removeEdge(
+    MapDB.removeEdge(
         db_EdgesEditFirstSelected.getNodeID(), db_EdgesEditSecondSelectedOld.getNodeID());
-    DbController.addEdge(
-        db_EdgesEditFirstSelected.getNodeID(), db_EdgesEditSecondSelected.getNodeID());
+    MapDB.addEdge(db_EdgesEditFirstSelected.getNodeID(), db_EdgesEditSecondSelected.getNodeID());
     // DbNode node = db_EdgesEditFirstSelected;
     resetEdgesEdit();
     // txt_EdgesEditStartNode.requestFocus();
