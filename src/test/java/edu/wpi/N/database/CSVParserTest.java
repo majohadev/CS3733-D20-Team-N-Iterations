@@ -138,7 +138,7 @@ public class CSVParserTest {
             "BCONF00102",
             2150,
             1025,
-            2,
+            4,
             "45 Francis",
             "CONF",
             "Duncan Reid Conference Room",
