@@ -126,6 +126,11 @@ public class MapDisplayController extends QRGenerator implements Controller {
   }
 
   public void initialize() throws DBException {
+    // DbController.clearNodes();
+    // InputStream nodes = Main.class.getResourceAsStream("csv/UPDATEDTeamNnodes.csv");
+    // InputStream edges = Main.class.getResourceAsStream("csv/UPDATEDTeamNedges.csv");
+    // CSVParser.parseCSV(nodes);
+    // CSVParser.parseCSV(edges);
     clampPanning(0, 0);
     selectedNodes = new LinkedList<DbNode>();
     allFloorNodes = DbController.floorNodes(4, "Faulkner");

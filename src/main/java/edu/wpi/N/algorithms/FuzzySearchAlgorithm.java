@@ -24,7 +24,7 @@ public class FuzzySearchAlgorithm {
     if (userInput.length() > 1) {
 
       // search for all nodes by long name
-      LinkedList<DbNode> suggestedNodes = DbController.searchVisNode(-1, null, null, userInput);
+      LinkedList<DbNode> suggestedNodes = DbController.searchVisNode(4, null, null, userInput);
       if (suggestedNodes.size() != 0) {
         for (DbNode node : suggestedNodes) {
           suggestions.add(node);
@@ -56,7 +56,7 @@ public class FuzzySearchAlgorithm {
     double ratio = 0.8;
 
     // Get all the visible nodes from DB
-    for (DbNode node : DbController.searchVisNode(-1, null, null, "")) {
+    for (DbNode node : DbController.searchVisNode(4, null, null, "")) {
       String fullLongName = node.getLongName();
 
       // Iterate through Long Name's words

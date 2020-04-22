@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="462.0" maxWidth="742.0" prefHeight="462.0" prefWidth="742.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.DataEditorController">
+<AnchorPane maxHeight="462.0" maxWidth="742.0" minHeight="462.0" minWidth="742.0" prefHeight="462.0" prefWidth="742.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.DataEditorController">
    <children>
       <Button fx:id="btn_select" layoutX="109.0" layoutY="81.0" mnemonicParsing="false" onMouseClicked="#onSelectClicked" text="Select File">
          <font>
@@ -28,16 +28,11 @@
             <Font name="Calibri" size="14.0" />
          </font></Button>
       <Label fx:id="lbl_filePath_edges" disable="true" layoutX="220.0" layoutY="188.0" prefHeight="25.0" prefWidth="368.0" style="-fx-border-color: BLACK;" text="File Path" />
-      <Button fx:id="btn_default" layoutX="300.0" layoutY="257.0" mnemonicParsing="false" onMouseClicked="#onDefaultClicked" prefHeight="27.0" prefWidth="175.0" text="Reset FIle Paths To Default">
+      <Button fx:id="btn_default" layoutX="158.0" layoutY="257.0" mnemonicParsing="false" onMouseClicked="#onDefaultClicked" prefHeight="27.0" prefWidth="175.0" text="Reset FIle Paths To Default">
          <font>
             <Font name="Calibri" size="14.0" />
          </font></Button>
-      <Button fx:id="btn_uploadnode" layoutX="625.0" layoutY="81.0" mnemonicParsing="false" onMouseClicked="#onUploadNodesClicked" text="Upload">
-         <font>
-            <Font name="Calibri" size="14.0" />
-         </font>
-      </Button>
-      <Button fx:id="btn_uploadedge" layoutX="625.0" layoutY="187.0" mnemonicParsing="false" onMouseClicked="#onUploadEdgesClicked" text="Upload">
+      <Button fx:id="btn_uploadedge" layoutX="443.0" layoutY="257.0" mnemonicParsing="false" onMouseClicked="#onUploadEdgesClicked" prefHeight="27.0" prefWidth="163.0" text="Upload Both CSV Files">
          <font>
             <Font name="Calibri" size="14.0" />
          </font>
