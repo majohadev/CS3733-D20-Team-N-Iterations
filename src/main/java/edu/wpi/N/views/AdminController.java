@@ -239,8 +239,17 @@ public class AdminController implements Initializable, Controller {
 
   @FXML
   private void assignPressed(MouseEvent e) {
-    int eID = cb_Employee.getSelectionModel().getSelectedItem().getID();
-    int rID = tbMockData.getSelectionModel().getSelectedItem().getRequestID();
+    int eID;
+    int rID;
+    try {
+      eID = cb_Employee.getSelectionModel().getSelectedItem().getID();
+      rID = tbMockData.getSelectionModel().getSelectedItem().getRequestID();
+    } catch (NullPointerException indx) {
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setContentText("Please select a request and an employee!");
+      errorAlert.show();
+      return;
+    }
     assignEmployeeToRequest(eID, rID);
 
     try {
@@ -255,6 +264,7 @@ public class AdminController implements Initializable, Controller {
     } catch (DBException ev) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
       errorAlert.setContentText(ev.getMessage());
+      errorAlert.show();
     }
   }
 
