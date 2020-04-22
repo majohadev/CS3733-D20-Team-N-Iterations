@@ -29,7 +29,6 @@ public class DataEditorController implements Controller {
   @FXML Button btn_select_edges;
   @FXML Label lbl_filePath_edges;
   @FXML Button btn_default;
-  @FXML Button btn_uploadnode;
   @FXML Button btn_uploadedge;
   @FXML Button btn_downloadnode;
   @FXML Button btn_downloadedge;
@@ -70,9 +69,10 @@ public class DataEditorController implements Controller {
     }
   }
 
-  @FXML
-  public void onUploadNodesClicked() throws IOException, DBException {
 
+
+  @FXML
+  public void onUploadEdgesClicked() throws IOException, DBException {
     DbController.clearNodes();
 
     String path = lbl_filePath.getText();
@@ -81,10 +81,6 @@ public class DataEditorController implements Controller {
     } else {
       CSVParser.parseCSVfromPath(path);
     }
-  }
-
-  @FXML
-  public void onUploadEdgesClicked() throws IOException {
 
     // For edges
     String path_edges = lbl_filePath_edges.getText();
