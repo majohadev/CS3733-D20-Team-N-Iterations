@@ -291,7 +291,9 @@ public class MapEditController implements Controller {
     for (Circle mapNode : masterNodes.keySet()) {
       mapNode.setFill(Color.PURPLE);
       mapNode.setDisable(false);
+      mapNode.setOnMouseDragged(null);
     }
+
     selectedNodes.clear();
     lst_selected.getItems().clear();
     // RESET ADD

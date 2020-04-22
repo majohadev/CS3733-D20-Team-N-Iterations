@@ -33,7 +33,7 @@
                   <Pane fx:id="pn_firstEdges" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="910.0" prefWidth="1520.0" />
                   <Pane fx:id="pn_display" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="910.0" prefWidth="1520.0">
                      <children>
-                        <Button fx:id="btn_return" layoutX="87.0" layoutY="367.0" mnemonicParsing="false" onMouseClicked="#onReturnClicked" prefHeight="50.0" prefWidth="181.0" style="-fx-background-radius: 10;" text=" Homepage">
+                        <Button fx:id="btn_return" layoutX="94.0" layoutY="366.0" mnemonicParsing="false" onMouseClicked="#onReturnClicked" prefHeight="50.0" prefWidth="181.0" style="-fx-background-radius: 10;" text=" Homepage">
                            <font>
                               <Font name="Calibri" size="18.0" />
                            </font>
