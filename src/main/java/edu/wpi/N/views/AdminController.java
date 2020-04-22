@@ -27,6 +27,7 @@ import lombok.SneakyThrows;
 public class AdminController implements Initializable, Controller {
 
   private App mainApp;
+  private HomeController homeController;
   // public LoginController controller;
   @FXML Button btn_logout;
   @FXML Button btn_laundryReq;
@@ -58,8 +59,14 @@ public class AdminController implements Initializable, Controller {
   @Override
   public void initialize(URL location, ResourceBundle resourceBundle) {
     if (App.adminDataStorage.newData != null) {
-      LinkedList<Request> reqs = EmployeeController.getOpenRequests();
-      tableData.setAll(reqs);
+      try {
+        LinkedList<Request> reqs = EmployeeController.getOpenRequests();
+        tableData.setAll(reqs);
+      } catch (DBException e) {
+        Alert newAlert = new Alert(Alert.AlertType.ERROR);
+        newAlert.setContentText(e.getMessage());
+        newAlert.show();
+      }
 
       TableColumn<Request, Integer> requestID = new TableColumn<>("ID");
       TableColumn<Request, Employee> emp_assigned = new TableColumn<>("Assigned");
@@ -145,8 +152,8 @@ public class AdminController implements Initializable, Controller {
 
   @FXML
   public void editMap(MouseEvent e) throws IOException {
-    this.mainApp.switchScene("mapEdit.fxml");
-    ((Node) (e.getSource())).getScene().getWindow().hide();
+    this.mainApp.switchScene("editMap.fxml");
+    // ((Node) (e.getSource())).getScene().getWindow().hide();
   }
 
   @Override
@@ -252,8 +259,14 @@ public class AdminController implements Initializable, Controller {
   }
 
   public void populateChoiceBox() throws DBException {
-    LinkedList<Employee> empList = EmployeeController.getEmployees();
-    ObservableList<Employee> empObv = FXCollections.observableArrayList(empList);
-    cb_Employee.setItems(empObv);
+    try {
+      LinkedList<Employee> empList = EmployeeController.getEmployees();
+      ObservableList<Employee> empObv = FXCollections.observableArrayList(empList);
+      cb_Employee.setItems(empObv);
+    } catch (DBException e) {
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setContentText(e.getMessage());
+      errorAlert.show();
+    }
   }
 }
