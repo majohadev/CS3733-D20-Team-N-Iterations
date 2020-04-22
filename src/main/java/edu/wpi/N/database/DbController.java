@@ -64,62 +64,21 @@ public class DbController {
     }
   }
 
-  /** Standardizes all of the nodeIDs in the database */
-  // Noah
-  public static void fixNodes() throws DBException {
-    try {
-      String query = "SELECT nodeID, floor, nodeType, teamAssigned FROM nodes";
-      PreparedStatement state = con.prepareStatement(query);
-      ResultSet nodes = state.executeQuery();
-      while (nodes.next()) {
-        LinkedList<DbNode> edges = new LinkedList<DbNode>();
-        String nodeID = nodes.getString("nodeID");
-        int floor = nodes.getInt("floor");
-        String nodeType = nodes.getString("nodeType");
-        String teamAssigned = nodes.getString("teamAssigned");
-        String newID;
-        con.setAutoCommit(false);
-        if (!(nodeID.substring(0, 5) + nodeID.substring(8))
-            .equals(teamAssigned + nodeType.toUpperCase() + String.format("%02d", floor))) {
-          if (nodeID.substring(1, 5).equals(nodeType)) {
-            newID = teamAssigned + nodeID.substring(1, 8) + String.format("%02d", floor);
-          } else {
-            newID = teamAssigned + nodeType.toUpperCase() + nextAvailNum(nodeType) + "0" + floor;
-          }
-        } else newID = nodeID;
-        if (!newID.equals(nodeID)) {
-          edges = getAdjacent(nodeID);
-          query = "DELETE FROM EDGES WHERE node1 = ? OR node2 = ?";
-          PreparedStatement stmt = con.prepareStatement(query);
-          stmt.setString(1, nodeID);
-          stmt.setString(2, nodeID);
-          stmt.executeUpdate();
-        }
-        query = "UPDATE nodes SET nodeID = ? WHERE nodeID = ?";
-        PreparedStatement stmt = con.prepareStatement(query);
-        stmt.setString(1, newID);
-        stmt.setString(2, nodeID);
-        stmt.executeUpdate();
-        Iterator<DbNode> it = edges.iterator();
-        while (it.hasNext()) {
-          addEdge(newID, it.next().getNodeID());
-        }
-        con.commit();
-        con.setAutoCommit(true);
-      }
-    } catch (SQLException e) {
-      e.printStackTrace();
-      try {
-        con.rollback();
-        con.setAutoCommit(true);
-      } catch (SQLException ex) {
-        ex.printStackTrace();
-        throw new DBException("Unknown error: modifyNode", ex);
-      }
-      throw new DBException("Unknown error: modifyNode", e);
-    }
-  }
-
+  /**
+   * Modifies a node unsafely. Probably shouldn't ever use. Can mess with nodeID
+   *
+   * @param nodeID the nodeID of the node you want to modify
+   * @param x the new x value
+   * @param y the new y value
+   * @param floor the new floor
+   * @param building the new building
+   * @param nodeType the new nodeType
+   * @param longName the new longName
+   * @param shortName the new shortName
+   * @param teamAssigned the new teamAssigned
+   * @return
+   * @throws DBException
+   */
   public static boolean modifyNode(
       String nodeID,
       int x,
@@ -141,7 +100,8 @@ public class DbController {
         if (nodeID.substring(1, 5).equals(nodeType)) {
           newID = teamAssigned + nodeID.substring(1, 8) + String.format("%02d", floor);
         } else {
-          newID = teamAssigned + nodeType.toUpperCase() + nextAvailNum(nodeType) + "0" + floor;
+          newID =
+              teamAssigned + nodeType.toUpperCase() + nextAvailNum(nodeType, floor) + "0" + floor;
         }
       } else newID = nodeID;
       if (!newID.equals(nodeID)) {
@@ -364,10 +324,11 @@ public class DbController {
    * @throws SQLException if something goes wrong with the sql
    */
   // Chris
-  private static String nextAvailNum(String nodeType) throws SQLException {
-    String query = "SELECT nodeID FROM nodes WHERE nodeType = ?";
+  private static String nextAvailNum(String nodeType, int floor) throws SQLException {
+    String query = "SELECT nodeID FROM nodes WHERE nodeType = ? AND floor = ?";
     PreparedStatement stmt = con.prepareStatement(query);
     stmt.setString(1, nodeType);
+    stmt.setInt(2, floor);
     ResultSet rs = stmt.executeQuery();
     ArrayList<Integer> nums = new ArrayList<Integer>();
     while (rs.next()) {
@@ -420,7 +381,10 @@ public class DbController {
       throws DBException {
     try {
       String nodeID =
-          "I" + nodeType.toUpperCase() + nextAvailNum(nodeType) + String.format("%02d", floor);
+          "I"
+              + nodeType.toUpperCase()
+              + nextAvailNum(nodeType, floor)
+              + String.format("%02d", floor);
       String query = "INSERT INTO nodes VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
       PreparedStatement stmt = con.prepareStatement(query);
       stmt.setString(1, nodeID);
