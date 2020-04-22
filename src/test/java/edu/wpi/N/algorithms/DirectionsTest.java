@@ -2,7 +2,7 @@ package edu.wpi.N.algorithms;
 
 import edu.wpi.N.database.CSVParser;
 import edu.wpi.N.database.DBException;
-import edu.wpi.N.database.DbController;
+import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.Path;
 import java.io.InputStream;
 import java.sql.SQLException;
@@ -19,8 +19,8 @@ import org.junit.jupiter.api.Test;
 public class DirectionsTest {
   @BeforeAll
   public static void setup() throws SQLException, ClassNotFoundException, DBException {
-    DbController.initDB();
-    DbController.clearNodes();
+    MapDB.initDB();
+    MapDB.clearNodes();
     InputStream inputNodes =
         PathfinderMethodsTest.class.getResourceAsStream("../csv/TeamNnodes_T.csv");
     InputStream inputEdges =
@@ -140,6 +140,6 @@ public class DirectionsTest {
 
   @AfterAll
   public static void clearDB() throws DBException {
-    DbController.clearNodes();
+    MapDB.clearNodes();
   }
 }

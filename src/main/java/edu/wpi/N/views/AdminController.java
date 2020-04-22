@@ -2,7 +2,7 @@ package edu.wpi.N.views;
 
 import edu.wpi.N.App;
 import edu.wpi.N.database.DBException;
-import edu.wpi.N.database.EmployeeController;
+import edu.wpi.N.database.ServiceDB;
 import edu.wpi.N.entities.Employee;
 import edu.wpi.N.entities.Request;
 import edu.wpi.N.entities.Translator;
@@ -60,7 +60,7 @@ public class AdminController implements Initializable, Controller {
   public void initialize(URL location, ResourceBundle resourceBundle) {
     if (App.adminDataStorage.newData != null) {
       try {
-        LinkedList<Request> reqs = EmployeeController.getRequests();
+        LinkedList<Request> reqs = ServiceDB.getRequests();
         tableData.setAll(reqs);
       } catch (DBException e) {
         Alert newAlert = new Alert(Alert.AlertType.ERROR);
@@ -127,10 +127,10 @@ public class AdminController implements Initializable, Controller {
               (ov, old, val) -> {
                 try {
                   if (val) {
-                    LinkedList<Request> rqs = EmployeeController.getOpenRequests();
+                    LinkedList<Request> rqs = ServiceDB.getOpenRequests();
                     tableData.setAll(rqs);
                   } else {
-                    LinkedList<Request> rqs = EmployeeController.getRequests();
+                    LinkedList<Request> rqs = ServiceDB.getRequests();
                     tableData.setAll(rqs);
                   }
                 } catch (DBException e) {
@@ -165,11 +165,11 @@ public class AdminController implements Initializable, Controller {
   private void acceptRow(MouseEvent e) {
     try {
       if (e.getSource() == btn_Accept
-          && (EmployeeController.getRequest(
+          && (ServiceDB.getRequest(
                       tbMockData.getSelectionModel().getSelectedItems().get(0).getRequestID())
                   .getEmp_assigned()
               != null)) {
-        EmployeeController.completeRequest(
+        ServiceDB.completeRequest(
             tbMockData.getSelectionModel().getSelectedItems().get(0).getRequestID());
 
         Alert acceptReq = new Alert(Alert.AlertType.CONFIRMATION);
@@ -179,11 +179,11 @@ public class AdminController implements Initializable, Controller {
         if (ch_requestFilter.isSelected()) {
           tbMockData.getItems().removeAll(tbMockData.getSelectionModel().getSelectedItem());
         } else {
-          LinkedList<Request> reqs = EmployeeController.getRequests();
+          LinkedList<Request> reqs = ServiceDB.getRequests();
           tableData.setAll(reqs);
         }
       } else if (e.getSource() == btn_Deny) { // This case needs a status check
-        EmployeeController.denyRequest(
+        ServiceDB.denyRequest(
             tbMockData.getSelectionModel().getSelectedItems().get(0).getRequestID());
 
         Alert denyReq = new Alert(Alert.AlertType.WARNING);
@@ -193,11 +193,11 @@ public class AdminController implements Initializable, Controller {
         if (ch_requestFilter.isSelected()) {
           tbMockData.getItems().removeAll(tbMockData.getSelectionModel().getSelectedItem());
         } else {
-          LinkedList<Request> reqs = EmployeeController.getRequests();
+          LinkedList<Request> reqs = ServiceDB.getRequests();
           tableData.setAll(reqs);
         }
       } else if (e.getSource() == btn_Accept
-          && (EmployeeController.getRequest(
+          && (ServiceDB.getRequest(
                       tbMockData.getSelectionModel().getSelectedItems().get(0).getRequestID())
                   .getEmp_assigned())
               == null) {
@@ -225,7 +225,7 @@ public class AdminController implements Initializable, Controller {
   private void assignEmployeeToRequest(int employee, int ID) {
     Alert confAlert = new Alert(Alert.AlertType.CONFIRMATION);
     try {
-      EmployeeController.assignToRequest(employee, ID);
+      ServiceDB.assignToRequest(employee, ID);
       confAlert.setContentText(
           cb_Employee.getSelectionModel().getSelectedItem().getName()
               + " was assigned to the request");
@@ -254,10 +254,10 @@ public class AdminController implements Initializable, Controller {
 
     try {
       if (ch_requestFilter.isSelected()) {
-        LinkedList<Request> reqs = EmployeeController.getOpenRequests();
+        LinkedList<Request> reqs = ServiceDB.getOpenRequests();
         tableData.setAll(reqs);
       } else {
-        LinkedList<Request> reqs = EmployeeController.getRequests();
+        LinkedList<Request> reqs = ServiceDB.getRequests();
         tableData.setAll(reqs);
       }
 
@@ -270,7 +270,7 @@ public class AdminController implements Initializable, Controller {
 
   public void populateChoiceBox() throws DBException {
     try {
-      LinkedList<Employee> empList = EmployeeController.getEmployees();
+      LinkedList<Employee> empList = ServiceDB.getEmployees();
       ObservableList<Employee> empObv = FXCollections.observableArrayList(empList);
       cb_Employee.setItems(empObv);
     } catch (DBException e) {

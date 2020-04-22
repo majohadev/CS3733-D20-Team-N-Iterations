@@ -56,7 +56,7 @@ public class CSVParser {
       String startNodeId = row[1];
       String endNodeId = row[2];
 
-      DbController.addEdge(startNodeId, endNodeId);
+      MapDB.addEdge(startNodeId, endNodeId);
     } catch (Exception e) {
       // for debugging purposes
       System.out.println(row[0]);
@@ -84,7 +84,7 @@ public class CSVParser {
         teamAssigned = row[8].charAt(0);
       }
 
-      DbController.addNode(
+      MapDB.addNode(
           nodeID, xcoord, ycoord, floor, building, nodeType, longName, shortName, teamAssigned);
     } catch (Exception e) {
       // for debugging purposes
@@ -166,9 +166,9 @@ public class CSVParser {
       if (serviceType.toLowerCase().equals("translator")) {
         String[] languages = row[3].replaceAll("\\s+", "").split(",");
 
-        EmployeeController.addTranslator(name, new LinkedList<String>(Arrays.asList(languages)));
+        ServiceDB.addTranslator(name, new LinkedList<String>(Arrays.asList(languages)));
       } else {
-        EmployeeController.addLaundry(name);
+        ServiceDB.addLaundry(name);
       }
 
     } catch (Exception e) {

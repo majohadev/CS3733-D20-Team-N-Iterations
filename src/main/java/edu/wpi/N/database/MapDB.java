@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-public class DbController {
+public class MapDB {
 
   private static Statement statement;
   private static Connection con;
@@ -312,8 +312,8 @@ public class DbController {
       if (!e.getSQLState().equals("X0Y32")) throw e;
     }
 
-    DoctorController.initDoctor();
-    EmployeeController.initEmployee();
+    DoctorDB.initDoctor();
+    ServiceDB.initEmployee();
   }
 
   /**

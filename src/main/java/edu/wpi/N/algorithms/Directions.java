@@ -4,7 +4,7 @@ import static edu.wpi.N.algorithms.Directions.State.*;
 import static java.lang.Math.atan2;
 
 import edu.wpi.N.database.DBException;
-import edu.wpi.N.database.DbController;
+import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -201,7 +201,7 @@ public class Directions {
    */
   private static DbNode getLandmark(DbNode node) throws DBException {
     if (node.getNodeType().equals("HALL")) {
-      for (DbNode n : DbController.getAdjacent(node.getNodeID())) {
+      for (DbNode n : MapDB.getAdjacent(node.getNodeID())) {
         if (!n.getNodeType().equals("HALL")) {
           return n;
         }
@@ -273,7 +273,7 @@ public class Directions {
   private static boolean atIntersection(DbNode node) throws DBException {
     int hallNodeCount = 0;
     if (node.getNodeType().equals("HALL")) {
-      for (DbNode n : DbController.getAdjacent(node.getNodeID())) {
+      for (DbNode n : MapDB.getAdjacent(node.getNodeID())) {
         if (n.getNodeType().equals("HALL")) {
           hallNodeCount++;
         }
@@ -294,7 +294,7 @@ public class Directions {
   private static boolean atEndOfHall(DbNode node) throws DBException {
     int hallNodeCount = 0;
     if (node.getNodeType().equals("HALL")) {
-      for (DbNode n : DbController.getAdjacent(node.getNodeID())) {
+      for (DbNode n : MapDB.getAdjacent(node.getNodeID())) {
         if (n.getNodeType().equals("HALL")) {
           hallNodeCount++;
         }

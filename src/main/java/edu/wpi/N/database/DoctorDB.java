@@ -6,8 +6,8 @@ import java.sql.*;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-public class DoctorController {
-  private static Connection con = DbController.getCon();
+public class DoctorDB {
+  private static Connection con = MapDB.getCon();
 
   static void initDoctor() throws DBException {
     try {
@@ -50,7 +50,7 @@ public class DoctorController {
       ResultSet rs = state.executeQuery();
       LinkedList<DbNode> offices = new LinkedList<DbNode>();
       while (rs.next()) {
-        offices.add(DbController.getNode(rs.getString("nodeID")));
+        offices.add(MapDB.getNode(rs.getString("nodeID")));
       }
       query = "SELECT doctorID, name, field FROM doctors WHERE doctorID = ?";
       state = con.prepareStatement(query);
