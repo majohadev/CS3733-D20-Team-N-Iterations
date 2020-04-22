@@ -361,8 +361,8 @@ public class MapDisplayController extends QRGenerator implements Controller {
     pn_path.getChildren().removeIf(node -> node instanceof Line);
     int currentSelection = lst_locationsorted.getSelectionModel().getSelectedIndex();
     DbNode destinationNode = fuzzySearchNodeList.get(currentSelection);
+    if (selectedNodes.size() < 1) selectedNodes.add(defaultNode);
     selectedNodes.add(destinationNode);
-    if (selectedNodes.size() < 2) selectedNodes.add(defaultNode);
     onBtnFindClicked(event);
     selectedNodes.clear();
   }
@@ -413,8 +413,9 @@ public class MapDisplayController extends QRGenerator implements Controller {
     pn_path.getChildren().removeIf(node -> node instanceof Line);
     int currentSelection = lst_doctorlocations.getSelectionModel().getSelectedIndex();
     DbNode destinationNode = doctorNodes.get(currentSelection);
+    if (selectedNodes.size() < 1) selectedNodes.add(defaultNode);
     selectedNodes.add(destinationNode);
-    if (selectedNodes.size() < 2) selectedNodes.add(defaultNode);
+    // if (selectedNodes.size() < 2) selectedNodes.add(defaultNode);
     onBtnFindClicked(event);
     selectedNodes.clear();
   }
