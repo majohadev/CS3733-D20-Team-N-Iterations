@@ -27,6 +27,7 @@ import lombok.SneakyThrows;
 public class AdminController implements Initializable, Controller {
 
   private App mainApp;
+  private HomeController homeController;
   // public LoginController controller;
   @FXML Button btn_logout;
   @FXML Button btn_laundryReq;
@@ -151,8 +152,8 @@ public class AdminController implements Initializable, Controller {
 
   @FXML
   public void editMap(MouseEvent e) throws IOException {
-    this.mainApp.switchScene("mapEdit.fxml");
-    ((Node) (e.getSource())).getScene().getWindow().hide();
+    this.mainApp.switchScene("editMap.fxml");
+    // ((Node) (e.getSource())).getScene().getWindow().hide();
   }
 
   @Override
@@ -238,8 +239,17 @@ public class AdminController implements Initializable, Controller {
 
   @FXML
   private void assignPressed(MouseEvent e) {
-    int eID = cb_Employee.getSelectionModel().getSelectedItem().getID();
-    int rID = tbMockData.getSelectionModel().getSelectedItem().getRequestID();
+    int eID;
+    int rID;
+    try {
+      eID = cb_Employee.getSelectionModel().getSelectedItem().getID();
+      rID = tbMockData.getSelectionModel().getSelectedItem().getRequestID();
+    } catch (NullPointerException indx) {
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setContentText("Please select a request and an employee!");
+      errorAlert.show();
+      return;
+    }
     assignEmployeeToRequest(eID, rID);
 
     try {
@@ -254,6 +264,7 @@ public class AdminController implements Initializable, Controller {
     } catch (DBException ev) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
       errorAlert.setContentText(ev.getMessage());
+      errorAlert.show();
     }
   }
 

@@ -464,8 +464,15 @@ public class MapDisplayController extends QRGenerator implements Controller {
   @FXML
   public void createNewLaundry() throws DBException {
     int currentSelection = lst_laundryLocation.getSelectionModel().getSelectedIndex();
-
-    String nodeID = fuzzySearchNodeListLaundry.get(currentSelection).getNodeID();
+    String nodeID;
+    try {
+      nodeID = fuzzySearchNodeListLaundry.get(currentSelection).getNodeID();
+    } catch (IndexOutOfBoundsException e) {
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setContentText("Please select a location for your service request!");
+      errorAlert.show();
+      return;
+    }
     String notes = txtf_laundryNotes.getText();
     int laundryRequest = EmployeeController.addLaundReq(notes, nodeID);
     App.adminDataStorage.addToList(laundryRequest);
@@ -493,9 +500,23 @@ public class MapDisplayController extends QRGenerator implements Controller {
   public void createNewTranslator() throws DBException {
     int currentSelection = lst_translatorSearchBox.getSelectionModel().getSelectedIndex();
 
-    String nodeID = fuzzySearchNodeListTranslator.get(currentSelection).getNodeID();
+    String nodeID;
+    try {
+      nodeID = fuzzySearchNodeListTranslator.get(currentSelection).getNodeID();
+    } catch (IndexOutOfBoundsException e) {
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setContentText("Please select a location for your service request!");
+      errorAlert.show();
+      return;
+    }
     String notes = txtf_translatorNotes.getText();
     String language = cb_languages.getSelectionModel().getSelectedItem();
+    if (language == null) {
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setContentText("Please select a language for your translation request!");
+      errorAlert.show();
+      return;
+    }
     int transReq = EmployeeController.addTransReq(notes, nodeID, language);
     App.adminDataStorage.addToList(transReq);
 
