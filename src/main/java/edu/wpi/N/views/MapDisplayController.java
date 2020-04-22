@@ -203,11 +203,11 @@ public class MapDisplayController extends QRGenerator implements Controller {
       return;
     }
 
-    ArrayList<String> directions = path.getDirections();
-    for (String s : directions) {
-      System.out.println(s);
-    }
-    System.out.println(" ");
+    //    ArrayList<String> directions = path.getDirections();
+    //    for (String s : directions) {
+    //      System.out.println(s);
+    //    }
+    //    System.out.println(" ");
 
     for (Circle mapNode : masterNodes.keySet()) {
       mapNode.setDisable(true);
