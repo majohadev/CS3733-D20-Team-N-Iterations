@@ -10,8 +10,8 @@ public class Main {
 
   public static void main(String[] args) throws SQLException, DBException, ClassNotFoundException {
     DbController.initDB();
-    InputStream nodes = Main.class.getResourceAsStream("csv/UPDATEDTeamNnodes.csv");
-    InputStream edges = Main.class.getResourceAsStream("csv/UPDATEDTeamNedges.csv");
+    InputStream nodes = Main.class.getResourceAsStream("csv/newNodes.csv");
+    InputStream edges = Main.class.getResourceAsStream("csv/newEdges.csv");
     CSVParser.parseCSV(nodes);
     CSVParser.parseCSV(edges);
     LinkedList<DbNode> offices = new LinkedList();
