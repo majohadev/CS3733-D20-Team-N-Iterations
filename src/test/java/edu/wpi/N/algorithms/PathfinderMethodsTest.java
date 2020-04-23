@@ -17,7 +17,7 @@ public class PathfinderMethodsTest {
 
   @BeforeAll
   public static void initializeTest() throws SQLException, ClassNotFoundException, DBException {
-    MapDB.initDB();
+    MapDB.initTestDB();
     InputStream inputNodes =
         PathfinderMethodsTest.class.getResourceAsStream("../csv/TestNodes.csv");
     InputStream inputEdges =
