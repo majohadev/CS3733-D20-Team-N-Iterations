@@ -18,7 +18,7 @@ public class FuzzySearchLocationsAllNodes {
   @BeforeAll
   public static void initialize()
       throws DBException, FileNotFoundException, SQLException, ClassNotFoundException {
-    MapDB.initDB();
+    MapDB.initTestDB();
     File fNodes = new File("src/test/resources/edu/wpi/N/csv/UPDATEDTeamNnodes.csv");
     String path = fNodes.getAbsolutePath();
     CSVParser.parseCSVfromPath(path);
