@@ -16,7 +16,7 @@ public class FindPathPerformanceTest {
   @BeforeAll
   public static void initialize()
       throws DBException, FileNotFoundException, SQLException, ClassNotFoundException {
-    MapDB.initDB();
+    MapDB.initTestDB();
     File fNodes = new File("src/test/resources/edu/wpi/N/csv/TeamNAllNodes.csv");
     File fEdges = new File("src/test/resources/edu/wpi/N/csv/TeamNAllEdges.csv");
     String pathNodes = fNodes.getAbsolutePath();
