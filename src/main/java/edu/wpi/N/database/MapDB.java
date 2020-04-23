@@ -670,6 +670,16 @@ public class MapDB {
     return ret;
   }
 
+  /**
+   * Returns the Graph-style nodes adjacent to the given node and on either of the floors passed in,
+   * along with stairs/elevators
+   *
+   * @param nodeID the ID of the node you need the adjacents for
+   * @param startFloor the starting floor on the path
+   * @param endFloor the end floor on the path
+   * @return A linked list of all the adjacent nodes on the proper floors or of the proper node type
+   * @throws DBException on error
+   */
   public static LinkedList<Node> getGAdjacent(String nodeID, int startFloor, int endFloor)
       throws DBException {
     LinkedList<Node> ret = new LinkedList<Node>();
