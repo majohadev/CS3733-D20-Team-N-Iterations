@@ -24,7 +24,7 @@ public class FuzzySearchAlgorithm {
     if (userInput.length() > 1) {
 
       // search for all nodes by long name
-      LinkedList<DbNode> suggestedNodes = MapDB.searchVisNode(4, null, null, userInput);
+      LinkedList<DbNode> suggestedNodes = MapDB.searchVisNode(-1, null, null, userInput);
       if (suggestedNodes.size() != 0) {
         for (DbNode node : suggestedNodes) {
           suggestions.add(node);
@@ -53,10 +53,10 @@ public class FuzzySearchAlgorithm {
     userInput = userInput.toLowerCase();
     LinkedList<DbNode> suggestions = new LinkedList<DbNode>();
 
-    double ratio = 0.8;
+    double ratio = 0.85;
 
     // Get all the visible nodes from DB
-    for (DbNode node : MapDB.searchVisNode(4, null, null, "")) {
+    for (DbNode node : MapDB.searchVisNode(-1, null, null, "")) {
       String fullLongName = node.getLongName();
 
       // Iterate through Long Name's words

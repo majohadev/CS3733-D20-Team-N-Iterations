@@ -113,8 +113,10 @@ public class DirectionsTest {
    */
   @Test
   public void directionsTester6() throws DBException {
+
     Path path = Pathfinder.findPath("NREST00204", "NDEPT02104");
     ArrayList<String> directions = path.getDirections();
+
     //    for (String s : directions) {
     //      // System.out.println(s);
     //    }
