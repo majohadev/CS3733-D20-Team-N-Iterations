@@ -41,11 +41,9 @@ public class Pathfinder {
   public static Path findPath(DbNode startNode, DbNode endNode) {
     try {
 
-      // get floors of start and end nodes
       int startFloorNum = startNode.getFloor();
       int endFloorNum = endNode.getFloor();
 
-      // If yes, find path from elevator to the end Node
       Node start = MapDB.getGNode(startNode.getNodeID());
       Node end = MapDB.getGNode(endNode.getNodeID());
 
