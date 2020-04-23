@@ -15,7 +15,7 @@ public class CSVParserTest {
 
   @BeforeAll
   public static void initializeTest() throws SQLException, ClassNotFoundException, DBException {
-    MapDB.initDB();
+    MapDB.initTestDB();
   }
 
   /** Tests that ParseCSV imports Nodes and Edges from csv files into Database successfully */

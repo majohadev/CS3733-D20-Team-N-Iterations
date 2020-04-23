@@ -19,7 +19,7 @@ import org.junit.jupiter.api.Test;
 public class DirectionsTest {
   @BeforeAll
   public static void setup() throws SQLException, ClassNotFoundException, DBException {
-    MapDB.initDB();
+    MapDB.initTestDB();
     MapDB.clearNodes();
     InputStream inputNodes =
         PathfinderMethodsTest.class.getResourceAsStream("../csv/TeamNnodes_T.csv");
