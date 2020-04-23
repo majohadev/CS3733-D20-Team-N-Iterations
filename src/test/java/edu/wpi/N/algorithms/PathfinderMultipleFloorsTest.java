@@ -114,36 +114,37 @@ public class PathfinderMultipleFloorsTest {
   //    }
   //  }
 
-  /**
-   * Tests if the algorithm knows to not pick stairs (since they don't have access to floor 2) and
-   * chooses the correct elevator
-   */
-  @Test
-  public void thirdToSecondFloorNoStairsTest() throws DBException {
-    DbNode startNode = MapDB.getNode("STAI013000");
-    DbNode endNode = MapDB.getNode("H022000000");
-
-    long startTime = System.nanoTime();
-    Path testPath = Pathfinder.findPath(startNode, endNode);
-    long endTime = System.nanoTime();
-
-    long timeElapsed = endTime - startTime;
-    System.out.println("Elapsed time for FindPath in milliseconds:" + timeElapsed / 1000000);
-
-    LinkedList<DbNode> actualPath = new LinkedList<DbNode>();
-    actualPath.add(MapDB.getNode("STAI013000"));
-    actualPath.add(MapDB.getNode("H043000000"));
-    actualPath.add(MapDB.getNode("H023000000"));
-    actualPath.add(MapDB.getNode("H033000000"));
-    actualPath.add(MapDB.getNode("ELEV013000"));
-    actualPath.add(MapDB.getNode("ELEV012000"));
-    actualPath.add(MapDB.getNode("H032000000"));
-    actualPath.add(MapDB.getNode("H022000000"));
-
-    for (int i = 0; i < actualPath.size(); i++) {
-      Assertions.assertEquals(actualPath.get(i), testPath.getPath().get(i));
-    }
-  }
+  //  /**
+  //   * Tests if the algorithm knows to not pick stairs (since they don't have access to floor 2)
+  // and
+  //   * chooses the correct elevator
+  //   */
+  //  @Test
+  //  public void thirdToSecondFloorNoStairsTest() throws DBException {
+  //    DbNode startNode = MapDB.getNode("STAI013000");
+  //    DbNode endNode = MapDB.getNode("H022000000");
+  //
+  //    long startTime = System.nanoTime();
+  //    Path testPath = Pathfinder.findPath(startNode, endNode);
+  //    long endTime = System.nanoTime();
+  //
+  //    long timeElapsed = endTime - startTime;
+  //    System.out.println("Elapsed time for FindPath in milliseconds:" + timeElapsed / 1000000);
+  //
+  //    LinkedList<DbNode> actualPath = new LinkedList<DbNode>();
+  //    actualPath.add(MapDB.getNode("STAI013000"));
+  //    actualPath.add(MapDB.getNode("H043000000"));
+  //    actualPath.add(MapDB.getNode("H023000000"));
+  //    actualPath.add(MapDB.getNode("H033000000"));
+  //    actualPath.add(MapDB.getNode("ELEV013000"));
+  //    actualPath.add(MapDB.getNode("ELEV012000"));
+  //    actualPath.add(MapDB.getNode("H032000000"));
+  //    actualPath.add(MapDB.getNode("H022000000"));
+  //
+  //    for (int i = 0; i < actualPath.size(); i++) {
+  //      Assertions.assertEquals(actualPath.get(i), testPath.getPath().get(i));
+  //    }
+  //  }
 
   //  /**
   //   * Tests if the pathfinder can get use one floor change to get to one floor, and then navigate
