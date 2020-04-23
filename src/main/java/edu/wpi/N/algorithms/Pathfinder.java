@@ -58,18 +58,32 @@ public class Pathfinder {
       costSoFar.put(start.ID, 0.0);
       start.score = 0;
 
+      // SUM OF TIME IT TAKES TO GET GADJACENT FROM DB
+      long totalTime = 0;
+
       // While priority queue is not empty, get the node with highest Score (priority)
       while (!frontier.isEmpty()) {
         Node current = frontier.poll();
+
+        System.out.println(
+            "Node Long Name poped from frontier: " + MapDB.getNode(current.ID).getLongName());
 
         // if the goal node was found, break out of the loop
         if (current == end) {
           break;
         }
 
+        // measure time to obtain necessary nodes
+        long startTime = System.nanoTime();
+
         // for every node (next node), current node has edge to:
         LinkedList<Node> adjacentToCurrent =
             MapDB.getGAdjacent(current.ID, floorNumStart, floorNumEnd);
+
+        long endTime = System.nanoTime();
+
+        totalTime = totalTime + (endTime - startTime);
+
         for (Node nextNode : adjacentToCurrent) {
           String nextNodeID = nextNode.ID;
 
@@ -91,6 +105,9 @@ public class Pathfinder {
           }
         }
       }
+
+      System.out.println(
+          "Total time for getting gAdjacents in milliseconds:" + totalTime / 1000000);
 
       // Generate and return the path in proper order
 
