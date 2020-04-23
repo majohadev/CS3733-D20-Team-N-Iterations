@@ -2,8 +2,8 @@ package edu.wpi.N.views;
 
 import com.github.sarxos.webcam.WebcamPanel;
 import com.jfoenix.controls.JFXButton;
-import edu.wpi.N.qrcontrol.QRBase;
-import java.awt.*;
+import edu.wpi.N.App;
+import edu.wpi.N.qrcontrol.QRReader;
 import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -11,7 +11,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javax.swing.*;
 
-public class QRTestController extends QRBase {
+public class QRReadTestController extends QRReader implements Controller {
 
   @FXML JFXButton btn_scanButton;
   @FXML Label lbl_output;
@@ -19,6 +19,12 @@ public class QRTestController extends QRBase {
 
   // SceneBuilder gets whiny if you try to add a SwingNode before runtime
   private SwingNode pane_webcamViewContainer;
+
+  private App mainApp;
+
+  public void setMainApp(App mainApp) {
+    this.mainApp = mainApp;
+  }
 
   @FXML
   public void initialize() {
@@ -34,11 +40,21 @@ public class QRTestController extends QRBase {
     btn_scanButton.setDisable(true);
     lbl_output.setText("Make sure QR code is clearly within view.");
     btn_scanButton.setText("Scanning...");
-    startScan();
+
+    // Open camera
+    panel.resume();
+    panel.setVisible(true);
+
+    startScan(false);
   }
 
   @Override
   public void onScanSucceed(String readKey) {
+
+    // Close camera
+    panel.pause();
+    panel.setVisible(false);
+
     lbl_output.setText("Scan successful! Key: " + readKey);
     btn_scanButton.setDisable(false);
     btn_scanButton.setText("Scan");
@@ -46,6 +62,11 @@ public class QRTestController extends QRBase {
 
   @Override
   public void onScanFail() {
+
+    // Close camera
+    panel.pause();
+    panel.setVisible(false);
+
     lbl_output.setText("Scan timed out.");
     btn_scanButton.setDisable(false);
     btn_scanButton.setText("Scan");
@@ -57,7 +78,7 @@ public class QRTestController extends QRBase {
         new Runnable() {
           @Override
           public void run() {
-            WebcamPanel wp = getWebcamView();
+            WebcamPanel wp = panel;
             swingNode.setContent(wp);
           }
         });

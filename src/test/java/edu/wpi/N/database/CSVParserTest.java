@@ -17,7 +17,7 @@ public class CSVParserTest {
 
   @BeforeAll
   public static void initializeTest() throws SQLException, ClassNotFoundException, DBException {
-    DbController.initDB();
+    MapDB.initTestDB();
   }
 
   /** Tests that ParseCSV imports Nodes and Edges from csv files into Database successfully */
@@ -41,13 +41,13 @@ public class CSVParserTest {
         new DbNode("H130000000", 1341, 1114, 1, "MainBuil", "HALL", "HALOL", "TT", 'V');*/
 
     // Compare with first
-    Assertions.assertEquals(firstExpected, DbController.getNode("AAAAAAAAAA"));
+    Assertions.assertEquals(firstExpected, MapDB.getNode("AAAAAAAAAA"));
 
     // Compare center
-    Assertions.assertEquals(middleExpected, DbController.getNode("H500000000"));
+    Assertions.assertEquals(middleExpected, MapDB.getNode("H500000000"));
     // Compare last
-    Assertions.assertEquals(lastExpected, DbController.getNode("H130000000"));
-    DbController.clearNodes();
+    Assertions.assertEquals(lastExpected, MapDB.getNode("H130000000"));
+    MapDB.clearNodes();
   }
 
   /**
@@ -69,18 +69,19 @@ public class CSVParserTest {
         new DbNode("H130000000", 1341, 1114, 1, "MainBuil", "LABS", "HALOL", "TT", 'V');
 
     /*new DbNode("AAAAAAAAAA", 171, 851, 1, "MainBuil", "OFFI", "Arnold", "AA", 'E');
-    DbNode middleExpected =
-        new DbNode("H500000000", 316, 1132, 1, "MainBuil", "HALL", "HALOL", "LL", 'N');
-    DbNode lastExpected =
-        new DbNode("H130000000", 1341, 1114, 1, "MainBuil", "HALL", "HALOL", "TT", 'V');*/
+    >>>>>>> dev:src/test/java/edu/wpi/N/database/CSVParserTest.java
+        DbNode middleExpected =
+            new DbNode("H500000000", 316, 1132, 1, "MainBuil", "HALL", "HALOL", "LL", 'N');
+        DbNode lastExpected =
+            new DbNode("H130000000", 1341, 1114, 1, "MainBuil", "HALL", "HALOL", "TT", 'V');*/
 
     // Compare with first
-    Assertions.assertEquals(firstExpected, DbController.getNode("AAAAAAAAAA"));
+    Assertions.assertEquals(firstExpected, MapDB.getNode("AAAAAAAAAA"));
     // Compare center
-    Assertions.assertEquals(middleExpected, DbController.getNode("H500000000"));
+    Assertions.assertEquals(middleExpected, MapDB.getNode("H500000000"));
     // Compare last
-    Assertions.assertEquals(lastExpected, DbController.getNode("H130000000"));
-    DbController.clearNodes();
+    Assertions.assertEquals(lastExpected, MapDB.getNode("H130000000"));
+    MapDB.clearNodes();
   }
 
   /**
@@ -98,23 +99,19 @@ public class CSVParserTest {
     CSVParser.parseCSVfromPath(pathToEdges);
 
     LinkedList<DbNode> expectedH9 = new LinkedList<DbNode>();
-
     expectedH9.add(new DbNode("CCCCCCCCCC", 776, 523, 1, "MainBuil", "LABS", "Candie", "CC", 'G'));
-
-    expectedH9.add(new DbNode("CCCCCCCCCC", 776, 523, 1, "MainBuil", "OFFI", "Candie", "CC", 'G'));
-
     expectedH9.add(new DbNode("H800000000", 596, 794, 1, "MainBuil", "HALL", "HALOL", "OO", 'Q'));
     expectedH9.add(new DbNode("H100000001", 999, 816, 1, "MainBuil", "HALL", "HALOL", "QQ", 'S'));
     expectedH9.add(new DbNode("H120000000", 1214, 715, 1, "MainBuil", "HALL", "HALOL", "SS", 'U'));
 
-    LinkedList<DbNode> actualEdges = DbController.getAdjacent("H900000000");
+    LinkedList<DbNode> actualEdges = MapDB.getAdjacent("H900000000");
 
     Assertions.assertTrue(expectedH9.contains(actualEdges.get(0)));
     Assertions.assertTrue(expectedH9.contains(actualEdges.get(1)));
     Assertions.assertTrue(expectedH9.contains(actualEdges.get(2)));
     Assertions.assertTrue(expectedH9.contains(actualEdges.get(3)));
 
-    DbController.clearNodes();
+    MapDB.clearNodes();
   }
 
   /**
@@ -127,7 +124,7 @@ public class CSVParserTest {
     String path = f.getAbsolutePath();
 
     Assertions.assertThrows(Exception.class, () -> CSVParser.parseCSVfromPath(path));
-    DbController.clearNodes();
+    MapDB.clearNodes();
   }
 
   /** Tests that parceCSVfromPath successfully parses Prototype Node file */
@@ -143,7 +140,7 @@ public class CSVParserTest {
             "BCONF00102",
             2150,
             1025,
-            2,
+            4,
             "45 Francis",
             "CONF",
             "Duncan Reid Conference Room",
@@ -151,8 +148,8 @@ public class CSVParserTest {
             'Z');
 
     // Compare with first
-    Assertions.assertEquals(firstExpected, DbController.getNode("BCONF00102"));
-    DbController.clearNodes();
+    Assertions.assertEquals(firstExpected, MapDB.getNode("BCONF00102"));
+    MapDB.clearNodes();
   }
 
   /**
@@ -163,7 +160,7 @@ public class CSVParserTest {
   @Test
   public void testParsedAllEdgesCorrectly() throws DBException {
 
-    DbController.clearNodes();
+    MapDB.clearNodes();
 
     InputStream inputNodes =
         PathfinderMethodsTest.class.getResourceAsStream("../csv/ThreeFloorsTestNode.csv");
@@ -172,12 +169,12 @@ public class CSVParserTest {
     CSVParser.parseCSV(inputNodes);
     CSVParser.parseCSV(inputEdges);
 
-    LinkedList<Node> actualEdges = DbController.getGAdjacent("ELEV022000");
+    LinkedList<Node> actualEdges = MapDB.getGAdjacent("ELEV022000");
 
-    Node actualOne = DbController.getGNode("ELEV021000");
-    Node actualTwo = DbController.getGNode("ELEV023000");
-    Node actualThree = DbController.getGNode("H052000000");
-    Node actualFour = DbController.getGNode("H062000000");
+    Node actualOne = MapDB.getGNode("ELEV021000");
+    Node actualTwo = MapDB.getGNode("ELEV023000");
+    Node actualThree = MapDB.getGNode("H052000000");
+    Node actualFour = MapDB.getGNode("H062000000");
 
     Assertions.assertTrue(actualEdges.size() == 4);
     Assertions.assertTrue(actualEdges.contains(actualOne));
@@ -185,11 +182,11 @@ public class CSVParserTest {
     Assertions.assertTrue(actualEdges.contains(actualThree));
     Assertions.assertTrue(actualEdges.contains(actualFour));
 
-    DbController.clearNodes();
+    MapDB.clearNodes();
   }
 
   @AfterAll
   public static void clearDb() throws DBException {
-    DbController.clearNodes();
+    MapDB.clearNodes();
   }
 }

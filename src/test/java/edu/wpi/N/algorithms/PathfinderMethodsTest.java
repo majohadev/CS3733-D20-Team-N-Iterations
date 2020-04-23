@@ -2,7 +2,7 @@ package edu.wpi.N.algorithms;
 
 import edu.wpi.N.database.CSVParser;
 import edu.wpi.N.database.DBException;
-import edu.wpi.N.database.DbController;
+import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Path;
 import java.io.InputStream;
@@ -17,7 +17,7 @@ public class PathfinderMethodsTest {
 
   @BeforeAll
   public static void initializeTest() throws SQLException, ClassNotFoundException, DBException {
-    DbController.initDB();
+    MapDB.initTestDB();
     InputStream inputNodes =
         PathfinderMethodsTest.class.getResourceAsStream("../csv/TestNodes.csv");
     InputStream inputEdges =
@@ -30,14 +30,14 @@ public class PathfinderMethodsTest {
   @Test
   public void findPathNormalCase() throws DBException {
     LinkedList<DbNode> actualPath = new LinkedList<DbNode>();
-    actualPath.add(DbController.getNode("H100000001"));
-    actualPath.add(DbController.getNode("H900000000"));
-    actualPath.add(DbController.getNode("H120000000"));
-    actualPath.add(DbController.getNode("H130000000"));
-    actualPath.add(DbController.getNode("EEEEEEEEEE"));
+    actualPath.add(MapDB.getNode("H100000001"));
+    actualPath.add(MapDB.getNode("H900000000"));
+    actualPath.add(MapDB.getNode("H120000000"));
+    actualPath.add(MapDB.getNode("H130000000"));
+    actualPath.add(MapDB.getNode("EEEEEEEEEE"));
 
     Path testingPath =
-        Pathfinder.findPath(DbController.getNode("H100000001"), DbController.getNode("EEEEEEEEEE"));
+        Pathfinder.findPath(MapDB.getNode("H100000001"), MapDB.getNode("EEEEEEEEEE"));
 
     for (int i = 0; i < actualPath.size(); i++) {
       Assertions.assertEquals(
@@ -54,11 +54,11 @@ public class PathfinderMethodsTest {
 
     LinkedList<DbNode> actualPath = new LinkedList<DbNode>();
 
-    actualPath.add(DbController.getNode("H120000000"));
-    actualPath.add(DbController.getNode("H130000000"));
+    actualPath.add(MapDB.getNode("H120000000"));
+    actualPath.add(MapDB.getNode("H130000000"));
 
     Path testingPath =
-        Pathfinder.findPath(DbController.getNode("H120000000"), DbController.getNode("H130000000"));
+        Pathfinder.findPath(MapDB.getNode("H120000000"), MapDB.getNode("H130000000"));
 
     for (int i = 0; i < actualPath.size(); i++) {
       Assertions.assertEquals(
@@ -73,8 +73,7 @@ public class PathfinderMethodsTest {
   @Test
   public void findPathDestinationNotFound() throws DBException {
     Assertions.assertNull(
-        Pathfinder.findPath(
-            DbController.getNode("H120000000"), DbController.getNode("NonExistentNode")));
+        Pathfinder.findPath(MapDB.getNode("H120000000"), MapDB.getNode("NonExistentNode")));
   }
 
   /**
@@ -84,7 +83,7 @@ public class PathfinderMethodsTest {
   @Test
   public void findPathStartNodeHasNoEdges() throws DBException {
     DbNode nonExistentNode = new DbNode();
-    Assertions.assertNull(Pathfinder.findPath(nonExistentNode, DbController.getNode("H120000000")));
+    Assertions.assertNull(Pathfinder.findPath(nonExistentNode, MapDB.getNode("H120000000")));
   }
 
   /**
@@ -95,9 +94,9 @@ public class PathfinderMethodsTest {
   public void findPathEndIsStartNode() throws DBException {
     LinkedList<DbNode> actualPath = new LinkedList<DbNode>();
 
-    actualPath.add(DbController.getNode("H120000000"));
+    actualPath.add(MapDB.getNode("H120000000"));
     Path testingPath =
-        Pathfinder.findPath(DbController.getNode("H120000000"), DbController.getNode("H120000000"));
+        Pathfinder.findPath(MapDB.getNode("H120000000"), MapDB.getNode("H120000000"));
 
     for (int i = 0; i < actualPath.size(); i++) {
       Assertions.assertEquals(
@@ -108,15 +107,15 @@ public class PathfinderMethodsTest {
   /** Tests that findQuickAccess chooses finds the path to the closest node of the given nodeType */
   @Test
   public void findQuickAccessTester1() throws DBException {
-    Path path = Pathfinder.findQuickAccess(DbController.getNode("H200000000"), "REST");
-    Assertions.assertEquals(path.getPath().getLast(), DbController.getNode("AAAAAAAAAA"));
+    Path path = Pathfinder.findQuickAccess(MapDB.getNode("H200000000"), "REST");
+    Assertions.assertEquals(path.getPath().getLast(), MapDB.getNode("AAAAAAAAAA"));
   }
 
   /** Tests that findQuickAccess chooses finds the path to the closest node of the given nodeType */
   @Test
   public void findQuickAccessTester2() throws DBException {
-    Path path = Pathfinder.findQuickAccess(DbController.getNode("H700000000"), "LABS");
-    Assertions.assertEquals(path.getPath().getLast(), DbController.getNode("BBBBBBBBBB"));
+    Path path = Pathfinder.findQuickAccess(MapDB.getNode("H700000000"), "LABS");
+    Assertions.assertEquals(path.getPath().getLast(), MapDB.getNode("BBBBBBBBBB"));
   }
 
   /**
@@ -124,7 +123,7 @@ public class PathfinderMethodsTest {
    */
   @Test
   public void findQuickAccessNullTester() throws DBException {
-    Assertions.assertNull(Pathfinder.findQuickAccess(DbController.getNode("H700000000"), "ABCD"));
+    Assertions.assertNull(Pathfinder.findQuickAccess(MapDB.getNode("H700000000"), "ELEV"));
   }
 
   /**
@@ -133,9 +132,9 @@ public class PathfinderMethodsTest {
    */
   @Test
   public void findQuickAccessNoPathTester() throws DBException {
-    DbController.addNode("NHALL00104", 1250, 850, 1, "MainBuil", "ABCD", "Hall 1", "Hall 1", 'N');
-    Assertions.assertNull(Pathfinder.findQuickAccess(DbController.getNode("H700000000"), "ABCD"));
-    DbController.deleteNode("NHALL00104");
+    MapDB.addNode("NHALL00104", 1250, 850, 1, "MainBuil", "ELEV", "Hall 1", "Hall 1", 'N');
+    Assertions.assertNull(Pathfinder.findQuickAccess(MapDB.getNode("H700000000"), "ELEV"));
+    MapDB.deleteNode("NHALL00104");
   }
 
   // to test generatePath: uncomment the necessary test methods make the method itself public
@@ -185,10 +184,7 @@ public class PathfinderMethodsTest {
   //  }
 
   @AfterAll
-  public static void cleanup() throws DBException {}
-
-  @AfterAll
   public static void clearDB() throws DBException {
-    DbController.clearNodes();
+    MapDB.clearNodes();
   }
 }

@@ -2,7 +2,7 @@ package edu.wpi.N.algorithms;
 
 import edu.wpi.N.database.CSVParser;
 import edu.wpi.N.database.DBException;
-import edu.wpi.N.database.DbController;
+import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Path;
 import java.io.InputStream;
@@ -17,7 +17,7 @@ public class PathfinderMultipleFloorsTest {
 
   @BeforeAll
   public static void initialize() throws SQLException, DBException, ClassNotFoundException {
-    DbController.initDB();
+    MapDB.initTestDB();
     InputStream inputNodes =
         PathfinderMethodsTest.class.getResourceAsStream("../csv/ThreeFloorsTestNode.csv");
     InputStream inputEdges =
@@ -29,20 +29,20 @@ public class PathfinderMultipleFloorsTest {
   /** Tests if the pathfinder chooses the more efficient elevator when changing floors */
   @Test
   public void findCloserElevatorTest() throws DBException {
-    DbNode startNode = DbController.getNode("H011000000");
-    DbNode endNode = DbController.getNode("BBBBBBBBBB");
+    DbNode startNode = MapDB.getNode("H011000000");
+    DbNode endNode = MapDB.getNode("BBBBBBBBBB");
     Path testPath = Pathfinder.findPath(startNode, endNode);
 
     LinkedList<DbNode> actualPath = new LinkedList<DbNode>();
-    actualPath.add(DbController.getNode("H011000000"));
-    actualPath.add(DbController.getNode("H021000000"));
-    actualPath.add(DbController.getNode("H041000000"));
-    actualPath.add(DbController.getNode("H051000000"));
-    actualPath.add(DbController.getNode("ELEV021000"));
-    actualPath.add(DbController.getNode("ELEV022000"));
-    actualPath.add(DbController.getNode("H062000000"));
-    actualPath.add(DbController.getNode("H072000000"));
-    actualPath.add(DbController.getNode("BBBBBBBBBB"));
+    actualPath.add(MapDB.getNode("H011000000"));
+    actualPath.add(MapDB.getNode("H021000000"));
+    actualPath.add(MapDB.getNode("H041000000"));
+    actualPath.add(MapDB.getNode("H051000000"));
+    actualPath.add(MapDB.getNode("ELEV021000"));
+    actualPath.add(MapDB.getNode("ELEV022000"));
+    actualPath.add(MapDB.getNode("H062000000"));
+    actualPath.add(MapDB.getNode("H072000000"));
+    actualPath.add(MapDB.getNode("BBBBBBBBBB"));
 
     for (int i = 0; i < actualPath.size(); i++) {
       Assertions.assertEquals(actualPath.get(i), testPath.getPath().get(i));
@@ -50,19 +50,18 @@ public class PathfinderMultipleFloorsTest {
   }
 
   /**
-   * Tests if the pathfinder will choose the stairs over elevator if it's more efficient
-   * to do so
+   * Tests if the pathfinder will choose the stairs over elevator if it's more efficient to do so
    */
   @Test
   public void stairsOverElevatorTest() throws DBException {
-    DbNode startNode = DbController.getNode("STAI011000");
-    DbNode endNode = DbController.getNode("H083000000");
+    DbNode startNode = MapDB.getNode("STAI011000");
+    DbNode endNode = MapDB.getNode("H083000000");
     Path testPath = Pathfinder.findPath(startNode, endNode);
 
     LinkedList<DbNode> actualPath = new LinkedList<DbNode>();
-    actualPath.add(DbController.getNode("STAI011000"));
-    actualPath.add(DbController.getNode("STAI013000"));
-    actualPath.add(DbController.getNode("H083000000"));
+    actualPath.add(MapDB.getNode("STAI011000"));
+    actualPath.add(MapDB.getNode("STAI013000"));
+    actualPath.add(MapDB.getNode("H083000000"));
 
     for (int i = 0; i < actualPath.size(); i++) {
       Assertions.assertEquals(actualPath.get(i), testPath.getPath().get(i));
@@ -70,20 +69,20 @@ public class PathfinderMultipleFloorsTest {
   }
 
   /**
-   * Second test to see if the pathfinder will choose the stairs over elevator if
-   * it's more efficient to do so
+   * Second test to see if the pathfinder will choose the stairs over elevator if it's more
+   * efficient to do so
    */
   @Test
   public void stairsOverElevatorTest2() throws DBException {
-    DbNode startNode = DbController.getNode("H083000000");
-    DbNode endNode = DbController.getNode("H041000000");
+    DbNode startNode = MapDB.getNode("H083000000");
+    DbNode endNode = MapDB.getNode("H041000000");
     Path testPath = Pathfinder.findPath(startNode, endNode);
 
     LinkedList<DbNode> actualPath = new LinkedList<DbNode>();
-    actualPath.add(DbController.getNode("H083000000"));
-    actualPath.add(DbController.getNode("STAI013000"));
-    actualPath.add(DbController.getNode("STAI011000"));
-    actualPath.add(DbController.getNode("H041000000"));
+    actualPath.add(MapDB.getNode("H083000000"));
+    actualPath.add(MapDB.getNode("STAI013000"));
+    actualPath.add(MapDB.getNode("STAI011000"));
+    actualPath.add(MapDB.getNode("H041000000"));
 
     for (int i = 0; i < actualPath.size(); i++) {
       Assertions.assertEquals(actualPath.get(i), testPath.getPath().get(i));
@@ -96,19 +95,19 @@ public class PathfinderMultipleFloorsTest {
   //   */
   //  @Test
   //  public void secondToFirstFloorTest() throws DBException {
-  //    DbNode startNode = DbController.getNode("H022000000");
-  //    DbNode endNode = DbController.getNode("H081000000");
+  //    DbNode startNode = MapDB.getNode("H022000000");
+  //    DbNode endNode = MapDB.getNode("H081000000");
   //    Path testPath = Pathfinder.findPath(startNode, endNode);
   //
   //    LinkedList<DbNode> actualPath = new LinkedList<DbNode>();
-  //    actualPath.add(DbController.getNode("H022000000"));
-  //    actualPath.add(DbController.getNode("H042000000"));
-  //    actualPath.add(DbController.getNode("H052000000"));
-  //    actualPath.add(DbController.getNode("ELEV022000"));
-  //    actualPath.add(DbController.getNode("ELEV021000"));
-  //    actualPath.add(DbController.getNode("H061000000"));
-  //    actualPath.add(DbController.getNode("H071000000"));
-  //    actualPath.add(DbController.getNode("H081000000"));
+  //    actualPath.add(MapDB.getNode("H022000000"));
+  //    actualPath.add(MapDB.getNode("H042000000"));
+  //    actualPath.add(MapDB.getNode("H052000000"));
+  //    actualPath.add(MapDB.getNode("ELEV022000"));
+  //    actualPath.add(MapDB.getNode("ELEV021000"));
+  //    actualPath.add(MapDB.getNode("H061000000"));
+  //    actualPath.add(MapDB.getNode("H071000000"));
+  //    actualPath.add(MapDB.getNode("H081000000"));
   //
   //    for (int i = 0; i < actualPath.size(); i++) {
   //      Assertions.assertEquals(actualPath.get(i), testPath.getPath().get(i));
@@ -121,19 +120,25 @@ public class PathfinderMultipleFloorsTest {
    */
   @Test
   public void thirdToSecondFloorNoStairsTest() throws DBException {
-    DbNode startNode = DbController.getNode("STAI013000");
-    DbNode endNode = DbController.getNode("H022000000");
+    DbNode startNode = MapDB.getNode("STAI013000");
+    DbNode endNode = MapDB.getNode("H022000000");
+
+    long startTime = System.nanoTime();
     Path testPath = Pathfinder.findPath(startNode, endNode);
+    long endTime = System.nanoTime();
+
+    long timeElapsed = endTime - startTime;
+    System.out.println("Elapsed time for FindPath in milliseconds:" + timeElapsed / 1000000);
 
     LinkedList<DbNode> actualPath = new LinkedList<DbNode>();
-    actualPath.add(DbController.getNode("STAI013000"));
-    actualPath.add(DbController.getNode("H043000000"));
-    actualPath.add(DbController.getNode("H023000000"));
-    actualPath.add(DbController.getNode("H033000000"));
-    actualPath.add(DbController.getNode("ELEV013000"));
-    actualPath.add(DbController.getNode("ELEV012000"));
-    actualPath.add(DbController.getNode("H032000000"));
-    actualPath.add(DbController.getNode("H022000000"));
+    actualPath.add(MapDB.getNode("STAI013000"));
+    actualPath.add(MapDB.getNode("H043000000"));
+    actualPath.add(MapDB.getNode("H023000000"));
+    actualPath.add(MapDB.getNode("H033000000"));
+    actualPath.add(MapDB.getNode("ELEV013000"));
+    actualPath.add(MapDB.getNode("ELEV012000"));
+    actualPath.add(MapDB.getNode("H032000000"));
+    actualPath.add(MapDB.getNode("H022000000"));
 
     for (int i = 0; i < actualPath.size(); i++) {
       Assertions.assertEquals(actualPath.get(i), testPath.getPath().get(i));
@@ -147,20 +152,20 @@ public class PathfinderMultipleFloorsTest {
   //   */
   //  @Test
   //  public void fourthToFirstFloorTest() throws DBException {
-  //    DbNode startNode = DbController.getNode("DDDDDDDDDD");
-  //    DbNode endNode = DbController.getNode("H011000000");
+  //    DbNode startNode = MapDB.getNode("DDDDDDDDDD");
+  //    DbNode endNode = MapDB.getNode("H011000000");
   //    Path testPath = Pathfinder.findPath(startNode, endNode);
   //
   //    LinkedList<DbNode> actualPath = new LinkedList<DbNode>();
-  //    actualPath.add(DbController.getNode("DDDDDDDDDD"));
-  //    actualPath.add(DbController.getNode("ELEV034000"));
-  //    actualPath.add(DbController.getNode("ELEV033000"));
-  //    actualPath.add(DbController.getNode("H083000000"));
-  //    actualPath.add(DbController.getNode("STAI013000"));
-  //    actualPath.add(DbController.getNode("STAI011000"));
-  //    actualPath.add(DbController.getNode("H041000000"));
-  //    actualPath.add(DbController.getNode("H021000000"));
-  //    actualPath.add(DbController.getNode("H011000000"));
+  //    actualPath.add(MapDB.getNode("DDDDDDDDDD"));
+  //    actualPath.add(MapDB.getNode("ELEV034000"));
+  //    actualPath.add(MapDB.getNode("ELEV033000"));
+  //    actualPath.add(MapDB.getNode("H083000000"));
+  //    actualPath.add(MapDB.getNode("STAI013000"));
+  //    actualPath.add(MapDB.getNode("STAI011000"));
+  //    actualPath.add(MapDB.getNode("H041000000"));
+  //    actualPath.add(MapDB.getNode("H021000000"));
+  //    actualPath.add(MapDB.getNode("H011000000"));
   //
   //    for (int i = 0; i < actualPath.size(); i++) {
   //      Assertions.assertEquals(actualPath.get(i), testPath.getPath().get(i));
@@ -173,20 +178,20 @@ public class PathfinderMultipleFloorsTest {
    */
   @Test
   public void thirdToFourthFloorTest() throws DBException {
-    DbNode startNode = DbController.getNode("ELEV013000");
-    DbNode endNode = DbController.getNode("DDDDDDDDDD");
+    DbNode startNode = MapDB.getNode("ELEV013000");
+    DbNode endNode = MapDB.getNode("DDDDDDDDDD");
     Path testPath = Pathfinder.findPath(startNode, endNode);
 
     LinkedList<DbNode> actualPath = new LinkedList<DbNode>();
-    actualPath.add(DbController.getNode("ELEV013000"));
-    actualPath.add(DbController.getNode("H033000000"));
-    actualPath.add(DbController.getNode("H023000000"));
-    actualPath.add(DbController.getNode("H043000000"));
-    actualPath.add(DbController.getNode("STAI013000"));
-    actualPath.add(DbController.getNode("H083000000"));
-    actualPath.add(DbController.getNode("ELEV033000"));
-    actualPath.add(DbController.getNode("ELEV034000"));
-    actualPath.add(DbController.getNode("DDDDDDDDDD"));
+    actualPath.add(MapDB.getNode("ELEV013000"));
+    actualPath.add(MapDB.getNode("H033000000"));
+    actualPath.add(MapDB.getNode("H023000000"));
+    actualPath.add(MapDB.getNode("H043000000"));
+    actualPath.add(MapDB.getNode("STAI013000"));
+    actualPath.add(MapDB.getNode("H083000000"));
+    actualPath.add(MapDB.getNode("ELEV033000"));
+    actualPath.add(MapDB.getNode("ELEV034000"));
+    actualPath.add(MapDB.getNode("DDDDDDDDDD"));
 
     for (int i = 0; i < actualPath.size(); i++) {
       Assertions.assertEquals(actualPath.get(i), testPath.getPath().get(i));
@@ -199,7 +204,7 @@ public class PathfinderMultipleFloorsTest {
    */
   @Test
   public void isEligibleFloorChangeElevatorUpTest() throws DBException {
-    DbNode elevator = DbController.getNode("ELEV011000");
+    DbNode elevator = MapDB.getNode("ELEV011000");
     int endFloorNum = 3;
     Assertions.assertTrue(
         Pathfinder.isEligibleFloorChange(elevator, elevator.getFloor(), endFloorNum));
@@ -211,7 +216,7 @@ public class PathfinderMultipleFloorsTest {
    */
   @Test
   public void isEligibleFloorChangeStairUpTest() throws DBException {
-    DbNode stair = DbController.getNode("STAI011000");
+    DbNode stair = MapDB.getNode("STAI011000");
     int endFloorNum = 3;
     Assertions.assertTrue(Pathfinder.isEligibleFloorChange(stair, stair.getFloor(), endFloorNum));
   }
@@ -222,7 +227,7 @@ public class PathfinderMultipleFloorsTest {
    */
   @Test
   public void isEligibleFloorChangeStairSecondFloorTest() throws DBException {
-    DbNode stair = DbController.getNode("STAI011000");
+    DbNode stair = MapDB.getNode("STAI011000");
     int endFloorNum = 2;
     Assertions.assertFalse(Pathfinder.isEligibleFloorChange(stair, stair.getFloor(), endFloorNum));
   }
@@ -233,7 +238,7 @@ public class PathfinderMultipleFloorsTest {
    */
   @Test
   public void isEligibleFloorChangeElevatorDownTest() throws DBException {
-    DbNode elevator = DbController.getNode("ELEV013000");
+    DbNode elevator = MapDB.getNode("ELEV013000");
     int endFloorNum = 1;
     Assertions.assertTrue(
         Pathfinder.isEligibleFloorChange(elevator, elevator.getFloor(), endFloorNum));
@@ -245,7 +250,7 @@ public class PathfinderMultipleFloorsTest {
    */
   @Test
   public void isEligibleFloorChangeStairDownTest() throws DBException {
-    DbNode stair = DbController.getNode("STAI013000");
+    DbNode stair = MapDB.getNode("STAI013000");
     int endFloorNum = 1;
     Assertions.assertTrue(Pathfinder.isEligibleFloorChange(stair, stair.getFloor(), endFloorNum));
   }
@@ -253,9 +258,9 @@ public class PathfinderMultipleFloorsTest {
   /** Tests if the pathfinder get the correct elevator node when going up 2 floors */
   @Test
   public void getEligibleFloorChangeElevatorUpTest() throws DBException {
-    DbNode elevator = DbController.getNode("ELEV011000");
+    DbNode elevator = MapDB.getNode("ELEV011000");
     int endFloorNum = 3;
-    DbNode floorChangeElevator = DbController.getNode("ELEV013000");
+    DbNode floorChangeElevator = MapDB.getNode("ELEV013000");
     Assertions.assertEquals(
         floorChangeElevator,
         Pathfinder.getFloorChangeNode(elevator, elevator.getFloor(), endFloorNum));
@@ -264,9 +269,9 @@ public class PathfinderMultipleFloorsTest {
   /** Tests if the pathfinder get the correct elevator node when going down 1 floor */
   @Test
   public void getEligibleFloorChangeElevatorDownTest() throws DBException {
-    DbNode elevator = DbController.getNode("ELEV012000");
+    DbNode elevator = MapDB.getNode("ELEV012000");
     int endFloorNum = 1;
-    DbNode floorChangeElevator = DbController.getNode("ELEV011000");
+    DbNode floorChangeElevator = MapDB.getNode("ELEV011000");
     Assertions.assertEquals(
         floorChangeElevator,
         Pathfinder.getFloorChangeNode(elevator, elevator.getFloor(), endFloorNum));
@@ -275,9 +280,9 @@ public class PathfinderMultipleFloorsTest {
   /** Tests if the pathfinder get the correct stair node when going up 2 floors */
   @Test
   public void getEligibleFloorChangeStairUpTest() throws DBException {
-    DbNode stair = DbController.getNode("STAI011000");
+    DbNode stair = MapDB.getNode("STAI011000");
     int endFloorNum = 3;
-    DbNode floorChangeStair = DbController.getNode("STAI013000");
+    DbNode floorChangeStair = MapDB.getNode("STAI013000");
     Assertions.assertEquals(
         floorChangeStair, Pathfinder.getFloorChangeNode(stair, stair.getFloor(), endFloorNum));
   }
@@ -285,15 +290,15 @@ public class PathfinderMultipleFloorsTest {
   /** Tests if the pathfinder get the correct elevator node when going down 2 floors */
   @Test
   public void getEligibleFloorChangeStairDownTest() throws DBException {
-    DbNode stair = DbController.getNode("STAI013000");
+    DbNode stair = MapDB.getNode("STAI013000");
     int endFloorNum = 1;
-    DbNode floorChangeStair = DbController.getNode("STAI011000");
+    DbNode floorChangeStair = MapDB.getNode("STAI011000");
     Assertions.assertEquals(
         floorChangeStair, Pathfinder.getFloorChangeNode(stair, stair.getFloor(), endFloorNum));
   }
 
   @AfterAll
   public static void clear() throws DBException {
-    DbController.clearNodes();
+    MapDB.clearNodes();
   }
 }

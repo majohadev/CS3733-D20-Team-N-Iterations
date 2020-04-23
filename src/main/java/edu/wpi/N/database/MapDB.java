@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-public class DbController {
+public class MapDB {
 
   private static Statement statement;
   private static Connection con;
@@ -15,6 +15,191 @@ public class DbController {
   public static Connection getCon() {
     return con;
   }
+
+  /** Initializes the database, should be run before interfacing with it. */
+  // doesn't need to use prepared statements since it takes no user input
+  public static void initDB() throws ClassNotFoundException, SQLException, DBException {
+    if (con == null || statement == null) {
+      Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+      String URL;
+      URL = "jdbc:derby:MapDB;create=true";
+      con = DriverManager.getConnection(URL);
+      statement = con.createStatement();
+    }
+  }
+
+  /** Initializes a database in memory for tests */
+  public static void initTestDB() throws ClassNotFoundException, SQLException, DBException {
+    if (con == null || statement == null) {
+      Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+      String URL;
+      URL = "jdbc:derby:memory:db;create=true";
+      con = DriverManager.getConnection(URL);
+      statement = con.createStatement();
+    }
+    String query;
+
+    try {
+      query =
+          "CREATE TABLE nodes ("
+              + "nodeID CHAR(10) NOT NULL PRIMARY KEY, "
+              + "xcoord INT NOT NULL, "
+              + "ycoord INT NOT NULL, "
+              + "floor INT NOT NULL, "
+              + "building VARCHAR(255) NOT NULL, "
+              + "nodeType CHAR(4) NOT NULL CONSTRAINT TYPE_CK CHECK (nodeType IN ('HALL', 'ELEV', 'REST', 'STAI', 'DEPT', 'LABS', 'INFO', 'CONF', 'EXIT', 'RETL', 'SERV')), "
+              + "longName VARCHAR(255) NOT NULL, "
+              + "shortName VARCHAR(255) NOT NULL, "
+              + "teamAssigned CHAR(1) NOT NULL"
+              + ")";
+      statement.execute(query);
+    } catch (SQLException e) {
+      if (!e.getSQLState().equals("X0Y32")) throw e;
+    }
+
+    try {
+      query =
+          "CREATE TABLE edges ("
+              + "edgeID CHAR(21) NOT NULL PRIMARY KEY, "
+              + "node1 CHAR(10) NOT NULL, "
+              + "node2 CHAR(10) NOT NULL, "
+              + "FOREIGN KEY (node1) REFERENCES nodes(nodeID) ON DELETE CASCADE,"
+              + "FOREIGN KEY (node2) REFERENCES nodes(nodeID) ON DELETE CASCADE"
+              + ")";
+      statement.execute(query);
+    } catch (SQLException e) {
+      if (!e.getSQLState().equals("X0Y32")) throw e;
+    }
+
+    try {
+      query =
+          "CREATE TABLE doctors ("
+              + "doctorID INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,"
+              + "name VARCHAR(255) NOT NULL, "
+              + "field VARCHAR(255) NOT NULL)";
+
+      PreparedStatement state = con.prepareStatement(query);
+      state.execute();
+      query =
+          "CREATE TABLE location ("
+              + "doctor INT NOT NULL REFERENCES doctors(doctorID) ON DELETE CASCADE, "
+              + "nodeID char(10) NOT NULL REFERENCES nodes(nodeID) ON DELETE CASCADE,"
+              + "priority INT NOT NULL GENERATED ALWAYS AS IDENTITY,"
+              + "PRIMARY KEY (doctor, nodeID))";
+      state = con.prepareStatement(query);
+      state.execute();
+    } catch (SQLException e) {
+      if (!e.getSQLState().equals("X0Y32")) {
+        e.printStackTrace();
+        throw new DBException("Unknown error: initDoctor", e);
+      }
+    }
+    try {
+      query =
+          "CREATE TABLE service ("
+              + "serviceType VARCHAR(255) NOT NULL PRIMARY KEY,"
+              + "timeStart CHAR(5),"
+              + "timeEnd CHAR(5),"
+              + "description VARCHAR(255))";
+      PreparedStatement state = con.prepareStatement(query);
+      state.execute();
+      query =
+          "INSERT INTO service VALUES ('Translator', '00:00', '00:00', 'Make a request for our translation services!')";
+      state = con.prepareStatement(query);
+      state.execute();
+
+      query =
+          "INSERT INTO service VALUES ('Laundry', '00:00', '00:00', 'Make a request for laundry services!')";
+      state = con.prepareStatement(query);
+      state.execute();
+    } catch (SQLException e) {
+      if (!e.getSQLState().equals("X0Y32")) {
+        e.printStackTrace();
+        throw new DBException("Unknown error: initEmployee", e);
+      }
+    }
+    try {
+      query =
+          "CREATE TABLE employees ("
+              + "employeeID INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY, "
+              + "name VARCHAR(255) NOT NULL,"
+              + "serviceType VARCHAR(255) NOT NULL,"
+              + "FOREIGN KEY (serviceType) REFERENCES service (serviceType))";
+
+      PreparedStatement state = con.prepareStatement(query);
+      state.execute();
+    } catch (SQLException e) {
+      if (!e.getSQLState().equals("X0Y32")) {
+        e.printStackTrace();
+        throw new DBException("Unknown error: initEmployee", e);
+      }
+    }
+    try {
+      query =
+          "CREATE TABLE translator ("
+              + "t_employeeID INT NOT NULL PRIMARY KEY,"
+              + "FOREIGN KEY (t_employeeID) REFERENCES employees(employeeID) ON DELETE CASCADE)";
+      PreparedStatement state = con.prepareStatement(query);
+      state.execute();
+      query =
+          "CREATE TABLE language ("
+              + "t_employeeID INT NOT NULL, "
+              + "language VARCHAR(255) NOT NULL, "
+              + "CONSTRAINT LANG_PK PRIMARY KEY (t_employeeID, language),"
+              + "FOREIGN KEY (t_employeeID) REFERENCES translator (t_employeeID) ON DELETE CASCADE)";
+      state = con.prepareStatement(query);
+      state.execute();
+    } catch (SQLException e) {
+      if (!e.getSQLState().equals("X0Y32")) {
+        e.printStackTrace();
+        throw new DBException("Unknown error: initEmployee creating translator table", e);
+      }
+    }
+    try {
+      query =
+          "CREATE TABLE laundry("
+              + "l_employeeID INT NOT NULL References employees(employeeID) ON DELETE CASCADE,"
+              + "PRIMARY KEY(l_employeeID))";
+      PreparedStatement state = con.prepareStatement(query);
+      state.execute();
+    } catch (SQLException e) {
+      if (!e.getSQLState().equals("X0Y32")) {
+        e.printStackTrace();
+        throw new DBException("Unknown error: intiEmployee creating laundry table", e);
+      }
+    }
+    try {
+      query =
+          "CREATE TABLE request("
+              + "requestID INT NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY,"
+              + "timeRequested TIMESTAMP NOT NULL,"
+              + "timeCompleted TIMESTAMP,"
+              + "notes VARCHAR(255),"
+              + "assigned_eID INT REFERENCES employees(employeeID) ON DELETE SET NULL,"
+              + "serviceType VARCHAR(255) NOT NULL REFERENCES service(serviceType),"
+              + "nodeID CHAR(10) REFERENCES nodes(nodeID) ON DELETE SET NULL,"
+              + "status CHAR(4) NOT NULL CONSTRAINT STAT_CK CHECK (status IN ('OPEN', 'DENY', 'DONE')))";
+      PreparedStatement state = con.prepareStatement(query);
+      state.execute();
+      query =
+          "CREATE TABLE lrequest("
+              + "requestID INT NOT NULL PRIMARY KEY REFERENCES request(requestID) ON DELETE CASCADE)";
+      state = con.prepareStatement(query);
+      state.execute();
+      query =
+          "CREATE TABLE trequest("
+              + "requestID INT NOT NULL PRIMARY KEY REFERENCES request(requestID) ON DELETE CASCADE,"
+              + "language VARCHAR(255) NOT NULL)";
+      state = con.prepareStatement(query);
+      state.execute();
+    } catch (SQLException e) {
+      if (!e.getSQLState().equals("X0Y32")) {
+        e.printStackTrace();
+        throw new DBException("Unknown error: intiEmployee creating Request table", e);
+      }
+    }
+  }
+
   /**
    * Adds a node to the database including the nodeID for importing from the CSV
    *
@@ -50,8 +235,10 @@ public class DbController {
       stmt.setInt(4, floor);
       stmt.setString(5, building);
       stmt.setString(6, nodeType);
-      stmt.setString(7, longName.replace("\'", "\\'"));
-      stmt.setString(8, shortName.replace("\'", "\\'"));
+      // stmt.setString(7, longName.replace("\'", "\\'"));
+      // stmt.setString(8, shortName.replace("\'", "\\'"));
+      stmt.setString(7, longName);
+      stmt.setString(8, shortName);
       stmt.setString(9, String.valueOf(teamAssigned));
       stmt.executeUpdate();
       // System.out.println("Values Inserted");
@@ -63,19 +250,20 @@ public class DbController {
   }
 
   /**
-   * Modifies a Node in the database. May change NodeID
+   * Modifies a node unsafely. Probably shouldn't ever use. Can mess with nodeID
    *
-   * @param nodeID the ID of the node you wish to change
-   * @param x The new x coordinate of the node
-   * @param y The new y coordinate of the node
-   * @param floor The new floor of the node
-   * @param building The new building the node is in
-   * @param longName The new node's longName
-   * @param shortName The new node's shortName
-   * @param teamAssigned The new team assigned to the Node
-   * @return true if the node was modified, false otherwise
+   * @param nodeID the nodeID of the node you want to modify
+   * @param x the new x value
+   * @param y the new y value
+   * @param floor the new floor
+   * @param building the new building
+   * @param nodeType the new nodeType
+   * @param longName the new longName
+   * @param shortName the new shortName
+   * @param teamAssigned the new teamAssigned
+   * @return
+   * @throws DBException
    */
-  // Noah
   public static boolean modifyNode(
       String nodeID,
       int x,
@@ -97,7 +285,8 @@ public class DbController {
         if (nodeID.substring(1, 5).equals(nodeType)) {
           newID = teamAssigned + nodeID.substring(1, 8) + String.format("%02d", floor);
         } else {
-          newID = teamAssigned + nodeType.toUpperCase() + nextAvailNum(nodeType) + "0" + floor;
+          newID =
+              teamAssigned + nodeType.toUpperCase() + nextAvailNum(nodeType, floor) + "0" + floor;
         }
       } else newID = nodeID;
       if (!newID.equals(nodeID)) {
@@ -250,67 +439,6 @@ public class DbController {
     }
   }
 
-  /** Initializes the database, should be run before interfacing with it. */
-  // doesn't need to use prepared statements since it takes no user input
-  public static void initDB() throws ClassNotFoundException, SQLException, DBException {
-    Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
-    String URL;
-
-    URL = "jdbc:derby:memory:MapDB;create=true";
-    con = DriverManager.getConnection(URL);
-    statement = con.createStatement();
-    String query;
-
-    // not necessary when running the database in memory
-    //    try {
-    //      query = "DROP TABLE nodes";
-    //      statement.execute(query);
-    //    } catch (SQLException e) {
-    //      if (!e.getSQLState().equals("42Y55")) throw e;
-    //    }
-    //
-    //    try {
-    //      query = "DROP TABLE edges";
-    //      statement.execute(query);
-    //    } catch (SQLException e) {
-    //      if (!e.getSQLState().equals("42Y55")) throw e;
-    //    }
-
-    try {
-      query =
-          "CREATE TABLE nodes ("
-              + "nodeID CHAR(10) NOT NULL PRIMARY KEY, "
-              + "xcoord INT NOT NULL, "
-              + "ycoord INT NOT NULL, "
-              + "floor INT NOT NULL, "
-              + "building VARCHAR(255) NOT NULL, "
-              + "nodeType CHAR(4) NOT NULL, "
-              + "longName VARCHAR(255) NOT NULL, "
-              + "shortName VARCHAR(255) NOT NULL, "
-              + "teamAssigned CHAR(1) NOT NULL"
-              + ")";
-      statement.execute(query);
-    } catch (SQLException e) {
-      if (!e.getSQLState().equals("X0Y32")) throw e;
-    }
-
-    try {
-      query =
-          "CREATE TABLE edges ("
-              + "edgeID CHAR(21) NOT NULL PRIMARY KEY, "
-              + "node1 CHAR(10) NOT NULL, "
-              + "node2 CHAR(10) NOT NULL, "
-              + "FOREIGN KEY (node1) REFERENCES nodes(nodeID) ON DELETE CASCADE,"
-              + "FOREIGN KEY (node2) REFERENCES nodes(nodeID) ON DELETE CASCADE"
-              + ")";
-      statement.execute(query);
-    } catch (SQLException e) {
-      if (!e.getSQLState().equals("X0Y32")) throw e;
-    }
-
-    ServiceController.initService();
-  }
-
   /**
    * Gets the next available number for a particular node type for the purposes of making the nodeID
    *
@@ -319,10 +447,11 @@ public class DbController {
    * @throws SQLException if something goes wrong with the sql
    */
   // Chris
-  private static String nextAvailNum(String nodeType) throws SQLException {
-    String query = "SELECT nodeID FROM nodes WHERE nodeType = ?";
+  private static String nextAvailNum(String nodeType, int floor) throws SQLException {
+    String query = "SELECT nodeID FROM nodes WHERE nodeType = ? AND floor = ?";
     PreparedStatement stmt = con.prepareStatement(query);
     stmt.setString(1, nodeType);
+    stmt.setInt(2, floor);
     ResultSet rs = stmt.executeQuery();
     ArrayList<Integer> nums = new ArrayList<Integer>();
     while (rs.next()) {
@@ -375,26 +504,25 @@ public class DbController {
       throws DBException {
     try {
       String nodeID =
-          "I" + nodeType.toUpperCase() + nextAvailNum(nodeType) + String.format("%02d", floor);
-      String query =
-          "INSERT INTO nodes VALUES ('"
-              + nodeID
-              + "', "
-              + x
-              + ","
-              + y
-              + ","
-              + floor
-              + ",'"
-              + building
-              + "','"
-              + nodeType
-              + "','"
-              + longName.replace("'", "\\'")
-              + "','"
-              + shortName.replace("'", "\\'")
-              + "','I')";
-      statement.execute(query);
+          "I"
+              + nodeType.toUpperCase()
+              + nextAvailNum(nodeType, floor)
+              + String.format("%02d", floor);
+      String query = "INSERT INTO nodes VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+      PreparedStatement stmt = con.prepareStatement(query);
+      stmt.setString(1, nodeID);
+      stmt.setInt(2, x);
+      stmt.setInt(3, y);
+      stmt.setInt(4, floor);
+      stmt.setString(5, building);
+      stmt.setString(6, nodeType);
+      // stmt.setString(7, longName.replace("\'", "\\'"));
+      // stmt.setString(8, shortName.replace("\'", "\\'"));
+      stmt.setString(7, longName);
+      stmt.setString(8, shortName);
+      stmt.setString(9, "I");
+      stmt.executeUpdate();
+      // System.out.println("Values Inserted");
       return getNode(nodeID);
     } catch (SQLException e) {
       e.printStackTrace();
@@ -549,8 +677,9 @@ public class DbController {
       ResultSet rs = null;
       String query =
           "SELECT nodeID, xcoord, ycoord FROM (SELECT nodeID, xcoord, ycoord FROM nodes WHERE"
-              + " (nodes.floor = ? OR nodes.floor = ? OR nodes.nodeType = 'ELEV' OR nodes.nodeType = 'STAI')) AS nodes, edges "
-              + "WHERE ((edges.node1 = ? AND nodes.nodeID = edges.node2) OR (edges.node2 = ? AND nodes.nodeID = edges.node1))";
+              + " (nodes.floor = ? OR nodes.floor = ? OR nodes.nodeType = 'ELEV' OR nodes.nodeType = 'STAI')) AS nodes,"
+              + " (SELECT node1, node2 FROM edges  WHERE (edges.node1 = ?) OR (edges.node2 = ?)) AS edges "
+              + "WHERE edges.node1 = nodes.nodeID OR edges.node2 = nodes.nodeID";
       PreparedStatement stmt = con.prepareStatement(query);
       stmt.setString(3, nodeID);
       stmt.setString(4, nodeID);
@@ -755,6 +884,7 @@ public class DbController {
       st = con.prepareStatement(query);
       st.setString(1, edgeID);
       st.setString(2, nodeID1);
+      //noinspection JpaQueryApiInspection
       st.setString(3, nodeID2);
 
       return st.executeUpdate() > 0;
@@ -795,12 +925,43 @@ public class DbController {
     }
   }
 
+  /**
+   * Exports all the edges for CSV purposes
+   *
+   * @return a linked list of each edge in CSV format
+   */
+  public static LinkedList<String> exportEdges() throws DBException {
+    try {
+      LinkedList<String> edges = new LinkedList<String>();
+      String query = "SELECT * FROM edges";
+      ResultSet rs = con.prepareStatement(query).executeQuery();
+      while (rs.next()) {
+        edges.add(
+            rs.getString("edgeID") + "," + rs.getString("node1") + "," + rs.getString("node2"));
+      }
+      return edges;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown error: exportEdges", e);
+    }
+  }
+
   /** Clears all of the nodes and edges from the database */
   public static void clearNodes() throws DBException {
     try {
       String query = "DELETE FROM nodes";
       statement.executeUpdate(query);
-      query = "DELETE FROM edges";
+      // unneccessary to explicitly delete from edges due to on delete cascade in foreign keys
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown error: clearNodes", e);
+    }
+  }
+
+  /** Clears all of the edges from the database */
+  public static void clearEdges() throws DBException {
+    try {
+      String query = "DELETE FROM edges";
       statement.executeUpdate(query);
     } catch (SQLException e) {
       e.printStackTrace();
