@@ -42,7 +42,7 @@ public class Directions {
     double angle = 0;
     String startFloor = "";
     String message = "";
-    boolean spagetti = false;
+    boolean messageCheck = false;
     for (int i = 0; i <= path.size() - 1; i++) {
       currNode = path.get(i);
       if (i < path.size() - 1) {
@@ -126,12 +126,12 @@ public class Directions {
           if (!message.equals("")) {
             directions.add(message + " and enter " + currNode.getLongName());
             message = "";
-            spagetti = true;
+            messageCheck = true;
           }
           if (stateChange) {
-            if (spagetti) {
+            if (messageCheck) {
               directions.add("Take " + startFloor + " to floor " + currNode.getFloor());
-              spagetti = false;
+              messageCheck = false;
             } else {
               directions.add("Enter " + startFloor + " and go to floor " + currNode.getFloor());
             }
@@ -152,7 +152,7 @@ public class Directions {
   }
 
   /**
-   * gets the state based off of currNode and nextNode
+   * gets the state based off of currNode and change in angle
    *
    * @return int, State
    */
@@ -200,8 +200,9 @@ public class Directions {
   }
 
   /**
-   * Gets closest landmark to a node (ie. won't return hallway nodes...or returning hallway nodes->
-   * "end of corridor" or something?)
+   * Gets closest landmark to a node,
+   * if the node is a HALL node, returns an adjacent non-hallway node or null
+   * if node is not a HALL node, returns the same node
    *
    * @param node, DbNode
    * @return String, landmark for given node
