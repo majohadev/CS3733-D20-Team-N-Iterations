@@ -9,32 +9,6 @@ import java.util.LinkedList;
 public class DoctorDB {
   private static Connection con = MapDB.getCon();
 
-  static void initDoctor() throws DBException {
-    try {
-      String query =
-          "CREATE TABLE doctors ("
-              + "doctorID INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,"
-              + "name VARCHAR(255) NOT NULL, "
-              + "field VARCHAR(255) NOT NULL)";
-
-      PreparedStatement state = con.prepareStatement(query);
-      state.execute();
-      query =
-          "CREATE TABLE location ("
-              + "doctor INT NOT NULL REFERENCES doctors(doctorID) ON DELETE CASCADE, "
-              + "nodeID char(10) NOT NULL REFERENCES nodes(nodeID) ON DELETE CASCADE,"
-              + "priority INT NOT NULL GENERATED ALWAYS AS IDENTITY,"
-              + "PRIMARY KEY (doctor, nodeID))";
-      state = con.prepareStatement(query);
-      state.execute();
-    } catch (SQLException e) {
-      if (!e.getSQLState().equals("X0Y32")) {
-        e.printStackTrace();
-        throw new DBException("Unknown error: initDoctor", e);
-      }
-    }
-  }
-
   /**
    * Gets the doctor with the specified name (must be exact)
    *

@@ -12,7 +12,7 @@ public class MapDBGMethodsTest {
 
   @BeforeAll
   public static void initializeTest() throws Exception {
-    MapDB.initDB();
+    MapDB.initTestDB();
     InputStream inputNodes = Main.class.getResourceAsStream("csv/TestNodes.csv");
     InputStream inputEdges = Main.class.getResourceAsStream("csv/TestEdges.csv");
     CSVParser.parseCSV(inputNodes);

@@ -67,6 +67,14 @@ run {
 
 test {
     useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed", "standardOut", "standardError"
+        showExceptions true
+        exceptionFormat "full"
+        showCauses true
+        showStackTraces true
+        showStandardStreams = true
+    }
 }
 
 jar {
@@ -84,7 +92,8 @@ def codeCoverageExcludes = [
         'edu.wpi.N.entities.*',
         'edu.wpi.N.views.*',
         'edu.wpi.N.qrcontrol.*',
-        'edu.wpi.N.controllerData.*'
+        'edu.wpi.N.controllerData.*',
+        'edu.wpi.N.database.setupDB'
 ]
 
 jacoco {

@@ -15,6 +15,7 @@ derby.log
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
+local.properties
 
 # Generated files
 .idea/**/contentModel.xml
@@ -160,3 +161,4 @@ gradle-app.setting
 
 # End of https://www.gitignore.io/api/java,macos,gradle,intellij+all
 
+/MapDB/

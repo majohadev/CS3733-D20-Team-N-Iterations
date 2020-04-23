@@ -19,7 +19,7 @@ public class FuzzySearchDoctorsTest {
   @BeforeAll
   static void initDb()
       throws SQLException, DBException, ClassNotFoundException, FileNotFoundException {
-    MapDB.initDB();
+    MapDB.initTestDB();
 
     File fNodes = new File("src/test/resources/edu/wpi/N/csv/PrototypeNodes.csv");
     String path = fNodes.getAbsolutePath();
