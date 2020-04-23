@@ -3,13 +3,17 @@ package edu.wpi.N.views;
 import com.google.common.collect.HashBiMap;
 import edu.wpi.N.App;
 import edu.wpi.N.database.DBException;
-import edu.wpi.N.database.DbController;
+import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedList;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -36,6 +40,8 @@ public class MapEditController implements Controller {
   String[] types = {
     "HALL", "ELEV", "REST", "STAI", "DEPT", "LABS", "INFO", "CONF", "EXIT", "RETL", "SERV"
   };
+
+  ObservableList<String> floors = FXCollections.observableArrayList("1", "2", "3", "4", "5");
 
   @FXML Pane pn_display;
   @FXML Accordion acc_modify;
@@ -101,6 +107,12 @@ public class MapEditController implements Controller {
   Circle tempNode;
   DbNode editingNode;
   EditMode editMode;
+  int currentFloor = 4;
+
+  // CHANGE FLOOR
+  @FXML ChoiceBox cb_ChangeFloor;
+  @FXML Button btn_ChangeFloorConfirm;
+  @FXML ImageView img_master;
 
   public enum EditMode {
     NOSTATE,
@@ -114,7 +126,7 @@ public class MapEditController implements Controller {
 
   public void initialize() throws DBException, DBException {
     selectedNodes = new LinkedList<DbNode>();
-    allFloorNodes = DbController.floorNodes(4, "Faulkner");
+    allFloorNodes = MapDB.floorNodes(currentFloor, "Faulkner");
     masterNodes = HashBiMap.create();
     tempNode = null;
     editMode = editMode.NOSTATE;
@@ -126,13 +138,83 @@ public class MapEditController implements Controller {
     populateMap();
     accordionListener();
     populateComboBox(cb_NodesAddType, types);
+    cb_ChangeFloor.setItems(floors);
     accordionListenerNodes();
     accordionListenerEdges();
+  }
+
+  public void changeFloorReset() throws DBException {
+    selectedNodes = new LinkedList<DbNode>();
+    allFloorNodes = MapDB.floorNodes(currentFloor, "Faulkner");
+    masterNodes = HashBiMap.create();
+    tempNode = null;
+    editMode = editMode.NOSTATE;
+    editingNode = null;
+    edgeNodes = new DbNode[2];
+    line_EdgesDeleteSelected = null;
+    db_EdgesDeleteFirstSelected = null;
+    db_EdgesDeleteSecondSelected = null;
+    for (TitledPane pane : acc_edges.getPanes()) {
+      pane.setExpanded(false);
+    }
+    for (TitledPane pane : acc_nodes.getPanes()) {
+      pane.setExpanded(false);
+    }
+    populateMap();
   }
 
   public void populateComboBox(ComboBox cb, String[] ar) {
     for (String el : ar) {
       cb.getItems().add(el);
+    }
+  }
+
+  public void onBtnChangeFloorClicked() throws DBException {
+
+    Object floorNumObject = cb_ChangeFloor.getSelectionModel().getSelectedItem();
+    if (floorNumObject == null) {
+      displayErrorMessage("Invalid input");
+      return;
+    }
+    String floorNum = floorNumObject.toString();
+
+    if (floorNum.equals("1")) {
+      currentFloor = 1;
+      Image img = new Image(getClass().getResourceAsStream("/edu/wpi/N/images/Floor1TeamN.png"));
+      img_master.setImage(img);
+      resetPanes();
+      pn_display.getChildren().removeIf(node -> node instanceof Circle);
+      changeFloorReset();
+
+    } else if (floorNum.equals("2")) {
+      currentFloor = 2;
+      Image img = new Image(getClass().getResourceAsStream("/edu/wpi/N/images/Floor2TeamN.png"));
+      img_master.setImage(img);
+      resetPanes();
+      pn_display.getChildren().removeIf(node -> node instanceof Circle);
+      changeFloorReset();
+    } else if (floorNum.equals("3")) {
+      currentFloor = 3;
+      Image img = new Image(getClass().getResourceAsStream("/edu/wpi/N/images/Floor3TeamN.png"));
+      img_master.setImage(img);
+      resetPanes();
+      pn_display.getChildren().removeIf(node -> node instanceof Circle);
+      changeFloorReset();
+    } else if (floorNum.equals("4")) {
+      currentFloor = 4;
+      Image img =
+          new Image(getClass().getResourceAsStream("/edu/wpi/N/images/Floor4SolidBackground.png"));
+      img_master.setImage(img);
+      resetPanes();
+      pn_display.getChildren().removeIf(node -> node instanceof Circle);
+      changeFloorReset();
+    } else if (floorNum.equals("5")) {
+      currentFloor = 5;
+      Image img = new Image(getClass().getResourceAsStream("/edu/wpi/N/images/Floor5TeamN.png"));
+      img_master.setImage(img);
+      resetPanes();
+      pn_display.getChildren().removeIf(node -> node instanceof Circle);
+      changeFloorReset();
     }
   }
 
@@ -215,7 +297,9 @@ public class MapEditController implements Controller {
     for (Circle mapNode : masterNodes.keySet()) {
       mapNode.setFill(Color.PURPLE);
       mapNode.setDisable(false);
+      mapNode.setOnMouseDragged(null);
     }
+
     selectedNodes.clear();
     lst_selected.getItems().clear();
     // RESET ADD
@@ -276,7 +360,7 @@ public class MapEditController implements Controller {
     for (DbNode node : selectedNodes) {
       Circle mapNode = masterNodes.inverse().remove(node);
       pn_display.getChildren().remove(mapNode);
-      DbController.deleteNode(node.getNodeID());
+      MapDB.deleteNode(node.getNodeID());
     }
     onBtnClearClicked();
   }
@@ -324,7 +408,7 @@ public class MapEditController implements Controller {
     int x = (int) ((float) tempNode.getCenterX() / HORIZONTAL_SCALE);
     int y = (int) ((float) tempNode.getCenterY() / VERTICAL_SCALE);
 
-    DbNode newNode = DbController.addNode(x, y, 4, "Faulkner", type, longName, shortName);
+    DbNode newNode = MapDB.addNode(x, y, currentFloor, "Faulkner", type, longName, shortName);
     Circle mapNode = makeMapNode(newNode);
     pn_display.getChildren().remove(tempNode);
     pn_display.getChildren().add(mapNode);
@@ -348,8 +432,8 @@ public class MapEditController implements Controller {
     if (longName.equals("") || shortName.equals("")) {
       displayErrorMessage("Invalid Input");
     }
-    DbController.modifyNode(editingNode.getNodeID(), x, y, longName, shortName);
-    DbNode newNode = DbController.getNode(editingNode.getNodeID());
+    MapDB.modifyNode(editingNode.getNodeID(), x, y, longName, shortName);
+    DbNode newNode = MapDB.getNode(editingNode.getNodeID());
     // CHECK
     masterNodes.replace(masterNodes.inverse().get(editingNode), newNode);
     masterNodes.inverse().get(newNode).setFill(Color.PURPLE);
@@ -530,7 +614,7 @@ public class MapEditController implements Controller {
   public void displayPaths(int index) {
     LinkedList<DbNode> adjacentNodes = null;
     try {
-      adjacentNodes = DbController.getAdjacent(edgeNodes[index].getNodeID());
+      adjacentNodes = MapDB.getAdjacent(edgeNodes[index].getNodeID());
     } catch (DBException e) {
       e.printStackTrace();
     }
@@ -559,7 +643,7 @@ public class MapEditController implements Controller {
     if (!txt_EdgesAddFirstLocation.getText().equals("")
         && (!txt_EdgesAddSecondLocation.getText().equals(""))) {
       pn_display.getChildren().removeIf(node -> node instanceof Line);
-      DbController.addEdge(edgeNodes[0].getNodeID(), edgeNodes[1].getNodeID());
+      MapDB.addEdge(edgeNodes[0].getNodeID(), edgeNodes[1].getNodeID());
       resetPanes();
     }
   }
@@ -594,7 +678,7 @@ public class MapEditController implements Controller {
    * @throws DBException
    */
   public void displayAdjacentEdges(DbNode centerNode, Circle centerMapNode) throws DBException {
-    LinkedList<DbNode> adjacentNodes = DbController.getAdjacent(centerNode.getNodeID());
+    LinkedList<DbNode> adjacentNodes = MapDB.getAdjacent(centerNode.getNodeID());
     for (DbNode adjacentNode : adjacentNodes) {
       double x1 = centerMapNode.getCenterX();
       double y1 = centerMapNode.getCenterY();
@@ -651,7 +735,7 @@ public class MapEditController implements Controller {
       displayErrorMessage("Invalid Input");
       return;
     }
-    DbController.removeEdge(
+    MapDB.removeEdge(
         db_EdgesDeleteFirstSelected.getNodeID(), db_EdgesDeleteSecondSelected.getNodeID());
     DbNode node = db_EdgesDeleteFirstSelected;
     resetEdgesDelete();
@@ -694,10 +778,9 @@ public class MapEditController implements Controller {
       displayErrorMessage("Invalid Input");
       return;
     }
-    DbController.removeEdge(
+    MapDB.removeEdge(
         db_EdgesEditFirstSelected.getNodeID(), db_EdgesEditSecondSelectedOld.getNodeID());
-    DbController.addEdge(
-        db_EdgesEditFirstSelected.getNodeID(), db_EdgesEditSecondSelected.getNodeID());
+    MapDB.addEdge(db_EdgesEditFirstSelected.getNodeID(), db_EdgesEditSecondSelected.getNodeID());
     // DbNode node = db_EdgesEditFirstSelected;
     resetEdgesEdit();
     // txt_EdgesEditStartNode.requestFocus();

@@ -8,6 +8,7 @@ import edu.wpi.N.entities.Request;
 import edu.wpi.N.entities.Translator;
 import java.io.IOException;
 import java.net.URL;
+import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.ResourceBundle;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -16,6 +17,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
@@ -24,17 +26,23 @@ import javafx.util.Callback;
 public class AdminController implements Initializable, Controller {
 
   private App mainApp;
-
+  private HomeController homeController;
+  // public LoginController controller;
   @FXML Button btn_logout;
+  @FXML Button btn_laundryReq;
+  @FXML Button btn_transReq;
   @FXML Button btn_Accept;
   @FXML Button btn_Deny;
+  @FXML Button btn_Assign;
   @FXML ChoiceBox<Employee> cb_Employee;
-  @FXML TableView<Request> tb_RequestTable = new TableView<Request>();
+  @FXML TableView<Request> tbMockData = new TableView<Request>();
   @FXML TableView<String> tb_languages = new TableView<String>();
   @FXML CheckBox ch_requestFilter;
 
   ObservableList<Request> tableData = FXCollections.observableArrayList();
   ObservableList<String> languageData = FXCollections.observableArrayList();
+
+  Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
 
   private static class selfFactory<G>
       implements Callback<TableColumn.CellDataFeatures<G, G>, ObservableValue<G>> {
@@ -156,8 +164,14 @@ public class AdminController implements Initializable, Controller {
   }
 
   @FXML
-  public void editMap() throws IOException {
+  public void closeScreen(MouseEvent event) {
+    ((Node) (event.getSource())).getScene().getWindow().hide();
+  }
+
+  @FXML
+  public void editMap(MouseEvent e) throws IOException {
     this.mainApp.switchScene("editMap.fxml");
+    // ((Node) (e.getSource())).getScene().getWindow().hide();
   }
 
   @Override
@@ -172,12 +186,12 @@ public class AdminController implements Initializable, Controller {
       // Checks if a row is selected within the table and checks if there is an assigned employee to
       // that request
       if (e.getSource() == btn_Accept
-          && (EmployeeController.getRequest(
-                      tb_RequestTable.getSelectionModel().getSelectedItems().get(0).getRequestID())
+          && (ServiceDB.getRequest(
+                      tbMockData.getSelectionModel().getSelectedItems().get(0).getRequestID())
                   .getEmp_assigned()
               != null)) {
-        EmployeeController.completeRequest(
-            tb_RequestTable.getSelectionModel().getSelectedItems().get(0).getRequestID());
+        ServiceDB.completeRequest(
+            tbMockData.getSelectionModel().getSelectedItems().get(0).getRequestID());
 
         Alert acceptReq = new Alert(Alert.AlertType.CONFIRMATION);
         acceptReq.setContentText("Request Accepted");
@@ -188,12 +202,14 @@ public class AdminController implements Initializable, Controller {
               .getItems()
               .removeAll(tb_RequestTable.getSelectionModel().getSelectedItem());
         } else {
-          LinkedList<Request> reqs = EmployeeController.getRequests();
+          LinkedList<Request> reqs = ServiceDB.getRequests();
           tableData.setAll(reqs);
         }
       } else if (e.getSource() == btn_Deny) { // This case needs a status check
         EmployeeController.denyRequest(
             tb_RequestTable.getSelectionModel().getSelectedItems().get(0).getRequestID());
+        ServiceDB.denyRequest(
+            tbMockData.getSelectionModel().getSelectedItems().get(0).getRequestID());
 
         Alert denyReq = new Alert(Alert.AlertType.WARNING);
         denyReq.setContentText("Request Denied");
@@ -204,12 +220,14 @@ public class AdminController implements Initializable, Controller {
               .getItems()
               .removeAll(tb_RequestTable.getSelectionModel().getSelectedItem());
         } else {
-          LinkedList<Request> reqs = EmployeeController.getRequests();
+          LinkedList<Request> reqs = ServiceDB.getRequests();
           tableData.setAll(reqs);
         }
       } else if (e.getSource() == btn_Accept
           && (EmployeeController.getRequest(
                       tb_RequestTable.getSelectionModel().getSelectedItems().get(0).getRequestID())
+          && (ServiceDB.getRequest(
+                      tbMockData.getSelectionModel().getSelectedItems().get(0).getRequestID())
                   .getEmp_assigned())
               == null) {
         Alert needEmp = new Alert(Alert.AlertType.ERROR);
@@ -226,7 +244,7 @@ public class AdminController implements Initializable, Controller {
   private void assignEmployeeToRequest(int employee, int ID) {
     Alert confAlert = new Alert(Alert.AlertType.CONFIRMATION);
     try {
-      EmployeeController.assignToRequest(employee, ID);
+      ServiceDB.assignToRequest(employee, ID);
       confAlert.setContentText(
           cb_Employee.getSelectionModel().getSelectedItem().getName()
               + " was assigned to the request");
@@ -244,7 +262,7 @@ public class AdminController implements Initializable, Controller {
     int rID;
     try {
       eID = cb_Employee.getSelectionModel().getSelectedItem().getID();
-      rID = tb_RequestTable.getSelectionModel().getSelectedItem().getRequestID();
+      rID = tbMockData.getSelectionModel().getSelectedItem().getRequestID();
     } catch (NullPointerException indx) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
       errorAlert.setContentText("Please select a request and an employee!");
@@ -259,10 +277,10 @@ public class AdminController implements Initializable, Controller {
     /*
     try {
       if (ch_requestFilter.isSelected()) {
-        LinkedList<Request> reqs = EmployeeController.getRequests();
+        LinkedList<Request> reqs = ServiceDB.getOpenRequests();
         tableData.setAll(reqs);
       } else {
-        LinkedList<Request> reqs = EmployeeController.getOpenRequests();
+        LinkedList<Request> reqs = ServiceDB.getRequests();
         tableData.setAll(reqs);
       }
 
@@ -276,7 +294,7 @@ public class AdminController implements Initializable, Controller {
 
   public void populateChoiceBox() throws DBException {
     try {
-      LinkedList<Employee> empList = EmployeeController.getEmployees();
+      LinkedList<Employee> empList = ServiceDB.getEmployees();
       ObservableList<Employee> empObv = FXCollections.observableArrayList(empList);
       cb_Employee.setItems(empObv);
     } catch (DBException e) {

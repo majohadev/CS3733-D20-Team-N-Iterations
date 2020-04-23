@@ -1,8 +1,8 @@
 package edu.wpi.N.algorithms;
 
 import edu.wpi.N.database.DBException;
-import edu.wpi.N.database.DbController;
-import edu.wpi.N.database.DoctorController;
+import edu.wpi.N.database.DoctorDB;
+import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Doctor;
 import java.util.LinkedList;
@@ -24,7 +24,7 @@ public class FuzzySearchAlgorithm {
     if (userInput.length() > 1) {
 
       // search for all nodes by long name
-      LinkedList<DbNode> suggestedNodes = DbController.searchVisNode(-1, null, null, userInput);
+      LinkedList<DbNode> suggestedNodes = MapDB.searchVisNode(4, null, null, userInput);
       if (suggestedNodes.size() != 0) {
         for (DbNode node : suggestedNodes) {
           suggestions.add(node);
@@ -56,7 +56,7 @@ public class FuzzySearchAlgorithm {
     double ratio = 0.8;
 
     // Get all the visible nodes from DB
-    for (DbNode node : DbController.searchVisNode(-1, null, null, "")) {
+    for (DbNode node : MapDB.searchVisNode(4, null, null, "")) {
       String fullLongName = node.getLongName();
 
       // Iterate through Long Name's words
@@ -111,7 +111,7 @@ public class FuzzySearchAlgorithm {
 
     if (userInput.length() > 1) {
       // search for all nodes by long name
-      LinkedList<Doctor> suggestedDoctors = DoctorController.searchDoctors(userInput);
+      LinkedList<Doctor> suggestedDoctors = DoctorDB.searchDoctors(userInput);
       if (suggestedDoctors.size() != 0) {
         for (Doctor doc : suggestedDoctors) {
           suggestions.add(doc);
@@ -143,7 +143,7 @@ public class FuzzySearchAlgorithm {
     double ratio = 0.8;
 
     // Get all the visible nodes from DB
-    for (Doctor doc : DoctorController.getDoctors()) {
+    for (Doctor doc : DoctorDB.getDoctors()) {
       String fullName = doc.getName();
 
       // Iterate through Long Name's words

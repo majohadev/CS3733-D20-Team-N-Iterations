@@ -1,7 +1,7 @@
 package edu.wpi.N.entities;
 
 import edu.wpi.N.database.DBException;
-import edu.wpi.N.database.EmployeeController;
+import edu.wpi.N.database.ServiceDB;
 import java.util.GregorianCalendar;
 
 public abstract class Request {
@@ -27,7 +27,7 @@ public abstract class Request {
       String status) {
     this.requestID = requestID;
     try {
-      this.emp_assigned = EmployeeController.getEmployee(emp_assigned);
+      this.emp_assigned = ServiceDB.getEmployee(emp_assigned);
     } catch (DBException e) {
       this.emp_assigned = null;
     }

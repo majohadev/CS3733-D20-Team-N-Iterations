@@ -2,7 +2,7 @@ package edu.wpi.N.algorithms;
 
 import edu.wpi.N.database.CSVParser;
 import edu.wpi.N.database.DBException;
-import edu.wpi.N.database.DbController;
+import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -18,7 +18,7 @@ public class FuzzySearchLocationsTest {
   @BeforeAll
   public static void init()
       throws SQLException, ClassNotFoundException, FileNotFoundException, DBException {
-    DbController.initDB();
+    MapDB.initTestDB();
     File fNodes = new File("src/test/resources/edu/wpi/N/csv/PrototypeNodes.csv");
     String path = fNodes.getAbsolutePath();
     CSVParser.parseCSVfromPath(path);
@@ -52,7 +52,7 @@ public class FuzzySearchLocationsTest {
     String userInput = "Je";
     // expected output: Psych/Addiction Care, Psychiatric Inpatient Care,
     LinkedList<DbNode> expected = new LinkedList<DbNode>();
-    expected.add(DbController.getNode("BDEPT00402"));
+    expected.add(MapDB.getNode("BDEPT00402"));
 
     LinkedList<DbNode> actual = FuzzySearchAlgorithm.suggestLocations(userInput);
 
@@ -68,9 +68,9 @@ public class FuzzySearchLocationsTest {
   public void testSearchWithCorrectionInputIsSixLetters() throws DBException {
     String userInput = "Center";
     LinkedList<DbNode> expected = new LinkedList<DbNode>();
-    expected.add(DbController.getNode("BDEPT00402"));
-    expected.add(DbController.getNode("BDEPT00302"));
-    expected.add(DbController.getNode("BDEPT00902"));
+    expected.add(MapDB.getNode("BDEPT00402"));
+    expected.add(MapDB.getNode("BDEPT00302"));
+    expected.add(MapDB.getNode("BDEPT00902"));
     LinkedList<DbNode> actual = FuzzySearchAlgorithm.suggestLocations(userInput);
     Assertions.assertTrue(actual.size() == 3);
     Assertions.assertTrue(actual.contains(expected.get(0)));
@@ -89,9 +89,9 @@ public class FuzzySearchLocationsTest {
     String userInput = "Centar";
 
     LinkedList<DbNode> expected = new LinkedList<DbNode>();
-    expected.add(DbController.getNode("BDEPT00402"));
-    expected.add(DbController.getNode("BDEPT00302"));
-    expected.add(DbController.getNode("BDEPT00902"));
+    expected.add(MapDB.getNode("BDEPT00402"));
+    expected.add(MapDB.getNode("BDEPT00302"));
+    expected.add(MapDB.getNode("BDEPT00902"));
 
     long startTime = System.nanoTime();
 
@@ -121,7 +121,7 @@ public class FuzzySearchLocationsTest {
     String userInput = "Noose and ear";
 
     LinkedList<DbNode> expected = new LinkedList<DbNode>();
-    expected.add(DbController.getNode("BDEPT00502"));
+    expected.add(MapDB.getNode("BDEPT00502"));
 
     LinkedList<DbNode> actual = FuzzySearchAlgorithm.suggestLocations(userInput);
     Assertions.assertTrue(actual.contains(expected.get(0)));
@@ -138,7 +138,7 @@ public class FuzzySearchLocationsTest {
     String userInput = "Ear Nose";
 
     LinkedList<DbNode> expected = new LinkedList<DbNode>();
-    expected.add(DbController.getNode("BDEPT00502"));
+    expected.add(MapDB.getNode("BDEPT00502"));
     LinkedList<DbNode> actual = FuzzySearchAlgorithm.suggestLocations(userInput);
     Assertions.assertTrue(actual.contains(expected.get(0)));
     Assertions.assertTrue(actual.size() == 1);
@@ -167,7 +167,7 @@ public class FuzzySearchLocationsTest {
     String userInput = "Info";
 
     LinkedList<DbNode> expected = new LinkedList<DbNode>();
-    expected.add(DbController.getNode("BINFO00102"));
+    expected.add(MapDB.getNode("BINFO00102"));
 
     LinkedList<DbNode> actual = FuzzySearchAlgorithm.suggestLocations(userInput);
 
@@ -183,7 +183,7 @@ public class FuzzySearchLocationsTest {
   //   */
   //  @Test
   //  public void testSearchMeasureTimeOnAllNode() throws DBException, FileNotFoundException {
-  //    DbController.clearNodes();
+  //    MapDB.clearNodes();
   //
   //    File fNodes = new File("src/test/resources/edu/wpi/N/csv/MapNAllnodes.csv");
   //    String path = fNodes.getAbsolutePath();
@@ -197,7 +197,7 @@ public class FuzzySearchLocationsTest {
   //
   //    long endTime = System.nanoTime();
   //
-  //    System.out.println("Size of DB:" + DbController.allNodes().size());
+  //    System.out.println("Size of DB:" + MapDB.allNodes().size());
   //
   //    long timeElapsed = endTime - startTime;
   //    System.out.println("Elapsed time for FuzzySearch in milliseconds:" + timeElapsed / 1000000);
@@ -205,6 +205,6 @@ public class FuzzySearchLocationsTest {
 
   @AfterAll
   public static void clearDB() throws DBException {
-    DbController.clearNodes();
+    MapDB.clearNodes();
   }
 }

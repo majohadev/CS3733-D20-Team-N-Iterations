@@ -5,9 +5,8 @@ import edu.wpi.N.App;
 import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.algorithms.Pathfinder;
 import edu.wpi.N.database.DBException;
-import edu.wpi.N.database.DbController;
-import edu.wpi.N.database.EmployeeController;
-import edu.wpi.N.entities.*;
+import edu.wpi.N.database.MapDB;
+import edu.wpi.N.database.ServiceDB;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Doctor;
 import edu.wpi.N.entities.Path;
@@ -15,6 +14,7 @@ import edu.wpi.N.qrcontrol.QRGenerator;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.NoSuchElementException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -124,15 +124,26 @@ public class MapDisplayController extends QRGenerator implements Controller {
   }
 
   public void initialize() throws DBException {
+    // MapDB.clearNodes();
+    // InputStream nodes = Main.class.getResourceAsStream("csv/UPDATEDTeamNnodes.csv");
+    // InputStream edges = Main.class.getResourceAsStream("csv/UPDATEDTeamNedges.csv");
+    // CSVParser.parseCSV(nodes);
+    // CSVParser.parseCSV(edges);
     clampPanning(0, 0);
     selectedNodes = new LinkedList<DbNode>();
-    allFloorNodes = DbController.floorNodes(4, "Faulkner");
+    allFloorNodes = MapDB.visNodes(4, "Faulkner");
     masterNodes = HashBiMap.create();
-    defaultNode = DbController.getNode("NHALL00804");
-    if (defaultNode == null) defaultNode = allFloorNodes.getFirst();
+    defaultNode = MapDB.getNode("NHALL00804");
+    try {
+      if (defaultNode == null) defaultNode = allFloorNodes.getFirst();
+    } catch (NoSuchElementException e) {
+      Alert emptyMap = new Alert(Alert.AlertType.WARNING);
+      emptyMap.setContentText("The map is empty!");
+      emptyMap.show();
+    }
     populateMap();
 
-    LinkedList<String> languages = EmployeeController.getLanguages();
+    LinkedList<String> languages = ServiceDB.getLanguages();
     ObservableList<String> obvList = FXCollections.observableList(languages);
     cb_languages.setItems(obvList);
   }
@@ -178,9 +189,17 @@ public class MapDisplayController extends QRGenerator implements Controller {
     }
     DbNode firstNode = selectedNodes.get(0);
     DbNode secondNode = selectedNodes.get(1);
+    if (MapDB.getAdjacent(firstNode.getNodeID()).size() == 0
+        || MapDB.getAdjacent(secondNode.getNodeID()).size() == 0) {
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setHeaderText("Invalid input");
+      errorAlert.setContentText("No existing paths to this node");
+      errorAlert.showAndWait();
+      return;
+    }
 
-    if (DbController.getAdjacent(firstNode.getNodeID()).size() == 0
-        || DbController.getAdjacent(secondNode.getNodeID()).size() == 0) {
+    if (MapDB.getAdjacent(firstNode.getNodeID()).size() == 0
+        || MapDB.getAdjacent(secondNode.getNodeID()).size() == 0) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
       errorAlert.setHeaderText("Invalid input");
       errorAlert.setContentText("No existing paths to this node");
@@ -189,6 +208,7 @@ public class MapDisplayController extends QRGenerator implements Controller {
     }
 
     Path path = Pathfinder.findPath(firstNode.getNodeID(), secondNode.getNodeID());
+
     if (path != null) {
       LinkedList<DbNode> pathNodes = path.getPath();
       drawPath(pathNodes);
@@ -201,11 +221,11 @@ public class MapDisplayController extends QRGenerator implements Controller {
       return;
     }
 
-    ArrayList<String> directions = path.getDirections();
-    for (String s : directions) {
-      System.out.println(s);
-    }
-    System.out.println(" ");
+    //    ArrayList<String> directions = path.getDirections();
+    //    for (String s : directions) {
+    //      System.out.println(s);
+    //    }
+    //    System.out.println(" ");
 
     for (Circle mapNode : masterNodes.keySet()) {
       mapNode.setDisable(true);
@@ -345,16 +365,18 @@ public class MapDisplayController extends QRGenerator implements Controller {
     pn_path.getChildren().removeIf(node -> node instanceof Line);
     int currentSelection = lst_locationsorted.getSelectionModel().getSelectedIndex();
     DbNode destinationNode = fuzzySearchNodeList.get(currentSelection);
+    if (selectedNodes.size() < 1) selectedNodes.add(defaultNode);
     selectedNodes.add(destinationNode);
-    if (selectedNodes.size() < 2) selectedNodes.add(defaultNode);
     onBtnFindClicked(event);
     selectedNodes.clear();
   }
 
   @FXML
   private void onNearestBathroomClicked(MouseEvent event) throws Exception {
+    DbNode startNode = defaultNode;
+    if (selectedNodes.size() > 0) startNode = selectedNodes.getFirst();
     onResetClicked(event);
-    Path pathToBathroom = Pathfinder.findQuickAccess(defaultNode, "REST");
+    Path pathToBathroom = Pathfinder.findQuickAccess(startNode, "REST");
     if (pathToBathroom != null) {
       LinkedList<DbNode> pathNodes = pathToBathroom.getPath();
       drawPath(pathNodes);
@@ -397,8 +419,9 @@ public class MapDisplayController extends QRGenerator implements Controller {
     pn_path.getChildren().removeIf(node -> node instanceof Line);
     int currentSelection = lst_doctorlocations.getSelectionModel().getSelectedIndex();
     DbNode destinationNode = doctorNodes.get(currentSelection);
+    if (selectedNodes.size() < 1) selectedNodes.add(defaultNode);
     selectedNodes.add(destinationNode);
-    if (selectedNodes.size() < 2) selectedNodes.add(defaultNode);
+    // if (selectedNodes.size() < 2) selectedNodes.add(defaultNode);
     onBtnFindClicked(event);
     selectedNodes.clear();
   }
@@ -458,7 +481,8 @@ public class MapDisplayController extends QRGenerator implements Controller {
       return;
     }
     String notes = txtf_laundryNotes.getText();
-    int laundryRequest = EmployeeController.addLaundReq(notes, nodeID);
+    int laundryRequest = ServiceDB.addLaundReq(notes, nodeID);
+    App.adminDataStorage.addToList(laundryRequest);
 
     txtf_laundryLocation.clear();
     txtf_laundryNotes.clear();
@@ -482,8 +506,8 @@ public class MapDisplayController extends QRGenerator implements Controller {
   @FXML
   public void createNewTranslator() throws DBException {
     int currentSelection = lst_translatorSearchBox.getSelectionModel().getSelectedIndex();
-    String nodeID;
 
+    String nodeID;
     try {
       nodeID = fuzzySearchNodeListTranslator.get(currentSelection).getNodeID();
     } catch (IndexOutOfBoundsException e) {
@@ -492,18 +516,16 @@ public class MapDisplayController extends QRGenerator implements Controller {
       errorAlert.show();
       return;
     }
-
     String notes = txtf_translatorNotes.getText();
     String language = cb_languages.getSelectionModel().getSelectedItem();
-
     if (language == null) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
       errorAlert.setContentText("Please select a language for your translation request!");
       errorAlert.show();
       return;
     }
-
-    int transReq = EmployeeController.addTransReq(notes, nodeID, language);
+    int transReq = ServiceDB.addTransReq(notes, nodeID, language);
+    App.adminDataStorage.addToList(transReq);
 
     txtf_translatorLocation.clear();
     txtf_translatorNotes.clear();

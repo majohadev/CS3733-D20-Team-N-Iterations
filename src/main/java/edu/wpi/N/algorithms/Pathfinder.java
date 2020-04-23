@@ -1,7 +1,7 @@
 package edu.wpi.N.algorithms;
 
 import edu.wpi.N.database.DBException;
-import edu.wpi.N.database.DbController;
+import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Node;
 import edu.wpi.N.entities.Path;
@@ -40,8 +40,14 @@ public class Pathfinder {
    */
   public static Path findPath(String startID, String endID) {
     try {
-      Node start = DbController.getGNode(startID);
-      Node end = DbController.getGNode(endID);
+      DbNode startDb = MapDB.getNode(startID);
+      DbNode endDb = MapDB.getNode(endID);
+
+      int floorNumStart = startDb.getFloor();
+      int floorNumEnd = endDb.getFloor();
+
+      Node start = MapDB.getGNode(startID);
+      Node end = MapDB.getGNode(endID);
 
       // Initialize variables
       PriorityQueue<Node> frontier = new PriorityQueue<Node>();
@@ -62,7 +68,8 @@ public class Pathfinder {
         }
 
         // for every node (next node), current node has edge to:
-        LinkedList<Node> adjacentToCurrent = DbController.getGAdjacent(current.ID);
+        LinkedList<Node> adjacentToCurrent =
+            MapDB.getGAdjacent(current.ID, floorNumStart, floorNumEnd);
         for (Node nextNode : adjacentToCurrent) {
           String nextNodeID = nextNode.ID;
 
@@ -104,12 +111,12 @@ public class Pathfinder {
     try {
       String currentID = end.ID;
       LinkedList<DbNode> path = new LinkedList<DbNode>();
-      path.add(DbController.getNode(currentID));
+      path.add(MapDB.getNode(currentID));
 
       try {
         while (!currentID.equals(start.ID)) {
           currentID = cameFrom.get(currentID);
-          path.addFirst(DbController.getNode(currentID));
+          path.addFirst(MapDB.getNode(currentID));
         }
       } catch (NullPointerException e) {
         System.out.println("Location was not found.");
@@ -134,16 +141,13 @@ public class Pathfinder {
   public static Path findQuickAccess(DbNode start, String nodeType) throws DBException {
     try {
       LinkedList<DbNode> nodes =
-          DbController.searchNode(start.getFloor(), start.getBuilding(), nodeType, "");
+          MapDB.searchNode(start.getFloor(), start.getBuilding(), nodeType, "");
       if (!nodes.isEmpty()) {
         double closest =
-            cost(
-                DbController.getGNode(start.getNodeID()),
-                DbController.getGNode(nodes.getFirst().getNodeID()));
+            cost(MapDB.getGNode(start.getNodeID()), MapDB.getGNode(nodes.getFirst().getNodeID()));
         DbNode end = nodes.getFirst();
         for (DbNode n : nodes) {
-          double cost =
-              cost(DbController.getGNode(start.getNodeID()), DbController.getGNode(n.getNodeID()));
+          double cost = cost(MapDB.getGNode(start.getNodeID()), MapDB.getGNode(n.getNodeID()));
           if (cost <= closest) {
             closest = cost;
             end = n;

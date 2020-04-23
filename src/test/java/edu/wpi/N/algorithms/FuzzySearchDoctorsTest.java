@@ -2,8 +2,8 @@ package edu.wpi.N.algorithms;
 
 import edu.wpi.N.database.CSVParser;
 import edu.wpi.N.database.DBException;
-import edu.wpi.N.database.DbController;
-import edu.wpi.N.database.DoctorController;
+import edu.wpi.N.database.DoctorDB;
+import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Doctor;
 import java.io.File;
@@ -19,7 +19,7 @@ public class FuzzySearchDoctorsTest {
   @BeforeAll
   static void initDb()
       throws SQLException, DBException, ClassNotFoundException, FileNotFoundException {
-    DbController.initDB();
+    MapDB.initTestDB();
 
     File fNodes = new File("src/test/resources/edu/wpi/N/csv/PrototypeNodes.csv");
     String path = fNodes.getAbsolutePath();
@@ -27,8 +27,8 @@ public class FuzzySearchDoctorsTest {
 
     // Create first Doctor
     LinkedList<DbNode> ivanLocations = new LinkedList<DbNode>();
-    ivanLocations.add(DbController.getNode("BHALL03802"));
-    ivanLocations.add(DbController.getNode("BDEPT00202"));
+    ivanLocations.add(MapDB.getNode("BHALL03802"));
+    ivanLocations.add(MapDB.getNode("BDEPT00202"));
     Doctor ivan = new Doctor(1, "Ivan Eroshenko", "Prostate Specialist", ivanLocations);
 
     // Create Other Doctors
@@ -37,11 +37,11 @@ public class FuzzySearchDoctorsTest {
     Doctor chris = new Doctor(4, "Chris Lee", "Traveling Phlebotomist", new LinkedList<DbNode>());
     Doctor evan = new Doctor(5, "Evan Llewellyn", "Egg-Broker", null);
 
-    DoctorController.addDoctor(ivan.getName(), ivan.getField(), ivan.getLoc());
-    DoctorController.addDoctor(annie.getName(), annie.getField(), annie.getLoc());
-    DoctorController.addDoctor(mike.getName(), mike.getField(), mike.getLoc());
-    DoctorController.addDoctor(chris.getName(), chris.getField(), chris.getLoc());
-    DoctorController.addDoctor(evan.getName(), evan.getField(), evan.getLoc());
+    DoctorDB.addDoctor(ivan.getName(), ivan.getField(), ivan.getLoc());
+    DoctorDB.addDoctor(annie.getName(), annie.getField(), annie.getLoc());
+    DoctorDB.addDoctor(mike.getName(), mike.getField(), mike.getLoc());
+    DoctorDB.addDoctor(chris.getName(), chris.getField(), chris.getLoc());
+    DoctorDB.addDoctor(evan.getName(), evan.getField(), evan.getLoc());
   }
 
   @BeforeEach
@@ -50,8 +50,8 @@ public class FuzzySearchDoctorsTest {
 
     // Create first Doctor
     LinkedList<DbNode> ivanLocations = new LinkedList<DbNode>();
-    ivanLocations.add(DbController.getNode("BHALL03802"));
-    ivanLocations.add(DbController.getNode("BDEPT00202"));
+    ivanLocations.add(MapDB.getNode("BHALL03802"));
+    ivanLocations.add(MapDB.getNode("BDEPT00202"));
     Doctor ivan = new Doctor(1, "Ivan Eroshenko", "Prostate Specialist", ivanLocations);
 
     // Create Other Doctors
@@ -184,6 +184,6 @@ public class FuzzySearchDoctorsTest {
 
   @AfterAll
   public static void clear() throws DBException {
-    DbController.clearNodes();
+    MapDB.clearNodes();
   }
 }
