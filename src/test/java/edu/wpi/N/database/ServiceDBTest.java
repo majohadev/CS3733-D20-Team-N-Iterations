@@ -18,7 +18,7 @@ public class ServiceDBTest {
 
   @BeforeAll
   public static void setup() throws DBException, SQLException, ClassNotFoundException {
-    MapDB.initDB();
+    MapDB.initTestDB();
 
     LinkedList<String> langs = new LinkedList<>();
     langs.add("Gnomish");
