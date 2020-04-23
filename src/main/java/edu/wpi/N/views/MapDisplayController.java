@@ -14,6 +14,7 @@ import edu.wpi.N.qrcontrol.QRGenerator;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.NoSuchElementException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -132,10 +133,16 @@ public class MapDisplayController extends QRGenerator implements Controller {
     // CSVParser.parseCSV(edges);
     clampPanning(0, 0);
     selectedNodes = new LinkedList<DbNode>();
-    allFloorNodes = MapDB.floorNodes(4, "Faulkner");
+    allFloorNodes = MapDB.visNodes(4, "Faulkner");
     masterNodes = HashBiMap.create();
     defaultNode = MapDB.getNode("NHALL00804");
-    if (defaultNode == null) defaultNode = allFloorNodes.getFirst();
+    try {
+      if (defaultNode == null) defaultNode = allFloorNodes.getFirst();
+    } catch (NoSuchElementException e) {
+      Alert emptyMap = new Alert(Alert.AlertType.WARNING);
+      emptyMap.setContentText("The map is empty!");
+      emptyMap.show();
+    }
     populateMap();
 
     LinkedList<String> languages = ServiceDB.getLanguages();
