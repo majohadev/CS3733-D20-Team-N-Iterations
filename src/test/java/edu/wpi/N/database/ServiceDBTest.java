@@ -3,6 +3,7 @@ package edu.wpi.N.database;
 import static org.junit.jupiter.api.Assertions.*;
 
 import edu.wpi.N.entities.*;
+import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
@@ -17,7 +18,8 @@ public class ServiceDBTest {
   static Laundry snaps;
 
   @BeforeAll
-  public static void setup() throws DBException, SQLException, ClassNotFoundException {
+  public static void setup()
+      throws DBException, SQLException, ClassNotFoundException, FileNotFoundException {
     MapDB.initTestDB();
 
     LinkedList<String> langs = new LinkedList<>();

@@ -1,6 +1,7 @@
 DROP TABLE lrequest;
 DROP TABLE trequest;
 DROP TABLE request;
+DROP TABLE credential;
 DROP TABLE laundry;
 DROP TABLE language;
 DROP TABLE translator;
@@ -69,6 +70,11 @@ CREATE TABLE language (
 CREATE TABLE laundry(
       l_employeeID INT NOT NULL References employees(employeeID) ON DELETE CASCADE,
       PRIMARY KEY(l_employeeID));
+
+CREATE TABLE credential(
+    username VARCHAR(255) NOT NULL PRIMARY KEY,
+    password VARCHAR(255) NOT NULL
+);
 
 CREATE TABLE request(
       requestID INT NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
