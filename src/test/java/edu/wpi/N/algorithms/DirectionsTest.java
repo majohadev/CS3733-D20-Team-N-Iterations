@@ -17,14 +17,14 @@ import org.junit.jupiter.api.Test;
  * seeing if they make sense
  */
 public class DirectionsTest {
+  Algorithm myAStar = new Algorithm(new AStar());
+
   @BeforeAll
   public static void setup() throws SQLException, ClassNotFoundException, DBException {
     MapDB.initTestDB();
     MapDB.clearNodes();
-    InputStream inputNodes =
-        PathfinderMethodsTest.class.getResourceAsStream("../csv/TeamNnodes_T.csv");
-    InputStream inputEdges =
-        PathfinderMethodsTest.class.getResourceAsStream("../csv/TeamNedges_T.csv");
+    InputStream inputNodes = AStarMethodsTest.class.getResourceAsStream("../csv/TeamNnodes_T.csv");
+    InputStream inputEdges = AStarMethodsTest.class.getResourceAsStream("../csv/TeamNedges_T.csv");
     CSVParser.parseCSV(inputNodes);
     CSVParser.parseCSV(inputEdges);
   }
@@ -37,7 +37,7 @@ public class DirectionsTest {
    */
   @Test
   public void directionsTester() throws DBException {
-    Path path = Pathfinder.findPath(MapDB.getNode("NREST00104"), MapDB.getNode("NDEPT00704"));
+    Path path = myAStar.findPath(MapDB.getNode("NREST00104"), MapDB.getNode("NDEPT00704"));
     ArrayList<String> directions = path.getDirections();
     //    for (String s : directions) {
     //      // System.out.println(s);
@@ -52,7 +52,7 @@ public class DirectionsTest {
    */
   @Test
   public void directionsTester2() throws DBException {
-    Path path = Pathfinder.findPath(MapDB.getNode("NSTAI00104"), MapDB.getNode("NELEV00Y04"));
+    Path path = myAStar.findPath(MapDB.getNode("NSTAI00104"), MapDB.getNode("NELEV00Y04"));
     ArrayList<String> directions = path.getDirections();
     //    for (String s : directions) {
     //      // System.out.println(s);
@@ -67,7 +67,7 @@ public class DirectionsTest {
    */
   @Test
   public void directionsTester3() throws DBException {
-    Path path = Pathfinder.findPath(MapDB.getNode("NHALL00704"), MapDB.getNode("NHALL01504"));
+    Path path = myAStar.findPath(MapDB.getNode("NHALL00704"), MapDB.getNode("NHALL01504"));
     ArrayList<String> directions = path.getDirections();
     //    for (String s : directions) {
     //      // System.out.println(s);
@@ -82,7 +82,7 @@ public class DirectionsTest {
    */
   @Test
   public void directionsTester4() throws DBException {
-    Path path = Pathfinder.findPath(MapDB.getNode("NDEPT01304"), MapDB.getNode("NHALL02204"));
+    Path path = myAStar.findPath(MapDB.getNode("NDEPT01304"), MapDB.getNode("NHALL02204"));
     ArrayList<String> directions = path.getDirections();
     //    for (String s : directions) {
     //      // System.out.println(s);
@@ -97,7 +97,7 @@ public class DirectionsTest {
    */
   @Test
   public void directionsTester5() throws DBException {
-    Path path = Pathfinder.findPath(MapDB.getNode("NDEPT01204"), MapDB.getNode("NDEPT00204"));
+    Path path = myAStar.findPath(MapDB.getNode("NDEPT01204"), MapDB.getNode("NDEPT00204"));
     ArrayList<String> directions = path.getDirections();
     //    for (String s : directions) {
     //      // System.out.println(s);
@@ -114,7 +114,7 @@ public class DirectionsTest {
   //  @Test
   //  public void directionsTester6() throws DBException {
   //
-  //    Path path = Pathfinder.findPath("NREST00204", "NDEPT02104");
+  //    Path path = myAStar.findPath("NREST00204", "NDEPT02104");
   //    ArrayList<String> directions = path.getDirections();
   //
   //    //    for (String s : directions) {
@@ -134,7 +134,7 @@ public class DirectionsTest {
   //   */
   //  @Test
   //  public void directionsTester7() throws DBException {
-  //    Path path = Pathfinder.findPath("NDEPT00904", "NDEPT01104");
+  //    Path path = myAStar.findPath("NDEPT00904", "NDEPT01104");
   //    ArrayList<String> directions = path.getDirections();
   //    //    for (String s : directions) {
   //    //      // System.out.println(s);

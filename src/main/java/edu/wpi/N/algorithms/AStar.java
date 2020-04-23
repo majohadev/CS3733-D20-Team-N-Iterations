@@ -7,7 +7,7 @@ import edu.wpi.N.entities.Node;
 import edu.wpi.N.entities.Path;
 import java.util.*;
 
-public class Pathfinder {
+public class AStar implements PathFinder {
 
   /**
    * Function calculates Euclidean distance between the next Node and current Node (cost of given
@@ -38,7 +38,7 @@ public class Pathfinder {
    *
    * @return Path object indicating the shortest path to the goal Node from Start Node
    */
-  public static Path findPath(DbNode startNode, DbNode endNode) {
+  public Path findPath(DbNode startNode, DbNode endNode) {
     try {
 
       int startFloorNum = startNode.getFloor();
@@ -151,7 +151,8 @@ public class Pathfinder {
             end = n;
           }
         }
-        return findPath(start, end);
+        AStar thePathFinder = new AStar();
+        return thePathFinder.findPath(start, end);
       } else {
         return null;
       }

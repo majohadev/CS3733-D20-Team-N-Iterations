@@ -13,15 +13,14 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-public class PathfinderMethodsTest {
+public class AStarMethodsTest {
+  Algorithm myAStar = new Algorithm(new AStar());
 
   @BeforeAll
   public static void initializeTest() throws SQLException, ClassNotFoundException, DBException {
     MapDB.initTestDB();
-    InputStream inputNodes =
-        PathfinderMethodsTest.class.getResourceAsStream("../csv/TestNodes.csv");
-    InputStream inputEdges =
-        PathfinderMethodsTest.class.getResourceAsStream("../csv/TestEdges.csv");
+    InputStream inputNodes = AStarMethodsTest.class.getResourceAsStream("../csv/TestNodes.csv");
+    InputStream inputEdges = AStarMethodsTest.class.getResourceAsStream("../csv/TestEdges.csv");
     CSVParser.parseCSV(inputNodes);
     CSVParser.parseCSV(inputEdges);
   }
@@ -36,8 +35,7 @@ public class PathfinderMethodsTest {
     actualPath.add(MapDB.getNode("H130000000"));
     actualPath.add(MapDB.getNode("EEEEEEEEEE"));
 
-    Path testingPath =
-        Pathfinder.findPath(MapDB.getNode("H100000001"), MapDB.getNode("EEEEEEEEEE"));
+    Path testingPath = myAStar.findPath(MapDB.getNode("H100000001"), MapDB.getNode("EEEEEEEEEE"));
 
     for (int i = 0; i < actualPath.size(); i++) {
       Assertions.assertEquals(
@@ -57,8 +55,7 @@ public class PathfinderMethodsTest {
     actualPath.add(MapDB.getNode("H120000000"));
     actualPath.add(MapDB.getNode("H130000000"));
 
-    Path testingPath =
-        Pathfinder.findPath(MapDB.getNode("H120000000"), MapDB.getNode("H130000000"));
+    Path testingPath = myAStar.findPath(MapDB.getNode("H120000000"), MapDB.getNode("H130000000"));
 
     for (int i = 0; i < actualPath.size(); i++) {
       Assertions.assertEquals(
@@ -73,7 +70,7 @@ public class PathfinderMethodsTest {
   @Test
   public void findPathDestinationNotFound() throws DBException {
     Assertions.assertNull(
-        Pathfinder.findPath(MapDB.getNode("H120000000"), MapDB.getNode("NonExistentNode")));
+        myAStar.findPath(MapDB.getNode("H120000000"), MapDB.getNode("NonExistentNode")));
   }
 
   /**
@@ -83,7 +80,7 @@ public class PathfinderMethodsTest {
   @Test
   public void findPathStartNodeHasNoEdges() throws DBException {
     DbNode nonExistentNode = new DbNode();
-    Assertions.assertNull(Pathfinder.findPath(nonExistentNode, MapDB.getNode("H120000000")));
+    Assertions.assertNull(myAStar.findPath(nonExistentNode, MapDB.getNode("H120000000")));
   }
 
   /**
@@ -95,8 +92,7 @@ public class PathfinderMethodsTest {
     LinkedList<DbNode> actualPath = new LinkedList<DbNode>();
 
     actualPath.add(MapDB.getNode("H120000000"));
-    Path testingPath =
-        Pathfinder.findPath(MapDB.getNode("H120000000"), MapDB.getNode("H120000000"));
+    Path testingPath = myAStar.findPath(MapDB.getNode("H120000000"), MapDB.getNode("H120000000"));
 
     for (int i = 0; i < actualPath.size(); i++) {
       Assertions.assertEquals(
@@ -107,14 +103,14 @@ public class PathfinderMethodsTest {
   /** Tests that findQuickAccess chooses finds the path to the closest node of the given nodeType */
   @Test
   public void findQuickAccessTester1() throws DBException {
-    Path path = Pathfinder.findQuickAccess(MapDB.getNode("H200000000"), "REST");
+    Path path = AStar.findQuickAccess(MapDB.getNode("H200000000"), "REST");
     Assertions.assertEquals(path.getPath().getLast(), MapDB.getNode("AAAAAAAAAA"));
   }
 
   /** Tests that findQuickAccess chooses finds the path to the closest node of the given nodeType */
   @Test
   public void findQuickAccessTester2() throws DBException {
-    Path path = Pathfinder.findQuickAccess(MapDB.getNode("H700000000"), "LABS");
+    Path path = AStar.findQuickAccess(MapDB.getNode("H700000000"), "LABS");
     Assertions.assertEquals(path.getPath().getLast(), MapDB.getNode("BBBBBBBBBB"));
   }
 
@@ -123,7 +119,7 @@ public class PathfinderMethodsTest {
    */
   @Test
   public void findQuickAccessNullTester() throws DBException {
-    Assertions.assertNull(Pathfinder.findQuickAccess(MapDB.getNode("H700000000"), "ELEV"));
+    Assertions.assertNull(AStar.findQuickAccess(MapDB.getNode("H700000000"), "ELEV"));
   }
 
   /**
@@ -133,7 +129,7 @@ public class PathfinderMethodsTest {
   @Test
   public void findQuickAccessNoPathTester() throws DBException {
     MapDB.addNode("NHALL00104", 1250, 850, 1, "MainBuil", "ELEV", "Hall 1", "Hall 1", 'N');
-    Assertions.assertNull(Pathfinder.findQuickAccess(MapDB.getNode("H700000000"), "ELEV"));
+    Assertions.assertNull(AStar.findQuickAccess(MapDB.getNode("H700000000"), "ELEV"));
     MapDB.deleteNode("NHALL00104");
   }
 
