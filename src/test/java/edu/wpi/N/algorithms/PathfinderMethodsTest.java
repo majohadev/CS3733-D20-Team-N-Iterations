@@ -36,7 +36,8 @@ public class PathfinderMethodsTest {
     actualPath.add(MapDB.getNode("H130000000"));
     actualPath.add(MapDB.getNode("EEEEEEEEEE"));
 
-    Path testingPath = Pathfinder.findPath("H100000001", "EEEEEEEEEE");
+    Path testingPath =
+        Pathfinder.findPath(MapDB.getNode("H100000001"), MapDB.getNode("EEEEEEEEEE"));
 
     for (int i = 0; i < actualPath.size(); i++) {
       Assertions.assertEquals(
@@ -56,7 +57,8 @@ public class PathfinderMethodsTest {
     actualPath.add(MapDB.getNode("H120000000"));
     actualPath.add(MapDB.getNode("H130000000"));
 
-    Path testingPath = Pathfinder.findPath("H120000000", "H130000000");
+    Path testingPath =
+        Pathfinder.findPath(MapDB.getNode("H120000000"), MapDB.getNode("H130000000"));
 
     for (int i = 0; i < actualPath.size(); i++) {
       Assertions.assertEquals(
@@ -69,8 +71,9 @@ public class PathfinderMethodsTest {
    * any node
    */
   @Test
-  public void findPathDestinationNotFound() {
-    Assertions.assertNull(Pathfinder.findPath("H120000000", "NonExistentNode"));
+  public void findPathDestinationNotFound() throws DBException {
+    Assertions.assertNull(
+        Pathfinder.findPath(MapDB.getNode("H120000000"), MapDB.getNode("NonExistentNode")));
   }
 
   /**
@@ -78,8 +81,9 @@ public class PathfinderMethodsTest {
    * to any node (including end node)
    */
   @Test
-  public void findPathStartNodeHasNoEdges() {
-    Assertions.assertNull(Pathfinder.findPath("NonExistentNode", "H120000000"));
+  public void findPathStartNodeHasNoEdges() throws DBException {
+    DbNode nonExistentNode = new DbNode();
+    Assertions.assertNull(Pathfinder.findPath(nonExistentNode, MapDB.getNode("H120000000")));
   }
 
   /**
@@ -91,7 +95,8 @@ public class PathfinderMethodsTest {
     LinkedList<DbNode> actualPath = new LinkedList<DbNode>();
 
     actualPath.add(MapDB.getNode("H120000000"));
-    Path testingPath = Pathfinder.findPath("H120000000", "H120000000");
+    Path testingPath =
+        Pathfinder.findPath(MapDB.getNode("H120000000"), MapDB.getNode("H120000000"));
 
     for (int i = 0; i < actualPath.size(); i++) {
       Assertions.assertEquals(

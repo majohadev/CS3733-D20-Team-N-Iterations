@@ -677,8 +677,9 @@ public class MapDB {
       ResultSet rs = null;
       String query =
           "SELECT nodeID, xcoord, ycoord FROM (SELECT nodeID, xcoord, ycoord FROM nodes WHERE"
-              + " (nodes.floor = ? OR nodes.floor = ? OR nodes.nodeType = 'ELEV' OR nodes.nodeType = 'STAI')) AS nodes, edges "
-              + "WHERE ((edges.node1 = ? AND nodes.nodeID = edges.node2) OR (edges.node2 = ? AND nodes.nodeID = edges.node1))";
+              + " (nodes.floor = ? OR nodes.floor = ? OR nodes.nodeType = 'ELEV' OR nodes.nodeType = 'STAI')) AS nodes,"
+              + " (SELECT node1, node2 FROM edges  WHERE (edges.node1 = ?) OR (edges.node2 = ?)) AS edges "
+              + "WHERE edges.node1 = nodes.nodeID OR edges.node2 = nodes.nodeID";
       PreparedStatement stmt = con.prepareStatement(query);
       stmt.setString(3, nodeID);
       stmt.setString(4, nodeID);
@@ -883,6 +884,7 @@ public class MapDB {
       st = con.prepareStatement(query);
       st.setString(1, edgeID);
       st.setString(2, nodeID1);
+      //noinspection JpaQueryApiInspection
       st.setString(3, nodeID2);
 
       return st.executeUpdate() > 0;

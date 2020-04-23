@@ -1,6 +1,8 @@
 package edu.wpi.N.database;
 
+import edu.wpi.N.algorithms.PathfinderMethodsTest;
 import edu.wpi.N.entities.DbNode;
+import edu.wpi.N.entities.Node;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -147,6 +149,39 @@ public class CSVParserTest {
 
     // Compare with first
     Assertions.assertEquals(firstExpected, MapDB.getNode("BCONF00102"));
+    MapDB.clearNodes();
+  }
+
+  /**
+   * Tests that Nodes and Edges CSV with multiple floors get parsed correctly
+   *
+   * @throws DBException
+   */
+  @Test
+  public void testParsedAllEdgesCorrectly() throws DBException {
+
+    MapDB.clearNodes();
+
+    InputStream inputNodes =
+        PathfinderMethodsTest.class.getResourceAsStream("../csv/ThreeFloorsTestNode.csv");
+    InputStream inputEdges =
+        PathfinderMethodsTest.class.getResourceAsStream("../csv/ThreeFloorsTestEdges.csv");
+    CSVParser.parseCSV(inputNodes);
+    CSVParser.parseCSV(inputEdges);
+
+    LinkedList<Node> actualEdges = MapDB.getGAdjacent("ELEV022000");
+
+    Node actualOne = MapDB.getGNode("ELEV021000");
+    Node actualTwo = MapDB.getGNode("ELEV023000");
+    Node actualThree = MapDB.getGNode("H052000000");
+    Node actualFour = MapDB.getGNode("H062000000");
+
+    Assertions.assertTrue(actualEdges.size() == 4);
+    Assertions.assertTrue(actualEdges.contains(actualOne));
+    Assertions.assertTrue(actualEdges.contains(actualTwo));
+    Assertions.assertTrue(actualEdges.contains(actualThree));
+    Assertions.assertTrue(actualEdges.contains(actualFour));
+
     MapDB.clearNodes();
   }
 
