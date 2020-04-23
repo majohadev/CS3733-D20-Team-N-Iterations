@@ -54,8 +54,6 @@ public class MapDisplayController extends QRGenerator implements Controller {
   final float VERTICAL_SCALE = (MAP_HEIGHT) / IMAGE_HEIGHT;
   int currentFloor = 4;
 
-  Boolean loggedin = false;
-
   @FXML Button btn_find;
   @FXML Button btn_reset;
   @FXML Pane pn_path, pn_routeNodes;
@@ -461,7 +459,6 @@ public class MapDisplayController extends QRGenerator implements Controller {
     }
     String notes = txtf_laundryNotes.getText();
     int laundryRequest = EmployeeController.addLaundReq(notes, nodeID);
-    App.adminDataStorage.addToList(laundryRequest);
 
     txtf_laundryLocation.clear();
     txtf_laundryNotes.clear();
@@ -485,8 +482,8 @@ public class MapDisplayController extends QRGenerator implements Controller {
   @FXML
   public void createNewTranslator() throws DBException {
     int currentSelection = lst_translatorSearchBox.getSelectionModel().getSelectedIndex();
-
     String nodeID;
+
     try {
       nodeID = fuzzySearchNodeListTranslator.get(currentSelection).getNodeID();
     } catch (IndexOutOfBoundsException e) {
@@ -495,16 +492,18 @@ public class MapDisplayController extends QRGenerator implements Controller {
       errorAlert.show();
       return;
     }
+
     String notes = txtf_translatorNotes.getText();
     String language = cb_languages.getSelectionModel().getSelectedItem();
+
     if (language == null) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
       errorAlert.setContentText("Please select a language for your translation request!");
       errorAlert.show();
       return;
     }
+
     int transReq = EmployeeController.addTransReq(notes, nodeID, language);
-    App.adminDataStorage.addToList(transReq);
 
     txtf_translatorLocation.clear();
     txtf_translatorNotes.clear();
