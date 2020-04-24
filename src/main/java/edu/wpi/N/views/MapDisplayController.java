@@ -482,7 +482,6 @@ public class MapDisplayController extends QRGenerator implements Controller {
     }
     String notes = txtf_laundryNotes.getText();
     int laundryRequest = ServiceDB.addLaundReq(notes, nodeID);
-    App.adminDataStorage.addToList(laundryRequest);
 
     txtf_laundryLocation.clear();
     txtf_laundryNotes.clear();
@@ -525,7 +524,6 @@ public class MapDisplayController extends QRGenerator implements Controller {
       return;
     }
     int transReq = ServiceDB.addTransReq(notes, nodeID, language);
-    App.adminDataStorage.addToList(transReq);
 
     txtf_translatorLocation.clear();
     txtf_translatorNotes.clear();
@@ -533,7 +531,7 @@ public class MapDisplayController extends QRGenerator implements Controller {
     lst_translatorSearchBox.getItems().clear();
 
     Alert confAlert = new Alert(Alert.AlertType.CONFIRMATION);
-    confAlert.setContentText("Request Recieved");
+    confAlert.setContentText("Request Received");
     confAlert.show();
   }
 }

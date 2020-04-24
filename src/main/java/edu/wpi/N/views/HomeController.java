@@ -23,6 +23,6 @@ public class HomeController implements Controller {
   }
 
   public void onBtnHamClicked() throws IOException {
-    this.mainApp.switchScene("views/hamburgerTest.fxml");
+    this.mainApp.switchScene("/edu/wpi/N/views/hamburgerTest.fxml");
   }
 }
