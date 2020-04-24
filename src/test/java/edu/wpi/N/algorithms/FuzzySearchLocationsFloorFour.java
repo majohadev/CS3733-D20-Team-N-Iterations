@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-public class FuzzySearchLocationsAllNodes {
+public class FuzzySearchLocationsFloorFour {
 
   @BeforeAll
   public static void initialize()

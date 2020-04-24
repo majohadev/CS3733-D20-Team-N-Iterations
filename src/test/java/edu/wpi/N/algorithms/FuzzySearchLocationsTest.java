@@ -174,6 +174,27 @@ public class FuzzySearchLocationsTest {
     Assertions.assertTrue(actual.contains(expected.get(0)));
   }
 
+  /**
+   * Tests that function returns correc DbNode in relevant order given incorrect input of two words
+   *
+   * @throws DBException
+   */
+  @Test
+  public void testSearchIncorrectInputTwoWords() throws DBException {
+    String userInput = "Jan Centar";
+
+    LinkedList<DbNode> expected = new LinkedList<DbNode>();
+    expected.add(MapDB.getNode("BDEPT00402"));
+    expected.add(MapDB.getNode("BDEPT00302"));
+    expected.add(MapDB.getNode("BDEPT00902"));
+
+    LinkedList<DbNode> actual = FuzzySearchAlgorithm.suggestLocations(userInput);
+
+    Assertions.assertTrue(actual.getFirst().equals(expected.get(0)));
+    Assertions.assertTrue(actual.contains(expected.get(1)));
+    Assertions.assertTrue(actual.contains(expected.get(2)));
+  }
+
   //  /**
   //   * Tests performance time given .csv of All Nodes Make sure to uncomment the test if need to
   // measure performance

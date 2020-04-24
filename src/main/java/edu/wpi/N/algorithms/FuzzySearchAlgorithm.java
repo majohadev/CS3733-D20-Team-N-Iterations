@@ -22,7 +22,7 @@ public class FuzzySearchAlgorithm {
     LinkedList<DbNode> suggestions = new LinkedList<DbNode>();
     int inputLength = userInput.replaceAll("\\s+", "").length();
     int lowestDistanceSoFar = 1000;
-    userInput = userInput.trim();
+    userInput = userInput.trim().toLowerCase();
 
     if (userInput.length() > 1) {
 
@@ -45,11 +45,8 @@ public class FuzzySearchAlgorithm {
       } else {
         // if 5 or more letters in user's input (not including space)
         if (inputLength > 4) {
-          int numInputWords = userInput.split(" ").length;
-          // Get a single longest word in user's string
-          String inputWord = getLongestWord(userInput);
           // // Do fuzzy search
-          suggestions = performFuzzySearchOnLocations(inputWord, numInputWords);
+          suggestions = performFuzzySearchOnLocations(userInput);
         }
       }
     }
@@ -62,11 +59,12 @@ public class FuzzySearchAlgorithm {
    * @param userInput: incorrect User input
    * @return: suggestions based on corrected user's input
    */
-  private static LinkedList<DbNode> performFuzzySearchOnLocations(
-      String userInput, int numInputWords) throws DBException {
+  private static LinkedList<DbNode> performFuzzySearchOnLocations(String userInput)
+      throws DBException {
     userInput = userInput.toLowerCase();
     LinkedList<DbNode> suggestions = new LinkedList<DbNode>();
-    int bestRatioSoFar = 0;
+    String[] userInputByWord = userInput.split(" ");
+    double bestRatioSoFar = 0;
 
     double ratio = 0.85;
 
@@ -75,25 +73,31 @@ public class FuzzySearchAlgorithm {
       String fullLongName = node.getLongName();
       String[] longNameWords = fullLongName.toLowerCase().split(" ");
       // Iterate through Long Name's words
-      for (String s : longNameWords) {
+      for (String location : longNameWords) {
+        double r = 0;
+        // Calculate ration of every Long Name to Every user's word
+        for (String userWord : userInputByWord) {
 
-        // Check that the word is >= than (user's word size - 2)
-        if (userInput.length() - 2 <= s.length()) {
+          // Check that the word is >= than (user's word size - 1)
+          if (userWord.length() - 1 <= location.length()) {
 
-          // calculate levenshtein distance between the 2 strings (input word and Long Name word)
-          LevenshteinDistance distance = new LevenshteinDistance();
-          int d = distance.apply(userInput, s);
+            // calculate levenshtein distance between the 2 strings (input word and Long Name word)
+            LevenshteinDistance distance = new LevenshteinDistance();
+            int d = distance.apply(userWord, location);
 
-          // calculate ratio
-          double lensum = s.length() + userInput.length();
-          double r = (lensum - d) / (lensum);
-          if (r >= ratio) {
-            // add the suggestions in proper order based on how relevant they are (most -> least)
-            if (r >= bestRatioSoFar && numInputWords == longNameWords.length) {
-              suggestions.addFirst(node);
-            } else {
-              suggestions.add(node);
-            }
+            // calculate ratio
+            double lensum = location.length() + userWord.length();
+            r = r + (lensum - d) / (lensum);
+          }
+        }
+
+        if (r >= ratio) {
+          // add the suggestions in proper order based on how relevant they are (most -> least)
+          if (r >= bestRatioSoFar) {
+            suggestions.addFirst(node);
+            bestRatioSoFar = r;
+          } else {
+            suggestions.add(node);
           }
         }
       }
@@ -174,7 +178,7 @@ public class FuzzySearchAlgorithm {
     LinkedList<Doctor> suggestions = new LinkedList<Doctor>();
 
     double ratio = 0.8;
-    int bestRatioSoFar = 0;
+    double bestRatioSoFar = 0;
 
     // Get all the visible nodes from DB
     for (Doctor doc : DoctorDB.getDoctors()) {
@@ -198,6 +202,7 @@ public class FuzzySearchAlgorithm {
             // add the suggestions in proper order based on how relevant they are (most -> least)
             if (r >= bestRatioSoFar && numInputWords == longNameWords.length) {
               suggestions.addFirst(doc);
+              bestRatioSoFar = r;
             } else {
               suggestions.add(doc);
             }
