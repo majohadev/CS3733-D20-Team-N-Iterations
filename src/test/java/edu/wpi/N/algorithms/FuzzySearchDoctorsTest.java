@@ -120,6 +120,23 @@ public class FuzzySearchDoctorsTest {
   }
 
   /**
+   * Tests that function returns 2 doctors corresponding to incorrect input
+   *
+   * @throws DBException
+   */
+  @Test
+  public void testSuggestDoctorsIncorrectInputTwoWordsProperOrder() throws DBException {
+    String userInput = "Eroshenka ival";
+    LinkedList<Doctor> actual = FuzzySearchAlgorithm.suggestDoctors(userInput);
+
+    Assertions.assertTrue(actual.size() == 2);
+    // check if doctor Ivan is there
+    Assertions.assertTrue(actual.getFirst().equals(testDoctors.get(0)));
+    // check if doctor Annie is there
+    Assertions.assertTrue(actual.contains(testDoctors.get(1)));
+  }
+
+  /**
    * Tests that function returns correct doctor corresponding to incorrect input single word
    *
    * @throws DBException

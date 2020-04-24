@@ -174,6 +174,56 @@ public class FuzzySearchLocationsTest {
     Assertions.assertTrue(actual.contains(expected.get(0)));
   }
 
+  /**
+   * Tests that function returns correct DbNode in relevant order given incorrect input of two words
+   *
+   * @throws DBException
+   */
+  @Test
+  public void testSearchIncorrectInputTwoWords() throws DBException {
+    String userInput = "Jen Centar";
+
+    LinkedList<DbNode> expected = new LinkedList<DbNode>();
+    expected.add(MapDB.getNode("BDEPT00402"));
+    expected.add(MapDB.getNode("BDEPT00302"));
+    expected.add(MapDB.getNode("BDEPT00902"));
+
+    LinkedList<DbNode> actual = FuzzySearchAlgorithm.suggestLocations(userInput);
+
+    Assertions.assertTrue(actual.getFirst().equals(expected.get(0)));
+    Assertions.assertTrue(actual.contains(expected.get(1)));
+    Assertions.assertTrue(actual.contains(expected.get(2)));
+  }
+
+  /**
+   * Tests that function returns correct DbNodes in proper order based on priority
+   *
+   * @throws DBException
+   */
+  @Test
+  public void testSearchIncorrectInputTwoWordsProperOrderOutput() throws DBException {
+    String userInput = "Beast Centar";
+
+    LinkedList<DbNode> expected = new LinkedList<DbNode>();
+    expected.add(MapDB.getNode("BDEPT00302"));
+    expected.add(MapDB.getNode("BDEPT00402"));
+    expected.add(MapDB.getNode("BDEPT00902"));
+
+    // Measure performance
+    long startTime = System.nanoTime();
+
+    LinkedList<DbNode> actual = FuzzySearchAlgorithm.suggestLocations(userInput);
+
+    long endTime = System.nanoTime();
+
+    long timeElapsed = endTime - startTime;
+    System.out.println("Elapsed time for FuzzySearch in milliseconds:" + timeElapsed / 1000000);
+
+    Assertions.assertTrue(actual.getFirst().equals(expected.get(0)));
+    Assertions.assertTrue(actual.contains(expected.get(1)));
+    Assertions.assertTrue(actual.contains(expected.get(2)));
+  }
+
   //  /**
   //   * Tests performance time given .csv of All Nodes Make sure to uncomment the test if need to
   // measure performance
