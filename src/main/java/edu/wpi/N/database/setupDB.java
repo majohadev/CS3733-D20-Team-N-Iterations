@@ -6,17 +6,21 @@ import java.sql.*;
 import org.apache.ibatis.jdbc.ScriptRunner;
 
 public class setupDB {
-  public static void main(String[] args)
-      throws SQLException, ClassNotFoundException, DBException, FileNotFoundException {
+  public static void main(String[] args) throws SQLException, ClassNotFoundException {
 
-    String query;
     Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
     String URL;
     URL = "jdbc:derby:MapDB;create=true";
     Connection con = DriverManager.getConnection(URL);
     ScriptRunner sr = new ScriptRunner(con);
     Reader reader =
-        new BufferedReader(new InputStreamReader(Main.class.getResourceAsStream("sql/setup.sql")));
+        new BufferedReader(
+            new InputStreamReader(Main.class.getResourceAsStream("sql/drop.sql"))); // drop tables
+    sr.runScript(reader);
+    reader =
+        new BufferedReader(
+            new InputStreamReader(
+                Main.class.getResourceAsStream("sql/setup.sql"))); // create tables
     sr.runScript(reader);
   }
 }

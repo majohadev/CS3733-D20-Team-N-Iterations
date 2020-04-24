@@ -1,18 +1,3 @@
-DROP TABLE lrequest;
-DROP TABLE trequest;
-DROP TABLE request;
-DROP TABLE credential;
-DROP TABLE laundry;
-DROP TABLE language;
-DROP TABLE translator;
-DROP TABLE employees;
-DROP TABLE service;
-DROP TABLE location;
-DROP TABLE doctors;
-DROP TABLE edges;
-DROP TABLE nodes;
-
-
 CREATE TABLE nodes (
   nodeID CHAR(10) NOT NULL PRIMARY KEY,
   xcoord INT NOT NULL,
