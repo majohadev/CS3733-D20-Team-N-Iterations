@@ -59,8 +59,9 @@ public class MapEditorController implements Controller {
 
   private void loadFloor(int floor, String building) throws DBException {
     LinkedList<DbNode> floorNodes = MapDB.floorNodes(floor, building);
+    LinkedList<DbNode> floorEdges = MapDB.floorEdges();
     HashMap<DbNode, UINode> conversion = createUINodes(floorNodes, DEFAULT_COLOR);
-    //    createUIEdges(conversion, floorNodes);
+    createUIEdges(conversion, floorNodes);
   }
 
   private HashMap<DbNode, UINode> createUINodes(LinkedList<DbNode> nodes, Color c) {
