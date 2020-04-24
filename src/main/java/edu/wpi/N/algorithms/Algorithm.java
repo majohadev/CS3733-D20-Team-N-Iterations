@@ -11,10 +11,12 @@ public class Algorithm {
     this.pathFinder = new AStar();
   }
 
-  //Getter
-  public IPathFinder getPathFinder(IPathFinder pathFinder) { return this.pathFinder; }
+  // Getter
+  public IPathFinder getPathFinder(IPathFinder pathFinder) {
+    return this.pathFinder;
+  }
 
-  //Setter
+  // Setter
   public void setPathFinder(IPathFinder pathFinder) {
     this.pathFinder = pathFinder;
   }

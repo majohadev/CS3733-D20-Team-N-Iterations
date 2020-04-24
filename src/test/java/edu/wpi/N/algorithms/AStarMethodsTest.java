@@ -35,7 +35,8 @@ public class AStarMethodsTest {
     actualPath.add(MapDB.getNode("H130000000"));
     actualPath.add(MapDB.getNode("EEEEEEEEEE"));
 
-    Path testingPath = myAStar.findPath(MapDB.getNode("H100000001"), MapDB.getNode("EEEEEEEEEE"));
+    Path testingPath =
+        myAStar.findPath(MapDB.getNode("H100000001"), MapDB.getNode("EEEEEEEEEE"), false);
 
     for (int i = 0; i < actualPath.size(); i++) {
       Assertions.assertEquals(
@@ -55,7 +56,8 @@ public class AStarMethodsTest {
     actualPath.add(MapDB.getNode("H120000000"));
     actualPath.add(MapDB.getNode("H130000000"));
 
-    Path testingPath = myAStar.findPath(MapDB.getNode("H120000000"), MapDB.getNode("H130000000"));
+    Path testingPath =
+        myAStar.findPath(MapDB.getNode("H120000000"), MapDB.getNode("H130000000"), false);
 
     for (int i = 0; i < actualPath.size(); i++) {
       Assertions.assertEquals(
@@ -70,7 +72,7 @@ public class AStarMethodsTest {
   @Test
   public void findPathDestinationNotFound() throws DBException {
     Assertions.assertNull(
-        myAStar.findPath(MapDB.getNode("H120000000"), MapDB.getNode("NonExistentNode")));
+        myAStar.findPath(MapDB.getNode("H120000000"), MapDB.getNode("NonExistentNode"), false));
   }
 
   /**
@@ -80,7 +82,7 @@ public class AStarMethodsTest {
   @Test
   public void findPathStartNodeHasNoEdges() throws DBException {
     DbNode nonExistentNode = new DbNode();
-    Assertions.assertNull(myAStar.findPath(nonExistentNode, MapDB.getNode("H120000000")));
+    Assertions.assertNull(myAStar.findPath(nonExistentNode, MapDB.getNode("H120000000"), false));
   }
 
   /**
@@ -92,7 +94,8 @@ public class AStarMethodsTest {
     LinkedList<DbNode> actualPath = new LinkedList<DbNode>();
 
     actualPath.add(MapDB.getNode("H120000000"));
-    Path testingPath = myAStar.findPath(MapDB.getNode("H120000000"), MapDB.getNode("H120000000"));
+    Path testingPath =
+        myAStar.findPath(MapDB.getNode("H120000000"), MapDB.getNode("H120000000"), false);
 
     for (int i = 0; i < actualPath.size(); i++) {
       Assertions.assertEquals(

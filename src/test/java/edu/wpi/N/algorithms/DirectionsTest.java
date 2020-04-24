@@ -37,7 +37,7 @@ public class DirectionsTest {
    */
   @Test
   public void directionsTester() throws DBException {
-    Path path = myAStar.findPath(MapDB.getNode("NREST00104"), MapDB.getNode("NDEPT00704"));
+    Path path = myAStar.findPath(MapDB.getNode("NREST00104"), MapDB.getNode("NDEPT00704"), false);
     ArrayList<String> directions = path.getDirections();
     //    for (String s : directions) {
     //      // System.out.println(s);
@@ -52,7 +52,7 @@ public class DirectionsTest {
    */
   @Test
   public void directionsTester2() throws DBException {
-    Path path = myAStar.findPath(MapDB.getNode("NSTAI00104"), MapDB.getNode("NELEV00Y04"));
+    Path path = myAStar.findPath(MapDB.getNode("NSTAI00104"), MapDB.getNode("NELEV00Y04"), false);
     ArrayList<String> directions = path.getDirections();
     //    for (String s : directions) {
     //      // System.out.println(s);
@@ -67,7 +67,7 @@ public class DirectionsTest {
    */
   @Test
   public void directionsTester3() throws DBException {
-    Path path = myAStar.findPath(MapDB.getNode("NHALL00704"), MapDB.getNode("NHALL01504"));
+    Path path = myAStar.findPath(MapDB.getNode("NHALL00704"), MapDB.getNode("NHALL01504"), false);
     ArrayList<String> directions = path.getDirections();
     //    for (String s : directions) {
     //      // System.out.println(s);
@@ -82,7 +82,7 @@ public class DirectionsTest {
    */
   @Test
   public void directionsTester4() throws DBException {
-    Path path = myAStar.findPath(MapDB.getNode("NDEPT01304"), MapDB.getNode("NHALL02204"));
+    Path path = myAStar.findPath(MapDB.getNode("NDEPT01304"), MapDB.getNode("NHALL02204"), false);
     ArrayList<String> directions = path.getDirections();
     //    for (String s : directions) {
     //      // System.out.println(s);
@@ -97,7 +97,7 @@ public class DirectionsTest {
    */
   @Test
   public void directionsTester5() throws DBException {
-    Path path = myAStar.findPath(MapDB.getNode("NDEPT01204"), MapDB.getNode("NDEPT00204"));
+    Path path = myAStar.findPath(MapDB.getNode("NDEPT01204"), MapDB.getNode("NDEPT00204"), false);
     ArrayList<String> directions = path.getDirections();
     //    for (String s : directions) {
     //      // System.out.println(s);

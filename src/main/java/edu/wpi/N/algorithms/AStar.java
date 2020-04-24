@@ -1,6 +1,5 @@
 package edu.wpi.N.algorithms;
 
-import afu.org.checkerframework.checker.oigj.qual.O;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
@@ -77,7 +76,7 @@ public class AStar extends AbsAlgo {
       return generatePath(start, end, cameFrom);
     } catch (Exception e) {
       e.printStackTrace();
-      throw new DBException("Unknown error: findPath in AStar", e);
+      return null;
     }
   }
 }

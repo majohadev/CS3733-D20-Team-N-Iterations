@@ -36,7 +36,7 @@ public class FindPathPerformanceTest {
 
     long startTime = System.nanoTime();
 
-    Path actual = myAStar.findPath(start, end);
+    Path actual = myAStar.findPath(start, end, false);
 
     long endTime = System.nanoTime();
 

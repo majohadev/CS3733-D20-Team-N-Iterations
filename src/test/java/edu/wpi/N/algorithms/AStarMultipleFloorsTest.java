@@ -32,7 +32,7 @@ public class AStarMultipleFloorsTest {
   public void findCloserElevatorTest() throws DBException {
     DbNode startNode = MapDB.getNode("H011000000");
     DbNode endNode = MapDB.getNode("BBBBBBBBBB");
-    Path testPath = myAStar.findPath(startNode, endNode);
+    Path testPath = myAStar.findPath(startNode, endNode, false);
 
     LinkedList<DbNode> actualPath = new LinkedList<DbNode>();
     actualPath.add(MapDB.getNode("H011000000"));
@@ -55,7 +55,7 @@ public class AStarMultipleFloorsTest {
   public void stairsOverElevatorTest() throws DBException {
     DbNode startNode = MapDB.getNode("STAI011000");
     DbNode endNode = MapDB.getNode("H083000000");
-    Path testPath = myAStar.findPath(startNode, endNode);
+    Path testPath = myAStar.findPath(startNode, endNode, false);
 
     LinkedList<DbNode> actualPath = new LinkedList<DbNode>();
     actualPath.add(MapDB.getNode("STAI011000"));
@@ -73,7 +73,7 @@ public class AStarMultipleFloorsTest {
   public void stairsOverElevatorTest2() throws DBException {
     DbNode startNode = MapDB.getNode("H083000000");
     DbNode endNode = MapDB.getNode("H041000000");
-    Path testPath = myAStar.findPath(startNode, endNode);
+    Path testPath = myAStar.findPath(startNode, endNode, false);
 
     LinkedList<DbNode> actualPath = new LinkedList<DbNode>();
     actualPath.add(MapDB.getNode("H083000000"));
@@ -92,7 +92,7 @@ public class AStarMultipleFloorsTest {
   public void thirdToFourthFloorTest() throws DBException {
     DbNode startNode = MapDB.getNode("ELEV013000");
     DbNode endNode = MapDB.getNode("DDDDDDDDDD");
-    Path testPath = myAStar.findPath(startNode, endNode);
+    Path testPath = myAStar.findPath(startNode, endNode, false);
 
     LinkedList<DbNode> actualPath = new LinkedList<DbNode>();
     actualPath.add(MapDB.getNode("ELEV013000"));

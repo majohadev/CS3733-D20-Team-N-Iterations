@@ -7,8 +7,6 @@ import edu.wpi.N.entities.Node;
 import edu.wpi.N.entities.Path;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.function.ToDoubleBiFunction;
-
 import org.bridj.util.Pair;
 
 public abstract class AbsAlgo implements IPathFinder {
@@ -91,8 +89,8 @@ public abstract class AbsAlgo implements IPathFinder {
         }
         Algorithm thePathFinder = new Algorithm();
 
-        //TODO
-        //Ask how to handle quick access handicap, put false for now
+        // TODO
+        // Ask how to handle quick access handicap, put false for now
         return thePathFinder.findPath(start, end, false);
       } else {
         return null;
@@ -137,8 +135,8 @@ public abstract class AbsAlgo implements IPathFinder {
   }
 
   /**
-   * Finds the best path from the start to the stop node given,
-   * then the best path from the stop to the end
+   * Finds the best path from the start to the stop node given, then the best path from the stop to
+   * the end
    *
    * @param start: Start node
    * @param end: End node
@@ -155,8 +153,8 @@ public abstract class AbsAlgo implements IPathFinder {
   }
 
   /**
-   * Finds the best path from the start to a stop node of the type given,
-   * then the best path from the stop to the end
+   * Finds the best path from the start to a stop node of the type given, then the best path from
+   * the stop to the end
    *
    * @param start: Start node
    * @param end: End node
@@ -165,8 +163,8 @@ public abstract class AbsAlgo implements IPathFinder {
    * @return: A pair of paths (start to stop, stop to end)
    * @throws DBException
    */
-  public Pair<Path, Path> getPathWithStop(DbNode start, DbNode end, String nodeType, boolean handicap)
-      throws DBException {
+  public Pair<Path, Path> getPathWithStop(
+      DbNode start, DbNode end, String nodeType, boolean handicap) throws DBException {
     DbNode stop = getBestStopQuickAccess(start, end, nodeType);
     Path pathOne = findPath(start, stop, handicap);
     Path pathTwo = findPath(stop, end, handicap);
