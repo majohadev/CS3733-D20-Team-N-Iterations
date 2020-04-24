@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Node;
+import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import org.junit.jupiter.api.AfterAll;
@@ -12,7 +13,8 @@ import org.junit.jupiter.api.Test;
 
 public class MapDBTest {
   @BeforeAll
-  public static void setup() throws SQLException, ClassNotFoundException, DBException {
+  public static void setup()
+      throws SQLException, ClassNotFoundException, DBException, FileNotFoundException {
     MapDB.initTestDB();
     MapDB.addNode("NHALL00104", 1250, 850, 4, "Faulkner", "HALL", "Hall 1", "Hall 1", 'N');
     MapDB.addNode("NDEPT00104", 1350, 950, 4, "Faulkner", "DEPT", "Cardiology", "Dept 1", 'N');

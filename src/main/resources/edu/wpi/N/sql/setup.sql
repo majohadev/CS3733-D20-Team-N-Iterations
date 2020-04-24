@@ -1,17 +1,3 @@
-DROP TABLE lrequest;
-DROP TABLE trequest;
-DROP TABLE request;
-DROP TABLE laundry;
-DROP TABLE language;
-DROP TABLE translator;
-DROP TABLE employees;
-DROP TABLE service;
-DROP TABLE location;
-DROP TABLE doctors;
-DROP TABLE edges;
-DROP TABLE nodes;
-
-
 CREATE TABLE nodes (
   nodeID CHAR(10) NOT NULL PRIMARY KEY,
   xcoord INT NOT NULL,
@@ -69,6 +55,12 @@ CREATE TABLE language (
 CREATE TABLE laundry(
       l_employeeID INT NOT NULL References employees(employeeID) ON DELETE CASCADE,
       PRIMARY KEY(l_employeeID));
+
+CREATE TABLE credential(
+    username VARCHAR(255) NOT NULL PRIMARY KEY,
+    password VARCHAR(255) NOT NULL,
+    access VARCHAR(6) NOT NULL CONSTRAINT ACC_CK CHECK (access IN ('ADMIN', 'DOCTOR'))
+);
 
 CREATE TABLE request(
       requestID INT NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY,

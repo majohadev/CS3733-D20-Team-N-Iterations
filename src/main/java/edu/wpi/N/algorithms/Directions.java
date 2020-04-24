@@ -11,7 +11,7 @@ import java.util.LinkedList;
 
 public class Directions {
   private ArrayList<String> directions;
-  private static LinkedList<DbNode> path;
+  private static ArrayList<DbNode> path;
   private static State state;
   private static final double TURN_THRESHOLD = 30;
 
@@ -26,17 +26,23 @@ public class Directions {
 
   public Directions(LinkedList<DbNode> path) {
     this.directions = new ArrayList<>();
-    this.path = path;
+    ArrayList<DbNode> pathNodes = new ArrayList<DbNode>();
+    for (DbNode node : path) {
+      pathNodes.add(node);
+    }
+    this.path = pathNodes;
   }
 
   /** Generates textual directions for the given path */
   private void generateDirections() throws DBException {
     DbNode currNode;
-    DbNode nextNode = path.getFirst();
+    DbNode nextNode = path.get(0);
     double distance = 0;
     boolean stateChange = true;
     double angle = 0;
+    String startFloor = "";
     String message = "";
+    boolean messageCheck = false;
     for (int i = 0; i <= path.size() - 1; i++) {
       currNode = path.get(i);
       if (i < path.size() - 1) {
@@ -47,8 +53,8 @@ public class Directions {
       state = getState(i);
       switch (state) {
         case STARTING:
-          if (!path.getFirst().getNodeType().equals("HALL")) {
-            message = "Start by exiting " + path.getFirst().getLongName();
+          if (!path.get(0).getNodeType().equals("HALL")) {
+            message = "Exit " + path.get(0).getLongName(); // "Start by exiting "
           } else if (!(getLandmark(nextNode) == null)) {
             message =
                 "Start towards "
@@ -61,17 +67,13 @@ public class Directions {
                     + getDistanceString(getDistance(currNode, nextNode));
           }
           break;
-        case EXITING: // not implemented yet, for building change or elevators
+        case EXITING: // not implemented yet, for building change
           directions.add("Exit " + currNode.getLongName());
           break;
-        case CONTINUING: // could add if passing an intersection, "continue past " + landmark
+        case CONTINUING:
           distance += getDistance(currNode, nextNode);
           if (!message.equals("")) {
-            if (atEndOfHall(nextNode)) {
-              directions.add(message + " and proceed to the end of the hall");
-            } else {
-              directions.add(message); // + " and proceed down the hall");
-            }
+            directions.add(message); // + " and proceed down the hall");
             message = "";
           } else if (stateChange || atIntersection(currNode)) {
             if (getLandmark(nextNode) == null) {
@@ -82,8 +84,8 @@ public class Directions {
                       + getLandmark(nextNode).getLongName()
                       + " "
                       + getDistanceString(distance);
-            } else if (atEndOfHall(nextNode)) {
-              message = "Continue to the end of the hallway " + getDistanceString(distance);
+              // } else if (atEndOfHall(nextNode)) { //this should go before first if
+              // message = "Continue to the end of the hallway " + getDistanceString(distance);
             } else {
               message =
                   "Continue past "
@@ -97,11 +99,7 @@ public class Directions {
         case TURNING:
           if (!nextNode.equals(path.get(path.size() - 1))) {
             if (!message.equals("")) {
-              if (i == 1) {
-                directions.add(message + " and turn " + getTurnType(angle, getAngle(i - 1)));
-              } else {
-                directions.add(message + " and turn " + getTurnType(angle, getAngle(i - 1)));
-              }
+              directions.add(message + " and turn " + getTurnType(angle, getAngle(i - 1)));
               message = "";
             } else if (!(getLandmark(currNode) == null)) {
               directions.add(
@@ -121,9 +119,22 @@ public class Directions {
             }
           }
           break;
-        case CHANGING_FLOOR: // not implemented yet
+        case CHANGING_FLOOR:
+          if (!getState(i - 1).equals(CHANGING_FLOOR)) {
+            startFloor = currNode.getLongName();
+          }
+          if (!message.equals("")) {
+            directions.add(message + " and enter " + currNode.getLongName());
+            message = "";
+            messageCheck = true;
+          }
           if (stateChange) {
-            directions.add(getFloorChangeString(nextNode));
+            if (messageCheck) {
+              directions.add("Take " + startFloor + " to floor " + currNode.getFloor());
+              messageCheck = false;
+            } else {
+              directions.add("Enter " + startFloor + " and go to floor " + currNode.getFloor());
+            }
           }
           break;
         case ARRIVING:
@@ -141,7 +152,7 @@ public class Directions {
   }
 
   /**
-   * gets the state based off of currNode and nextNode
+   * gets the state based off of currNode and change in angle
    *
    * @return int, State
    */
@@ -153,16 +164,15 @@ public class Directions {
       return ARRIVING;
     } else if (Math.abs(getAngle(i) - getAngle(i - 1)) > TURN_THRESHOLD
         && Math.abs(getAngle(i) - getAngle(i - 1)) < 360 - TURN_THRESHOLD) {
-      double angleChange = Math.abs(getAngle(i) - getAngle(i - 1));
-      // System.out.println(Math.abs(getAngle(i) - getAngle(i - 1)));
       return TURNING;
-    } else if (path.get(i).getFloor() != path.get(i + 1).getFloor()) {
+    } else if ((path.get(i).getNodeType().equals("ELEV")
+            || path.get(i).getNodeType().equals("STAI"))
+        && (path.get(i).getFloor() != path.get(i + 1).getFloor()
+            || path.get(i).getNodeType().equals(path.get(i - 1).getNodeType()))) {
       return CHANGING_FLOOR;
     } else if (!path.get(i).getBuilding().equals(path.get(i + 1).getBuilding())) {
       return EXITING;
     } else {
-      // System.out.println(Math.abs(getAngle(i) - getAngle(i - 1)));
-
       return CONTINUING;
     }
   }
@@ -184,17 +194,14 @@ public class Directions {
       return "right";
     } else if (angleChange <= -1 * TURN_THRESHOLD) {
       return "left";
-    } else if (angleChange < TURN_THRESHOLD
-        && angleChange > -TURN_THRESHOLD) { // eventually will add slight turns
-      return "straight" + angleChange;
     } else {
-      return "other turn type";
+      return "straight" + angleChange;
     }
   }
 
   /**
-   * Gets closest landmark to a node (ie. won't return hallway nodes...or returning hallway nodes->
-   * "end of corridor" or something?)
+   * Gets closest landmark to a node, if the node is a HALL node, returns an adjacent non-hallway
+   * node or null if node is not a HALL node, returns the same node
    *
    * @param node, DbNode
    * @return String, landmark for given node
@@ -208,7 +215,7 @@ public class Directions {
       }
       return null;
     }
-    return node; // change to exclude hallway nodes etc.
+    return node;
   }
 
   /**
@@ -218,23 +225,7 @@ public class Directions {
    * @return String, how far in feet between nodes
    */
   private static String getDistanceString(double distance) {
-    return "(" + Math.round(distance) + " ft)";
-  } // "(Go " + Math.round(distance) + " ft)"
-
-  /**
-   * generates a string "Take ___ to floor __" using floor number and nodeType
-   *
-   * @param node, end node of floor change
-   * @return String
-   */
-  private static String getFloorChangeString(DbNode node) {
-    String direction = "Take ";
-    if (node.getNodeType().equals("ELEV")) {
-      direction += "elevator to floor " + node.getFloor();
-    } else if (node.getNodeType().equals("STAI")) {
-      direction += "stairs to floor " + node.getFloor();
-    }
-    return direction;
+    return "(" + Math.round(distance) + " ft)"; // "(Go " + Math.round(distance) + " ft)"
   }
 
   /**
@@ -267,7 +258,7 @@ public class Directions {
   /**
    * Determines if a node is at an intersection by looking for adjacent hallway nodes
    *
-   * @param node
+   * @param node, DbNode
    * @return true, if intersection, false otherwise
    */
   private static boolean atIntersection(DbNode node) throws DBException {
@@ -278,37 +269,14 @@ public class Directions {
           hallNodeCount++;
         }
       }
-      if (hallNodeCount >= 3) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  /**
-   * Determines if a node is the last node in a hallway
-   *
-   * @param node
-   * @return true, if the node is at the end of the hall, false otherwise
-   */
-  private static boolean atEndOfHall(DbNode node) throws DBException {
-    int hallNodeCount = 0;
-    if (node.getNodeType().equals("HALL")) {
-      for (DbNode n : MapDB.getAdjacent(node.getNodeID())) {
-        if (n.getNodeType().equals("HALL")) {
-          hallNodeCount++;
-        }
-      }
-      if (hallNodeCount <= 1) {
-        return true;
-      }
+      return hallNodeCount >= 3;
     }
     return false;
   }
 
   /** @return directions with numbers at beginning of each line */
   private ArrayList<String> getNumberedDirection() {
-    ArrayList<String> newDirections = new ArrayList<String>();
+    ArrayList<String> newDirections = new ArrayList<>();
     int index = 1;
     if (!this.directions.isEmpty()) {
       for (String s : this.directions) {
@@ -329,10 +297,30 @@ public class Directions {
   public ArrayList<String> getDirections() throws DBException {
     if (!(this.path == null)) {
       this.generateDirections();
-      // this.directions;
       return this.getNumberedDirection();
     } else {
       return null;
     }
   }
+
+  /*    */
+  /**
+   * Determines if a node is the last node in a hallway
+   *
+   * @param node, DbNode
+   * @return true, if the node is at the end of the hall, false otherwise
+   */
+  /*
+  private static boolean atEndOfHall(DbNode node) throws DBException {
+      int hallNodeCount = 0;
+      if (node.getNodeType().equals("HALL")) {
+          for (DbNode n : MapDB.getAdjacent(node.getNodeID())) {
+              if (n.getNodeType().equals("HALL")) {
+                  hallNodeCount++;
+              }
+          }
+        return hallNodeCount <= 1;
+      }
+      return false;
+  }*/
 }
