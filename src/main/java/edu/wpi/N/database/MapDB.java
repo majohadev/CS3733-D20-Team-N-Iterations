@@ -886,7 +886,7 @@ public class MapDB {
   /** set Kiosk as default starting Node*/
   public static DbNode getKiosk(int floor, String building) throws DBException{
     try{
-      String query = "SELECT * FROM nodes WHERE floor = ? AND buidling = ? AND (UPPER(longName) LIKE '% KIOSK')";
+      String query = "SELECT * FROM nodes WHERE floor = ? AND building = ? AND (UPPER(longName) LIKE '% KIOSK')";
       PreparedStatement stmt = con.prepareStatement(query);
       ResultSet rs = stmt.executeQuery(query);
       stmt.setInt(1,floor);
