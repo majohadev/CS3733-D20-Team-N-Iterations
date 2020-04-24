@@ -7,6 +7,7 @@ import edu.wpi.N.App;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
+import edu.wpi.N.entities.Node;
 import edu.wpi.N.entities.UIEdge;
 import edu.wpi.N.entities.UINode;
 import java.util.HashMap;
@@ -59,7 +60,7 @@ public class MapEditorController implements Controller {
 
   private void loadFloor(int floor, String building) throws DBException {
     LinkedList<DbNode> floorNodes = MapDB.floorNodes(floor, building);
-    LinkedList<DbNode> floorEdges = MapDB.floorEdges();
+    LinkedList<Node[]> floorEdges = MapDB.getFloorEdges(floor);
     HashMap<DbNode, UINode> conversion = createUINodes(floorNodes, DEFAULT_COLOR);
     createUIEdges(conversion, floorNodes);
   }
