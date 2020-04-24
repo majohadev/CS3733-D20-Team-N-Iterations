@@ -38,16 +38,14 @@ public class Pathfinder {
    *
    * @return Path object indicating the shortest path to the goal Node from Start Node
    */
-  public static Path findPath(String startID, String endID) {
+  public static Path findPath(DbNode startNode, DbNode endNode) {
     try {
-      DbNode startDb = MapDB.getNode(startID);
-      DbNode endDb = MapDB.getNode(endID);
 
-      int floorNumStart = startDb.getFloor();
-      int floorNumEnd = endDb.getFloor();
+      int startFloorNum = startNode.getFloor();
+      int endFloorNum = endNode.getFloor();
 
-      Node start = MapDB.getGNode(startID);
-      Node end = MapDB.getGNode(endID);
+      Node start = MapDB.getGNode(startNode.getNodeID());
+      Node end = MapDB.getGNode(endNode.getNodeID());
 
       // Initialize variables
       PriorityQueue<Node> frontier = new PriorityQueue<Node>();
@@ -63,13 +61,14 @@ public class Pathfinder {
         Node current = frontier.poll();
 
         // if the goal node was found, break out of the loop
-        if (current == end) {
+        if (current.equals(end)) {
           break;
         }
 
         // for every node (next node), current node has edge to:
         LinkedList<Node> adjacentToCurrent =
-            MapDB.getGAdjacent(current.ID, floorNumStart, floorNumEnd);
+            MapDB.getGAdjacent(current.ID, startFloorNum, endFloorNum);
+
         for (Node nextNode : adjacentToCurrent) {
           String nextNodeID = nextNode.ID;
 
@@ -93,7 +92,6 @@ public class Pathfinder {
       }
 
       // Generate and return the path in proper order
-
       return generatePath(start, end, cameFrom);
     } catch (Exception e) {
       e.printStackTrace();
@@ -153,7 +151,7 @@ public class Pathfinder {
             end = n;
           }
         }
-        return findPath(start.getNodeID(), end.getNodeID());
+        return findPath(start, end);
       } else {
         return null;
       }
