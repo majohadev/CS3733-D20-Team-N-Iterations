@@ -5,6 +5,7 @@ import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Path;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.LinkedList;
@@ -17,7 +18,8 @@ public class AStarMethodsTest {
   Algorithm myAStar = new Algorithm();
 
   @BeforeAll
-  public static void initializeTest() throws SQLException, ClassNotFoundException, DBException {
+  public static void initializeTest()
+      throws SQLException, ClassNotFoundException, DBException, FileNotFoundException {
     MapDB.initTestDB();
     InputStream inputNodes = AStarMethodsTest.class.getResourceAsStream("../csv/TestNodes.csv");
     InputStream inputEdges = AStarMethodsTest.class.getResourceAsStream("../csv/TestEdges.csv");

@@ -16,7 +16,8 @@ import org.junit.jupiter.api.Test;
 public class CSVParserTest {
 
   @BeforeAll
-  public static void initializeTest() throws SQLException, ClassNotFoundException, DBException {
+  public static void initializeTest()
+      throws SQLException, ClassNotFoundException, DBException, FileNotFoundException {
     MapDB.initTestDB();
   }
 

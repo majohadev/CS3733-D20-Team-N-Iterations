@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Node;
+import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import org.junit.jupiter.api.AfterAll;
@@ -12,7 +13,8 @@ import org.junit.jupiter.api.Test;
 
 public class MapDBTest {
   @BeforeAll
-  public static void setup() throws SQLException, ClassNotFoundException, DBException {
+  public static void setup()
+      throws SQLException, ClassNotFoundException, DBException, FileNotFoundException {
     MapDB.initTestDB();
     MapDB.addNode("NHALL00104", 1250, 850, 4, "Faulkner", "HALL", "Hall 1", "Hall 1", 'N');
     MapDB.addNode("NDEPT00104", 1350, 950, 4, "Faulkner", "DEPT", "Cardiology", "Dept 1", 'N');
@@ -356,6 +358,36 @@ public class MapDBTest {
     assertFalse(
         adj.contains(
             new DbNode("NHALL00204", 1350, 1250, 4, "Faulkner", "HALL", "Hall 2", "Hall 2", 'N')));
+  }
+
+  @Test
+  public void testGetFloorEdges() throws DBException {
+    MapDB.addNode("NELEV00X03", 2, 1, 3, "Faulkner", "ELEV", "Elevator X3", "ELEV X3", 'N');
+    MapDB.addNode("NELEV00X04", 2, 1, 4, "Faulkner", "ELEV", "Elevator X4", "ELEV X4", 'N');
+
+    MapDB.addEdge("NHALL00204", "NDEPT00104");
+    MapDB.addEdge("NHALL00104", "NHALL00204");
+    MapDB.addEdge("NELEV00X03", "NELEV00X04");
+
+    LinkedList<DbNode[]> edges = MapDB.getFloorEdges(4);
+
+    DbNode hall1 = MapDB.getNode("NHALL00104");
+    DbNode hall2 = MapDB.getNode("NHALL00204");
+    DbNode dept1 = MapDB.getNode("NDEPT00104");
+
+    assertEquals(2, edges.size());
+    // there is probably a better way to test this
+    assertEquals(hall1, edges.get(0)[0]);
+    assertEquals(hall2, edges.get(0)[1]);
+    assertEquals(hall2, edges.get(1)[0]);
+    assertEquals(dept1, edges.get(1)[1]);
+
+    MapDB.removeEdge("NHALL00204", "NDEPT00104");
+    MapDB.removeEdge("NHALL00104", "NHALL00204");
+    MapDB.removeEdge("NELEV00X03", "NELEV00X04");
+
+    MapDB.deleteNode("NELEV00X03");
+    MapDB.deleteNode("NELEV00X04");
   }
 
   @AfterAll
