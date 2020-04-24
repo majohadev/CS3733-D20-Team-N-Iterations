@@ -7,38 +7,17 @@ import edu.wpi.N.entities.Node;
 import edu.wpi.N.entities.Path;
 import java.util.*;
 
-public class AStar implements PathFinder {
+public class AStar extends AbsAlgo {
 
   /**
-   * Function calculates Euclidean distance between the next Node and current Node (cost of given
-   * node)
+   * Finds the shortest path from Start to Goal node using the A* algorithm
    *
-   * @param currNode: current Node
-   * @param nextNode: next Node
-   * @return Euclidean distance from the start
+   * @param startNode: The start node
+   * @param endNode: The destination node
+   * @return: Path object indicating the shortest path to the goal Node from Start Node
+   * @throws DBException
    */
-  public static double cost(Node currNode, Node nextNode) {
-    return Math.sqrt(
-        Math.pow(nextNode.getX() - currNode.getX(), 2)
-            + Math.pow(nextNode.getY() - currNode.getY(), 2));
-  }
-
-  /**
-   * Function calculates Manhatten distance between goal and current Node
-   *
-   * @param currNode: current Node
-   * @return Manhattan distance to the goal Node
-   */
-  public static double heuristic(Node currNode, Node end) {
-    return Math.abs(end.getX() - currNode.getX()) + Math.abs(end.getY() - currNode.getY());
-  }
-
-  /**
-   * Finds the shortest path from Start to Goal node
-   *
-   * @return Path object indicating the shortest path to the goal Node from Start Node
-   */
-  public Path findPath(DbNode startNode, DbNode endNode) {
+  public Path findPath(DbNode startNode, DbNode endNode) throws DBException {
     try {
 
       int startFloorNum = startNode.getFloor();
@@ -95,70 +74,7 @@ public class AStar implements PathFinder {
       return generatePath(start, end, cameFrom);
     } catch (Exception e) {
       e.printStackTrace();
-      return null;
-    }
-  }
-
-  /**
-   * Helper function which generates Path given a Map
-   *
-   * @param cameFrom: Map, where key: NodeID, value: came-from-NodeID
-   * @return Path object containing generated path
-   */
-  private static Path generatePath(Node start, Node end, Map<String, String> cameFrom) {
-    try {
-      String currentID = end.ID;
-      LinkedList<DbNode> path = new LinkedList<DbNode>();
-      path.add(MapDB.getNode(currentID));
-
-      try {
-        while (!currentID.equals(start.ID)) {
-          currentID = cameFrom.get(currentID);
-          path.addFirst(MapDB.getNode(currentID));
-        }
-      } catch (NullPointerException e) {
-        System.out.println("Location was not found.");
-        throw e;
-      }
-
-      Path finalPath = new Path(path);
-
-      return finalPath;
-    } catch (Exception e) {
-      e.printStackTrace();
-      return null;
-    }
-  }
-
-  /**
-   * @param start, DbNode of starting node
-   * @param nodeType, String the type of node you want (must be length 4)
-   * @return Path, path from start node to closest (eucledian) end node of requested type
-   * @throws DBException
-   */
-  public static Path findQuickAccess(DbNode start, String nodeType) throws DBException {
-    try {
-      LinkedList<DbNode> nodes =
-          MapDB.searchNode(start.getFloor(), start.getBuilding(), nodeType, "");
-      if (!nodes.isEmpty()) {
-        double closest =
-            cost(MapDB.getGNode(start.getNodeID()), MapDB.getGNode(nodes.getFirst().getNodeID()));
-        DbNode end = nodes.getFirst();
-        for (DbNode n : nodes) {
-          double cost = cost(MapDB.getGNode(start.getNodeID()), MapDB.getGNode(n.getNodeID()));
-          if (cost <= closest) {
-            closest = cost;
-            end = n;
-          }
-        }
-        AStar thePathFinder = new AStar();
-        return thePathFinder.findPath(start, end);
-      } else {
-        return null;
-      }
-    } catch (DBException e) {
-      e.printStackTrace();
-      return null;
+      throw new DBException("Unknown error: findPath in AStar", e);
     }
   }
 }

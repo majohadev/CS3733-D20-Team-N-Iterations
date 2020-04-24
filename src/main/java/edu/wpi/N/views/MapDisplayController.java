@@ -210,6 +210,7 @@ public class MapDisplayController extends QRGenerator implements Controller {
       return;
     }
 
+    // Evan - hard coded map to use AStar algorithm for now
     Algorithm myAStar = new Algorithm(new AStar());
     Path path = myAStar.findPath(firstNode, secondNode);
 

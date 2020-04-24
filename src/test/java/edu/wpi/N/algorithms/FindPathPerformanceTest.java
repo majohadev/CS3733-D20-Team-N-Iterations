@@ -13,7 +13,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 public class FindPathPerformanceTest {
-  Algorithm myAStar = new Algorithm(new AStar());
+  Algorithm myAStar = new Algorithm();
 
   @BeforeAll
   public static void initialize()

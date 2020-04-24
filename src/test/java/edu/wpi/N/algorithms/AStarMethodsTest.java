@@ -14,7 +14,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 public class AStarMethodsTest {
-  Algorithm myAStar = new Algorithm(new AStar());
+  Algorithm myAStar = new Algorithm();
 
   @BeforeAll
   public static void initializeTest() throws SQLException, ClassNotFoundException, DBException {

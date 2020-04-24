@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Test;
  * seeing if they make sense
  */
 public class DirectionsTest {
-  Algorithm myAStar = new Algorithm(new AStar());
+  Algorithm myAStar = new Algorithm();
 
   @BeforeAll
   public static void setup() throws SQLException, ClassNotFoundException, DBException {
