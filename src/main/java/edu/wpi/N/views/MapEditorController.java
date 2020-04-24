@@ -1,6 +1,8 @@
 package edu.wpi.N.views;
 
 import com.google.common.collect.HashBiMap;
+import com.jfoenix.controls.JFXHamburger;
+import com.jfoenix.transitions.hamburger.HamburgerSlideCloseTransition;
 import edu.wpi.N.App;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
@@ -21,8 +23,9 @@ public class MapEditorController implements Controller {
   App mainApp;
 
   @FXML Pane pn_display;
+  @FXML JFXHamburger hb_editor;
 
-  final int DEFAULT_FLOOR = 1;
+  final int DEFAULT_FLOOR = 4;
   final String DEFAULT_BUILDING = "Faulkner";
   final Color DEFAULT_COLOR = Color.BLACK;
   final Color ADD_NODE_COLOR = Color.RED;
@@ -49,7 +52,9 @@ public class MapEditorController implements Controller {
   public void initialize() throws DBException {
     int currentFloor = DEFAULT_FLOOR;
     String currentBuilding = DEFAULT_BUILDING;
+    nodesMap = HashBiMap.create();
     loadFloor(currentFloor, currentBuilding);
+    initEditor();
   }
 
   private void loadFloor(int floor, String building) throws DBException {
@@ -76,6 +81,17 @@ public class MapEditorController implements Controller {
   //
   //    }
   //  }
+
+  public void initEditor() {
+    HamburgerSlideCloseTransition trans = new HamburgerSlideCloseTransition(hb_editor);
+    trans.setRate(-1);
+    hb_editor.addEventHandler(MouseEvent.MOUSE_CLICKED, e -> this.onHBEditorClicked(trans));
+  }
+
+  public void onHBEditorClicked(HamburgerSlideCloseTransition trans) {
+    trans.setRate(trans.getRate() * -1);
+    trans.play();
+  }
 
   // Nodes Add
   public void onPaneDisplayClicked(MouseEvent event) {

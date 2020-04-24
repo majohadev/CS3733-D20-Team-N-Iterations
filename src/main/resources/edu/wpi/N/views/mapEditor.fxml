@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXHamburger?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -18,5 +19,6 @@
             <Pane fx:id="pn_display" onMouseClicked="#onPaneDisplayClicked" prefHeight="1073.0" prefWidth="1760.0" />
          </children>
       </StackPane>
+      <JFXHamburger fx:id="hb_editor" layoutX="1861.0" layoutY="36.0" />
    </children>
 </AnchorPane>

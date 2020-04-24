@@ -531,7 +531,8 @@ public class MapDB {
    * @return A linked list of all the adjacent nodes on the proper floors or of the proper node type
    * @throws DBException on error
    */
-  public static LinkedList<Node> getGAdjacent(String nodeID, int startFloor, int endFloor) throws DBException{
+  public static LinkedList<Node> getGAdjacent(String nodeID, int startFloor, int endFloor)
+      throws DBException {
     return getGAdjacent(nodeID, startFloor, endFloor, false);
   }
 
@@ -546,23 +547,24 @@ public class MapDB {
    * @return A linked list of all the adjacent nodes on the proper floors or of the proper node type
    * @throws DBException on error
    */
-  public static LinkedList<Node> getGAdjacent(String nodeID, int startFloor, int endFloor, boolean wheelAccess)
-      throws DBException {
+  public static LinkedList<Node> getGAdjacent(
+      String nodeID, int startFloor, int endFloor, boolean wheelAccess) throws DBException {
     LinkedList<Node> ret = new LinkedList<Node>();
     try {
       ResultSet rs = null;
       String query;
-      if(wheelAccess){
-        query = "SELECT nodeID, xcoord, ycoord FROM (SELECT nodeID, xcoord, ycoord FROM nodes WHERE"
-                        + " ((nodes.floor = ? OR nodes.floor = ? OR nodes.nodeType = 'ELEV') AND NOT nodes.nodeType = 'STAI')) AS nodes,"
-                        + " (SELECT node1, node2 FROM edges  WHERE (edges.node1 = ?) OR (edges.node2 = ?)) AS edges "
-                        + "WHERE edges.node1 = nodes.nodeID OR edges.node2 = nodes.nodeID";
-      }
-      else {
-        query = "SELECT nodeID, xcoord, ycoord FROM (SELECT nodeID, xcoord, ycoord FROM nodes WHERE"
-                        + " (nodes.floor = ? OR nodes.floor = ? OR nodes.nodeType = 'ELEV' OR nodes.nodeType = 'STAI')) AS nodes,"
-                        + " (SELECT node1, node2 FROM edges  WHERE (edges.node1 = ?) OR (edges.node2 = ?)) AS edges "
-                        + "WHERE edges.node1 = nodes.nodeID OR edges.node2 = nodes.nodeID";
+      if (wheelAccess) {
+        query =
+            "SELECT nodeID, xcoord, ycoord FROM (SELECT nodeID, xcoord, ycoord FROM nodes WHERE"
+                + " ((nodes.floor = ? OR nodes.floor = ? OR nodes.nodeType = 'ELEV') AND NOT nodes.nodeType = 'STAI')) AS nodes,"
+                + " (SELECT node1, node2 FROM edges  WHERE (edges.node1 = ?) OR (edges.node2 = ?)) AS edges "
+                + "WHERE edges.node1 = nodes.nodeID OR edges.node2 = nodes.nodeID";
+      } else {
+        query =
+            "SELECT nodeID, xcoord, ycoord FROM (SELECT nodeID, xcoord, ycoord FROM nodes WHERE"
+                + " (nodes.floor = ? OR nodes.floor = ? OR nodes.nodeType = 'ELEV' OR nodes.nodeType = 'STAI')) AS nodes,"
+                + " (SELECT node1, node2 FROM edges  WHERE (edges.node1 = ?) OR (edges.node2 = ?)) AS edges "
+                + "WHERE edges.node1 = nodes.nodeID OR edges.node2 = nodes.nodeID";
       }
       PreparedStatement stmt = con.prepareStatement(query);
       stmt.setString(3, nodeID);
