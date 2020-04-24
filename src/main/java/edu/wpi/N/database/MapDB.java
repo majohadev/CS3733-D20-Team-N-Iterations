@@ -531,7 +531,8 @@ public class MapDB {
    * @return A linked list of all the adjacent nodes on the proper floors or of the proper node type
    * @throws DBException on error
    */
-  public static LinkedList<Node> getGAdjacent(String nodeID, int startFloor, int endFloor) throws DBException{
+  public static LinkedList<Node> getGAdjacent(String nodeID, int startFloor, int endFloor)
+      throws DBException {
     return getGAdjacent(nodeID, startFloor, endFloor, false);
   }
 
@@ -546,23 +547,24 @@ public class MapDB {
    * @return A linked list of all the adjacent nodes on the proper floors or of the proper node type
    * @throws DBException on error
    */
-  public static LinkedList<Node> getGAdjacent(String nodeID, int startFloor, int endFloor, boolean wheelAccess)
-      throws DBException {
+  public static LinkedList<Node> getGAdjacent(
+      String nodeID, int startFloor, int endFloor, boolean wheelAccess) throws DBException {
     LinkedList<Node> ret = new LinkedList<Node>();
     try {
       ResultSet rs = null;
       String query;
-      if(wheelAccess){
-        query = "SELECT nodeID, xcoord, ycoord FROM (SELECT nodeID, xcoord, ycoord FROM nodes WHERE"
-                        + " ((nodes.floor = ? OR nodes.floor = ? OR nodes.nodeType = 'ELEV') AND NOT nodes.nodeType = 'STAI')) AS nodes,"
-                        + " (SELECT node1, node2 FROM edges  WHERE (edges.node1 = ?) OR (edges.node2 = ?)) AS edges "
-                        + "WHERE edges.node1 = nodes.nodeID OR edges.node2 = nodes.nodeID";
-      }
-      else {
-        query = "SELECT nodeID, xcoord, ycoord FROM (SELECT nodeID, xcoord, ycoord FROM nodes WHERE"
-                        + " (nodes.floor = ? OR nodes.floor = ? OR nodes.nodeType = 'ELEV' OR nodes.nodeType = 'STAI')) AS nodes,"
-                        + " (SELECT node1, node2 FROM edges  WHERE (edges.node1 = ?) OR (edges.node2 = ?)) AS edges "
-                        + "WHERE edges.node1 = nodes.nodeID OR edges.node2 = nodes.nodeID";
+      if (wheelAccess) {
+        query =
+            "SELECT nodeID, xcoord, ycoord FROM (SELECT nodeID, xcoord, ycoord FROM nodes WHERE"
+                + " ((nodes.floor = ? OR nodes.floor = ? OR nodes.nodeType = 'ELEV') AND NOT nodes.nodeType = 'STAI')) AS nodes,"
+                + " (SELECT node1, node2 FROM edges  WHERE (edges.node1 = ?) OR (edges.node2 = ?)) AS edges "
+                + "WHERE edges.node1 = nodes.nodeID OR edges.node2 = nodes.nodeID";
+      } else {
+        query =
+            "SELECT nodeID, xcoord, ycoord FROM (SELECT nodeID, xcoord, ycoord FROM nodes WHERE"
+                + " (nodes.floor = ? OR nodes.floor = ? OR nodes.nodeType = 'ELEV' OR nodes.nodeType = 'STAI')) AS nodes,"
+                + " (SELECT node1, node2 FROM edges  WHERE (edges.node1 = ?) OR (edges.node2 = ?)) AS edges "
+                + "WHERE edges.node1 = nodes.nodeID OR edges.node2 = nodes.nodeID";
       }
       PreparedStatement stmt = con.prepareStatement(query);
       stmt.setString(3, nodeID);
@@ -806,6 +808,34 @@ public class MapDB {
     } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Unknown error: removeEdge", e);
+    }
+  }
+
+  public static LinkedList<Node[]> getFloorEdges(int floor) throws DBException {
+    try {
+      LinkedList<Node[]> ret = new LinkedList<>();
+      String query =
+          "SELECT edges.node1, n1.xcoord AS x1, n1.ycoord AS y1, edges.node2, n2.xcoord AS x2, n2.ycoord AS y2 FROM edges "
+              + "JOIN nodes n1 ON edges.node1 = n1.nodeID "
+              + "JOIN nodes n2 ON edges.node2 = n2.nodeID "
+              + "WHERE n1.floor = ? AND n2.floor = ?";
+
+      PreparedStatement st = con.prepareStatement(query);
+      st.setInt(1, floor);
+      st.setInt(2, floor);
+      ResultSet rs = st.executeQuery();
+
+      while (rs.next()) {
+        Node node1 = new Node(rs.getInt("x1"), rs.getInt("y1"), rs.getString("node1"));
+        Node node2 = new Node(rs.getInt("x2"), rs.getInt("y2"), rs.getString("node2"));
+
+        ret.add(new Node[] {node1, node2});
+      }
+
+      return ret;
+
+    } catch (SQLException e) {
+      throw new DBException("Unknown error: getFloorEdges", e);
     }
   }
 
