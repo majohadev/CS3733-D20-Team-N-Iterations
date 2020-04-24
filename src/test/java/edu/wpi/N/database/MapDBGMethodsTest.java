@@ -60,7 +60,9 @@ public class MapDBGMethodsTest {
     hall13Edges.add(MapDB.getGNode("EEEEEEEEEE"));
     hall13Edges.add(MapDB.getGNode("H100000000"));
     hall13Edges.add(MapDB.getGNode("H120000000"));
-    Assertions.assertEquals(MapDB.getGAdjacent("H130000000"), hall13Edges);
+    Assertions.assertTrue(MapDB.getGAdjacent("H130000000").contains(hall13Edges.get(0)));
+    Assertions.assertTrue(MapDB.getGAdjacent("H130000000").contains(hall13Edges.get(1)));
+    Assertions.assertTrue(MapDB.getGAdjacent("H130000000").contains(hall13Edges.get(2)));
     MapDB.removeEdge("H100000000", "H130000000");
   }
 

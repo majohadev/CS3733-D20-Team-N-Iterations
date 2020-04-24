@@ -5,6 +5,7 @@ import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Path;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.LinkedList;
@@ -16,7 +17,8 @@ import org.junit.jupiter.api.Test;
 public class PathfinderMultipleFloorsTest {
 
   @BeforeAll
-  public static void initialize() throws SQLException, DBException, ClassNotFoundException {
+  public static void initialize()
+      throws SQLException, DBException, ClassNotFoundException, FileNotFoundException {
     MapDB.initTestDB();
     InputStream inputNodes =
         PathfinderMethodsTest.class.getResourceAsStream("../csv/ThreeFloorsTestNode.csv");
