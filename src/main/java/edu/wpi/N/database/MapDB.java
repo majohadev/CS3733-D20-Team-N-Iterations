@@ -811,6 +811,34 @@ public class MapDB {
     }
   }
 
+  public static LinkedList<Node[]> getFloorEdges(int floor) throws DBException {
+    try {
+      LinkedList<Node[]> ret = new LinkedList<>();
+      String query =
+          "SELECT edges.node1, n1.xcoord AS x1, n1.ycoord AS y1, edges.node2, n2.xcoord AS x2, n2.ycoord AS y2 FROM edges "
+              + "JOIN nodes n1 ON edges.node1 = n1.nodeID "
+              + "JOIN nodes n2 ON edges.node2 = n2.nodeID "
+              + "WHERE n1.floor = ? AND n2.floor = ?";
+
+      PreparedStatement st = con.prepareStatement(query);
+      st.setInt(1, floor);
+      st.setInt(2, floor);
+      ResultSet rs = st.executeQuery();
+
+      while (rs.next()) {
+        Node node1 = new Node(rs.getInt("x1"), rs.getInt("y1"), rs.getString("node1"));
+        Node node2 = new Node(rs.getInt("x2"), rs.getInt("y2"), rs.getString("node2"));
+
+        ret.add(new Node[] {node1, node2});
+      }
+
+      return ret;
+
+    } catch (SQLException e) {
+      throw new DBException("Unknown error: getFloorEdges", e);
+    }
+  }
+
   /**
    * Exports all the edges for CSV purposes
    *
