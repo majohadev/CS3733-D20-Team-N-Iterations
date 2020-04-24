@@ -11,20 +11,20 @@ public class LoginDB {
    *
    * @param username The username for the new user
    * @param password The password for the new user
-   * @throws DBException On error
+   * @throws DBException On error or when the user already exists
    */
   public static void createLogin(String username, String password) throws DBException {
     String query = "INSERT INTO credential (username, password) VALUES (?, ?)";
-    try{
+    try {
       PreparedStatement stmt = con.prepareStatement(query);
       stmt.setString(1, username);
       stmt.setString(2, password);
       stmt.executeUpdate();
-    } catch(SQLException e){
-      if(e.getSQLState().equals("23505")){
+    } catch (SQLException e) {
+      if (e.getSQLState()
+          .equals("23505")) { // statement was aborted due to duplicate key in unique/primary key
         throw new DBException("That username already exists!");
-      }
-      else{
+      } else {
         e.printStackTrace();
         throw new DBException("Unknown error: createLogin", e);
       }
@@ -33,45 +33,95 @@ public class LoginDB {
 
   /**
    * Removes the login of the specified user from the database
+   *
    * @param username The username of the user you want to remove from the database
-   * @throws DBException on error
+   * @throws DBException on error or when the specified user doesn't exist.
    */
   public static void removeLogin(String username) throws DBException {
     String query = "DELETE FROM credential WHERE username = ?";
-    try{
+    try {
       PreparedStatement stmt = con.prepareStatement(query);
       stmt.setString(1, username);
-      if(stmt.executeUpdate() <= 0) throw new DBException("That user doesn't exist!");
-    } catch(SQLException e){
-        e.printStackTrace();
-        throw new DBException("Unknown error: deleteLogin", e);
-    }
-  }
-
-  public static void changePass(String username, String oldpass, String newpass) throws DBException {
-    verify(username, oldpass);
-    String query = "UPDATE credential SET password = ? WHERE username = ? AND password = ?";
-    try{
-      PreparedStatement stmt = con.prepareStatement(query);
-      stmt.setString(1, newpass);
-      stmt.setString(2, username);
-      stmt.setString(3, oldpass);
-      if(stmt.executeUpdate() <= 0) throw new DBException("That user doesn't exist!");
-    } catch(SQLException e){
+      if (stmt.executeUpdate() <= 0) throw new DBException("That user doesn't exist!");
+    } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Unknown error: deleteLogin", e);
     }
   }
 
-  public static void verifyLogin(String username, String password) throws DBException {}
-
-  private static void verify(String username, String password) throws DBException{
-
+  /**
+   * Changes the password of the specified user
+   *
+   * @param username The username
+   * @param oldpass The user's old password
+   * @param newpass The user's new password
+   * @throws DBException On error, when the old password isn't valid for the entered username or
+   *     when the user doesn't exist
+   */
+  public static void changePass(String username, String oldpass, String newpass)
+      throws DBException {
+    verify(username, oldpass);
+    String query = "UPDATE credential SET password = ? WHERE username = ? AND password = ?";
+    try {
+      PreparedStatement stmt = con.prepareStatement(query);
+      stmt.setString(1, newpass);
+      stmt.setString(2, username);
+      stmt.setString(3, oldpass);
+      if (stmt.executeUpdate() <= 0) throw new DBException("That user doesn't exist!");
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown error: deleteLogin", e);
+    }
   }
 
-  public static void logout() throws DBException {}
+  /**
+   * Verifies the login credentials. Throws DBException when they are invalid; If this does not
+   * throw DBException, the credentials are valid. This also sets the current user to these
+   * credentials, which can be retrieved through currentLogin().
+   *
+   * @param username the user's username
+   * @param password The user's password
+   * @throws DBException When the credentials are invalid (or on error)
+   */
+  public static void verifyLogin(String username, String password) throws DBException {
+    verify(username, password);
+    currentUser = username;
+  }
+
+  /**
+   * Verifies the credentials without setting the currentUser; used for internal commands
+   *
+   * @param username the user's username
+   * @param password the user's password
+   * @throws DBException When credentials are invalid (or on error)
+   */
+  private static void verify(String username, String password) throws DBException {
+    try {
+      String query = "SELECT password FROM credential WHERE username = ?";
+      PreparedStatement stmt = con.prepareStatement(query);
+      stmt.setString(1, username);
+      ResultSet rs = stmt.executeQuery();
+      rs.next();
+      if (!rs.getString("password").equals(password)) {
+        throw new DBException("Invalid password!");
+      }
+    } catch (SQLException e) {
+      if (e.getSQLState().equals("24000")) { // Invalid cursor state - no current row
+        throw new DBException("Invalid username!");
+      } else {
+        e.printStackTrace();
+        throw new DBException("Unknown error: verify", e);
+      }
+    }
+  }
+
+  public static void logout() throws DBException {
+    if (currentUser == null) throw new DBException("No users are currently logged in!");
+    currentUser = null;
+  }
 
   public static String currentLogin() throws DBException {
+    if (currentUser == null) throw new DBException("No users are currently logged in!");
     return currentUser;
   }
 }

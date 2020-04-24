@@ -37,16 +37,18 @@ public class MapDB {
   /** Initializes a database in memory for tests */
   public static void initTestDB()
       throws SQLException, ClassNotFoundException, DBException, FileNotFoundException {
-
-    Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
-    String URL;
-    URL = "jdbc:derby:memory:db;create=true";
-    con = DriverManager.getConnection(URL);
-    statement = con.createStatement();
-    ScriptRunner sr = new ScriptRunner(con);
-    Reader reader =
-        new BufferedReader(new InputStreamReader(Main.class.getResourceAsStream("sql/setup.sql")));
-    sr.runScript(reader);
+    if (con == null || statement == null) {
+      Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+      String URL;
+      URL = "jdbc:derby:memory:db;create=true";
+      con = DriverManager.getConnection(URL);
+      statement = con.createStatement();
+      ScriptRunner sr = new ScriptRunner(con);
+      Reader reader =
+          new BufferedReader(
+              new InputStreamReader(Main.class.getResourceAsStream("sql/setup.sql")));
+      sr.runScript(reader);
+    }
   }
 
   /**

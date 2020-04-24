@@ -17,12 +17,16 @@ public class LoginDBTest {
   }
 
   @Test
-  public static void testLogin() throws DBException {
+  public void testLogin() throws DBException {
     LoginDB.createLogin("Gaben", "MoolyFTW");
     LoginDB.verifyLogin("Gaben", "MoolyFTW");
     assertEquals("Gaben", LoginDB.currentLogin());
     LoginDB.logout();
-    assertNull(LoginDB.currentLogin());
+    assertThrows(
+        DBException.class,
+        () -> {
+          LoginDB.currentLogin();
+        });
     assertThrows(
         DBException.class,
         () -> {

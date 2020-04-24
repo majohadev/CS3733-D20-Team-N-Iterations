@@ -4,6 +4,7 @@ import edu.wpi.N.database.CSVParser;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.Path;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -18,7 +19,8 @@ import org.junit.jupiter.api.Test;
  */
 public class DirectionsTest {
   @BeforeAll
-  public static void setup() throws SQLException, ClassNotFoundException, DBException {
+  public static void setup()
+      throws SQLException, ClassNotFoundException, DBException, FileNotFoundException {
     MapDB.initTestDB();
     MapDB.clearNodes();
     InputStream inputNodes =
