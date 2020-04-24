@@ -18,9 +18,10 @@ public class LoginDBTest {
 
   @Test
   public void testLogin() throws DBException {
-    LoginDB.createLogin("Gaben", "MoolyFTW");
+    LoginDB.createAdminLogin("Gaben", "MoolyFTW");
     LoginDB.verifyLogin("Gaben", "MoolyFTW");
     assertEquals("Gaben", LoginDB.currentLogin());
+    assertEquals("ADMIN", LoginDB.currentAccess());
     LoginDB.logout();
     assertThrows(
         DBException.class,
@@ -49,7 +50,7 @@ public class LoginDBTest {
         () -> {
           LoginDB.changePass("Gaben", "MoolyFTW", "oldpasswrong");
         });
-    LoginDB.createLogin("Wong", "password");
+    LoginDB.createDoctorLogin("Wong", "password");
     LoginDB.logout();
     LoginDB.removeLogin("Gaben");
     assertThrows(
@@ -58,6 +59,7 @@ public class LoginDBTest {
           LoginDB.verifyLogin("Gaben", "wrongPass");
         });
     LoginDB.verifyLogin("Wong", "password");
+    assertEquals("DOCTOR", LoginDB.currentAccess());
   }
 
   @AfterAll

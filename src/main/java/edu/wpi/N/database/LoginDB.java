@@ -5,6 +5,7 @@ import java.sql.*;
 public class LoginDB {
   private static Connection con = MapDB.getCon();
   private static String currentUser;
+  private static String currentAccess;
 
   /**
    * Creates a new login for the specified username and password
@@ -13,12 +14,14 @@ public class LoginDB {
    * @param password The password for the new user
    * @throws DBException On error or when the user already exists
    */
-  public static void createLogin(String username, String password) throws DBException {
-    String query = "INSERT INTO credential (username, password) VALUES (?, ?)";
+  private static void createLogin(String username, String password, String access)
+      throws DBException {
+    String query = "INSERT INTO credential (username, password, access) VALUES (?, ?, ?)";
     try {
       PreparedStatement stmt = con.prepareStatement(query);
       stmt.setString(1, username);
       stmt.setString(2, password);
+      stmt.setString(3, access);
       stmt.executeUpdate();
     } catch (SQLException e) {
       if (e.getSQLState()
@@ -29,6 +32,28 @@ public class LoginDB {
         throw new DBException("Unknown error: createLogin", e);
       }
     }
+  }
+
+  /**
+   * Creates a new login with admin access
+   *
+   * @param username the new username
+   * @param password the new password
+   * @throws DBException On error or when the user already exists
+   */
+  public static void createAdminLogin(String username, String password) throws DBException {
+    createLogin(username, password, "ADMIN");
+  }
+
+  /**
+   * Creates a new login with doctor access
+   *
+   * @param username the new username
+   * @param password the new password
+   * @throws DBException On error or when the user already exists
+   */
+  public static void createDoctorLogin(String username, String password) throws DBException {
+    createLogin(username, password, "DOCTOR");
   }
 
   /**
@@ -86,6 +111,17 @@ public class LoginDB {
   public static void verifyLogin(String username, String password) throws DBException {
     verify(username, password);
     currentUser = username;
+    String query = "SELECT access FROM credential WHERE username = ?";
+    try {
+      PreparedStatement stmt = con.prepareStatement(query);
+      stmt.setString(1, username);
+      ResultSet rs = stmt.executeQuery();
+      rs.next();
+      currentAccess = rs.getString("access");
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown error: verify login", e);
+    }
   }
 
   /**
@@ -118,10 +154,16 @@ public class LoginDB {
   public static void logout() throws DBException {
     if (currentUser == null) throw new DBException("No users are currently logged in!");
     currentUser = null;
+    currentAccess = null;
   }
 
   public static String currentLogin() throws DBException {
     if (currentUser == null) throw new DBException("No users are currently logged in!");
     return currentUser;
+  }
+
+  public static String currentAccess() throws DBException {
+    if (currentAccess == null) throw new DBException("No users are currently logged in!");
+    return currentAccess;
   }
 }

@@ -58,7 +58,8 @@ CREATE TABLE laundry(
 
 CREATE TABLE credential(
     username VARCHAR(255) NOT NULL PRIMARY KEY,
-    password VARCHAR(255) NOT NULL
+    password VARCHAR(255) NOT NULL,
+    access VARCHAR(6) NOT NULL CONSTRAINT ACC_CK CHECK (access IN ('ADMIN', 'DOCTOR'))
 );
 
 CREATE TABLE request(
