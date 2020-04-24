@@ -200,9 +200,8 @@ public class Directions {
   }
 
   /**
-   * Gets closest landmark to a node,
-   * if the node is a HALL node, returns an adjacent non-hallway node or null
-   * if node is not a HALL node, returns the same node
+   * Gets closest landmark to a node, if the node is a HALL node, returns an adjacent non-hallway
+   * node or null if node is not a HALL node, returns the same node
    *
    * @param node, DbNode
    * @return String, landmark for given node
