@@ -2,35 +2,32 @@ package edu.wpi.N.views;
 
 import com.google.common.collect.HashBiMap;
 import edu.wpi.N.App;
-import java.awt.*;
-import java.util.HashMap;
-import java.util.LinkedList;
-
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.UIEdge;
 import edu.wpi.N.entities.UINode;
+import java.util.HashMap;
+import java.util.LinkedList;
 import javafx.fxml.FXML;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-
 import javax.swing.*;
 
 public class MapEditorController implements Controller {
   App mainApp;
+
   @FXML Pane pn_display;
-  HashBiMap<Circle, UINode> nodesMap;
-  HashBiMap<Line, UIEdge> edgesMap;
+
   final int DEFAULT_FLOOR = 1;
   final String DEFAULT_BUILDING = "Faulkner";
   final Color DEFAULT_COLOR = Color.BLACK;
   final Color ADD_NODE_COLOR = Color.RED;
   final double DEFAULT_CIRCLE_OPACITY = 0.7;
   final double DEFAULT_CIRCLE_RADIUS = 7;
-
 
   final double SCREEN_WIDTH = 1920;
   final double SCREEN_HEIGHT = 1080;
@@ -41,6 +38,8 @@ public class MapEditorController implements Controller {
   final double HORIZONTAL_SCALE = MAP_WIDTH / IMAGE_WIDTH;
   final double VERTICAL_SCALE = MAP_HEIGHT / IMAGE_HEIGHT;
 
+  HashBiMap<Circle, UINode> nodesMap;
+  HashBiMap<Line, UIEdge> edgesMap;
 
   @Override
   public void setMainApp(App mainApp) {
@@ -50,19 +49,18 @@ public class MapEditorController implements Controller {
   public void initialize() throws DBException {
     int currentFloor = DEFAULT_FLOOR;
     String currentBuilding = DEFAULT_BUILDING;
-
     loadFloor(currentFloor, currentBuilding);
   }
 
   private void loadFloor(int floor, String building) throws DBException {
     LinkedList<DbNode> floorNodes = MapDB.floorNodes(floor, building);
     HashMap<DbNode, UINode> conversion = createUINodes(floorNodes, DEFAULT_COLOR);
-    createUIEdges(conversion, floorNodes);
+    //    createUIEdges(conversion, floorNodes);
   }
 
   private HashMap<DbNode, UINode> createUINodes(LinkedList<DbNode> nodes, Color c) {
     HashMap<DbNode, UINode> conversion = new HashMap<>();
-    for (DbNode DBnode: nodes) {
+    for (DbNode DBnode : nodes) {
       Circle circle = createCircle(scaleX(DBnode.getX()), scaleY(DBnode.getY()), c);
       UINode UInode = new UINode(circle, DBnode);
       nodesMap.put(circle, UInode);
@@ -71,12 +69,13 @@ public class MapEditorController implements Controller {
     return conversion;
   }
 
-  private void createUIEdges(HashMap<DbNode, UINode> conversion, LinkedList<DbNode> nodes) throws DBException {
-    for (DbNode DBnode : nodes) {
-      MapDB.
-
-    }
-  }
+  //  private void createUIEdges(HashMap<DbNode, UINode> conversion, LinkedList<DbNode> nodes)
+  // throws DBException {
+  //    for (DbNode DBnode : nodes) {
+  //      MapDB.
+  //
+  //    }
+  //  }
 
   // Nodes Add
   public void onPaneDisplayClicked(MouseEvent event) {
@@ -90,10 +89,13 @@ public class MapEditorController implements Controller {
     circle.setRadius(DEFAULT_CIRCLE_RADIUS);
     circle.setCenterX(x);
     circle.setCenterY(y);
+    circle.setFill(c);
     circle.setOpacity(DEFAULT_CIRCLE_OPACITY);
     pn_display.getChildren().add(circle);
     return circle;
   }
+
+  //  private Line createLine(double x1, double y1, double x2, double y2) {}
 
   private double scaleX(double x) {
     return x * HORIZONTAL_SCALE;
