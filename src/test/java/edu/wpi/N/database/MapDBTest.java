@@ -362,8 +362,12 @@ public class MapDBTest {
 
   @Test
   public void testGetFloorEdges() throws DBException {
+    MapDB.addNode("NELEV00X03", 2, 1, 3, "Faulkner", "ELEV", "Elevator X3", "ELEV X3", 'N');
+    MapDB.addNode("NELEV00X04", 2, 1, 4, "Faulkner", "ELEV", "Elevator X4", "ELEV X4", 'N');
+
     MapDB.addEdge("NHALL00204", "NDEPT00104");
     MapDB.addEdge("NHALL00104", "NHALL00204");
+    MapDB.addEdge("NELEV00X03", "NELEV00X04");
 
     LinkedList<Node[]> edges = MapDB.getFloorEdges(4);
 
@@ -372,7 +376,7 @@ public class MapDBTest {
     Node dept1 = MapDB.getGNode("NDEPT00104");
 
     assertEquals(2, edges.size());
-    //there is probably a better way to test this
+    // there is probably a better way to test this
     assertEquals(hall1.ID, edges.get(0)[0].ID);
     assertEquals(hall2.ID, edges.get(0)[1].ID);
     assertEquals(hall2.ID, edges.get(1)[0].ID);
@@ -380,6 +384,10 @@ public class MapDBTest {
 
     MapDB.removeEdge("NHALL00204", "NDEPT00104");
     MapDB.removeEdge("NHALL00104", "NHALL00204");
+    MapDB.removeEdge("NELEV00X03", "NELEV00X04");
+
+    MapDB.deleteNode("NELEV00X03");
+    MapDB.deleteNode("NELEV00X04");
   }
 
   @AfterAll
