@@ -14,11 +14,12 @@ public class BFS extends AbsAlgo {
    *
    * @param startNode: The start node
    * @param endNode: The destination node
+   * @param handicap: Boolean saying whether path should be handicap accessible only
    * @return: Path object indicating the shortest path to the goal Node from Start Node
    * @throws DBException
    */
   @Override
-  public Path findPath(DbNode startNode, DbNode endNode) throws DBException {
+  public Path findPath(DbNode startNode, DbNode endNode, boolean handicap) throws DBException {
     try {
 
       Queue<DbNode> queue = new LinkedList<>();

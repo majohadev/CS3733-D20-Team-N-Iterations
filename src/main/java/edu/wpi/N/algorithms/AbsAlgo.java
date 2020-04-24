@@ -7,6 +7,8 @@ import edu.wpi.N.entities.Node;
 import edu.wpi.N.entities.Path;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.function.ToDoubleBiFunction;
+
 import org.bridj.util.Pair;
 
 public abstract class AbsAlgo implements IPathFinder {
@@ -88,7 +90,10 @@ public abstract class AbsAlgo implements IPathFinder {
           }
         }
         Algorithm thePathFinder = new Algorithm();
-        return thePathFinder.findPath(start, end);
+
+        //TODO
+        //Ask how to handle quick access handicap, put false for now
+        return thePathFinder.findPath(start, end, false);
       } else {
         return null;
       }
@@ -132,31 +137,39 @@ public abstract class AbsAlgo implements IPathFinder {
   }
 
   /**
-   * @param start
-   * @param end
-   * @param stop
-   * @return
+   * Finds the best path from the start to the stop node given,
+   * then the best path from the stop to the end
+   *
+   * @param start: Start node
+   * @param end: End node
+   * @param stop: Stop node
+   * @param handicap: Boolean saying whether path should be handicap accessible only
+   * @return: A pair of paths (start to stop, stop to end)
    * @throws DBException
    */
-  public Pair<Path, Path> getPathWithStop(DbNode start, DbNode end, DbNode stop)
+  public Pair<Path, Path> getPathWithStop(DbNode start, DbNode end, DbNode stop, boolean handicap)
       throws DBException {
-    Path pathOne = findPath(start, stop);
-    Path pathTwo = findPath(stop, end);
+    Path pathOne = findPath(start, stop, handicap);
+    Path pathTwo = findPath(stop, end, handicap);
     return new Pair<>(pathOne, pathTwo);
   }
 
   /**
-   * @param start
-   * @param end
-   * @param nodeType
-   * @return
+   * Finds the best path from the start to a stop node of the type given,
+   * then the best path from the stop to the end
+   *
+   * @param start: Start node
+   * @param end: End node
+   * @param nodeType: nodeType desired for the stop node
+   * @param handicap: Boolean saying whether path should be handicap accessible only
+   * @return: A pair of paths (start to stop, stop to end)
    * @throws DBException
    */
-  public Pair<Path, Path> getPathWithStop(DbNode start, DbNode end, String nodeType)
+  public Pair<Path, Path> getPathWithStop(DbNode start, DbNode end, String nodeType, boolean handicap)
       throws DBException {
     DbNode stop = getBestStopQuickAccess(start, end, nodeType);
-    Path pathOne = findPath(start, stop);
-    Path pathTwo = findPath(stop, end);
+    Path pathOne = findPath(start, stop, handicap);
+    Path pathTwo = findPath(stop, end, handicap);
     return new Pair<>(pathOne, pathTwo);
   }
 }

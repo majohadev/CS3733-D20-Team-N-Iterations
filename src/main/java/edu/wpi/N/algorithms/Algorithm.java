@@ -11,13 +11,26 @@ public class Algorithm {
     this.pathFinder = new AStar();
   }
 
+  //Getter
+  public IPathFinder getPathFinder(IPathFinder pathFinder) { return this.pathFinder; }
+
+  //Setter
   public void setPathFinder(IPathFinder pathFinder) {
     this.pathFinder = pathFinder;
   }
 
-  public Path findPath(DbNode start, DbNode end) throws DBException {
+  /**
+   * Finds the shortest path from Start to Goal node using the algorithm that pathfinder is set to
+   *
+   * @param startNode: The start node
+   * @param endNode: The destination node
+   * @param handicap: Boolean saying whether path should be handicap accessible only
+   * @return: Path object indicating the shortest path to the goal Node from Start Node
+   * @throws DBException
+   */
+  public Path findPath(DbNode startNode, DbNode endNode, boolean handicap) throws DBException {
     try {
-      return pathFinder.findPath(start, end);
+      return pathFinder.findPath(startNode, endNode, handicap);
     } catch (DBException e) {
       e.printStackTrace();
       throw e;

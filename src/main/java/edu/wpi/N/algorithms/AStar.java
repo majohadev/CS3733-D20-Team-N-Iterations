@@ -1,5 +1,6 @@
 package edu.wpi.N.algorithms;
 
+import afu.org.checkerframework.checker.oigj.qual.O;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
@@ -14,10 +15,12 @@ public class AStar extends AbsAlgo {
    *
    * @param startNode: The start node
    * @param endNode: The destination node
+   * @param handicap: Boolean saying whether path should be handicap accessible only
    * @return: Path object indicating the shortest path to the goal Node from Start Node
    * @throws DBException
    */
-  public Path findPath(DbNode startNode, DbNode endNode) throws DBException {
+  @Override
+  public Path findPath(DbNode startNode, DbNode endNode, boolean handicap) throws DBException {
     try {
 
       int startFloorNum = startNode.getFloor();

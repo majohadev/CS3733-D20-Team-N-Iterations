@@ -5,5 +5,5 @@ import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Path;
 
 public interface IPathFinder {
-  Path findPath(DbNode start, DbNode end) throws DBException;
+  Path findPath(DbNode startNode, DbNode endNode, boolean handicap) throws DBException;
 }
