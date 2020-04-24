@@ -811,11 +811,15 @@ public class MapDB {
     }
   }
 
-  public static LinkedList<Node[]> getFloorEdges(int floor) throws DBException {
+  public static LinkedList<DbNode[]> getFloorEdges(int floor) throws DBException {
     try {
-      LinkedList<Node[]> ret = new LinkedList<>();
+      LinkedList<DbNode[]> ret = new LinkedList<>();
       String query =
-          "SELECT edges.node1, n1.xcoord AS x1, n1.ycoord AS y1, edges.node2, n2.xcoord AS x2, n2.ycoord AS y2 FROM edges "
+          "SELECT edges.node1, n1.xcoord AS x1, n1.ycoord AS y1, n1.floor AS floor1, n1.building AS build1, n1.nodeType AS type1, "
+              + "n1.longName AS long1, n1.shortName AS short1, n1.teamAssigned AS team1, "
+              + "edges.node2, n2.xcoord AS x2, n2.ycoord AS y2, n2.floor AS floor2, n2.building AS build2, n2.nodeType AS type2, "
+              + "n2.longName AS long2, n2.shortName AS short2, n2.teamAssigned AS team2 "
+              + "FROM edges "
               + "JOIN nodes n1 ON edges.node1 = n1.nodeID "
               + "JOIN nodes n2 ON edges.node2 = n2.nodeID "
               + "WHERE n1.floor = ? AND n2.floor = ?";
@@ -826,10 +830,30 @@ public class MapDB {
       ResultSet rs = st.executeQuery();
 
       while (rs.next()) {
-        Node node1 = new Node(rs.getInt("x1"), rs.getInt("y1"), rs.getString("node1"));
-        Node node2 = new Node(rs.getInt("x2"), rs.getInt("y2"), rs.getString("node2"));
+        DbNode node1 =
+            new DbNode(
+                rs.getString("node1"),
+                rs.getInt("x1"),
+                rs.getInt("y1"),
+                rs.getInt("floor1"),
+                rs.getString("build1"),
+                rs.getString("type1"),
+                rs.getString("long1"),
+                rs.getString("short1"),
+                rs.getString("team1").charAt(0));
+        DbNode node2 =
+            new DbNode(
+                rs.getString("node2"),
+                rs.getInt("x2"),
+                rs.getInt("y2"),
+                rs.getInt("floor2"),
+                rs.getString("build2"),
+                rs.getString("type2"),
+                rs.getString("long2"),
+                rs.getString("short2"),
+                rs.getString("team2").charAt(0));
 
-        ret.add(new Node[] {node1, node2});
+        ret.add(new DbNode[] {node1, node2});
       }
 
       return ret;

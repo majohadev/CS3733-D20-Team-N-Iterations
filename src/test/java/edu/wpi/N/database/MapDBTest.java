@@ -369,18 +369,18 @@ public class MapDBTest {
     MapDB.addEdge("NHALL00104", "NHALL00204");
     MapDB.addEdge("NELEV00X03", "NELEV00X04");
 
-    LinkedList<Node[]> edges = MapDB.getFloorEdges(4);
+    LinkedList<DbNode[]> edges = MapDB.getFloorEdges(4);
 
-    Node hall1 = MapDB.getGNode("NHALL00104");
-    Node hall2 = MapDB.getGNode("NHALL00204");
-    Node dept1 = MapDB.getGNode("NDEPT00104");
+    DbNode hall1 = MapDB.getNode("NHALL00104");
+    DbNode hall2 = MapDB.getNode("NHALL00204");
+    DbNode dept1 = MapDB.getNode("NDEPT00104");
 
     assertEquals(2, edges.size());
     // there is probably a better way to test this
-    assertEquals(hall1.ID, edges.get(0)[0].ID);
-    assertEquals(hall2.ID, edges.get(0)[1].ID);
-    assertEquals(hall2.ID, edges.get(1)[0].ID);
-    assertEquals(dept1.ID, edges.get(1)[1].ID);
+    assertEquals(hall1, edges.get(0)[0]);
+    assertEquals(hall2, edges.get(0)[1]);
+    assertEquals(hall2, edges.get(1)[0]);
+    assertEquals(dept1, edges.get(1)[1]);
 
     MapDB.removeEdge("NHALL00204", "NDEPT00104");
     MapDB.removeEdge("NHALL00104", "NHALL00204");
