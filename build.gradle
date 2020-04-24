@@ -31,11 +31,11 @@ dependencies {
 
             'com.github.sarxos:webcam-capture:0.3.12',
             'com.google.zxing:core:3.4.0',
-            'com.google.zxing:javase:3.4.0'
+            'com.google.zxing:javase:3.4.0',
     )
 
 
-    compile group: 'com.google.guava', name: 'guava', version: '23.5-jre'
+    compile group: 'com.google.guava', name: 'guava', version: '23.5-jre', 'org.mybatis:mybatis:3.5.4'
 
     testImplementation(
             'org.junit.jupiter:junit-jupiter:5.6.0',

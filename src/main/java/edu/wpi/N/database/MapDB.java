@@ -1,11 +1,17 @@
 package edu.wpi.N.database;
 
+import edu.wpi.N.Main;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Node;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
+import org.apache.ibatis.jdbc.ScriptRunner;
 
 public class MapDB {
 
@@ -29,174 +35,19 @@ public class MapDB {
   }
 
   /** Initializes a database in memory for tests */
-  public static void initTestDB() throws ClassNotFoundException, SQLException, DBException {
+  public static void initTestDB()
+      throws SQLException, ClassNotFoundException, DBException, FileNotFoundException {
     if (con == null || statement == null) {
       Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
       String URL;
       URL = "jdbc:derby:memory:db;create=true";
       con = DriverManager.getConnection(URL);
       statement = con.createStatement();
-    }
-    String query;
-
-    try {
-      query =
-          "CREATE TABLE nodes ("
-              + "nodeID CHAR(10) NOT NULL PRIMARY KEY, "
-              + "xcoord INT NOT NULL, "
-              + "ycoord INT NOT NULL, "
-              + "floor INT NOT NULL, "
-              + "building VARCHAR(255) NOT NULL, "
-              + "nodeType CHAR(4) NOT NULL CONSTRAINT TYPE_CK CHECK (nodeType IN ('HALL', 'ELEV', 'REST', 'STAI', 'DEPT', 'LABS', 'INFO', 'CONF', 'EXIT', 'RETL', 'SERV')), "
-              + "longName VARCHAR(255) NOT NULL, "
-              + "shortName VARCHAR(255) NOT NULL, "
-              + "teamAssigned CHAR(1) NOT NULL"
-              + ")";
-      statement.execute(query);
-    } catch (SQLException e) {
-      if (!e.getSQLState().equals("X0Y32")) throw e;
-    }
-
-    try {
-      query =
-          "CREATE TABLE edges ("
-              + "edgeID CHAR(21) NOT NULL PRIMARY KEY, "
-              + "node1 CHAR(10) NOT NULL, "
-              + "node2 CHAR(10) NOT NULL, "
-              + "FOREIGN KEY (node1) REFERENCES nodes(nodeID) ON DELETE CASCADE,"
-              + "FOREIGN KEY (node2) REFERENCES nodes(nodeID) ON DELETE CASCADE"
-              + ")";
-      statement.execute(query);
-    } catch (SQLException e) {
-      if (!e.getSQLState().equals("X0Y32")) throw e;
-    }
-
-    try {
-      query =
-          "CREATE TABLE doctors ("
-              + "doctorID INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,"
-              + "name VARCHAR(255) NOT NULL, "
-              + "field VARCHAR(255) NOT NULL)";
-
-      PreparedStatement state = con.prepareStatement(query);
-      state.execute();
-      query =
-          "CREATE TABLE location ("
-              + "doctor INT NOT NULL REFERENCES doctors(doctorID) ON DELETE CASCADE, "
-              + "nodeID char(10) NOT NULL REFERENCES nodes(nodeID) ON DELETE CASCADE,"
-              + "priority INT NOT NULL GENERATED ALWAYS AS IDENTITY,"
-              + "PRIMARY KEY (doctor, nodeID))";
-      state = con.prepareStatement(query);
-      state.execute();
-    } catch (SQLException e) {
-      if (!e.getSQLState().equals("X0Y32")) {
-        e.printStackTrace();
-        throw new DBException("Unknown error: initDoctor", e);
-      }
-    }
-    try {
-      query =
-          "CREATE TABLE service ("
-              + "serviceType VARCHAR(255) NOT NULL PRIMARY KEY,"
-              + "timeStart CHAR(5),"
-              + "timeEnd CHAR(5),"
-              + "description VARCHAR(255))";
-      PreparedStatement state = con.prepareStatement(query);
-      state.execute();
-      query =
-          "INSERT INTO service VALUES ('Translator', '00:00', '00:00', 'Make a request for our translation services!')";
-      state = con.prepareStatement(query);
-      state.execute();
-
-      query =
-          "INSERT INTO service VALUES ('Laundry', '00:00', '00:00', 'Make a request for laundry services!')";
-      state = con.prepareStatement(query);
-      state.execute();
-    } catch (SQLException e) {
-      if (!e.getSQLState().equals("X0Y32")) {
-        e.printStackTrace();
-        throw new DBException("Unknown error: initEmployee", e);
-      }
-    }
-    try {
-      query =
-          "CREATE TABLE employees ("
-              + "employeeID INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY, "
-              + "name VARCHAR(255) NOT NULL,"
-              + "serviceType VARCHAR(255) NOT NULL,"
-              + "FOREIGN KEY (serviceType) REFERENCES service (serviceType))";
-
-      PreparedStatement state = con.prepareStatement(query);
-      state.execute();
-    } catch (SQLException e) {
-      if (!e.getSQLState().equals("X0Y32")) {
-        e.printStackTrace();
-        throw new DBException("Unknown error: initEmployee", e);
-      }
-    }
-    try {
-      query =
-          "CREATE TABLE translator ("
-              + "t_employeeID INT NOT NULL PRIMARY KEY,"
-              + "FOREIGN KEY (t_employeeID) REFERENCES employees(employeeID) ON DELETE CASCADE)";
-      PreparedStatement state = con.prepareStatement(query);
-      state.execute();
-      query =
-          "CREATE TABLE language ("
-              + "t_employeeID INT NOT NULL, "
-              + "language VARCHAR(255) NOT NULL, "
-              + "CONSTRAINT LANG_PK PRIMARY KEY (t_employeeID, language),"
-              + "FOREIGN KEY (t_employeeID) REFERENCES translator (t_employeeID) ON DELETE CASCADE)";
-      state = con.prepareStatement(query);
-      state.execute();
-    } catch (SQLException e) {
-      if (!e.getSQLState().equals("X0Y32")) {
-        e.printStackTrace();
-        throw new DBException("Unknown error: initEmployee creating translator table", e);
-      }
-    }
-    try {
-      query =
-          "CREATE TABLE laundry("
-              + "l_employeeID INT NOT NULL References employees(employeeID) ON DELETE CASCADE,"
-              + "PRIMARY KEY(l_employeeID))";
-      PreparedStatement state = con.prepareStatement(query);
-      state.execute();
-    } catch (SQLException e) {
-      if (!e.getSQLState().equals("X0Y32")) {
-        e.printStackTrace();
-        throw new DBException("Unknown error: intiEmployee creating laundry table", e);
-      }
-    }
-    try {
-      query =
-          "CREATE TABLE request("
-              + "requestID INT NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY,"
-              + "timeRequested TIMESTAMP NOT NULL,"
-              + "timeCompleted TIMESTAMP,"
-              + "notes VARCHAR(255),"
-              + "assigned_eID INT REFERENCES employees(employeeID) ON DELETE SET NULL,"
-              + "serviceType VARCHAR(255) NOT NULL REFERENCES service(serviceType),"
-              + "nodeID CHAR(10) REFERENCES nodes(nodeID) ON DELETE SET NULL,"
-              + "status CHAR(4) NOT NULL CONSTRAINT STAT_CK CHECK (status IN ('OPEN', 'DENY', 'DONE')))";
-      PreparedStatement state = con.prepareStatement(query);
-      state.execute();
-      query =
-          "CREATE TABLE lrequest("
-              + "requestID INT NOT NULL PRIMARY KEY REFERENCES request(requestID) ON DELETE CASCADE)";
-      state = con.prepareStatement(query);
-      state.execute();
-      query =
-          "CREATE TABLE trequest("
-              + "requestID INT NOT NULL PRIMARY KEY REFERENCES request(requestID) ON DELETE CASCADE,"
-              + "language VARCHAR(255) NOT NULL)";
-      state = con.prepareStatement(query);
-      state.execute();
-    } catch (SQLException e) {
-      if (!e.getSQLState().equals("X0Y32")) {
-        e.printStackTrace();
-        throw new DBException("Unknown error: intiEmployee creating Request table", e);
-      }
+      ScriptRunner sr = new ScriptRunner(con);
+      Reader reader =
+          new BufferedReader(
+              new InputStreamReader(Main.class.getResourceAsStream("sql/setup.sql")));
+      sr.runScript(reader);
     }
   }
 
@@ -670,15 +521,49 @@ public class MapDB {
     return ret;
   }
 
-  public static LinkedList<Node> getGAdjacent(String nodeID, int startFloor, int endFloor)
+  /**
+   * Returns the Graph-style nodes adjacent to the given node and on either of the floors passed in,
+   * along with stairs/elevators
+   *
+   * @param nodeID the ID of the node you need the adjacents for
+   * @param startFloor the starting floor on the path
+   * @param endFloor the end floor on the path
+   * @return A linked list of all the adjacent nodes on the proper floors or of the proper node type
+   * @throws DBException on error
+   */
+  public static LinkedList<Node> getGAdjacent(String nodeID, int startFloor, int endFloor) throws DBException{
+    return getGAdjacent(nodeID, startFloor, endFloor, false);
+  }
+
+  /**
+   * Returns the Graph-style nodes adjacent to the given node and on either of the floors passed in,
+   * along with elevators. Can exclude stair nodes.
+   *
+   * @param nodeID the ID of the node you need the adjacents for
+   * @param startFloor the starting floor on the path
+   * @param endFloor the end floor on the path
+   * @param wheelAccess true if you want to exclude STAI nodes, false otherwise.
+   * @return A linked list of all the adjacent nodes on the proper floors or of the proper node type
+   * @throws DBException on error
+   */
+  public static LinkedList<Node> getGAdjacent(String nodeID, int startFloor, int endFloor, boolean wheelAccess)
       throws DBException {
     LinkedList<Node> ret = new LinkedList<Node>();
     try {
       ResultSet rs = null;
-      String query =
-          "SELECT nodeID, xcoord, ycoord FROM (SELECT nodeID, xcoord, ycoord FROM nodes WHERE"
-              + " (nodes.floor = ? OR nodes.floor = ? OR nodes.nodeType = 'ELEV' OR nodes.nodeType = 'STAI')) AS nodes, edges "
-              + "WHERE ((edges.node1 = ? AND nodes.nodeID = edges.node2) OR (edges.node2 = ? AND nodes.nodeID = edges.node1))";
+      String query;
+      if(wheelAccess){
+        query = "SELECT nodeID, xcoord, ycoord FROM (SELECT nodeID, xcoord, ycoord FROM nodes WHERE"
+                        + " ((nodes.floor = ? OR nodes.floor = ? OR nodes.nodeType = 'ELEV') AND NOT nodes.nodeType = 'STAI')) AS nodes,"
+                        + " (SELECT node1, node2 FROM edges  WHERE (edges.node1 = ?) OR (edges.node2 = ?)) AS edges "
+                        + "WHERE edges.node1 = nodes.nodeID OR edges.node2 = nodes.nodeID";
+      }
+      else {
+        query = "SELECT nodeID, xcoord, ycoord FROM (SELECT nodeID, xcoord, ycoord FROM nodes WHERE"
+                        + " (nodes.floor = ? OR nodes.floor = ? OR nodes.nodeType = 'ELEV' OR nodes.nodeType = 'STAI')) AS nodes,"
+                        + " (SELECT node1, node2 FROM edges  WHERE (edges.node1 = ?) OR (edges.node2 = ?)) AS edges "
+                        + "WHERE edges.node1 = nodes.nodeID OR edges.node2 = nodes.nodeID";
+      }
       PreparedStatement stmt = con.prepareStatement(query);
       stmt.setString(3, nodeID);
       stmt.setString(4, nodeID);
@@ -883,6 +768,7 @@ public class MapDB {
       st = con.prepareStatement(query);
       st.setString(1, edgeID);
       st.setString(2, nodeID1);
+      //noinspection JpaQueryApiInspection
       st.setString(3, nodeID2);
 
       return st.executeUpdate() > 0;

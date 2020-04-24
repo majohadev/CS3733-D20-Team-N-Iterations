@@ -209,7 +209,7 @@ public class MapDisplayController extends QRGenerator implements Controller {
       return;
     }
 
-    Path path = Pathfinder.findPath(firstNode.getNodeID(), secondNode.getNodeID());
+    Path path = Pathfinder.findPath(firstNode, secondNode);
 
     if (path != null) {
       LinkedList<DbNode> pathNodes = path.getPath();
