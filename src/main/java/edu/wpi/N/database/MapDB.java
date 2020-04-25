@@ -811,7 +811,7 @@ public class MapDB {
     }
   }
 
-  public static LinkedList<DbNode[]> getFloorEdges(int floor) throws DBException {
+  public static LinkedList<DbNode[]> getFloorEdges(int floor, String building) throws DBException {
     try {
       LinkedList<DbNode[]> ret = new LinkedList<>();
       String query =
@@ -822,11 +822,13 @@ public class MapDB {
               + "FROM edges "
               + "JOIN nodes n1 ON edges.node1 = n1.nodeID "
               + "JOIN nodes n2 ON edges.node2 = n2.nodeID "
-              + "WHERE n1.floor = ? AND n2.floor = ?";
+              + "WHERE n1.floor = ? AND n2.floor = ? AND n1.building = ? AND n2.building = ?";
 
       PreparedStatement st = con.prepareStatement(query);
       st.setInt(1, floor);
       st.setInt(2, floor);
+      st.setString(3, building);
+      st.setString(4, building);
       ResultSet rs = st.executeQuery();
 
       while (rs.next()) {
