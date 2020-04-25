@@ -90,6 +90,6 @@ INSERT INTO service VALUES ('Medicine', '00:00', '00:00', 'Request medicine deli
 CREATE TRIGGER doc_delete AFTER DELETE ON doctors
 REFERENCING OLD AS oldRow
 FOR EACH ROW MODE DB2SQL
-DELETE FROM employees WHERE employeeID = oldRow.doctorID;
+DELETE FROM credential WHERE credential.username = oldRow.username;
 
 
