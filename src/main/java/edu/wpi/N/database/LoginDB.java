@@ -46,13 +46,14 @@ public class LoginDB {
   }
 
   /**
-   * Creates a new login with doctor access
+   * Creates a new login with doctor access Shouldn't ever call directly, this is called when you
+   * call addDoctor
    *
    * @param username the new username
    * @param password the new password
    * @throws DBException On error or when the user already exists
    */
-  public static void createDoctorLogin(String username, String password) throws DBException {
+  static void createDoctorLogin(String username, String password) throws DBException {
     createLogin(username, password, "DOCTOR");
   }
 
@@ -63,12 +64,17 @@ public class LoginDB {
    * @throws DBException on error or when the specified user doesn't exist.
    */
   public static void removeLogin(String username) throws DBException {
+    if (currentUser != null) logout();
     String query = "DELETE FROM credential WHERE username = ?";
     try {
       PreparedStatement stmt = con.prepareStatement(query);
       stmt.setString(1, username);
       if (stmt.executeUpdate() <= 0) throw new DBException("That user doesn't exist!");
     } catch (SQLException e) {
+      if (e.getSQLState().equals("23503")) {
+        throw new DBException(
+            "You cannot directly delete logins for doctors! delete the doctor with removeEmployee instead (the login will be deleted automatically).");
+      }
       e.printStackTrace();
       throw new DBException("Unknown error: deleteLogin", e);
     }

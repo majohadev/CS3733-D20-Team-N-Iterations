@@ -1,13 +1,13 @@
 DROP TABLE lrequest;
 DROP TABLE trequest;
 DROP TABLE request;
+DROP TABLE location;
+DROP TABLE doctors;
 DROP TABLE credential;
 DROP TABLE laundry;
 DROP TABLE language;
 DROP TABLE translator;
 DROP TABLE employees;
 DROP TABLE service;
-DROP TABLE location;
-DROP TABLE doctors;
 DROP TABLE edges;
 DROP TABLE nodes;

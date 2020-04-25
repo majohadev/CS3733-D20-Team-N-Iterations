@@ -1,4 +1,4 @@
-package edu.wpi.N.entities;
+package edu.wpi.N.entities.employees;
 
 public abstract class Employee {
   private int id;
