@@ -721,7 +721,7 @@ public class ServiceDB {
    * @return list of patients
    */
   public static LinkedList<Patient> getpatientbyMedType(String type){
-
+    return null;
   }
 
   //Nick
@@ -794,7 +794,7 @@ public class ServiceDB {
    * @return lst of all patients
    */
   public static LinkedList<Patient> getlistPatient(){
-
+    return null;
   }
 
   //Nick
@@ -828,7 +828,7 @@ public class ServiceDB {
    * @return list of patients
    */
   public static LinkedList<Patient> searchbyPatient(String name){
-
+    return null;
   }
 
   //Nick
@@ -838,6 +838,6 @@ public class ServiceDB {
    * @return list of medicine type(String)
    */
   public static LinkedList<String> searchbyMedType(String type){
-
+    return null;
   }
 }
