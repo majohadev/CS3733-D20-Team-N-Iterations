@@ -10,7 +10,7 @@ public class DoctorDB {
   private static Connection con = MapDB.getCon();
 
   /**
-   * Gets the doctor with the specified name (must be exact)
+   * Gets the doctor with the specified ID
    *
    * @param doctorID The exact name of the doctor
    * @return The doctor asked for
