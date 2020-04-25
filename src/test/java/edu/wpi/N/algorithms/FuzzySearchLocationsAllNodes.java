@@ -19,72 +19,32 @@ public class FuzzySearchLocationsAllNodes {
   public static void initialize()
       throws DBException, FileNotFoundException, SQLException, ClassNotFoundException {
     MapDB.initTestDB();
-    File fNodes = new File("src/test/resources/edu/wpi/N/csv/UPDATEDTeamNnodes.csv");
+    File fNodes = new File("src/test/resources/edu/wpi/N/csv/TeamNAllNodes.csv");
     String path = fNodes.getAbsolutePath();
     CSVParser.parseCSVfromPath(path);
   }
 
-  /**
-   * Tests that function outputs suggested locations in proper order (from most relevant to least)
-   */
   @Test
-  public void testSearchCorrectInputOutputsInProperOrder() throws DBException {
-    String userInput = "admi";
+  public void testFuzzySearchIncorrectInputTwoWords() throws DBException {
+    String userInput = "department affices";
 
     LinkedList<DbNode> expected = new LinkedList<DbNode>();
-    expected.add(MapDB.getNode("NSERV01404"));
-    expected.add(MapDB.getNode("NSERV00204"));
+    expected.add(MapDB.getNode("NDEPT00204"));
+    expected.add(MapDB.getNode("NDEPT01504"));
+
+    // Measure performance
+    long startTime = System.nanoTime();
 
     LinkedList<DbNode> actual = FuzzySearchAlgorithm.suggestLocations(userInput);
 
-    // Check if the answer is in proper order
-    for (int i = 0; i < expected.size(); i++) {
-      Assertions.assertTrue(expected.get(i).equals(actual.get(i)));
-    }
-  }
+    long endTime = System.nanoTime();
 
-  /**
-   * Tests that function outputs DbNodes in proper order (best match -> lowest match)
-   *
-   * @throws DBException
-   */
-  @Test
-  public void testSearchIncorrectInputTwoWordsOutputInOrderOfPriority() throws DBException {
+    long timeElapsed = endTime - startTime;
+    System.out.println(
+        "Elapsed time for FuzzySearch on all Nodes in milliseconds:" + timeElapsed / 1000000);
 
-    String userInput = "cardolog";
-
-    LinkedList<DbNode> expected = new LinkedList<DbNode>();
-    expected.add(MapDB.getNode("NDEPT00504"));
-    expected.add(MapDB.getNode("NDEPT00404"));
-
-    LinkedList<DbNode> actual = FuzzySearchAlgorithm.suggestLocations(userInput);
-
-    Assertions.assertTrue(actual.size() == 2);
-
-    // Check if the answer is in proper order
-    for (int i = 0; i < expected.size(); i++) {
-      Assertions.assertTrue(expected.get(i).equals(actual.get(i)));
-    }
-  }
-
-  @Test
-  public void testSearchIncorrectInputTwoWordsOutputInOrder() throws DBException {
-
-    String userInput = "DB Cardiology";
-
-    LinkedList<DbNode> expected = new LinkedList<DbNode>();
-    expected.add(MapDB.getNode("NDEPT00404"));
-    expected.add(MapDB.getNode("NDEPT00504"));
-    // expected.add(MapDB.getNode("NDEPT00104"));
-
-    LinkedList<DbNode> actual = FuzzySearchAlgorithm.suggestLocations(userInput);
-
-    Assertions.assertTrue(actual.size() == 2);
-
-    // Check if the answer is in proper order
-    for (int i = 0; i < expected.size(); i++) {
-      Assertions.assertTrue(expected.get(i).equals(actual.get(i)));
-    }
+    Assertions.assertTrue(actual.getFirst().equals(expected.get(0)));
+    Assertions.assertTrue(actual.contains(expected.get(1)));
   }
 
   @AfterAll
