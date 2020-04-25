@@ -363,7 +363,7 @@ public class ServiceDB {
       stmt.setString(1, name);
       stmt.executeUpdate();
       ResultSet rs = stmt.getGeneratedKeys();
-      rs.next(); // NullPointerException
+      rs.next();
       query = "INSERT INTO Laundry VALUES (?)";
       stmt = con.prepareStatement(query);
       int id = rs.getInt("1");
@@ -765,6 +765,7 @@ public class ServiceDB {
     }
   }
 
+  //Nick
   /**
    * Adds a patient to the database
    * @param name The name of the patient
@@ -773,12 +774,18 @@ public class ServiceDB {
    */
   public static int addPatient(String name, String location) throws DBException {
     try{
-      String query = "";
-      PreparedStatement st = con.prepareStatement(query);
+      String query = "INSERT INTO patient VALUES (?, ?)";
+      PreparedStatement st = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+      st.setString(1, name);
+      st.setString(2, name);
+      st.executeUpdate();
+      ResultSet rs = st.getGeneratedKeys();
+      rs.next();
+      int id = rs.getInt("1");
+      return id;
     } catch (SQLException e) {
       throw new DBException("Unknown error: addPatient", e);
     }
-    return 0;
   }
 
   //Chris
@@ -792,12 +799,26 @@ public class ServiceDB {
 
   //Nick
   /**
-   *  gets a specific patient
-   * @param patientID
-   * @return patient
+   * Gets the patient specified by the given ID
+   * @param patientID the ID of the patient
+   * @return The Patient object containing information about the patient
    */
-  public static Patient getPatient(int patientID){
-
+  public static Patient getPatient(int patientID) throws DBException {
+    try{
+      String query = "SELECT * FROM patients WHERE patientID = ?";
+      PreparedStatement st = con.prepareStatement(query);
+      st.setInt(1, patientID);
+      ResultSet rs = st.executeQuery();
+      if(rs.next()){
+        return new Patient(rs.getInt("patientID"),
+                rs.getString("patientName"),
+                rs.getString("location"));
+      } else {
+        throw new DBException("getPatient: Could not find patient with id " + patientID);
+      }
+    } catch (SQLException e) {
+      throw new DBException("Unknown error: getPatient", e);
+    }
   }
 
   //Chris

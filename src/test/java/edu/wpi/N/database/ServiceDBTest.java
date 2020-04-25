@@ -245,6 +245,15 @@ public class ServiceDBTest {
     assertTrue(result.contains(expected2));
   }
 
+  @Test
+  public void testAddAndGetPatient() throws DBException {
+    int id = ServiceDB.addPatient("Dippy Tikklekins", "ZDEPT00101");
+
+    Patient dippy = new Patient(id, "Dippy Tikklekins", "ZDEPT00101");
+
+    assertEquals(dippy, ServiceDB.getPatient(id));
+  }
+
   @AfterAll
   public static void cleanup() throws DBException {
     MapDB.clearNodes();
