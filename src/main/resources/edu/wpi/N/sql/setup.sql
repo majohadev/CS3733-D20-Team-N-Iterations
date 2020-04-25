@@ -56,7 +56,7 @@ CREATE TABLE doctors (
       doctorID INT NOT NULL PRIMARY KEY,
       field VARCHAR(255) NOT NULL,
       username VARCHAR(255) NOT NULL UNIQUE,
-      FOREIGN KEY (username) REFERENCES credential(username) ON DELETE CASCADE,
+      FOREIGN KEY (username) REFERENCES credential(username),
       FOREIGN KEY (doctorID) REFERENCES employees(employeeID) ON DELETE CASCADE);
 
 CREATE TABLE location (

@@ -71,6 +71,10 @@ public class LoginDB {
       stmt.setString(1, username);
       if (stmt.executeUpdate() <= 0) throw new DBException("That user doesn't exist!");
     } catch (SQLException e) {
+      if (e.getSQLState().equals("23503")) {
+        throw new DBException(
+            "You cannot directly delete logins for doctors! delete the doctor with removeEmployee instead (the login will be deleted automatically).");
+      }
       e.printStackTrace();
       throw new DBException("Unknown error: deleteLogin", e);
     }
