@@ -2,21 +2,25 @@ package edu.wpi.N.entities;
 
 import java.util.LinkedList;
 
-public class Doctor {
-  private int id;
-  private String name;
+public class Doctor extends Employee {
   private LinkedList<DbNode> loc;
   private String field;
+  private String username;
 
-  public Doctor(int id, String name, String field, LinkedList<DbNode> loc) {
-    this.id = id;
-    this.name = name;
+  public Doctor(int id, String name, String field, String username, LinkedList<DbNode> loc) {
+    super(id, name);
     this.loc = loc;
+    this.username = username;
     this.field = field;
   }
 
-  public String getName() {
-    return name;
+  public String getUsername() {
+    return this.username;
+  }
+
+  @Override
+  public String getServiceType() {
+    return "Medicine";
   }
 
   public LinkedList<DbNode> getLoc() {
@@ -27,10 +31,6 @@ public class Doctor {
     return field;
   }
 
-  public int getID() {
-    return id;
-  }
-
   public boolean equals(Object o) {
     if (!(o instanceof Doctor)) {
       return false;
@@ -38,6 +38,6 @@ public class Doctor {
 
     Doctor other = (Doctor) o;
 
-    return this.name.equals(other.getName());
+    return this.getID() == other.getID();
   }
 }

@@ -26,13 +26,26 @@ public class DoctorDB {
       while (rs.next()) {
         offices.add(MapDB.getNode(rs.getString("nodeID")));
       }
-      query = "SELECT doctorID, name, field FROM doctors WHERE doctorID = ?";
+
+      query = "SELECT name FROM employees WHERE employeeID = ?";
+      state = con.prepareStatement(query);
+      state.setInt(1, doctorID);
+      rs = state.executeQuery();
+      String name = "";
+
+      if (rs.next()) {
+        name = rs.getString("name");
+      } else {
+        throw new DBException("getDoctor: Doctor not found");
+      }
+
+      query = "SELECT doctorID, field, username FROM doctors WHERE doctorID = ?";
       state = con.prepareStatement(query);
       state.setInt(1, doctorID);
       rs = state.executeQuery();
       if (rs.next()) {
         return new Doctor(
-            rs.getInt("doctorID"), rs.getString("name"), rs.getString("field"), offices);
+            rs.getInt("doctorID"), name, rs.getString("field"), rs.getString("username"), offices);
       } else {
         throw new DBException("getDoctor: Doctor not found");
       }
@@ -51,18 +64,35 @@ public class DoctorDB {
    * @return the id of the doctor created
    * @throws DBException
    */
-  public static int addDoctor(String name, String field, LinkedList<DbNode> offices)
+  public static int addDoctor(
+      String name, String field, String username, String password, LinkedList<DbNode> offices)
       throws DBException {
     try {
-      String query = "INSERT INTO doctors (name, field) VALUES (?, ?)";
+      con.setAutoCommit(false);
+
+      LoginDB.createDoctorLogin(username, password);
+      String query = "INSERT INTO employees (name, serviceType) VALUES (?, 'Medicine')";
       PreparedStatement state = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
       state.setString(1, name);
-      state.setString(2, field);
-      if (state.executeUpdate() <= 0) throw new DBException("Error: Doctor not added!");
+      state.executeUpdate();
+
       ResultSet rs = state.getGeneratedKeys();
       rs.next();
       int id = rs.getInt("1");
-      if (offices == null) return id;
+
+      query = "INSERT INTO doctors (doctorID, field, username) VALUES(?, ?, ?)";
+      state = con.prepareStatement(query);
+      state.setInt(1, id);
+      state.setString(2, field);
+      state.setString(3, username);
+      state.executeUpdate();
+
+      if (offices == null) {
+        con.commit();
+        con.setAutoCommit(true);
+        return id;
+      }
+
       Iterator<DbNode> it = offices.iterator();
       while (it.hasNext()) {
         query = "INSERT INTO location (doctor, nodeID) VALUES (?, ?)";
@@ -71,31 +101,34 @@ public class DoctorDB {
         state.setString(2, it.next().getNodeID());
         state.executeUpdate();
       }
+
+      con.commit();
+      con.setAutoCommit(true);
       return id;
     } catch (SQLException e) {
+      try {
+        con.rollback();
+        con.setAutoCommit(true);
+      } catch (SQLException ex) {
+        ex.printStackTrace();
+        throw new DBException("Unknown error: addDoctor", e);
+      }
       e.printStackTrace();
       throw new DBException("Unknown error: addDoctor", e);
+    } catch (DBException e) {
+      try {
+        con.rollback();
+        con.setAutoCommit(true);
+      } catch (SQLException ex) {
+        ex.printStackTrace();
+        throw new DBException("Unknown error: addDoctor", e);
+      }
+      e.printStackTrace();
+      throw e;
     }
   }
 
-  /**
-   * Deletes a doctor from the database
-   *
-   * @param doctorID The ID Of the doctor to be deleted
-   * @return True if successful, false otherwise
-   * @throws DBException on error
-   */
-  public static boolean deleteDoctor(int doctorID) throws DBException {
-    try {
-      String query = "DELETE FROM doctors WHERE doctorID = ?";
-      PreparedStatement state = con.prepareStatement(query);
-      state.setInt(1, doctorID);
-      return state.executeUpdate() > 0;
-    } catch (SQLException e) {
-      e.printStackTrace();
-      throw new DBException("Unknown error: deleteDoctor", e);
-    }
-  }
+  // use removeEmployee to delete a doctor
 
   /**
    * Adds an office to the specified doctor's list of offices
@@ -171,7 +204,8 @@ public class DoctorDB {
   public static LinkedList<Doctor> searchDoctors(String name) throws DBException {
     try {
       LinkedList<Doctor> docs = new LinkedList<Doctor>();
-      String query = "SELECT doctorID FROM doctors WHERE UPPER(name) LIKE ?";
+      String query =
+          "SELECT doctorID FROM doctors, (SELECT employeeID, name FROM employees) as employees WHERE doctorID = employeeID AND UPPER(name) LIKE ?";
       PreparedStatement stmt = con.prepareStatement(query);
       stmt.setString(1, "%" + name.toUpperCase() + "%");
       ResultSet rs = stmt.executeQuery();

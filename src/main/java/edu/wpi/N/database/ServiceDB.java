@@ -502,6 +502,23 @@ public class ServiceDB {
    * @param employeeID the id of the employee to be excised
    */
   public static void removeEmployee(int employeeID) throws DBException {
+    // deals with doctors, since doctors need to have their logins removed when they are removed as
+    // employees
+    try {
+      String query = "SELECT username FROM doctors WHERE doctorID = ?";
+      PreparedStatement state = con.prepareStatement(query);
+      state.setInt(1, employeeID);
+      ResultSet rs = state.executeQuery();
+      rs.next();
+      LoginDB.removeLogin(rs.getString("username"));
+    } catch (SQLException e) {
+      if (!e.getSQLState()
+          .equals("24000")) { // this code means that we're not dealing with a doctor, which is fine
+        e.printStackTrace();
+        throw new DBException("Unknown error: removeEmployee", e);
+      } else System.out.println("?");
+    }
+
     try {
       String query = "DELETE FROM employees WHERE employeeID = ?";
       PreparedStatement stmt = con.prepareStatement(query);

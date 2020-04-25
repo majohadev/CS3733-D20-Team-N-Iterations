@@ -19,16 +19,6 @@ CREATE TABLE edges (
    FOREIGN KEY (node2) REFERENCES nodes(nodeID) ON DELETE CASCADE
    );
 
-CREATE TABLE doctors (
-      doctorID INT NOT NULL GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-      name VARCHAR(255) NOT NULL,
-      field VARCHAR(255) NOT NULL);
-
-CREATE TABLE location (
-      doctor INT NOT NULL REFERENCES doctors(doctorID) ON DELETE CASCADE,
-      nodeID char(10) NOT NULL REFERENCES nodes(nodeID) ON DELETE CASCADE,
-      priority INT NOT NULL GENERATED ALWAYS AS IDENTITY,
-      PRIMARY KEY (doctor, nodeID));
 
 CREATE TABLE service (
   serviceType VARCHAR(255) NOT NULL PRIMARY KEY,
@@ -62,6 +52,19 @@ CREATE TABLE credential(
     access VARCHAR(6) NOT NULL CONSTRAINT ACC_CK CHECK (access IN ('ADMIN', 'DOCTOR'))
 );
 
+CREATE TABLE doctors (
+      doctorID INT NOT NULL PRIMARY KEY,
+      field VARCHAR(255) NOT NULL,
+      username VARCHAR(255) NOT NULL UNIQUE,
+      FOREIGN KEY (username) REFERENCES credential(username) ON DELETE CASCADE,
+      FOREIGN KEY (doctorID) REFERENCES employees(employeeID) ON DELETE CASCADE);
+
+CREATE TABLE location (
+      doctor INT NOT NULL REFERENCES doctors(doctorID) ON DELETE CASCADE,
+      nodeID char(10) NOT NULL REFERENCES nodes(nodeID) ON DELETE CASCADE,
+      priority INT NOT NULL GENERATED ALWAYS AS IDENTITY,
+      PRIMARY KEY (doctor, nodeID));
+
 CREATE TABLE request(
       requestID INT NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
       timeRequested TIMESTAMP NOT NULL,
@@ -81,5 +84,6 @@ CREATE TABLE trequest(
 
 INSERT INTO service VALUES ('Translator', '00:00', '00:00', 'Make a request for our translation services!');
 INSERT INTO service VALUES ('Laundry', '00:00', '00:00', 'Make a request for laundry services!');
+INSERT INTO service VALUES ('Medicine', '00:00', '00:00', 'Request medicine delivery!');
 
 
