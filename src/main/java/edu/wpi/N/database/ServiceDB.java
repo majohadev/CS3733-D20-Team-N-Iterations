@@ -5,8 +5,11 @@ import edu.wpi.N.entities.employees.Employee;
 import edu.wpi.N.entities.employees.Laundry;
 import edu.wpi.N.entities.employees.Translator;
 import edu.wpi.N.entities.request.LaundryRequest;
+import edu.wpi.N.entities.request.MedicineRequest;
 import edu.wpi.N.entities.request.Request;
 import edu.wpi.N.entities.request.TranslatorRequest;
+
+import javax.swing.plaf.nimbus.State;
 import java.sql.*;
 import java.util.*;
 import java.util.Date;
@@ -300,27 +303,15 @@ public class ServiceDB {
       LinkedList<Translator> translators = new LinkedList<Translator>();
       while (rs.next()) {
         translators.add((Translator) getEmployee(rs.getInt("t_employeeID")));
-        //        LinkedList<String> langs = new LinkedList<String>();
-        //        int id = rs.getInt("t_employeeID");
-        //        String name = rs.getString("name");
-        //        while (rs.getInt("t_employeeID") == id) {
-        //          langs.add(rs.getString("language"));
-        //          rs.next();
-        //        }
-        //        translators.add(new Translator(id, name, langs));
       }
       return translators;
     } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Unknown error: getTransLang, lang :" + lang, e);
     }
-    //    LinkedList<Translator> list = getTranslators();
-    //    LinkedList<Translator> special = new LinkedList<Translator>();
-    //    for (int i = 1; i < list.size(); i++) {
-    //      if (list.get(i).getLanguages().equals(lang)) special.add(list.get(i));
-    //    }
-    //    return special;
   }
+
+  public static LinkedList<Patient>
 
   // Nick
   /**
@@ -418,6 +409,46 @@ public class ServiceDB {
     } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Error: addTransReq", e);
+    }
+  }
+
+  /**
+   * Adds a request for a medicine
+   *
+   * @param reqNotes
+   * @param nodeID
+   * @param type
+   * @param dosage
+   * @param units
+   * @param patient
+   * @return the id of the created request
+   * @throws DBException
+   */
+  public static int addMedReq(String reqNotes, String nodeID, String type, double dosage, String units, Patient patient) throws DBException {
+    try{
+      String query = "INSERT INTO request (timeRequested, reqNotes, serviceType, nodeID, status) VALUES (?, ?, ?, ?, ?)";
+      PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+      stmt.setTimestamp(1, new Timestamp((new Date().getTime())));
+      stmt.setString(2, reqNotes);
+      stmt.setString(3, "Medicine");
+      stmt.setString(4, nodeID);
+      stmt.setString(5, "OPEN");
+      stmt.execute();
+      ResultSet rs = stmt.getGeneratedKeys();
+      rs.next();
+      query = "INSERT INTO mrequest (requestID, medicineType, dosage, units, patient) VALUES (?, ?, ?, ?, ?)";
+      stmt = con.prepareStatement(query);
+      int id = rs.getInt("1");
+      stmt.setInt(1, id);
+      stmt.setString(2, type);
+      stmt.setDouble(3, dosage);
+      stmt.setString(4, units);
+      stmt.setObject(5, patient);
+      stmt.executeUpdate();
+      return id;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Error: addMedReq");
     }
   }
 
@@ -681,5 +712,64 @@ public class ServiceDB {
   public static Timestamp getSqltime(GregorianCalendar cal) {
     Timestamp time = new Timestamp(cal.getTime().getTime());
     return time;
+  }
+
+  //Chris
+  /**
+   * gets a list of patients taking the specified medicine
+   * @param type
+   * @return list of patients
+   */
+  public static LinkedList<Patient> getpatientbyMedType(String type){
+
+  }
+
+  //Nick
+  /**
+   * gets a list of request associated with the specified patient
+   * @param patient
+   * @return list of medicine request
+   */
+  public static LinkedList<MedicineRequest> getmedRequest(Patient patient){
+
+  }
+
+  //Chris
+  /**
+   * gets list of all patients
+   * @return lst of all patients
+   */
+  public static LinkedList<Patient> getlistPatient(){
+
+  }
+
+  //Nick
+  /**
+   *  gets a specific patient
+   * @param patientID
+   * @return patient
+   */
+  public static Patient getPatient(int patientID){
+
+  }
+
+  //Chris
+  /**
+   * gets a list of patient with the specified name
+   * @param name
+   * @return list of patients
+   */
+  public static LinkedList<Patient> searchbyPatient(String name){
+
+  }
+
+  //Nick
+  /**
+   * searches to make a list of specified medicine type
+   * @param type
+   * @return list of medicine type(String)
+   */
+  public static LinkedList<String> searchbyMedType(String type){
+
   }
 }
