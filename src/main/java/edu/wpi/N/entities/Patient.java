@@ -16,4 +16,15 @@ public class Patient {
 	public String getLocation() {
 		return location;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(!(obj instanceof Patient)){
+			return false;
+		}
+
+		Patient other = (Patient) obj;
+
+		return name.equals(other.name) && location.equals(other.location);
+	}
 }
