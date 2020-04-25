@@ -123,7 +123,6 @@ public class DoctorDB {
         ex.printStackTrace();
         throw new DBException("Unknown error: addDoctor", e);
       }
-      e.printStackTrace();
       throw e;
     }
   }

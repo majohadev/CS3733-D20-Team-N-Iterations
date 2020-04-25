@@ -1,3 +1,11 @@
+// commented everything out since this is pretty broken
+// I don't think I changed anything that would actually mess up fuzzySearchDoctors, though.
+// If you want to rewrite this, make sure that
+// A) you aren't ever calling the Doctor constructor directly
+// B) you aren't ever assuming that doctor IDs will be specific values (they TYPICALLY start at 1,
+// but there is no guarantee; the counter doesn't reset when doctors are removed)
+// C) you're specifying a username with each Doctor
+
 // package edu.wpi.N.algorithms;
 //
 // import edu.wpi.N.database.CSVParser;
