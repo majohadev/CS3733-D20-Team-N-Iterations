@@ -69,16 +69,16 @@ public class MedicineRequest extends Request {
 
   @Override
   public boolean equals(Object o) {
-    if(!(o instanceof MedicineRequest)){
+    if (!(o instanceof MedicineRequest)) {
       return false;
     }
 
     MedicineRequest other = (MedicineRequest) o;
 
     return super.equals(o)
-            && medicineType.equals(other.medicineType)
-            && dosage == other.dosage
-            && units.equals(other.units)
-            && patient.equals(other.patient);
+        && medicineType.equals(other.medicineType)
+        && dosage == other.dosage
+        && units.equals(other.units)
+        && patient.equals(other.patient);
   }
 }

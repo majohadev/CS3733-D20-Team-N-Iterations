@@ -97,11 +97,25 @@ public abstract class Request {
 
     Request other = (Request) o;
 
+    boolean emp_assignedEqual;
+    if (emp_assigned == null) {
+      emp_assignedEqual = other.emp_assigned == null;
+    } else {
+      emp_assignedEqual = emp_assigned.equals(other.emp_assigned);
+    }
+
+    boolean compNotesEqual;
+    if (compNotes == null) {
+      compNotesEqual = other.compNotes == null;
+    } else {
+      compNotesEqual = compNotes.equals(other.compNotes);
+    }
+
     return requestID == other.requestID
-            && emp_assigned.equals(other.emp_assigned)
-            && reqNotes.equals(other.reqNotes)
-            && compNotes.equals(other.compNotes)
-            && nodeID.equals(other.nodeID)
-            && status.equals(other.status);
+        && emp_assignedEqual
+        && reqNotes.equals(other.reqNotes)
+        && compNotesEqual
+        && nodeID.equals(other.nodeID)
+        && status.equals(other.status);
   }
 }

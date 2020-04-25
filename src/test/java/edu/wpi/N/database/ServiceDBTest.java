@@ -10,7 +10,6 @@ import edu.wpi.N.entities.request.MedicineRequest;
 import edu.wpi.N.entities.request.Request;
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoField;
 import java.util.GregorianCalendar;
@@ -233,13 +232,24 @@ public class ServiceDBTest {
 
     GregorianCalendar cal = (GregorianCalendar) GregorianCalendar.getInstance();
 
-    MedicineRequest expected1 = new MedicineRequest(
-            id1, 0, "yep", null, "ZDEPT00101", cal, cal, "OPEN",
-            "the good stuff", 100, "mg", tony);
+    MedicineRequest expected1 =
+        new MedicineRequest(
+            id1, 0, "yep", null, "ZDEPT00101", cal, cal, "OPEN", "the good stuff", 100, "mg", tony);
 
-    MedicineRequest expected2 = new MedicineRequest(
-            id2, 0, "yep 2", null, "ZDEPT00101", cal, cal, "OPEN",
-            "the better stuff", 1, "g", tony);
+    MedicineRequest expected2 =
+        new MedicineRequest(
+            id2,
+            0,
+            "yep 2",
+            null,
+            "ZDEPT00101",
+            cal,
+            cal,
+            "OPEN",
+            "the better stuff",
+            1,
+            "g",
+            tony);
 
     assertTrue(result.contains(expected1));
     assertTrue(result.contains(expected2));
