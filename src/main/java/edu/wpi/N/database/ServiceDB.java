@@ -319,7 +319,7 @@ public class ServiceDB {
    *
    * @param name the translator's name
    * @param languages the languages that this translator is capable of speaking
-   * @return id of created request
+   * @return id of created translator
    */
   public static int addTranslator(String name, LinkedList<String> languages) throws DBException {
     try {
@@ -726,12 +726,59 @@ public class ServiceDB {
 
   //Nick
   /**
-   * gets a list of request associated with the specified patient
-   * @param patient
-   * @return list of medicine request
+   * Gets a list of requests associated with the specified patient
+   * @param patient The specified patient
+   * @return a LinkedList of MedicineRequest
    */
-  public static LinkedList<MedicineRequest> getmedRequest(Patient patient){
+  public static LinkedList<MedicineRequest> getMedRequestByPatient(Patient patient) throws DBException {
+    try{
+      LinkedList<MedicineRequest> res = new LinkedList<>();
 
+      String query = "SELECT * FROM medicineRequests " +
+              "JOIN request ON medicineRequests.requestID = request.requestID " +
+              "JOIN patients ON medicineRequests.patientID = patients.patientID " +
+              "WHERE patientID = ?";
+      PreparedStatement st = con.prepareStatement(query);
+      st.setInt(1, patient.getId());
+      ResultSet rs = st.executeQuery();
+
+      while(rs.next()){
+        res.add(new MedicineRequest(rs.getInt("requestID"),
+                rs.getInt("assigned_eID"),
+                rs.getString("reqNotes"),
+                rs.getString("compNotes"),
+                rs.getString("nodeID"),
+                getJavatime(rs.getTimestamp("timeRequested")),
+                getJavatime(rs.getTimestamp("timeCompleted")),
+                rs.getString("status"),
+                rs.getString("serviceType"),
+                rs.getDouble("dosage"),
+                rs.getString("units"),
+                new Patient(rs.getInt("patientID"),
+                        rs.getString("patientName"),
+                        rs.getString("location"))));
+      }
+
+      return res;
+    }catch(SQLException e){
+      throw new DBException("Unknown error: getMedRequest", e);
+    }
+  }
+
+  /**
+   * Adds a patient to the database
+   * @param name The name of the patient
+   * @param location The nodeID of the location of the patient
+   * @return id of created patient
+   */
+  public static int addPatient(String name, String location) throws DBException {
+    try{
+      String query = "";
+      PreparedStatement st = con.prepareStatement(query);
+    } catch (SQLException e) {
+      throw new DBException("Unknown error: addPatient", e);
+    }
+    return 0;
   }
 
   //Chris

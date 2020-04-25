@@ -66,4 +66,19 @@ public class MedicineRequest extends Request {
   public void setPatient(Patient patient) {
     this.patient = patient;
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if(!(o instanceof MedicineRequest)){
+      return false;
+    }
+
+    MedicineRequest other = (MedicineRequest) o;
+
+    return super.equals(o)
+            && medicineType.equals(other.medicineType)
+            && dosage == other.dosage
+            && units.equals(other.units)
+            && patient.equals(other.patient);
+  }
 }

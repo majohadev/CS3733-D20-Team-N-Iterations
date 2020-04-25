@@ -6,11 +6,14 @@ import edu.wpi.N.entities.*;
 import edu.wpi.N.entities.employees.Employee;
 import edu.wpi.N.entities.employees.Laundry;
 import edu.wpi.N.entities.employees.Translator;
+import edu.wpi.N.entities.request.MedicineRequest;
 import edu.wpi.N.entities.request.Request;
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoField;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.LinkedList;
 import org.junit.jupiter.api.AfterAll;
@@ -22,9 +25,11 @@ public class ServiceDBTest {
   static Translator felix;
   static Translator fats;
   static Laundry snaps;
+  static Patient tony;
   static int felixID;
   static int fatsID;
   static int snapsID;
+  static int tonyID;
 
   @BeforeAll
   public static void setup()
@@ -47,8 +52,12 @@ public class ServiceDBTest {
 
     MapDB.addNode("ZHALL00101", 10, 10, 1, "Faulkner", "HALL", "HALLZ1", "HALLZ1", 'Z');
     MapDB.addNode("ZHALL00102", 10, 10, 2, "Faulkner", "HALL", "HALLZ2", "HALLZ2", 'Z');
+    MapDB.addNode("ZDEPT00101", 123, 123, 1, "Faulkner", "DEPT", "Tony's room", "Room", 'Z');
     laundReqID1 = ServiceDB.addLaundReq("wash", "ZHALL00101");
     transReqID1 = ServiceDB.addTransReq("speak", "ZHALL00102", "Gnomish");
+
+    tonyID = ServiceDB.addPatient("Tony Cannoli", "ZDEPT00101");
+    Patient tony = ServiceDB.getPatient(tonyID);
   }
 
   @Test
@@ -213,6 +222,27 @@ public class ServiceDBTest {
         () -> {
           ServiceDB.setServiceTime("Translator", "4:00", "1:00PM");
         });
+  }
+
+  @Test
+  public void testGetMedRequestsByPatient() throws DBException {
+    int id1 = ServiceDB.addMedReq("yep", "ZDEPT00101", "the good stuff", 100, "mg", tony);
+    int id2 = ServiceDB.addMedReq("yep 2", "ZDEPT00101", "the better stuff", 1, "g", tony);
+
+    LinkedList<MedicineRequest> result = ServiceDB.getMedRequestByPatient(tony);
+
+    GregorianCalendar cal = (GregorianCalendar) GregorianCalendar.getInstance();
+
+    MedicineRequest expected1 = new MedicineRequest(
+            id1, 0, "yep", null, "ZDEPT00101", cal, cal, "OPEN",
+            "the good stuff", 100, "mg", tony);
+
+    MedicineRequest expected2 = new MedicineRequest(
+            id2, 0, "yep 2", null, "ZDEPT00101", cal, cal, "OPEN",
+            "the better stuff", 1, "g", tony);
+
+    assertTrue(result.contains(expected1));
+    assertTrue(result.contains(expected2));
   }
 
   @AfterAll

@@ -97,6 +97,11 @@ public abstract class Request {
 
     Request other = (Request) o;
 
-    return requestID == other.requestID;
+    return requestID == other.requestID
+            && emp_assigned.equals(other.emp_assigned)
+            && reqNotes.equals(other.reqNotes)
+            && compNotes.equals(other.compNotes)
+            && nodeID.equals(other.nodeID)
+            && status.equals(other.status);
   }
 }
