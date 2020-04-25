@@ -8,7 +8,8 @@ import java.util.GregorianCalendar;
 public abstract class Request {
   int requestID;
   Employee emp_assigned;
-  String notes;
+  String reqNotes;
+  String compNotes;
   String nodeID;
   GregorianCalendar timeRequested;
   GregorianCalendar timeCompleted;
@@ -21,7 +22,8 @@ public abstract class Request {
   Request(
       int requestID,
       int emp_assigned,
-      String notes,
+      String reqNotes,
+      String compNotes,
       String nodeID,
       GregorianCalendar timeRequested,
       GregorianCalendar timeCompleted,
@@ -32,7 +34,8 @@ public abstract class Request {
     } catch (DBException e) {
       this.emp_assigned = null;
     }
-    this.notes = notes;
+    this.reqNotes = reqNotes;
+    this.compNotes = compNotes;
     this.nodeID = nodeID;
     this.timeCompleted = timeCompleted;
     this.timeRequested = timeRequested;
@@ -47,8 +50,12 @@ public abstract class Request {
     return emp_assigned;
   }
 
-  public String getNotes() {
-    return notes;
+  public String getReqNotes() {
+    return reqNotes;
+  }
+
+  public String getCompNotes() {
+    return compNotes;
   }
 
   public String getNodeID() {
@@ -57,7 +64,22 @@ public abstract class Request {
 
   public abstract String getServiceType();
 
-  public abstract String getLanguage();
+  // Attribute getters
+  public String getAtr1() {
+    return "N/A";
+  }
+
+  public String getAtr2() {
+    return "N/A";
+  }
+
+  public String getAtr3() {
+    return "N/A";
+  }
+
+  public String getAtr4() {
+    return "N/A";
+  }
 
   public GregorianCalendar getTimeRequested() {
     return timeRequested;

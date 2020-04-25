@@ -108,7 +108,7 @@ public class ServiceDBTest {
 
   @Test
   public void testCompleteRequest() throws DBException {
-    ServiceDB.completeRequest(transReqID1);
+    ServiceDB.completeRequest(transReqID1, null);
     Request req = ServiceDB.getRequest(transReqID1);
     assertNotNull(req.getTimeCompleted());
   }
@@ -118,7 +118,7 @@ public class ServiceDBTest {
     assertThrows(
         DBException.class,
         () -> {
-          ServiceDB.denyRequest(transReqID1);
+          ServiceDB.denyRequest(transReqID1, null);
         });
     Request req = ServiceDB.getRequest(transReqID1);
     assertNotNull(req.getTimeCompleted());
@@ -139,7 +139,7 @@ public class ServiceDBTest {
 
   @Test
   public void testGetRequest() throws DBException {
-    assertEquals("wash", ServiceDB.getRequest(laundReqID1).getNotes());
+    assertEquals("wash", ServiceDB.getRequest(laundReqID1).getReqNotes());
     assertEquals("ZHALL00101", ServiceDB.getRequest(laundReqID1).getNodeID());
   }
 
