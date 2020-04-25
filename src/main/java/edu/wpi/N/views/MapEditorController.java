@@ -7,7 +7,6 @@ import edu.wpi.N.App;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
-import edu.wpi.N.entities.Node;
 import edu.wpi.N.entities.UIEdge;
 import edu.wpi.N.entities.UINode;
 import java.util.HashMap;
@@ -28,7 +27,9 @@ public class MapEditorController implements Controller {
 
   final int DEFAULT_FLOOR = 4;
   final String DEFAULT_BUILDING = "Faulkner";
-  final Color DEFAULT_COLOR = Color.BLACK;
+  final Color DEFAULT_CIRCLE_COLOR = Color.PURPLE;
+  final Color DEFAULT_LINE_COLOR = Color.BLACK;
+  final double DEFAULT_LINE_WIDTH = 4;
   final Color ADD_NODE_COLOR = Color.RED;
   final double DEFAULT_CIRCLE_OPACITY = 0.7;
   final double DEFAULT_CIRCLE_RADIUS = 7;
@@ -54,15 +55,16 @@ public class MapEditorController implements Controller {
     int currentFloor = DEFAULT_FLOOR;
     String currentBuilding = DEFAULT_BUILDING;
     nodesMap = HashBiMap.create();
+    edgesMap = HashBiMap.create();
     loadFloor(currentFloor, currentBuilding);
     initEditor();
   }
 
   private void loadFloor(int floor, String building) throws DBException {
     LinkedList<DbNode> floorNodes = MapDB.floorNodes(floor, building);
-    LinkedList<Node[]> floorEdges = MapDB.getFloorEdges(floor);
-    HashMap<DbNode, UINode> conversion = createUINodes(floorNodes, DEFAULT_COLOR);
-    createUIEdges(conversion, floorNodes);
+    LinkedList<DbNode[]> floorEdges = MapDB.getFloorEdges(floor);
+    HashMap<DbNode, UINode> conversion = createUINodes(floorNodes, DEFAULT_CIRCLE_COLOR);
+    createUIEdges(conversion, floorEdges, DEFAULT_LINE_COLOR);
   }
 
   private HashMap<DbNode, UINode> createUINodes(LinkedList<DbNode> nodes, Color c) {
@@ -76,13 +78,21 @@ public class MapEditorController implements Controller {
     return conversion;
   }
 
-  //  private void createUIEdges(HashMap<DbNode, UINode> conversion, LinkedList<DbNode> nodes)
-  // throws DBException {
-  //    for (DbNode DBnode : nodes) {
-  //      MapDB.
-  //
-  //    }
-  //  }
+  private void createUIEdges(
+      HashMap<DbNode, UINode> conversion, LinkedList<DbNode[]> edges, Color c) {
+    for (DbNode[] edge : edges) {
+      Line line =
+          createLine(
+              scaleX(edge[0].getX()),
+              scaleY(edge[0].getY()),
+              scaleX(edge[1].getX()),
+              scaleY(edge[1].getY()),
+              c);
+      UIEdge UIedge = new UIEdge(line, edge);
+      conversion.get
+      edgesMap.put(line, UIedge);
+    }
+  }
 
   public void initEditor() {
     HamburgerSlideCloseTransition trans = new HamburgerSlideCloseTransition(hb_editor);
@@ -113,7 +123,13 @@ public class MapEditorController implements Controller {
     return circle;
   }
 
-  //  private Line createLine(double x1, double y1, double x2, double y2) {}
+  private Line createLine(double x1, double y1, double x2, double y2, Color c) {
+    Line line = new Line(x1, y1, x2, y2);
+    line.setStroke(c);
+    line.setStrokeWidth(DEFAULT_LINE_WIDTH);
+    pn_display.getChildren().add(line);
+    return line;
+  }
 
   private double scaleX(double x) {
     return x * HORIZONTAL_SCALE;

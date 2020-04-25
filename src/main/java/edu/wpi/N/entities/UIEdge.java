@@ -1,13 +1,12 @@
 package edu.wpi.N.entities;
 
-import java.util.LinkedList;
 import javafx.scene.shape.Line;
 
 public class UIEdge {
   Line line;
-  LinkedList<DbNode> nodes;
+  DbNode[] nodes;
 
-  public UIEdge(Line line, LinkedList nodes) {
+  public UIEdge(Line line, DbNode[] nodes) {
     this.nodes = nodes;
     this.line = line;
   }
@@ -20,11 +19,11 @@ public class UIEdge {
     return this.line;
   }
 
-  public void setDBNodes(LinkedList<DbNode> nodes) {
+  public void setDBNodes(DbNode[] nodes) {
     this.nodes = nodes;
   }
 
-  public LinkedList<DbNode> getDBNodes() {
+  public DbNode[] getDBNodes() {
     return this.nodes;
   }
 }
