@@ -390,6 +390,11 @@ public class MapDBTest {
     MapDB.deleteNode("NELEV00X04");
   }
 
+  @Test
+  public void testGetKiosk(){
+
+  }
+
   @AfterAll
   public static void clearDB() throws DBException {
     MapDB.clearNodes();

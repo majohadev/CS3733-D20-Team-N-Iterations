@@ -907,27 +907,28 @@ public class MapDB {
     }
   }
 
-  /** set Kiosk as default starting Node*/
-  public static DbNode getKiosk(int floor, String building) throws DBException{
-    try{
-      String query = "SELECT * FROM nodes WHERE floor = ? AND building = ? AND (UPPER(longName) LIKE '% KIOSK')";
+  /** set Kiosk as default starting Node */
+  public static DbNode getKiosk(int floor, String building) throws DBException {
+    try {
+      String query =
+          "SELECT * FROM nodes WHERE floor = ? AND building = ? AND (UPPER(longName) LIKE '% KIOSK')";
       PreparedStatement stmt = con.prepareStatement(query);
       ResultSet rs = stmt.executeQuery(query);
-      stmt.setInt(1,floor);
+      stmt.setInt(1, floor);
       stmt.setString(2, building);
       DbNode sample = null;
-      if(rs.next()){
+      if (rs.next()) {
         sample =
-                new DbNode(
-                        rs.getString("nodeID"),
-                        rs.getInt("xcoord"),
-                        rs.getInt("ycoord"),
-                        floor,
-                        building,
-                        rs.getString("nodeType"),
-                        rs.getString("longName"),
-                        rs.getString("shortName"),
-                        rs.getString("teamAssigned").charAt(0));
+            new DbNode(
+                rs.getString("nodeID"),
+                rs.getInt("xcoord"),
+                rs.getInt("ycoord"),
+                floor,
+                building,
+                rs.getString("nodeType"),
+                rs.getString("longName"),
+                rs.getString("shortName"),
+                rs.getString("teamAssigned").charAt(0));
       }
       return sample;
     } catch (SQLException e) {
@@ -935,5 +936,4 @@ public class MapDB {
       throw new DBException("Error: getKiosk is not working properly");
     }
   }
-
 }
