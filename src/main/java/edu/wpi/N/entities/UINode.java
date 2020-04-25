@@ -11,6 +11,7 @@ public class UINode {
   public UINode(Circle circle, DbNode node) {
     this.circle = null;
     this.node = null;
+    this.edges = new LinkedList<>();
   }
 
   public void setCircle(Circle circle) {

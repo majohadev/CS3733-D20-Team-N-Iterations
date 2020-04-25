@@ -1,24 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXHamburger?>
+<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 
-<AnchorPane prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: d0e6d1;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.MapEditorController">
+<AnchorPane prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: BLACK;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.MapEditorController">
    <children>
-      <StackPane layoutX="59.0" prefHeight="1073.0" prefWidth="1779.0">
-         <children>
-            <ImageView fitHeight="1081.0" fitWidth="1806.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../images/Floor4SolidBackground.png" />
-               </image>
-            </ImageView>
-            <Pane fx:id="pn_display" onMouseClicked="#onPaneDisplayClicked" prefHeight="1073.0" prefWidth="1760.0" />
-         </children>
-      </StackPane>
-      <JFXHamburger fx:id="hb_editor" layoutX="1861.0" layoutY="36.0" />
+      <SplitPane dividerPositions="0.0027829313543599257" orientation="VERTICAL" prefHeight="1080.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <items>
+          <AnchorPane disable="true" maxHeight="75.0" maxWidth="-Infinity" minHeight="75.0" minWidth="75.0" prefHeight="75.0" prefWidth="1920.0" />
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" style="-fx-background-color: d0e6d1;">
+               <children>
+                  <StackPane layoutX="128.0" prefHeight="829.0" prefWidth="1028.0">
+                     <children>
+                        <ImageView fitHeight="997.0" fitWidth="1818.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/Floor1TeamN.png" />
+                           </image>
+                        </ImageView>
+                        <Pane fx:id="pn_display" onKeyPressed="#onPaneDisplayKeyPressed" onMouseClicked="#onPaneDisplayClicked" prefHeight="773.0" prefWidth="1257.0">
+                           <children>
+                              <Pane fx:id="pn_editor" layoutX="1048.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="280.0" prefWidth="470.0" />
+                           </children>
+                        </Pane>
+                     </children>
+                  </StackPane>
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
    </children>
 </AnchorPane>
