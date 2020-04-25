@@ -87,4 +87,9 @@ INSERT INTO service VALUES ('Translator', '00:00', '00:00', 'Make a request for 
 INSERT INTO service VALUES ('Laundry', '00:00', '00:00', 'Make a request for laundry services!');
 INSERT INTO service VALUES ('Medicine', '00:00', '00:00', 'Request medicine delivery!');
 
+CREATE TRIGGER doc_delete AFTER DELETE ON doctors
+REFERENCING OLD AS oldRow
+FOR EACH ROW MODE DB2SQL
+DELETE FROM employees WHERE employeeID = oldRow.doctorID;
+
 

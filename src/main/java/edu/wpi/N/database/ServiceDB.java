@@ -533,6 +533,10 @@ public class ServiceDB {
       ResultSet rs = state.executeQuery();
       rs.next();
       LoginDB.removeLogin(rs.getString("username"));
+      return;
+      //this is a bit weird, but it works. Basically, username is a foreign key in doctor with on delete cascade
+      //this means that when we removeLogin, the doctor's tuple is deleted as well
+      //then, the trigger doc_delete activates, deleting the employee.
     } catch (SQLException e) {
       if (!e.getSQLState()
           .equals("24000")) { // this code means that we're not dealing with a doctor, which is fine
