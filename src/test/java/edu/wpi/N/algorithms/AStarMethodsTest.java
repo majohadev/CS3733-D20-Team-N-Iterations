@@ -40,10 +40,7 @@ public class AStarMethodsTest {
     Path testingPath =
         myAStar.findPath(MapDB.getNode("H100000001"), MapDB.getNode("EEEEEEEEEE"), false);
 
-    for (int i = 0; i < actualPath.size(); i++) {
-      Assertions.assertEquals(
-          actualPath.get(i).getNodeID(), testingPath.getPath().get(i).getNodeID());
-    }
+    Assertions.assertEquals(actualPath, testingPath.getPath());
   }
 
   /**
@@ -61,10 +58,7 @@ public class AStarMethodsTest {
     Path testingPath =
         myAStar.findPath(MapDB.getNode("H120000000"), MapDB.getNode("H130000000"), false);
 
-    for (int i = 0; i < actualPath.size(); i++) {
-      Assertions.assertEquals(
-          testingPath.getPath().get(i).getNodeID(), actualPath.get(i).getNodeID());
-    }
+    Assertions.assertEquals(actualPath, testingPath.getPath());
   }
 
   /**
@@ -99,10 +93,7 @@ public class AStarMethodsTest {
     Path testingPath =
         myAStar.findPath(MapDB.getNode("H120000000"), MapDB.getNode("H120000000"), false);
 
-    for (int i = 0; i < actualPath.size(); i++) {
-      Assertions.assertEquals(
-          testingPath.getPath().get(i).getNodeID(), actualPath.get(i).getNodeID());
-    }
+    Assertions.assertEquals(actualPath, testingPath.getPath());
   }
 
   /** Tests that findQuickAccess chooses finds the path to the closest node of the given nodeType */

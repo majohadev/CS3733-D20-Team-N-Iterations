@@ -3,14 +3,13 @@ package edu.wpi.N.algorithms;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
-import edu.wpi.N.entities.Node;
 import edu.wpi.N.entities.Path;
 import java.util.*;
 
 public class BFS extends AbsAlgo {
 
   /**
-   * Finds the shortest path from Start to Goal node using the BFS algorithm (Dijkstra's algorithm)
+   * Finds the shortest path from Start to Goal node using the BFS algorithm
    *
    * @param startNode: The start node
    * @param endNode: The destination node
@@ -23,40 +22,36 @@ public class BFS extends AbsAlgo {
     try {
 
       Queue<DbNode> queue = new LinkedList<>();
-      ArrayList<Node> checked = new ArrayList<>();
-      LinkedList<DbNode> path = new LinkedList<>();
+      ArrayList<DbNode> checked = new ArrayList<>();
+      Map<String, String> cameFrom = new HashMap<>();
 
       queue.add(startNode);
-      // Make new BFS Node that contains itself and where it came from?
+      cameFrom.put(startNode.getNodeID(), "");
 
       while (!queue.isEmpty()) {
         DbNode currNode = queue.poll();
+        checked.add(currNode);
 
         LinkedList<DbNode> neighbors = MapDB.getAdjacent(currNode.getNodeID());
         if (neighbors.contains(endNode)) {
-          path.add(endNode);
+          cameFrom.put(endNode.getNodeID(), currNode.getNodeID());
+          break;
         }
 
         for (DbNode nextNode : neighbors) {
           if (!checked.contains(nextNode) && !queue.contains(nextNode)) {
             queue.add(nextNode);
-            // Make jacoco happy
-            return null;
+            cameFrom.put(nextNode.getNodeID(), currNode.getNodeID());
           }
         }
       }
 
-      //      if(true) {
-      //        String nextNodeID = nextNode.getNodeID();
-      //        if (nextNodeID.equals(endNode.getNodeID())) {
-      //          path.add(MapDB.getNode(nextNodeID));
-      //        }
-      //      }
-
-      return null;
+      // Generate and return the path in proper order
+      return generatePath(
+          MapDB.getGNode(startNode.getNodeID()), MapDB.getGNode(endNode.getNodeID()), cameFrom);
     } catch (Exception e) {
       e.printStackTrace();
-      throw new DBException("Unknown error: findPath in BFS", e);
+      return null;
     }
   }
 }

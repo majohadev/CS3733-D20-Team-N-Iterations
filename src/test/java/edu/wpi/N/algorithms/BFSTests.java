@@ -41,12 +41,63 @@ public class BFSTests {
     Path testingPath =
         myBFS.findPath(MapDB.getNode("H100000001"), MapDB.getNode("EEEEEEEEEE"), false);
 
-    // Placeholder
-    Assertions.assertEquals(true, true);
-    //    for (int i = 0; i < actualPath.size(); i++) {
-    //      Assertions.assertEquals(
-    //          actualPath.get(i).getNodeID(), testingPath.getPath().get(i).getNodeID());
-    //    }
+    Assertions.assertEquals(actualPath, testingPath.getPath());
+  }
+
+  /**
+   * Tests that findPath method return a Path object with route consisting of 2 Nodes, since start
+   * and end nodes are neighbors
+   */
+  @Test
+  public void findPathStartIsNeighborWithEndNode() throws DBException {
+    myBFS.setPathFinder(new BFS());
+    LinkedList<DbNode> actualPath = new LinkedList<DbNode>();
+
+    actualPath.add(MapDB.getNode("H120000000"));
+    actualPath.add(MapDB.getNode("H130000000"));
+
+    Path testingPath =
+        myBFS.findPath(MapDB.getNode("H120000000"), MapDB.getNode("H130000000"), false);
+
+    Assertions.assertEquals(actualPath, testingPath.getPath());
+  }
+
+  /**
+   * Tests that findPath throws NullPointerException if the destination given is not connected to
+   * any node
+   */
+  @Test
+  public void findPathDestinationNotFound() throws DBException {
+    myBFS.setPathFinder(new BFS());
+    Assertions.assertNull(
+        myBFS.findPath(MapDB.getNode("H120000000"), MapDB.getNode("NonExistentNode"), false));
+  }
+
+  /**
+   * Tests that findPath method throws NullPointerException if start Node doesn't have a connection
+   * to any node (including end node)
+   */
+  @Test
+  public void findPathStartNodeHasNoEdges() throws DBException {
+    myBFS.setPathFinder(new BFS());
+    DbNode nonExistentNode = new DbNode();
+    Assertions.assertNull(myBFS.findPath(nonExistentNode, MapDB.getNode("H120000000"), false));
+  }
+
+  /**
+   * Tests that findPath method returns a Path object with only one node in its route since Start
+   * Node = End Node
+   */
+  @Test
+  public void findPathEndIsStartNode() throws DBException {
+    myBFS.setPathFinder(new BFS());
+    LinkedList<DbNode> actualPath = new LinkedList<DbNode>();
+
+    actualPath.add(MapDB.getNode("H120000000"));
+    Path testingPath =
+        myBFS.findPath(MapDB.getNode("H120000000"), MapDB.getNode("H120000000"), false);
+
+    Assertions.assertEquals(actualPath, testingPath.getPath());
   }
 
   @AfterAll

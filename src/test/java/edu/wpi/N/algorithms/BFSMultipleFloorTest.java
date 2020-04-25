@@ -14,8 +14,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-public class AStarMultipleFloorsTest {
-  Algorithm myAStar = new Algorithm();
+public class BFSMultipleFloorTest {
+  Algorithm myBFS = new Algorithm();
 
   @BeforeAll
   public static void initialize()
@@ -29,12 +29,13 @@ public class AStarMultipleFloorsTest {
     CSVParser.parseCSV(inputEdges);
   }
 
-  /** Tests if the AStar pathfinder chooses the more efficient elevator when changing floors */
+  /** Tests if the BFS pathfinder chooses the more efficient elevator when changing floors */
   @Test
   public void findCloserElevatorTest() throws DBException {
+    myBFS.setPathFinder(new BFS());
     DbNode startNode = MapDB.getNode("H011000000");
     DbNode endNode = MapDB.getNode("BBBBBBBBBB");
-    Path testPath = myAStar.findPath(startNode, endNode, false);
+    Path testPath = myBFS.findPath(startNode, endNode, false);
 
     LinkedList<DbNode> actualPath = new LinkedList<DbNode>();
     actualPath.add(MapDB.getNode("H011000000"));
@@ -51,14 +52,15 @@ public class AStarMultipleFloorsTest {
   }
 
   /**
-   * Tests if the AStar pathfinder will choose the stairs over elevator if it's more efficient to do
+   * Tests if the BFS pathfinder will choose the stairs over elevator if it's more efficient to do
    * so
    */
   @Test
   public void stairsOverElevatorTest() throws DBException {
+    myBFS.setPathFinder(new BFS());
     DbNode startNode = MapDB.getNode("STAI011000");
     DbNode endNode = MapDB.getNode("H083000000");
-    Path testPath = myAStar.findPath(startNode, endNode, false);
+    Path testPath = myBFS.findPath(startNode, endNode, false);
 
     LinkedList<DbNode> actualPath = new LinkedList<DbNode>();
     actualPath.add(MapDB.getNode("STAI011000"));
@@ -69,14 +71,15 @@ public class AStarMultipleFloorsTest {
   }
 
   /**
-   * Second test to see if the AStar pathfinder will choose the stairs over elevator if it's more
+   * Second test to see if the BFS pathfinder will choose the stairs over elevator if it's more
    * efficient to do so
    */
   @Test
   public void stairsOverElevatorTest2() throws DBException {
+    myBFS.setPathFinder(new BFS());
     DbNode startNode = MapDB.getNode("H083000000");
     DbNode endNode = MapDB.getNode("H041000000");
-    Path testPath = myAStar.findPath(startNode, endNode, false);
+    Path testPath = myBFS.findPath(startNode, endNode, false);
 
     LinkedList<DbNode> actualPath = new LinkedList<DbNode>();
     actualPath.add(MapDB.getNode("H083000000"));
@@ -88,14 +91,15 @@ public class AStarMultipleFloorsTest {
   }
 
   /**
-   * Tests if the AStar pathfinder goes to the correct elevator (the only one that can access floor
-   * 4) when going from floor 3 to floor 4
+   * Tests if the BFS pathfinder goes to the correct elevator (the only one that can access floor 4)
+   * when going from floor 3 to floor 4
    */
   @Test
   public void thirdToFourthFloorTest() throws DBException {
+    myBFS.setPathFinder(new BFS());
     DbNode startNode = MapDB.getNode("ELEV013000");
     DbNode endNode = MapDB.getNode("DDDDDDDDDD");
-    Path testPath = myAStar.findPath(startNode, endNode, false);
+    Path testPath = myBFS.findPath(startNode, endNode, false);
 
     LinkedList<DbNode> actualPath = new LinkedList<DbNode>();
     actualPath.add(MapDB.getNode("ELEV013000"));
@@ -110,31 +114,6 @@ public class AStarMultipleFloorsTest {
 
     Assertions.assertEquals(actualPath, testPath.getPath());
   }
-
-  //  /**
-  //   * Tests if the pathfinder can get use one floor change to get to one floor, and then navigate
-  //   * to different one
-  //   * Doesn't currently work due to what GetGAdjacent returns
-  //   */
-  //  @Test
-  //  public void fourthToFirstFloorTest() throws DBException {
-  //    DbNode startNode = MapDB.getNode("DDDDDDDDDD");
-  //    DbNode endNode = MapDB.getNode("H011000000");
-  //    Path testPath = Pathfinder.findPath(startNode, endNode);
-  //
-  //    LinkedList<DbNode> actualPath = new LinkedList<DbNode>();
-  //    actualPath.add(MapDB.getNode("DDDDDDDDDD"));
-  //    actualPath.add(MapDB.getNode("ELEV034000"));
-  //    actualPath.add(MapDB.getNode("ELEV033000"));
-  //    actualPath.add(MapDB.getNode("H083000000"));
-  //    actualPath.add(MapDB.getNode("STAI013000"));
-  //    actualPath.add(MapDB.getNode("STAI011000"));
-  //    actualPath.add(MapDB.getNode("H041000000"));
-  //    actualPath.add(MapDB.getNode("H021000000"));
-  //    actualPath.add(MapDB.getNode("H011000000"));
-  //
-  //    Assertions.assertEquals(actualPath, testPath.getPath());
-  //  }
 
   @AfterAll
   public static void clear() throws DBException {
