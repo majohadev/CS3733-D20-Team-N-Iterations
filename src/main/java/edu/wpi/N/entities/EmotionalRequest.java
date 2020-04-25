@@ -3,6 +3,9 @@ package edu.wpi.N.entities;
 import java.util.GregorianCalendar;
 
 public class EmotionalRequest extends Request {
+
+
+
     public EmotionalRequest(
             int requestID,
             int emp_assigned,
