@@ -4,8 +4,11 @@ import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.DoctorDB;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
-import edu.wpi.N.entities.Doctor;
+import edu.wpi.N.entities.employees.Doctor;
+import java.util.*;
+import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
 import org.apache.commons.text.similarity.LevenshteinDistance;
 
 public class FuzzySearchAlgorithm {
@@ -20,22 +23,33 @@ public class FuzzySearchAlgorithm {
   public static LinkedList<DbNode> suggestLocations(String userInput) throws DBException {
     // initialize variables
     LinkedList<DbNode> suggestions = new LinkedList<DbNode>();
+    int inputLength = userInput.replaceAll("\\s+", "").length();
+    int lowestDistanceSoFar = 1000;
+    userInput = userInput.trim().toLowerCase();
 
     if (userInput.length() > 1) {
 
       // search for all nodes by long name
-      LinkedList<DbNode> suggestedNodes = MapDB.searchVisNode(4, null, null, userInput);
+      LinkedList<DbNode> suggestedNodes = MapDB.searchVisNode(-1, null, null, userInput);
       if (suggestedNodes.size() != 0) {
+
         for (DbNode node : suggestedNodes) {
-          suggestions.add(node);
+
+          // Identify in which order to put the suggestions (most relevant -> less relevant)
+          LevenshteinDistance distance = new LevenshteinDistance();
+          int d = distance.apply(userInput, node.getLongName());
+          if (d < lowestDistanceSoFar) {
+            suggestions.addFirst(node);
+            lowestDistanceSoFar = d;
+          } else {
+            suggestions.add(node);
+          }
         }
       } else {
         // if 5 or more letters in user's input (not including space)
-        if (userInput.replaceAll("\\s+", "").length() > 4) {
-          // Get a single longest word in user's string
-          String inputWord = getLongestWord(userInput);
+        if (inputLength > 4) {
           // // Do fuzzy search
-          suggestions = performFuzzySearchOnLocations(inputWord);
+          suggestions = performFuzzySearchOnLocations(userInput);
         }
       }
     }
@@ -50,31 +64,54 @@ public class FuzzySearchAlgorithm {
    */
   private static LinkedList<DbNode> performFuzzySearchOnLocations(String userInput)
       throws DBException {
-    userInput = userInput.toLowerCase();
     LinkedList<DbNode> suggestions = new LinkedList<DbNode>();
+    // Get rid of any pretexts
+    List<String> userInputByWord = new ArrayList<String>(Arrays.asList(userInput.split(" ")));
+    int numUserWords = userInputByWord.size();
+    userInputByWord.removeIf(
+        s -> {
+          return (s.equals("and") || s.equals("&") || s.equals("of") || s.equals("to"));
+        });
+
+    double bestRatioSoFar = 0;
 
     double ratio = 0.8;
 
     // Get all the visible nodes from DB
-    for (DbNode node : MapDB.searchVisNode(4, null, null, "")) {
+    for (DbNode node : MapDB.searchVisNode(-1, null, null, "")) {
+
       String fullLongName = node.getLongName();
+      String[] longNameWords = fullLongName.toLowerCase().split(" ");
+      double r = 0;
 
       // Iterate through Long Name's words
-      for (String s : fullLongName.toLowerCase().split(" ")) {
+      for (String location : longNameWords) {
+        // Calculate ration of every Long Name to Every user's word
+        for (String userWord : userInputByWord) {
 
-        // Check that the word is >= than (user's word size - 2)
-        if (userInput.length() - 2 <= s.length()) {
+          // Check that the word is >= than (user's word size - 1)
+          if (userWord.length() - 1 <= location.length()) {
 
-          // calculate levenshtein distance between the 2 strings (input word and Long Name word)
-          LevenshteinDistance distance = new LevenshteinDistance();
-          int d = distance.apply(userInput, s);
+            // calculate levenshtein distance between the 2 strings (input word and Long Name word)
+            LevenshteinDistance distance = new LevenshteinDistance();
+            int d = distance.apply(userWord, location);
 
-          // calculate ratio
-          double lensum = s.length() + userInput.length();
-          if ((lensum - d) / (lensum) >= ratio) {
-            suggestions.add(node);
+            // calculate ratio
+            double lensum = location.length() + userWord.length();
+            double currentRatio = (lensum - d) / (lensum);
+            if (currentRatio >= ratio) {
+              r = r + currentRatio;
+            }
           }
         }
+      }
+
+      // add the suggestions in proper order based on how relevant they are (most -> least)
+      if (r >= bestRatioSoFar && r >= ratio && numUserWords <= longNameWords.length) {
+        suggestions.addFirst(node);
+        bestRatioSoFar = r;
+      } else if (r >= ratio) {
+        suggestions.add(node);
       }
     }
     return suggestions;
@@ -108,21 +145,33 @@ public class FuzzySearchAlgorithm {
 
     // initialize variables
     LinkedList<Doctor> suggestions = new LinkedList<Doctor>();
+    int inputLength = userInput.replaceAll("\\s+", "").length();
+    int lowestDistanceSoFar = 1000;
+    userInput = userInput.trim().toLowerCase();
 
     if (userInput.length() > 1) {
+
       // search for all nodes by long name
-      LinkedList<Doctor> suggestedDoctors = DoctorDB.searchDoctors(userInput);
-      if (suggestedDoctors.size() != 0) {
-        for (Doctor doc : suggestedDoctors) {
-          suggestions.add(doc);
+      LinkedList<Doctor> suggestedNodes = DoctorDB.searchDoctors(userInput);
+      if (suggestedNodes.size() != 0) {
+
+        for (Doctor doc : suggestedNodes) {
+
+          // Identify in which order to put the suggestions (most relevant -> less relevant)
+          LevenshteinDistance distance = new LevenshteinDistance();
+          int d = distance.apply(userInput, doc.getName());
+          if (d < lowestDistanceSoFar) {
+            suggestions.addFirst(doc);
+            lowestDistanceSoFar = d;
+          } else {
+            suggestions.add(doc);
+          }
         }
       } else {
         // if 5 or more letters in user's input (not including space)
-        if (userInput.replaceAll("\\s+", "").length() > 4) {
-          // Get a single longest word in user's string
-          String inputWord = getLongestWord(userInput);
+        if (inputLength > 4) {
           // // Do fuzzy search
-          suggestions = performFuzzySearchOnDoctors(inputWord);
+          suggestions = performFuzzySearchOnDoctors(userInput);
         }
       }
     }
@@ -137,34 +186,58 @@ public class FuzzySearchAlgorithm {
    */
   private static LinkedList<Doctor> performFuzzySearchOnDoctors(String userInput)
       throws DBException {
-    userInput = userInput.toLowerCase();
+
     LinkedList<Doctor> suggestions = new LinkedList<Doctor>();
 
+    // Get rid of any pretexts
+    List<String> userInputByWord = new ArrayList<String>(Arrays.asList(userInput.split(" ")));
+    int numUserWords = userInputByWord.size();
+    userInputByWord.removeIf(
+        s -> {
+          return (s.equals("and") || s.equals("&") || s.equals("of") || s.equals("to"));
+        });
+
     double ratio = 0.8;
+    double bestRatioSoFar = 0;
 
     // Get all the visible nodes from DB
     for (Doctor doc : DoctorDB.getDoctors()) {
       String fullName = doc.getName();
+      String[] fullNameWords = fullName.toLowerCase().split(" ");
+
+      double r = 0;
 
       // Iterate through Long Name's words
-      for (String s : fullName.toLowerCase().split(" ")) {
+      for (String doctorName : fullNameWords) {
 
-        // Check that the word is >= than (user's word size - 2)
-        if (userInput.length() - 2 <= s.length()) {
+        // Calculate ratio of every Long Name to Every user's word
+        for (String userWord : userInputByWord) {
 
-          // calculate levenshtein distance between the 2 strings (input word and Long Name word)
-          LevenshteinDistance distance = new LevenshteinDistance();
-          int d = distance.apply(userInput, s);
+          // Check that the word is >= than (user's word size - 1)
+          if (userWord.length() - 1 <= doctorName.length()) {
 
-          // calculate ratio
-          double lensum = s.length() + userInput.length();
-          if ((lensum - d) / (lensum) >= ratio) {
-            suggestions.add(doc);
+            // calculate levenshtein distance between the 2 strings (input word and Long Name word)
+            LevenshteinDistance distance = new LevenshteinDistance();
+            int d = distance.apply(userWord, doctorName);
+
+            // calculate ratio
+            double lensum = doctorName.length() + userWord.length();
+            double currentRatio = (lensum - d) / (lensum);
+            if (currentRatio >= ratio) {
+              r = r + currentRatio;
+            }
           }
         }
       }
+
+      // add the suggestions in proper order based on how relevant they are (most -> least)
+      if (r >= bestRatioSoFar && r >= ratio && numUserWords <= fullNameWords.length) {
+        suggestions.addFirst(doc);
+        bestRatioSoFar = r;
+      } else if (r >= ratio) {
+        suggestions.add(doc);
+      }
     }
-    // suggestions
     return suggestions;
   }
 }
