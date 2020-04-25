@@ -29,7 +29,7 @@ public class BFSMultipleFloorTest {
     CSVParser.parseCSV(inputEdges);
   }
 
-  /** Tests if the BFS pathfinder chooses the more efficient elevator when changing floors */
+  /** Tests if the pathfinder chooses the more efficient elevator when changing floors */
   @Test
   public void findCloserElevatorTest() throws DBException {
     myBFS.setPathFinder(new BFS());
@@ -52,7 +52,7 @@ public class BFSMultipleFloorTest {
   }
 
   /**
-   * Tests if the BFS pathfinder will choose the stairs over elevator if it's more efficient to do
+   * Tests if the pathfinder will choose the stairs over elevator if it's more efficient to do
    * so
    */
   @Test
@@ -71,7 +71,7 @@ public class BFSMultipleFloorTest {
   }
 
   /**
-   * Second test to see if the BFS pathfinder will choose the stairs over elevator if it's more
+   * Second test to see if the pathfinder will choose the stairs over elevator if it's more
    * efficient to do so
    */
   @Test
@@ -91,7 +91,7 @@ public class BFSMultipleFloorTest {
   }
 
   /**
-   * Tests if the BFS pathfinder goes to the correct elevator (the only one that can access floor 4)
+   * Tests if the pathfinder goes to the correct elevator (the only one that can access floor 4)
    * when going from floor 3 to floor 4
    */
   @Test

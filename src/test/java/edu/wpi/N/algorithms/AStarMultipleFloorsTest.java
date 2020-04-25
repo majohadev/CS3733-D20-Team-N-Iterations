@@ -29,7 +29,7 @@ public class AStarMultipleFloorsTest {
     CSVParser.parseCSV(inputEdges);
   }
 
-  /** Tests if the AStar pathfinder chooses the more efficient elevator when changing floors */
+  /** Tests if the pathfinder chooses the more efficient elevator when changing floors */
   @Test
   public void findCloserElevatorTest() throws DBException {
     DbNode startNode = MapDB.getNode("H011000000");
@@ -51,7 +51,7 @@ public class AStarMultipleFloorsTest {
   }
 
   /**
-   * Tests if the AStar pathfinder will choose the stairs over elevator if it's more efficient to do
+   * Tests if the pathfinder will choose the stairs over elevator if it's more efficient to do
    * so
    */
   @Test
@@ -69,7 +69,7 @@ public class AStarMultipleFloorsTest {
   }
 
   /**
-   * Second test to see if the AStar pathfinder will choose the stairs over elevator if it's more
+   * Second test to see if the pathfinder will choose the stairs over elevator if it's more
    * efficient to do so
    */
   @Test
@@ -88,7 +88,7 @@ public class AStarMultipleFloorsTest {
   }
 
   /**
-   * Tests if the AStar pathfinder goes to the correct elevator (the only one that can access floor
+   * Tests if the pathfinder goes to the correct elevator (the only one that can access floor
    * 4) when going from floor 3 to floor 4
    */
   @Test
