@@ -3,7 +3,7 @@ package edu.wpi.N.database;
 import static org.junit.jupiter.api.Assertions.*;
 
 import edu.wpi.N.entities.DbNode;
-import edu.wpi.N.entities.Doctor;
+import edu.wpi.N.entities.employees.Doctor;
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import java.util.LinkedList;
@@ -26,7 +26,7 @@ public class DoctorDBTest {
     LinkedList<DbNode> offices = new LinkedList<DbNode>();
     offices.add(MapDB.getNode("NDEPT00104"));
     offices.add(MapDB.getNode("NHALL00104"));
-    int wongID = DoctorDB.addDoctor("Wong", "Softeng", offices);
+    int wongID = DoctorDB.addDoctor("Wong", "Softeng", "DocWong", "password", offices);
     Doctor wong = DoctorDB.getDoctor(wongID);
     assertTrue(wong.getField().equals("Softeng"));
     assertTrue(wong.getLoc().get(0).equals(MapDB.getNode("NDEPT00104")));
@@ -38,7 +38,14 @@ public class DoctorDBTest {
     DoctorDB.removeOffice(wongID, MapDB.getNode("NHALL00104"));
     wong = DoctorDB.getDoctor(wongID);
     assertTrue(wong.getLoc().get(1).equals(MapDB.getNode("NDEPT00204")));
-    DoctorDB.deleteDoctor(wongID);
+    LoginDB.verifyLogin("DocWong", "password");
+    assertEquals("DOCTOR", LoginDB.currentAccess());
+    ServiceDB.removeEmployee(wongID);
+    assertThrows(
+        DBException.class,
+        () -> {
+          LoginDB.verifyLogin("DocWong", "password");
+        });
   }
 
   @Test
@@ -46,10 +53,10 @@ public class DoctorDBTest {
     LinkedList<DbNode> offices = new LinkedList<DbNode>();
     offices.add(MapDB.getNode("NDEPT00104"));
     offices.add(MapDB.getNode("NHALL00104"));
-    int wongID = DoctorDB.addDoctor("Wong", "Softeng", offices);
+    int wongID = DoctorDB.addDoctor("Wong", "Softeng", "DocWong", "password", offices);
     offices.pop();
     offices.add(MapDB.getNode("NDEPT00204"));
-    int kongID = DoctorDB.addDoctor("Kong", "History", offices);
+    int kongID = DoctorDB.addDoctor("Kong", "History", "Kong", "Kpass", offices);
     LinkedList<Doctor> drs = DoctorDB.searchDoctors("oNg");
     Doctor wong = DoctorDB.getDoctor(wongID);
     Doctor kong = DoctorDB.getDoctor(kongID);
@@ -61,8 +68,8 @@ public class DoctorDBTest {
     drs = DoctorDB.getDoctors();
     assertTrue(drs.contains(wong));
     assertTrue(drs.contains(kong));
-    DoctorDB.deleteDoctor(wongID);
-    DoctorDB.deleteDoctor(kongID);
+    ServiceDB.removeEmployee(wongID);
+    ServiceDB.removeEmployee(kongID);
   }
 
   @AfterAll

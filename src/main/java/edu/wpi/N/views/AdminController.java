@@ -3,9 +3,9 @@ package edu.wpi.N.views;
 import edu.wpi.N.App;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.ServiceDB;
-import edu.wpi.N.entities.Employee;
-import edu.wpi.N.entities.Request;
-import edu.wpi.N.entities.Translator;
+import edu.wpi.N.entities.employees.Employee;
+import edu.wpi.N.entities.employees.Translator;
+import edu.wpi.N.entities.request.Request;
 import java.io.IOException;
 import java.net.URL;
 import java.util.GregorianCalendar;
@@ -174,7 +174,7 @@ public class AdminController implements Initializable, Controller {
                   .getEmp_assigned()
               != null)) {
         ServiceDB.completeRequest(
-            tbMockData.getSelectionModel().getSelectedItems().get(0).getRequestID());
+            tbMockData.getSelectionModel().getSelectedItems().get(0).getRequestID(), null);
 
         Alert acceptReq = new Alert(Alert.AlertType.CONFIRMATION);
         acceptReq.setContentText("Request Accepted");
@@ -188,7 +188,7 @@ public class AdminController implements Initializable, Controller {
         }
       } else if (e.getSource() == btn_Deny) { // This case needs a status check
         ServiceDB.denyRequest(
-            tbMockData.getSelectionModel().getSelectedItems().get(0).getRequestID());
+            tbMockData.getSelectionModel().getSelectedItems().get(0).getRequestID(), null);
 
         Alert denyReq = new Alert(Alert.AlertType.WARNING);
         denyReq.setContentText("Request Denied");
