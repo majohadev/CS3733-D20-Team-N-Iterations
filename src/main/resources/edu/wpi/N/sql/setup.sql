@@ -93,6 +93,7 @@ CREATE TABLE medicineRequests(
     requestID INT NOT NULL PRIMARY KEY REFERENCES request(requestID) ON DELETE CASCADE,
     medicineName VARCHAR(255),
     dosage FLOAT,
+    units VARCHAR(3),
     patientID INT NOT NULL REFERENCES patients(patientID) ON DELETE SET NULL
 );
 
