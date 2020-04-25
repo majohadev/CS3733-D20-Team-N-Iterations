@@ -913,9 +913,9 @@ public class MapDB {
       String query =
           "SELECT * FROM nodes WHERE floor = ? AND building = ? AND (UPPER(longName) LIKE '% KIOSK')";
       PreparedStatement stmt = con.prepareStatement(query);
-      ResultSet rs = stmt.executeQuery(query);
       stmt.setInt(1, floor);
       stmt.setString(2, building);
+      ResultSet rs = stmt.executeQuery();
       DbNode sample = null;
       if (rs.next()) {
         sample =
