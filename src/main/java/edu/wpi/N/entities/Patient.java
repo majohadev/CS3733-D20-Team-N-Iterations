@@ -1,12 +1,18 @@
 package edu.wpi.N.entities;
 
 public class Patient {
+  private int id;
   private String name;
   private String location;
 
-  public Patient(String name, String location) {
+  public Patient(int id, String name, String location) {
+    this.id = id;
     this.name = name;
     this.location = location;
+  }
+
+  public int getId() {
+    return id;
   }
 
   public String getName() {
@@ -25,6 +31,6 @@ public class Patient {
 
     Patient other = (Patient) obj;
 
-    return name.equals(other.name) && location.equals(other.location);
+    return id == other.id && name.equals(other.name) && location.equals(other.location);
   }
 }
