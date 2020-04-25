@@ -6,6 +6,8 @@ import edu.wpi.N.entities.*;
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoField;
+import java.util.Iterator;
 import java.util.LinkedList;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -184,6 +186,25 @@ public class ServiceDBTest {
     LinkedList<String> langs = ServiceDB.getLanguages();
     assertTrue(langs.contains("Gnomish"));
     assertTrue(langs.contains("Lojban"));
+  }
+
+  @Test
+  public void testChangeServiceTime() throws DBException {
+    ServiceDB.setServiceTime("Laundry", "04:00", "14:35");
+    LinkedList<Service> services = ServiceDB.getServices();
+    Iterator<Service> serviceIterator = services.iterator();
+    while (serviceIterator.hasNext()) {
+      Service s = serviceIterator.next();
+      if (s.getServiceType().equals("Laundry")) {
+        assertEquals(4, s.getStartTime().get(ChronoField.HOUR_OF_DAY));
+        assertEquals(35, s.getEndTime().get(ChronoField.MINUTE_OF_HOUR));
+      }
+    }
+    assertThrows(
+        DBException.class,
+        () -> {
+          ServiceDB.setServiceTime("Translator", "4:00", "1:00PM");
+        });
   }
 
   @AfterAll

@@ -4,6 +4,7 @@ import edu.wpi.N.entities.*;
 import java.sql.*;
 import java.util.*;
 import java.util.Date;
+import java.util.regex.Pattern;
 
 public class ServiceDB {
   private static Connection con = MapDB.getCon();
@@ -603,6 +604,40 @@ public class ServiceDB {
       e.printStackTrace();
       throw new DBException("Unknown error: getlanguages", e);
     }
+  }
+
+  /**
+   * Changes the time that a service is available. Important: Times must be in a five-character time
+   * format in 24-hour time Examples of valid times: 08:45, 14:20, 00:15 (12:15 AM), invalid times:
+   * 8:45, 2:20PM, 12:15 would be 15 minutes past noon
+   *
+   * @param serviceType The service type which you want to change
+   * @param startTime The new start time for the service
+   * @param endTime The new end time for the service
+   * @throws DBException On error or when input is invalid.
+   */
+  public static void setServiceTime(String serviceType, String startTime, String endTime)
+      throws DBException {
+    String p = "([01]\\d:[0-6]\\d)|(2[0-4]:[0-6]\\d)";
+    Pattern pattern = Pattern.compile(p);
+    if (startTime.length() == 5
+        && endTime.length() == 5
+        && pattern.matcher(startTime).matches()
+        && pattern.matcher(startTime).matches()) {
+      String query = "UPDATE service SET timeStart = ?, timeEnd = ? WHERE serviceType = ?";
+      try {
+        PreparedStatement stmt = con.prepareStatement(query);
+        stmt.setString(1, startTime);
+        stmt.setString(2, endTime);
+        stmt.setString(3, serviceType);
+        if (stmt.executeUpdate() <= 0) throw new DBException("That service type is invalid!");
+      } catch (SQLException e) {
+        e.printStackTrace();
+        throw new DBException("Unknown error: setServiceTime ", e);
+      }
+    } else
+      throw new DBException(
+          "The times you entered, " + startTime + ", " + endTime + ", are invalid!");
   }
 
   public static GregorianCalendar getJavatime(Timestamp time) {
