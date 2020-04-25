@@ -11,3 +11,5 @@ DROP TABLE employees;
 DROP TABLE service;
 DROP TABLE edges;
 DROP TABLE nodes;
+DROP TABLE patients;
+DROP TABLE medicineRequests;
