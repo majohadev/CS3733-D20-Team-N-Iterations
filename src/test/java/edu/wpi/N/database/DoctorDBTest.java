@@ -3,7 +3,7 @@ package edu.wpi.N.database;
 import static org.junit.jupiter.api.Assertions.*;
 
 import edu.wpi.N.entities.DbNode;
-import edu.wpi.N.entities.Doctor;
+import edu.wpi.N.entities.employees.Doctor;
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import java.util.LinkedList;

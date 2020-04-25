@@ -1,6 +1,12 @@
 package edu.wpi.N.database;
 
 import edu.wpi.N.entities.*;
+import edu.wpi.N.entities.employees.Employee;
+import edu.wpi.N.entities.employees.Laundry;
+import edu.wpi.N.entities.employees.Translator;
+import edu.wpi.N.entities.request.LaundryRequest;
+import edu.wpi.N.entities.request.Request;
+import edu.wpi.N.entities.request.TranslatorRequest;
 import java.sql.*;
 import java.util.*;
 import java.util.Date;

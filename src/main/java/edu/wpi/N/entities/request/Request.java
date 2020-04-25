@@ -1,7 +1,8 @@
-package edu.wpi.N.entities;
+package edu.wpi.N.entities.request;
 
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.ServiceDB;
+import edu.wpi.N.entities.employees.Employee;
 import java.util.GregorianCalendar;
 
 public abstract class Request {

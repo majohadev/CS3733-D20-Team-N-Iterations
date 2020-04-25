@@ -46,13 +46,14 @@ public class LoginDB {
   }
 
   /**
-   * Creates a new login with doctor access
+   * Creates a new login with doctor access Shouldn't ever call directly, this is called when you
+   * call addDoctor
    *
    * @param username the new username
    * @param password the new password
    * @throws DBException On error or when the user already exists
    */
-  public static void createDoctorLogin(String username, String password) throws DBException {
+  static void createDoctorLogin(String username, String password) throws DBException {
     createLogin(username, password, "DOCTOR");
   }
 

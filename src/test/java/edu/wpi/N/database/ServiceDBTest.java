@@ -3,6 +3,10 @@ package edu.wpi.N.database;
 import static org.junit.jupiter.api.Assertions.*;
 
 import edu.wpi.N.entities.*;
+import edu.wpi.N.entities.employees.Employee;
+import edu.wpi.N.entities.employees.Laundry;
+import edu.wpi.N.entities.employees.Translator;
+import edu.wpi.N.entities.request.Request;
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
@@ -130,7 +134,7 @@ public class ServiceDBTest {
     assertTrue(felix.getName().equals("Felix Bignoodle"));
     assertTrue(felix.getLanguages().contains("Lojban"));
     assertTrue(felix.getLanguages().contains("Gnomish"));
-    assertEquals(new Laundry(3, "Snaps McKraken"), snaps);
+    assertEquals(new Laundry(snapsID, "Snaps McKraken"), snaps);
   }
 
   @Test

@@ -5,7 +5,7 @@
 // import edu.wpi.N.database.DoctorDB;
 // import edu.wpi.N.database.MapDB;
 // import edu.wpi.N.entities.DbNode;
-// import edu.wpi.N.entities.Doctor;
+// import edu.wpi.N.entities.employees.Doctor;
 // import java.io.File;
 // import java.io.FileNotFoundException;
 // import java.sql.SQLException;

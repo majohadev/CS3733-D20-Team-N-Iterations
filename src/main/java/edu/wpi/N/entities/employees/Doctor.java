@@ -1,5 +1,6 @@
-package edu.wpi.N.entities;
+package edu.wpi.N.entities.employees;
 
+import edu.wpi.N.entities.DbNode;
 import java.util.LinkedList;
 
 public class Doctor extends Employee {

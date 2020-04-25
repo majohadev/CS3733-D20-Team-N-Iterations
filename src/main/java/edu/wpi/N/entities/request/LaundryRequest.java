@@ -1,4 +1,4 @@
-package edu.wpi.N.entities;
+package edu.wpi.N.entities.request;
 
 import java.util.GregorianCalendar;
 

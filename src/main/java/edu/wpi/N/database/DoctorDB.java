@@ -1,7 +1,7 @@
 package edu.wpi.N.database;
 
 import edu.wpi.N.entities.DbNode;
-import edu.wpi.N.entities.Doctor;
+import edu.wpi.N.entities.employees.Doctor;
 import java.sql.*;
 import java.util.Iterator;
 import java.util.LinkedList;
