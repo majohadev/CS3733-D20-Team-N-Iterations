@@ -231,6 +231,8 @@ public class ServiceDBTest {
 
     MedicineRequest med = (MedicineRequest) ServiceDB.getRequest(id);
     assertTrue(ServiceDB.getRequests().contains(med));
+
+    MapDB.deleteNode("NDEPT10004");
   }
 
   @Test
@@ -242,6 +244,8 @@ public class ServiceDBTest {
     LinkedList<String> list = ServiceDB.getPatientByMedType("weed");
     assertTrue(list.contains("Max"));
     assertTrue(list.contains("Nick"));
+    MapDB.deleteNode("NDEPT10004");
+    MapDB.deleteNode("NDEPT10014");
   }
 
   @Test
