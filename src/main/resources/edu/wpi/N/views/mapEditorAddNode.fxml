@@ -23,7 +23,7 @@
             <Font name="Calibri" size="25.0" />
          </font>
       </Label>
-      <JFXTextField fx:id="txt_xPos" layoutX="44.0" layoutY="140.0" prefHeight="25.0" prefWidth="171.0" promptText="X Position" style="-fx-text-inner-color: WHITE; -fx-prompt-text-fill: WHITE;" unFocusColor="WHITE">
+      <JFXTextField fx:id="txt_xPos" layoutX="44.0" layoutY="143.0" prefHeight="25.0" prefWidth="171.0" promptText="X Position" style="-fx-text-inner-color: WHITE; -fx-prompt-text-fill: WHITE;" unFocusColor="WHITE">
          <font>
             <Font name="Calibri" size="18.0" />
          </font></JFXTextField>
