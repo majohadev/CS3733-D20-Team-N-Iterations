@@ -4,10 +4,12 @@ import edu.wpi.N.entities.*;
 import edu.wpi.N.entities.employees.Doctor;
 import edu.wpi.N.entities.employees.EmotionalSupporter;
 import edu.wpi.N.entities.employees.Employee;
+import edu.wpi.N.entities.employees.IT;
 import edu.wpi.N.entities.employees.Laundry;
 import edu.wpi.N.entities.employees.Translator;
 import edu.wpi.N.entities.employees.WheelchairEmployee;
 import edu.wpi.N.entities.request.EmotionalRequest;
+import edu.wpi.N.entities.request.ITRequest;
 import edu.wpi.N.entities.request.LaundryRequest;
 import edu.wpi.N.entities.request.MedicineRequest;
 import edu.wpi.N.entities.request.Request;
@@ -22,7 +24,6 @@ public class ServiceDB {
   private static Connection con = MapDB.getCon();
 
   // Noah
-
   /**
    * Returns the employee specified by the given ID
    *
@@ -59,6 +60,8 @@ public class ServiceDB {
         return DoctorDB.getDoctor(id);
       } else if (sType.equals("Wheelchair")) {
         return new WheelchairEmployee(id, name);
+      } else if (sType.equals("IT")) {
+        return new IT(id, name);
       } else
         throw new DBException(
             "Invalid employee in table employees! ID: " + id + "Name: " + rs.getString("name"));
@@ -70,7 +73,6 @@ public class ServiceDB {
   }
 
   // Chris
-
   /**
    * Returns a list of all employees in the database
    *
@@ -85,11 +87,11 @@ public class ServiceDB {
     allEmployee.addAll(getEmotionalSupporters());
     allEmployee.addAll(DoctorDB.getDoctors());
     allEmployee.addAll(getWheelchairEmployees());
+    allEmployee.addAll(getITs());
     return allEmployee;
   }
 
   // Nick
-
   /**
    * Gets all services in the database
    *
@@ -186,7 +188,6 @@ public class ServiceDB {
             timeComp,
             status,
             rs.getString("supportType"));
-
       } else if (rs.getString("serviceType").equals("Medicine")) {
         query =
             "SELECT medicineName, dosage, units, patient FROM medicineRequests WHERE requestID = ?";
@@ -207,6 +208,23 @@ public class ServiceDB {
             rs.getDouble("dosage"),
             rs.getString("units"),
             rs.getString("patient"));
+      } else if (sType.equals("IT")) {
+        query = "SELECT device, problem FROM ITrequest WHERE requestID = ?";
+        stmt = con.prepareStatement(query);
+        stmt.setInt(1, id);
+        rs = stmt.executeQuery();
+        rs.next();
+        return new ITRequest(
+            rid,
+            empId,
+            reqNotes,
+            compNotes,
+            nodeID,
+            timeReq,
+            timeComp,
+            status,
+            rs.getString("device"),
+            rs.getString("problem"));
       } else throw new DBException("Invalid request! ID = " + id);
     } catch (SQLException e) {
       e.printStackTrace();
@@ -215,7 +233,6 @@ public class ServiceDB {
   }
 
   // Noah
-
   /**
    * Gets all the requests in the database
    *
@@ -308,6 +325,23 @@ public class ServiceDB {
                 rs.getString("status"),
                 rs.getString("needsAssistance")));
       }
+      query = "SELECT * from request, ITrequest WHERE request.requestID = ITrequest.requestID";
+      stmt = con.prepareStatement(query);
+      rs = stmt.executeQuery();
+      while (rs.next()) {
+        requests.add(
+            new ITRequest(
+                rs.getInt("requestID"),
+                rs.getInt("assigned_eID"),
+                rs.getString("reqNotes"),
+                rs.getString("compNotes"),
+                rs.getString("nodeID"),
+                getJavatime(rs.getTimestamp("timeRequested")),
+                getJavatime(rs.getTimestamp("timeCompleted")),
+                rs.getString("status"),
+                rs.getString("device"),
+                rs.getString("problem")));
+      }
       return requests;
     } catch (SQLException e) {
       e.printStackTrace();
@@ -316,7 +350,6 @@ public class ServiceDB {
   }
 
   // Chris
-
   /**
    * Gets all the open requests (not completed requests) in the database
    *
@@ -394,6 +427,24 @@ public class ServiceDB {
                 rs.getString("status"),
                 rs.getString("supportType")));
       }
+      query =
+          "SELECT * from request, ITrequest WHERE request.requestID = ITrequest.requestID AND status = 'OPEN'";
+      stmt = con.prepareStatement(query);
+      rs = stmt.executeQuery();
+      while (rs.next()) {
+        openList.add(
+            new ITRequest(
+                rs.getInt("requestID"),
+                rs.getInt("assigned_eID"),
+                rs.getString("reqNotes"),
+                rs.getString("compNotes"),
+                rs.getString("nodeID"),
+                getJavatime(rs.getTimestamp("timeRequested")),
+                getJavatime(rs.getTimestamp("timeCompleted")),
+                rs.getString("status"),
+                rs.getString("device"),
+                rs.getString("problem")));
+      }
       return openList;
     } catch (SQLException ex) {
       ex.printStackTrace();
@@ -402,7 +453,6 @@ public class ServiceDB {
   }
 
   // Nick
-
   /**
    * Gets all the translators in the database
    *
@@ -451,7 +501,7 @@ public class ServiceDB {
   /**
    * Gets all the emotional supporters in the database
    *
-   * @return a linked list of all people who can do laundry in the database
+   * @return a linked list of all people who can do emotional support in the database
    */
   public static LinkedList<EmotionalSupporter> getEmotionalSupporters() throws DBException {
     try {
@@ -492,8 +542,28 @@ public class ServiceDB {
       throw new DBException("Unknown error: getWheelchairEmployees", e);
     }
   }
-  // Chris
+  /**
+   * Gets all the IT employees in the database
+   *
+   * @return a linked list of all people who can do IT in the database
+   */
+  public static LinkedList<IT> getITs() throws DBException {
+    try {
+      String query = "SELECT IT_employeeID from employees, IT where employeeID = IT_employeeID";
+      PreparedStatement stmt = con.prepareStatement(query);
+      ResultSet rs = stmt.executeQuery();
+      LinkedList<IT> ITs = new LinkedList<>();
+      while (rs.next()) {
+        ITs.add((IT) getEmployee(rs.getInt("IT_employeeID")));
+      }
+      return ITs;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown error: getITs", e);
+    }
+  }
 
+  // Chris
   /**
    * Returns a list of all translators who speak a specified langauge
    *
@@ -520,7 +590,6 @@ public class ServiceDB {
   }
 
   // Nick
-
   /**
    * Adds a translator to the database
    *
@@ -557,7 +626,6 @@ public class ServiceDB {
   }
 
   // Noah
-
   /**
    * Adds a laundry employee to the database
    *
@@ -638,8 +706,33 @@ public class ServiceDB {
       throw new DBException("Unknown error: addWheelchairEmployee , name = " + name, e);
     }
   }
-  // Chris
+  /**
+   * Adds a IT employee to the database
+   *
+   * @param name the IT employee's name
+   * @return id of created request
+   */
+  public static int addIT(String name) throws DBException {
+    try {
+      String query = "INSERT INTO employees (name, serviceType) VALUES (?, 'IT')";
+      PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+      stmt.setString(1, name);
+      stmt.executeUpdate();
+      ResultSet rs = stmt.getGeneratedKeys();
+      rs.next(); // NullPointerException
+      query = "INSERT INTO IT VALUES (?)";
+      stmt = con.prepareStatement(query);
+      int id = rs.getInt("1");
+      stmt.setInt(1, id);
+      stmt.executeUpdate();
+      return id;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown error: addIT , name = " + name, e);
+    }
+  }
 
+  // Chris
   /**
    * Adds a request for a translator
    *
@@ -720,7 +813,6 @@ public class ServiceDB {
   }
 
   // Nick
-
   /**
    * Adds a request for laundry
    *
@@ -826,8 +918,42 @@ public class ServiceDB {
       throw new DBException("Error: addWheelchairRequest", e);
     }
   }
-  // Noah
+  /**
+   * Adds a request for IT
+   *
+   * @param reqNotes some notes for the IT request
+   * @param nodeID The ID of the node in which these services are requested
+   * @return the id of the created request
+   */
+  public static int addITReq(String reqNotes, String nodeID, String device, String problem)
+      throws DBException {
+    try {
+      String query =
+          "INSERT INTO request (timeRequested, reqNotes, serviceType, nodeID, status) VALUES (?, ?, ?, ?, ?)";
+      PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+      stmt.setTimestamp(1, new Timestamp(new Date().getTime()));
+      stmt.setString(2, reqNotes);
+      stmt.setString(3, "IT");
+      stmt.setString(4, nodeID);
+      stmt.setString(5, "OPEN");
+      stmt.execute();
+      ResultSet rs = stmt.getGeneratedKeys();
+      rs.next();
+      query = "INSERT INTO ITrequest (requestID, device, problem) VALUES (?, ?, ?)";
+      stmt = con.prepareStatement(query);
+      int id = rs.getInt("1");
+      stmt.setInt(1, id);
+      stmt.setString(2, device);
+      stmt.setString(3, problem);
+      stmt.executeUpdate();
+      return id;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Error: addITReq", e);
+    }
+  }
 
+  // Noah
   /**
    * Assigns an employee to a request; the employee must be able to fulfil that request
    *
@@ -861,7 +987,6 @@ public class ServiceDB {
   }
 
   // Chris
-
   /**
    * Marks a request as completed and done at the time that this function was called
    *
@@ -907,7 +1032,6 @@ public class ServiceDB {
   }
 
   // Nick
-
   /**
    * Removes an employee from the database
    *
@@ -926,7 +1050,6 @@ public class ServiceDB {
   }
 
   // regEx
-
   /**
    * Adds a language to the translator with the specified employee ID
    *
@@ -952,7 +1075,6 @@ public class ServiceDB {
   }
 
   // Chris
-
   /**
    * Removes a language to the translator with the specified employee ID
    *
@@ -977,7 +1099,6 @@ public class ServiceDB {
   // TODO: make functions for changing the attributes of your employees
 
   // Nick
-
   /**
    * Denies a given request
    *
