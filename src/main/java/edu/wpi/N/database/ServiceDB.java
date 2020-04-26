@@ -171,8 +171,8 @@ public class ServiceDB {
             timeReq,
             timeComp,
             status,
-            rs.getString("size"),
             rs.getString("sanitationType"),
+            rs.getString("size"),
             rs.getString("danger"));
       } else throw new DBException("Invalid request! ID = " + id);
     } catch (SQLException e) {
@@ -242,25 +242,24 @@ public class ServiceDB {
                 rs.getString("units"),
                 rs.getString("patient")));
       }
-      query = "SELECT * FROM request, sanitationRequests WHERE request.requestID = sanitationRequest.requestID";
+      query =
+          "SELECT * FROM request, sanitationRequests WHERE request.requestID = sanitationRequests.requestID";
       stmt = con.prepareStatement(query);
       rs = stmt.executeQuery();
-      while(rs.next()) {
+      while (rs.next()) {
         requests.add(
-                new SanitationRequest(
-                        rs.getInt("requestID"),
-                        rs.getInt("assigned_eID"),
-                        rs.getString("reqNotes"),
-                        rs.getString("compNotes"),
-                        rs.getString("nodeID"),
-                        getJavatime(rs.getTimestamp("timeRequested")),
-                        getJavatime(rs.getTimestamp("timeCompleted")),
-                        rs.getString("status"),
-                        rs.getString("sanitationType"),
-                        rs.getString("size"),
-                        rs.getString("danger")
-                )
-        );
+            new SanitationRequest(
+                rs.getInt("requestID"),
+                rs.getInt("assigned_eID"),
+                rs.getString("reqNotes"),
+                rs.getString("compNotes"),
+                rs.getString("nodeID"),
+                getJavatime(rs.getTimestamp("timeRequested")),
+                getJavatime(rs.getTimestamp("timeCompleted")),
+                rs.getString("status"),
+                rs.getString("sanitationType"),
+                rs.getString("size"),
+                rs.getString("danger")));
       }
       return requests;
     } catch (SQLException e) {
@@ -1116,14 +1115,17 @@ public class ServiceDB {
   public static int addSanitationReq(
       String reqNotes, String nodeID, String spillType, String size, String danger)
       throws DBException {
+    size = size.toLowerCase();
+    danger = danger.toLowerCase();
+
     String[] sizeArray = new String[] {"small", "medium", "large", "unknown"};
     String[] dangerArray = new String[] {"low", "medium", "high", "unknown"};
 
-    if (!Arrays.asList(sizeArray).contains(size.toLowerCase())) {
+    if (!Arrays.asList(sizeArray).contains(size)) {
       throw new DBException("addSanitationReq: \"" + size + "\" is not a valid size");
     }
 
-    if (!Arrays.asList(dangerArray).contains(danger.toLowerCase())) {
+    if (!Arrays.asList(dangerArray).contains(danger)) {
       throw new DBException("addSanitationReq: \"" + danger + "\" is not a valid danger level");
     }
 
