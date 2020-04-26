@@ -16,7 +16,7 @@ import javafx.scene.layout.VBox;
 
 public class hamburgerTestController implements Controller, Initializable {
 
-  private App mainApp;
+  private App mainApp = null;
   @FXML JFXHamburger hm_ham1;
   @FXML JFXDrawer dw_drawer;
 

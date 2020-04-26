@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXPasswordField?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.NewAdminController">
+   <children>
+      <Pane layoutX="32.0" layoutY="127.0" prefHeight="75.0" prefWidth="1920.0" style="-fx-background-color: #0e4D92;" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <JFXButton layoutX="1805.0" layoutY="16.0" text="Logout" textFill="WHITE">
+               <font>
+                  <Font name="Calibri Bold" size="24.0" />
+               </font>
+            </JFXButton>
+            <Label fx:id="lbl_Time" layoutX="9.0" layoutY="8.0" text="Label">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="lbl_Date" layoutX="9.0" layoutY="41.0" text="Label">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="946.0" layoutY="27.0" text="Label" />
+         </children></Pane>
+      <SplitPane dividerPositions="0.1" layoutY="75.0" prefHeight="1005.0" prefWidth="1920.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+               <children>
+                  <VBox prefHeight="1005.0" prefWidth="192.0">
+                     <children>
+                        <Pane prefHeight="251.25" prefWidth="192.0">
+                           <children>
+                              <JFXButton fx:id="btn_EmployeeEdit" layoutX="11.0" layoutY="113.0" onMouseClicked="#changePanes" text="Add / Edit / Delete Employee" wrapText="true" />
+                           </children></Pane>
+                        <Pane prefHeight="251.25" prefWidth="192.0">
+                           <children>
+                              <JFXButton fx:id="btn_AccountEdit" layoutX="15.0" layoutY="111.0" onMouseClicked="#changePanes" text="Add / Edit / Delete Account" />
+                           </children></Pane>
+                        <Pane prefHeight="251.25" prefWidth="192.0">
+                           <children>
+                              <JFXButton fx:id="btn_ViewRequests" layoutX="57.0" layoutY="113.0" onMouseClicked="#changePanes" text="View Requests" />
+                           </children></Pane>
+                        <Pane prefHeight="251.25" prefWidth="192.0">
+                           <children>
+                              <JFXButton fx:id="btn_EditMap" layoutX="54.0" layoutY="119.0" text="Edit Map" />
+                           </children></Pane>
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+          <AnchorPane layoutY="75.0" minHeight="0.0" minWidth="0.0" prefHeight="1003.0" prefWidth="1449.0">
+               <children>
+                  <StackPane fx:id="sp_getpanes" prefHeight="1005.0" prefWidth="1820.0">
+                     <children>
+                        <Pane fx:id="pn_pane2" prefHeight="200.0" prefWidth="200.0" visible="false">
+                           <children>
+                              <JFXTextField fx:id="txtf_newuser" layoutX="159.0" layoutY="96.0" />
+                              <Label layoutX="100.0" layoutY="100.0" text="Username:" />
+                              <Label layoutX="96.0" layoutY="139.0" text="Password:" />
+                              <JFXPasswordField fx:id="pwf_newpass" layoutX="158.0" layoutY="135.0" />
+                              <Label layoutX="51.0" layoutY="173.0" text="Confirm Password:" />
+                              <JFXPasswordField fx:id="pwf_confpass" layoutX="158.0" layoutY="169.0" />
+                              <JFXButton layoutX="199.0" layoutY="211.0" onMouseClicked="#addNewAdmin" text="Submit" />
+                           </children></Pane>
+                        <Pane fx:id="pn_pane3" prefHeight="200.0" prefWidth="200.0" visible="false">
+                           <children>
+                              <Label layoutX="100.0" layoutY="100.0" text="REQUESTS SCREEN">
+                                 <font>
+                                    <Font size="36.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </Pane>
+                        <Pane fx:id="pn_pane1" prefHeight="1005.0" prefWidth="1762.0">
+                           <children>
+                              <Label layoutX="666.0" layoutY="632.0" text="ACCOUNT EDIT SCREEN">
+                                 <font>
+                                    <Font size="36.0" />
+                                 </font>
+                              </Label>
+                           </children></Pane>
+                        <Pane fx:id="pn_pane11" layoutX="10.0" layoutY="10.0" prefHeight="1005.0" prefWidth="1762.0">
+                           <children>
+                              <Label layoutX="666.0" layoutY="632.0" text="ACCOUNT EDIT SCREEN">
+                                 <font>
+                                    <Font size="36.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="168.0" layoutY="114.0" text="Add Username:" />
+                              <Label layoutX="168.0" layoutY="153.0" text="Add Password: " />
+                              <JFXTextField layoutX="261.0" layoutY="110.0" />
+                              <JFXTextField layoutX="261.0" layoutY="149.0" />
+                              <ChoiceBox fx:id="cb_credentials" layoutX="253.0" layoutY="210.0" prefWidth="150.0" />
+                              <Label layoutX="162.0" layoutY="214.0" text="Credential Level:" />
+                           </children>
+                        </Pane>
+                     </children>
+                  </StackPane>
+               </children></AnchorPane>
+        </items>
+      </SplitPane>
+   </children>
+</AnchorPane>

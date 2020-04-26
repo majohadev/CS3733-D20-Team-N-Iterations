@@ -26,13 +26,10 @@ public class AdminController implements Initializable, Controller {
 
   private App mainApp;
   private HomeController homeController;
-  // public LoginController controller;
+
   @FXML Button btn_logout;
-  @FXML Button btn_laundryReq;
-  @FXML Button btn_transReq;
   @FXML Button btn_Accept;
   @FXML Button btn_Deny;
-  @FXML Button btn_Assign;
   @FXML ChoiceBox<Employee> cb_Employee;
   @FXML TableView<Request> tb_RequestTable = new TableView<Request>();
   @FXML TableView<String> tb_languages = new TableView<String>();

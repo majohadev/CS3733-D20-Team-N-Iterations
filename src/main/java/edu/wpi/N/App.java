@@ -45,7 +45,7 @@ public class App extends Application {
 
     Scene scene = new Scene(pane);
     masterStage.setScene(scene);
-    masterStage.setMaximized(true);
+    // masterStage.setMaximized(true);
     masterStage.setFullScreenExitHint("");
     masterStage.show();
     Controller controller = loader.getController();

@@ -14,10 +14,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1005.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Pane prefHeight="215.0" prefWidth="300.0">
+      <Pane prefHeight="215.0" prefWidth="0.0">
          <children>
             <Separator layoutY="214.0" prefHeight="3.0" prefWidth="300.0" />
             <ImageView fitHeight="200.0" fitWidth="229.0" layoutY="9.0" pickOnBounds="true" preserveRatio="true">
@@ -35,15 +34,30 @@
       <Pane prefHeight="20.0" prefWidth="300.0" />
       <Accordion prefHeight="417.0" prefWidth="300.0">
          <panes>
-            <TitledPane animated="false" prefHeight="387.0" prefWidth="251.0" text="Search By Doctor">
+            <TitledPane animated="false" prefHeight="350.0" prefWidth="92.0" text="Search By Doctor">
                <content>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="325.0" prefWidth="298.0">
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="309.0" prefWidth="298.0">
                      <children>
-                        <JFXTextField layoutX="55.0" layoutY="26.0" prefHeight="29.0" prefWidth="200.0" promptText="Enter a Doctors Name to Begin" text="Enter a Doctors Name" AnchorPane.leftAnchor="42.5" AnchorPane.rightAnchor="42.5" />
-                        <JFXListView layoutX="50.0" layoutY="67.0" prefHeight="75.0" prefWidth="200.0" AnchorPane.leftAnchor="42.5" AnchorPane.rightAnchor="42.5" />
-                        <JFXTextField layoutX="67.8" layoutY="149.0" minWidth="185.0" prefHeight="29.0" prefWidth="200.0" promptText="Enter a Doctors Name to Begin" text="Enter a Location" AnchorPane.leftAnchor="42.5" AnchorPane.rightAnchor="42.5" />
-                        <JFXListView layoutX="55.0" layoutY="191.0" prefHeight="75.0" prefWidth="200.0" AnchorPane.leftAnchor="42.5" AnchorPane.rightAnchor="42.5" />
-                        <JFXButton buttonType="RAISED" layoutX="123.0" layoutY="281.0" text="Find by Doctor" AnchorPane.leftAnchor="42.5" AnchorPane.rightAnchor="42.5" />
+                        <JFXButton buttonType="RAISED" ellipsisString="" layoutX="213.0" layoutY="48.0" prefHeight="51.0" prefWidth="54.0" text="   " textAlignment="CENTER" />
+                        <ImageView fitHeight="28.0" fitWidth="29.0" layoutX="228.0" layoutY="59.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/Find%20A%20Doctor.png" />
+                           </image>
+                        </ImageView>
+                        <JFXListView layoutX="49.0" layoutY="103.0" prefHeight="75.0" prefWidth="200.0" AnchorPane.leftAnchor="45.0" AnchorPane.rightAnchor="45.0" />
+                        <JFXTextField layoutX="59.0" layoutY="58.0" prefHeight="29.0" prefWidth="151.0" promptText="Search by Doctor" />
+                        <JFXButton buttonType="RAISED" layoutX="63.0" layoutY="285.0" prefHeight="27.0" prefWidth="178.0" style="-fx-background-radius: 10;" text="   Find Path To Location" textAlignment="CENTER">
+                           <font>
+                              <Font name="Calibri Bold" size="14.0" />
+                           </font>
+                        </JFXButton>
+                        <ImageView fitHeight="24.0" fitWidth="26.0" layoutX="66.0" layoutY="286.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/Search%20Map.png" />
+                           </image>
+                        </ImageView>
+                        <JFXListView layoutX="57.0" layoutY="204.0" prefHeight="75.0" prefWidth="200.0" AnchorPane.leftAnchor="45.0" AnchorPane.rightAnchor="45.0" />
+                        <Label layoutX="52.0" layoutY="183.0" text="Select a Location from the list below" />
                      </children>
                   </AnchorPane>
                </content>
@@ -53,7 +67,21 @@
             </TitledPane>
             <TitledPane animated="false" prefHeight="387.0" prefWidth="308.0" text="Search By Location">
                <content>
-                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="266.0" prefWidth="298.0">
+                     <children>
+                        <JFXListView layoutX="49.0" layoutY="70.0" prefHeight="75.0" prefWidth="200.0" />
+                        <JFXTextField layoutX="49.0" layoutY="29.0" prefWidth="200.0" promptText="Search by Location" />
+                        <JFXButton buttonType="RAISED" layoutX="64.0" layoutY="165.0" prefHeight="27.0" prefWidth="171.0" text="Find Path To Location" textAlignment="CENTER">
+                           <font>
+                              <Font name="Calibri Bold" size="14.0" />
+                           </font>
+                        </JFXButton>
+                        <ImageView fitHeight="24.0" fitWidth="26.0" layoutX="64.0" layoutY="166.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/Search%20Map.png" />
+                           </image>
+                        </ImageView>
+                     </children></AnchorPane>
                </content>
                <font>
                   <Font name="Calibri" size="16.0" />
@@ -61,5 +89,14 @@
             </TitledPane>
          </panes>
       </Accordion>
+      <VBox prefHeight="200.0" prefWidth="100.0">
+         <children>
+            <Label text="Click An Icon Below To Navigate To Popular Locations" textAlignment="CENTER" wrapText="true">
+               <font>
+                  <Font name="Calibri" size="18.0" />
+               </font>
+            </Label>
+         </children>
+      </VBox>
    </children>
 </VBox>
