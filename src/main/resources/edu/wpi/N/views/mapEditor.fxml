@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -11,7 +12,7 @@
    <children>
       <SplitPane dividerPositions="0.0027829313543599257" orientation="VERTICAL" prefHeight="1080.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
-          <AnchorPane disable="true" maxHeight="75.0" maxWidth="-Infinity" minHeight="75.0" minWidth="75.0" prefHeight="75.0" prefWidth="1920.0" />
+          <AnchorPane disable="true" maxHeight="110.0" maxWidth="-Infinity" minHeight="110.0" minWidth="110.0" prefHeight="110.0" prefWidth="1920.0" />
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" style="-fx-background-color: d0e6d1;">
                <children>
                   <StackPane layoutX="128.0" prefHeight="829.0" prefWidth="1028.0">
@@ -24,6 +25,7 @@
                         <Pane fx:id="pn_display" onKeyPressed="#onPaneDisplayKeyPressed" onMouseClicked="#onPaneDisplayClicked" prefHeight="773.0" prefWidth="1257.0">
                            <children>
                               <Pane fx:id="pn_editor" layoutX="1048.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="280.0" prefWidth="470.0" />
+                              <JFXButton fx:id="btn_home" layoutX="144.0" layoutY="372.0" onMouseClicked="#onBtnHomeClicked" prefHeight="52.0" prefWidth="103.0" text="Home" />
                            </children>
                         </Pane>
                      </children>

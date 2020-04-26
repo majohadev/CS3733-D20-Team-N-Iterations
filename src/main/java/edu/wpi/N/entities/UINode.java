@@ -9,8 +9,8 @@ public class UINode {
   LinkedList<UIEdge> edges;
 
   public UINode(Circle circle, DbNode node) {
-    this.circle = null;
-    this.node = null;
+    this.circle = circle;
+    this.node = node;
     this.edges = new LinkedList<>();
   }
 

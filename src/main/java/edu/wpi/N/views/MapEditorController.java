@@ -13,8 +13,12 @@ import java.util.LinkedList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -27,6 +31,7 @@ public class MapEditorController implements Controller {
 
   @FXML Pane pn_display;
   @FXML Pane pn_editor;
+  @FXML Button btn_home;
 
   final int DEFAULT_FLOOR = 4;
   final String DEFAULT_BUILDING = "Faulkner";
@@ -34,6 +39,7 @@ public class MapEditorController implements Controller {
   final Color DEFAULT_LINE_COLOR = Color.BLACK;
   final double DEFAULT_LINE_WIDTH = 4;
   final Color ADD_NODE_COLOR = Color.BLACK;
+  final Color DELETE_NODE_COLOR = Color.RED;
   final double DEFAULT_CIRCLE_OPACITY = 0.7;
   final double DEFAULT_CIRCLE_RADIUS = 7;
 
@@ -60,8 +66,13 @@ public class MapEditorController implements Controller {
   HashBiMap<Circle, UINode> nodesMap;
   HashBiMap<Line, UIEdge> edgesMap;
   MapEditorAddNodeController controllerAddNode;
+  MapEditorDeleteNodeController controllerDeleteNode;
   int currentFloor;
   String currentBuilding;
+  // Add Node Variable
+  Circle addNodeCircle;
+  // Delete Node Variable
+  LinkedList<Circle> deleteNodeCircles;
 
   @Override
   public void setMainApp(App mainApp) {
@@ -75,6 +86,8 @@ public class MapEditorController implements Controller {
     edgesMap = HashBiMap.create();
     mode = Mode.NO_STATE;
     loadFloor();
+    addNodeCircle = null;
+    deleteNodeCircles = new LinkedList<>();
   }
 
   private void loadFloor() throws DBException {
@@ -120,6 +133,7 @@ public class MapEditorController implements Controller {
     circle.setFill(c);
     circle.setOpacity(DEFAULT_CIRCLE_OPACITY);
     circle.setOnMouseDragged(event -> this.handleCircleDragEvents(event, circle));
+    circle.setOnMouseClicked(event -> this.handleCircleClickedEvents(event, circle));
     pn_display.getChildren().add(circle);
     return circle;
   }
@@ -141,38 +155,62 @@ public class MapEditorController implements Controller {
   }
 
   private void changeEditor() throws IOException {
-    switch (mode) {
-      case ADD_NODE:
-        loadEditor("/edu/wpi/N/views/mapEditorAddNode.fxml");
-      case DELETE_NODE:
-        //        loadEditor("views/mapEditorDeleteNode.fxml");
-      case EDIT_NODE:
-        //        loadEditor("views/mapEditorEditNode.fxml");
-      case ADD_EDGE:
-        //        loadEditor("views/mapEditorAddEdge.fxml");
-      case DELETE_EDGE:
-        //        loadEditor("views/mapEditorDeleteEdge.fxml");
-      case EDIT_EDGE:
-        //        loadEditor("views/mapEditorEditEdge.fxml");
+    resetAll();
+    if (mode == Mode.ADD_NODE) {
+      loadEditor("/edu/wpi/N/views/mapEditorAddNode.fxml");
+    } else if (mode == Mode.DELETE_NODE) {
+      loadEditor("/edu/wpi/N/views/mapEditorDeleteNode.fxml");
     }
   }
 
   private void loadEditor(String path) throws IOException {
     FXMLLoader loader = new FXMLLoader(getClass().getResource(path));
     Pane pane = loader.load();
-    switch (mode) {
-      case ADD_NODE:
-        controllerAddNode = loader.getController();
+    if (mode == Mode.ADD_NODE) {
+      controllerAddNode = loader.getController();
+    } else if (mode == Mode.DELETE_NODE) {
+      controllerDeleteNode = loader.getController();
     }
     pn_editor.getChildren().add(pane);
     pn_editor.setVisible(true);
   }
 
   private void handleCircleDragEvents(MouseEvent event, Circle circle) {
-    if (mode == Mode.ADD_NODE) {
+    if (mode == Mode.ADD_NODE && circle == addNodeCircle) {
       onCircleAddNodeDragged(event, circle);
     }
     if (mode == Mode.EDIT_NODE) {}
+  }
+
+  private void handleCircleClickedEvents(MouseEvent event, Circle circle) {
+    if (mode == Mode.DELETE_NODE) {
+      onCircleDeleteNodeClicked(event, circle);
+    }
+  }
+
+  private void onCircleDeleteNodeClicked(MouseEvent event, Circle circle) {
+    if (circle.getFill() == DEFAULT_CIRCLE_COLOR) {
+      circle.setFill(DELETE_NODE_COLOR);
+      deleteNodeCircles.add(circle);
+      controllerDeleteNode.addLstDeleteNode(nodesMap.get(circle).getDBNode().getShortName());
+    } else if (circle.getFill() == DELETE_NODE_COLOR) {
+      circle.setFill(DEFAULT_CIRCLE_COLOR);
+      deleteNodeCircles.remove(circle);
+      controllerDeleteNode.removeLstDeleteNode(nodesMap.get(circle).getDBNode().getShortName());
+    }
+  }
+
+  private void handleDeleteNodeRightClick() throws IOException, DBException {
+    mode = Mode.DELETE_NODE;
+    changeEditor();
+    onBtnCancelDeleteNodeClicked();
+    onBtnConfirmDeleteNodeClicked();
+  }
+
+  private void handleEditNodeRightClick() throws IOException {
+    mode = Mode.EDIT_NODE;
+    changeEditor();
+
   }
 
   // Pane Display Clicked
@@ -181,16 +219,32 @@ public class MapEditorController implements Controller {
     if (event.getClickCount() == 2 && mode != Mode.ADD_NODE) {
       onPaneDisplayClickedAddNode(event);
     }
+    if (event.getButton() == MouseButton.SECONDARY) {
+      ContextMenu menu = new ContextMenu();
+      MenuItem deleteNode = new MenuItem("Delete Node");
+      MenuItem editNode = new MenuItem("Edit Node");
+      deleteNode.setOnAction(
+          e -> {
+            try {
+              handleDeleteNodeRightClick();
+            } catch (IOException | DBException ex) {
+              ex.printStackTrace();
+            }
+          });
+      editNode.setOnAction(e -> handleEditNodeRightClick());
+      menu.getItems().addAll(deleteNode, editNode);
+      menu.show(mainApp.getStage(), event.getSceneX(), event.getSceneY());
+    }
   }
 
   private void onPaneDisplayClickedAddNode(MouseEvent event) throws IOException {
     mode = Mode.ADD_NODE;
     changeEditor();
-    Circle circle = createCircle(event.getX(), event.getY(), ADD_NODE_COLOR);
+    addNodeCircle = createCircle(event.getX(), event.getY(), ADD_NODE_COLOR);
     controllerAddNode.setPos(event.getX(), event.getY());
-    onTxtPosAddNodeTextChanged(circle);
-    onBtnConfirmAddNodeClicked(circle);
-    onBtnCancelAddNodeClicked(circle);
+    onTxtPosAddNodeTextChanged(addNodeCircle);
+    onBtnConfirmAddNodeClicked(addNodeCircle);
+    onBtnCancelAddNodeClicked();
   }
 
   public void onPaneDisplayKeyPressed(KeyEvent event) {
@@ -276,15 +330,78 @@ public class MapEditorController implements Controller {
             });
   }
 
-  private void onBtnCancelAddNodeClicked(Circle circle) {
+  private void onBtnConfirmDeleteNodeClicked() throws DBException {
+    controllerDeleteNode
+        .getBtnConfirm()
+        .setOnMouseClicked(
+            event -> {
+              for (Circle circle : deleteNodeCircles) {
+                UINode node = nodesMap.get(circle);
+                try {
+                  MapDB.deleteNode(node.getDBNode().getNodeID());
+                } catch (DBException e) {
+                  e.printStackTrace();
+                }
+                for (UIEdge edge : node.getEdges()) {
+                  DbNode[] edgeNodes = edge.getDBNodes();
+                  try {
+                    MapDB.removeEdge(edgeNodes[0].getNodeID(), edgeNodes[1].getNodeID());
+                  } catch (DBException e) {
+                    e.printStackTrace();
+                  }
+                  edgesMap.remove(edge.getLine());
+                  pn_display.getChildren().remove(edge.getLine());
+                }
+                pn_display.getChildren().remove(circle);
+                nodesMap.remove(circle);
+              }
+              resetDeleteNode();
+              pn_editor.setVisible(false);
+            });
+  }
+
+  private void onBtnCancelAddNodeClicked() {
     controllerAddNode
         .getBtnCancel()
         .setOnMouseClicked(
             event -> {
               mode = Mode.NO_STATE;
               pn_editor.setVisible(false);
-              pn_display.getChildren().remove(circle);
+              pn_display.getChildren().remove(addNodeCircle);
             });
+  }
+
+  private void onBtnCancelDeleteNodeClicked() {
+    controllerDeleteNode
+        .getBtnCancel()
+        .setOnMouseClicked(
+            event -> {
+              mode = Mode.NO_STATE;
+              for (Circle circle : deleteNodeCircles) {
+                circle.setFill(DEFAULT_CIRCLE_COLOR);
+              }
+              deleteNodeCircles.clear();
+              pn_editor.setVisible(false);
+            });
+  }
+
+  private void resetAll() {
+    pn_editor.setVisible(false);
+    resetAddNode();
+    resetDeleteNode();
+  }
+
+  private void resetAddNode() {
+    if (addNodeCircle != null) {
+      pn_display.getChildren().remove(addNodeCircle);
+    }
+  }
+
+  private void resetDeleteNode() {
+    for (Circle circle : deleteNodeCircles) {
+      circle.setFill(DEFAULT_CIRCLE_COLOR);
+    }
+    deleteNodeCircles.clear();
   }
 
   private double scaleXDB(double x) {
@@ -300,5 +417,9 @@ public class MapEditorController implements Controller {
     errorAlert.setHeaderText("Invalid input");
     errorAlert.setContentText(str);
     errorAlert.showAndWait();
+  }
+
+  public void onBtnHomeClicked() throws IOException {
+    mainApp.switchScene("views/home.fxml");
   }
 }
