@@ -421,7 +421,7 @@ public class ServiceDB {
    * @throws DBException
    */
   public static int addMedReq(
-      String reqNotes, String nodeID, String type, double dosage, String units, Patient patient)
+      String reqNotes, String nodeID, String type, double dosage, String units, String patient)
       throws DBException {
     try {
       String query =
@@ -436,14 +436,14 @@ public class ServiceDB {
       ResultSet rs = stmt.getGeneratedKeys();
       rs.next();
       query =
-          "INSERT INTO medicineRequests (requestID, medicineName, dosage, units, patientID) VALUES (?, ?, ?, ?, ?)";
+          "INSERT INTO medicineRequests (requestID, medicineName, dosage, units, patient) VALUES (?, ?, ?, ?, ?)";
       stmt = con.prepareStatement(query);
       int id = rs.getInt("1");
       stmt.setInt(1, id);
       stmt.setString(2, type);
       stmt.setDouble(3, dosage);
       stmt.setString(4, units);
-      stmt.setInt(5, patient.getId());
+      stmt.setString(5, patient);
       stmt.executeUpdate();
       return id;
     } catch (SQLException e) {
@@ -721,7 +721,7 @@ public class ServiceDB {
    * @param type
    * @return list of patients
    */
-  public static LinkedList<Patient> getpatientbyMedType(String type) {
+  public static LinkedList<String> getpatientbyMedType(String type) {
     return null;
   }
 
@@ -732,7 +732,7 @@ public class ServiceDB {
    * @param patient The specified patient
    * @return a LinkedList of MedicineRequest
    */
-  public static LinkedList<MedicineRequest> getMedRequestByPatient(Patient patient)
+  public static LinkedList<MedicineRequest> getMedRequestByPatient(String patient)
       throws DBException {
     try {
       LinkedList<MedicineRequest> res = new LinkedList<>();
@@ -740,10 +740,9 @@ public class ServiceDB {
       String query =
           "SELECT * FROM medicineRequests "
               + "JOIN request ON medicineRequests.requestID = request.requestID "
-              + "JOIN patients ON medicineRequests.patientID = patients.patientID "
-              + "WHERE patientID = ?";
+              + "WHERE patient = ?";
       PreparedStatement st = con.prepareStatement(query);
-      st.setInt(1, patient.getId());
+      st.setString(1, patient);
       ResultSet rs = st.executeQuery();
 
       while (rs.next()) {
@@ -760,10 +759,7 @@ public class ServiceDB {
                 rs.getString("serviceType"),
                 rs.getDouble("dosage"),
                 rs.getString("units"),
-                new Patient(
-                    rs.getInt("patientID"),
-                    rs.getString("patientName"),
-                    rs.getString("location"))));
+                rs.getString("patient")));
       }
 
       return res;
@@ -780,31 +776,31 @@ public class ServiceDB {
    * @param location The nodeID of the location of the patient
    * @return id of created patient
    */
-  public static int addPatient(String name, String location) throws DBException {
-    try {
-      String query = "INSERT INTO patients (patientName, location) VALUES (?, ?)";
-      PreparedStatement st = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-      st.setString(1, name);
-      st.setString(2, location);
-      st.executeUpdate();
-      ResultSet rs = st.getGeneratedKeys();
-      rs.next();
-      int id = rs.getInt("1");
-      return id;
-    } catch (SQLException e) {
-      throw new DBException("Unknown error: addPatient", e);
-    }
-  }
+  //  public static int addPatient(String name, String location) throws DBException {
+  //    try {
+  //      String query = "INSERT INTO patients (patientName, location) VALUES (?, ?)";
+  //      PreparedStatement st = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+  //      st.setString(1, name);
+  //      st.setString(2, location);
+  //      st.executeUpdate();
+  //      ResultSet rs = st.getGeneratedKeys();
+  //      rs.next();
+  //      int id = rs.getInt("1");
+  //      return id;
+  //    } catch (SQLException e) {
+  //      throw new DBException("Unknown error: addPatient", e);
+  //    }
+  //  }
 
-  // Chris
-  /**
-   * gets list of all patients
-   *
-   * @return lst of all patients
-   */
-  public static LinkedList<Patient> getlistPatient() {
-    return null;
-  }
+  //  // Chris
+  //  /**
+  //   * gets list of all patients
+  //   *
+  //   * @return list of all patients
+  //   */
+  //  public static LinkedList<String> getlistPatient() {
+  //    return null;
+  //  }
 
   // Nick
   /**
@@ -813,22 +809,22 @@ public class ServiceDB {
    * @param patientID the ID of the patient
    * @return The Patient object containing information about the patient
    */
-  public static Patient getPatient(int patientID) throws DBException {
-    try {
-      String query = "SELECT * FROM patients WHERE patientID = ?";
-      PreparedStatement st = con.prepareStatement(query);
-      st.setInt(1, patientID);
-      ResultSet rs = st.executeQuery();
-      if (rs.next()) {
-        return new Patient(
-            rs.getInt("patientID"), rs.getString("patientName"), rs.getString("location"));
-      } else {
-        throw new DBException("getPatient: Could not find patient with id " + patientID);
-      }
-    } catch (SQLException e) {
-      throw new DBException("Unknown error: getPatient", e);
-    }
-  }
+  //  public static Patient getPatient(int patientID) throws DBException {
+  //    try {
+  //      String query = "SELECT * FROM patients WHERE patientID = ?";
+  //      PreparedStatement st = con.prepareStatement(query);
+  //      st.setInt(1, patientID);
+  //      ResultSet rs = st.executeQuery();
+  //      if (rs.next()) {
+  //        return new Patient(
+  //            rs.getInt("patientID"), rs.getString("patientName"), rs.getString("location"));
+  //      } else {
+  //        throw new DBException("getPatient: Could not find patient with id " + patientID);
+  //      }
+  //    } catch (SQLException e) {
+  //      throw new DBException("Unknown error: getPatient", e);
+  //    }
+  //  }
 
   // Chris
   /**
@@ -837,7 +833,7 @@ public class ServiceDB {
    * @param name
    * @return list of patients
    */
-  public static LinkedList<Patient> searchbyPatient(String name) {
+  public static LinkedList<String> searchbyPatient(String name) {
     return null;
   }
 

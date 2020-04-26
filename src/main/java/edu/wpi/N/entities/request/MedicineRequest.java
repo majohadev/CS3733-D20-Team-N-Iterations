@@ -1,13 +1,12 @@
 package edu.wpi.N.entities.request;
 
-import edu.wpi.N.entities.Patient;
 import java.util.GregorianCalendar;
 
 public class MedicineRequest extends Request {
   private String medicineType;
   private double dosage;
   private String units;
-  private Patient patient;
+  private String patient;
 
   public MedicineRequest(
       int requestID,
@@ -21,7 +20,7 @@ public class MedicineRequest extends Request {
       String type,
       double dosage,
       String units,
-      Patient patient) {
+      String patient) {
     super(
         requestID, emp_assigned, reqNotes, compNotes, nodeID, timeRequested, timeCompleted, status);
     this.medicineType = type;
@@ -59,11 +58,11 @@ public class MedicineRequest extends Request {
     this.units = units;
   }
 
-  public Patient getPatient() {
+  public String getPatient() {
     return patient;
   }
 
-  public void setPatient(Patient patient) {
+  public void setPatient(String patient) {
     this.patient = patient;
   }
 

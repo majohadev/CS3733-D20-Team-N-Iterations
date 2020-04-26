@@ -83,18 +83,12 @@ CREATE TABLE trequest(
                 requestID INT NOT NULL PRIMARY KEY REFERENCES request(requestID) ON DELETE CASCADE,
                 language VARCHAR(255) NOT NULL);
 
-CREATE TABLE patients(
-    patientID INT NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-    patientName VARCHAR(255) NOT NULL,
-    location CHAR(10) REFERENCES nodes(nodeID) ON DELETE SET NULL
-);
-
 CREATE TABLE medicineRequests(
     requestID INT NOT NULL PRIMARY KEY REFERENCES request(requestID) ON DELETE CASCADE,
     medicineName VARCHAR(255),
     dosage FLOAT,
     units VARCHAR(3),
-    patientID INT NOT NULL REFERENCES patients(patientID) ON DELETE SET NULL
+    patient VARCHAR(255) NOT NULL
 );
 
 INSERT INTO service VALUES ('Translator', '00:00', '00:00', 'Make a request for our translation services!');
