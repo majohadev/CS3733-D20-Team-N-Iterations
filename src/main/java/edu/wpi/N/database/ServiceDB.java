@@ -737,7 +737,7 @@ public class ServiceDB {
    * @param type
    * @return list of patients
    */
-  public static LinkedList<String> getpatientbyMedType(String type) throws DBException {
+  public static LinkedList<String> getPatientByMedType(String type) throws DBException {
     try {
       String query = "SELECT patient FROM medicineRequests WHERE medicineName = ?";
       PreparedStatement stmt = con.prepareStatement(query);
@@ -904,12 +904,24 @@ public class ServiceDB {
 
   // Nick
   /**
-   * searches to make a list of specified medicine type
+   * Searches for a medicine name
    *
-   * @param type
-   * @return list of medicine type(String)
+   * @param searchQuery The search query
+   * @return LinkedList of medicine name (String) that matches query
    */
-  public static LinkedList<String> searchbyMedType(String type) {
-    return null;
+  public static LinkedList<String> searchByMedType(String searchQuery) throws DBException {
+    try {
+      LinkedList<String> res = new LinkedList<>();
+      String query = "SELECT medicineName FROM medicineRequests WHERE medicineName LIKE ?";
+      PreparedStatement st = con.prepareStatement(query);
+      st.setString(1, "%" + searchQuery + "%");
+      ResultSet rs = st.executeQuery();
+      while (rs.next()) {
+        res.add(rs.getString("medicineName"));
+      }
+      return res;
+    } catch (SQLException e) {
+      throw new DBException("Unknown error : searchByMedType", e);
+    }
   }
 }

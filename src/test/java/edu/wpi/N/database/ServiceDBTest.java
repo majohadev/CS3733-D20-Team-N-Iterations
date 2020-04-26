@@ -28,6 +28,8 @@ public class ServiceDBTest {
   static int felixID;
   static int fatsID;
   static int snapsID;
+  static int medReqId1;
+  static int medReqId2;
 
   @BeforeAll
   public static void setup()
@@ -53,6 +55,9 @@ public class ServiceDBTest {
     MapDB.addNode("ZDEPT00101", 123, 123, 1, "Faulkner", "DEPT", "Tony's room", "Room", 'Z');
     laundReqID1 = ServiceDB.addLaundReq("wash", "ZHALL00101");
     transReqID1 = ServiceDB.addTransReq("speak", "ZHALL00102", "Gnomish");
+
+    medReqId1 = ServiceDB.addMedReq("yep", "ZDEPT00101", "the good stuff", 100, "mg", tony);
+    medReqId2 = ServiceDB.addMedReq("yep 2", "ZDEPT00101", "the better stuff", 1, "g", tony);
   }
 
   @Test
@@ -221,20 +226,28 @@ public class ServiceDBTest {
 
   @Test
   public void testGetMedRequestsByPatient() throws DBException {
-    int id1 = ServiceDB.addMedReq("yep", "ZDEPT00101", "the good stuff", 100, "mg", tony);
-    int id2 = ServiceDB.addMedReq("yep 2", "ZDEPT00101", "the better stuff", 1, "g", tony);
-
     LinkedList<MedicineRequest> result = ServiceDB.getMedRequestByPatient(tony);
 
     GregorianCalendar cal = (GregorianCalendar) GregorianCalendar.getInstance();
 
     MedicineRequest expected1 =
         new MedicineRequest(
-            id1, 0, "yep", null, "ZDEPT00101", cal, cal, "OPEN", "the good stuff", 100, "mg", tony);
+            medReqId1,
+            0,
+            "yep",
+            null,
+            "ZDEPT00101",
+            cal,
+            cal,
+            "OPEN",
+            "the good stuff",
+            100,
+            "mg",
+            tony);
 
     MedicineRequest expected2 =
         new MedicineRequest(
-            id2,
+            medReqId2,
             0,
             "yep 2",
             null,
@@ -250,6 +263,24 @@ public class ServiceDBTest {
     assertEquals(2, result.size());
     assertTrue(result.contains(expected1));
     assertTrue(result.contains(expected2));
+  }
+
+  @Test
+  public void testSearchByMedType() throws DBException {
+    LinkedList<String> meds = ServiceDB.searchByMedType("the");
+
+    assertEquals(2, meds.size());
+    assertTrue(meds.contains("the good stuff"));
+    assertTrue(meds.contains("the better stuff"));
+
+    meds = ServiceDB.searchByMedType("good");
+
+    assertEquals(1, meds.size());
+    assertTrue(meds.contains("the good stuff"));
+
+    meds = ServiceDB.searchByMedType("great");
+
+    assertTrue(meds.isEmpty());
   }
 
   //  @Test
