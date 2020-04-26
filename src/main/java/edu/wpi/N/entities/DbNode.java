@@ -1,6 +1,6 @@
 package edu.wpi.N.entities;
 
-public class DbNode {
+public class DbNode implements INode {
   private int x, y, floor;
   private String nodeID, building, nodeType, longName, shortName;
   private char teamAssigned;

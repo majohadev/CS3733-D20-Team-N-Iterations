@@ -2,7 +2,7 @@ package edu.wpi.N.entities;
 
 // Node = Graph Node (limited data)
 // Needed for A* algorithm
-public class Node implements Comparable<Node> {
+public class Node implements Comparable<Node>, INode {
   private double xcoord, ycoord;
   public double score;
   public String ID;

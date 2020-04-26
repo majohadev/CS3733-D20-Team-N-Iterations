@@ -38,16 +38,14 @@ public class Pathfinder {
    *
    * @return Path object indicating the shortest path to the goal Node from Start Node
    */
-  public static Path findPath(String startID, String endID) {
+  public static Path findPath(DbNode startNode, DbNode endNode) {
     try {
-      DbNode startDb = MapDB.getNode(startID);
-      DbNode endDb = MapDB.getNode(endID);
 
-      int floorNumStart = startDb.getFloor();
-      int floorNumEnd = endDb.getFloor();
+      int startFloorNum = startNode.getFloor();
+      int endFloorNum = endNode.getFloor();
 
-      Node start = MapDB.getGNode(startID);
-      Node end = MapDB.getGNode(endID);
+      Node start = MapDB.getGNode(startNode.getNodeID());
+      Node end = MapDB.getGNode(endNode.getNodeID());
 
       // Initialize variables
       PriorityQueue<Node> frontier = new PriorityQueue<Node>();
@@ -63,13 +61,14 @@ public class Pathfinder {
         Node current = frontier.poll();
 
         // if the goal node was found, break out of the loop
-        if (current == end) {
+        if (current.equals(end)) {
           break;
         }
 
         // for every node (next node), current node has edge to:
         LinkedList<Node> adjacentToCurrent =
-            MapDB.getGAdjacent(current.ID, floorNumStart, floorNumEnd);
+            MapDB.getGAdjacent(current.ID, startFloorNum, endFloorNum);
+
         for (Node nextNode : adjacentToCurrent) {
           String nextNodeID = nextNode.ID;
 
@@ -93,7 +92,6 @@ public class Pathfinder {
       }
 
       // Generate and return the path in proper order
-
       return generatePath(start, end, cameFrom);
     } catch (Exception e) {
       e.printStackTrace();
@@ -120,7 +118,7 @@ public class Pathfinder {
         }
       } catch (NullPointerException e) {
         System.out.println("Location was not found.");
-        throw e;
+        return null;
       }
 
       Path finalPath = new Path(path);
@@ -153,7 +151,7 @@ public class Pathfinder {
             end = n;
           }
         }
-        return findPath(start.getNodeID(), end.getNodeID());
+        return findPath(start, end);
       } else {
         return null;
       }
@@ -161,5 +159,46 @@ public class Pathfinder {
       e.printStackTrace();
       return null;
     }
+  }
+
+  /**
+   * Returns a Linked list of DbNode arrays, each array containing two nodes indicating an edge
+   * between floors for the elevator or staircase indicated by the given node
+   *
+   * @param node, from the elevator or staircase you want edges for
+   * @return LinkedList<DbNode []>
+   * @throws DBException
+   */
+  public static LinkedList<DbNode[]> getEdgesBetweenFloors(DbNode node) throws DBException {
+    LinkedList<DbNode[]> edges = new LinkedList<>();
+    if (!(node.getNodeType().equals("ELEV") || node.getNodeType().equals("STAI"))) {
+      return null;
+    }
+    LinkedList<DbNode> floorchangeNodes = new LinkedList<DbNode>();
+    for (int i = 1;
+        i <= 5;
+        i++) { // will need to change when we add another building with different number of floors
+      floorchangeNodes.addAll(MapDB.searchNode(i, node.getBuilding(), node.getNodeType(), ""));
+    }
+    ArrayList<DbNode> thisFloorChangeNodes = new ArrayList<DbNode>();
+    for (int i = 0; i < 5; i++) {
+      thisFloorChangeNodes.add(
+          i, new DbNode("1234567890", 0, 0, -1, "MainBuil", "HALL", "Hall 1", "Hall 1", 'N'));
+    }
+    for (DbNode n : floorchangeNodes) {
+      if (node.getX() == n.getX() && node.getY() == n.getY()) {
+        thisFloorChangeNodes.add(n.getFloor() - 1, n);
+      }
+    }
+    for (int i = 0; i < thisFloorChangeNodes.size(); i++) {
+      for (DbNode adj : MapDB.getAdjacent(thisFloorChangeNodes.get(i).getNodeID())) {
+        if (thisFloorChangeNodes.get(i).getNodeType().equals(adj.getNodeType())
+            && adj.getFloor() > thisFloorChangeNodes.get(i).getFloor()) {
+          DbNode[] nodes = new DbNode[] {thisFloorChangeNodes.get(i), adj};
+          edges.add(nodes);
+        }
+      }
+    }
+    return edges;
   }
 }
