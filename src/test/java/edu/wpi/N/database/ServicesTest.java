@@ -34,7 +34,6 @@ public class ServicesTest {
   @BeforeAll
   public static void setup()
       throws ClassNotFoundException, SQLException, DBException, FileNotFoundException {
-
     MapDB.initTestDB();
     con = MapDB.getCon();
   }
