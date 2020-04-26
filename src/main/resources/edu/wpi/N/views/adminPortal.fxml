@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
 <?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXTextField?>
-<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
@@ -16,7 +17,7 @@
    <children>
       <Pane layoutX="32.0" layoutY="127.0" prefHeight="75.0" prefWidth="1920.0" style="-fx-background-color: #0e4D92;" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <JFXButton layoutX="1805.0" layoutY="16.0" text="Logout" textFill="WHITE">
+            <JFXButton layoutX="1805.0" layoutY="16.0" onMouseClicked="#logoutUser" text="Logout" textFill="WHITE">
                <font>
                   <Font name="Calibri Bold" size="24.0" />
                </font>
@@ -32,6 +33,7 @@
                </font>
             </Label>
             <Label layoutX="946.0" layoutY="27.0" text="Label" />
+            <JFXButton layoutX="370.0" layoutY="23.0" onMouseClicked="#returnToPrev" text="BACK" />
          </children></Pane>
       <SplitPane dividerPositions="0.1" layoutY="75.0" prefHeight="1005.0" prefWidth="1920.0">
         <items>
@@ -53,7 +55,7 @@
                            </children></Pane>
                         <Pane prefHeight="251.25" prefWidth="192.0">
                            <children>
-                              <JFXButton fx:id="btn_EditMap" layoutX="54.0" layoutY="119.0" text="Edit Map" />
+                              <JFXButton fx:id="btn_EditMap" layoutX="54.0" layoutY="119.0" onMouseClicked="#adminEditMap" text="Edit Map" />
                            </children></Pane>
                      </children>
                   </VBox>
@@ -84,27 +86,110 @@
                         </Pane>
                         <Pane fx:id="pn_pane1" prefHeight="1005.0" prefWidth="1762.0">
                            <children>
-                              <Label layoutX="666.0" layoutY="632.0" text="ACCOUNT EDIT SCREEN">
+                              <Label layoutX="231.0" layoutY="89.0" text="ADD DOCTOR">
                                  <font>
                                     <Font size="36.0" />
                                  </font>
                               </Label>
+                              <Label layoutX="177.0" layoutY="252.0" text="Add Username:">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font></Label>
+                              <Label layoutX="186.0" layoutY="301.0" text="Add Password: ">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font></Label>
+                              <JFXTextField fx:id="txtf_docuser" layoutX="348.0" layoutY="257.0" />
+                              <JFXTextField fx:id="txtf_docpass" layoutX="348.0" layoutY="306.0" />
+                              <Label layoutX="223.0" layoutY="204.0" text="Last Name:">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="222.0" layoutY="158.0" text="First Name:">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <JFXTextField fx:id="txtf_docfn" layoutX="350.0" layoutY="163.0" />
+                              <JFXTextField fx:id="txtf_docln" layoutX="350.0" layoutY="209.0" />
+                              <JFXButton buttonType="RAISED" layoutX="311.0" layoutY="402.0" onMouseClicked="#addDoc" text="Add Doctor" />
+                              <Label layoutX="192.0" layoutY="353.0" text="Field of Study:">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <JFXTextField fx:id="txtf_docfield" layoutX="350.0" layoutY="358.0" />
+                              <TableView fx:id="tbl_Employees" layoutX="595.0" layoutY="68.0" prefHeight="437.0" prefWidth="230.0" />
+                              <JFXButton fx:id="btn_delemp" layoutX="657.0" layoutY="515.0" onMouseClicked="#deleteEmployee" text="Delete Employee" />
+                              <Label layoutX="211.0" layoutY="574.0" text="ADD EMPLOYEE">
+                                 <font>
+                                    <Font size="36.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="241.0" layoutY="686.0" text="Last Name:">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="240.0" layoutY="640.0" text="First Name:">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <JFXTextField fx:id="txtf_empfn" layoutX="368.0" layoutY="645.0" />
+                              <JFXTextField fx:id="txtf_empln" layoutX="368.0" layoutY="691.0" />
+                              <JFXCheckBox fx:id="cb_translator" layoutX="251.0" layoutY="774.0" text="Translator" />
+                              <Label fx:id="lbl_languages" layoutX="161.0" layoutY="720.0" text="Known Languages:" visible="false">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <JFXTextField fx:id="txtf_languages" layoutX="365.0" layoutY="726.0" prefHeight="25.0" prefWidth="138.0" visible="false" />
+                              <JFXButton buttonType="RAISED" layoutX="391.0" layoutY="771.0" onMouseClicked="#addEmployee" text="Add Employee" />
+                              <Label layoutX="710.0" layoutY="601.0" text="ADD ADMIN">
+                                 <font>
+                                    <Font size="36.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="599.0" layoutY="669.0" text="Add Username:">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="607.0" layoutY="709.0" text="Add Password: ">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <JFXTextField fx:id="txtf_adminuser" layoutX="769.0" layoutY="672.0" />
+                              <JFXTextField fx:id="txtf_adminpass" layoutX="769.0" layoutY="721.0" />
+                              <JFXButton buttonType="RAISED" layoutX="787.0" layoutY="759.0" onMouseClicked="#addAdmin" text="Add Admin" />
+                              <Label layoutX="1040.0" layoutY="601.0" text="Change Pass">
+                                 <font>
+                                    <Font size="36.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="1010.0" layoutY="658.0" text="Username:">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="967.0" layoutY="738.0" text="New Password:">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="972.0" layoutY="699.0" text="Old Password:">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <JFXTextField fx:id="txtf_cpoldpass" layoutX="1127.0" layoutY="704.0" />
+                              <JFXTextField fx:id="txtf_cpuser" layoutX="1127.0" layoutY="663.0" />
+                              <JFXTextField fx:id="txtf_cpnewpass" layoutX="1127.0" layoutY="747.0" />
+                              <JFXButton buttonType="RAISED" layoutX="1156.0" layoutY="780.0" onMouseClicked="#changeAccountPass" text="Submit" />
                            </children></Pane>
-                        <Pane fx:id="pn_pane11" layoutX="10.0" layoutY="10.0" prefHeight="1005.0" prefWidth="1762.0">
-                           <children>
-                              <Label layoutX="666.0" layoutY="632.0" text="ACCOUNT EDIT SCREEN">
-                                 <font>
-                                    <Font size="36.0" />
-                                 </font>
-                              </Label>
-                              <Label layoutX="168.0" layoutY="114.0" text="Add Username:" />
-                              <Label layoutX="168.0" layoutY="153.0" text="Add Password: " />
-                              <JFXTextField layoutX="261.0" layoutY="110.0" />
-                              <JFXTextField layoutX="261.0" layoutY="149.0" />
-                              <ChoiceBox fx:id="cb_credentials" layoutX="253.0" layoutY="210.0" prefWidth="150.0" />
-                              <Label layoutX="162.0" layoutY="214.0" text="Credential Level:" />
-                           </children>
-                        </Pane>
                      </children>
                   </StackPane>
                </children></AnchorPane>

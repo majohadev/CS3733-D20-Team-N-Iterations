@@ -5,11 +5,9 @@ import com.jfoenix.controls.JFXTextField;
 import edu.wpi.N.App;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.LoginDB;
-import edu.wpi.N.entities.Translator;
+import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
-
-import java.util.LinkedList;
 
 public class newLoginController implements Controller {
 
@@ -24,8 +22,14 @@ public class newLoginController implements Controller {
       String pass = pwf_password.getText();
       String user = txtf_username.getText();
       LoginDB.verifyLogin(user, pass);
+
+      if (LoginDB.currentAccess().equals("ADMIN")) {
+        mainApp.switchScene("views/adminPortal.fxml");
+      } else if (LoginDB.currentAccess().equals("DOCTOR")) {
+        mainApp.switchScene("views/medicineRequest.fxml");
+      }
       System.out.println("Valid Login");
-    } catch (DBException e) {
+    } catch (DBException | IOException e) {
       Alert invalidLogin = new Alert(Alert.AlertType.ERROR);
       invalidLogin.setContentText(e.getMessage());
       invalidLogin.show();
@@ -38,6 +42,10 @@ public class newLoginController implements Controller {
     txtf_username.clear();
   }
 
+  public void goBack() throws IOException {
+    mainApp.switchScene("views/home.fxml");
+  }
+
   @FXML
   public void logoutUser() throws DBException {
     try {
@@ -47,19 +55,6 @@ public class newLoginController implements Controller {
       logoutError.setContentText(e.getMessage());
       logoutError.show();
     }
-  }
-
-  public void fillChoiceBox(){
-    cb_Employee
-            .valueProperty()
-            .addListener(
-                    (ov, old, emp) -> {
-                      if (emp instanceof Translator) {
-                        languageData.setAll(((Translator) emp).getLanguages());
-                      } else {
-                        languageData.setAll(new LinkedList<String>());
-                      }
-                    });
   }
 
   @Override

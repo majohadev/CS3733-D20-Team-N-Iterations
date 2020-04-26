@@ -8,7 +8,6 @@ import edu.wpi.N.entities.employees.Translator;
 import edu.wpi.N.entities.request.Request;
 import java.io.IOException;
 import java.net.URL;
-import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import java.util.ResourceBundle;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -31,7 +30,6 @@ public class AdminController implements Initializable, Controller {
   @FXML Button btn_logout;
   @FXML Button btn_Accept;
   @FXML Button btn_Deny;
-  @FXML Button btn_Assign;
   @FXML ChoiceBox<Employee> cb_Employee;
   @FXML TableView<Request> tb_RequestTable = new TableView<Request>();
   @FXML TableView<String> tb_languages = new TableView<String>();
@@ -189,7 +187,7 @@ public class AdminController implements Initializable, Controller {
                   .getEmp_assigned()
               != null)) {
         ServiceDB.completeRequest(
-            tb_RequestTable.getSelectionModel().getSelectedItems().get(0).getRequestID());
+            tb_RequestTable.getSelectionModel().getSelectedItems().get(0).getRequestID(), "");
 
         Alert acceptReq = new Alert(Alert.AlertType.CONFIRMATION);
         acceptReq.setContentText("Request Accepted");
@@ -205,9 +203,9 @@ public class AdminController implements Initializable, Controller {
         }
       } else if (e.getSource() == btn_Deny) { // This case needs a status check
         ServiceDB.denyRequest(
-            tb_RequestTable.getSelectionModel().getSelectedItems().get(0).getRequestID());
+            tb_RequestTable.getSelectionModel().getSelectedItems().get(0).getRequestID(), "");
         ServiceDB.denyRequest(
-            tb_RequestTable.getSelectionModel().getSelectedItems().get(0).getRequestID());
+            tb_RequestTable.getSelectionModel().getSelectedItems().get(0).getRequestID(), "");
 
         Alert denyReq = new Alert(Alert.AlertType.WARNING);
         denyReq.setContentText("Request Denied");
