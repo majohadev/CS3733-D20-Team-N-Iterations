@@ -952,9 +952,9 @@ public class ServiceDB {
   public static LinkedList<String> searchByMedType(String searchQuery) throws DBException {
     try {
       LinkedList<String> res = new LinkedList<>();
-      String query = "SELECT medicineName FROM medicineRequests WHERE medicineName LIKE ?";
+      String query = "SELECT medicineName FROM medicineRequests WHERE UPPER(medicineName) LIKE ?";
       PreparedStatement st = con.prepareStatement(query);
-      st.setString(1, "%" + searchQuery + "%");
+      st.setString(1, "%" + searchQuery.toUpperCase() + "%");
       ResultSet rs = st.executeQuery();
       while (rs.next()) {
         res.add(rs.getString("medicineName"));

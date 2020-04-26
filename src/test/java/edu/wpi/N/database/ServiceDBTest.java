@@ -276,13 +276,13 @@ public class ServiceDBTest {
 
   @Test
   public void testSearchByMedType() throws DBException {
-    LinkedList<String> meds = ServiceDB.searchByMedType("the");
+    LinkedList<String> meds = ServiceDB.searchByMedType("THE");
 
     assertEquals(2, meds.size());
     assertTrue(meds.contains("the good stuff"));
     assertTrue(meds.contains("the better stuff"));
 
-    meds = ServiceDB.searchByMedType("good");
+    meds = ServiceDB.searchByMedType("Good");
 
     assertEquals(1, meds.size());
     assertTrue(meds.contains("the good stuff"));
