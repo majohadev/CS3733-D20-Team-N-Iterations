@@ -1,11 +1,18 @@
 package edu.wpi.N.entities.request;
 
+import edu.wpi.N.database.DBException;
+
+import java.util.Arrays;
 import java.util.GregorianCalendar;
 
 public class SanitationRequest extends Request {
 
-  private String spillType, amount, danger;
+  private String spillType, size, danger;
 
+  /**
+   * Note: size must be one of {"small", "medium", "large", "unknown"} (case insensitive)
+   * Note: danger must be one of {"low", "medium", "high", "unknown"} (case insensitive)
+   */
   public SanitationRequest(
       int requestID,
       int emp_assigned,
@@ -16,12 +23,24 @@ public class SanitationRequest extends Request {
       GregorianCalendar timeCompleted,
       String status,
       String spillType,
-      String amount,
+      String size,
       String danger) {
     super(
         requestID, emp_assigned, reqNotes, compNotes, nodeID, timeRequested, timeCompleted, status);
+
+    String[] sizeArray = new String[] {"small", "medium", "large", "unknown"};
+    String[] dangerArray = new String[] {"low", "medium", "high", "unknown"};
+
+    if (!Arrays.asList(sizeArray).contains(size.toLowerCase())) {
+      throw new IllegalArgumentException("SanitationRequest: \"" + size + "\" is not a valid size");
+    }
+
+    if (!Arrays.asList(dangerArray).contains(danger.toLowerCase())) {
+      throw new IllegalArgumentException("SanitationRequest: \"" + danger + "\" is not a valid danger level");
+    }
+
     this.spillType = spillType;
-    this.amount = amount;
+    this.size = size;
     this.danger = danger;
   }
 
@@ -34,8 +53,8 @@ public class SanitationRequest extends Request {
     return spillType;
   }
 
-  public String getAmount() {
-    return amount;
+  public String getSize() {
+    return size;
   }
 
   public String getDanger() {
@@ -50,7 +69,7 @@ public class SanitationRequest extends Request {
 
     return super.equals(o)
         && spillType.equals(other.spillType)
-        && amount.equals(other.amount)
+        && size.equals(other.size)
         && danger.equals(other.danger);
   }
 }
