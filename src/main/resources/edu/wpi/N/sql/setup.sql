@@ -102,7 +102,8 @@ CREATE TABLE medicineRequests(
 
 /*TODO: Add request table */
 CREATE TABLE wrequest(
-              requestID INT NOT NULL PRIMARY KEY REFERENCES request(requestID) ON DELETE CASCADE);
+              requestID INT NOT NULL PRIMARY KEY REFERENCES request(requestID) ON DELETE CASCADE,
+              needsAssistance VARCHAR(255) NOT NULL);
 CREATE TABLE erequest(
                 requestID INT NOT NULL PRIMARY KEY REFERENCES request(requestID) ON DELETE CASCADE,
                 supportType VARCHAR(255) NOT NULL);

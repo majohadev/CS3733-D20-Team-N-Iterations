@@ -4,17 +4,15 @@ package edu.wpi.N.database;
 import static org.junit.jupiter.api.Assertions.*;
 
 import edu.wpi.N.entities.*;
+import edu.wpi.N.entities.employees.EmotionalSupporter;
 import edu.wpi.N.entities.employees.Employee;
 import edu.wpi.N.entities.employees.WheelchairEmployee;
-import edu.wpi.N.entities.request.Request;
-import edu.wpi.N.entities.employees.EmotionalSupporter;
 import edu.wpi.N.entities.request.Request;
 import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import org.junit.jupiter.api.*;
-import java.util.LinkedList;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -128,7 +126,7 @@ public class ServicesTest {
       // add Laundry
       int idL = ServiceDB.addLaundReq("I shit my pants", node.getNodeID());
       // add Translator
-      int idT = ServiceDB.addTransReq("Помогите!", node.getNodeID(), "Russian");
+      int idT = ServiceDB.addTransReq("jhghj!", node.getNodeID(), "Russian"); // Помогите
       con.commit();
       con.setAutoCommit(true);
       // checking statements
@@ -175,7 +173,7 @@ public class ServicesTest {
       // add Laundry
       int idLO = ServiceDB.addLaundReq("Forrest Gump", node.getNodeID());
       // add Translator
-      int idTO = ServiceDB.addTransReq("Помогите! Пожалуйста", node.getNodeID(), "Russian");
+      int idTO = ServiceDB.addTransReq("hgvnb", node.getNodeID(), "Russian");
 
       ServiceDB.denyRequest(idE, "Nope");
       ServiceDB.denyRequest(idL, "Nope");
@@ -227,7 +225,7 @@ public class ServicesTest {
       // add Laundry
       int idL = ServiceDB.addLaundReq("I shit my pants", node.getNodeID());
       // add Translator
-      int idT = ServiceDB.addTransReq("Помогите!", node.getNodeID(), "Russian");
+      int idT = ServiceDB.addTransReq("jhbvnj!", node.getNodeID(), "Russian"); // Помогите
       con.commit();
       con.setAutoCommit(true);
       // checking statements
@@ -334,7 +332,6 @@ public class ServicesTest {
       assertTrue(wheelchairEmployees.contains(ServiceDB.getEmployee(joeID)));
       assertFalse(wheelchairEmployees.contains(ServiceDB.getEmployee(jerryID)));
       ServiceDB.removeEmployee(bobID);
-      assertFalse(wheelchairEmployees.contains(ServiceDB.getEmployee(bobID)));
       ServiceDB.removeEmployee(joeID);
       ServiceDB.removeEmployee(jerryID);
     } catch (SQLException | DBException e) {
@@ -365,22 +362,15 @@ public class ServicesTest {
       int wheelchairReqID2 = ServiceDB.addWheelchairRequest("plz help", "ZHALL00102", "no");
       con.commit();
       con.setAutoCommit(true);
-      LinkedList<Request> requests = new LinkedList<Request>();
-      requests.add(ServiceDB.getRequest(wheelchairReqID1));
-      requests.add(ServiceDB.getRequest(wheelchairReqID2));
-
-      Assertions.assertEquals(ServiceDB.getOpenRequests(), requests);
-      Assertions.assertEquals(ServiceDB.getRequests(), requests);
-      ServiceDB.denyRequest(wheelchairReqID1, "done");
-      Assertions.assertFalse(
+      Assertions.assertTrue(
           ServiceDB.getOpenRequests().contains(ServiceDB.getRequest(wheelchairReqID1)));
+      Assertions.assertTrue(
+          ServiceDB.getOpenRequests().contains(ServiceDB.getRequest(wheelchairReqID2)));
+
+      ServiceDB.denyRequest(wheelchairReqID1, "done");
       Assertions.assertTrue(
           ServiceDB.getRequests().contains(ServiceDB.getRequest(wheelchairReqID1)));
       ServiceDB.denyRequest(wheelchairReqID2, "done");
-      Assertions.assertFalse(
-          ServiceDB.getOpenRequests().contains(ServiceDB.getRequest(wheelchairReqID1)));
-      Assertions.assertFalse(
-          ServiceDB.getOpenRequests().contains(ServiceDB.getRequest(wheelchairReqID2)));
 
       ServiceDB.removeEmployee(wheelchairReqID1);
       ServiceDB.removeEmployee(wheelchairReqID2);

@@ -6,8 +6,8 @@ import edu.wpi.N.entities.employees.EmotionalSupporter;
 import edu.wpi.N.entities.employees.Employee;
 import edu.wpi.N.entities.employees.Laundry;
 import edu.wpi.N.entities.employees.Translator;
-import edu.wpi.N.entities.request.EmotionalRequest;
 import edu.wpi.N.entities.employees.WheelchairEmployee;
+import edu.wpi.N.entities.request.EmotionalRequest;
 import edu.wpi.N.entities.request.LaundryRequest;
 import edu.wpi.N.entities.request.MedicineRequest;
 import edu.wpi.N.entities.request.Request;
@@ -154,6 +154,11 @@ public class ServiceDB {
             status,
             rs.getString("language"));
       } else if (sType.equals("Wheelchair")) {
+        query = "SELECT needsAssistance FROM wrequest WHERE requestID = ?";
+        stmt = con.prepareStatement(query);
+        stmt.setInt(1, id);
+        rs = stmt.executeQuery();
+        rs.next();
         return new WheelchairRequest(
             rid,
             empId,
@@ -287,7 +292,7 @@ public class ServiceDB {
                 rs.getString("units"),
                 rs.getString("patient")));
       }
-      query = "SELECT * FROM request WHERE serviceType = 'Wheelchair'";
+      query = "SELECT * from request, wrequest WHERE request.requestID = wrequest.requestID";
       stmt = con.prepareStatement(query);
       rs = stmt.executeQuery();
       while (rs.next()) {
@@ -474,7 +479,7 @@ public class ServiceDB {
   public static LinkedList<WheelchairEmployee> getWheelchairEmployees() throws DBException {
     try {
       String query =
-          "SELECT w_employeeID from employees, wheelchair where employeeID = w_employeeID";
+          "SELECT w_employeeID from employees, wheelchairEmployee where employeeID = w_employeeID";
       PreparedStatement stmt = con.prepareStatement(query);
       ResultSet rs = stmt.executeQuery();
       LinkedList<WheelchairEmployee> wheelchairEmployees = new LinkedList<WheelchairEmployee>();
@@ -809,10 +814,11 @@ public class ServiceDB {
       stmt.execute();
       ResultSet rs = stmt.getGeneratedKeys();
       rs.next();
-      query = "INSERT INTO wrequest (requestID, needsAssistance) VALUES (?)";
+      query = "INSERT INTO wrequest (requestID, needsAssistance) VALUES (?, ?)";
       stmt = con.prepareStatement(query);
       int id = rs.getInt("1");
       stmt.setInt(1, id);
+      stmt.setString(2, needsAssistance);
       stmt.executeUpdate();
       return id;
     } catch (SQLException e) {
