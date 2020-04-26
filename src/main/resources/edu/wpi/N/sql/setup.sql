@@ -46,6 +46,10 @@ CREATE TABLE laundry(
       l_employeeID INT NOT NULL References employees(employeeID) ON DELETE CASCADE,
       PRIMARY KEY(l_employeeID));
 
+CREATE TABLE sanitation(
+    sanitationEmployeeID INT NOT NULL PRIMARY KEY REFERENCES employees(employeeID) ON DELETE CASCADE
+);
+
 CREATE TABLE credential(
     username VARCHAR(255) NOT NULL PRIMARY KEY,
     password VARCHAR(255) NOT NULL,
