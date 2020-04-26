@@ -49,7 +49,7 @@
                                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                       </rowConstraints>
                                        <children>
-                                          <JFXButton buttonType="RAISED" contentDisplay="TOP" minHeight="285.0" minWidth="256.0" prefHeight="290.0" prefWidth="290.0" ripplerFill="#ffd965" stylesheets="@iconButton.css" text="Laundry">
+                                          <JFXButton fx:id="btn_laundry" buttonType="RAISED" contentDisplay="TOP" minHeight="285.0" minWidth="256.0" onMouseClicked="#switchToLaundryPage" prefHeight="290.0" prefWidth="290.0" ripplerFill="#ffd965" stylesheets="@iconButton.css" text="Laundry">
                                              <graphic>
                                                 <ImageView fitHeight="203.0" fitWidth="190.0" pickOnBounds="true" preserveRatio="true">
                                                    <image>
@@ -64,7 +64,7 @@
                                                 <Shadow />
                                              </effect>
                                           </JFXButton>
-                                          <JFXButton buttonType="RAISED" contentDisplay="TOP" minHeight="268.0" minWidth="256.0" prefHeight="290.0" prefWidth="290.0" ripplerFill="#ffd965" style="-fx-background-color: #002186;" stylesheets="@iconButton.css" text="Translator" textFill="WHITE" GridPane.columnIndex="1">
+                                          <JFXButton fx:id="btn_translator" buttonType="RAISED" contentDisplay="TOP" minHeight="268.0" minWidth="256.0" onMouseClicked="#switchToTranslatorPage" prefHeight="290.0" prefWidth="290.0" ripplerFill="#ffd965" style="-fx-background-color: #002186;" stylesheets="@iconButton.css" text="Translator" textFill="WHITE" GridPane.columnIndex="1">
                                              <graphic>
                                                 <ImageView fitHeight="203.0" fitWidth="190.0" pickOnBounds="true" preserveRatio="true">
                                                    <image>
@@ -139,7 +139,6 @@
                   </AnchorPane>
                   <AnchorPane fx:id="service_anchor" layoutX="657.0" maxHeight="890.0" maxWidth="1264.0" minHeight="890.0" minWidth="1264.0" prefHeight="900.0" prefWidth="1264.0">
                      <children>
-                         <fx:include fx:id="servicePageTemplate" source="serviceTemplate.fxml" />
                      </children></AnchorPane>
                </children>
             </AnchorPane>
