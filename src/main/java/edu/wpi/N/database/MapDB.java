@@ -52,6 +52,32 @@ public class MapDB {
   }
 
   /**
+   * Same as initTestDB except the database is guarenteed to be completely empty after running this function.
+   * Use whenever possible.
+   * @throws SQLException on error
+   * @throws ClassNotFoundException on error
+   * @throws DBException on error
+   * @throws FileNotFoundException when it can't find the file I guess. Or on error.
+   */
+  public static void refreshTestDB()
+      throws SQLException, ClassNotFoundException, DBException, FileNotFoundException {
+    if (con == null) {
+      initTestDB();
+      return;
+    }
+    ScriptRunner sr = new ScriptRunner(con);
+    Reader reader =
+        new BufferedReader(
+            new InputStreamReader(Main.class.getResourceAsStream("sql/drop.sql"))); // drop tables
+    sr.runScript(reader);
+    reader =
+        new BufferedReader(
+            new InputStreamReader(
+                Main.class.getResourceAsStream("sql/setup.sql"))); // create tables
+    sr.runScript(reader);
+  }
+
+  /**
    * Adds a node to the database including the nodeID for importing from the CSV
    *
    * @param nodeID The node ID
