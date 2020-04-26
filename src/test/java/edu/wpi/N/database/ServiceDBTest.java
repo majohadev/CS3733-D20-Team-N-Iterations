@@ -8,6 +8,7 @@ import edu.wpi.N.entities.employees.Laundry;
 import edu.wpi.N.entities.employees.Translator;
 import edu.wpi.N.entities.request.MedicineRequest;
 import edu.wpi.N.entities.request.Request;
+import edu.wpi.N.entities.request.SanitationRequest;
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
@@ -315,6 +316,23 @@ public class ServiceDBTest {
   //
   //    assertEquals(dippy, ServiceDB.getPatient(id));
   //  }
+
+  @Test
+  public void testAddSanitationReq() throws DBException {
+    int id = ServiceDB.addSanitationReq("help", "ZHALL00102", "wet", "large", "unknown");
+    SanitationRequest req = (SanitationRequest) ServiceDB.getRequest(id);
+    GregorianCalendar cal = (GregorianCalendar) GregorianCalendar.getInstance();
+
+    SanitationRequest expected =
+        new SanitationRequest(
+            id, 0, "help", null, "ZHALL00102", cal, cal, "OPEN", "wet", "large", "unknown");
+
+    assertEquals(expected, ServiceDB.getRequest(id));
+
+    assertThrows(
+        DBException.class,
+        () -> ServiceDB.addSanitationReq("help", "ZHALL00102", "wet", "big", "unknown"));
+  }
 
   @AfterAll
   public static void cleanup() throws DBException {

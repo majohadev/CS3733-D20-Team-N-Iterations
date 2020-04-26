@@ -6,7 +6,6 @@ import edu.wpi.N.entities.employees.Employee;
 import edu.wpi.N.entities.employees.Laundry;
 import edu.wpi.N.entities.employees.Translator;
 import edu.wpi.N.entities.request.*;
-
 import java.sql.*;
 import java.util.*;
 import java.util.Date;
@@ -158,6 +157,24 @@ public class ServiceDB {
             rs.getDouble("dosage"),
             rs.getString("units"),
             rs.getString("patient"));
+      } else if (sType.equals("Sanitation")) {
+        query = "SELECT size, sanitationType, danger FROM SANITATIONREQUESTS WHERE requestID = ?";
+        stmt = con.prepareStatement(query);
+        stmt.setInt(1, id);
+        rs = stmt.executeQuery();
+        rs.next();
+        return new SanitationRequest(
+            rid,
+            empId,
+            reqNotes,
+            compNotes,
+            nodeID,
+            timeReq,
+            timeComp,
+            status,
+            rs.getString("size"),
+            rs.getString("sanitationType"),
+            rs.getString("danger"));
       } else throw new DBException("Invalid request! ID = " + id);
     } catch (SQLException e) {
       e.printStackTrace();
@@ -481,7 +498,7 @@ public class ServiceDB {
       stmt.setString(3, "Medicine");
       stmt.setString(4, nodeID);
       stmt.setString(5, "OPEN");
-      stmt.execute();
+      stmt.executeUpdate();
       ResultSet rs = stmt.getGeneratedKeys();
       rs.next();
       query =
@@ -977,67 +994,122 @@ public class ServiceDB {
     }
   }
 
-  //Chris
+  // Chris
   /**
    * adds a sanitation employee with the specified name
+   *
    * @param name
    * @return the generated id
    */
-  public static int addSanitationEmp(String name){
+  public static int addSanitationEmp(String name) {
     return 0;
   }
 
-  //Nick
+  // Nick
   /**
    * adds a sanitation request with the specified fields
-   * @param reqNote
+   *
+   * @param reqNotes
    * @param nodeID
    * @param spillType
-   * @param amount
+   * @param size
    * @param danger
    * @return the generated requestID
    */
-  public static int addSanitationReq(String reqNote, String nodeID, String spillType, String amount, String danger) {
-    return 0;
+  public static int addSanitationReq(
+      String reqNotes, String nodeID, String spillType, String size, String danger)
+      throws DBException {
+    String[] sizeArray = new String[] {"small", "medium", "large", "unknown"};
+    String[] dangerArray = new String[] {"low", "medium", "high", "unknown"};
+
+    if (!Arrays.asList(sizeArray).contains(size.toLowerCase())) {
+      throw new DBException("addSanitationReq: \"" + size + "\" is not a valid size");
+    }
+
+    if (!Arrays.asList(dangerArray).contains(danger.toLowerCase())) {
+      throw new DBException("addSanitationReq: \"" + danger + "\" is not a valid danger level");
+    }
+
+    try {
+      con.setAutoCommit(false);
+
+      String query =
+          "INSERT INTO request (timeRequested, reqNotes, serviceType, nodeID, status) VALUES (?, ?, ?, ?, ?)";
+      PreparedStatement st = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+      st.setTimestamp(1, new Timestamp(new Date().getTime()));
+      st.setString(2, reqNotes);
+      st.setString(3, "Sanitation");
+      st.setString(4, nodeID);
+      st.setString(5, "OPEN");
+      st.executeUpdate();
+
+      ResultSet rs = st.getGeneratedKeys();
+      rs.next();
+      int id = rs.getInt("1");
+
+      query =
+          "INSERT INTO sanitationRequests (requestid, size, sanitationtype, danger) VALUES (?, ?, ?, ?)";
+      st = con.prepareStatement(query);
+      st.setInt(1, id);
+      st.setString(2, size);
+      st.setString(3, spillType);
+      st.setString(4, danger);
+      st.executeUpdate();
+
+      con.commit();
+      con.setAutoCommit(true);
+      return id;
+    } catch (SQLException e) {
+      try {
+        con.rollback();
+        con.setAutoCommit(true);
+      } catch (SQLException ex) {
+        throw new DBException("Unknown Error: addSanitationReq", ex);
+      }
+      throw new DBException("Unknown Error: addSanitationReq", e);
+    }
   }
 
-  //Chris
+  // Chris
   /**
    * searches through the database where the spillType contains the given type
+   *
    * @param type
    * @return a list of sanitationRequest where spillType contains the given type
    */
-  public static LinkedList<SanitationRequest> searchbyspillType(String type){
+  public static LinkedList<SanitationRequest> searchbyspillType(String type) {
     return null;
   }
 
-  //Nick
+  // Nick
   /**
    * gets a list of sanitationRequest where the danger mathces the given val
+   *
    * @param danger
    * @return a list of sanitationRequest where danger matches the given danger level
    */
-  public static LinkedList<SanitationRequest> getsanitationbyDanger(String danger){
+  public static LinkedList<SanitationRequest> getsanitationbyDanger(String danger) {
     return null;
   }
 
-  //Chris
+  // Chris
   /**
    * gets a list of sanitationRequest where the amount matches the given val
+   *
    * @param amount
    * @return a list of sanitationRequest where amount matches the given amount
    */
-  public static LinkedList<SanitationRequest> getsanitationbyAmount(String amount){
+  public static LinkedList<SanitationRequest> getsanitationbyAmount(String amount) {
     return null;
   }
 
-  //Nick
+  // Nick
   /**
    * gets a list of all sanitation Employee in the database
+   *
    * @return list of all sanitation Employee
    */
-  public static LinkedList<Employee> getSanitationEmp(){
+  public static LinkedList<Employee> getSanitationEmp() {
     return null;
   }
-
 }
