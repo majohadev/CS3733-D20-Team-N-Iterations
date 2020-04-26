@@ -33,7 +33,7 @@ public class BetweenFloorsTest {
     DbNode[] firstEdge = edgesBetweenFloors.getFirst();
     DbNode[] secondEdge = edgesBetweenFloors.get(1);
     Assertions.assertEquals(firstEdge[0].getNodeID(), "ELEV021000");
-    Assertions.assertEquals(firstEdge[1].getNodeID(),"ELEV022000");
+    Assertions.assertEquals(firstEdge[1].getNodeID(), "ELEV022000");
     Assertions.assertEquals(secondEdge[0].getNodeID(), "ELEV022000");
     Assertions.assertEquals(secondEdge[1].getNodeID(), "ELEV023000");
     Assertions.assertTrue(edgesBetweenFloors.size() == 2);
