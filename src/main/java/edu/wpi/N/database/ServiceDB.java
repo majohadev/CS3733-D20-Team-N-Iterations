@@ -779,9 +779,9 @@ public class ServiceDB {
    */
   public static LinkedList<String> getPatientByMedType(String type) throws DBException {
     try {
-      String query = "SELECT patient FROM medicineRequests WHERE medicineName = ?";
+      String query = "SELECT patient FROM medicineRequests WHERE UPPER(medicineName) = ?";
       PreparedStatement stmt = con.prepareStatement(query);
-      stmt.setString(1, type);
+      stmt.setString(1, type.toUpperCase());
       ResultSet rs = stmt.executeQuery();
       LinkedList<String> plist = new LinkedList<>();
       while (rs.next()) {

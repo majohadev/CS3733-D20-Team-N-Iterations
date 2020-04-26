@@ -234,6 +234,17 @@ public class ServiceDBTest {
   }
 
   @Test
+  public void testgetPatientbyMedType() throws DBException {
+    MapDB.addNode("NDEPT10004", 100, 100, 4, "Faulkner", "DEPT", "Hello", "Hell", 'N');
+    int id = ServiceDB.addMedReq("hello", "NDEPT10004", "weed", 100, "kg", "Max");
+    MapDB.addNode("NDEPT10014", 100, 100, 4, "Faulkner", "DEPT", "Hello", "Hell", 'N');
+    int id2 = ServiceDB.addMedReq("hello", "NDEPT10014", "Weed", 100, "kg", "Nick");
+    LinkedList<String> list = ServiceDB.getPatientByMedType("weed");
+    assertTrue(list.contains("Max"));
+    assertTrue(list.contains("Nick"));
+  }
+
+  @Test
   public void testGetMedRequestsByPatient() throws DBException {
     LinkedList<MedicineRequest> result = ServiceDB.getMedRequestByPatient(tony);
 
