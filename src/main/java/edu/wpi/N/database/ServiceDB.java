@@ -49,7 +49,7 @@ public class ServiceDB {
       } else if (sType.equals("Laundry")) {
         return new Laundry(id, name);
       } else if (sType.equals("Emotional Support")) {
-        return new Laundry(id, name);
+        return new EmotionalSupporter(id, name);
       } else if (sType.equals("Medicine")) {
         return DoctorDB.getDoctor(id);
       } else
@@ -150,15 +150,15 @@ public class ServiceDB {
         rs = stmt.executeQuery();
         rs.next();
         return new EmotionalRequest(
-                rid,
-                empId,
-                reqNotes,
-                compNotes,
-                nodeID,
-                timeReq,
-                timeComp,
-                status,
-                rs.getString("supportType"));
+            rid,
+            empId,
+            reqNotes,
+            compNotes,
+            nodeID,
+            timeReq,
+            timeComp,
+            status,
+            rs.getString("supportType"));
       } else throw new DBException("Invalid request! ID = " + id);
     } catch (SQLException e) {
       e.printStackTrace();
@@ -199,7 +199,7 @@ public class ServiceDB {
             new TranslatorRequest(
                 rs.getInt("requestID"),
                 rs.getInt("assigned_eID"),
-                rs.getString("notes"),
+                rs.getString("reqNotes"),
                 rs.getString("compNotes"),
                 rs.getString("nodeID"),
                 getJavatime(rs.getTimestamp("timeRequested")),
@@ -212,16 +212,16 @@ public class ServiceDB {
       rs = stmt.executeQuery();
       while (rs.next()) {
         requests.add(
-                new EmotionalRequest(
-                        rs.getInt("requestID"),
-                        rs.getInt("assigned_eID"),
-                        rs.getString("notes"),
-                        rs.getString("compNotes"),
-                        rs.getString("nodeID"),
-                        getJavatime(rs.getTimestamp("timeRequested")),
-                        getJavatime(rs.getTimestamp("timeCompleted")),
-                        rs.getString("status"),
-                        rs.getString("supportType")));
+            new EmotionalRequest(
+                rs.getInt("requestID"),
+                rs.getInt("assigned_eID"),
+                rs.getString("reqNotes"),
+                rs.getString("compNotes"),
+                rs.getString("nodeID"),
+                getJavatime(rs.getTimestamp("timeRequested")),
+                getJavatime(rs.getTimestamp("timeCompleted")),
+                rs.getString("status"),
+                rs.getString("supportType")));
       }
       return requests;
     } catch (SQLException e) {
@@ -275,21 +275,21 @@ public class ServiceDB {
                 rs.getString("status")));
       }
       query =
-              "SELECT * FROM request, erequest WHERE request.requestID = erequest.requestID AND status = 'OPEN'";
+          "SELECT * FROM request, erequest WHERE request.requestID = erequest.requestID AND status = 'OPEN'";
       stmt = con.prepareStatement(query);
       rs = stmt.executeQuery();
       while (rs.next()) {
         openList.add(
-                new EmotionalRequest(
-                        rs.getInt("requestID"),
-                        rs.getInt("assigned_eID"),
-                        rs.getString("notes"),
-                        rs.getString("compNotes"),
-                        rs.getString("nodeID"),
-                        getJavatime(rs.getTimestamp("timeRequested")),
-                        getJavatime(rs.getTimestamp("timeCompleted")),
-                        rs.getString("status"),
-                        rs.getString("supportType")));
+            new EmotionalRequest(
+                rs.getInt("requestID"),
+                rs.getInt("assigned_eID"),
+                rs.getString("reqNotes"),
+                rs.getString("compNotes"),
+                rs.getString("nodeID"),
+                getJavatime(rs.getTimestamp("timeRequested")),
+                getJavatime(rs.getTimestamp("timeCompleted")),
+                rs.getString("status"),
+                rs.getString("supportType")));
       }
       return openList;
     } catch (SQLException ex) {
@@ -497,7 +497,6 @@ public class ServiceDB {
     }
   }
 
-
   // Chris
   /**
    * Adds a request for a translator
@@ -578,10 +577,10 @@ public class ServiceDB {
    * @return the id of the created request
    */
   public static int addEmotSuppReq(String reqNotes, String nodeID, String supportType)
-          throws DBException {
+      throws DBException {
     try {
       String query =
-              "INSERT INTO request (timeRequested, reqNotes, serviceType, nodeID, status) VALUES (?, ?, ?, ?, ?)";
+          "INSERT INTO request (timeRequested, reqNotes, serviceType, nodeID, status) VALUES (?, ?, ?, ?, ?)";
       PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
       stmt.setTimestamp(1, new Timestamp(new Date().getTime()));
       stmt.setString(2, reqNotes);

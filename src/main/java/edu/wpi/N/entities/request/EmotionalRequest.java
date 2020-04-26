@@ -3,6 +3,7 @@ package edu.wpi.N.entities.request;
 import java.util.GregorianCalendar;
 
 public class EmotionalRequest extends Request {
+  // Available types of support: Individual, Family, Couple, Group
   private String supportType;
 
   public EmotionalRequest(
