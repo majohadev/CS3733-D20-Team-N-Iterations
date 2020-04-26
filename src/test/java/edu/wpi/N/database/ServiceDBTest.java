@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import edu.wpi.N.entities.*;
 import edu.wpi.N.entities.employees.Employee;
 import edu.wpi.N.entities.employees.Laundry;
+import edu.wpi.N.entities.employees.Sanitation;
 import edu.wpi.N.entities.employees.Translator;
 import edu.wpi.N.entities.request.MedicineRequest;
 import edu.wpi.N.entities.request.Request;
@@ -310,9 +311,13 @@ public class ServiceDBTest {
 
   @Test
   public void testaddSanitationEmp() throws DBException {
-    assertEquals(
-        "Chicken Ceaser Wrap",
-        ServiceDB.getEmployee(ServiceDB.addSanitationEmp("Chicken Ceaser Wrap")).getName());
+    int id = ServiceDB.addSanitationEmp("Chicken Caesar Wrap");
+
+    Sanitation expected = new Sanitation(id, "Chicken Caesar Wrap");
+
+    assertEquals(expected, ServiceDB.getEmployee(id));
+
+    ServiceDB.removeEmployee(id);
   }
 
   @Test
@@ -387,6 +392,20 @@ public class ServiceDBTest {
     result = ServiceDB.getSanitationByDanger("Medium");
 
     assertTrue(result.contains(medium1));
+  }
+
+  @Test
+  public void testGetSanitationEmp() throws DBException {
+    int id1 = ServiceDB.addSanitationEmp("Fritz Coggelsgog");
+    int id2 = ServiceDB.addSanitationEmp("Bambimble Dignugget");
+
+    Sanitation expected1 = (Sanitation) ServiceDB.getEmployee(id1);
+    Sanitation expected2 = (Sanitation) ServiceDB.getEmployee(id2);
+
+    LinkedList<Sanitation> result = ServiceDB.getSanitationEmp();
+
+    assertTrue(result.contains(expected1));
+    assertTrue(result.contains(expected2));
   }
 
   @AfterAll

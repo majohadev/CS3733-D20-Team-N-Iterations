@@ -1216,9 +1216,22 @@ public class ServiceDB {
   /**
    * gets a list of all sanitation Employee in the database
    *
-   * @return list of all sanitation Employee
+   * @return a LinkedList of Sanitation
    */
-  public static LinkedList<Employee> getSanitationEmp() {
-    return null;
+  public static LinkedList<Sanitation> getSanitationEmp() throws DBException {
+    try {
+      LinkedList<Sanitation> result = new LinkedList<>();
+      String query = "SELECT * FROM employees WHERE SERVICETYPE = 'Sanitation'";
+
+      PreparedStatement st = con.prepareStatement(query);
+      ResultSet rs = st.executeQuery();
+
+      while (rs.next()) {
+        result.add(new Sanitation(rs.getInt("employeeID"), rs.getString("name")));
+      }
+      return result;
+    } catch (SQLException e) {
+      throw new DBException("Unknown error: getSanitationEmp", e);
+    }
   }
 }
