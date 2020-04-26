@@ -369,7 +369,7 @@ public class MapDBTest {
     MapDB.addEdge("NHALL00104", "NHALL00204");
     MapDB.addEdge("NELEV00X03", "NELEV00X04");
 
-    LinkedList<DbNode[]> edges = MapDB.getFloorEdges(4);
+    LinkedList<DbNode[]> edges = MapDB.getFloorEdges(4, "Faulkner");
 
     DbNode hall1 = MapDB.getNode("NHALL00104");
     DbNode hall2 = MapDB.getNode("NHALL00204");
