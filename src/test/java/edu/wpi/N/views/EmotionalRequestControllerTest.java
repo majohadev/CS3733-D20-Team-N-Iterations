@@ -50,7 +50,10 @@ public class EmotionalRequestControllerTest extends ApplicationTest {
       con.setAutoCommit(false);
       // Insertion statements, like addTranslator
 
-      clickOn("#cmbo_text").write("Duncan Reid Conference Room").type(KeyCode.DOWN).type(KeyCode.ENTER);
+      clickOn("#cmbo_text")
+          .write("Duncan Reid Conference Room")
+          .type(KeyCode.DOWN)
+          .type(KeyCode.ENTER);
 
       clickOn("#cmbo_selectSupport").type(KeyCode.DOWN).type(KeyCode.DOWN);
       clickOn("#txtf_supportNotes").write("I wanna live!");
@@ -77,7 +80,7 @@ public class EmotionalRequestControllerTest extends ApplicationTest {
         }
       }
 
-      //TODO: Update once Controller is updated
+      // TODO: Update once Controller is updated
       Assertions.assertTrue(true);
 
       // deleting statements
