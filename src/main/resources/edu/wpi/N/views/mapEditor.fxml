@@ -22,6 +22,7 @@
                               <Image url="@../images/Floor1TeamN.png" />
                            </image>
                         </ImageView>
+                        <Pane fx:id="pn_edges" prefHeight="997.0" prefWidth="1696.0" />
                         <Pane fx:id="pn_display" onKeyPressed="#onPaneDisplayKeyPressed" onMouseClicked="#onPaneDisplayClicked" prefHeight="773.0" prefWidth="1257.0">
                            <children>
                               <Pane fx:id="pn_editor" layoutX="1048.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="280.0" prefWidth="470.0" />

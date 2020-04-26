@@ -29,6 +29,7 @@ public class MapEditorController implements Controller {
   @FXML Pane pn_display;
   @FXML Pane pn_editor;
   @FXML Button btn_home;
+  @FXML Pane pn_edges;
 
   final int DEFAULT_FLOOR = 4;
   final String DEFAULT_BUILDING = "Faulkner";
@@ -94,7 +95,7 @@ public class MapEditorController implements Controller {
     deleteNodeCircles = new LinkedList<>();
     editNodeCircle = null;
     addEdgeLine = new Line();
-    pn_display.getChildren().add(addEdgeLine);
+    pn_edges.getChildren().add(addEdgeLine);
   }
 
   private void loadFloor() throws DBException {
@@ -108,7 +109,7 @@ public class MapEditorController implements Controller {
 
   private void displayEdges() {
     for (Line line : edgesMap.keySet()) {
-      pn_display.getChildren().add(line);
+      pn_edges.getChildren().add(line);
     }
   }
 
@@ -332,6 +333,7 @@ public class MapEditorController implements Controller {
       ContextMenu menu = new ContextMenu();
       MenuItem deleteNode = new MenuItem("Delete Node");
       MenuItem editNode = new MenuItem("Edit Node");
+      MenuItem deleteEdge = new MenuItem("Delete Edge");
       deleteNode.setOnAction(
           e -> {
             try {
@@ -348,6 +350,7 @@ public class MapEditorController implements Controller {
               ex.printStackTrace();
             }
           });
+      deleteEdge.setOnAction(handleDelete);
       menu.getItems().addAll(deleteNode, editNode);
       menu.show(mainApp.getStage(), event.getSceneX(), event.getSceneY());
     }
@@ -357,6 +360,7 @@ public class MapEditorController implements Controller {
     mode = Mode.ADD_NODE;
     changeEditor();
     addNodeCircle = createCircle(event.getX(), event.getY(), ADD_NODE_COLOR);
+    pn_display.getChildren().add(addNodeCircle);
     controllerAddNode.setPos(event.getX(), event.getY());
     onTxtPosAddNodeTextChanged(addNodeCircle);
     onBtnConfirmAddNodeClicked(addNodeCircle);
@@ -522,13 +526,14 @@ public class MapEditorController implements Controller {
                     e.printStackTrace();
                   }
                   edgesMap.remove(edge.getLine());
-                  pn_display.getChildren().remove(edge.getLine());
+                  pn_edges.getChildren().remove(edge.getLine());
                 }
                 pn_display.getChildren().remove(circle);
                 nodesMap.remove(circle);
               }
               resetDeleteNode();
               pn_editor.setVisible(false);
+              mode = Mode.NO_STATE;
             });
   }
 
@@ -673,32 +678,40 @@ public class MapEditorController implements Controller {
 
   private void handleCircleDragReleased(MouseEvent event, Circle circle) throws DBException {
     LinkedList<DbNode> nodes = new LinkedList();
+    LinkedList<UINode> UInode = new LinkedList();
+    LinkedList<Circle> circles = new LinkedList();
     if (mode == mode.ADD_EDGE) {
       for (Circle aCircle : nodesMap.keySet()) {
         if (aCircle.contains(addEdgeLine.getStartX(), addEdgeLine.getStartY())
             || aCircle.contains(addEdgeLine.getEndX(), addEdgeLine.getEndY())) {
           nodes.add(nodesMap.get(aCircle).getDBNode());
+          UInode.add(nodesMap.get(aCircle));
+          circles.add(aCircle);
         }
       }
+      if (nodes.size() == 2) {
+        MapDB.addEdge(nodes.get(0).getNodeID(), nodes.get(1).getNodeID());
+        DbNode[] nodes1 = {nodes.get(0), nodes.get(1)};
+        DbNode[] nodes2 = {nodes.get(1), nodes.get(0)};
+        UIEdge edge;
+        if (circles.get(0).contains(addEdgeLine.getStartX(), addEdgeLine.getStartY())) {
+          edge = new UIEdge(addEdgeLine, nodes1);
+        } else {
+          edge = new UIEdge(addEdgeLine, nodes2);
+        }
+        edgesMap.put(addEdgeLine, edge);
+        pn_edges.getChildren().remove(addEdgeLine);
+        pn_edges.getChildren().add(edge.getLine());
+        UInode.get(0).addEdge(edge);
+        UInode.get(1).addEdge(edge);
+      }
+      nodes.clear();
+      addEdgeLine = new Line();
+      pn_edges.getChildren().remove(addEdgeLine);
+      pn_edges.getChildren().add(addEdgeLine);
+      mode = Mode.NO_STATE;
     }
-    if (nodes.size() == 2) {
-      MapDB.addEdge(nodes.get(0).getNodeID(), nodes.get(1).getNodeID());
-      DbNode[] nodes1 = {nodes.get(0), nodes.get(1)};
-      Line line = new Line();
-      setLinePosition(
-          line,
-          addEdgeLine.getStartX(),
-          addEdgeLine.getStartY(),
-          addEdgeLine.getEndX(),
-          addEdgeLine.getEndY());
-      UIEdge edge = new UIEdge(line, nodes1);
-      pn_display.getChildren().remove(addEdgeLine);
-      pn_display.getChildren().add(edge.getLine());
-    }
-    nodes.clear();
-    pn_display.getChildren().remove(addEdgeLine);
-    addEdgeLine = new Line();
-    pn_display.getChildren().add(addEdgeLine);
-    mode = Mode.NO_STATE;
   }
+
+
 }
