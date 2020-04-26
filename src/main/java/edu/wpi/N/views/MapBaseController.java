@@ -4,20 +4,14 @@ import com.google.common.collect.HashBiMap;
 import edu.wpi.N.App;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
-import edu.wpi.N.database.ServiceDB;
 import edu.wpi.N.entities.DbNode;
+import edu.wpi.N.entities.UIEdge;
+import edu.wpi.N.entities.UINode;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
 import java.util.Set;
-import java.util.function.BiFunction;
 import java.util.stream.Stream;
-
-import edu.wpi.N.entities.UIEdge;
-import edu.wpi.N.entities.UINode;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
@@ -28,9 +22,6 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
 
 public class MapBaseController {
 
@@ -40,11 +31,12 @@ public class MapBaseController {
 
   LinkedList<DbNode> allFloorNodes; // stores all the nodes on the floor
   LinkedList<UINode> selectedNodes; // stores all the selected nodes on the map
-  //LinkedList<String> longNamesList = new LinkedList<>(); // Stores Floor Node names
+  // LinkedList<String> longNamesList = new LinkedList<>(); // Stores Floor Node names
 
   public UINode defaultNode;
 
-  private HashBiMap<UINode, DbNode> masterNodes; // Maps UINodes from pool to DbNodes from current floor
+  private HashBiMap<UINode, DbNode>
+      masterNodes; // Maps UINodes from pool to DbNodes from current floor
   private Set<UIEdge> masterEdges; // Maps UINodes from pool to DbNodes from current floor
 
   // Screen constants
@@ -87,25 +79,22 @@ public class MapBaseController {
     changeFloor(4);
 
     selectedNodes = new LinkedList<UINode>();
-    allFloorNodes = MapDB.visNodes(currentFloor, currentBuilding);
+    allFloorNodes = MapDB.floorNodes(currentFloor, currentBuilding);
     masterNodes = HashBiMap.create();
 
     populateMap();
-    defaultNode = masterNodes.inverse().get(MapDB.getNode("NHALL00804"));
+    //defaultNode = masterNodes.inverse().get(MapDB.getNode("NHALL00804"));
 
     try {
-      if (defaultNode == null) {
-        defaultNode = masterNodes.inverse().get(allFloorNodes.getFirst());
-      }
+      defaultNode = masterNodes.inverse().get(allFloorNodes.getFirst());
     } catch (NoSuchElementException e) {
       Alert emptyMap = new Alert(Alert.AlertType.WARNING);
       emptyMap.setContentText("The map is empty!");
       emptyMap.show();
     }
-
   }
 
-  public void changeFloor (int newFloor) {
+  public void changeFloor(int newFloor) {
     // Change floor
     currentFloor = newFloor;
     img_map.setImage(App.mapData.getMap(newFloor));
@@ -118,51 +107,54 @@ public class MapBaseController {
     return newNode;
   }
 
-  private void addEdge (UINode nodeA, UINode nodeB) {
+  private void addEdge(UINode nodeA, UINode nodeB) {
     UIEdge newEdge = nodeA.addEdgeTo(nodeB);
-    if (newEdge != null) { masterEdges.add(newEdge); }
+    if (newEdge != null) {
+      masterEdges.add(newEdge);
+    }
   }
 
-  private void breakEdge (UINode nodeA, UINode nodeB) {
+  private void breakEdge(UINode nodeA, UINode nodeB) {
     nodeA.breakEdgeTo(nodeB);
   }
 
-  public DbNode getDbFromUi (UINode uiNode) {
+  public DbNode getDbFromUi(UINode uiNode) {
     return masterNodes.get(uiNode);
   }
 
-  public UINode getUiFromDb (DbNode dbNode) {
+  public UINode getUiFromDb(DbNode dbNode) {
     return masterNodes.inverse().get(dbNode);
   }
 
-  public UINode getDefaultNode () {
+  public UINode getDefaultNode() {
     return defaultNode;
   }
 
   // Replace (or create) link between a UINode and a DbNode
-  private void setLink(UINode uiNode, DbNode dbNode, boolean showKey){
+  private void setLink(UINode uiNode, DbNode dbNode, boolean showKey) {
     if (uiNode != null && dbNode != null) {
       uiNode.setVisible(showKey);
       if (masterNodes.replace(uiNode, dbNode) == null) { // If uiNode is a new map key
 
-        masterNodes.put(uiNode, dbNode);  // Add the new key
+        masterNodes.put(uiNode, dbNode); // Add the new key
 
-        try {  // Add any attached edges
+        try { // Add any attached edges
           UINode otherAsUI;
           for (DbNode other : MapDB.getAdjacent(dbNode.getNodeID())) {
             otherAsUI = getUiFromDb(other);
-            if (otherAsUI != null) { addEdge(uiNode, otherAsUI); }
+            if (otherAsUI != null) {
+              addEdge(uiNode, otherAsUI);
+            }
           }
         } catch (DBException e) {
 
         }
-
       }
     }
   }
 
   // Called by the UINode that was clicked
-  public void onUINodeClicked (MouseEvent e, UINode clickedNode) {
+  public void onUINodeClicked(MouseEvent e, UINode clickedNode) {
 
     if (clickedNode.getSelected()) {
       selectedNodes.add(clickedNode);
@@ -174,7 +166,7 @@ public class MapBaseController {
   }
 
   // Called by the UINode that was clicked
-  public void onUIEdgeClicked (MouseEvent e, UIEdge clickedEdge) {
+  public void onUIEdgeClicked(MouseEvent e, UIEdge clickedEdge) {
     System.out.println("Edge (?) clicked!");
   }
 
@@ -182,7 +174,8 @@ public class MapBaseController {
     try {
       Set<UINode> keys = masterNodes.keySet();
       Stream<UINode> keyStream = keys.stream();
-      LinkedList<DbNode> thisFloor = MapDB.floorNodes(currentFloor, currentBuilding);
+      allFloorNodes = MapDB.floorNodes(currentFloor, currentBuilding);
+      LinkedList<DbNode> thisFloor = allFloorNodes;
 
       try {
         keyStream.forEach(key -> setLink(key, thisFloor.pop(), false));
@@ -196,12 +189,10 @@ public class MapBaseController {
         setLink(makeUINode(), thisFloor.pop(), false);
       }
 
-
     } catch (DBException e) {
       System.out.print("Populating floor " + currentFloor + " in  " + currentBuilding + " failed.");
       e.printStackTrace();
     }
-
   }
 
   // Draw lines between each pair of nodes in given path
@@ -221,15 +212,15 @@ public class MapBaseController {
         return;
       }
 
-      //float startX = (dbFirst.getX() * HORIZONTAL_SCALE) + HORIZONTAL_OFFSET;
-      //float startY = (dbFirst.getY() * VERTICAL_SCALE) + VERTICAL_OFFSET;
-      //float endX = (dbSecond.getX() * HORIZONTAL_SCALE) + HORIZONTAL_OFFSET;
-      //float endY = (dbSecond.getY() * VERTICAL_SCALE) + VERTICAL_OFFSET;
+      // float startX = (dbFirst.getX() * HORIZONTAL_SCALE) + HORIZONTAL_OFFSET;
+      // float startY = (dbFirst.getY() * VERTICAL_SCALE) + VERTICAL_OFFSET;
+      // float endX = (dbSecond.getX() * HORIZONTAL_SCALE) + HORIZONTAL_OFFSET;
+      // float endY = (dbSecond.getY() * VERTICAL_SCALE) + VERTICAL_OFFSET;
 
       uiFirst = masterNodes.inverse().get(dbFirst);
       uiSecond = masterNodes.inverse().get(dbSecond);
 
-      //Highlight edge
+      // Highlight edge
     }
   }
 
@@ -241,10 +232,9 @@ public class MapBaseController {
     selectedNodes.clear();
   }
 
-  public void forceSelect (UINode uiNode, boolean selected) {  // Don't really want
+  public void forceSelect(UINode uiNode, boolean selected) { // Don't really want
     uiNode.setSelected(selected);
   }
-
 
   // == MAP ZOOM CONTROLS ==
 
@@ -331,9 +321,9 @@ public class MapBaseController {
     double yLimit = (pn_movableMap.getScaleY() - MIN_MAP_SCALE) * MAP_HEIGHT / 2;
 
     double newTranslateX =
-            Math.min(Math.max(pn_movableMap.getTranslateX() + deltaX, -xLimit), xLimit);
+        Math.min(Math.max(pn_movableMap.getTranslateX() + deltaX, -xLimit), xLimit);
     double newTranslateY =
-            Math.min(Math.max(pn_movableMap.getTranslateY() + deltaY, -yLimit), yLimit);
+        Math.min(Math.max(pn_movableMap.getTranslateY() + deltaY, -yLimit), yLimit);
 
     pn_movableMap.setTranslateX(newTranslateX);
     pn_movableMap.setTranslateY(newTranslateY);

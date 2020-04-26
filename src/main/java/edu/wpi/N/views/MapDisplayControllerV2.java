@@ -1,6 +1,5 @@
 package edu.wpi.N.views;
 
-import com.google.common.collect.HashBiMap;
 import edu.wpi.N.App;
 import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.algorithms.Pathfinder;
@@ -11,37 +10,27 @@ import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Doctor;
 import edu.wpi.N.entities.Path;
 import edu.wpi.N.qrcontrol.QRGenerator;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.input.ScrollEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.NoSuchElementException;
 
 public class MapDisplayControllerV2 extends QRGenerator implements Controller {
   private App mainApp;
 
-  @FXML
-  private MapBaseController mapBase;
+  @FXML private MapBaseController mapBase;
 
   Boolean loggedin = false;
 
@@ -74,7 +63,7 @@ public class MapDisplayControllerV2 extends QRGenerator implements Controller {
   @FXML ImageView img_qrDirections;
   @FXML Pane pn_directionsBox;
 
-  //LinkedList<DbNode> allFloorNodes; // stores all the nodes on the floor
+  // LinkedList<DbNode> allFloorNodes; // stores all the nodes on the floor
   LinkedList<String> longNamesList = new LinkedList<>(); // Stores Floor Node names
 
   private ObservableList<String> fuzzySearchTextList =
@@ -102,7 +91,6 @@ public class MapDisplayControllerV2 extends QRGenerator implements Controller {
     ObservableList<String> obvList = FXCollections.observableList(languages);
     cb_languages.setItems(obvList);
   }
-
 
   @FXML
   private void onBtnFindClicked(MouseEvent event) throws DBException {
@@ -145,7 +133,6 @@ public class MapDisplayControllerV2 extends QRGenerator implements Controller {
     }
   }
 
-
   @FXML
   private void onResetClicked(MouseEvent event) throws Exception {
     pn_directionsBox.setVisible(false);
@@ -187,7 +174,8 @@ public class MapDisplayControllerV2 extends QRGenerator implements Controller {
   @FXML
   private void onNearestBathroomClicked(MouseEvent event) throws Exception {
     DbNode startNode = mapBase.getDbFromUi(mapBase.getDefaultNode());
-    if (mapBase.selectedNodes.size() > 0) startNode =  mapBase.getDbFromUi(mapBase.selectedNodes.getFirst());
+    if (mapBase.selectedNodes.size() > 0)
+      startNode = mapBase.getDbFromUi(mapBase.selectedNodes.getFirst());
     onResetClicked(event);
     Path pathToBathroom = Pathfinder.findQuickAccess(startNode, "REST");
     if (pathToBathroom != null) {
