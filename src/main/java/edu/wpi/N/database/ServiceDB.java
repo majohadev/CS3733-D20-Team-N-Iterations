@@ -1,12 +1,14 @@
 package edu.wpi.N.database;
 
 import edu.wpi.N.entities.*;
+import edu.wpi.N.entities.employees.Doctor;
 import edu.wpi.N.entities.employees.EmotionalSupporter;
 import edu.wpi.N.entities.employees.Employee;
 import edu.wpi.N.entities.employees.Laundry;
 import edu.wpi.N.entities.employees.Translator;
 import edu.wpi.N.entities.request.EmotionalRequest;
 import edu.wpi.N.entities.request.LaundryRequest;
+import edu.wpi.N.entities.request.MedicineRequest;
 import edu.wpi.N.entities.request.Request;
 import edu.wpi.N.entities.request.TranslatorRequest;
 import java.sql.*;
@@ -18,6 +20,7 @@ public class ServiceDB {
   private static Connection con = MapDB.getCon();
 
   // Noah
+
   /**
    * Returns the employee specified by the given ID
    *
@@ -63,6 +66,7 @@ public class ServiceDB {
   }
 
   // Chris
+
   /**
    * Returns a list of all employees in the database
    *
@@ -80,6 +84,7 @@ public class ServiceDB {
   }
 
   // Nick
+
   /**
    * Gets all services in the database
    *
@@ -145,6 +150,7 @@ public class ServiceDB {
             rs.getString("language"));
       } else if (sType.equals("Emotional Support")) {
         query = "SELECT supportType FROM erequest WHERE requestID = ?";
+
         stmt = con.prepareStatement(query);
         stmt.setInt(1, id);
         rs = stmt.executeQuery();
@@ -159,6 +165,27 @@ public class ServiceDB {
             timeComp,
             status,
             rs.getString("supportType"));
+
+      } else if (rs.getString("serviceType").equals("Medicine")) {
+        query =
+            "SELECT medicineName, dosage, units, patient FROM medicineRequests WHERE requestID = ?";
+        stmt = con.prepareStatement(query);
+        stmt.setInt(1, id);
+        rs = stmt.executeQuery();
+        rs.next();
+        return new MedicineRequest(
+            rid,
+            empId,
+            reqNotes,
+            compNotes,
+            nodeID,
+            timeReq,
+            timeComp,
+            status,
+            rs.getString("medicineName"),
+            rs.getDouble("dosage"),
+            rs.getString("units"),
+            rs.getString("patient"));
       } else throw new DBException("Invalid request! ID = " + id);
     } catch (SQLException e) {
       e.printStackTrace();
@@ -167,6 +194,7 @@ public class ServiceDB {
   }
 
   // Noah
+
   /**
    * Gets all the requests in the database
    *
@@ -223,6 +251,26 @@ public class ServiceDB {
                 rs.getString("status"),
                 rs.getString("supportType")));
       }
+      query =
+          "SELECT * from request, medicineRequests WHERE request.requestID = medicineRequests.requestID";
+      stmt = con.prepareStatement(query);
+      rs = stmt.executeQuery();
+      while (rs.next()) {
+        requests.add(
+            new MedicineRequest(
+                rs.getInt("requestID"),
+                rs.getInt("assigned_eID"),
+                rs.getString("reqNotes"),
+                rs.getString("compNotes"),
+                rs.getString("nodeID"),
+                getJavatime(rs.getTimestamp("timeRequested")),
+                getJavatime(rs.getTimestamp("timeCompleted")),
+                rs.getString("status"),
+                rs.getString("medicineName"),
+                rs.getDouble("dosage"),
+                rs.getString("units"),
+                rs.getString("patient")));
+      }
       return requests;
     } catch (SQLException e) {
       e.printStackTrace();
@@ -231,6 +279,7 @@ public class ServiceDB {
   }
 
   // Chris
+
   /**
    * Gets all the open requests (not completed requests) in the database
    *
@@ -299,6 +348,7 @@ public class ServiceDB {
   }
 
   // Nick
+
   /**
    * Gets all the translators in the database
    *
@@ -322,6 +372,7 @@ public class ServiceDB {
   }
 
   // Noah
+
   /**
    * Gets all the laundrys in the database
    *
@@ -367,6 +418,7 @@ public class ServiceDB {
   }
 
   // Chris
+
   /**
    * Returns a list of all translators who speak a specified langauge
    *
@@ -384,35 +436,22 @@ public class ServiceDB {
       LinkedList<Translator> translators = new LinkedList<Translator>();
       while (rs.next()) {
         translators.add((Translator) getEmployee(rs.getInt("t_employeeID")));
-        //        LinkedList<String> langs = new LinkedList<String>();
-        //        int id = rs.getInt("t_employeeID");
-        //        String name = rs.getString("name");
-        //        while (rs.getInt("t_employeeID") == id) {
-        //          langs.add(rs.getString("language"));
-        //          rs.next();
-        //        }
-        //        translators.add(new Translator(id, name, langs));
       }
       return translators;
     } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Unknown error: getTransLang, lang :" + lang, e);
     }
-    //    LinkedList<Translator> list = getTranslators();
-    //    LinkedList<Translator> special = new LinkedList<Translator>();
-    //    for (int i = 1; i < list.size(); i++) {
-    //      if (list.get(i).getLanguages().equals(lang)) special.add(list.get(i));
-    //    }
-    //    return special;
   }
 
   // Nick
+
   /**
    * Adds a translator to the database
    *
    * @param name the translator's name
    * @param languages the languages that this translator is capable of speaking
-   * @return id of created request
+   * @return id of created translator
    */
   public static int addTranslator(String name, LinkedList<String> languages) throws DBException {
     try {
@@ -443,6 +482,7 @@ public class ServiceDB {
   }
 
   // Noah
+
   /**
    * Adds a laundry employee to the database
    *
@@ -456,7 +496,7 @@ public class ServiceDB {
       stmt.setString(1, name);
       stmt.executeUpdate();
       ResultSet rs = stmt.getGeneratedKeys();
-      rs.next(); // NullPointerException
+      rs.next();
       query = "INSERT INTO Laundry VALUES (?)";
       stmt = con.prepareStatement(query);
       int id = rs.getInt("1");
@@ -498,6 +538,7 @@ public class ServiceDB {
   }
 
   // Chris
+
   /**
    * Adds a request for a translator
    *
@@ -533,7 +574,52 @@ public class ServiceDB {
     }
   }
 
+  /**
+   * Adds a request for a medicine
+   *
+   * @param reqNotes
+   * @param nodeID
+   * @param type
+   * @param dosage
+   * @param units
+   * @param patient
+   * @return the id of the created request
+   * @throws DBException
+   */
+  public static int addMedReq(
+      String reqNotes, String nodeID, String type, double dosage, String units, String patient)
+      throws DBException {
+    try {
+      String query =
+          "INSERT INTO request (timeRequested, reqNotes, serviceType, nodeID, status) VALUES (?, ?, ?, ?, ?)";
+      PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+      stmt.setTimestamp(1, new Timestamp((new Date().getTime())));
+      stmt.setString(2, reqNotes);
+      stmt.setString(3, "Medicine");
+      stmt.setString(4, nodeID);
+      stmt.setString(5, "OPEN");
+      stmt.execute();
+      ResultSet rs = stmt.getGeneratedKeys();
+      rs.next();
+      query =
+          "INSERT INTO medicineRequests (requestID, medicineName, dosage, units, patient) VALUES (?, ?, ?, ?, ?)";
+      stmt = con.prepareStatement(query);
+      int id = rs.getInt("1");
+      stmt.setInt(1, id);
+      stmt.setString(2, type);
+      stmt.setDouble(3, dosage);
+      stmt.setString(4, units);
+      stmt.setString(5, patient);
+      stmt.executeUpdate();
+      return id;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown error: addMedReq", e);
+    }
+  }
+
   // Nick
+
   /**
    * Adds a request for laundry
    *
@@ -604,6 +690,7 @@ public class ServiceDB {
   }
 
   // Noah
+
   /**
    * Assigns an employee to a request; the employee must be able to fulfil that request
    *
@@ -637,6 +724,7 @@ public class ServiceDB {
   }
 
   // Chris
+
   /**
    * Marks a request as completed and done at the time that this function was called
    *
@@ -644,7 +732,22 @@ public class ServiceDB {
    * @param compNotes notes regarding the completion of the request
    */
   public static void completeRequest(int requestID, String compNotes) throws DBException {
+    Request req = getRequest(requestID);
     try {
+      if (req instanceof MedicineRequest) {
+        Doctor doc = (Doctor) req.getEmp_assigned();
+        try {
+          if (!(LoginDB.currentLogin().equals(doc.getUsername()))) {
+            throw new DBException(
+                "Error: You muse login as the Doctor "
+                    + doc.getName()
+                    + " with username "
+                    + doc.getUsername());
+          }
+        } catch (DBException e) {
+          throw new DBException("Error: No login");
+        }
+      }
       String query = "SELECT status FROM request WHERE requestID = ?";
       PreparedStatement stmt = con.prepareStatement(query);
       stmt.setInt(1, requestID);
@@ -667,6 +770,7 @@ public class ServiceDB {
   }
 
   // Nick
+
   /**
    * Removes an employee from the database
    *
@@ -685,6 +789,7 @@ public class ServiceDB {
   }
 
   // regEx
+
   /**
    * Adds a language to the translator with the specified employee ID
    *
@@ -710,6 +815,7 @@ public class ServiceDB {
   }
 
   // Chris
+
   /**
    * Removes a language to the translator with the specified employee ID
    *
@@ -734,6 +840,7 @@ public class ServiceDB {
   // TODO: make functions for changing the attributes of your employees
 
   // Nick
+
   /**
    * Denies a given request
    *
@@ -832,5 +939,203 @@ public class ServiceDB {
   public static Timestamp getSqltime(GregorianCalendar cal) {
     Timestamp time = new Timestamp(cal.getTime().getTime());
     return time;
+  }
+
+  // Chris
+
+  /**
+   * gets a list of patients taking the specified medicine
+   *
+   * @param type
+   * @return list of patients
+   */
+  public static LinkedList<String> getPatientByMedType(String type) throws DBException {
+    try {
+      String query = "SELECT patient FROM medicineRequests WHERE UPPER(medicineName) = ?";
+      PreparedStatement stmt = con.prepareStatement(query);
+      stmt.setString(1, type.toUpperCase());
+      ResultSet rs = stmt.executeQuery();
+      LinkedList<String> plist = new LinkedList<>();
+      while (rs.next()) {
+        plist.add(rs.getString("patient"));
+      }
+      return plist;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Error: getpatientbyMedType");
+    }
+  }
+
+  // Nick
+
+  /**
+   * Gets a list of requests associated with the specified patient
+   *
+   * @param patient The specified patient
+   * @return a LinkedList of MedicineRequest
+   */
+  public static LinkedList<MedicineRequest> getMedRequestByPatient(String patient)
+      throws DBException {
+    try {
+      LinkedList<MedicineRequest> res = new LinkedList<>();
+
+      String query =
+          "SELECT * FROM medicineRequests "
+              + "JOIN request ON medicineRequests.requestID = request.requestID "
+              + "WHERE patient = ?";
+      PreparedStatement st = con.prepareStatement(query);
+      st.setString(1, patient);
+      ResultSet rs = st.executeQuery();
+
+      while (rs.next()) {
+        res.add(
+            new MedicineRequest(
+                rs.getInt("requestID"),
+                rs.getInt("assigned_eID"),
+                rs.getString("reqNotes"),
+                rs.getString("compNotes"),
+                rs.getString("nodeID"),
+                getJavatime(rs.getTimestamp("timeRequested")),
+                getJavatime(rs.getTimestamp("timeCompleted")),
+                rs.getString("status"),
+                rs.getString("medicineName"),
+                rs.getDouble("dosage"),
+                rs.getString("units"),
+                rs.getString("patient")));
+      }
+
+      return res;
+    } catch (SQLException e) {
+      throw new DBException("Unknown error: getMedRequest", e);
+    }
+  }
+
+  //  // Nick
+  //  /**
+  //   * Adds a patient to the database
+  //   *
+  //   * @param name The name of the patient
+  //   * @param location The nodeID of the location of the patient
+  //   * @return id of created patient
+  //   */
+  //  public static int addPatient(String name, String location) throws DBException {
+  //    try {
+  //      String query = "INSERT INTO patients (patientName, location) VALUES (?, ?)";
+  //      PreparedStatement st = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+  //      st.setString(1, name);
+  //      st.setString(2, location);
+  //      st.executeUpdate();
+  //      ResultSet rs = st.getGeneratedKeys();
+  //      rs.next();
+  //      int id = rs.getInt("1");
+  //      return id;
+  //    } catch (SQLException e) {
+  //      throw new DBException("Unknown error: addPatient", e);
+  //    }
+  //  }
+  //
+  //  // Chris
+  //  /**
+  //   * gets list of all patients
+  //   * @return lst of all patients
+  //   */
+  //  public static LinkedList<Patient> getlistPatient() throws DBException {
+  //    LinkedList<Patient> allPatients = new LinkedList<Patient>();
+  //
+  //    try{
+  //      String query = "SELECT * FROM patients";
+  //      PreparedStatement stmt = con.prepareStatement(query);
+  //      ResultSet rs = stmt.executeQuery();
+  //      while(rs.next()){
+  //        allPatients.add(
+  //                new Patient(
+  //                        rs.getInt("id"),
+  //                        rs.getString("name"),
+  //                        rs.getString("location")
+  //                )
+  //        );
+  //      }
+  //      return allPatients;
+  //    } catch (SQLException e) {
+  //      e.printStackTrace();
+  //      throw new DBException("Error: getlistPatients");
+  //    }
+  //  }
+
+  // Nick
+  /**
+   * Gets the patient specified by the given ID
+   *
+   * @param patientID the ID of the patient
+   * @return The Patient object containing information about the patient
+   */
+  //  public static Patient getPatient(int patientID) throws DBException {
+  //    try {
+  //      String query = "SELECT * FROM patients WHERE patientID = ?";
+  //      PreparedStatement st = con.prepareStatement(query);
+  //      st.setInt(1, patientID);
+  //      ResultSet rs = st.executeQuery();
+  //      if (rs.next()) {
+  //        return new Patient(
+  //            rs.getInt("patientID"), rs.getString("patientName"), rs.getString("location"));
+  //      } else {
+  //        throw new DBException("getPatient: Could not find patient with id " + patientID);
+  //      }
+  //    } catch (SQLException e) {
+  //      throw new DBException("Unknown error: getPatient", e);
+  //    }
+  //  }
+
+  //// Chris
+  //  /**
+  //   * gets a list of patient with the specified name
+  //   * @param id
+  //   * @return list of patients
+  //   */
+  //  public static LinkedList<String> searchbyPatient(int id) throws DBException {
+  //    try{
+  //      LinkedList<String> patients = new LinkedList<>();
+  //      String query = "SELECT * FROM patients WHERE id = ?";
+  //      PreparedStatement stmt = con.prepareStatement(query);
+  //      stmt.setInt(1, id);
+  //      ResultSet rs = stmt.executeQuery();
+  //      while(rs.next()){
+  //        patients.add(
+  //                new Patient(
+  //                        rs.getInt("id"),
+  //                        rs.getString("name"),
+  //                        rs.getString("location")
+  //                )
+  //        );
+  //      }
+  //      return patients;
+  //    } catch (SQLException e) {
+  //      e.printStackTrace();
+  //      throw new DBException("Error: searchbyPatient causing error");
+  //    }
+  //  }
+
+  // Nick
+
+  /**
+   * Searches for a medicine name
+   *
+   * @param searchQuery The search query
+   * @return LinkedList of medicine name (String) that matches query
+   */
+  public static LinkedList<String> searchByMedType(String searchQuery) throws DBException {
+    try {
+      LinkedList<String> res = new LinkedList<>();
+      String query = "SELECT medicineName FROM medicineRequests WHERE UPPER(medicineName) LIKE ?";
+      PreparedStatement st = con.prepareStatement(query);
+      st.setString(1, "%" + searchQuery.toUpperCase() + "%");
+      ResultSet rs = st.executeQuery();
+      while (rs.next()) {
+        res.add(rs.getString("medicineName"));
+      }
+      return res;
+    } catch (SQLException e) {
+      throw new DBException("Unknown error : searchByMedType", e);
+    }
   }
 }
