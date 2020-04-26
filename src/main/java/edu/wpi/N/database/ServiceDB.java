@@ -2,9 +2,11 @@ package edu.wpi.N.database;
 
 import edu.wpi.N.entities.*;
 import edu.wpi.N.entities.employees.Doctor;
+import edu.wpi.N.entities.employees.EmotionalSupporter;
 import edu.wpi.N.entities.employees.Employee;
 import edu.wpi.N.entities.employees.Laundry;
 import edu.wpi.N.entities.employees.Translator;
+import edu.wpi.N.entities.request.EmotionalRequest;
 import edu.wpi.N.entities.request.LaundryRequest;
 import edu.wpi.N.entities.request.MedicineRequest;
 import edu.wpi.N.entities.request.Request;
@@ -18,6 +20,7 @@ public class ServiceDB {
   private static Connection con = MapDB.getCon();
 
   // Noah
+
   /**
    * Returns the employee specified by the given ID
    *
@@ -48,6 +51,8 @@ public class ServiceDB {
 
       } else if (sType.equals("Laundry")) {
         return new Laundry(id, name);
+      } else if (sType.equals("Emotional Support")) {
+        return new EmotionalSupporter(id, name);
       } else if (sType.equals("Medicine")) {
         return DoctorDB.getDoctor(id);
       } else
@@ -61,6 +66,7 @@ public class ServiceDB {
   }
 
   // Chris
+
   /**
    * Returns a list of all employees in the database
    *
@@ -72,11 +78,13 @@ public class ServiceDB {
     LinkedList<Employee> allEmployee = new LinkedList<Employee>();
     allEmployee.addAll(getTranslators());
     allEmployee.addAll(getLaundrys());
+    allEmployee.addAll(getEmotionalSupporters());
     allEmployee.addAll(DoctorDB.getDoctors());
     return allEmployee;
   }
 
   // Nick
+
   /**
    * Gets all services in the database
    *
@@ -140,6 +148,24 @@ public class ServiceDB {
             timeComp,
             status,
             rs.getString("language"));
+      } else if (sType.equals("Emotional Support")) {
+        query = "SELECT supportType FROM erequest WHERE requestID = ?";
+
+        stmt = con.prepareStatement(query);
+        stmt.setInt(1, id);
+        rs = stmt.executeQuery();
+        rs.next();
+        return new EmotionalRequest(
+            rid,
+            empId,
+            reqNotes,
+            compNotes,
+            nodeID,
+            timeReq,
+            timeComp,
+            status,
+            rs.getString("supportType"));
+
       } else if (rs.getString("serviceType").equals("Medicine")) {
         query =
             "SELECT medicineName, dosage, units, patient FROM medicineRequests WHERE requestID = ?";
@@ -168,6 +194,7 @@ public class ServiceDB {
   }
 
   // Noah
+
   /**
    * Gets all the requests in the database
    *
@@ -208,6 +235,22 @@ public class ServiceDB {
                 rs.getString("status"),
                 rs.getString("language")));
       }
+      query = "SELECT * from request, erequest WHERE request.requestID = erequest.requestID";
+      stmt = con.prepareStatement(query);
+      rs = stmt.executeQuery();
+      while (rs.next()) {
+        requests.add(
+            new EmotionalRequest(
+                rs.getInt("requestID"),
+                rs.getInt("assigned_eID"),
+                rs.getString("reqNotes"),
+                rs.getString("compNotes"),
+                rs.getString("nodeID"),
+                getJavatime(rs.getTimestamp("timeRequested")),
+                getJavatime(rs.getTimestamp("timeCompleted")),
+                rs.getString("status"),
+                rs.getString("supportType")));
+      }
       query =
           "SELECT * from request, medicineRequests WHERE request.requestID = medicineRequests.requestID";
       stmt = con.prepareStatement(query);
@@ -236,6 +279,7 @@ public class ServiceDB {
   }
 
   // Chris
+
   /**
    * Gets all the open requests (not completed requests) in the database
    *
@@ -279,6 +323,23 @@ public class ServiceDB {
                 getJavatime(rs.getTimestamp("timeCompleted")),
                 rs.getString("status")));
       }
+      query =
+          "SELECT * FROM request, erequest WHERE request.requestID = erequest.requestID AND status = 'OPEN'";
+      stmt = con.prepareStatement(query);
+      rs = stmt.executeQuery();
+      while (rs.next()) {
+        openList.add(
+            new EmotionalRequest(
+                rs.getInt("requestID"),
+                rs.getInt("assigned_eID"),
+                rs.getString("reqNotes"),
+                rs.getString("compNotes"),
+                rs.getString("nodeID"),
+                getJavatime(rs.getTimestamp("timeRequested")),
+                getJavatime(rs.getTimestamp("timeCompleted")),
+                rs.getString("status"),
+                rs.getString("supportType")));
+      }
       return openList;
     } catch (SQLException ex) {
       ex.printStackTrace();
@@ -287,6 +348,7 @@ public class ServiceDB {
   }
 
   // Nick
+
   /**
    * Gets all the translators in the database
    *
@@ -310,10 +372,11 @@ public class ServiceDB {
   }
 
   // Noah
+
   /**
    * Gets all the laundrys in the database
    *
-   * @return a linked list of all people who can do laundry in the database
+   * @return a linked list of all people who can do emotional support in the database
    */
   public static LinkedList<Laundry> getLaundrys() throws DBException {
     try {
@@ -332,7 +395,30 @@ public class ServiceDB {
   }
   // TODO: GetEmployeeTypes (something which gets all the employees of your particular type)
 
+  /**
+   * Gets all the emotional supporters in the database
+   *
+   * @return a linked list of all people who can do laundry in the database
+   */
+  public static LinkedList<EmotionalSupporter> getEmotionalSupporters() throws DBException {
+    try {
+      String query =
+          "SELECT l_employeeID from employees, emotionalSupporter where employeeID = l_employeeID";
+      PreparedStatement stmt = con.prepareStatement(query);
+      ResultSet rs = stmt.executeQuery();
+      LinkedList<EmotionalSupporter> emotionalSupporters = new LinkedList<EmotionalSupporter>();
+      while (rs.next()) {
+        emotionalSupporters.add((EmotionalSupporter) getEmployee(rs.getInt("l_employeeID")));
+      }
+      return emotionalSupporters;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown error: getEmotionalSupporters", e);
+    }
+  }
+
   // Chris
+
   /**
    * Returns a list of all translators who speak a specified langauge
    *
@@ -359,6 +445,7 @@ public class ServiceDB {
   }
 
   // Nick
+
   /**
    * Adds a translator to the database
    *
@@ -395,6 +482,7 @@ public class ServiceDB {
   }
 
   // Noah
+
   /**
    * Adds a laundry employee to the database
    *
@@ -423,7 +511,34 @@ public class ServiceDB {
 
   // TODO: Add a function to add your employee type to the database
 
+  /**
+   * Adds a Emotional Supporter employee to the database
+   *
+   * @param name the Emotional supporter employee's name
+   * @return id of created request
+   */
+  public static int addEmotionalSupporter(String name) throws DBException {
+    try {
+      String query = "INSERT INTO employees (name, serviceType) VALUES (?, 'Emotional Support')";
+      PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+      stmt.setString(1, name);
+      stmt.executeUpdate();
+      ResultSet rs = stmt.getGeneratedKeys();
+      rs.next(); // NullPointerException
+      query = "INSERT INTO emotionalSupporter VALUES (?)";
+      stmt = con.prepareStatement(query);
+      int id = rs.getInt("1");
+      stmt.setInt(1, id);
+      stmt.executeUpdate();
+      return id;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown error: addEmotionalSupporter , name = " + name, e);
+    }
+  }
+
   // Chris
+
   /**
    * Adds a request for a translator
    *
@@ -504,6 +619,7 @@ public class ServiceDB {
   }
 
   // Nick
+
   /**
    * Adds a request for laundry
    *
@@ -538,7 +654,43 @@ public class ServiceDB {
 
   // TODO: Create your addRequest call here
 
+  /**
+   * Adds a request for emotional support
+   *
+   * @param reqNotes some notes for the emotional support request
+   * @param nodeID The ID of the node in which these services are requested
+   * @param supportType the type of support the emotional supporter is requested for
+   * @return the id of the created request
+   */
+  public static int addEmotSuppReq(String reqNotes, String nodeID, String supportType)
+      throws DBException {
+    try {
+      String query =
+          "INSERT INTO request (timeRequested, reqNotes, serviceType, nodeID, status) VALUES (?, ?, ?, ?, ?)";
+      PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+      stmt.setTimestamp(1, new Timestamp(new Date().getTime()));
+      stmt.setString(2, reqNotes);
+      stmt.setString(3, "Emotional Support");
+      stmt.setString(4, nodeID);
+      stmt.setString(5, "OPEN");
+      stmt.execute();
+      ResultSet rs = stmt.getGeneratedKeys();
+      rs.next();
+      query = "INSERT INTO erequest (requestID, supportType) VALUES (?, ?)";
+      stmt = con.prepareStatement(query);
+      int id = rs.getInt("1");
+      stmt.setInt(1, id);
+      stmt.setString(2, supportType);
+      stmt.executeUpdate();
+      return id;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Error: addEmotSuppReq", e);
+    }
+  }
+
   // Noah
+
   /**
    * Assigns an employee to a request; the employee must be able to fulfil that request
    *
@@ -572,6 +724,7 @@ public class ServiceDB {
   }
 
   // Chris
+
   /**
    * Marks a request as completed and done at the time that this function was called
    *
@@ -617,6 +770,7 @@ public class ServiceDB {
   }
 
   // Nick
+
   /**
    * Removes an employee from the database
    *
@@ -635,6 +789,7 @@ public class ServiceDB {
   }
 
   // regEx
+
   /**
    * Adds a language to the translator with the specified employee ID
    *
@@ -660,6 +815,7 @@ public class ServiceDB {
   }
 
   // Chris
+
   /**
    * Removes a language to the translator with the specified employee ID
    *
@@ -684,6 +840,7 @@ public class ServiceDB {
   // TODO: make functions for changing the attributes of your employees
 
   // Nick
+
   /**
    * Denies a given request
    *
@@ -785,6 +942,7 @@ public class ServiceDB {
   }
 
   // Chris
+
   /**
    * gets a list of patients taking the specified medicine
    *
@@ -809,6 +967,7 @@ public class ServiceDB {
   }
 
   // Nick
+
   /**
    * Gets a list of requests associated with the specified patient
    *
@@ -957,6 +1116,7 @@ public class ServiceDB {
   //  }
 
   // Nick
+
   /**
    * Searches for a medicine name
    *
