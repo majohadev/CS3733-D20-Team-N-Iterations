@@ -4,7 +4,7 @@ import edu.wpi.N.database.DBException;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Path;
 
-public class Algorithm {
+public class Algorithm extends AbsAlgo {
   private IPathFinder pathFinder;
 
   public Algorithm() {
