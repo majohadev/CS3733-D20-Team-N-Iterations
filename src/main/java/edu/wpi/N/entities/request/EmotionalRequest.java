@@ -1,0 +1,34 @@
+package edu.wpi.N.entities.request;
+
+import edu.wpi.N.entities.request.Request;
+
+import java.util.GregorianCalendar;
+
+
+public class EmotionalRequest extends Request {
+    private String supportType;
+
+    public EmotionalRequest(
+            int requestID,
+            int emp_assigned,
+            String reqNotes,
+            String compNotes,
+            String nodeID,
+            GregorianCalendar timeRequested,
+            GregorianCalendar timeCompleted,
+            String status,
+            String supportType) {
+        super(requestID, emp_assigned, reqNotes, compNotes, nodeID, timeRequested, timeCompleted, status);
+        this.supportType = supportType;
+    }
+
+    @Override
+    public String getAtr1() {
+        return supportType;
+    }
+
+    @Override
+    public String getServiceType() {
+        return "Emotional Support";
+    }
+}
