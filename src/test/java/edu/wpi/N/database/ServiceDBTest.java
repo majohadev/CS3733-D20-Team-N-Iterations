@@ -247,6 +247,7 @@ public class ServiceDBTest {
             "g",
             tony);
 
+    assertEquals(2, result.size());
     assertTrue(result.contains(expected1));
     assertTrue(result.contains(expected2));
   }

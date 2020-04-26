@@ -1,6 +1,5 @@
 package edu.wpi.N.database;
 
-import com.sun.javafx.font.LogicalFont;
 import edu.wpi.N.entities.*;
 import edu.wpi.N.entities.employees.Doctor;
 import edu.wpi.N.entities.employees.Employee;
@@ -530,13 +529,17 @@ public class ServiceDB {
   public static void completeRequest(int requestID, String compNotes) throws DBException {
     Request req = getRequest(requestID);
     try {
-      if(req instanceof MedicineRequest){
-        Doctor doc = (Doctor)req.getEmp_assigned();
-        try{
-          if(!(LoginDB.currentLogin().equals(doc.getUsername()))){
-            throw new DBException("Error: You muse login as the Doctor " + doc.getName() + " with username " + doc.getUsername());
+      if (req instanceof MedicineRequest) {
+        Doctor doc = (Doctor) req.getEmp_assigned();
+        try {
+          if (!(LoginDB.currentLogin().equals(doc.getUsername()))) {
+            throw new DBException(
+                "Error: You muse login as the Doctor "
+                    + doc.getName()
+                    + " with username "
+                    + doc.getUsername());
           }
-        }catch(DBException e){
+        } catch (DBException e) {
           throw new DBException("Error: No login");
         }
       }
@@ -782,7 +785,7 @@ public class ServiceDB {
                 getJavatime(rs.getTimestamp("timeRequested")),
                 getJavatime(rs.getTimestamp("timeCompleted")),
                 rs.getString("status"),
-                rs.getString("serviceType"),
+                rs.getString("medicineName"),
                 rs.getDouble("dosage"),
                 rs.getString("units"),
                 rs.getString("patient")));

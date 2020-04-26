@@ -3,7 +3,7 @@ package edu.wpi.N.entities.request;
 import java.util.GregorianCalendar;
 
 public class MedicineRequest extends Request {
-  private String medicineType;
+  private String medicineName;
   private double dosage;
   private String units;
   private String patient;
@@ -17,13 +17,13 @@ public class MedicineRequest extends Request {
       GregorianCalendar timeRequested,
       GregorianCalendar timeCompleted,
       String status,
-      String type,
+      String medicineName,
       double dosage,
       String units,
       String patient) {
     super(
         requestID, emp_assigned, reqNotes, compNotes, nodeID, timeRequested, timeCompleted, status);
-    this.medicineType = type;
+    this.medicineName = medicineName;
     this.dosage = dosage;
     this.units = units;
     this.patient = patient;
@@ -34,12 +34,12 @@ public class MedicineRequest extends Request {
     return "Medicine";
   }
 
-  public String getMedicineType() {
-    return medicineType;
+  public String getMedicineName() {
+    return medicineName;
   }
 
-  public void setMedicineType(String medicineType) {
-    this.medicineType = medicineType;
+  public void setMedicineName(String medicineName) {
+    this.medicineName = medicineName;
   }
 
   public double getDosage() {
@@ -75,7 +75,7 @@ public class MedicineRequest extends Request {
     MedicineRequest other = (MedicineRequest) o;
 
     return super.equals(o)
-        && medicineType.equals(other.medicineType)
+        && medicineName.equals(other.medicineName)
         && dosage == other.dosage
         && units.equals(other.units)
         && patient.equals(other.patient);
