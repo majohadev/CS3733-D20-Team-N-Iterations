@@ -1,6 +1,8 @@
 package edu.wpi.N.database;
 
+import com.sun.javafx.font.LogicalFont;
 import edu.wpi.N.entities.*;
+import edu.wpi.N.entities.employees.Doctor;
 import edu.wpi.N.entities.employees.Employee;
 import edu.wpi.N.entities.employees.Laundry;
 import edu.wpi.N.entities.employees.Translator;
@@ -526,7 +528,18 @@ public class ServiceDB {
    * @param compNotes notes regarding the completion of the request
    */
   public static void completeRequest(int requestID, String compNotes) throws DBException {
+    Request req = getRequest(requestID);
     try {
+      if(req instanceof MedicineRequest){
+        Doctor doc = (Doctor)req.getEmp_assigned();
+        try{
+          if(!(LoginDB.currentLogin().equals(doc.getUsername()))){
+            throw new DBException("Error: You muse login as the Doctor " + doc.getName() + " with username " + doc.getUsername());
+          }
+        }catch(DBException e){
+          throw new DBException("Error: No login");
+        }
+      }
       String query = "SELECT status FROM request WHERE requestID = ?";
       PreparedStatement stmt = con.prepareStatement(query);
       stmt.setInt(1, requestID);
