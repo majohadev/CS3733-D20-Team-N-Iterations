@@ -150,8 +150,16 @@ public class ServiceDB {
         rs = stmt.executeQuery();
         rs.next();
         return new ITRequest(
-                rid, empId, reqNotes, compNotes, nodeID, timeReq, timeComp, status,
-                rs.getString("device"), rs.getString("problem"));
+            rid,
+            empId,
+            reqNotes,
+            compNotes,
+            nodeID,
+            timeReq,
+            timeComp,
+            status,
+            rs.getString("device"),
+            rs.getString("problem"));
       } else throw new DBException("Invalid request! ID = " + id);
     } catch (SQLException e) {
       e.printStackTrace();
@@ -205,17 +213,17 @@ public class ServiceDB {
       rs = stmt.executeQuery();
       while (rs.next()) {
         requests.add(
-                new ITRequest(
-                        rs.getInt("requestID"),
-                        rs.getInt("assigned_eID"),
-                        rs.getString("notes"),
-                        rs.getString("compNotes"),
-                        rs.getString("nodeID"),
-                        getJavatime(rs.getTimestamp("timeRequested")),
-                        getJavatime(rs.getTimestamp("timeCompleted")),
-                        rs.getString("status"),
-                        rs.getString("device"),
-                        rs.getString("problem")));
+            new ITRequest(
+                rs.getInt("requestID"),
+                rs.getInt("assigned_eID"),
+                rs.getString("notes"),
+                rs.getString("compNotes"),
+                rs.getString("nodeID"),
+                getJavatime(rs.getTimestamp("timeRequested")),
+                getJavatime(rs.getTimestamp("timeCompleted")),
+                rs.getString("status"),
+                rs.getString("device"),
+                rs.getString("problem")));
       }
       return requests;
     } catch (SQLException e) {
@@ -563,29 +571,32 @@ public class ServiceDB {
   // TODO: Create your addRequest call here
 
   /**
-   * Adds a request for laundry
+   * Adds a request for IT
    *
-   * @param reqNotes some notes for the laundry request
+   * @param reqNotes some notes for the IT request
    * @param nodeID The ID of the node in which these services are requested
    * @return the id of the created request
    */
-  public static int addITReq(String reqNotes, String nodeID) throws DBException {
+  public static int addITReq(String reqNotes, String nodeID, String device, String problem)
+      throws DBException {
     try {
       String query =
-              "INSERT INTO request (timeRequested, reqNotes, serviceType, nodeID, status) VALUES (?, ?, ?, ?, ?)";
+          "INSERT INTO request (timeRequested, reqNotes, serviceType, nodeID, status) VALUES (?, ?, ?, ?, ?)";
       PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
       stmt.setTimestamp(1, new Timestamp(new Date().getTime()));
       stmt.setString(2, reqNotes);
-      stmt.setString(3, "Laundry");
+      stmt.setString(3, "IT");
       stmt.setString(4, nodeID);
       stmt.setString(5, "OPEN");
       stmt.execute();
       ResultSet rs = stmt.getGeneratedKeys();
       rs.next();
-      query = "INSERT INTO lrequest (requestID) VALUES (?)";
+      query = "INSERT INTO ITrequest (requestID) VALUES (?, ?, ?)";
       stmt = con.prepareStatement(query);
       int id = rs.getInt("1");
       stmt.setInt(1, id);
+      stmt.setString(2, device);
+      stmt.setString(3, problem);
       stmt.executeUpdate();
       return id;
     } catch (SQLException e) {

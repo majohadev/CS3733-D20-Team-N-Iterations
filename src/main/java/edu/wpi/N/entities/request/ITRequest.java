@@ -23,9 +23,15 @@ public class ITRequest extends Request {
     this.problem = problem;
   }
 
-  public String getAtr1() { return device; }
+  public String getAtr1() {
+    return device;
+  }
 
-  public String getAtr2() { return problem; }
+  public String getAtr2() {
+    return problem;
+  }
 
-  public String getServiceType() { return "IT"; }
+  public String getServiceType() {
+    return "IT";
+  }
 }
