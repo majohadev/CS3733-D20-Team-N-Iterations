@@ -113,6 +113,59 @@ public class BFSMultipleFloorsTest {
     Assertions.assertEquals(actualPath, testPath.getPath());
   }
 
+  /**
+   * Tests if the pathfinder goes to the correct elevator (the only one that can access floor 4)
+   * when going from floor 3 to floor 4 with handicap selected (ignores stairs)
+   */
+  @Test
+  public void thirdToFourthFloorHandicapBFSTest() throws DBException {
+    myBFS.setPathFinder(new BFS());
+    DbNode startNode = MapDB.getNode("ELEV013000");
+    DbNode endNode = MapDB.getNode("DDDDDDDDDD");
+    Path testPath = myBFS.findPath(startNode, endNode, true);
+
+    LinkedList<DbNode> actualPath = new LinkedList<DbNode>();
+    actualPath.add(MapDB.getNode("ELEV013000"));
+    actualPath.add(MapDB.getNode("H033000000"));
+    actualPath.add(MapDB.getNode("H023000000"));
+    actualPath.add(MapDB.getNode("H043000000"));
+    actualPath.add(MapDB.getNode("H053000000"));
+    actualPath.add(MapDB.getNode("ELEV023000"));
+    actualPath.add(MapDB.getNode("H063000000"));
+    actualPath.add(MapDB.getNode("H073000000"));
+    actualPath.add(MapDB.getNode("H083000000"));
+    actualPath.add(MapDB.getNode("ELEV033000"));
+    actualPath.add(MapDB.getNode("ELEV034000"));
+    actualPath.add(MapDB.getNode("DDDDDDDDDD"));
+
+    Assertions.assertEquals(actualPath, testPath.getPath());
+  }
+
+  /**
+   * Tests if the pathfinder will choose an elevator over stairs since it's a handicap accessible
+   * path
+   */
+  @Test
+  public void elevatorOverStairHandicapBFSTest() throws DBException {
+    myBFS.setPathFinder(new BFS());
+    DbNode startNode = MapDB.getNode("STAI011000");
+    DbNode endNode = MapDB.getNode("H083000000");
+    Path testPath = myBFS.findPath(startNode, endNode, true);
+
+    LinkedList<DbNode> actualPath = new LinkedList<DbNode>();
+    actualPath.add(MapDB.getNode("STAI011000"));
+    actualPath.add(MapDB.getNode("H041000000"));
+    actualPath.add(MapDB.getNode("H051000000"));
+    actualPath.add(MapDB.getNode("ELEV021000"));
+    actualPath.add(MapDB.getNode("ELEV022000"));
+    actualPath.add(MapDB.getNode("ELEV023000"));
+    actualPath.add(MapDB.getNode("H063000000"));
+    actualPath.add(MapDB.getNode("H073000000"));
+    actualPath.add(MapDB.getNode("H083000000"));
+
+    Assertions.assertEquals(actualPath, testPath.getPath());
+  }
+
   @AfterAll
   public static void clear() throws DBException {
     MapDB.clearNodes();

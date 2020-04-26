@@ -109,16 +109,67 @@ public class AStarMultipleFloorsTest {
     Assertions.assertEquals(actualPath, testPath.getPath());
   }
 
+  /**
+   * Tests if the pathfinder goes to the correct elevator (the only one that can access floor 4)
+   * when going from floor 3 to floor 4 with handicap selected (ignores stairs)
+   */
+  @Test
+  public void thirdToFourthFloorHandicapAStarTest() throws DBException {
+    DbNode startNode = MapDB.getNode("ELEV013000");
+    DbNode endNode = MapDB.getNode("DDDDDDDDDD");
+    Path testPath = myAStar.findPath(startNode, endNode, true);
+
+    LinkedList<DbNode> actualPath = new LinkedList<DbNode>();
+    actualPath.add(MapDB.getNode("ELEV013000"));
+    actualPath.add(MapDB.getNode("H033000000"));
+    actualPath.add(MapDB.getNode("H023000000"));
+    actualPath.add(MapDB.getNode("H043000000"));
+    actualPath.add(MapDB.getNode("H053000000"));
+    actualPath.add(MapDB.getNode("ELEV023000"));
+    actualPath.add(MapDB.getNode("H063000000"));
+    actualPath.add(MapDB.getNode("H073000000"));
+    actualPath.add(MapDB.getNode("H083000000"));
+    actualPath.add(MapDB.getNode("ELEV033000"));
+    actualPath.add(MapDB.getNode("ELEV034000"));
+    actualPath.add(MapDB.getNode("DDDDDDDDDD"));
+
+    Assertions.assertEquals(actualPath, testPath.getPath());
+  }
+
+  /**
+   * Tests if the pathfinder will choose an elevator over stairs since it's a handicap accessible
+   * path
+   */
+  @Test
+  public void elevatorOverStairHandicapAStarTest() throws DBException {
+    DbNode startNode = MapDB.getNode("STAI011000");
+    DbNode endNode = MapDB.getNode("H083000000");
+    Path testPath = myAStar.findPath(startNode, endNode, true);
+
+    LinkedList<DbNode> actualPath = new LinkedList<DbNode>();
+    actualPath.add(MapDB.getNode("STAI011000"));
+    actualPath.add(MapDB.getNode("H041000000"));
+    actualPath.add(MapDB.getNode("H051000000"));
+    actualPath.add(MapDB.getNode("ELEV021000"));
+    actualPath.add(MapDB.getNode("ELEV022000"));
+    actualPath.add(MapDB.getNode("ELEV023000"));
+    actualPath.add(MapDB.getNode("H063000000"));
+    actualPath.add(MapDB.getNode("H073000000"));
+    actualPath.add(MapDB.getNode("H083000000"));
+
+    Assertions.assertEquals(actualPath, testPath.getPath());
+  }
+
   //  /**
   //   * Tests if the pathfinder can get use one floor change to get to one floor, and then navigate
-  //   * to different one
-  //   * Doesn't currently work due to what GetGAdjacent returns
+  // to
+  //   * different one Doesn't currently work due to what GetGAdjacent returns
   //   */
   //  @Test
   //  public void fourthToFirstFloorAStarTest() throws DBException {
   //    DbNode startNode = MapDB.getNode("DDDDDDDDDD");
   //    DbNode endNode = MapDB.getNode("H011000000");
-  //    Path testPath = Pathfinder.findPath(startNode, endNode);
+  //    Path testPath = myAStar.findPath(startNode, endNode, false);
   //
   //    LinkedList<DbNode> actualPath = new LinkedList<DbNode>();
   //    actualPath.add(MapDB.getNode("DDDDDDDDDD"));
