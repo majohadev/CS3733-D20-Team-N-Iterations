@@ -16,6 +16,8 @@ import java.time.temporal.ChronoField;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.LinkedList;
+
+import edu.wpi.N.entities.request.SanitationRequest;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -306,6 +308,39 @@ public class ServiceDBTest {
     meds = ServiceDB.searchByMedType("great");
 
     assertTrue(meds.isEmpty());
+  }
+
+  @Test
+  public void testaddSanitationEmp() throws DBException {
+    assertEquals(
+        "Chicken Ceaser Wrap",
+        ServiceDB.getEmployee(ServiceDB.addSanitationEmp("Chicken Ceaser Wrap")).getName());
+  }
+
+  @Test
+  public void testgetSanitationbyAmount() throws DBException {
+    MapDB.addNode("NDEPT10004", 100, 100, 4, "Faulkner", "DEPT", "Hello", "Hell", 'N');
+    int id = ServiceDB.addSanitationReq("hello", "NDEPT10004", "weed", "medium", "medium");
+    MapDB.addNode("NDEPT10014", 100, 100, 4, "Faulkner", "DEPT", "Hello", "Hell", 'N');
+    int id2 = ServiceDB.addSanitationReq("hello", "NDEPT10014", "Weed", "MeDiuM", "low");
+    LinkedList<SanitationRequest> list = ServiceDB.getsanitationbyAmount("medium");
+    assertTrue(list.contains(ServiceDB.getRequest(id)));
+    assertTrue(list.contains(ServiceDB.getRequest(id2)));
+    MapDB.deleteNode("NDEPT10004");
+    MapDB.deleteNode("NDEPT10014");
+  }
+
+  @Test
+  public void testsearchbySpillType() throws DBException {
+    MapDB.addNode("NDEPT10004", 100, 100, 4, "Faulkner", "DEPT", "Hello", "Hell", 'N');
+    int id = ServiceDB.addSanitationReq("hello", "NDEPT10004", "weeds", "medium", "medium");
+    MapDB.addNode("NDEPT10014", 100, 100, 4, "Faulkner", "DEPT", "Hello", "Hell", 'N');
+    int id2 = ServiceDB.addSanitationReq("hello", "NDEPT10014", "weed smeling like Cocaine", "MeDiuM", "low");
+    LinkedList<SanitationRequest> list = ServiceDB.searchbyspillType("weed");
+    assertTrue(list.contains(ServiceDB.getRequest(id)));
+    assertTrue(list.contains(ServiceDB.getRequest(id2)));
+    MapDB.deleteNode("NDEPT10004");
+    MapDB.deleteNode("NDEPT10014");
   }
 
   //  @Test

@@ -1,10 +1,7 @@
 package edu.wpi.N.database;
 
 import edu.wpi.N.entities.*;
-import edu.wpi.N.entities.employees.Doctor;
-import edu.wpi.N.entities.employees.Employee;
-import edu.wpi.N.entities.employees.Laundry;
-import edu.wpi.N.entities.employees.Translator;
+import edu.wpi.N.entities.employees.*;
 import edu.wpi.N.entities.request.*;
 import java.sql.*;
 import java.util.*;
@@ -47,6 +44,8 @@ public class ServiceDB {
         return new Laundry(id, name);
       } else if (sType.equals("Medicine")) {
         return DoctorDB.getDoctor(id);
+      } else if (sType.equals("Sanitation")) {
+        return new Sanitation(id, name);
       } else
         throw new DBException(
             "Invalid employee in table employees! ID: " + id + "Name: " + rs.getString("name"));
@@ -243,6 +242,26 @@ public class ServiceDB {
                 rs.getString("units"),
                 rs.getString("patient")));
       }
+      query = "SELECT * FROM request, sanitationRequests WHERE request.requestID = sanitationRequest.requestID";
+      stmt = con.prepareStatement(query);
+      rs = stmt.executeQuery();
+      while(rs.next()) {
+        requests.add(
+                new SanitationRequest(
+                        rs.getInt("requestID"),
+                        rs.getInt("assigned_eID"),
+                        rs.getString("reqNotes"),
+                        rs.getString("compNotes"),
+                        rs.getString("nodeID"),
+                        getJavatime(rs.getTimestamp("timeRequested")),
+                        getJavatime(rs.getTimestamp("timeCompleted")),
+                        rs.getString("status"),
+                        rs.getString("sanitationType"),
+                        rs.getString("size"),
+                        rs.getString("danger")
+                )
+        );
+      }
       return requests;
     } catch (SQLException e) {
       e.printStackTrace();
@@ -433,6 +452,33 @@ public class ServiceDB {
     } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Unknown error: addLaundry , name = " + name, e);
+    }
+  }
+
+  // Chris
+  /**
+   * adds a sanitation employee with the specified name
+   *
+   * @param name
+   * @return the generated id
+   */
+  public static int addSanitationEmp(String name) throws DBException {
+    try {
+      String query = "INSERT INTO employees (name, serviceType) VALUES (?, 'Sanitation')";
+      PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+      stmt.setString(1, name);
+      stmt.executeUpdate();
+      ResultSet rs = stmt.getGeneratedKeys();
+      rs.next();
+      query = "INSERT INTO sanitation VALUES (?)";
+      stmt = con.prepareStatement(query);
+      int id = rs.getInt(1);
+      stmt.setInt(1, id);
+      stmt.executeUpdate();
+      return id;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown Error: addSanitationEmp");
     }
   }
 
@@ -866,6 +912,44 @@ public class ServiceDB {
     }
   }
 
+  // Chris
+  /**
+   * gets a list of sanitationRequest where the amount matches the given val
+   *
+   * @param amount
+   * @return a list of sanitationRequest where amount matches the given amount
+   */
+  public static LinkedList<SanitationRequest> getsanitationbyAmount(String amount)
+      throws DBException {
+    LinkedList<SanitationRequest> list = new LinkedList<SanitationRequest>();
+    try {
+      String query =
+          "SELECT * FROM sanitationRequests, request WHERE sanitationRequests.requestID = request.requestID AND Upper(size) = ?";
+      PreparedStatement st = con.prepareStatement(query);
+      st.setString(1, amount.toUpperCase());
+      ResultSet rs = st.executeQuery();
+      while (rs.next()) {
+        list.add(
+            new SanitationRequest(
+                rs.getInt("requestID"),
+                rs.getInt("assigned_eID"),
+                rs.getString("reqNotes"),
+                rs.getString("compNotes"),
+                rs.getString("nodeID"),
+                getJavatime(rs.getTimestamp("timeRequested")),
+                getJavatime(rs.getTimestamp("timeCompleted")),
+                rs.getString("status"),
+                rs.getString("sanitationType"),
+                rs.getString("size"),
+                rs.getString("danger")));
+      }
+      return list;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown Error: getSanitationAmount");
+    }
+  }
+
   //  // Nick
   //  /**
   //   * Adds a patient to the database
@@ -996,13 +1080,26 @@ public class ServiceDB {
 
   // Chris
   /**
-   * adds a sanitation employee with the specified name
+   * searches through the database where the spillType contains the given type
    *
-   * @param name
-   * @return the generated id
+   * @param type
+   * @return a list of sanitationRequest where spillType contains the given type
    */
-  public static int addSanitationEmp(String name) {
-    return 0;
+  public static LinkedList<SanitationRequest> searchbyspillType(String type) throws DBException {
+    try {
+      LinkedList<SanitationRequest> list = new LinkedList<SanitationRequest>();
+      String query = "SELECT * FROM sanitationRequests WHERE UPPER(sanitationType) LIKE ?";
+      PreparedStatement stmt = con.prepareStatement(query);
+      stmt.setString(1, "%" + type.toUpperCase() + "%");
+      ResultSet rs = stmt.executeQuery();
+      while (rs.next()) {
+        list.add((SanitationRequest) getRequest(rs.getInt("requestID")));
+      }
+      return list;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown error: searchbyspillType");
+    }
   }
 
   // Nick
@@ -1069,18 +1166,6 @@ public class ServiceDB {
       throw new DBException("Unknown Error: addSanitationReq", e);
     }
   }
-
-  // Chris
-  /**
-   * searches through the database where the spillType contains the given type
-   *
-   * @param type
-   * @return a list of sanitationRequest where spillType contains the given type
-   */
-  public static LinkedList<SanitationRequest> searchbyspillType(String type) {
-    return null;
-  }
-
   // Nick
   /**
    * gets a list of sanitationRequest where the danger mathces the given val
@@ -1089,17 +1174,6 @@ public class ServiceDB {
    * @return a list of sanitationRequest where danger matches the given danger level
    */
   public static LinkedList<SanitationRequest> getsanitationbyDanger(String danger) {
-    return null;
-  }
-
-  // Chris
-  /**
-   * gets a list of sanitationRequest where the amount matches the given val
-   *
-   * @param amount
-   * @return a list of sanitationRequest where amount matches the given amount
-   */
-  public static LinkedList<SanitationRequest> getsanitationbyAmount(String amount) {
     return null;
   }
 

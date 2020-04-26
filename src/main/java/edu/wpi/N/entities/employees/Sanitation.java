@@ -7,6 +7,6 @@ public class Sanitation extends Employee {
 
   @Override
   public String getServiceType() {
-    return "sanitation";
+    return "Sanitation";
   }
 }

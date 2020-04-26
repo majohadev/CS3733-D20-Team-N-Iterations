@@ -27,7 +27,7 @@ public class SanitationRequest extends Request {
 
   @Override
   public String getServiceType() {
-    return "sanitation";
+    return "Sanitation";
   }
 
   public String getSpillType() {
