@@ -94,6 +94,15 @@ CREATE TABLE medicineRequests(
     patient VARCHAR(255) NOT NULL
 );
 
+CREATE TABLE sanitationRequests(
+    requestID INT NOT NULL PRIMARY KEY REFERENCES request(requestID) ON DELETE CASCADE,
+    size VARCHAR(7) NOT NULL,
+    sanitationType VARCHAR(255),
+    danger VARCHAR(7),
+    CONSTRAINT size_ck CHECK (LOWER(size) IN ('small', 'medium', 'large', 'unknown')),
+    CONSTRAINT danger_ck CHECK (LOWER(danger) IN ('low', 'medium', 'high', 'unknown'))
+);
+
 /*TODO: Add request table */
 
 

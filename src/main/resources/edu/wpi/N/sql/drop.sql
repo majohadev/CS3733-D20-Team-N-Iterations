@@ -1,5 +1,5 @@
+DROP TABLE sanitationRequests;
 DROP TABLE medicineRequests;
-DROP TABLE patients;
 DROP TABLE lrequest;
 DROP TABLE trequest;
 DROP TABLE request;
@@ -13,4 +13,4 @@ DROP TABLE employees;
 DROP TABLE service;
 DROP TABLE edges;
 DROP TABLE nodes;
-/* TODO: Add drop statements, make sure they are in correct order (reverse of setup.sql). */
+/* TODO: Add drop statements, make sure they are in correct order (reverse of setup.sql). */;
