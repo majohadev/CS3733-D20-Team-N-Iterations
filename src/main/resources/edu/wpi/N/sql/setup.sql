@@ -59,6 +59,10 @@ CREATE TABLE doctors (
       FOREIGN KEY (username) REFERENCES credential(username),
       FOREIGN KEY (doctorID) REFERENCES employees(employeeID) ON DELETE CASCADE);
 
+CREATE TABLE IT(
+      IT_employeeID INT NOT NULL References employees(employeeID) ON DELETE CASCADE,
+      PRIMARY KEY(IT_employeeID));
+
 /*TODO add the employees table */
 
 CREATE TABLE location (
@@ -85,11 +89,15 @@ CREATE TABLE trequest(
                 requestID INT NOT NULL PRIMARY KEY REFERENCES request(requestID) ON DELETE CASCADE,
                 language VARCHAR(255) NOT NULL);
 
+CREATE TABLE ITrequest(
+              requestID INT NOT NULL PRIMARY KEY REFERENCES request(requestID) ON DELETE CASCADE);
+
 /*TODO: Add request table */
 
 INSERT INTO service VALUES ('Translator', '00:00', '00:00', 'Make a request for our translation services!');
 INSERT INTO service VALUES ('Laundry', '00:00', '00:00', 'Make a request for laundry services!');
 INSERT INTO service VALUES ('Medicine', '00:00', '00:00', 'Request medicine delivery!');
+INSERT INTO service VALUES ('IT', '00:00', '00:00', 'Make a request for IT services!');
 /*TODO: Insert your service tuple */
 
 CREATE TRIGGER doc_delete AFTER DELETE ON doctors

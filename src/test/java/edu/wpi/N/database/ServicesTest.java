@@ -23,6 +23,7 @@ public class ServicesTest {
   public static void setup()
       throws ClassNotFoundException, SQLException, DBException, FileNotFoundException {
     MapDB.initTestDB();
+    con = MapDB.getCon();
   }
 
   //    @Test

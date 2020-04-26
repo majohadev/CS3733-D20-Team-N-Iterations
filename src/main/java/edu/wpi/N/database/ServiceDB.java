@@ -2,8 +2,10 @@ package edu.wpi.N.database;
 
 import edu.wpi.N.entities.*;
 import edu.wpi.N.entities.employees.Employee;
+import edu.wpi.N.entities.employees.IT;
 import edu.wpi.N.entities.employees.Laundry;
 import edu.wpi.N.entities.employees.Translator;
+import edu.wpi.N.entities.request.ITRequest;
 import edu.wpi.N.entities.request.LaundryRequest;
 import edu.wpi.N.entities.request.Request;
 import edu.wpi.N.entities.request.TranslatorRequest;
@@ -48,6 +50,8 @@ public class ServiceDB {
         return new Laundry(id, name);
       } else if (sType.equals("Medicine")) {
         return DoctorDB.getDoctor(id);
+      } else if (sType.equals("IT")) {
+        return new IT(id, name);
       } else
         throw new DBException(
             "Invalid employee in table employees! ID: " + id + "Name: " + rs.getString("name"));
@@ -71,6 +75,7 @@ public class ServiceDB {
     allEmployee.addAll(getTranslators());
     allEmployee.addAll(getLaundrys());
     allEmployee.addAll(DoctorDB.getDoctors());
+    allEmployee.addAll(getITs());
     return allEmployee;
   }
 
@@ -138,6 +143,15 @@ public class ServiceDB {
             timeComp,
             status,
             rs.getString("language"));
+      } else if (sType.equals("IT")) {
+        query = "SELECT device, problem FROM ITrequest WHERE requestID = ?";
+        stmt = con.prepareStatement(query);
+        stmt.setInt(1, id);
+        rs = stmt.executeQuery();
+        rs.next();
+        return new ITRequest(
+                rid, empId, reqNotes, compNotes, nodeID, timeReq, timeComp, status,
+                rs.getString("device"), rs.getString("problem"));
       } else throw new DBException("Invalid request! ID = " + id);
     } catch (SQLException e) {
       e.printStackTrace();
@@ -185,6 +199,23 @@ public class ServiceDB {
                 getJavatime(rs.getTimestamp("timeCompleted")),
                 rs.getString("status"),
                 rs.getString("language")));
+      }
+      query = "SELECT * from request, ITrequest WHERE request.requestID = ITrequest.requestID";
+      stmt = con.prepareStatement(query);
+      rs = stmt.executeQuery();
+      while (rs.next()) {
+        requests.add(
+                new ITRequest(
+                        rs.getInt("requestID"),
+                        rs.getInt("assigned_eID"),
+                        rs.getString("notes"),
+                        rs.getString("compNotes"),
+                        rs.getString("nodeID"),
+                        getJavatime(rs.getTimestamp("timeRequested")),
+                        getJavatime(rs.getTimestamp("timeCompleted")),
+                        rs.getString("status"),
+                        rs.getString("device"),
+                        rs.getString("problem")));
       }
       return requests;
     } catch (SQLException e) {
@@ -236,6 +267,24 @@ public class ServiceDB {
                 getJavatime(rs.getTimestamp("timeRequested")),
                 getJavatime(rs.getTimestamp("timeCompleted")),
                 rs.getString("status")));
+      }
+      query =
+          "SELECT * from request, ITrequest WHERE request.requestID = ITrequest.requestID AND status = 'OPEN'";
+      stmt = con.prepareStatement(query);
+      rs = stmt.executeQuery();
+      while (rs.next()) {
+        openList.add(
+            new ITRequest(
+                rs.getInt("requestID"),
+                rs.getInt("assigned_eID"),
+                rs.getString("notes"),
+                rs.getString("compNotes"),
+                rs.getString("nodeID"),
+                getJavatime(rs.getTimestamp("timeRequested")),
+                getJavatime(rs.getTimestamp("timeCompleted")),
+                rs.getString("status"),
+                rs.getString("device"),
+                rs.getString("problem")));
       }
       return openList;
     } catch (SQLException ex) {
@@ -289,6 +338,27 @@ public class ServiceDB {
     }
   }
   // TODO: GetEmployeeTypes (something which gets all the employees of your particular type)
+
+  /**
+   * Gets all the laundrys in the database
+   *
+   * @return a linked list of all people who can do laundry in the database
+   */
+  public static LinkedList<IT> getITs() throws DBException {
+    try {
+      String query = "SELECT IT_employeeID from employees, IT where employeeID = IT_employeeID";
+      PreparedStatement stmt = con.prepareStatement(query);
+      ResultSet rs = stmt.executeQuery();
+      LinkedList<IT> ITs = new LinkedList<>();
+      while (rs.next()) {
+        ITs.add((IT) getEmployee(rs.getInt("IT_employeeID")));
+      }
+      return ITs;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown error: getITs", e);
+    }
+  }
 
   // Chris
   /**
@@ -395,6 +465,32 @@ public class ServiceDB {
 
   // TODO: Add a function to add your employee type to the database
 
+  /**
+   * Adds a IT employee to the database
+   *
+   * @param name the IT employee's name
+   * @return id of created request
+   */
+  public static int addIT(String name) throws DBException {
+    try {
+      String query = "INSERT INTO employees (name, serviceType) VALUES (?, 'IT')";
+      PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+      stmt.setString(1, name);
+      stmt.executeUpdate();
+      ResultSet rs = stmt.getGeneratedKeys();
+      rs.next(); // NullPointerException
+      query = "INSERT INTO IT VALUES (?)";
+      stmt = con.prepareStatement(query);
+      int id = rs.getInt("1");
+      stmt.setInt(1, id);
+      stmt.executeUpdate();
+      return id;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown error: addIT , name = " + name, e);
+    }
+  }
+
   // Chris
   /**
    * Adds a request for a translator
@@ -465,6 +561,38 @@ public class ServiceDB {
   }
 
   // TODO: Create your addRequest call here
+
+  /**
+   * Adds a request for laundry
+   *
+   * @param reqNotes some notes for the laundry request
+   * @param nodeID The ID of the node in which these services are requested
+   * @return the id of the created request
+   */
+  public static int addITReq(String reqNotes, String nodeID) throws DBException {
+    try {
+      String query =
+              "INSERT INTO request (timeRequested, reqNotes, serviceType, nodeID, status) VALUES (?, ?, ?, ?, ?)";
+      PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+      stmt.setTimestamp(1, new Timestamp(new Date().getTime()));
+      stmt.setString(2, reqNotes);
+      stmt.setString(3, "Laundry");
+      stmt.setString(4, nodeID);
+      stmt.setString(5, "OPEN");
+      stmt.execute();
+      ResultSet rs = stmt.getGeneratedKeys();
+      rs.next();
+      query = "INSERT INTO lrequest (requestID) VALUES (?)";
+      stmt = con.prepareStatement(query);
+      int id = rs.getInt("1");
+      stmt.setInt(1, id);
+      stmt.executeUpdate();
+      return id;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Error: addITReq", e);
+    }
+  }
 
   // Noah
   /**
