@@ -34,46 +34,50 @@ public class MapDB {
     }
   }
 
-  /** Initializes a database in memory for tests */
-  public static void initTestDB()
-      throws SQLException, ClassNotFoundException, DBException, FileNotFoundException {
-    if (con == null || statement == null) {
-      Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
-      String URL;
-      URL = "jdbc:derby:memory:db;create=true";
-      con = DriverManager.getConnection(URL);
-      statement = con.createStatement();
-      ScriptRunner sr = new ScriptRunner(con);
-      Reader reader =
-          new BufferedReader(
-              new InputStreamReader(Main.class.getResourceAsStream("sql/setup.sql")));
-      sr.runScript(reader);
-    }
-  }
+  //  /** Initializes a database in memory for tests */
+  //  public static void initTestDB()
+  //      throws SQLException, ClassNotFoundException, DBException, FileNotFoundException {
+  //    if (con == null || statement == null) {
+  //      Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+  //      String URL;
+  //      URL = "jdbc:derby:memory:db;create=true";
+  //      con = DriverManager.getConnection(URL);
+  //      statement = con.createStatement();
+  //      ScriptRunner sr = new ScriptRunner(con);
+  //      Reader reader =
+  //          new BufferedReader(
+  //              new InputStreamReader(Main.class.getResourceAsStream("sql/setup.sql")));
+  //      sr.runScript(reader);
+  //    }
+  //  }
 
   /**
-   * Same as initTestDB except the database is guarenteed to be completely empty after running this function.
-   * Use whenever possible.
+   * Same as initTestDB except the database is guarenteed to be completely empty after running this
+   * function. Use whenever possible.
+   *
    * @throws SQLException on error
    * @throws ClassNotFoundException on error
    * @throws DBException on error
    * @throws FileNotFoundException when it can't find the file I guess. Or on error.
    */
-  public static void refreshTestDB()
+  public static void initTestDB()
       throws SQLException, ClassNotFoundException, DBException, FileNotFoundException {
-    if (con == null) {
-      initTestDB();
-      return;
+    if (con != null) {
+      ScriptRunner sr = new ScriptRunner(con);
+      Reader reader =
+          new BufferedReader(
+              new InputStreamReader(Main.class.getResourceAsStream("sql/drop.sql"))); // drop tables
+      sr.runScript(reader);
+    } else {
+      Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+      String URL;
+      URL = "jdbc:derby:memory:db;create=true";
+      con = DriverManager.getConnection(URL);
+      statement = con.createStatement();
     }
     ScriptRunner sr = new ScriptRunner(con);
     Reader reader =
-        new BufferedReader(
-            new InputStreamReader(Main.class.getResourceAsStream("sql/drop.sql"))); // drop tables
-    sr.runScript(reader);
-    reader =
-        new BufferedReader(
-            new InputStreamReader(
-                Main.class.getResourceAsStream("sql/setup.sql"))); // create tables
+        new BufferedReader(new InputStreamReader(Main.class.getResourceAsStream("sql/setup.sql")));
     sr.runScript(reader);
   }
 
