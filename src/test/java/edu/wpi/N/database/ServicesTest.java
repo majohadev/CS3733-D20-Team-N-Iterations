@@ -86,6 +86,12 @@ public class ServicesTest {
       Assertions.assertFalse(emotionalEmployees.contains(ServiceDB.getEmployee(idLTwo)));
 
       // deleting statements
+      ServiceDB.removeEmployee(idEOne);
+      ServiceDB.removeEmployee(idTOne);
+      ServiceDB.removeEmployee(idLOne);
+      ServiceDB.removeEmployee(idLTwo);
+      ServiceDB.removeEmployee(idETwo);
+      ServiceDB.removeEmployee(idEThree);
 
     } catch (SQLException e) { // also wanna catch DBException e
       try {
@@ -253,6 +259,7 @@ public class ServicesTest {
       Assertions.assertTrue("Ivan Eroshenko".equals(ServiceDB.getEmployee(id).getName()));
       Assertions.assertTrue("Emotional Support".equals(ServiceDB.getEmployee(id).getServiceType()));
       // deleting statements
+      ServiceDB.removeEmployee(id);
     } catch (SQLException e) { // also wanna catch DBException e
       try {
         con.rollback();
