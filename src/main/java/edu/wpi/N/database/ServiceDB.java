@@ -7,8 +7,8 @@ import edu.wpi.N.entities.employees.Employee;
 import edu.wpi.N.entities.employees.IT;
 import edu.wpi.N.entities.employees.Laundry;
 import edu.wpi.N.entities.employees.Translator;
-import edu.wpi.N.entities.request.ITRequest;
 import edu.wpi.N.entities.request.EmotionalRequest;
+import edu.wpi.N.entities.request.ITRequest;
 import edu.wpi.N.entities.request.LaundryRequest;
 import edu.wpi.N.entities.request.MedicineRequest;
 import edu.wpi.N.entities.request.Request;
@@ -166,7 +166,6 @@ public class ServiceDB {
             timeComp,
             status,
             rs.getString("supportType"));
-
       } else if (rs.getString("serviceType").equals("Medicine")) {
         query =
             "SELECT medicineName, dosage, units, patient FROM medicineRequests WHERE requestID = ?";
@@ -296,7 +295,7 @@ public class ServiceDB {
             new ITRequest(
                 rs.getInt("requestID"),
                 rs.getInt("assigned_eID"),
-                rs.getString("notes"),
+                rs.getString("reqNotes"),
                 rs.getString("compNotes"),
                 rs.getString("nodeID"),
                 getJavatime(rs.getTimestamp("timeRequested")),
@@ -382,7 +381,7 @@ public class ServiceDB {
             new ITRequest(
                 rs.getInt("requestID"),
                 rs.getInt("assigned_eID"),
-                rs.getString("notes"),
+                rs.getString("reqNotes"),
                 rs.getString("compNotes"),
                 rs.getString("nodeID"),
                 getJavatime(rs.getTimestamp("timeRequested")),
@@ -801,7 +800,7 @@ public class ServiceDB {
       stmt.execute();
       ResultSet rs = stmt.getGeneratedKeys();
       rs.next();
-      query = "INSERT INTO ITrequest (requestID) VALUES (?, ?, ?)";
+      query = "INSERT INTO ITrequest (requestID, device, problem) VALUES (?, ?, ?)";
       stmt = con.prepareStatement(query);
       int id = rs.getInt("1");
       stmt.setInt(1, id);

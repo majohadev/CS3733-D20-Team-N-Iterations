@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import edu.wpi.N.entities.*;
 import edu.wpi.N.entities.employees.EmotionalSupporter;
-import edu.wpi.N.entities.request.Request;
 import edu.wpi.N.entities.employees.IT;
 import edu.wpi.N.entities.request.Request;
 import java.io.FileNotFoundException;
@@ -13,7 +12,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import org.junit.jupiter.api.*;
-import java.util.LinkedList;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -306,6 +304,17 @@ public class ServicesTest {
       ServiceDB.removeEmployee(idLucy);
       ServiceDB.removeEmployee(idFrank);
       ServiceDB.removeEmployee(idDrew);
+
+    } catch (DBException | SQLException e) {
+      try {
+        con.rollback();
+        con.setAutoCommit(true);
+      } catch (SQLException ex) {
+        throw new DBException("Oh no");
+      }
+    }
+  }
+
   /**
    * Tests that request for Emotional Support gets added correctly to the database
    *
@@ -327,16 +336,6 @@ public class ServicesTest {
       // deleting statements
       ServiceDB.denyRequest(id, "Fuck off!");
     } catch (SQLException e) { // also wanna catch DBException e
-      try {
-        con.rollback();
-        con.setAutoCommit(true);
-      } catch (SQLException ex) {
-        throw new DBException("Oh no");
-      }
-    }
-  }
-
-    } catch (DBException | SQLException e) {
       try {
         con.rollback();
         con.setAutoCommit(true);
