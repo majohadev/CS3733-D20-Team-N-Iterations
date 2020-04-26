@@ -6,6 +6,7 @@ DROP TABLE request;
 DROP TABLE location;
 DROP TABLE doctors;
 DROP TABLE credential;
+DROP TABLE sanitation;
 DROP TABLE laundry;
 DROP TABLE language;
 DROP TABLE translator;
