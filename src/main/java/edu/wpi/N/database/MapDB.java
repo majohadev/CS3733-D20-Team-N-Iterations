@@ -908,4 +908,34 @@ public class MapDB {
       throw new DBException("Unknown error: clearNodes", e);
     }
   }
+
+  /** set Kiosk as default starting Node */
+  public static DbNode getKiosk(int floor, String building) throws DBException {
+    try {
+      String query =
+          "SELECT * FROM nodes WHERE floor = ? AND building = ? AND (UPPER(longName) LIKE '% KIOSK')";
+      PreparedStatement stmt = con.prepareStatement(query);
+      stmt.setInt(1, floor);
+      stmt.setString(2, building);
+      ResultSet rs = stmt.executeQuery();
+      DbNode sample = null;
+      if (rs.next()) {
+        sample =
+            new DbNode(
+                rs.getString("nodeID"),
+                rs.getInt("xcoord"),
+                rs.getInt("ycoord"),
+                floor,
+                building,
+                rs.getString("nodeType"),
+                rs.getString("longName"),
+                rs.getString("shortName"),
+                rs.getString("teamAssigned").charAt(0));
+      }
+      return sample;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Error: getKiosk is not working properly");
+    }
+  }
 }

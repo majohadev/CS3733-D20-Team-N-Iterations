@@ -390,6 +390,20 @@ public class MapDBTest {
     MapDB.deleteNode("NELEV00X04");
   }
 
+  @Test
+  public void testGetKiosk() throws DBException {
+    DbNode node = MapDB.getKiosk(4, "Faulkner");
+    assertNull(node);
+
+    MapDB.addNode("NSERV00104", 2, 3, 4, "Faulkner", "SERV", "4th Floor Kiosk", "Kiosk", 'N');
+    DbNode result =
+        new DbNode("NSERV00104", 2, 3, 4, "Faulkner", "SERV", "4th Floor Kiosk", "Kiosk", 'N');
+    node = MapDB.getKiosk(4, "Faulkner");
+    assertEquals(result, node);
+
+    MapDB.deleteNode("NSERV00104");
+  }
+
   @AfterAll
   public static void clearDB() throws DBException {
     MapDB.clearNodes();

@@ -1,3 +1,5 @@
+DROP TABLE medicineRequests;
+DROP TABLE patients;
 DROP TABLE lrequest;
 DROP TABLE trequest;
 DROP TABLE request;
