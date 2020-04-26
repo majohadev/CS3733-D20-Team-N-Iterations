@@ -50,10 +50,7 @@ public class EmotionalRequestControllerTest extends ApplicationTest {
       con.setAutoCommit(false);
       // Insertion statements, like addTranslator
 
-      clickOn("#cmbo_text")
-          .write("Duncan Reid Conference Room")
-          .type(KeyCode.DOWN)
-          .type(KeyCode.ENTER);
+      clickOn("#cmbo_text").write("Duncan Reid Conference Room").push(KeyCode.ENTER);
 
       clickOn("#cmbo_selectSupport").type(KeyCode.DOWN).type(KeyCode.DOWN);
       clickOn("#txtf_supportNotes").write("I wanna live!");
@@ -68,7 +65,6 @@ public class EmotionalRequestControllerTest extends ApplicationTest {
 
       for (Request r : allRequests) {
         try {
-          r = (EmotionalRequest) r;
           if (r.getNodeID().equals("BCONF00102")
               && r.getReqNotes().equals("I wanna live!")
               && r.getServiceType().equals("Emotional Support")
