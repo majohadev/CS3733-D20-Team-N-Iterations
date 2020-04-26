@@ -52,7 +52,7 @@
                         <Insets top="50.0" />
                      </VBox.margin>
                   </Label>
-                  <JFXComboBox fx:id="cmbo_selectLang" labelFloat="true" layoutX="63.0" layoutY="279.0" prefHeight="46.0" prefWidth="394.0" promptText="Select Type of Support From List" style="-fx-font-size: 18;" />
+                  <JFXComboBox fx:id="cmbo_selectSupport" labelFloat="true" layoutX="63.0" layoutY="279.0" prefHeight="46.0" prefWidth="394.0" promptText="Select Type of Support From List" style="-fx-font-size: 18;" />
                </children>
             </VBox>
             <VBox alignment="CENTER" maxHeight="500.0" maxWidth="500.0" minWidth="500.0" prefHeight="200.0" prefWidth="100.0" spacing="30.0">
@@ -65,11 +65,11 @@
                         <Insets top="50.0" />
                      </VBox.margin>
                   </Label>
-                  <JFXTextArea fx:id="txtf_langNotes" maxWidth="394.0" minWidth="394.0" prefHeight="138.0" prefWidth="394.0" promptText="Enter Notes Here" style="-fx-font-size: 18;" />
+                  <JFXTextArea fx:id="txtf_supportNotes" maxWidth="394.0" minWidth="394.0" prefHeight="138.0" prefWidth="394.0" promptText="Enter Notes Here" style="-fx-font-size: 18;" />
                </children></VBox>
          </children>
       </HBox>
-      <JFXButton fx:id="btn_submit" buttonType="RAISED" contentDisplay="RIGHT" graphicTextGap="20.0" layoutX="382.0" layoutY="743.0" minHeight="75.0" minWidth="200.0" onMouseClicked="#createNewEmotionalRequest" ripplerFill="#c1c9eb" style="-fx-background-color: #002186;" stylesheets="@submitButton.css" text="Submit Request">
+      <JFXButton fx:id="btn_submit" buttonType="RAISED" contentDisplay="RIGHT" graphicTextGap="20.0" layoutX="382.0" layoutY="743.0" minHeight="75.0" minWidth="200.0" onAction="#createNewEmotionalRequest" onMouseClicked="#createNewEmotionalRequest" ripplerFill="#c1c9eb" style="-fx-background-color: #002186;" stylesheets="@submitButton.css" text="Submit Request">
          <font>
             <Font size="48.0" />
          </font>

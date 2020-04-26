@@ -7,13 +7,12 @@ import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.ServiceDB;
 import edu.wpi.N.entities.DbNode;
+import java.util.LinkedList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.input.KeyEvent;
-
-import java.util.LinkedList;
 
 public class EmotionalRequestController implements Controller {
 
@@ -21,8 +20,8 @@ public class EmotionalRequestController implements Controller {
 
   // Add FXML Tags Here
   @FXML JFXComboBox<String> cmbo_text;
-  @FXML JFXComboBox<String> cmbo_selectLang;
-  @FXML JFXTextArea txtf_langNotes;
+  @FXML JFXComboBox<String> cmbo_selectSupport;
+  @FXML JFXTextArea txtf_supportNotes;
 
   private ObservableList<String> fuzzySearchTextList =
       // List that fills TextViews
@@ -41,10 +40,15 @@ public class EmotionalRequestController implements Controller {
   public void initialize() throws DBException {
 
     cmbo_text.getEditor().setOnKeyTyped(this::locationTextChanged);
-    LinkedList<String> languages = ServiceDB.getLanguages();
-    languages.add("French");
-    ObservableList<String> langList = FXCollections.observableList(languages);
-    cmbo_selectLang.setItems(langList);
+    // Available types of support: Individual, Family, Couple, Group
+    LinkedList<String> supportTypes = new LinkedList<String>();
+    supportTypes.add("Individual");
+    supportTypes.add("Family");
+    supportTypes.add("Couple");
+    supportTypes.add("Group");
+
+    ObservableList<String> supportTypeList = FXCollections.observableList(supportTypes);
+    cmbo_selectSupport.setItems(supportTypeList);
   }
 
   @FXML
@@ -82,7 +86,7 @@ public class EmotionalRequestController implements Controller {
   @FXML
   public void createNewEmotionalRequest() throws DBException {
 
-    String langSelection = cmbo_selectLang.getSelectionModel().getSelectedItem();
+    String supportSelection = cmbo_selectSupport.getSelectionModel().getSelectedItem();
     String nodeID;
     int nodeIndex = 0;
 
@@ -103,18 +107,18 @@ public class EmotionalRequestController implements Controller {
       return;
     }
 
-    String notes = txtf_langNotes.getText();
-    if (langSelection == null) {
+    String notes = txtf_supportNotes.getText();
+    if (supportSelection == null) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-      errorAlert.setContentText("Please select a language for your translation request!");
+      errorAlert.setContentText("Please select a support type for your emotional support request!");
       errorAlert.show();
       return;
     }
-    int transReq = ServiceDB.addTransReq(notes, nodeID, langSelection);
-    App.adminDataStorage.addToList(transReq);
+    int emotSuppReq = ServiceDB.addEmotSuppReq(notes, nodeID, supportSelection);
+    App.adminDataStorage.addToList(emotSuppReq);
 
-    txtf_langNotes.clear();
-    cmbo_selectLang.getItems().clear();
+    txtf_supportNotes.clear();
+    cmbo_selectSupport.getItems().clear();
     cmbo_text.getItems().clear();
 
     Alert confAlert = new Alert(Alert.AlertType.CONFIRMATION);
