@@ -21,4 +21,8 @@ public class HomeController implements Controller {
   public void onBtnFileClicked() throws IOException {
     this.mainApp.switchScene("views/fileManagementScreen.fxml");
   }
+
+  public void onBtnFloorEdgesClicked() throws IOException {
+    this.mainApp.switchScene("views/BetweenFloorsEditor.fxml");
+  }
 }

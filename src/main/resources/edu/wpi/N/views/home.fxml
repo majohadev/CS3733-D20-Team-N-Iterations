@@ -41,6 +41,7 @@
                <font>
                   <Font name="Calibri" size="16.0" />
                </font></Button>
+            <Button fx:id="btn_floorEdges" mnemonicParsing="false" onAction="#onBtnFloorEdgesClicked" text="Button" />
          </children>
       </VBox>
    </children>

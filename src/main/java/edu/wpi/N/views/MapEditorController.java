@@ -210,7 +210,6 @@ public class MapEditorController implements Controller {
   private void handleEditNodeRightClick() throws IOException {
     mode = Mode.EDIT_NODE;
     changeEditor();
-
   }
 
   // Pane Display Clicked
@@ -231,7 +230,14 @@ public class MapEditorController implements Controller {
               ex.printStackTrace();
             }
           });
-      editNode.setOnAction(e -> handleEditNodeRightClick());
+      editNode.setOnAction(
+          e -> {
+            try {
+              handleEditNodeRightClick();
+            } catch (IOException ex) {
+              ex.printStackTrace();
+            }
+          });
       menu.getItems().addAll(deleteNode, editNode);
       menu.show(mainApp.getStage(), event.getSceneX(), event.getSceneY());
     }
