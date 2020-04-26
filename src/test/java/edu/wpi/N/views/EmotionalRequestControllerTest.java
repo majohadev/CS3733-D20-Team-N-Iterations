@@ -43,7 +43,7 @@ public class EmotionalRequestControllerTest extends ApplicationTest {
     primaryStage.show();
   }
 
-  @Test
+  //TODO: ADD @TEST TAG
   public void testAddNewRequest() throws DBException {
 
     try {
