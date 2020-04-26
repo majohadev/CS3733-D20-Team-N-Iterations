@@ -1170,7 +1170,7 @@ public class ServiceDB {
   }
   // Nick
   /**
-   * gets a list of sanitationRequest where the danger matches the given value
+   * gets a list of sanitationRequest where the danger matches the given value (case insensitive)
    *
    * @param danger
    * @return a list of sanitationRequest where danger matches the given danger level
@@ -1185,7 +1185,7 @@ public class ServiceDB {
       String query =
           "SELECT * FROM sanitationRequests "
               + "JOIN request ON sanitationRequests.requestID = request.requestID "
-              + "WHERE danger = ?";
+              + "WHERE LOWER(danger) = ?";
 
       PreparedStatement st = con.prepareStatement(query);
       st.setString(1, danger);
@@ -1195,7 +1195,7 @@ public class ServiceDB {
         result.add(
             new SanitationRequest(
                 rs.getInt("requestID"),
-                rs.getInt("asigned_eID"),
+                rs.getInt("assigned_eID"),
                 rs.getString("reqNotes"),
                 rs.getString("compNotes"),
                 rs.getString("nodeID"),

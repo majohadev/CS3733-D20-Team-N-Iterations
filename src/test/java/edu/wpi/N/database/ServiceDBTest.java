@@ -371,18 +371,18 @@ public class ServiceDBTest {
 
   @Test
   public void testGetSanitationByDanger() throws DBException {
-    int id1 = ServiceDB.addSanitationReq("help", "ZHALL00102", "wet", "Small", "Unknown");
+    int id1 = ServiceDB.addSanitationReq("help", "ZHALL00102", "wet", "large", "High");
     int id2 = ServiceDB.addSanitationReq("aaa", "ZHALL00101", "dry", "small", "HIGH");
     int id3 = ServiceDB.addSanitationReq("woo", "ZHALL00102", "ehh", "medium", "Medium");
 
-    SanitationRequest small1 = (SanitationRequest) ServiceDB.getRequest(id1);
-    SanitationRequest small2 = (SanitationRequest) ServiceDB.getRequest(id2);
+    SanitationRequest high1 = (SanitationRequest) ServiceDB.getRequest(id1);
+    SanitationRequest high2 = (SanitationRequest) ServiceDB.getRequest(id2);
     SanitationRequest medium1 = (SanitationRequest) ServiceDB.getRequest(id3);
 
-    LinkedList<SanitationRequest> result = ServiceDB.getSanitationByDanger("SMALL");
+    LinkedList<SanitationRequest> result = ServiceDB.getSanitationByDanger("high");
 
-    assertTrue(result.contains(small1));
-    assertTrue(result.contains(small2));
+    assertTrue(result.contains(high1));
+    assertTrue(result.contains(high2));
 
     result = ServiceDB.getSanitationByDanger("Medium");
 
