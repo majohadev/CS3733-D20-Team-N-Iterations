@@ -225,6 +225,15 @@ public class ServiceDBTest {
   }
 
   @Test
+  public void testaddMedReq() throws DBException {
+    MapDB.addNode("NDEPT10004", 100, 100, 4, "Faulkner", "DEPT", "Hello", "Hell", 'N');
+    int id = ServiceDB.addMedReq("hello", "NDEPT10004", "Weed", 100, "kg", tony);
+
+    MedicineRequest med = (MedicineRequest) ServiceDB.getRequest(id);
+    assertTrue(ServiceDB.getRequests().contains(med));
+  }
+
+  @Test
   public void testGetMedRequestsByPatient() throws DBException {
     LinkedList<MedicineRequest> result = ServiceDB.getMedRequestByPatient(tony);
 

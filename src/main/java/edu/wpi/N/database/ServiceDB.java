@@ -135,6 +135,26 @@ public class ServiceDB {
             timeComp,
             status,
             rs.getString("language"));
+      } else if (rs.getString("serviceType").equals("Medicine")) {
+        query =
+            "SELECT medicineName, dosage, units, patient FROM medicineRequests WHERE requestID = ?";
+        stmt = con.prepareStatement(query);
+        stmt.setInt(1, id);
+        rs = stmt.executeQuery();
+        rs.next();
+        return new MedicineRequest(
+            rid,
+            empId,
+            reqNotes,
+            compNotes,
+            nodeID,
+            timeReq,
+            timeComp,
+            status,
+            rs.getString("medicineName"),
+            rs.getDouble("dosage"),
+            rs.getString("units"),
+            rs.getString("patient"));
       } else throw new DBException("Invalid request! ID = " + id);
     } catch (SQLException e) {
       e.printStackTrace();
@@ -174,13 +194,33 @@ public class ServiceDB {
             new TranslatorRequest(
                 rs.getInt("requestID"),
                 rs.getInt("assigned_eID"),
-                rs.getString("notes"),
+                rs.getString("reqNotes"),
                 rs.getString("compNotes"),
                 rs.getString("nodeID"),
                 getJavatime(rs.getTimestamp("timeRequested")),
                 getJavatime(rs.getTimestamp("timeCompleted")),
                 rs.getString("status"),
                 rs.getString("language")));
+      }
+      query =
+          "SELECT * from request, medicineRequests WHERE request.requestID = medicineRequests.requestID";
+      stmt = con.prepareStatement(query);
+      rs = stmt.executeQuery();
+      while (rs.next()) {
+        requests.add(
+            new MedicineRequest(
+                rs.getInt("requestID"),
+                rs.getInt("assigned_eID"),
+                rs.getString("reqNotes"),
+                rs.getString("compNotes"),
+                rs.getString("nodeID"),
+                getJavatime(rs.getTimestamp("timeRequested")),
+                getJavatime(rs.getTimestamp("timeCompleted")),
+                rs.getString("status"),
+                rs.getString("medicineName"),
+                rs.getDouble("dosage"),
+                rs.getString("units"),
+                rs.getString("patient")));
       }
       return requests;
     } catch (SQLException e) {
