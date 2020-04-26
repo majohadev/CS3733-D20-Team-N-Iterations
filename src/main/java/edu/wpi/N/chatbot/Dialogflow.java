@@ -28,7 +28,4 @@ public class Dialogflow {
         this.clientId = "";
         this.tokenServerURI = "";
     }
-
-
-
 }
