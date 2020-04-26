@@ -119,3 +119,4 @@ public abstract class Request {
         && status.equals(other.status);
   }
 }
+/*TODO: Make your request entity */
