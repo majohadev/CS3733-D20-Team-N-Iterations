@@ -47,7 +47,8 @@ CREATE TABLE laundry(
       PRIMARY KEY(l_employeeID));
 
 CREATE TABLE sanitation(
-    sanitationEmployeeID INT NOT NULL PRIMARY KEY REFERENCES employees(employeeID) ON DELETE CASCADE
+    sanitationEmployeeID INT NOT NULL REFERENCES employees(employeeID) ON DELETE CASCADE,
+    PRIMARY KEY(sanitationEmployeeID)
 );
 
 CREATE TABLE credential(
@@ -113,6 +114,7 @@ CREATE TABLE sanitationRequests(
 INSERT INTO service VALUES ('Translator', '00:00', '00:00', 'Make a request for our translation services!');
 INSERT INTO service VALUES ('Laundry', '00:00', '00:00', 'Make a request for laundry services!');
 INSERT INTO service VALUES ('Medicine', '00:00', '00:00', 'Request medicine delivery!');
+INSERT INTO service VALUES ('Sanitation', '00:00', '00:00', 'Request sanitation service!');
 /*TODO: Insert your service tuple */
 
 CREATE TRIGGER doc_delete AFTER DELETE ON doctors
