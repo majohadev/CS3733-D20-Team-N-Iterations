@@ -29,15 +29,19 @@ public class MapBaseController {
   int currentFloor;
   String currentBuilding = "Faulkner";
 
-  LinkedList<DbNode> allFloorNodes; // stores all the nodes on the floor
-  LinkedList<UINode> selectedNodes; // stores all the selected nodes on the map
+  LinkedList<DbNode> allFloorNodes = new LinkedList<DbNode>(); // stores all the nodes on the floor
+  LinkedList<UINode> selectedNodes =
+      new LinkedList<UINode>(); // stores all the selected nodes on the map
+  LinkedList<UIEdge> selectedEdges =
+      new LinkedList<UIEdge>(); // stores all the selected edges on the map
   // LinkedList<String> longNamesList = new LinkedList<>(); // Stores Floor Node names
 
   public UINode defaultNode;
 
   private HashBiMap<UINode, DbNode>
       masterNodes; // Maps UINodes from pool to DbNodes from current floor
-  private Set<UIEdge> masterEdges; // Maps UINodes from pool to DbNodes from current floor
+  private LinkedList<UIEdge> masterEdges =
+      new LinkedList<>(); // Maps UINodes from pool to DbNodes from current floor
 
   // Screen constants
   private final float BAR_WIDTH = 300;
@@ -77,13 +81,9 @@ public class MapBaseController {
   public void initialize() throws DBException {
 
     changeFloor(4);
-
-    selectedNodes = new LinkedList<UINode>();
-    allFloorNodes = MapDB.floorNodes(currentFloor, currentBuilding);
     masterNodes = HashBiMap.create();
 
     populateMap();
-    //defaultNode = masterNodes.inverse().get(MapDB.getNode("NHALL00804"));
 
     try {
       defaultNode = masterNodes.inverse().get(allFloorNodes.getFirst());
@@ -101,7 +101,7 @@ public class MapBaseController {
   }
 
   private UINode makeUINode() {
-    UINode newNode = new UINode(false);
+    UINode newNode = new UINode(true);
     newNode.placeOnPane(pn_routeNodes);
     newNode.setBaseMap(this);
     return newNode;
@@ -111,6 +111,8 @@ public class MapBaseController {
     UIEdge newEdge = nodeA.addEdgeTo(nodeB);
     if (newEdge != null) {
       masterEdges.add(newEdge);
+      newEdge.placeOnPane(pn_path);
+      newEdge.setBaseMap(this);
     }
   }
 
@@ -134,21 +136,24 @@ public class MapBaseController {
   private void setLink(UINode uiNode, DbNode dbNode, boolean showKey) {
     if (uiNode != null && dbNode != null) {
       uiNode.setVisible(showKey);
+      uiNode.setPos(
+          dbNode.getX() * HORIZONTAL_SCALE + HORIZONTAL_OFFSET,
+          dbNode.getY() * VERTICAL_SCALE + VERTICAL_OFFSET);
       if (masterNodes.replace(uiNode, dbNode) == null) { // If uiNode is a new map key
-
         masterNodes.put(uiNode, dbNode); // Add the new key
-
-        try { // Add any attached edges
-          UINode otherAsUI;
-          for (DbNode other : MapDB.getAdjacent(dbNode.getNodeID())) {
-            otherAsUI = getUiFromDb(other);
-            if (otherAsUI != null) {
-              addEdge(uiNode, otherAsUI);
-            }
+      }
+      try { // Add any attached edges
+        UINode otherAsUI;
+        for (DbNode other : MapDB.getAdjacent(dbNode.getNodeID())) {
+          otherAsUI = getUiFromDb(other);
+          if (otherAsUI != null) {
+            addEdge(uiNode, otherAsUI);
+          } else {
+            // System.out.println("Couldn't find UI element for node " + other.getNodeID());
           }
-        } catch (DBException e) {
-
         }
+      } catch (DBException e) {
+        System.out.println("No adjacent nodes to " + dbNode.getShortName());
       }
     }
   }
@@ -158,35 +163,46 @@ public class MapBaseController {
 
     if (clickedNode.getSelected()) {
       selectedNodes.add(clickedNode);
-      System.out.println("Selected node " + masterNodes.get(clickedNode).getLongName() + ".");
+      // System.out.println("Selected node " + masterNodes.get(clickedNode).getLongName() + ".");
     } else {
       selectedNodes.remove(clickedNode);
-      System.out.println("Deselected node " + masterNodes.get(clickedNode).getLongName() + ".");
+      // System.out.println("Deselected node " + masterNodes.get(clickedNode).getLongName() + ".");
     }
   }
 
-  // Called by the UINode that was clicked
+  // Called by the UIEdge that was clicked
   public void onUIEdgeClicked(MouseEvent e, UIEdge clickedEdge) {
-    System.out.println("Edge (?) clicked!");
+
+    if (clickedEdge.getSelected()) {
+      selectedEdges.add(clickedEdge);
+      // System.out.println("Selected node " + masterNodes.get(clickedNode).getLongName() + ".");
+    } else {
+      selectedEdges.remove(clickedEdge);
+      // System.out.println("Deselected node " + masterNodes.get(clickedNode).getLongName() + ".");
+    }
   }
 
   public void populateMap() {
     try {
       Set<UINode> keys = masterNodes.keySet();
       Stream<UINode> keyStream = keys.stream();
-      allFloorNodes = MapDB.floorNodes(currentFloor, currentBuilding);
-      LinkedList<DbNode> thisFloor = allFloorNodes;
+
+      allFloorNodes = MapDB.floorNodes(currentFloor, currentBuilding); // Reference copy
+
+      LinkedList<DbNode> thisFloor = new LinkedList<>();
+      thisFloor.addAll(allFloorNodes); // Make a copy of allFloorNodes to use pop or pull on
 
       try {
-        keyStream.forEach(key -> setLink(key, thisFloor.pop(), false));
+        keyStream.forEach(key -> setLink(key, thisFloor.pop(), true));
       } catch (NoSuchElementException e) {
         // If there are more keys than nodes, hide extras from searcher functions
-        System.out.println("More keys than DbNodes, as expected");
       }
 
-      while (thisFloor.poll() != null) {
+      DbNode keylessNode = thisFloor.poll();
+      while (keylessNode != null) {
         // If there are DbNodes without keys, add keys
-        setLink(makeUINode(), thisFloor.pop(), false);
+        setLink(makeUINode(), keylessNode, true);
+        keylessNode = thisFloor.poll();
       }
 
     } catch (DBException e) {
@@ -230,13 +246,17 @@ public class MapBaseController {
       uiNode.setSelected(false);
     }
     selectedNodes.clear();
+
+    for (UIEdge edge : masterEdges) {
+      edge.setSelected(false);
+    }
   }
 
   public void forceSelect(UINode uiNode, boolean selected) { // Don't really want
     uiNode.setSelected(selected);
   }
 
-  // == MAP ZOOM CONTROLS ==
+  //   == MAP ZOOM CONTROLS ==
 
   // Get zoom button input
   @FXML

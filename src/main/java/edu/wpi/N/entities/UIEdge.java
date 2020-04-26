@@ -1,9 +1,12 @@
 package edu.wpi.N.entities;
 
+import edu.wpi.N.views.MapBaseController;
 import javafx.scene.Cursor;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.StrokeLineCap;
 
 public class UIEdge {
 
@@ -11,6 +14,7 @@ public class UIEdge {
   private boolean selected;
   private boolean highlighted;
   private Line marker;
+  private MapBaseController mbc;
 
   private final Color colorNormal = Color.BLACK;
   private final Color colorSelected = Color.LAWNGREEN;
@@ -20,12 +24,14 @@ public class UIEdge {
     marker = new Line();
     marker.setStrokeWidth(2);
     marker.setStroke(colorNormal);
+    marker.setStrokeLineCap(StrokeLineCap.ROUND);
     marker.setFill(colorNormal);
     // marker.setOpacity(0.7);
-    marker.setOnMouseClicked(mouseEvent -> this.toggleSelected());
+    marker.setOnMouseClicked(mouseEvent -> this.onMarkerClicked(mouseEvent));
     marker.setCursor(Cursor.HAND); // Cursor points when over nodes
     this.selected = false;
     this.highlighted = false;
+    setVisible(showing);
 
     setNodes(nodeA, nodeB);
   }
@@ -33,8 +39,8 @@ public class UIEdge {
   public void updateMarkerPos() {
     marker.setStartX(nodeA.getX());
     marker.setStartY(nodeA.getY());
-    marker.setStartX(nodeB.getX());
-    marker.setStartY(nodeB.getY());
+    marker.setEndX(nodeB.getX());
+    marker.setEndY(nodeB.getY());
   }
 
   public boolean toggleSelected() {
@@ -46,15 +52,27 @@ public class UIEdge {
     this.selected = selected;
     if (selected) {
       // Selected appearance
-      marker.setFill(colorSelected);
+      marker.setStroke(colorSelected);
     } else {
       // Deselected appearance
-      marker.setFill(colorNormal);
+      marker.setStroke(colorNormal);
     }
   }
 
   public boolean getSelected() {
     return selected;
+  }
+
+  public void setBaseMap(MapBaseController mbc) {
+    this.mbc = mbc;
+  }
+
+  public void onMarkerClicked(MouseEvent e) {
+
+    toggleSelected();
+    if (mbc != null) {
+      mbc.onUIEdgeClicked(e, this);
+    }
   }
 
   public void setVisible(boolean visible) {
@@ -69,7 +87,7 @@ public class UIEdge {
 
   public void setNodes(UINode nodeA, UINode nodeB) {
     if (nodeA != null && nodeB != null) {
-      if (nodeA != nodeB && nodeA.edgeTo(nodeB) != null) {
+      if (nodeA != nodeB && nodeA.edgeTo(nodeB) == null) {
         this.nodeA = nodeA;
         this.nodeB = nodeB;
       }

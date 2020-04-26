@@ -20,13 +20,13 @@ public class UINode {
   private final Color colorSelected = Color.RED;
 
   public UINode(boolean showing) {
-
     marker = new Circle();
     ((Circle) marker).setRadius(6);
     marker.setFill(colorNormal);
     marker.setOpacity(0.7);
-    marker.setOnMouseClicked(mouseEvent -> this.toggleSelected());
+    marker.setOnMouseClicked(mouseEvent -> this.onMarkerClicked(mouseEvent));
     marker.setCursor(Cursor.HAND); // Cursor points when over nodes
+    setVisible(showing);
   }
 
   public boolean toggleSelected() {
@@ -55,10 +55,10 @@ public class UINode {
     }
   }
 
-  public void setPos(int x, int y) {
+  public void setPos(double x, double y) {
     if (marker.getParent() != null) {
-      this.marker.setTranslateX(x);
-      this.marker.setTranslateY(y);
+      this.marker.setLayoutX(x);
+      this.marker.setLayoutY(y);
 
       for (UIEdge edge : connectedEdges) {
         edge.updateMarkerPos(); // Move all lines with the node
@@ -67,11 +67,11 @@ public class UINode {
   }
 
   public double getX() {
-    return this.marker.getTranslateX();
+    return this.marker.getLayoutX();
   }
 
   public double getY() {
-    return this.marker.getTranslateY();
+    return this.marker.getLayoutY();
   }
 
   public boolean getSelected() {
@@ -83,6 +83,8 @@ public class UINode {
   }
 
   public void onMarkerClicked(MouseEvent e) {
+
+    toggleSelected();
     if (mbc != null) {
       mbc.onUINodeClicked(e, this);
     }
@@ -92,7 +94,7 @@ public class UINode {
   public UIEdge addEdgeTo(UINode other) {
 
     if (edgeTo(other) == null) {
-      UIEdge newEdge = new UIEdge(false, this, other);
+      UIEdge newEdge = new UIEdge(true, this, other);
       this.connectedEdges.add(newEdge);
       other.connectedEdges.add(newEdge);
       newEdge.updateMarkerPos();

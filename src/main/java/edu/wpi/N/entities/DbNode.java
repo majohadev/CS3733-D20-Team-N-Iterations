@@ -137,4 +137,10 @@ public class DbNode {
         && shortName.equals(other.shortName)
         && teamAssigned == other.teamAssigned;
   }
+
+  @Override
+  public int hashCode() {
+    // XOR values/multiply by prime num to mix them up
+    return nodeID.hashCode() ^ ((x ^ y) * 17) ^ building.hashCode();
+  }
 }
