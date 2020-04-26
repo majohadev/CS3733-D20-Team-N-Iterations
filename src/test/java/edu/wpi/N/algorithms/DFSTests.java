@@ -21,8 +21,8 @@ public class DFSTests {
   public static void initializeTest()
       throws SQLException, ClassNotFoundException, DBException, FileNotFoundException {
     MapDB.initTestDB();
-    InputStream inputNodes = AStarTests.class.getResourceAsStream("../csv/TestNodes.csv");
-    InputStream inputEdges = AStarTests.class.getResourceAsStream("../csv/TestEdges.csv");
+    InputStream inputNodes = DFSTests.class.getResourceAsStream("../csv/TestNodes.csv");
+    InputStream inputEdges = DFSTests.class.getResourceAsStream("../csv/TestEdges.csv");
     CSVParser.parseCSV(inputNodes);
     CSVParser.parseCSV(inputEdges);
   }

@@ -21,9 +21,10 @@ public class DFSMultipleFloorsTest {
   public static void initialize()
       throws SQLException, DBException, ClassNotFoundException, FileNotFoundException {
     MapDB.initTestDB();
-    InputStream inputNodes = AStarTests.class.getResourceAsStream("../csv/ThreeFloorsTestNode.csv");
+    InputStream inputNodes =
+        DFSMultipleFloorsTest.class.getResourceAsStream("../csv/ThreeFloorsTestNode.csv");
     InputStream inputEdges =
-        AStarTests.class.getResourceAsStream("../csv/ThreeFloorsTestEdges.csv");
+        DFSMultipleFloorsTest.class.getResourceAsStream("../csv/ThreeFloorsTestEdges.csv");
     CSVParser.parseCSV(inputNodes);
     CSVParser.parseCSV(inputEdges);
   }

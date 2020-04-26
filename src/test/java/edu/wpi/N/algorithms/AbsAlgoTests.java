@@ -18,8 +18,8 @@ public class AbsAlgoTests {
   public static void initializeTest()
       throws SQLException, ClassNotFoundException, DBException, FileNotFoundException {
     MapDB.initTestDB();
-    InputStream inputNodes = AStarTests.class.getResourceAsStream("../csv/TestNodes.csv");
-    InputStream inputEdges = AStarTests.class.getResourceAsStream("../csv/TestEdges.csv");
+    InputStream inputNodes = AbsAlgoTests.class.getResourceAsStream("../csv/TestNodes.csv");
+    InputStream inputEdges = AbsAlgoTests.class.getResourceAsStream("../csv/TestEdges.csv");
     CSVParser.parseCSV(inputNodes);
     CSVParser.parseCSV(inputEdges);
   }
