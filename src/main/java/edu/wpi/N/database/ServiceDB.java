@@ -722,7 +722,7 @@ public class ServiceDB {
    */
   public static LinkedList<Patient> getpatientbyMedType(String type) throws DBException {
     try{
-      String query = "SELECT patient.id FROM patient, (SELECT medicineType FROM mrequest WHERE medicineType = ?) AS mrequest" +
+      String query = "SELECT patients.id FROM patient, (SELECT medicineType FROM medicineRequests WHERE medicineType = ?) AS medicineRequests" +
               "WHERE patient.id = mrequest.patientID";
       PreparedStatement stmt = con.prepareStatement(query);
       stmt.setString(1, type);
@@ -818,7 +818,7 @@ public class ServiceDB {
     LinkedList<Patient> allPatients = new LinkedList<Patient>();
 
     try{
-      String query = "SELECT * FROM patient";
+      String query = "SELECT * FROM patients";
       PreparedStatement stmt = con.prepareStatement(query);
       ResultSet rs = stmt.executeQuery();
       while(rs.next()){
@@ -870,7 +870,7 @@ public class ServiceDB {
   public static LinkedList<Patient> searchbyPatient(int id) throws DBException {
     try{
       LinkedList<Patient> patients = new LinkedList<Patient>();
-      String query = "SELECT * FROM patient WHERE id = ?";
+      String query = "SELECT * FROM patients WHERE id = ?";
       PreparedStatement stmt = con.prepareStatement(query);
       stmt.setInt(1, id);
       ResultSet rs = stmt.executeQuery();
