@@ -73,7 +73,7 @@ public abstract class AbsAlgo implements IPathFinder {
    * @return Path, path from start node to closest (eucledian) end node of requested type
    * @throws DBException
    */
-  public static Path findQuickAccess(DbNode start, String nodeType) throws DBException {
+  public Path findQuickAccess(DbNode start, String nodeType) throws DBException {
     try {
       LinkedList<DbNode> nodes =
           MapDB.searchNode(start.getFloor(), start.getBuilding(), nodeType, "");
@@ -88,11 +88,9 @@ public abstract class AbsAlgo implements IPathFinder {
             end = n;
           }
         }
-        Algorithm thePathFinder = new Algorithm();
+        //        Algorithm thePathFinder = new Algorithm();
 
-        // TODO
-        // Ask how to handle quick access handicap, put false for now
-        return thePathFinder.findPath(start, end, false);
+        return findPath(start, end, false);
       } else {
         return null;
       }
