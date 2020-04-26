@@ -35,3 +35,5 @@ public abstract class Employee {
     return id == other.id && name.equals(other.name);
   }
 }
+
+/* TODO: Create your employee entity: make sure serviceType is the same as what you insert into service*/
