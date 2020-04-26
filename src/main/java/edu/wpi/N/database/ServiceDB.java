@@ -5,10 +5,8 @@ import edu.wpi.N.entities.employees.Doctor;
 import edu.wpi.N.entities.employees.Employee;
 import edu.wpi.N.entities.employees.Laundry;
 import edu.wpi.N.entities.employees.Translator;
-import edu.wpi.N.entities.request.LaundryRequest;
-import edu.wpi.N.entities.request.MedicineRequest;
-import edu.wpi.N.entities.request.Request;
-import edu.wpi.N.entities.request.TranslatorRequest;
+import edu.wpi.N.entities.request.*;
+
 import java.sql.*;
 import java.util.*;
 import java.util.Date;
@@ -978,4 +976,68 @@ public class ServiceDB {
       throw new DBException("Unknown error : searchByMedType", e);
     }
   }
+
+  //Chris
+  /**
+   * adds a sanitation employee with the specified name
+   * @param name
+   * @return the generated id
+   */
+  public static int addSanitationEmp(String name){
+    return 0;
+  }
+
+  //Nick
+  /**
+   * adds a sanitation request with the specified fields
+   * @param reqNote
+   * @param nodeID
+   * @param spillType
+   * @param amount
+   * @param danger
+   * @return the generated requestID
+   */
+  public static int addSanitationReq(String reqNote, String nodeID, String spillType, String amount, String danger) {
+    return 0;
+  }
+
+  //Chris
+  /**
+   * searches through the database where the spillType contains the given type
+   * @param type
+   * @return a list of sanitationRequest where spillType contains the given type
+   */
+  public static LinkedList<SanitationRequest> searchbyspillType(String type){
+    return null;
+  }
+
+  //Nick
+  /**
+   * gets a list of sanitationRequest where the danger mathces the given val
+   * @param danger
+   * @return a list of sanitationRequest where danger matches the given danger level
+   */
+  public static LinkedList<SanitationRequest> getsanitationbyDanger(String danger){
+    return null;
+  }
+
+  //Chris
+  /**
+   * gets a list of sanitationRequest where the amount matches the given val
+   * @param amount
+   * @return a list of sanitationRequest where amount matches the given amount
+   */
+  public static LinkedList<SanitationRequest> getsanitationbyAmount(String amount){
+    return null;
+  }
+
+  //Nick
+  /**
+   * gets a list of all sanitation Employee in the database
+   * @return list of all sanitation Employee
+   */
+  public static LinkedList<Employee> getSanitationEmp(){
+    return null;
+  }
+
 }
