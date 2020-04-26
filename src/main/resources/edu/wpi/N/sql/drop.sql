@@ -14,4 +14,4 @@ DROP TABLE employees;
 DROP TABLE service;
 DROP TABLE edges;
 DROP TABLE nodes;
-/* TODO: Add drop statements, make sure they are in correct order (reverse of setup.sql). */
+
