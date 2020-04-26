@@ -423,7 +423,7 @@ public class ServiceDB {
    * @throws DBException
    */
   public static int addMedReq(
-      String reqNotes, String nodeID, String type, double dosage, String units, Patient patient)
+      String reqNotes, String nodeID, String type, double dosage, String units, String patient)
       throws DBException {
     try {
       String query =
@@ -438,14 +438,14 @@ public class ServiceDB {
       ResultSet rs = stmt.getGeneratedKeys();
       rs.next();
       query =
-          "INSERT INTO medicineRequests (requestID, medicineName, dosage, units, patientID) VALUES (?, ?, ?, ?, ?)";
+          "INSERT INTO medicineRequests (requestID, medicineName, dosage, units, patient) VALUES (?, ?, ?, ?, ?)";
       stmt = con.prepareStatement(query);
       int id = rs.getInt("1");
       stmt.setInt(1, id);
       stmt.setString(2, type);
       stmt.setDouble(3, dosage);
       stmt.setString(4, units);
-      stmt.setInt(5, patient.getId());
+      stmt.setString(5, patient);
       stmt.executeUpdate();
       return id;
     } catch (SQLException e) {
@@ -727,22 +727,22 @@ public class ServiceDB {
     return time;
   }
 
-//Chris
+  // Chris
   /**
    * gets a list of patients taking the specified medicine
+   *
    * @param type
    * @return list of patients
    */
-  public static LinkedList<Patient> getpatientbyMedType(String type) throws DBException {
-    try{
-      String query = "SELECT patients.id FROM patient, (SELECT medicineType FROM medicineRequests WHERE medicineType = ?) AS medicineRequests" +
-              "WHERE patient.id = mrequest.patientID";
+  public static LinkedList<String> getpatientbyMedType(String type) throws DBException {
+    try {
+      String query = "SELECT patient FROM medicineRequests WHERE medicineName = ?";
       PreparedStatement stmt = con.prepareStatement(query);
       stmt.setString(1, type);
       ResultSet rs = stmt.executeQuery();
-      LinkedList<Patient> plist = new LinkedList<Patient>();
-      while(rs.next()){
-        plist.add(getPatient(rs.getInt("id")));
+      LinkedList<String> plist = new LinkedList<>();
+      while (rs.next()) {
+        plist.add(rs.getString("patient"));
       }
       return plist;
     } catch (SQLException e) {
@@ -758,7 +758,7 @@ public class ServiceDB {
    * @param patient The specified patient
    * @return a LinkedList of MedicineRequest
    */
-  public static LinkedList<MedicineRequest> getMedRequestByPatient(Patient patient)
+  public static LinkedList<MedicineRequest> getMedRequestByPatient(String patient)
       throws DBException {
     try {
       LinkedList<MedicineRequest> res = new LinkedList<>();
@@ -766,10 +766,9 @@ public class ServiceDB {
       String query =
           "SELECT * FROM medicineRequests "
               + "JOIN request ON medicineRequests.requestID = request.requestID "
-              + "JOIN patients ON medicineRequests.patientID = patients.patientID "
-              + "WHERE patientID = ?";
+              + "WHERE patient = ?";
       PreparedStatement st = con.prepareStatement(query);
-      st.setInt(1, patient.getId());
+      st.setString(1, patient);
       ResultSet rs = st.executeQuery();
 
       while (rs.next()) {
@@ -786,10 +785,7 @@ public class ServiceDB {
                 rs.getString("serviceType"),
                 rs.getDouble("dosage"),
                 rs.getString("units"),
-                new Patient(
-                    rs.getInt("patientID"),
-                    rs.getString("patientName"),
-                    rs.getString("location"))));
+                rs.getString("patient")));
       }
 
       return res;
@@ -798,57 +794,57 @@ public class ServiceDB {
     }
   }
 
-  // Nick
-  /**
-   * Adds a patient to the database
-   *
-   * @param name The name of the patient
-   * @param location The nodeID of the location of the patient
-   * @return id of created patient
-   */
-  public static int addPatient(String name, String location) throws DBException {
-    try {
-      String query = "INSERT INTO patients (patientName, location) VALUES (?, ?)";
-      PreparedStatement st = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-      st.setString(1, name);
-      st.setString(2, location);
-      st.executeUpdate();
-      ResultSet rs = st.getGeneratedKeys();
-      rs.next();
-      int id = rs.getInt("1");
-      return id;
-    } catch (SQLException e) {
-      throw new DBException("Unknown error: addPatient", e);
-    }
-  }
-
-  // Chris
-  /**
-   * gets list of all patients
-   * @return lst of all patients
-   */
-  public static LinkedList<Patient> getlistPatient() throws DBException {
-    LinkedList<Patient> allPatients = new LinkedList<Patient>();
-
-    try{
-      String query = "SELECT * FROM patients";
-      PreparedStatement stmt = con.prepareStatement(query);
-      ResultSet rs = stmt.executeQuery();
-      while(rs.next()){
-        allPatients.add(
-                new Patient(
-                        rs.getInt("id"),
-                        rs.getString("name"),
-                        rs.getString("location")
-                )
-        );
-      }
-      return allPatients;
-    } catch (SQLException e) {
-      e.printStackTrace();
-      throw new DBException("Error: getlistPatients");
-    }
-  }
+  //  // Nick
+  //  /**
+  //   * Adds a patient to the database
+  //   *
+  //   * @param name The name of the patient
+  //   * @param location The nodeID of the location of the patient
+  //   * @return id of created patient
+  //   */
+  //  public static int addPatient(String name, String location) throws DBException {
+  //    try {
+  //      String query = "INSERT INTO patients (patientName, location) VALUES (?, ?)";
+  //      PreparedStatement st = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+  //      st.setString(1, name);
+  //      st.setString(2, location);
+  //      st.executeUpdate();
+  //      ResultSet rs = st.getGeneratedKeys();
+  //      rs.next();
+  //      int id = rs.getInt("1");
+  //      return id;
+  //    } catch (SQLException e) {
+  //      throw new DBException("Unknown error: addPatient", e);
+  //    }
+  //  }
+  //
+  //  // Chris
+  //  /**
+  //   * gets list of all patients
+  //   * @return lst of all patients
+  //   */
+  //  public static LinkedList<Patient> getlistPatient() throws DBException {
+  //    LinkedList<Patient> allPatients = new LinkedList<Patient>();
+  //
+  //    try{
+  //      String query = "SELECT * FROM patients";
+  //      PreparedStatement stmt = con.prepareStatement(query);
+  //      ResultSet rs = stmt.executeQuery();
+  //      while(rs.next()){
+  //        allPatients.add(
+  //                new Patient(
+  //                        rs.getInt("id"),
+  //                        rs.getString("name"),
+  //                        rs.getString("location")
+  //                )
+  //        );
+  //      }
+  //      return allPatients;
+  //    } catch (SQLException e) {
+  //      e.printStackTrace();
+  //      throw new DBException("Error: getlistPatients");
+  //    }
+  //  }
 
   // Nick
   /**
@@ -857,51 +853,51 @@ public class ServiceDB {
    * @param patientID the ID of the patient
    * @return The Patient object containing information about the patient
    */
-  public static Patient getPatient(int patientID) throws DBException {
-    try {
-      String query = "SELECT * FROM patients WHERE patientID = ?";
-      PreparedStatement st = con.prepareStatement(query);
-      st.setInt(1, patientID);
-      ResultSet rs = st.executeQuery();
-      if (rs.next()) {
-        return new Patient(
-            rs.getInt("patientID"), rs.getString("patientName"), rs.getString("location"));
-      } else {
-        throw new DBException("getPatient: Could not find patient with id " + patientID);
-      }
-    } catch (SQLException e) {
-      throw new DBException("Unknown error: getPatient", e);
-    }
-  }
+  //  public static Patient getPatient(int patientID) throws DBException {
+  //    try {
+  //      String query = "SELECT * FROM patients WHERE patientID = ?";
+  //      PreparedStatement st = con.prepareStatement(query);
+  //      st.setInt(1, patientID);
+  //      ResultSet rs = st.executeQuery();
+  //      if (rs.next()) {
+  //        return new Patient(
+  //            rs.getInt("patientID"), rs.getString("patientName"), rs.getString("location"));
+  //      } else {
+  //        throw new DBException("getPatient: Could not find patient with id " + patientID);
+  //      }
+  //    } catch (SQLException e) {
+  //      throw new DBException("Unknown error: getPatient", e);
+  //    }
+  //  }
 
-//Chris
-  /**
-   * gets a list of patient with the specified name
-   * @param id
-   * @return list of patients
-   */
-  public static LinkedList<Patient> searchbyPatient(int id) throws DBException {
-    try{
-      LinkedList<Patient> patients = new LinkedList<Patient>();
-      String query = "SELECT * FROM patients WHERE id = ?";
-      PreparedStatement stmt = con.prepareStatement(query);
-      stmt.setInt(1, id);
-      ResultSet rs = stmt.executeQuery();
-      while(rs.next()){
-        patients.add(
-                new Patient(
-                        rs.getInt("id"),
-                        rs.getString("name"),
-                        rs.getString("location")
-                )
-        );
-      }
-      return patients;
-    } catch (SQLException e) {
-      e.printStackTrace();
-      throw new DBException("Error: searchbyPatient causing error");
-    }
-  }
+  //// Chris
+  //  /**
+  //   * gets a list of patient with the specified name
+  //   * @param id
+  //   * @return list of patients
+  //   */
+  //  public static LinkedList<String> searchbyPatient(int id) throws DBException {
+  //    try{
+  //      LinkedList<String> patients = new LinkedList<>();
+  //      String query = "SELECT * FROM patients WHERE id = ?";
+  //      PreparedStatement stmt = con.prepareStatement(query);
+  //      stmt.setInt(1, id);
+  //      ResultSet rs = stmt.executeQuery();
+  //      while(rs.next()){
+  //        patients.add(
+  //                new Patient(
+  //                        rs.getInt("id"),
+  //                        rs.getString("name"),
+  //                        rs.getString("location")
+  //                )
+  //        );
+  //      }
+  //      return patients;
+  //    } catch (SQLException e) {
+  //      e.printStackTrace();
+  //      throw new DBException("Error: searchbyPatient causing error");
+  //    }
+  //  }
 
   // Nick
   /**

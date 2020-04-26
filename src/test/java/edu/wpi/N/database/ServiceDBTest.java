@@ -24,11 +24,10 @@ public class ServiceDBTest {
   static Translator felix;
   static Translator fats;
   static Laundry snaps;
-  static Patient tony;
+  static String tony = "Tony Cannoli";
   static int felixID;
   static int fatsID;
   static int snapsID;
-  static int tonyID;
 
   @BeforeAll
   public static void setup()
@@ -54,9 +53,6 @@ public class ServiceDBTest {
     MapDB.addNode("ZDEPT00101", 123, 123, 1, "Faulkner", "DEPT", "Tony's room", "Room", 'Z');
     laundReqID1 = ServiceDB.addLaundReq("wash", "ZHALL00101");
     transReqID1 = ServiceDB.addTransReq("speak", "ZHALL00102", "Gnomish");
-
-    tonyID = ServiceDB.addPatient("Tony Cannoli", "ZDEPT00101");
-    Patient tony = ServiceDB.getPatient(tonyID);
   }
 
   @Test
@@ -255,14 +251,14 @@ public class ServiceDBTest {
     assertTrue(result.contains(expected2));
   }
 
-  @Test
-  public void testAddAndGetPatient() throws DBException {
-    int id = ServiceDB.addPatient("Dippy Tikklekins", "ZDEPT00101");
-
-    Patient dippy = new Patient(id, "Dippy Tikklekins", "ZDEPT00101");
-
-    assertEquals(dippy, ServiceDB.getPatient(id));
-  }
+  //  @Test
+  //  public void testAddAndGetPatient() throws DBException {
+  //    int id = ServiceDB.addPatient("Dippy Tikklekins", "ZDEPT00101");
+  //
+  //    Patient dippy = new Patient(id, "Dippy Tikklekins", "ZDEPT00101");
+  //
+  //    assertEquals(dippy, ServiceDB.getPatient(id));
+  //  }
 
   @AfterAll
   public static void cleanup() throws DBException {

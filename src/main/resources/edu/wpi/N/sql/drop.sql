@@ -1,3 +1,5 @@
+DROP TABLE medicineRequests;
+DROP TABLE patients;
 DROP TABLE lrequest;
 DROP TABLE trequest;
 DROP TABLE request;
@@ -11,5 +13,3 @@ DROP TABLE employees;
 DROP TABLE service;
 DROP TABLE edges;
 DROP TABLE nodes;
-DROP TABLE patients;
-DROP TABLE medicineRequests;
