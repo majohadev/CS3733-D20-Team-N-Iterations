@@ -7,12 +7,14 @@ import edu.wpi.N.entities.employees.Employee;
 import edu.wpi.N.entities.employees.IT;
 import edu.wpi.N.entities.employees.Laundry;
 import edu.wpi.N.entities.employees.Translator;
+import edu.wpi.N.entities.employees.WheelchairEmployee;
 import edu.wpi.N.entities.request.EmotionalRequest;
 import edu.wpi.N.entities.request.ITRequest;
 import edu.wpi.N.entities.request.LaundryRequest;
 import edu.wpi.N.entities.request.MedicineRequest;
 import edu.wpi.N.entities.request.Request;
 import edu.wpi.N.entities.request.TranslatorRequest;
+import edu.wpi.N.entities.request.WheelchairRequest;
 import java.sql.*;
 import java.util.*;
 import java.util.Date;
@@ -56,6 +58,8 @@ public class ServiceDB {
         return new EmotionalSupporter(id, name);
       } else if (sType.equals("Medicine")) {
         return DoctorDB.getDoctor(id);
+      } else if (sType.equals("Wheelchair")) {
+        return new WheelchairEmployee(id, name);
       } else if (sType.equals("IT")) {
         return new IT(id, name);
       } else
@@ -82,6 +86,8 @@ public class ServiceDB {
     allEmployee.addAll(getLaundrys());
     allEmployee.addAll(getEmotionalSupporters());
     allEmployee.addAll(DoctorDB.getDoctors());
+    allEmployee.addAll(getWheelchairEmployees());
+    allEmployee.addAll(getITs());
     return allEmployee;
   }
 
@@ -149,6 +155,22 @@ public class ServiceDB {
             timeComp,
             status,
             rs.getString("language"));
+      } else if (sType.equals("Wheelchair")) {
+        query = "SELECT needsAssistance FROM wrequest WHERE requestID = ?";
+        stmt = con.prepareStatement(query);
+        stmt.setInt(1, id);
+        rs = stmt.executeQuery();
+        rs.next();
+        return new WheelchairRequest(
+            rid,
+            empId,
+            reqNotes,
+            compNotes,
+            nodeID,
+            timeReq,
+            timeComp,
+            status,
+            rs.getString("needsAssistance"));
       } else if (sType.equals("Emotional Support")) {
         query = "SELECT supportType FROM erequest WHERE requestID = ?";
 
@@ -287,6 +309,22 @@ public class ServiceDB {
                 rs.getString("units"),
                 rs.getString("patient")));
       }
+      query = "SELECT * from request, wrequest WHERE request.requestID = wrequest.requestID";
+      stmt = con.prepareStatement(query);
+      rs = stmt.executeQuery();
+      while (rs.next()) {
+        requests.add(
+            new WheelchairRequest(
+                rs.getInt("requestID"),
+                rs.getInt("assigned_eID"),
+                rs.getString("reqNotes"),
+                rs.getString("compNotes"),
+                rs.getString("nodeID"),
+                getJavatime(rs.getTimestamp("timeRequested")),
+                getJavatime(rs.getTimestamp("timeCompleted")),
+                rs.getString("status"),
+                rs.getString("needsAssistance")));
+      }
       query = "SELECT * from request, ITrequest WHERE request.requestID = ITrequest.requestID";
       stmt = con.prepareStatement(query);
       rs = stmt.executeQuery();
@@ -354,6 +392,23 @@ public class ServiceDB {
                 getJavatime(rs.getTimestamp("timeRequested")),
                 getJavatime(rs.getTimestamp("timeCompleted")),
                 rs.getString("status")));
+      }
+      query =
+          "SELECT * FROM request, wrequest WHERE request.requestID = wrequest.requestID AND status = 'OPEN'";
+      stmt = con.prepareStatement(query);
+      rs = stmt.executeQuery();
+      while (rs.next()) {
+        openList.add(
+            new WheelchairRequest(
+                rs.getInt("requestID"),
+                rs.getInt("assigned_eID"),
+                rs.getString("reqNotes"),
+                rs.getString("compNotes"),
+                rs.getString("nodeID"),
+                getJavatime(rs.getTimestamp("timeRequested")),
+                getJavatime(rs.getTimestamp("timeCompleted")),
+                rs.getString("status"),
+                rs.getString("needsAssistance")));
       }
       query =
           "SELECT * FROM request, erequest WHERE request.requestID = erequest.requestID AND status = 'OPEN'";
@@ -466,9 +521,31 @@ public class ServiceDB {
   }
 
   /**
-   * Gets all the laundrys in the database
+   * Gets all the wheelchair employees in the database
    *
-   * @return a linked list of all people who can do laundry in the database
+   * @return LinkedList<WheelchairEmployee>, all wheelchair employees
+   * @throws DBException
+   */
+  public static LinkedList<WheelchairEmployee> getWheelchairEmployees() throws DBException {
+    try {
+      String query =
+          "SELECT w_employeeID from employees, wheelchairEmployee where employeeID = w_employeeID";
+      PreparedStatement stmt = con.prepareStatement(query);
+      ResultSet rs = stmt.executeQuery();
+      LinkedList<WheelchairEmployee> wheelchairEmployees = new LinkedList<WheelchairEmployee>();
+      while (rs.next()) {
+        wheelchairEmployees.add((WheelchairEmployee) getEmployee(rs.getInt("w_employeeID")));
+      }
+      return wheelchairEmployees;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown error: getWheelchairEmployees", e);
+    }
+  }
+  /**
+   * Gets all the IT employees in the database
+   *
+   * @return a linked list of all people who can do IT in the database
    */
   public static LinkedList<IT> getITs() throws DBException {
     try {
@@ -603,6 +680,32 @@ public class ServiceDB {
     }
   }
 
+  /**
+   * adds a wheelchair employee to the database
+   *
+   * @param name, the wheelchair employee's name
+   * @return int, employeeID of the newly added employee
+   * @throws DBException
+   */
+  public static int addWheelchairEmployee(String name) throws DBException {
+    try {
+      String query = "INSERT INTO employees (name, serviceType) VALUES (?, 'Wheelchair')";
+      PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+      stmt.setString(1, name);
+      stmt.executeUpdate();
+      ResultSet rs = stmt.getGeneratedKeys();
+      rs.next(); // NullPointerException
+      query = "INSERT INTO WheelchairEmployee VALUES (?)";
+      stmt = con.prepareStatement(query);
+      int id = rs.getInt("1");
+      stmt.setInt(1, id);
+      stmt.executeUpdate();
+      return id;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown error: addWheelchairEmployee , name = " + name, e);
+    }
+  }
   /**
    * Adds a IT employee to the database
    *
@@ -779,6 +882,42 @@ public class ServiceDB {
     }
   }
 
+  /**
+   * creates a new wheelchair request
+   *
+   * @param reqNotes, notes for the wheelchair request
+   * @param nodeID, String, location of wheelchair request
+   * @param needsAssistance, String, whether the wheelchair requester requires assistance ("yes" or
+   *     "no")
+   * @return int, the requestID of the new request
+   * @throws DBException
+   */
+  public static int addWheelchairRequest(String reqNotes, String nodeID, String needsAssistance)
+      throws DBException {
+    try {
+      String query =
+          "INSERT INTO request (timeRequested, reqNotes, serviceType, nodeID, status) VALUES (?, ?, ?, ?, ?)";
+      PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+      stmt.setTimestamp(1, new Timestamp(new Date().getTime()));
+      stmt.setString(2, reqNotes);
+      stmt.setString(3, "Wheelchair");
+      stmt.setString(4, nodeID);
+      stmt.setString(5, "OPEN");
+      stmt.execute();
+      ResultSet rs = stmt.getGeneratedKeys();
+      rs.next();
+      query = "INSERT INTO wrequest (requestID, needsAssistance) VALUES (?, ?)";
+      stmt = con.prepareStatement(query);
+      int id = rs.getInt("1");
+      stmt.setInt(1, id);
+      stmt.setString(2, needsAssistance);
+      stmt.executeUpdate();
+      return id;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Error: addWheelchairRequest", e);
+    }
+  }
   /**
    * Adds a request for IT
    *

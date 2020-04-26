@@ -60,6 +60,9 @@ CREATE TABLE doctors (
       FOREIGN KEY (doctorID) REFERENCES employees(employeeID) ON DELETE CASCADE);
 
 /*TODO add the employees table */
+CREATE TABLE wheelchairEmployee(
+      w_employeeID INT NOT NULL References employees(employeeID) ON DELETE CASCADE,
+      PRIMARY KEY(w_employeeID));
 CREATE TABLE emotionalSupporter(
       l_employeeID INT NOT NULL References employees(employeeID) ON DELETE CASCADE,
       PRIMARY KEY(l_employeeID));
@@ -102,6 +105,9 @@ CREATE TABLE medicineRequests(
 );
 
 /*TODO: Add request table */
+CREATE TABLE wrequest(
+              requestID INT NOT NULL PRIMARY KEY REFERENCES request(requestID) ON DELETE CASCADE,
+              needsAssistance VARCHAR(255) NOT NULL);
 CREATE TABLE erequest(
                 requestID INT NOT NULL PRIMARY KEY REFERENCES request(requestID) ON DELETE CASCADE,
                 supportType VARCHAR(255) NOT NULL);
@@ -115,6 +121,7 @@ INSERT INTO service VALUES ('Translator', '00:00', '00:00', 'Make a request for 
 INSERT INTO service VALUES ('Laundry', '00:00', '00:00', 'Make a request for laundry services!');
 INSERT INTO service VALUES ('Medicine', '00:00', '00:00', 'Request medicine delivery!');
 /*TODO: Insert your service tuple */
+INSERT INTO service VALUES ('Wheelchair', '00:00', '00:00', 'Request a wheelchair!');
 INSERT INTO service VALUES ('Emotional Support', '00:00', '00:00', 'Request emotional support, please?!');
 INSERT INTO service VALUES ('IT', '00:00', '00:00', 'Make a request for IT services!');
 
