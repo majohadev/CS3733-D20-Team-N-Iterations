@@ -50,7 +50,8 @@ public class LoginDBTest {
         () -> {
           LoginDB.changePass("Gaben", "MoolyFTW", "oldpasswrong");
         });
-    LoginDB.createDoctorLogin("Wong", "password");
+    int wID = DoctorDB.addDoctor("Wong", "field", "Wong", "password", null);
+    // LoginDB.createDoctorLogin("Wong", "password"); //I'm allowed to do i, you're not
     LoginDB.logout();
     LoginDB.removeLogin("Gaben");
     assertThrows(
@@ -60,10 +61,16 @@ public class LoginDBTest {
         });
     LoginDB.verifyLogin("Wong", "password");
     assertEquals("DOCTOR", LoginDB.currentAccess());
+    assertThrows(
+        DBException.class,
+        () -> {
+          LoginDB.removeLogin("Wong");
+        });
+    ServiceDB.removeEmployee(wID);
   }
 
   @AfterAll
   public static void clearDB() throws DBException {
-    LoginDB.removeLogin("Wong");
+    // LoginDB.removeLogin("Wong");
   }
 }
