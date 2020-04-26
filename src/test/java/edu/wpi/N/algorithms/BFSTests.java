@@ -29,7 +29,7 @@ public class BFSTests {
 
   /** Tests that findPath returns a Path object with the best route from H9 to EEE */
   @Test
-  public void findPathNormalCaseBFS() throws DBException {
+  public void findPathNormalCaseBFSTest() throws DBException {
     myBFS.setPathFinder(new BFS());
     LinkedList<DbNode> actualPath = new LinkedList<DbNode>();
     actualPath.add(MapDB.getNode("H100000001"));
@@ -49,7 +49,7 @@ public class BFSTests {
    * and end nodes are neighbors
    */
   @Test
-  public void findPathStartIsNeighborWithEndNode() throws DBException {
+  public void findPathStartIsNeighborWithEndNodeBFSTest() throws DBException {
     myBFS.setPathFinder(new BFS());
     LinkedList<DbNode> actualPath = new LinkedList<DbNode>();
 
@@ -67,7 +67,7 @@ public class BFSTests {
    * any node
    */
   @Test
-  public void findPathDestinationNotFound() throws DBException {
+  public void findPathDestinationNotFoundBFSTest() throws DBException {
     myBFS.setPathFinder(new BFS());
     Assertions.assertNull(
         myBFS.findPath(MapDB.getNode("H120000000"), MapDB.getNode("NonExistentNode"), false));
@@ -78,7 +78,7 @@ public class BFSTests {
    * to any node (including end node)
    */
   @Test
-  public void findPathStartNodeHasNoEdges() throws DBException {
+  public void findPathStartNodeHasNoEdgesBFSTest() throws DBException {
     myBFS.setPathFinder(new BFS());
     DbNode nonExistentNode = new DbNode();
     Assertions.assertNull(myBFS.findPath(nonExistentNode, MapDB.getNode("H120000000"), false));
@@ -89,7 +89,7 @@ public class BFSTests {
    * Node = End Node
    */
   @Test
-  public void findPathEndIsStartNode() throws DBException {
+  public void findPathEndIsStartNodeBFSTest() throws DBException {
     myBFS.setPathFinder(new BFS());
     LinkedList<DbNode> actualPath = new LinkedList<DbNode>();
 

@@ -14,8 +14,8 @@ public class AStar extends AbsAlgo {
    *
    * @param startNode: The start node
    * @param endNode: The destination node
-   * @param handicap: Boolean saying whether path should be handicap accessible only
-   * @return: Path object indicating the shortest path to the goal Node from Start Node
+   * @param handicap: Boolean saying whether path should be handicap accessible
+   * @return: Path object indicating the shortest path to the Goal Node from Start Node
    * @throws DBException
    */
   @Override
@@ -48,7 +48,7 @@ public class AStar extends AbsAlgo {
 
         // for every node (next node), current node has edge to:
         LinkedList<Node> adjacentToCurrent =
-            MapDB.getGAdjacent(current.ID, startFloorNum, endFloorNum);
+            MapDB.getGAdjacent(current.ID, startFloorNum, endFloorNum, handicap);
 
         for (Node nextNode : adjacentToCurrent) {
           String nextNodeID = nextNode.ID;

@@ -51,11 +51,10 @@ public class AStarMultipleFloorsTest {
   }
 
   /**
-   * Tests if the pathfinder will choose the stairs over elevator if it's more efficient to do
-   * so
+   * Tests if the pathfinder will choose the stairs over elevator if it's more efficient to do so
    */
   @Test
-  public void stairsOverElevatorTest() throws DBException {
+  public void stairsOverElevatorAStarTest() throws DBException {
     DbNode startNode = MapDB.getNode("STAI011000");
     DbNode endNode = MapDB.getNode("H083000000");
     Path testPath = myAStar.findPath(startNode, endNode, false);
@@ -73,7 +72,7 @@ public class AStarMultipleFloorsTest {
    * efficient to do so
    */
   @Test
-  public void stairsOverElevatorTest2() throws DBException {
+  public void stairsOverElevatorAStarTest2() throws DBException {
     DbNode startNode = MapDB.getNode("H083000000");
     DbNode endNode = MapDB.getNode("H041000000");
     Path testPath = myAStar.findPath(startNode, endNode, false);
@@ -88,11 +87,11 @@ public class AStarMultipleFloorsTest {
   }
 
   /**
-   * Tests if the pathfinder goes to the correct elevator (the only one that can access floor
-   * 4) when going from floor 3 to floor 4
+   * Tests if the pathfinder goes to the correct elevator (the only one that can access floor 4)
+   * when going from floor 3 to floor 4
    */
   @Test
-  public void thirdToFourthFloorTest() throws DBException {
+  public void thirdToFourthFloorAStarTest() throws DBException {
     DbNode startNode = MapDB.getNode("ELEV013000");
     DbNode endNode = MapDB.getNode("DDDDDDDDDD");
     Path testPath = myAStar.findPath(startNode, endNode, false);
@@ -117,7 +116,7 @@ public class AStarMultipleFloorsTest {
   //   * Doesn't currently work due to what GetGAdjacent returns
   //   */
   //  @Test
-  //  public void fourthToFirstFloorTest() throws DBException {
+  //  public void fourthToFirstFloorAStarTest() throws DBException {
   //    DbNode startNode = MapDB.getNode("DDDDDDDDDD");
   //    DbNode endNode = MapDB.getNode("H011000000");
   //    Path testPath = Pathfinder.findPath(startNode, endNode);

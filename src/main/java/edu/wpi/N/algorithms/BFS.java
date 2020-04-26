@@ -3,6 +3,7 @@ package edu.wpi.N.algorithms;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
+import edu.wpi.N.entities.Node;
 import edu.wpi.N.entities.Path;
 import java.util.*;
 
@@ -13,42 +14,56 @@ public class BFS extends AbsAlgo {
    *
    * @param startNode: The start node
    * @param endNode: The destination node
-   * @param handicap: Boolean saying whether path should be handicap accessible only
-   * @return: Path object indicating the shortest path to the goal Node from Start Node
+   * @param handicap: Boolean saying whether path should be handicap accessible
+   * @return: Path object indicating the shortest path to the Goal Node from Start Node
    * @throws DBException
    */
   @Override
   public Path findPath(DbNode startNode, DbNode endNode, boolean handicap) throws DBException {
     try {
-
-      Queue<DbNode> queue = new LinkedList<>();
-      ArrayList<DbNode> checked = new ArrayList<>();
+      // Initialize variables
+      Queue<Node> queue = new LinkedList<>();
+      ArrayList<Node> checked = new ArrayList<>();
       Map<String, String> cameFrom = new HashMap<>();
 
-      queue.add(startNode);
-      cameFrom.put(startNode.getNodeID(), "");
+      // Get start and end floor
+      int startFloorNum = startNode.getFloor();
+      int endFloorNum = endNode.getFloor();
 
+      // Get Node version of  start and end DbNodes
+      Node start = MapDB.getGNode(startNode.getNodeID());
+      Node end = MapDB.getGNode(endNode.getNodeID());
+
+      // Add start node to queue
+      queue.add(start);
+      cameFrom.put(start.ID, "");
+
+      // While the queue isn't empty, keep looking for neighbors with the end node
       while (!queue.isEmpty()) {
-        DbNode currNode = queue.poll();
+        // Get the next node to check in the queue and mark it as checked
+        Node currNode = queue.poll();
         checked.add(currNode);
 
-        LinkedList<DbNode> neighbors = MapDB.getAdjacent(currNode.getNodeID());
+        // Get the current nodes neighbors and check if it connects to the end node
+        LinkedList<Node> neighbors =
+            MapDB.getGAdjacent(currNode.ID, startFloorNum, endFloorNum, handicap);
         if (neighbors.contains(endNode)) {
-          cameFrom.put(endNode.getNodeID(), currNode.getNodeID());
+          cameFrom.put(endNode.getNodeID(), currNode.ID);
           break;
         }
 
-        for (DbNode nextNode : neighbors) {
+        // If it doesn't connect with the end node, get all of its neighbors that aren't checked or
+        // in the queue
+        for (Node nextNode : neighbors) {
           if (!checked.contains(nextNode) && !queue.contains(nextNode)) {
             queue.add(nextNode);
-            cameFrom.put(nextNode.getNodeID(), currNode.getNodeID());
+            cameFrom.put(nextNode.ID, currNode.ID);
           }
         }
       }
 
       // Generate and return the path in proper order
-      return generatePath(
-          MapDB.getGNode(startNode.getNodeID()), MapDB.getGNode(endNode.getNodeID()), cameFrom);
+      return generatePath(start, end, cameFrom);
     } catch (Exception e) {
       e.printStackTrace();
       return null;

@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-public class BFSMultipleFloorTest {
+public class BFSMultipleFloorsTest {
   Algorithm myBFS = new Algorithm();
 
   @BeforeAll
@@ -31,7 +31,7 @@ public class BFSMultipleFloorTest {
 
   /** Tests if the pathfinder chooses the more efficient elevator when changing floors */
   @Test
-  public void findCloserElevatorTest() throws DBException {
+  public void findCloserElevatorBFSTest() throws DBException {
     myBFS.setPathFinder(new BFS());
     DbNode startNode = MapDB.getNode("H011000000");
     DbNode endNode = MapDB.getNode("BBBBBBBBBB");
@@ -52,11 +52,10 @@ public class BFSMultipleFloorTest {
   }
 
   /**
-   * Tests if the pathfinder will choose the stairs over elevator if it's more efficient to do
-   * so
+   * Tests if the pathfinder will choose the stairs over elevator if it's more efficient to do so
    */
   @Test
-  public void stairsOverElevatorTest() throws DBException {
+  public void stairsOverElevatorBFSTest() throws DBException {
     myBFS.setPathFinder(new BFS());
     DbNode startNode = MapDB.getNode("STAI011000");
     DbNode endNode = MapDB.getNode("H083000000");
@@ -75,7 +74,7 @@ public class BFSMultipleFloorTest {
    * efficient to do so
    */
   @Test
-  public void stairsOverElevatorTest2() throws DBException {
+  public void stairsOverElevatorBFSTest2() throws DBException {
     myBFS.setPathFinder(new BFS());
     DbNode startNode = MapDB.getNode("H083000000");
     DbNode endNode = MapDB.getNode("H041000000");
@@ -95,7 +94,7 @@ public class BFSMultipleFloorTest {
    * when going from floor 3 to floor 4
    */
   @Test
-  public void thirdToFourthFloorTest() throws DBException {
+  public void thirdToFourthFloorBFSTest() throws DBException {
     myBFS.setPathFinder(new BFS());
     DbNode startNode = MapDB.getNode("ELEV013000");
     DbNode endNode = MapDB.getNode("DDDDDDDDDD");

@@ -29,7 +29,7 @@ public class AStarMethodsTest {
 
   /** Tests that findPath returns a Path object with the best route from H9 to EEE */
   @Test
-  public void findPathNormalCase() throws DBException {
+  public void findPathNormalCaseAStarTest() throws DBException {
     LinkedList<DbNode> actualPath = new LinkedList<DbNode>();
     actualPath.add(MapDB.getNode("H100000001"));
     actualPath.add(MapDB.getNode("H900000000"));
@@ -48,7 +48,7 @@ public class AStarMethodsTest {
    * and end nodes are neighbors
    */
   @Test
-  public void findPathStartIsNeighborWithEndNode() throws DBException {
+  public void findPathStartIsNeighborWithEndNodeAStarTest() throws DBException {
 
     LinkedList<DbNode> actualPath = new LinkedList<DbNode>();
 
@@ -66,7 +66,7 @@ public class AStarMethodsTest {
    * any node
    */
   @Test
-  public void findPathDestinationNotFound() throws DBException {
+  public void findPathDestinationNotFoundAStarTest() throws DBException {
     Assertions.assertNull(
         myAStar.findPath(MapDB.getNode("H120000000"), MapDB.getNode("NonExistentNode"), false));
   }
@@ -76,7 +76,7 @@ public class AStarMethodsTest {
    * to any node (including end node)
    */
   @Test
-  public void findPathStartNodeHasNoEdges() throws DBException {
+  public void findPathStartNodeHasNoEdgesAStarTest() throws DBException {
     DbNode nonExistentNode = new DbNode();
     Assertions.assertNull(myAStar.findPath(nonExistentNode, MapDB.getNode("H120000000"), false));
   }
@@ -86,7 +86,7 @@ public class AStarMethodsTest {
    * Node = End Node
    */
   @Test
-  public void findPathEndIsStartNode() throws DBException {
+  public void findPathEndIsStartNodeAStarTest() throws DBException {
     LinkedList<DbNode> actualPath = new LinkedList<DbNode>();
 
     actualPath.add(MapDB.getNode("H120000000"));
