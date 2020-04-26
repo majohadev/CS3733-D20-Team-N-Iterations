@@ -32,6 +32,8 @@ dependencies {
             'com.github.sarxos:webcam-capture:0.3.12',
             'com.google.zxing:core:3.4.0',
             'com.google.zxing:javase:3.4.0',
+            'com.google.cloud:google-cloud-dialogflow:1.0.0',
+            'com.google.cloud:google-cloud-storage:1.107.0'
     )
 
 

@@ -25,9 +25,10 @@ public class App extends Application {
   @Override
   public void start(Stage primaryStage) throws IOException {
     // Configure the primary Stage
+
     this.masterStage = primaryStage;
     this.masterStage.setTitle("Brigham and Women's Hospital Kiosk Application");
-    switchScene("views/home.fxml");
+    switchScene("views/chatbot.fxml");
     masterStage.setMaximized(true);
   }
 
