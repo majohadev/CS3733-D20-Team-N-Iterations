@@ -1,7 +1,5 @@
 package edu.wpi.N.entities.request;
 
-import edu.wpi.N.database.DBException;
-
 import java.util.Arrays;
 import java.util.GregorianCalendar;
 
@@ -10,8 +8,8 @@ public class SanitationRequest extends Request {
   private String spillType, size, danger;
 
   /**
-   * Note: size must be one of {"small", "medium", "large", "unknown"} (case insensitive)
-   * Note: danger must be one of {"low", "medium", "high", "unknown"} (case insensitive)
+   * Note: size must be one of {"small", "medium", "large", "unknown"} (case insensitive) Note:
+   * danger must be one of {"low", "medium", "high", "unknown"} (case insensitive)
    */
   public SanitationRequest(
       int requestID,
@@ -36,7 +34,8 @@ public class SanitationRequest extends Request {
     }
 
     if (!Arrays.asList(dangerArray).contains(danger.toLowerCase())) {
-      throw new IllegalArgumentException("SanitationRequest: \"" + danger + "\" is not a valid danger level");
+      throw new IllegalArgumentException(
+          "SanitationRequest: \"" + danger + "\" is not a valid danger level");
     }
 
     this.spillType = spillType;

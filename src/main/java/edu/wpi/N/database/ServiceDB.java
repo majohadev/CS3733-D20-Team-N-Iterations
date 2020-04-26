@@ -1170,13 +1170,46 @@ public class ServiceDB {
   }
   // Nick
   /**
-   * gets a list of sanitationRequest where the danger mathces the given val
+   * gets a list of sanitationRequest where the danger matches the given value
    *
    * @param danger
    * @return a list of sanitationRequest where danger matches the given danger level
    */
-  public static LinkedList<SanitationRequest> getsanitationbyDanger(String danger) {
-    return null;
+  public static LinkedList<SanitationRequest> getSanitationByDanger(String danger)
+      throws DBException {
+    try {
+      LinkedList<SanitationRequest> result = new LinkedList<>();
+
+      danger = danger.toLowerCase();
+
+      String query =
+          "SELECT * FROM sanitationRequests "
+              + "JOIN request ON sanitationRequests.requestID = request.requestID "
+              + "WHERE danger = ?";
+
+      PreparedStatement st = con.prepareStatement(query);
+      st.setString(1, danger);
+      ResultSet rs = st.executeQuery();
+
+      while (rs.next()) {
+        result.add(
+            new SanitationRequest(
+                rs.getInt("requestID"),
+                rs.getInt("asigned_eID"),
+                rs.getString("reqNotes"),
+                rs.getString("compNotes"),
+                rs.getString("nodeID"),
+                getJavatime(rs.getTimestamp("timeRequested")),
+                getJavatime(rs.getTimestamp("timeCompleted")),
+                rs.getString("status"),
+                rs.getString("sanitationType"),
+                rs.getString("size"),
+                rs.getString("danger")));
+      }
+      return result;
+    } catch (SQLException e) {
+      throw new DBException("Unknown error: getSanitationByDanger", e);
+    }
   }
 
   // Nick

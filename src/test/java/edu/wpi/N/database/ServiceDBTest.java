@@ -369,6 +369,26 @@ public class ServiceDBTest {
         () -> ServiceDB.addSanitationReq("help", "ZHALL00102", "wet", "big", "unknown"));
   }
 
+  @Test
+  public void testGetSanitationByDanger() throws DBException {
+    int id1 = ServiceDB.addSanitationReq("help", "ZHALL00102", "wet", "Small", "Unknown");
+    int id2 = ServiceDB.addSanitationReq("aaa", "ZHALL00101", "dry", "small", "HIGH");
+    int id3 = ServiceDB.addSanitationReq("woo", "ZHALL00102", "ehh", "medium", "Medium");
+
+    SanitationRequest small1 = (SanitationRequest) ServiceDB.getRequest(id1);
+    SanitationRequest small2 = (SanitationRequest) ServiceDB.getRequest(id2);
+    SanitationRequest medium1 = (SanitationRequest) ServiceDB.getRequest(id3);
+
+    LinkedList<SanitationRequest> result = ServiceDB.getSanitationByDanger("SMALL");
+
+    assertTrue(result.contains(small1));
+    assertTrue(result.contains(small2));
+
+    result = ServiceDB.getSanitationByDanger("Medium");
+
+    assertTrue(result.contains(medium1));
+  }
+
   @AfterAll
   public static void cleanup() throws DBException {
     MapDB.clearNodes();
