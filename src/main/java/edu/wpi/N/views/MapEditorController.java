@@ -18,6 +18,7 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.*;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
@@ -29,6 +30,7 @@ public class MapEditorController implements Controller {
   @FXML Pane pn_display;
   @FXML Pane pn_editor;
   @FXML Button btn_home;
+  @FXML StackPane pn_stack;
   @FXML Pane pn_edges;
 
   final int DEFAULT_FLOOR = 4;
@@ -41,6 +43,7 @@ public class MapEditorController implements Controller {
   final Color EDIT_NODE_COLOR = Color.RED;
   final double DEFAULT_CIRCLE_OPACITY = 1;
   final double DEFAULT_CIRCLE_RADIUS = 7;
+  final Color DELETE_EDGE_COLOR = Color.RED;
 
   final double SCREEN_WIDTH = 1920;
   final double SCREEN_HEIGHT = 1080;
@@ -67,6 +70,7 @@ public class MapEditorController implements Controller {
   MapEditorAddNodeController controllerAddNode;
   MapEditorDeleteNodeController controllerDeleteNode;
   MapEditorEditNodeController controllerEditNode;
+  MapEditorDeleteEdgeController controllerDeleteEdge;
 
   int currentFloor;
   String currentBuilding;
@@ -78,6 +82,8 @@ public class MapEditorController implements Controller {
   Circle editNodeCircle;
   // Add Edge Variable
   Line addEdgeLine;
+  // Delete Edge Variable
+  LinkedList<Line> deleteEdgeLines;
 
   @Override
   public void setMainApp(App mainApp) {
@@ -96,6 +102,7 @@ public class MapEditorController implements Controller {
     editNodeCircle = null;
     addEdgeLine = new Line();
     pn_edges.getChildren().add(addEdgeLine);
+    deleteEdgeLines = new LinkedList<>();
   }
 
   private void loadFloor() throws DBException {
@@ -140,6 +147,7 @@ public class MapEditorController implements Controller {
               scaleX(edge[1].getX()),
               scaleY(edge[1].getY()),
               c);
+      line.setOnMouseClicked(event -> this.handleLineClickedEvents(event, line));
       UIEdge UIedge = new UIEdge(line, edge);
       conversion.get(edge[0].getNodeID()).addEdge(UIedge);
       conversion.get(edge[1].getNodeID()).addEdge(UIedge);
@@ -192,6 +200,8 @@ public class MapEditorController implements Controller {
       loadEditor("/edu/wpi/N/views/mapEditorDeleteNode.fxml");
     } else if (mode == Mode.EDIT_NODE) {
       loadEditor("/edu/wpi/N/views/mapEditorEditNode.fxml");
+    } else if (mode == Mode.DELETE_EDGE) {
+      loadEditor("/edu/wpi/N/views/mapEditorDeleteEdge.fxml");
     }
   }
 
@@ -204,6 +214,8 @@ public class MapEditorController implements Controller {
       controllerDeleteNode = loader.getController();
     } else if (mode == Mode.EDIT_NODE) {
       controllerEditNode = loader.getController();
+    } else if (mode == Mode.DELETE_EDGE) {
+      controllerDeleteEdge = loader.getController();
     }
     pn_editor.getChildren().add(pane);
     pn_editor.setVisible(true);
@@ -224,7 +236,34 @@ public class MapEditorController implements Controller {
       handleCircleAddEdgeDragged(event, circle);
     }
   }
+  // TODO
+  // SDFKJSDLFKJSLKDFJSLKDFJSLKDJFLKSDJFLSKJDFLKSJDFLKSJDFLKSJDFLKSJDFLKSJDFLKSJFLKSJDFLKSJDFLKSJDF
+  private void handleLineClickedEvents(MouseEvent event, Line line) {
+    if (mode == Mode.DELETE_EDGE) {
+      onLineDeleteEdgeClicked(event, line);
+    }
+  }
 
+  private void onLineDeleteEdgeClicked(MouseEvent event, Line line) {
+    if (line.getStroke() == DEFAULT_LINE_COLOR) {
+      line.setStroke(DELETE_EDGE_COLOR);
+      DbNode[] edge = edgesMap.get(line).getDBNodes();
+      deleteEdgeLines.add(line);
+      controllerDeleteEdge.addLstDeleteNode(edge[0].getShortName() + ", " + edge[1].getShortName());
+    } else if (line.getStroke() == DELETE_EDGE_COLOR) {
+      line.setStroke(DEFAULT_LINE_COLOR);
+      DbNode[] edge = edgesMap.get(line).getDBNodes();
+      controllerDeleteEdge.removeLstDeleteNode(
+          edge[0].getShortName() + ", " + edge[1].getShortName());
+      deleteEdgeLines.remove(line);
+    }
+  }
+
+  private void resetDeleteEdge() {
+    pn_stack.getChildren().remove(pn_display);
+    pn_stack.getChildren().add(pn_display);
+  }
+  // TODO ASLDKFJAS;LKDFJA;LSDKFJAS;LDKFJA;LKDFJA;LKSDJF;ALKSDJF
   private void handleCircleClickedEvents(MouseEvent event, Circle circle) {
     if (mode == Mode.DELETE_NODE) {
       onCircleDeleteNodeClicked(event, circle);
@@ -323,6 +362,13 @@ public class MapEditorController implements Controller {
     changeEditor();
   }
 
+  private void handleDeleteEdgeRightClick() throws IOException {
+    mode = Mode.DELETE_EDGE;
+    pn_stack.getChildren().remove(pn_edges);
+    pn_stack.getChildren().add(pn_edges);
+    changeEditor();
+  }
+
   // Pane Display Clicked
   public void onPaneDisplayClicked(MouseEvent event) throws IOException {
     // Add Node
@@ -350,8 +396,15 @@ public class MapEditorController implements Controller {
               ex.printStackTrace();
             }
           });
-      deleteEdge.setOnAction(handleDelete);
-      menu.getItems().addAll(deleteNode, editNode);
+      deleteEdge.setOnAction(
+          e -> {
+            try {
+              handleDeleteEdgeRightClick();
+            } catch (IOException ex) {
+              ex.printStackTrace();
+            }
+          });
+      menu.getItems().addAll(deleteNode, editNode, deleteEdge);
       menu.show(mainApp.getStage(), event.getSceneX(), event.getSceneY());
     }
   }
@@ -365,15 +418,6 @@ public class MapEditorController implements Controller {
     onTxtPosAddNodeTextChanged(addNodeCircle);
     onBtnConfirmAddNodeClicked(addNodeCircle);
     onBtnCancelAddNodeClicked();
-  }
-
-  public void onPaneDisplayKeyPressed(KeyEvent event) {
-    // Add Node
-    if (mode == Mode.ADD_NODE) {
-      if (event.getCode() == KeyCode.ENTER) {
-        System.out.println("Enter Pressed");
-      }
-    }
   }
 
   public void onCircleAddNodeDragged(MouseEvent event, Circle circle) {
@@ -699,6 +743,7 @@ public class MapEditorController implements Controller {
         } else {
           edge = new UIEdge(addEdgeLine, nodes2);
         }
+        addEdgeLine.setOnMouseClicked(e -> this.handleLineClickedEvents(event, addEdgeLine));
         edgesMap.put(addEdgeLine, edge);
         pn_edges.getChildren().remove(addEdgeLine);
         pn_edges.getChildren().add(edge.getLine());
@@ -712,6 +757,4 @@ public class MapEditorController implements Controller {
       mode = Mode.NO_STATE;
     }
   }
-
-
 }
