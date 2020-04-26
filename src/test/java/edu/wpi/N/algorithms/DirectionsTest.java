@@ -25,8 +25,8 @@ public class DirectionsTest {
       throws SQLException, ClassNotFoundException, DBException, FileNotFoundException {
     MapDB.initTestDB();
     MapDB.clearNodes();
-    InputStream inputNodes = AStarMethodsTest.class.getResourceAsStream("../csv/TeamNnodes_T.csv");
-    InputStream inputEdges = AStarMethodsTest.class.getResourceAsStream("../csv/TeamNedges_T.csv");
+    InputStream inputNodes = AStarTests.class.getResourceAsStream("../csv/TeamNnodes_T.csv");
+    InputStream inputEdges = AStarTests.class.getResourceAsStream("../csv/TeamNedges_T.csv");
     CSVParser.parseCSV(inputNodes);
     CSVParser.parseCSV(inputEdges);
   }

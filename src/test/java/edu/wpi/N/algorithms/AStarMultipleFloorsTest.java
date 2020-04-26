@@ -21,10 +21,9 @@ public class AStarMultipleFloorsTest {
   public static void initialize()
       throws SQLException, DBException, ClassNotFoundException, FileNotFoundException {
     MapDB.initTestDB();
-    InputStream inputNodes =
-        AStarMethodsTest.class.getResourceAsStream("../csv/ThreeFloorsTestNode.csv");
+    InputStream inputNodes = AStarTests.class.getResourceAsStream("../csv/ThreeFloorsTestNode.csv");
     InputStream inputEdges =
-        AStarMethodsTest.class.getResourceAsStream("../csv/ThreeFloorsTestEdges.csv");
+        AStarTests.class.getResourceAsStream("../csv/ThreeFloorsTestEdges.csv");
     CSVParser.parseCSV(inputNodes);
     CSVParser.parseCSV(inputEdges);
   }

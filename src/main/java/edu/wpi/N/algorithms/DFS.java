@@ -44,7 +44,7 @@ public class DFS extends AbsAlgo {
 
         // Get the current nodes neighbors and check if it connects to the end node
         LinkedList<Node> neighbors =
-            MapDB.getGAdjacent(start.ID, startFloorNum, endFloorNum, handicap);
+            MapDB.getGAdjacent(currNode.ID, startFloorNum, endFloorNum, handicap);
         if (neighbors.contains(endNode)) {
           cameFrom.put(endNode.getNodeID(), currNode.ID);
           break;
