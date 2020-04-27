@@ -6,6 +6,8 @@
 <AnchorPane fx:id="parent" accessibleText="kkm" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@BetweenFloorLines.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.BetweenFloorsController">
    <children>
       <JFXButton fx:id="button" layoutX="462.0" layoutY="313.0" onAction="#onButton1" text="Node" />
-      <JFXButton fx:id="button2" layoutX="482.0" layoutY="164.0" onAction="#onButton2" text="Floor" />
+      <JFXButton fx:id="button2" layoutX="463.0" layoutY="218.0" onAction="#onButton2" text="Floor" />
+      <JFXButton fx:id="btn_save" layoutX="462.0" layoutY="380.0" onAction="#onSaveButton" text="Save" />
+      <JFXButton fx:id="btn_cancel" layoutX="456.0" layoutY="448.0" onAction="#onCancelButton" text="Cancel" />
    </children>
 </AnchorPane>
