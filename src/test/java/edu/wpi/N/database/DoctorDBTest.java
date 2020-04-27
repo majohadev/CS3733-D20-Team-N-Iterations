@@ -59,7 +59,7 @@ public class DoctorDBTest {
     int kongID = DoctorDB.addDoctor("Kong", "History", "Kong", "Kpass", offices);
     LinkedList<Doctor> drs = DoctorDB.searchDoctors("oNg");
     Doctor wong = DoctorDB.getDoctor(wongID);
-    Doctor kong = DoctorDB.getDoctor(kongID);
+    Doctor kong = DoctorDB.getDoctor("Kong"); // test using username
     assertTrue(drs.contains(wong));
     assertTrue(drs.contains(kong));
     drs = DoctorDB.searchDoctors("ko");
