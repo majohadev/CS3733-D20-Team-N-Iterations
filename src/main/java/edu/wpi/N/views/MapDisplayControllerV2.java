@@ -7,8 +7,8 @@ import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.database.ServiceDB;
 import edu.wpi.N.entities.DbNode;
-import edu.wpi.N.entities.Doctor;
 import edu.wpi.N.entities.Path;
+import edu.wpi.N.entities.employees.Doctor;
 import edu.wpi.N.qrcontrol.QRGenerator;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -118,7 +118,7 @@ public class MapDisplayControllerV2 extends QRGenerator implements Controller {
       return;
     }
 
-    Path path = Pathfinder.findPath(firstNode.getNodeID(), secondNode.getNodeID());
+    Path path = Pathfinder.findPath(firstNode, secondNode);
 
     if (path != null) {
       LinkedList<DbNode> pathNodes = path.getPath();

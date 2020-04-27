@@ -13,17 +13,24 @@ public class UINode {
 
   private LinkedList<UIEdge> connectedEdges = new LinkedList<>();
   private boolean selected = false;
+  private char mode = 'n';
   private Shape marker;
   private MapBaseController mbc;
 
-  private final Color colorNormal = Color.PURPLE;
-  private final Color colorSelected = Color.RED;
+  final Color DEFAULT_NODE_COLOR = Color.PURPLE;
+  final Color ADD_NODE_COLOR = Color.BLACK;
+  final Color DELETE_NODE_COLOR = Color.RED;
+  final Color EDIT_NODE_COLOR = Color.RED;
+  final double DEFAULT_NODE_OPACITY = 0.7;
+  final double DEFAULT_NODE_RADIUS = 7;
+
+  private Color currentSelectColor = EDIT_NODE_COLOR;
 
   public UINode(boolean showing) {
     marker = new Circle();
-    ((Circle) marker).setRadius(6);
-    marker.setFill(colorNormal);
-    marker.setOpacity(0.7);
+    ((Circle) marker).setRadius(DEFAULT_NODE_RADIUS);
+    marker.setFill(DEFAULT_NODE_COLOR);
+    marker.setOpacity(DEFAULT_NODE_OPACITY);
     marker.setOnMouseClicked(mouseEvent -> this.onMarkerClicked(mouseEvent));
     marker.setCursor(Cursor.HAND); // Cursor points when over nodes
     setVisible(showing);
@@ -38,10 +45,10 @@ public class UINode {
     this.selected = selected;
     if (selected) {
       // Selected appearance
-      marker.setFill(colorSelected);
+      marker.setFill(currentSelectColor);
     } else {
       // Deselected appearance
-      marker.setFill(colorNormal);
+      marker.setFill(DEFAULT_NODE_COLOR);
     }
   }
 
@@ -49,12 +56,36 @@ public class UINode {
     marker.setVisible(visible);
   }
 
+  // Set node mode
+
+  public void enterEditMode() {
+    mode = 'e';
+    currentSelectColor = EDIT_NODE_COLOR;
+  }
+
+  public void enterAddMode() {
+    mode = 'a';
+    currentSelectColor = ADD_NODE_COLOR;
+  }
+
+  public void enterDeleteMode() {
+    mode = 'd';
+    currentSelectColor = DELETE_NODE_COLOR;
+  }
+
+  public void enterNormalMode() {
+    mode = 'n';
+    currentSelectColor = DEFAULT_NODE_COLOR;
+  }
+
+  // Place node marker on given plane
   public void placeOnPane(Pane pane) {
     if (marker.getParent() == null) {
       pane.getChildren().add(this.marker);
     }
   }
 
+  // Set node position
   public void setPos(double x, double y) {
     if (marker.getParent() != null) {
       this.marker.setLayoutX(x);
@@ -66,29 +97,47 @@ public class UINode {
     }
   }
 
+  // X position getter
   public double getX() {
     return this.marker.getLayoutX();
   }
 
+  // Y position getter
   public double getY() {
     return this.marker.getLayoutY();
   }
 
+  // Get whether this node is selected
   public boolean getSelected() {
     return selected;
   }
 
+  // Set base map controller to report back to
   public void setBaseMap(MapBaseController mbc) {
     this.mbc = mbc;
   }
 
+  // Handles mouse clicks on node marker
   public void onMarkerClicked(MouseEvent e) {
-
     toggleSelected();
     if (mbc != null) {
       mbc.onUINodeClicked(e, this);
     }
   }
+
+  /*
+  public void handleNodeDragEvents(MouseEvent event, UINode node) {
+    if (mode == MapEditorController.Mode.ADD_NODE && node == tempUINode) {
+      onCircleAddNodeDragged(event, node);
+    }
+    if (mode == MapEditorController.Mode.EDIT_NODE) {
+      onBtnCancelEditNodeClicked();
+      onBtnConfirmEditNodeClicked();
+      onTxtPosEditNodeTextChanged(node);
+      onCircleEditNodeDragged(event, node);
+    }
+  }
+   */
 
   // Return added edge
   public UIEdge addEdgeTo(UINode other) {

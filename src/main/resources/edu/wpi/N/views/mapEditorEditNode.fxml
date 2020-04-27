@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="280.0" prefWidth="470.0" style="-fx-background-color: #4A69C6; -fx-background-radius: 10; -fx-border-radius: 10;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.MapEditorEditNodeController">
+   <children>
+      <Label layoutX="54.0" layoutY="24.0" prefHeight="39.0" prefWidth="246.0" text="Edit Node" textFill="WHITE">
+         <font>
+            <Font name="Calibri" size="25.0" />
+         </font>
+      </Label>
+      <JFXTextField fx:id="txt_shortName" focusColor="WHITE" layoutX="54.0" layoutY="63.0" prefHeight="25.0" prefWidth="377.0" promptText="Short Name" style="-fx-text-inner-color: WHITE; -fx-prompt-text-fill: WHITE;" unFocusColor="WHITE">
+         <font>
+            <Font name="Calibri" size="18.0" />
+         </font>
+      </JFXTextField>
+      <JFXTextField fx:id="txt_longName" layoutX="54.0" layoutY="108.0" prefHeight="25.0" prefWidth="377.0" promptText="Long Name" style="-fx-text-inner-color: WHITE; -fx-prompt-text-fill: WHITE;" unFocusColor="WHITE">
+         <font>
+            <Font name="Calibri" size="18.0" />
+         </font>
+      </JFXTextField>
+      <JFXTextField fx:id="txt_xPos" layoutX="54.0" layoutY="153.0" prefHeight="25.0" prefWidth="171.0" promptText="X Position" style="-fx-text-inner-color: WHITE; -fx-prompt-text-fill: WHITE;" unFocusColor="WHITE">
+         <font>
+            <Font name="Calibri" size="18.0" />
+         </font>
+      </JFXTextField>
+      <JFXTextField fx:id="txt_yPos" focusColor="WHITE" layoutX="260.0" layoutY="148.0" prefHeight="25.0" prefWidth="171.0" promptText="Y Position" style="-fx-text-inner-color: WHITE; -fx-prompt-text-fill: WHITE;" unFocusColor="WHITE">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </JFXTextField>
+      <JFXButton fx:id="btn_confirm" layoutX="339.0" layoutY="221.0" prefHeight="37.0" prefWidth="92.0" text="Confirm" textFill="WHITE">
+         <font>
+            <Font name="Calibri" size="16.0" />
+         </font>
+      </JFXButton>
+      <JFXButton fx:id="btn_cancel" layoutX="54.0" layoutY="221.0" prefHeight="37.0" prefWidth="92.0" text="Cancel" textFill="WHITE">
+         <font>
+            <Font name="Calibri" size="16.0" />
+         </font>
+      </JFXButton>
+   </children>
+</AnchorPane>

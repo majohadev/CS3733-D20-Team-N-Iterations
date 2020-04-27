@@ -16,16 +16,16 @@ public class UIEdge {
   private Line marker;
   private MapBaseController mbc;
 
-  private final Color colorNormal = Color.BLACK;
-  private final Color colorSelected = Color.LAWNGREEN;
+  private final Color DEFAULT_LINE_COLOR = Color.BLACK;
+  private final Color SELECTED_LINE_COLOR = Color.LAWNGREEN;
+  final double DEFAULT_LINE_WIDTH = 4;
 
   public UIEdge(boolean showing, UINode nodeA, UINode nodeB) {
 
     marker = new Line();
-    marker.setStrokeWidth(2);
-    marker.setStroke(colorNormal);
+    marker.setStrokeWidth(DEFAULT_LINE_WIDTH);
+    marker.setStroke(DEFAULT_LINE_COLOR);
     marker.setStrokeLineCap(StrokeLineCap.ROUND);
-    marker.setFill(colorNormal);
     // marker.setOpacity(0.7);
     marker.setOnMouseClicked(mouseEvent -> this.onMarkerClicked(mouseEvent));
     marker.setCursor(Cursor.HAND); // Cursor points when over nodes
@@ -52,10 +52,10 @@ public class UIEdge {
     this.selected = selected;
     if (selected) {
       // Selected appearance
-      marker.setStroke(colorSelected);
+      marker.setStroke(SELECTED_LINE_COLOR);
     } else {
       // Deselected appearance
-      marker.setStroke(colorNormal);
+      marker.setStroke(DEFAULT_LINE_COLOR);
     }
   }
 
