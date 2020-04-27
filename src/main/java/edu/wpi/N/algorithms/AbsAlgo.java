@@ -198,11 +198,10 @@ public abstract class AbsAlgo implements IPathFinder {
         thisFloorChangeNodes.add(n.getFloor() - 1, n);
       }
     }
-    for (int i = 0; i < thisFloorChangeNodes.size(); i++) {
-      for (DbNode adj : MapDB.getAdjacent(thisFloorChangeNodes.get(i).getNodeID())) {
-        if (thisFloorChangeNodes.get(i).getNodeType().equals(adj.getNodeType())
-            && adj.getFloor() > thisFloorChangeNodes.get(i).getFloor()) {
-          DbNode[] nodes = new DbNode[] {thisFloorChangeNodes.get(i), adj};
+    for (DbNode fCNOde : thisFloorChangeNodes) {
+      for (DbNode adj : MapDB.getAdjacent(fCNOde.getNodeID())) {
+        if (fCNOde.getNodeType().equals(adj.getNodeType()) && adj.getFloor() > fCNOde.getFloor()) {
+          DbNode[] nodes = new DbNode[] {fCNOde, adj};
           edges.add(nodes);
         }
       }
