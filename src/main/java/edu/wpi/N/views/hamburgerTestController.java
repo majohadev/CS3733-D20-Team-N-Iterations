@@ -120,7 +120,8 @@ public class hamburgerTestController implements Controller, Initializable {
     try {
       findPath(stringNodeConversion.get(firstSelection), stringNodeConversion.get(secondSelection));
     } catch (NullPointerException e) {
-      displayErrorMessage("Please check your inputs");
+      displayErrorMessage("Path does not exist");
+      return;
     }
   }
 
