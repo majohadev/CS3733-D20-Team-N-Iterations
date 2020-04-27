@@ -164,7 +164,7 @@ INSERT INTO service VALUES ('Sanitation', '00:00', '00:00', 'Request sanitation 
 INSERT INTO service VALUES ('Wheelchair', '00:00', '00:00', 'Request a wheelchair!');
 INSERT INTO service VALUES ('Emotional Support', '00:00', '00:00', 'Request emotional support, please?!');
 INSERT INTO service VALUES ('IT', '00:00', '00:00', 'Make a request for IT services!');
-INSERT INTO service VALUES ('Flower', '00:00', '00:00', 'Make a request for Flower Delivery services')
+INSERT INTO service VALUES ('Flower', '00:00', '00:00', 'Make a request for Flower Delivery services');
 
 CREATE TRIGGER doc_delete AFTER DELETE ON doctors
 REFERENCING OLD AS oldRow

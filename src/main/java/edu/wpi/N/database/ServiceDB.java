@@ -52,11 +52,9 @@ public class ServiceDB {
         return new WheelchairEmployee(id, name);
       } else if (sType.equals("IT")) {
         return new IT(id, name);
-      }
-      else if(sType.equals("Flower")){
+      } else if (sType.equals("Flower")) {
         return new flowerDeliverer(id, name);
-      }
-      else
+      } else
         throw new DBException(
             "Invalid employee in table employees! ID: " + id + "Name: " + rs.getString("name"));
 
@@ -238,42 +236,26 @@ public class ServiceDB {
             status,
             rs.getString("device"),
             rs.getString("problem"));
-      }
-      else if(sType.equals("flower")){
-        query = "SELECT requestID, patientName, visitorName, flowerName, creditNum FROM flowerRequest WHERE requestID = ?";
+      } else if (sType.equals("flower")) {
+        query =
+            "SELECT requestID, patientName, visitorName, creditNum FROM flowerRequest WHERE requestID = ?";
         stmt = con.prepareStatement(query);
         stmt.setInt(1, id);
         rs = stmt.executeQuery();
         String a = rs.getString("patientName");
         String b = rs.getString("visitorName");
         String c = rs.getString("creditNum");
-        query = "SELECT flower.* FROM flower, flowertoflower WHERE flower.flowerName = flowertoflower.flowerName AND flowertoflower.requestID = ?";
+        query =
+            "SELECT flower.* FROM flower, flowertoflower WHERE flower.flowerName = flowertoflower.flowerName AND flowertoflower.requestID = ?";
         stmt = con.prepareStatement(query);
         stmt.setInt(1, rs.getInt("requestID"));
         rs = stmt.executeQuery();
         LinkedList<Flower> list = new LinkedList<Flower>();
-        while(rs.next()){
-          list.add(
-                  new Flower(
-                          rs.getString("flowerName"),
-                          rs.getInt("price")
-                  )
-          );
+        while (rs.next()) {
+          list.add(new Flower(rs.getString("flowerName"), rs.getInt("price")));
         }
         return new FlowerRequest(
-                rid,
-                empId,
-                reqNotes,
-                compNotes,
-                nodeID,
-                timeReq,
-                timeComp,
-                status,
-                a,
-                b,
-                c,
-                list
-        );
+            rid, empId, reqNotes, compNotes, nodeID, timeReq, timeComp, status, a, b, c, list);
       } else throw new DBException("Invalid request! ID = " + id);
     } catch (SQLException e) {
       e.printStackTrace();
@@ -410,39 +392,34 @@ public class ServiceDB {
                 rs.getString("device"),
                 rs.getString("problem")));
       }
-      query = "SELECT * FROM request, flowerRequest WHERE request.requestID = flowerRequest.requestID";
+      query =
+          "SELECT * FROM request, flowerRequest WHERE request.requestID = flowerRequest.requestID";
       stmt = con.prepareStatement(query);
       rs = stmt.executeQuery();
-      while(rs.next()){
-        query = "SELECT flower.* FROM flower, flowertoflower WHERE flower.flowerName = flowertoflower.flowerName AND flowertoflower.requestID = ?";
+      while (rs.next()) {
+        query =
+            "SELECT flower.* FROM flower, flowertoflower WHERE flower.flowerName = flowertoflower.flowerName AND flowertoflower.requestID = ?";
         stmt = con.prepareStatement(query);
         stmt.setInt(1, rs.getInt("requestID"));
         ResultSet rx = stmt.executeQuery();
         LinkedList<Flower> list = new LinkedList<Flower>();
-        while(rx.next()){
-          list.add(
-                  new Flower(
-                          rx.getString("flowerName"),
-                          rx.getInt("price")
-                  )
-          );
+        while (rx.next()) {
+          list.add(new Flower(rx.getString("flowerName"), rx.getInt("price")));
         }
         requests.add(
-                new FlowerRequest(
-                        rs.getInt("requestID"),
-                        rs.getInt("assigned_eID"),
-                        rs.getString("reqNotes"),
-                        rs.getString("compNotes"),
-                        rs.getString("nodeID"),
-                        getJavatime(rs.getTimestamp("timeRequested")),
-                        getJavatime(rs.getTimestamp("timeCompleted")),
-                        rs.getString("status"),
-                        rs.getString("patientName"),
-                        rs.getString("visitorName"),
-                        rs.getString("creditNum"),
-                        list
-                )
-        );
+            new FlowerRequest(
+                rs.getInt("requestID"),
+                rs.getInt("assigned_eID"),
+                rs.getString("reqNotes"),
+                rs.getString("compNotes"),
+                rs.getString("nodeID"),
+                getJavatime(rs.getTimestamp("timeRequested")),
+                getJavatime(rs.getTimestamp("timeCompleted")),
+                rs.getString("status"),
+                rs.getString("patientName"),
+                rs.getString("visitorName"),
+                rs.getString("creditNum"),
+                list));
       }
       return requests;
     } catch (SQLException e) {
@@ -548,57 +525,52 @@ public class ServiceDB {
                 rs.getString("problem")));
       }
       query =
-              "SELECT * from request, sanitationRequests WHERE request.requestID = sanitationRequests.requestID AND status = 'OPEN'";
+          "SELECT * from request, sanitationRequests WHERE request.requestID = sanitationRequests.requestID AND status = 'OPEN'";
       stmt = con.prepareStatement(query);
       rs = stmt.executeQuery();
       while (rs.next()) {
         openList.add(
-                new SanitationRequest(
-                        rs.getInt("requestID"),
-                        rs.getInt("assigned_eID"),
-                        rs.getString("reqNotes"),
-                        rs.getString("compNotes"),
-                        rs.getString("nodeID"),
-                        getJavatime(rs.getTimestamp("timeRequested")),
-                        getJavatime(rs.getTimestamp("timeCompleted")),
-                        rs.getString("status"),
-                        rs.getString("sanitationType"),
-                        rs.getString("size"),
-                        rs.getString("danger")));
+            new SanitationRequest(
+                rs.getInt("requestID"),
+                rs.getInt("assigned_eID"),
+                rs.getString("reqNotes"),
+                rs.getString("compNotes"),
+                rs.getString("nodeID"),
+                getJavatime(rs.getTimestamp("timeRequested")),
+                getJavatime(rs.getTimestamp("timeCompleted")),
+                rs.getString("status"),
+                rs.getString("sanitationType"),
+                rs.getString("size"),
+                rs.getString("danger")));
       }
-      query = "SELECT * FROM request, flowerRequest WHERE request.requestID = flowerRequest.requestID AND status = 'OPEN'";
+      query =
+          "SELECT * FROM request, flowerRequest WHERE request.requestID = flowerRequest.requestID AND status = 'OPEN'";
       stmt = con.prepareStatement(query);
       rs = stmt.executeQuery();
-      while(rs.next()){
-        query = "SELECT flower.* FROM flower, flowertoflower WHERE flower.flowerName = flowertoflower.flowerName AND flowertoflower.requestID = ?";
+      while (rs.next()) {
+        query =
+            "SELECT flower.* FROM flower, flowertoflower WHERE flower.flowerName = flowertoflower.flowerName AND flowertoflower.requestID = ?";
         stmt = con.prepareStatement(query);
         stmt.setInt(1, rs.getInt("requestID"));
         ResultSet rx = stmt.executeQuery();
         LinkedList<Flower> list = new LinkedList<Flower>();
-        while(rx.next()){
-          list.add(
-                  new Flower(
-                          rx.getString("flowerName"),
-                          rx.getInt("price")
-                  )
-          );
+        while (rx.next()) {
+          list.add(new Flower(rx.getString("flowerName"), rx.getInt("price")));
         }
         openList.add(
-                new FlowerRequest(
-                        rs.getInt("requestID"),
-                        rs.getInt("assigned_eID"),
-                        rs.getString("reqNotes"),
-                        rs.getString("compNotes"),
-                        rs.getString("nodeID"),
-                        getJavatime(rs.getTimestamp("timeRequested")),
-                        getJavatime(rs.getTimestamp("timeCompleted")),
-                        rs.getString("status"),
-                        rs.getString("patientName"),
-                        rs.getString("visitorName"),
-                        rs.getString("creditNum"),
-                        list
-                )
-        );
+            new FlowerRequest(
+                rs.getInt("requestID"),
+                rs.getInt("assigned_eID"),
+                rs.getString("reqNotes"),
+                rs.getString("compNotes"),
+                rs.getString("nodeID"),
+                getJavatime(rs.getTimestamp("timeRequested")),
+                getJavatime(rs.getTimestamp("timeCompleted")),
+                rs.getString("status"),
+                rs.getString("patientName"),
+                rs.getString("visitorName"),
+                rs.getString("creditNum"),
+                list));
       }
       return openList;
     } catch (SQLException ex) {
@@ -655,13 +627,14 @@ public class ServiceDB {
 
   /**
    * gets a list of all flower deliverers
+   *
    * @return list of all flower deliverers
    * @throws DBException
    */
   public static LinkedList<flowerDeliverer> getFlowerDeliverers() throws DBException {
     try {
       String query =
-              "SELECT l_employeeID from employees, flowerDeliverer where employeeID = f_employeeID";
+          "SELECT f_employeeID from employees, flowerDeliverer where employeeID = f_employeeID";
       PreparedStatement stmt = con.prepareStatement(query);
       ResultSet rs = stmt.executeQuery();
       LinkedList<flowerDeliverer> list = new LinkedList<flowerDeliverer>();
@@ -674,7 +647,6 @@ public class ServiceDB {
       throw new DBException("Unknown error: getflowerDeliverer", e);
     }
   }
-
 
   /**
    * Gets all the emotional supporters in the database
@@ -860,13 +832,14 @@ public class ServiceDB {
   // TODO: Add a function to add your employee type to the database
 
   /**
-   *  Adds a Flower Deliverer to the database
+   * Adds a Flower Deliverer to the database
+   *
    * @param name
    * @return the employeeID of the generated Employee
    * @throws DBException
    */
   public static int addflowerDeliverer(String name) throws DBException {
-    try{
+    try {
       String query = "INSERT INTO employees (name, serviceType) VALUES (?, 'Flower')";
       PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
       stmt.setString(1, name);
@@ -1078,10 +1051,17 @@ public class ServiceDB {
 
   // TODO: Create your addRequest call here
 
-  public static int addFlowerReq(String reqNotes, String nodeID, String patientName, String visitorName, String creditNum, LinkedList<Flower> list) throws DBException {
-    try{
+  public static int addFlowerReq(
+      String reqNotes,
+      String nodeID,
+      String patientName,
+      String visitorName,
+      String creditNum,
+      LinkedList<String> flowerList)
+      throws DBException {
+    try {
       String query =
-              "INSERT INTO request (timeRequested, reqNotes, serviceType, nodeID, status) VALUES (?, ?, ?, ?, ?)";
+          "INSERT INTO request (timeRequested, reqNotes, serviceType, nodeID, status) VALUES (?, ?, ?, ?, ?)";
       PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
       stmt.setTimestamp(1, new Timestamp(new Date().getTime()));
       stmt.setString(2, reqNotes);
@@ -1091,7 +1071,8 @@ public class ServiceDB {
       stmt.execute();
       ResultSet rs = stmt.getGeneratedKeys();
       rs.next();
-      query = "INSERT INTO flowerRequest (requestID, patientName, visitorName, creditNum) VALUES (?, ?, ?, ?)";
+      query =
+          "INSERT INTO flowerRequest (requestID, patientName, visitorName, creditNum) VALUES (?, ?, ?, ?)";
       stmt = con.prepareStatement(query);
       int id = rs.getInt("1");
       stmt.setInt(1, id);
@@ -1102,8 +1083,8 @@ public class ServiceDB {
       query = "INSERT INTO flowertoflower (requestID, flowerName) VALUES (?, ?)";
       stmt = con.prepareStatement(query);
       stmt.setInt(1, id);
-      for(Flower f : list){
-        stmt.setString(2, f.getFlowerName());
+      for (String f : flowerList) {
+        stmt.setString(2, f);
         stmt.executeUpdate();
       }
       return id;

@@ -641,43 +641,41 @@ public class ServicesTest {
     }
   }
 
-  //Chris
+  // Chris
   @Test
-  public void testgetEmployee_flower(){
+  public void testgetEmployee_flower() {
 
   }
 
-  //Nick
+  // Nick
   @Test
-  public void testgetRequest_flower(){
+  public void testGetAndAddRequest_flower() {
+    
+  }
+
+  // Chris
+  @Test
+  public void testgetRequests_flower() {
 
   }
 
-  //Chris
+  // Nick
   @Test
-  public void testgetRequests_flower(){
+  public void testgetEmployees_flower() {
 
   }
 
-  //Nick
+  // Chris
   @Test
-  public void testgetEmployees_flower(){
+  public void testgetOpenRequest_flower() {
 
   }
 
-  //Chris
+  // Nick
   @Test
-  public void testgetOpenRequest_flower(){
+  public void testgetflowerDeliverers() {
 
   }
-
-  //Nick
-  @Test
-  public void testgetflowerDeliverers(){
-
-  }
-
-
 
   @AfterEach
   public void clearDB() throws DBException {
