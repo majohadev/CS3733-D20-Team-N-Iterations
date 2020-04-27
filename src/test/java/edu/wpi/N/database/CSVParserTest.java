@@ -1,6 +1,6 @@
 package edu.wpi.N.database;
 
-import edu.wpi.N.algorithms.PathfinderMethodsTest;
+import edu.wpi.N.algorithms.AStarTests;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Node;
 import java.io.File;
@@ -163,10 +163,9 @@ public class CSVParserTest {
 
     MapDB.clearNodes();
 
-    InputStream inputNodes =
-        PathfinderMethodsTest.class.getResourceAsStream("../csv/ThreeFloorsTestNode.csv");
+    InputStream inputNodes = AStarTests.class.getResourceAsStream("../csv/ThreeFloorsTestNode.csv");
     InputStream inputEdges =
-        PathfinderMethodsTest.class.getResourceAsStream("../csv/ThreeFloorsTestEdges.csv");
+        AStarTests.class.getResourceAsStream("../csv/ThreeFloorsTestEdges.csv");
     CSVParser.parseCSV(inputNodes);
     CSVParser.parseCSV(inputEdges);
 
