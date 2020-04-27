@@ -798,6 +798,8 @@ public class MapEditorController implements Controller {
                 addEdgeLine.getEndX(),
                 addEdgeLine.getEndY());
         line.setStrokeWidth(DEFAULT_LINE_WIDTH);
+        line.setOnMouseClicked(e -> this.handleLineClickedEvents(event, line));
+
         if (circles.get(0).contains(addEdgeLine.getStartX(), addEdgeLine.getStartY())) {
           edge = new UIEdge(line, nodes1);
         } else {
