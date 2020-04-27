@@ -33,7 +33,7 @@ public class MapEditorController implements Controller {
   @FXML StackPane pn_stack;
   @FXML Pane pn_edges;
 
-  final int DEFAULT_FLOOR = 4;
+  final int DEFAULT_FLOOR = 1;
   final String DEFAULT_BUILDING = "Faulkner";
   final Color DEFAULT_CIRCLE_COLOR = Color.PURPLE;
   final Color DEFAULT_LINE_COLOR = Color.BLACK;
