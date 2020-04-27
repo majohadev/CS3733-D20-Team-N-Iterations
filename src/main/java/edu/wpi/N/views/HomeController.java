@@ -19,7 +19,7 @@ public class HomeController implements Controller {
   }
 
   public void onBtnFileClicked() throws IOException {
-    this.mainApp.switchScene("views/fileManagementScreen.fxml");
+    this.mainApp.switchScene("views/servicesPage.fxml");
   }
 
   public void onBtnHamClicked() throws IOException {

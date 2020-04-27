@@ -97,6 +97,26 @@ public abstract class Request {
 
     Request other = (Request) o;
 
-    return requestID == other.requestID;
+    boolean emp_assignedEqual;
+    if (emp_assigned == null) {
+      emp_assignedEqual = other.emp_assigned == null;
+    } else {
+      emp_assignedEqual = emp_assigned.equals(other.emp_assigned);
+    }
+
+    boolean compNotesEqual;
+    if (compNotes == null) {
+      compNotesEqual = other.compNotes == null;
+    } else {
+      compNotesEqual = compNotes.equals(other.compNotes);
+    }
+
+    return requestID == other.requestID
+        && emp_assignedEqual
+        && reqNotes.equals(other.reqNotes)
+        && compNotesEqual
+        && nodeID.equals(other.nodeID)
+        && status.equals(other.status);
   }
 }
+/*TODO: Make your request entity */

@@ -34,21 +34,51 @@ public class MapDB {
     }
   }
 
-  /** Initializes a database in memory for tests */
+  //  /** Initializes a database in memory for tests */
+  //  public static void initTestDB()
+  //      throws SQLException, ClassNotFoundException, DBException, FileNotFoundException {
+  //    if (con == null || statement == null) {
+  //      Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+  //      String URL;
+  //      URL = "jdbc:derby:memory:db;create=true";
+  //      con = DriverManager.getConnection(URL);
+  //      statement = con.createStatement();
+  //      ScriptRunner sr = new ScriptRunner(con);
+  //      Reader reader =
+  //          new BufferedReader(
+  //              new InputStreamReader(Main.class.getResourceAsStream("sql/setup.sql")));
+  //      sr.runScript(reader);
+  //    }
+  //  }
+
+  /**
+   * Same as initTestDB except the database is guarenteed to be completely empty after running this
+   * function. Use whenever possible.
+   *
+   * @throws SQLException on error
+   * @throws ClassNotFoundException on error
+   * @throws DBException on error
+   * @throws FileNotFoundException when it can't find the file I guess. Or on error.
+   */
   public static void initTestDB()
       throws SQLException, ClassNotFoundException, DBException, FileNotFoundException {
-    if (con == null || statement == null) {
+    if (con != null) {
+      ScriptRunner sr = new ScriptRunner(con);
+      Reader reader =
+          new BufferedReader(
+              new InputStreamReader(Main.class.getResourceAsStream("sql/drop.sql"))); // drop tables
+      sr.runScript(reader);
+    } else {
       Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
       String URL;
       URL = "jdbc:derby:memory:db;create=true";
       con = DriverManager.getConnection(URL);
       statement = con.createStatement();
-      ScriptRunner sr = new ScriptRunner(con);
-      Reader reader =
-          new BufferedReader(
-              new InputStreamReader(Main.class.getResourceAsStream("sql/setup.sql")));
-      sr.runScript(reader);
     }
+    ScriptRunner sr = new ScriptRunner(con);
+    Reader reader =
+        new BufferedReader(new InputStreamReader(Main.class.getResourceAsStream("sql/setup.sql")));
+    sr.runScript(reader);
   }
 
   /**
@@ -906,6 +936,36 @@ public class MapDB {
     } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Unknown error: clearNodes", e);
+    }
+  }
+
+  /** set Kiosk as default starting Node */
+  public static DbNode getKiosk(int floor, String building) throws DBException {
+    try {
+      String query =
+          "SELECT * FROM nodes WHERE floor = ? AND building = ? AND (UPPER(longName) LIKE '% KIOSK')";
+      PreparedStatement stmt = con.prepareStatement(query);
+      stmt.setInt(1, floor);
+      stmt.setString(2, building);
+      ResultSet rs = stmt.executeQuery();
+      DbNode sample = null;
+      if (rs.next()) {
+        sample =
+            new DbNode(
+                rs.getString("nodeID"),
+                rs.getInt("xcoord"),
+                rs.getInt("ycoord"),
+                floor,
+                building,
+                rs.getString("nodeType"),
+                rs.getString("longName"),
+                rs.getString("shortName"),
+                rs.getString("teamAssigned").charAt(0));
+      }
+      return sample;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Error: getKiosk is not working properly");
     }
   }
 }

@@ -59,6 +59,18 @@ CREATE TABLE doctors (
       FOREIGN KEY (username) REFERENCES credential(username),
       FOREIGN KEY (doctorID) REFERENCES employees(employeeID) ON DELETE CASCADE);
 
+/*TODO add the employees table */
+CREATE TABLE wheelchairEmployee(
+      w_employeeID INT NOT NULL References employees(employeeID) ON DELETE CASCADE,
+      PRIMARY KEY(w_employeeID));
+CREATE TABLE emotionalSupporter(
+      l_employeeID INT NOT NULL References employees(employeeID) ON DELETE CASCADE,
+      PRIMARY KEY(l_employeeID));
+
+CREATE TABLE IT(
+      IT_employeeID INT NOT NULL References employees(employeeID) ON DELETE CASCADE,
+      PRIMARY KEY(IT_employeeID));
+
 CREATE TABLE location (
       doctor INT NOT NULL REFERENCES doctors(doctorID) ON DELETE CASCADE,
       nodeID char(10) NOT NULL REFERENCES nodes(nodeID) ON DELETE CASCADE,
@@ -83,9 +95,35 @@ CREATE TABLE trequest(
                 requestID INT NOT NULL PRIMARY KEY REFERENCES request(requestID) ON DELETE CASCADE,
                 language VARCHAR(255) NOT NULL);
 
+
+CREATE TABLE medicineRequests(
+    requestID INT NOT NULL PRIMARY KEY REFERENCES request(requestID) ON DELETE CASCADE,
+    medicineName VARCHAR(255),
+    dosage FLOAT,
+    units VARCHAR(3),
+    patient VARCHAR(255) NOT NULL
+);
+
+/*TODO: Add request table */
+CREATE TABLE wrequest(
+              requestID INT NOT NULL PRIMARY KEY REFERENCES request(requestID) ON DELETE CASCADE,
+              needsAssistance VARCHAR(255) NOT NULL);
+CREATE TABLE erequest(
+                requestID INT NOT NULL PRIMARY KEY REFERENCES request(requestID) ON DELETE CASCADE,
+                supportType VARCHAR(255) NOT NULL);
+
+CREATE TABLE ITrequest(
+              requestID INT NOT NULL PRIMARY KEY REFERENCES request(requestID) ON DELETE CASCADE,
+              device VARCHAR(255) NOT NULL,
+              problem VARCHAR(255) NOT NULL);
+
 INSERT INTO service VALUES ('Translator', '00:00', '00:00', 'Make a request for our translation services!');
 INSERT INTO service VALUES ('Laundry', '00:00', '00:00', 'Make a request for laundry services!');
 INSERT INTO service VALUES ('Medicine', '00:00', '00:00', 'Request medicine delivery!');
+/*TODO: Insert your service tuple */
+INSERT INTO service VALUES ('Wheelchair', '00:00', '00:00', 'Request a wheelchair!');
+INSERT INTO service VALUES ('Emotional Support', '00:00', '00:00', 'Request emotional support, please?!');
+INSERT INTO service VALUES ('IT', '00:00', '00:00', 'Make a request for IT services!');
 
 CREATE TRIGGER doc_delete AFTER DELETE ON doctors
 REFERENCING OLD AS oldRow
