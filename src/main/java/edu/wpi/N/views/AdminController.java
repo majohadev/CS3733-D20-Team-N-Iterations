@@ -2,7 +2,9 @@ package edu.wpi.N.views;
 
 import edu.wpi.N.App;
 import edu.wpi.N.database.DBException;
+import edu.wpi.N.database.MapDB;
 import edu.wpi.N.database.ServiceDB;
+import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.employees.Employee;
 import edu.wpi.N.entities.employees.Translator;
 import edu.wpi.N.entities.request.Request;
@@ -45,6 +47,22 @@ public class AdminController implements Initializable, Controller {
     }
   }
 
+  private static class nodeLongName
+      implements Callback<TableColumn.CellDataFeatures<Request, String>, ObservableValue<String>> {
+
+    public nodeLongName() {}
+
+    @Override
+    public ObservableValue<String> call(TableColumn.CellDataFeatures<Request, String> param) {
+      try {
+        DbNode node = MapDB.getNode(param.getValue().getNodeID());
+        return new ReadOnlyObjectWrapper<>(node.getLongName());
+      } catch (DBException e) {
+        return new ReadOnlyObjectWrapper<>("Invalid Location");
+      }
+    }
+  }
+
   @Override
   public void initialize(URL location, ResourceBundle resourceBundle) {
 
@@ -81,7 +99,7 @@ public class AdminController implements Initializable, Controller {
     TableColumn<Request, String> nodeID = new TableColumn<>("Location");
     nodeID.setMaxWidth(100);
     nodeID.setMinWidth(100);
-    nodeID.setCellValueFactory(new PropertyValueFactory<Request, String>("nodeID"));
+    nodeID.setCellValueFactory(new nodeLongName());
 
     TableColumn<Request, String> status = new TableColumn<>("Status");
     status.setMaxWidth(100);
