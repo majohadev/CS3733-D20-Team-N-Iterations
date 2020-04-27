@@ -157,6 +157,7 @@ public class hamburgerTestController implements Controller, Initializable {
       try {
         path = myAStar.findPath(node1, node2, false);
       } catch (NullPointerException e) {
+      } catch (NullPointerException e) {
         displayErrorMessage("The path does not exist");
         return;
       }
@@ -371,4 +372,16 @@ public class hamburgerTestController implements Controller, Initializable {
       lst_firstLocation.getItems().clear();
     }
   }
+  // Upon clicking find path to location button call this method
+/*  @FXML
+  private void onDoctorPathFindClicked(MouseEvent event) throws Exception {
+    pn_path.getChildren().removeIf(node -> node instanceof Line);
+    int currentSelection = lst_doctorlocations.getSelectionModel().getSelectedIndex();
+    DbNode destinationNode = doctorNodes.get(currentSelection);
+    if (selectedNodes.size() < 1) selectedNodes.add(defaultNode);
+    selectedNodes.add(destinationNode);
+    // if (selectedNodes.size() < 2) selectedNodes.add(defaultNode);
+    onBtnFindClicked(event);
+    selectedNodes.clear();
+  }*/
 }
