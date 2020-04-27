@@ -14,7 +14,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.input.KeyEvent;
 
-public class TemplateController implements Controller {
+public class FlowerRequestController implements Controller {
 
   private App mainApp;
 
@@ -31,7 +31,7 @@ public class TemplateController implements Controller {
 
   private String countVal = "";
 
-  public TemplateController() throws DBException {}
+  public FlowerRequestController() throws DBException {}
 
   public void setMainApp(App mainApp) {
     this.mainApp = mainApp;
