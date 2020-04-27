@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
+<?import com.jfoenix.controls.JFXListView?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.NewAdminController">
+   <children>
+      <Pane layoutX="32.0" layoutY="127.0" prefHeight="75.0" prefWidth="1920.0" style="-fx-background-color: #0e4D92;" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <JFXButton layoutX="1805.0" layoutY="16.0" onMouseClicked="#logoutUser" text="Logout" textFill="WHITE">
+               <font>
+                  <Font name="Calibri Bold" size="24.0" />
+               </font>
+            </JFXButton>
+            <Label fx:id="lbl_Time" layoutX="9.0" layoutY="8.0" text="Label">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="lbl_Date" layoutX="9.0" layoutY="41.0" text="Label">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="946.0" layoutY="27.0" text="Label" />
+            <JFXButton layoutX="370.0" layoutY="23.0" onMouseClicked="#returnToPrev" text="BACK" />
+         </children></Pane>
+      <SplitPane dividerPositions="0.1" layoutY="75.0" prefHeight="1005.0" prefWidth="1920.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+               <children>
+                  <VBox prefHeight="1005.0" prefWidth="192.0">
+                     <children>
+                        <Pane prefHeight="251.25" prefWidth="192.0">
+                           <children>
+                              <JFXButton fx:id="btn_EmployeeEdit" layoutX="11.0" layoutY="113.0" onMouseClicked="#changePanes" text="Add / Edit / Delete Employee" wrapText="true" />
+                           </children></Pane>
+                        <Pane prefHeight="251.25" prefWidth="192.0">
+                           <children>
+                              <JFXButton fx:id="btn_AccountEdit" layoutX="15.0" layoutY="111.0" onMouseClicked="#changePanes" text="Add / Edit / Delete Account" />
+                           </children></Pane>
+                        <Pane prefHeight="251.25" prefWidth="192.0">
+                           <children>
+                              <JFXButton fx:id="btn_ViewRequests" layoutX="57.0" layoutY="113.0" onMouseClicked="#changePanes" text="View Requests" />
+                           </children></Pane>
+                        <Pane prefHeight="251.25" prefWidth="192.0">
+                           <children>
+                              <JFXButton fx:id="btn_EditMap" layoutX="54.0" layoutY="119.0" onMouseClicked="#adminEditMap" text="Edit Map" />
+                           </children></Pane>
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+          <AnchorPane layoutY="75.0" minHeight="0.0" minWidth="0.0" prefHeight="1003.0" prefWidth="1449.0">
+               <children>
+                  <StackPane fx:id="sp_getpanes" prefHeight="1005.0" prefWidth="1820.0">
+                     <children>
+                        <Pane fx:id="pn_pane3" prefHeight="200.0" prefWidth="200.0">
+                           <children>
+                              <Label layoutX="828.0" layoutY="7.0" text="Service Requests">
+                                 <font>
+                                    <Font name="Calibri" size="32.0" />
+                                 </font>
+                              </Label>
+                              <Button fx:id="btn_Deny" layoutX="1039.0" layoutY="501.0" mnemonicParsing="false" onMouseClicked="#acceptRow" text="Deny">
+                                 <font>
+                                    <Font name="Calibri" size="12.0" />
+                                 </font>
+                              </Button>
+                              <Button fx:id="btn_Accept" layoutX="971.0" layoutY="501.0" mnemonicParsing="false" onMouseClicked="#acceptRow" text="Accept">
+                                 <font>
+                                    <Font name="Calibri" size="12.0" />
+                                 </font>
+                              </Button>
+                              <TableView fx:id="tb_RequestTable" layoutX="653.0" layoutY="50.0" maxWidth="591.0" minWidth="400.0" prefHeight="429.0" prefWidth="568.0" />
+                              <Button fx:id="btn_editMap" disable="true" mnemonicParsing="false" onMouseClicked="#editMap" prefHeight="50.0" prefWidth="190.0" text="Edit Map" visible="false">
+                                 <font>
+                                    <Font name="Calibri" size="24.0" />
+                                 </font>
+                              </Button>
+                              <ChoiceBox fx:id="cb_Employee" layoutX="443.0" layoutY="240.0" prefWidth="150.0" />
+                              <Button fx:id="btn_Assigned" layoutX="913.0" layoutY="501.0" mnemonicParsing="false" onMouseClicked="#assignPressed" text="Assign">
+                                 <font>
+                                    <Font name="Calibri" size="12.0" />
+                                 </font>
+                              </Button>
+                              <TableView fx:id="tb_languages" layoutX="443.0" layoutY="277.0" prefHeight="202.0" prefWidth="150.0" />
+                              <CheckBox fx:id="ch_requestFilter" layoutX="755.0" layoutY="503.0" mnemonicParsing="false" text="Filter to Open Requests" />
+                           </children>
+                        </Pane>
+                        <Pane fx:id="pn_pane1" prefHeight="1005.0" prefWidth="1762.0" visible="false">
+                           <children>
+                              <TableView fx:id="tbl_Employees" layoutX="595.0" layoutY="68.0" prefHeight="437.0" prefWidth="230.0" />
+                              <JFXButton fx:id="btn_delemp" layoutX="657.0" layoutY="515.0" onMouseClicked="#deleteEmployee" text="Delete Employee" />
+                              <Label layoutX="166.0" layoutY="104.0" text="ADD ADMIN">
+                                 <font>
+                                    <Font size="36.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="55.0" layoutY="172.0" text="Add Username:">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="63.0" layoutY="212.0" text="Add Password: ">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <JFXTextField fx:id="txtf_adminuser" layoutX="225.0" layoutY="175.0" />
+                              <JFXTextField fx:id="txtf_adminpass" layoutX="225.0" layoutY="224.0" />
+                              <JFXButton buttonType="RAISED" layoutX="243.0" layoutY="262.0" onMouseClicked="#addAdmin" text="Add Admin" />
+                              <Label layoutX="1040.0" layoutY="601.0" text="Change Pass">
+                                 <font>
+                                    <Font size="36.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="1010.0" layoutY="658.0" text="Username:">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="967.0" layoutY="738.0" text="New Password:">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="972.0" layoutY="699.0" text="Old Password:">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <JFXTextField fx:id="txtf_cpoldpass" layoutX="1127.0" layoutY="704.0" />
+                              <JFXTextField fx:id="txtf_cpuser" layoutX="1127.0" layoutY="663.0" />
+                              <JFXTextField fx:id="txtf_cpnewpass" layoutX="1127.0" layoutY="747.0" />
+                              <JFXButton buttonType="RAISED" layoutX="1156.0" layoutY="780.0" onMouseClicked="#changeAccountPass" text="Submit" />
+                           </children></Pane>
+                        <Pane fx:id="pn_pane2" prefHeight="200.0" prefWidth="200.0" visible="false">
+                           <children>
+                              <Label layoutX="155.0" layoutY="87.0" text="Add Doctor">
+                                 <font>
+                                    <Font size="36.0" />
+                                 </font>
+                              </Label>
+                              <JFXTextField fx:id="txtf_docfn" layoutX="247.0" layoutY="153.0" />
+                              <JFXTextField fx:id="txtf_docln" layoutX="247.0" layoutY="198.0" />
+                              <JFXTextField fx:id="txtf_docuser" layoutX="247.0" layoutY="241.0" />
+                              <JFXTextField fx:id="txtf_docpass" layoutX="247.0" layoutY="289.0" />
+                              <JFXTextField fx:id="txtf_docfield" layoutX="247.0" layoutY="337.0" />
+                              <Label layoutX="77.0" layoutY="236.0" text="Add Username:">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="85.0" layoutY="284.0" text="Add Password: ">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="122.0" layoutY="193.0" text="Last Name:">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="121.0" layoutY="148.0" text="First Name:">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="91.0" layoutY="332.0" text="Field of Study:">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <JFXButton buttonType="RAISED" layoutX="275.0" layoutY="376.0" onMouseClicked="#addDoc" text="Add Doctor" />
+                              <Label layoutX="140.0" layoutY="433.0" text="Add Employee">
+                                 <font>
+                                    <Font size="36.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="122.0" layoutY="546.0" text="Last Name:">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="120.0" layoutY="503.0" text="First Name:">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <JFXTextField fx:id="txtf_empfn" layoutX="247.0" layoutY="508.0" />
+                              <JFXTextField fx:id="txtf_empln" layoutX="247.0" layoutY="551.0" />
+                              <JFXCheckBox fx:id="cb_translator" layoutX="127.0" layoutY="655.0" text="Translator" />
+                              <Label fx:id="lbl_languages" layoutX="42.0" layoutY="594.0" text="Known Languages:">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <JFXTextField fx:id="txtf_languages" layoutX="245.0" layoutY="599.0" prefHeight="25.0" prefWidth="138.0" />
+                              <JFXButton buttonType="RAISED" layoutX="255.0" layoutY="652.0" onMouseClicked="#addEmployee" text="Add Employee" />
+                              <Label layoutX="501.0" layoutY="87.0" text="Update Doctor">
+                                 <font>
+                                    <Font size="36.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="493.0" layoutY="148.0" text="Doctor ID:">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <JFXTextField fx:id="txtf_docid" layoutX="609.0" layoutY="153.0" prefHeight="25.0" prefWidth="138.0" />
+                              <JFXTextField fx:id="txtf_docoffices" layoutX="493.0" layoutY="198.0" onKeyTyped="#searchByLocationTextFill" prefHeight="35.0" prefWidth="251.0" promptText="Search for Locations" />
+                              <JFXListView fx:id="lst_docoffice" layoutX="496.0" layoutY="254.0" prefHeight="134.0" prefWidth="251.0" />
+                              <JFXButton fx:id="btn_addoffice" buttonType="RAISED" layoutX="503.0" layoutY="401.0" onMouseClicked="#addOffice" text="Add Office" />
+                              <JFXButton fx:id="btn_removeoffice" buttonType="RAISED" layoutX="642.0" layoutY="401.0" onMouseClicked="#removeOffice" text="Remove Office" />
+                              <Label layoutX="476.0" layoutY="433.0" text="Update Translator">
+                                 <font>
+                                    <Font size="36.0" />
+                                 </font>
+                              </Label>
+                              <Label layoutX="485.0" layoutY="546.0" text="Language:">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <JFXTextField fx:id="txtf_newLang" layoutX="601.0" layoutY="551.0" prefHeight="25.0" prefWidth="138.0" />
+                              <Label layoutX="455.0" layoutY="503.0" text="Employee ID:">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </Label>
+                              <JFXTextField fx:id="txtf_empid" layoutX="601.0" layoutY="508.0" prefHeight="25.0" prefWidth="138.0" />
+                              <JFXButton fx:id="btn_addLanguage" buttonType="RAISED" layoutX="493.0" layoutY="612.0" onMouseClicked="#updateTranslator" text="Add Language" />
+                              <JFXButton fx:id="btn_removeLanguage" buttonType="RAISED" layoutX="642.0" layoutY="612.0" onMouseClicked="#updateTranslator" text="Remove Language" />
+                           </children></Pane>
+                     </children>
+                  </StackPane>
+               </children></AnchorPane>
+        </items>
+      </SplitPane>
+   </children>
+</AnchorPane>
