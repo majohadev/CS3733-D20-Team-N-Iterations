@@ -8,7 +8,7 @@ public class Main {
 
   public static void main(String[] args)
       throws SQLException, DBException, ClassNotFoundException, FileNotFoundException {
-    MapDB.initDB();
+    // MapDB.initDB();
     /*final String DEFAULT_NODES = "csv/UPDATEDTeamNnodes.csv";
     final String DEFAULT_PATHS = "csv/UPDATEDTeamNedges.csv";
     final InputStream INPUT_NODES_DEFAULT = Main.class.getResourceAsStream(DEFAULT_NODES);
