@@ -27,8 +27,8 @@
             </ImageView>
             <Pane fx:id="pn_display" prefHeight="200.0" prefWidth="200.0">
                <children>
-                  <Pane fx:id="pn_changeFloor" layoutX="1544.0" layoutY="14.0" prefHeight="490.0" prefWidth="120.0" />
-                  <JFXButton fx:id="btn_home" layoutX="151.0" layoutY="377.0" onMouseClicked="#onBtnHomeClicked" prefHeight="48.0" prefWidth="105.0" text="Home">
+                  <Pane fx:id="pn_changeFloor" layoutX="1458.0" layoutY="14.0" prefHeight="490.0" prefWidth="206.0" />
+                  <JFXButton fx:id="btn_home" layoutX="151.0" layoutY="377.0" onMouseClicked="#onBtnHomeClicked" prefHeight="48.0" prefWidth="105.0" styleClass="animated-option-button" stylesheets="@MapDisplayFloors.css" text="Home">
                      <font>
                         <Font name="Calibri" size="24.0" />
                      </font>

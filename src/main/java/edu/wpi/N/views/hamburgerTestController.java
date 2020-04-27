@@ -26,6 +26,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.StrokeLineCap;
 import lombok.SneakyThrows;
 
 public class hamburgerTestController implements Controller, Initializable {
@@ -132,6 +133,8 @@ public class hamburgerTestController implements Controller, Initializable {
     enableAllFloorButtons();
     String firstSelection = (String) lst_firstLocation.getSelectionModel().getSelectedItem();
     String secondSelection = (String) lst_secondLocation.getSelectionModel().getSelectedItem();
+    jumpToFloor(imgPaths[stringNodeConversion.get(firstSelection).getFloor() - 1]);
+    currentFloor = stringNodeConversion.get(firstSelection).getFloor();
     try {
       findPath(stringNodeConversion.get(firstSelection), stringNodeConversion.get(secondSelection));
     } catch (NullPointerException e) {
@@ -148,8 +151,6 @@ public class hamburgerTestController implements Controller, Initializable {
   }
 
   private void findPath(DbNode node1, DbNode node2) throws DBException {
-    //    setFloorImg(imgPaths[node1.getFloor()]);
-    //    currentFloor = node1.getFloor();
     if (node1.getFloor() <= node2.getFloor()) {
       Path path;
       Algorithm myAStar = new Algorithm();
@@ -200,6 +201,7 @@ public class hamburgerTestController implements Controller, Initializable {
                 scaleX(secondNode.getX()),
                 scaleY(secondNode.getY()));
         line.setStrokeWidth(5);
+        line.setStrokeLineCap(StrokeLineCap.ROUND);
         pn_display.getChildren().add(line);
       }
     }
@@ -240,11 +242,11 @@ public class hamburgerTestController implements Controller, Initializable {
     btn_floors
         .getStylesheets()
         .addAll(getClass().getResource("/edu/wpi/N/views/MapDisplayFloors.css").toExternalForm());
-    btn_floors.getStyleClass().addAll("animated-option-button", "animated-option-sub-button");
+    btn_floors.getStyleClass().addAll("animated-option-button");
     btn_floor1
         .getStylesheets()
         .addAll(getClass().getResource("/edu/wpi/N/views/MapDisplayFloors.css").toExternalForm());
-    btn_floor1.getStyleClass().addAll("animated-option-button", "animated-option-sub-button");
+    btn_floor1.getStyleClass().addAll("animated-option-button");
     btn_floor1.setOnMouseClicked(
         e -> {
           currentFloor = 1;
@@ -257,7 +259,7 @@ public class hamburgerTestController implements Controller, Initializable {
     btn_floor2
         .getStylesheets()
         .addAll(getClass().getResource("/edu/wpi/N/views/MapDisplayFloors.css").toExternalForm());
-    btn_floor2.getStyleClass().addAll("animated-option-button", "animated-option-sub-button");
+    btn_floor2.getStyleClass().addAll("animated-option-button");
     btn_floor2.setOnMouseClicked(
         e -> {
           currentFloor = 2;
@@ -270,7 +272,7 @@ public class hamburgerTestController implements Controller, Initializable {
     btn_floor3
         .getStylesheets()
         .addAll(getClass().getResource("/edu/wpi/N/views/MapDisplayFloors.css").toExternalForm());
-    btn_floor3.getStyleClass().addAll("animated-option-button", "animated-option-sub-button");
+    btn_floor3.getStyleClass().addAll("animated-option-button");
     btn_floor3.setOnMouseClicked(
         e -> {
           currentFloor = 3;
@@ -283,7 +285,7 @@ public class hamburgerTestController implements Controller, Initializable {
     btn_floor4
         .getStylesheets()
         .addAll(getClass().getResource("/edu/wpi/N/views/MapDisplayFloors.css").toExternalForm());
-    btn_floor4.getStyleClass().addAll("animated-option-button", "animated-option-sub-button");
+    btn_floor4.getStyleClass().addAll("animated-option-button");
     btn_floor4.setOnMouseClicked(
         e -> {
           currentFloor = 4;
@@ -296,7 +298,7 @@ public class hamburgerTestController implements Controller, Initializable {
     btn_floor5
         .getStylesheets()
         .addAll(getClass().getResource("/edu/wpi/N/views/MapDisplayFloors.css").toExternalForm());
-    btn_floor5.getStyleClass().addAll("animated-option-button", "animated-option-sub-button");
+    btn_floor5.getStyleClass().addAll("animated-option-button");
     btn_floor5.setOnMouseClicked(
         e -> {
           currentFloor = 5;
@@ -325,6 +327,11 @@ public class hamburgerTestController implements Controller, Initializable {
     if (mode == Mode.NO_STATE) {
       defaultKioskNode();
     }
+    Image img = new Image(getClass().getResourceAsStream(path));
+    img_map.setImage(img);
+  }
+
+  private void jumpToFloor(String path) throws DBException {
     Image img = new Image(getClass().getResourceAsStream(path));
     img_map.setImage(img);
   }

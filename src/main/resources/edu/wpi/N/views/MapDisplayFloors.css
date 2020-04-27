@@ -1,11 +1,23 @@
 .animated-option-button {
-    -fx-pref-width: 50px;
+    -fx-pref-width: 100px;
     -fx-background-color: #002186;
+    -jfx-rippler-fill: #ffd965;
     -fx-background-radius: 50px;
     -fx-pref-height: 50px;
     -fx-text-fill: white;
+    -fx-font-size: 24;
+    -fx-font-type: Calibri;
+    -jfx-button-type: RAISED;
 }
 
-.animated-option-sub-button{
-    -fx-background-color: #002186;
+.animated-option-button-selected {
+    -fx-pref-width: 100px;
+    -fx-background-color: F7B80F;
+    -jfx-rippler-fill: #ffd965;
+    -fx-background-radius: 50px;
+    -fx-pref-height: 50px;
+    -fx-text-fill: white;
+    -fx-font-size: 24;
+    -fx-font-type: Calibri;
+    -jfx-button-type: RAISED;
 }
