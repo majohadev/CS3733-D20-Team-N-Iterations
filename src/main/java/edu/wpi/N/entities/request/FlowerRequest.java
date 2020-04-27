@@ -1,7 +1,9 @@
 package edu.wpi.N.entities.request;
 
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Set;
 
 public class FlowerRequest extends Request {
 
@@ -27,8 +29,30 @@ public class FlowerRequest extends Request {
     this.visitorName = visitor;
     this.creditNum = num;
 
-    String sample = list.toString();
-    this.flowerList = sample.substring(1, sample.length() - 1);
+    HashMap<String, Integer> acc = new HashMap<>();
+    int n;
+    for(String f : list){
+      if(acc.containsKey(f)){
+        n = acc.remove(f) + 1;
+        acc.put(f, n);
+      } else {
+        acc.put(f, 1);
+      }
+    }
+
+    String flowerList = "";
+    Set<String> keys = acc.keySet();
+
+    for(String k : keys){
+      if(acc.get(k) > 1){
+        flowerList += "" + acc.get(k) + " " + k + "s, ";
+      } else {
+        flowerList += "" + acc.get(k) + " " + k + ", ";
+      }
+    }
+    flowerList = flowerList.substring(0, flowerList.length()-2);
+
+    this.flowerList = flowerList;
   }
 
   @Override
