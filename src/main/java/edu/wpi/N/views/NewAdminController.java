@@ -31,8 +31,6 @@ public class NewAdminController implements Controller, Initializable {
 
   private App mainApp = null;
 
-  @FXML Label lbl_Time;
-  @FXML Label lbl_Date;
   @FXML JFXPasswordField pwf_newpass;
   @FXML JFXPasswordField pwf_confpass;
   @FXML JFXTextField txtf_docoffices;
@@ -135,13 +133,12 @@ public class NewAdminController implements Controller, Initializable {
       populateChangeAlgo();
       changeAlgorithm();
       setTitleLabel();
-      addEmployee();
 
       cb_employeeTypes
           .valueProperty()
           .addListener(
               (ob, old, newVal) -> {
-                if (newVal.equals("Translator")) {
+                if (newVal.getServiceType().equals("Translator")) {
                   txtf_languages.setVisible(true);
                   lbl_languages.setVisible(true);
                 } else {
@@ -150,7 +147,7 @@ public class NewAdminController implements Controller, Initializable {
                 }
               });
 
-      allFloorNodes = MapDB.visNodes(4, "Faulkner");
+      allFloorNodes = MapDB.allNodes();
       for (DbNode node : allFloorNodes) {
         longNamesList.add(node.getLongName());
       }
@@ -184,18 +181,6 @@ public class NewAdminController implements Controller, Initializable {
       emps.addAll(empList);
       tbl_Employees.setItems(emps);
 
-      tbl_Employees
-          .getSelectionModel()
-          .selectedItemProperty()
-          .addListener(
-              (obs, old, newVal) -> {
-                try {
-                  emps.setAll(ServiceDB.getEmployees());
-                } catch (DBException e) {
-                  e.printStackTrace();
-                }
-              });
-
     } catch (DBException e) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
       errorAlert.setContentText(e.getMessage());
@@ -220,22 +205,25 @@ public class NewAdminController implements Controller, Initializable {
     }
   }
 
-  public void changePanes(MouseEvent e) {
+  public void changePanes(MouseEvent e) throws DBException {
     if (e.getSource() == btn_AccountEdit) {
       System.out.println("In Account Edit");
       pn_pane1.setVisible(true);
       pn_pane2.setVisible(false);
       pn_pane3.setVisible(false);
+      populateTable();
     } else if (e.getSource() == btn_EmployeeEdit) {
       System.out.println("In Employee Edit");
       pn_pane2.setVisible(true);
       pn_pane1.setVisible(false);
       pn_pane3.setVisible(false);
+      populateTable();
     } else if (e.getSource() == btn_ViewRequests) {
       System.out.println("In View Requests");
       pn_pane3.setVisible(true);
       pn_pane1.setVisible(false);
       pn_pane2.setVisible(false);
+      populateTable();
     }
   }
 
@@ -282,61 +270,43 @@ public class NewAdminController implements Controller, Initializable {
   REFACTOR TO SUPPORT ALL NEW EMPLOYEES
    */
   public void addEmployee() throws DBException {
+    System.out.println(cb_employeeTypes.getValue().getServiceType());
     String name = txtf_empfn.getText() + " " + txtf_empln.getText();
     try {
-      cb_employeeTypes
-          .valueProperty()
-          .addListener(
-              (ob, old, newVal) -> {
-                if (newVal.getServiceType().equals("Translator")) {
-                  String[] arrOfString = txtf_languages.getText().split(",");
-                  LinkedList<String> languages = new LinkedList<>();
-                  for (String a : arrOfString) {
-                    languages.add(a);
-                  }
-                  try {
-                    ServiceDB.addTranslator(name, languages);
-                  } catch (DBException ex) {
-                    ex.printStackTrace();
-                  }
-                } else if (newVal.getServiceType().equals("Laundry")) {
-                  try {
-                    ServiceDB.addLaundry(name);
-                  } catch (DBException ex) {
-                    ex.printStackTrace();
-                  }
-                } else if (newVal.getServiceType().equals("Wheelchair")) {
-                  try {
-                    ServiceDB.addWheelchairEmployee(name);
-                  } catch (DBException ex) {
-                    ex.printStackTrace();
-                  }
-                } else if (cb_employeeTypes
-                    .valueProperty()
-                    .get()
-                    .getServiceType()
-                    .equals("Emotional Support")) {
-                } else if (cb_employeeTypes.valueProperty().get().getServiceType().equals("IT")) {
-                }
-              });
-      // else if() (Sanatation Condition)
-      tbl_Employees
-          .getSelectionModel()
-          .selectedItemProperty()
-          .addListener(
-              (obs, old, newVal) -> {
-                try {
-                  emps.setAll(ServiceDB.getEmployees());
-                } catch (DBException e) {
-                  e.printStackTrace();
-                }
-              });
-      populateTable();
+      if (cb_employeeTypes.valueProperty().equals("Translator")) {
+
+        String[] arrOfString = txtf_languages.getText().split(",");
+        LinkedList<String> languages = new LinkedList<>();
+        for (String a : arrOfString) {
+          languages.add(a);
+        }
+
+        ServiceDB.addTranslator(name, languages);
+
+      } else if (cb_employeeTypes.getValue().getServiceType().equals("Laundry")) {
+        ServiceDB.addLaundry(name);
+      } else if (cb_employeeTypes.getValue().getServiceType().equals("Wheelchair")) {
+        ServiceDB.addWheelchairEmployee(name);
+      } else if (cb_employeeTypes.getValue().getServiceType().equals("IT")) {
+        ServiceDB.addIT(name);
+      } else if (cb_employeeTypes.getValue().getServiceType().equals("Emotional Support")) {
+        ServiceDB.addEmotionalSupporter(name);
+
+      } else if (cb_employeeTypes.getValue().getServiceType().equals("Sanitation")) {
+
+      }
+
     } catch (DBException e) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
       errorAlert.setContentText(e.getMessage());
       errorAlert.show();
     }
+    tbl_Employees.getItems().clear();
+    /*
+    LinkedList<Employee> empList = ServiceDB.getEmployees();
+    emps.addAll(empList);
+    tbl_Employees.setItems(emps);
+     */
   }
 
   public void adminEditMap() throws IOException {
@@ -666,6 +636,10 @@ public class NewAdminController implements Controller, Initializable {
     mainApp.switchScene("views/mapEdit.fxml");
   }
 
+  /*
+  Populates employee table based on the getEmployees()
+   */
+
   public void populateEmployeeType() throws DBException {
     LinkedList<Service> employeeList = new LinkedList<Service>();
     employeeList.addAll(ServiceDB.getServices());
@@ -673,6 +647,10 @@ public class NewAdminController implements Controller, Initializable {
     empTypeList.addAll(employeeList);
     cb_employeeTypes.setItems(empTypeList);
   }
+
+  /*
+  Populate the choicebox for changing the algorithm
+   */
 
   public void populateChangeAlgo() {
     LinkedList<String> algoTypes = new LinkedList<>();
@@ -684,6 +662,9 @@ public class NewAdminController implements Controller, Initializable {
     cb_changeAlgo.setItems(algos);
   }
 
+  /*
+  Sets the "Welcome" message based on the username
+   */
   public void setTitleLabel() throws DBException {
     try {
       lbl_title.setText("Welcome, " + LoginDB.currentLogin());
@@ -694,30 +675,21 @@ public class NewAdminController implements Controller, Initializable {
     }
   }
 
+  /*
+  Updates the given algorithm for pathfinder
+   */
   public void changeAlgorithm() {
-
-    /*
-    System.out.println(cb_changeAlgo.valueProperty().toString());
-    System.out.println(cb_changeAlgo.getSelectionModel().toString());
-    System.out.println(cb_changeAlgo.getValue().toString());
-    */
 
     cb_changeAlgo
         .valueProperty()
         .addListener(
             (ob, old, newVal) -> {
               if (newVal.equals("BFS")) {
-                System.out.println(cb_changeAlgo.getSelectionModel().getSelectedItem());
                 algo.setPathFinder(new BFS());
-                System.out.println("BFS");
               } else if (newVal.equals("DFS")) {
-                System.out.println(cb_changeAlgo.getSelectionModel().getSelectedItem());
                 algo.setPathFinder(new DFS());
-                System.out.println("DFS");
               } else if (newVal.equals("AStar")) {
-                System.out.println(cb_changeAlgo.getSelectionModel().getSelectedItem());
                 algo.setPathFinder(new AStar());
-                System.out.println("AStar");
               }
             });
   }
