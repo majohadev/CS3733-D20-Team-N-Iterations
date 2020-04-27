@@ -115,7 +115,7 @@ public class EmotionalRequestController implements Controller {
       return;
     }
     int emotSuppReq = ServiceDB.addEmotSuppReq(notes, nodeID, supportSelection);
-    App.adminDataStorage.addToList(emotSuppReq);
+    //    App.adminDataStorage.addToList(emotSuppReq);
 
     txtf_supportNotes.clear();
     cmbo_selectSupport.getItems().clear();
