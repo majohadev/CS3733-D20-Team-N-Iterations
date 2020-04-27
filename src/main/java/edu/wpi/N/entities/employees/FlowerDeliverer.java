@@ -1,7 +1,7 @@
 package edu.wpi.N.entities.employees;
 
-public class flowerDeliverer extends Employee {
-  public flowerDeliverer(int id, String name) {
+public class FlowerDeliverer extends Employee {
+  public FlowerDeliverer(int id, String name) {
     super(id, name);
   }
 

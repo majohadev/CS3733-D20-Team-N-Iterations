@@ -4,10 +4,7 @@ package edu.wpi.N.database;
 import static org.junit.jupiter.api.Assertions.*;
 
 import edu.wpi.N.entities.*;
-import edu.wpi.N.entities.employees.EmotionalSupporter;
-import edu.wpi.N.entities.employees.Employee;
-import edu.wpi.N.entities.employees.IT;
-import edu.wpi.N.entities.employees.WheelchairEmployee;
+import edu.wpi.N.entities.employees.*;
 import edu.wpi.N.entities.request.FlowerRequest;
 import edu.wpi.N.entities.request.Request;
 import java.io.FileNotFoundException;
@@ -15,7 +12,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.GregorianCalendar;
 import java.util.LinkedList;
-import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -645,24 +641,25 @@ public class ServicesTest {
 
   // Chris
   @Test
-  public void testgetEmployee_flower() throws  DBException {
-    try{
+  public void testgetEmployee_flower() throws DBException, SQLException {
+    try {
       con.setAutoCommit(false);
-      int id = ServiceDB.addflowerDeliverer("Chris");
+      int id = ServiceDB.addFlowerDeliverer("Chris");
 
       con.commit();
       con.setAutoCommit(true);
-      Assertions.assertTrue("Chris".equals(ServiceDB.getEmployee(id).getName()));
-      Assertions.assertTrue("Flower".equals(ServiceDB.getEmployee(id).getServiceType()));
+      assertEquals("Chris", ServiceDB.getEmployee(id).getName());
+      assertEquals("Flower", ServiceDB.getEmployee(id).getServiceType());
 
       ServiceDB.removeEmployee(id);
-    }catch(DBException | SQLException e){
+    } catch (DBException | SQLException e) {
       try {
         con.rollback();
         con.setAutoCommit(true);
       } catch (SQLException ex) {
         throw new DBException("Error: flower is not a employee");
       }
+      throw e;
     }
   }
 
@@ -712,19 +709,29 @@ public class ServicesTest {
 
   // Chris
   @Test
-  public void testgetRequests_flower() throws DBException {
+  public void testgetRequests_flower() throws DBException, SQLException {
     try {
       con.setAutoCommit(false);
       DbNode node = MapDB.addNode(5, 5, 1, "TestBuilding", "STAI", "My test", "Short");
+
+      ServiceDB.addFlower("Rose", 1.23);
+      LinkedList<String> flowers = new LinkedList<>();
+      flowers.add("Rose");
+
       int id =
-              ServiceDB.addFlowerReq(
-                      "Had device for 1000000 year", node.getNodeID(), "Chris", "Nick", "1111-1111-1111-1111", null);
+          ServiceDB.addFlowerReq(
+              "Had device for 1000000 year",
+              node.getNodeID(),
+              "Chris",
+              "Nick",
+              "1111-1111-1111-1111",
+              flowers);
 
       con.commit();
       con.setAutoCommit(true);
 
       String type = ServiceDB.getRequest(id).getServiceType();
-      Assertions.assertTrue("Flower".equals(type));
+      assertEquals("Flower", type);
       Assertions.assertTrue(id != 0);
 
       ServiceDB.denyRequest(id, "Don't request ever again.");
@@ -736,27 +743,54 @@ public class ServicesTest {
       } catch (SQLException ex) {
         throw new DBException("Oh no");
       }
+      throw e;
     }
   }
 
   // Nick
   @Test
-  public void testgetEmployees_flower() {}
+  public void testgetEmployees_flower() throws DBException {
+    int id1 = ServiceDB.addFlowerDeliverer("Lucas Winfield");
+    int id2 = ServiceDB.addFlowerDeliverer("Araxis");
+
+    LinkedList<Employee> result = ServiceDB.getEmployees();
+
+    assertTrue(result.contains(new FlowerDeliverer(id1, "Lucas Winfield")));
+    assertTrue(result.contains(new FlowerDeliverer(id2, "Araxis")));
+
+    ServiceDB.removeEmployee(id1);
+    ServiceDB.removeEmployee(id2);
+  }
 
   // Chris
   @Test
-  public void testgetOpenRequest_flower() throws DBException {
+  public void testgetOpenRequest_flower() throws DBException, SQLException {
     try {
       con.setAutoCommit(false);
       // Insertion statements, like addTranslator
       DbNode node = MapDB.addNode(5, 5, 1, "TestBuilding", "STAI", "My test", "Short");
       // add Emotional support
+
+      ServiceDB.addFlower("Daisy", 12.09);
+      LinkedList<String> flowers = new LinkedList<>();
+      flowers.add("Daisy");
+
       int idE =
-              ServiceDB.addFlowerReq("Software Engineering class", node.getNodeID(), "annie", "ivan", "2222-2222-2222-2222", null);
-      // add Laundry
-      int idL = ServiceDB.addFlowerReq("I shit my pants", node.getNodeID(), "nick", "mike", "3333-3333-3333-3333", null);
-      // add Translator
-      int idT = ServiceDB.addFlowerReq("Помогите!", node.getNodeID(), "Russian", "Korean", "4444-4444-4444-4444", null);
+          ServiceDB.addFlowerReq(
+              "Software Engineering class",
+              node.getNodeID(),
+              "annie",
+              "ivan",
+              "2222-2222-2222-2222",
+              flowers);
+
+      int idL =
+          ServiceDB.addFlowerReq(
+              "I shit my pants", node.getNodeID(), "nick", "mike", "3333-3333-3333-3333", flowers);
+
+      int idT =
+          ServiceDB.addFlowerReq(
+              "Помогите!", node.getNodeID(), "Russian", "Korean", "4444-4444-4444-4444", flowers);
       con.commit();
       con.setAutoCommit(true);
       // checking statements
@@ -774,6 +808,7 @@ public class ServicesTest {
       } catch (SQLException ex) {
         throw new DBException("Oh no");
       }
+      throw e;
     }
   }
 

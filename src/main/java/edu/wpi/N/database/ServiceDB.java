@@ -53,7 +53,7 @@ public class ServiceDB {
       } else if (sType.equals("IT")) {
         return new IT(id, name);
       } else if (sType.equals("Flower")) {
-        return new flowerDeliverer(id, name);
+        return new FlowerDeliverer(id, name);
       } else
         throw new DBException(
             "Invalid employee in table employees! ID: " + id + "Name: " + rs.getString("name"));
@@ -633,15 +633,15 @@ public class ServiceDB {
    * @return list of all flower deliverers
    * @throws DBException
    */
-  public static LinkedList<flowerDeliverer> getFlowerDeliverers() throws DBException {
+  public static LinkedList<FlowerDeliverer> getFlowerDeliverers() throws DBException {
     try {
       String query =
           "SELECT f_employeeID from employees, flowerDeliverer where employeeID = f_employeeID";
       PreparedStatement stmt = con.prepareStatement(query);
       ResultSet rs = stmt.executeQuery();
-      LinkedList<flowerDeliverer> list = new LinkedList<flowerDeliverer>();
+      LinkedList<FlowerDeliverer> list = new LinkedList<FlowerDeliverer>();
       while (rs.next()) {
-        list.add((flowerDeliverer) getEmployee(rs.getInt("f_employeeID")));
+        list.add((FlowerDeliverer) getEmployee(rs.getInt("f_employeeID")));
       }
       return list;
     } catch (SQLException e) {
@@ -840,7 +840,7 @@ public class ServiceDB {
    * @return the employeeID of the generated Employee
    * @throws DBException
    */
-  public static int addflowerDeliverer(String name) throws DBException {
+  public static int addFlowerDeliverer(String name) throws DBException {
     try {
       String query = "INSERT INTO employees (name, serviceType) VALUES (?, 'Flower')";
       PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
@@ -1061,6 +1061,9 @@ public class ServiceDB {
       String creditNum,
       LinkedList<String> flowerList)
       throws DBException {
+    if (flowerList == null || flowerList.size() == 0) {
+      throw new DBException("addFlowerReq: The list of flowers is either empty or null");
+    }
     try {
       String query =
           "INSERT INTO request (timeRequested, reqNotes, serviceType, nodeID, status) VALUES (?, ?, ?, ?, ?)";
