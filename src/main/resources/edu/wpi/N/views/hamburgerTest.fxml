@@ -28,6 +28,11 @@
             <Pane fx:id="pn_display" prefHeight="200.0" prefWidth="200.0">
                <children>
                   <Pane fx:id="pn_changeFloor" layoutX="1544.0" layoutY="14.0" prefHeight="490.0" prefWidth="120.0" />
+                  <JFXButton fx:id="btn_home" layoutX="151.0" layoutY="377.0" onMouseClicked="#onBtnHomeClicked" prefHeight="48.0" prefWidth="105.0" text="Home">
+                     <font>
+                        <Font name="Calibri" size="24.0" />
+                     </font>
+                  </JFXButton>
                </children>
             </Pane>
          </children>
@@ -65,7 +70,7 @@
                      </children>
                   </Pane>
                   <Pane prefHeight="20.0" prefWidth="300.0" />
-                  <Accordion prefHeight="417.0" prefWidth="300.0">
+                  <Accordion prefHeight="590.0" prefWidth="300.0">
                      <panes>
                         <TitledPane animated="false" prefHeight="350.0" prefWidth="92.0" text="Search By Doctor">
                            <content>
@@ -98,24 +103,29 @@
                               <Font name="Calibri" size="16.0" />
                            </font>
                         </TitledPane>
-                        <TitledPane animated="false" prefHeight="387.0" prefWidth="308.0" text="Search By Location">
+                        <TitledPane animated="false" prefHeight="653.0" prefWidth="300.0" text="Search By Location">
                            <content>
-                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="438.0" prefWidth="298.0">
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="534.0" prefWidth="298.0">
                                  <children>
-                                    <JFXListView fx:id="lst_firstLocation" layoutX="49.0" layoutY="70.0" prefHeight="75.0" prefWidth="200.0" />
-                                    <JFXTextField fx:id="txt_firstLocation" layoutX="49.0" layoutY="29.0" onKeyTyped="#onSearchFirstLocation" prefWidth="200.0" promptText="Search by Location" />
-                                    <JFXButton fx:id="btn_findPath" buttonType="RAISED" layoutX="64.0" layoutY="296.0" onMouseClicked="#onBtnPathfindClicked" prefHeight="27.0" prefWidth="171.0" text="Find Path To Location" textAlignment="CENTER">
+                                    <JFXListView fx:id="lst_firstLocation" layoutX="49.0" layoutY="53.0" prefHeight="172.0" prefWidth="200.0" />
+                                    <JFXTextField fx:id="txt_firstLocation" layoutX="49.0" layoutY="14.0" onKeyTyped="#onSearchFirstLocation" prefWidth="200.0" promptText="Search by Location" />
+                                    <JFXButton fx:id="btn_findPath" buttonType="RAISED" layoutX="64.0" layoutY="456.0" onMouseClicked="#onBtnPathfindClicked" prefHeight="27.0" prefWidth="171.0" text="Find Path To Location" textAlignment="CENTER">
                                        <font>
                                           <Font name="Calibri Bold" size="14.0" />
                                        </font>
                                     </JFXButton>
-                                    <ImageView fitHeight="24.0" fitWidth="26.0" layoutX="64.0" layoutY="298.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fitHeight="24.0" fitWidth="26.0" layoutX="52.0" layoutY="458.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@../images/Search%20Map.png" />
                                        </image>
                                     </ImageView>
-                                    <JFXTextField fx:id="txt_secondLocation" layoutX="49.0" layoutY="164.0" onKeyTyped="#onSearchSecondLocation" prefWidth="200.0" promptText="Search by Location" />
-                                    <JFXListView fx:id="lst_secondLocation" layoutX="49.0" layoutY="207.0" prefHeight="75.0" prefWidth="200.0" />
+                                    <JFXTextField fx:id="txt_secondLocation" layoutX="49.0" layoutY="235.0" onKeyTyped="#onSearchSecondLocation" prefWidth="200.0" promptText="Search by Location" />
+                                    <JFXListView fx:id="lst_secondLocation" layoutX="50.0" layoutY="274.0" prefHeight="172.0" prefWidth="200.0" />
+                                    <JFXButton fx:id="btn_resetPath" buttonType="RAISED" layoutX="64.0" layoutY="492.0" onMouseClicked="#onBtnResetPathClicked" prefHeight="27.0" prefWidth="171.0" text="Reset" textAlignment="CENTER">
+                                       <font>
+                                          <Font name="Calibri Bold" size="14.0" />
+                                       </font>
+                                    </JFXButton>
                                  </children>
                               </AnchorPane>
                            </content>
@@ -125,15 +135,6 @@
                         </TitledPane>
                      </panes>
                   </Accordion>
-                  <VBox prefHeight="281.0" prefWidth="300.0">
-                     <children>
-                        <Label text="Click An Icon Below To Navigate To Popular Locations" textAlignment="CENTER" wrapText="true">
-                           <font>
-                              <Font name="Calibri" size="18.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </VBox>
                </children>
             </VBox>
          </children>
