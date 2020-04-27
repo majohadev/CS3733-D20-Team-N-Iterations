@@ -70,7 +70,7 @@
                      </children>
                   </Pane>
                   <Pane prefHeight="20.0" prefWidth="300.0" />
-                  <Accordion prefHeight="590.0" prefWidth="300.0">
+                  <Accordion fx:id="acc_search" prefHeight="590.0" prefWidth="300.0">
                      <panes>
                         <TitledPane animated="false" prefHeight="350.0" prefWidth="92.0" text="Search By Doctor">
                            <content>
@@ -103,7 +103,7 @@
                               <Font name="Calibri" size="16.0" />
                            </font>
                         </TitledPane>
-                        <TitledPane animated="false" prefHeight="653.0" prefWidth="300.0" text="Search By Location">
+                        <TitledPane fx:id="pn_locationSearch" animated="false" prefHeight="653.0" prefWidth="300.0" text="Search By Location">
                            <content>
                               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="534.0" prefWidth="298.0">
                                  <children>

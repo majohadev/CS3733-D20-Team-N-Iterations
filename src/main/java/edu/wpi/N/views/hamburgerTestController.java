@@ -17,7 +17,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Accordion;
 import javafx.scene.control.Alert;
+import javafx.scene.control.TitledPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
@@ -44,8 +46,9 @@ public class hamburgerTestController implements Controller, Initializable {
   @FXML JFXListView lst_secondLocation;
   @FXML JFXButton btn_findPath;
   @FXML JFXButton btn_home;
-
-  private JFXButton btn_floors, btn_floor1, btn_floor2, btn_floor3, btn_floor4, btn_floor5;
+  @FXML private JFXButton btn_floors, btn_floor1, btn_floor2, btn_floor3, btn_floor4, btn_floor5;
+  @FXML TitledPane pn_locationSearch;
+  @FXML Accordion acc_search;
   private final int DEFAULT_FLOOR = 1;
   private final String DEFAULT_BUILDING = "FAULKNER";
   private int currentFloor;
@@ -55,6 +58,14 @@ public class hamburgerTestController implements Controller, Initializable {
   LinkedList<DbNode> allFloorNodes = new LinkedList<>();
   JFXNodesList nodesList;
   LinkedList<DbNode> pathNodes;
+  String[] imgPaths =
+      new String[] {
+        "/edu/wpi/N/images/Floor1TeamN.png",
+        "/edu/wpi/N/images/Floor2TeamN.png",
+        "/edu/wpi/N/images/Floor3TeamN.png",
+        "/edu/wpi/N/images/Floor4TeamN.png",
+        "/edu/wpi/N/images/Floor5TeamN.png"
+      };
 
   private enum Mode {
     NO_STATE,
@@ -72,6 +83,8 @@ public class hamburgerTestController implements Controller, Initializable {
     this.mode = Mode.NO_STATE;
     this.allFloorNodes = MapDB.allNodes();
     initializeConversions();
+    defaultKioskNode();
+    acc_search.setExpandedPane(pn_locationSearch);
   }
 
   private void initializeConversions() {
@@ -135,6 +148,8 @@ public class hamburgerTestController implements Controller, Initializable {
   }
 
   private void findPath(DbNode node1, DbNode node2) throws DBException {
+    //    setFloorImg(imgPaths[node1.getFloor()]);
+    //    currentFloor = node1.getFloor();
     if (node1.getFloor() <= node2.getFloor()) {
       Path path;
       Algorithm myAStar = new Algorithm();
@@ -190,8 +205,9 @@ public class hamburgerTestController implements Controller, Initializable {
     }
   }
 
-  public void onBtnResetPathClicked() {
+  public void onBtnResetPathClicked() throws DBException {
     mode = Mode.NO_STATE;
+    defaultKioskNode();
     enableAllFloorButtons();
     pn_display.getChildren().removeIf(node -> node instanceof Line);
     txt_firstLocation.clear();
@@ -232,7 +248,11 @@ public class hamburgerTestController implements Controller, Initializable {
     btn_floor1.setOnMouseClicked(
         e -> {
           currentFloor = 1;
-          setFloorImg("/edu/wpi/N/images/Floor1TeamN.png");
+          try {
+            setFloorImg("/edu/wpi/N/images/Floor1TeamN.png");
+          } catch (DBException ex) {
+            ex.printStackTrace();
+          }
         });
     btn_floor2
         .getStylesheets()
@@ -241,7 +261,11 @@ public class hamburgerTestController implements Controller, Initializable {
     btn_floor2.setOnMouseClicked(
         e -> {
           currentFloor = 2;
-          setFloorImg("/edu/wpi/N/images/Floor2TeamN.png");
+          try {
+            setFloorImg("/edu/wpi/N/images/Floor2TeamN.png");
+          } catch (DBException ex) {
+            ex.printStackTrace();
+          }
         });
     btn_floor3
         .getStylesheets()
@@ -250,7 +274,11 @@ public class hamburgerTestController implements Controller, Initializable {
     btn_floor3.setOnMouseClicked(
         e -> {
           currentFloor = 3;
-          setFloorImg("/edu/wpi/N/images/Floor3TeamN.png");
+          try {
+            setFloorImg("/edu/wpi/N/images/Floor3TeamN.png");
+          } catch (DBException ex) {
+            ex.printStackTrace();
+          }
         });
     btn_floor4
         .getStylesheets()
@@ -259,7 +287,11 @@ public class hamburgerTestController implements Controller, Initializable {
     btn_floor4.setOnMouseClicked(
         e -> {
           currentFloor = 4;
-          setFloorImg("/edu/wpi/N/images/Floor4TeamN.png");
+          try {
+            setFloorImg("/edu/wpi/N/images/Floor4TeamN.png");
+          } catch (DBException ex) {
+            ex.printStackTrace();
+          }
         });
     btn_floor5
         .getStylesheets()
@@ -268,7 +300,11 @@ public class hamburgerTestController implements Controller, Initializable {
     btn_floor5.setOnMouseClicked(
         e -> {
           currentFloor = 5;
-          setFloorImg("/edu/wpi/N/images/Floor5TeamN.png");
+          try {
+            setFloorImg("/edu/wpi/N/images/Floor5TeamN.png");
+          } catch (DBException ex) {
+            ex.printStackTrace();
+          }
         });
     nodesList = new JFXNodesList();
     nodesList.addAnimatedNode(btn_floors);
@@ -281,11 +317,13 @@ public class hamburgerTestController implements Controller, Initializable {
     pn_changeFloor.getChildren().add(nodesList);
   }
 
-  private void setFloorImg(String path) {
+  private void setFloorImg(String path) throws DBException {
     pn_display.getChildren().removeIf(node -> node instanceof Line);
-    System.out.println(mode);
     if (mode == Mode.PATH_STATE) {
       drawPath(pathNodes);
+    }
+    if (mode == Mode.NO_STATE) {
+      defaultKioskNode();
     }
     Image img = new Image(getClass().getResourceAsStream(path));
     img_map.setImage(img);
@@ -304,5 +342,26 @@ public class hamburgerTestController implements Controller, Initializable {
     errorAlert.setHeaderText("Invalid input");
     errorAlert.setContentText(str);
     errorAlert.showAndWait();
+  }
+
+  private void defaultKioskNode() throws DBException {
+    LinkedList<String> kiosks = new LinkedList<>();
+    if (currentFloor == 1) {
+      txt_firstLocation.setText(MapDB.getNode("NSERV00301").getLongName());
+      kiosks.add(MapDB.getNode("NSERV00301").getLongName());
+      ObservableList<String> textList = FXCollections.observableList(kiosks);
+      lst_firstLocation.setItems(textList);
+      lst_firstLocation.getSelectionModel().select(0);
+
+    } else if (currentFloor == 3) {
+      txt_firstLocation.setText(MapDB.getNode("NSERV00103").getLongName());
+      kiosks.add(MapDB.getNode("NSERV00103").getLongName());
+      ObservableList<String> textList = FXCollections.observableList(kiosks);
+      lst_firstLocation.setItems(textList);
+      lst_firstLocation.getSelectionModel().select(0);
+    } else {
+      txt_firstLocation.clear();
+      lst_firstLocation.getItems().clear();
+    }
   }
 }
