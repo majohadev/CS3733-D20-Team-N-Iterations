@@ -406,6 +406,9 @@ public class ServiceDBTest {
 
     assertTrue(result.contains(expected1));
     assertTrue(result.contains(expected2));
+
+    ServiceDB.removeEmployee(id1);
+    ServiceDB.removeEmployee(id2);
   }
 
   @AfterAll
