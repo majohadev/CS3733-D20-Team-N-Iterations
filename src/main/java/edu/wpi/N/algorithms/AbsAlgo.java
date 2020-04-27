@@ -73,7 +73,7 @@ public abstract class AbsAlgo implements IPathFinder {
    * @return Path, path from start node to closest (eucledian) end node of requested type
    * @throws DBException
    */
-  public static Path findQuickAccess(DbNode start, String nodeType) throws DBException {
+  public Path findQuickAccess(DbNode start, String nodeType) throws DBException {
     try {
       LinkedList<DbNode> nodes =
           MapDB.searchNode(start.getFloor(), start.getBuilding(), nodeType, "");
@@ -88,11 +88,9 @@ public abstract class AbsAlgo implements IPathFinder {
             end = n;
           }
         }
-        Algorithm thePathFinder = new Algorithm();
+        //        Algorithm thePathFinder = new Algorithm();
 
-        // TODO
-        // Ask how to handle quick access handicap, put false for now
-        return thePathFinder.findPath(start, end, false);
+        return findPath(start, end, false);
       } else {
         return null;
       }
@@ -200,11 +198,10 @@ public abstract class AbsAlgo implements IPathFinder {
         thisFloorChangeNodes.add(n.getFloor() - 1, n);
       }
     }
-    for (int i = 0; i < thisFloorChangeNodes.size(); i++) {
-      for (DbNode adj : MapDB.getAdjacent(thisFloorChangeNodes.get(i).getNodeID())) {
-        if (thisFloorChangeNodes.get(i).getNodeType().equals(adj.getNodeType())
-            && adj.getFloor() > thisFloorChangeNodes.get(i).getFloor()) {
-          DbNode[] nodes = new DbNode[] {thisFloorChangeNodes.get(i), adj};
+    for (DbNode fCNOde : thisFloorChangeNodes) {
+      for (DbNode adj : MapDB.getAdjacent(fCNOde.getNodeID())) {
+        if (fCNOde.getNodeType().equals(adj.getNodeType()) && adj.getFloor() > fCNOde.getFloor()) {
+          DbNode[] nodes = new DbNode[] {fCNOde, adj};
           edges.add(nodes);
         }
       }
