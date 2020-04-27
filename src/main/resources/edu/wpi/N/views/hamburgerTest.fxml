@@ -77,14 +77,14 @@
                               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="309.0" prefWidth="298.0">
                                  <children>
                                     <JFXButton buttonType="RAISED" ellipsisString="" layoutX="213.0" layoutY="48.0" prefHeight="51.0" prefWidth="54.0" text="   " textAlignment="CENTER" />
-                                    <ImageView fitHeight="28.0" fitWidth="29.0" layoutX="228.0" layoutY="59.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="btn_searchdoc" fitHeight="28.0" fitWidth="29.0" layoutX="228.0" layoutY="59.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@../images/Find%20A%20Doctor.png" />
                                        </image>
                                     </ImageView>
-                                    <JFXListView layoutX="49.0" layoutY="103.0" prefHeight="75.0" prefWidth="200.0" AnchorPane.leftAnchor="45.0" AnchorPane.rightAnchor="45.0" />
-                                    <JFXTextField fx:id="txt_firstLocation" layoutX="59.0" layoutY="58.0" prefHeight="29.0" prefWidth="151.0" promptText="Search by Doctor" />
-                                    <JFXButton buttonType="RAISED" layoutX="63.0" layoutY="285.0" prefHeight="27.0" prefWidth="178.0" style="-fx-background-radius: 10;" text="   Find Path To Location" textAlignment="CENTER">
+                                    <JFXListView fx:id="lst_doctornames" layoutX="49.0" layoutY="103.0" prefHeight="75.0" prefWidth="200.0" AnchorPane.leftAnchor="45.0" AnchorPane.rightAnchor="45.0" />
+                                    <JFXTextField fx:id="txtf_doctorname" layoutX="59.0" layoutY="58.0" prefHeight="29.0" prefWidth="151.0" promptText="Search by Doctor" />
+                                    <JFXButton fx:id="btn_findpathdoc" buttonType="RAISED" layoutX="63.0" layoutY="285.0" prefHeight="27.0" prefWidth="178.0" style="-fx-background-radius: 10;" text="   Find Path To Location" textAlignment="CENTER">
                                        <font>
                                           <Font name="Calibri Bold" size="14.0" />
                                        </font>
@@ -94,7 +94,7 @@
                                           <Image url="@../images/Search%20Map.png" />
                                        </image>
                                     </ImageView>
-                                    <JFXListView layoutX="57.0" layoutY="204.0" prefHeight="75.0" prefWidth="200.0" AnchorPane.leftAnchor="45.0" AnchorPane.rightAnchor="45.0" />
+                                    <JFXListView fx:id="lst_doctorlocations" layoutX="57.0" layoutY="204.0" prefHeight="75.0" prefWidth="200.0" AnchorPane.leftAnchor="45.0" AnchorPane.rightAnchor="45.0" />
                                     <Label layoutX="52.0" layoutY="183.0" text="Select a Location from the list below" />
                                  </children>
                               </AnchorPane>

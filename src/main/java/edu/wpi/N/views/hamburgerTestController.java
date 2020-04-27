@@ -5,9 +5,11 @@ import edu.wpi.N.App;
 import edu.wpi.N.algorithms.Algorithm;
 import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.database.DBException;
+import edu.wpi.N.database.DoctorDB;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Path;
+import edu.wpi.N.entities.employees.Doctor;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
@@ -17,9 +19,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Accordion;
-import javafx.scene.control.Alert;
-import javafx.scene.control.TitledPane;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
@@ -45,6 +45,11 @@ public class hamburgerTestController implements Controller, Initializable {
   @FXML JFXTextField txt_secondLocation;
   @FXML JFXListView lst_firstLocation;
   @FXML JFXListView lst_secondLocation;
+  @FXML TextField txtf_doctorname;
+  @FXML ListView lst_doctornames;
+  @FXML Button btn_searchdoc;
+  @FXML ListView lst_doctorlocations;
+  @FXML Button btn_findpathdoc;
   @FXML JFXButton btn_findPath;
   @FXML JFXButton btn_home;
   @FXML private JFXButton btn_floors, btn_floor1, btn_floor2, btn_floor3, btn_floor4, btn_floor5;
@@ -57,6 +62,9 @@ public class hamburgerTestController implements Controller, Initializable {
   HashMap<String, DbNode> stringNodeConversion = new HashMap<>();
   LinkedList<String> allLongNames = new LinkedList<>();
   LinkedList<DbNode> allFloorNodes = new LinkedList<>();
+  private ObservableList<String> fuzzySearchDoctorList = FXCollections.observableArrayList();
+  private LinkedList<Doctor> searchedDoc = new LinkedList<>();
+  private LinkedList<DbNode> doctorNodes = new LinkedList<>();
   JFXNodesList nodesList;
   LinkedList<DbNode> pathNodes;
   String[] imgPaths =
@@ -86,6 +94,7 @@ public class hamburgerTestController implements Controller, Initializable {
     initializeConversions();
     defaultKioskNode();
     acc_search.setExpandedPane(pn_locationSearch);
+
   }
 
   private void initializeConversions() {
@@ -127,6 +136,35 @@ public class hamburgerTestController implements Controller, Initializable {
     lst_secondLocation.setItems(fuzzySearchTextList);
   }
 
+  @FXML
+  private void searchByDoctorTextFill(KeyEvent keyEvent) throws DBException {
+    String currentText = txtf_doctorname.getText();
+    if (currentText.length() > 1) {
+      searchedDoc = FuzzySearchAlgorithm.suggestDoctors(currentText);
+      LinkedList<String> fuzzySearchStringList = new LinkedList<>();
+      for (Doctor doctors : searchedDoc) {
+        fuzzySearchStringList.add(doctors.getName());
+      }
+      fuzzySearchDoctorList = FXCollections.observableList(fuzzySearchStringList);
+      lst_doctornames.setItems(fuzzySearchDoctorList);
+    }
+  }
+
+  @FXML
+  private void onFindDoctorClicked(MouseEvent event) throws Exception {
+    int currentSelection = lst_doctornames.getSelectionModel().getSelectedIndex();
+    System.out.println(currentSelection);
+    Doctor selectedDoc = searchedDoc.get(currentSelection);
+    System.out.println(selectedDoc);
+    doctorNodes = selectedDoc.getLoc();
+    LinkedList<String> docNames = new LinkedList<>();
+    for (DbNode nodes : doctorNodes) {
+      docNames.add(nodes.getLongName());
+    }
+    ObservableList<String> doctorsLocations = FXCollections.observableList(docNames);
+    lst_doctorlocations.setItems(doctorsLocations);
+  }
+
   public void onBtnPathfindClicked(MouseEvent event) throws Exception {
     this.mode = Mode.PATH_STATE;
     pn_display.getChildren().removeIf(node -> node instanceof Line);
@@ -156,7 +194,6 @@ public class hamburgerTestController implements Controller, Initializable {
       Algorithm myAStar = new Algorithm();
       try {
         path = myAStar.findPath(node1, node2, false);
-      } catch (NullPointerException e) {
       } catch (NullPointerException e) {
         displayErrorMessage("The path does not exist");
         return;
@@ -373,7 +410,7 @@ public class hamburgerTestController implements Controller, Initializable {
     }
   }
   // Upon clicking find path to location button call this method
-/*  @FXML
+  /*  @FXML
   private void onDoctorPathFindClicked(MouseEvent event) throws Exception {
     pn_path.getChildren().removeIf(node -> node instanceof Line);
     int currentSelection = lst_doctorlocations.getSelectionModel().getSelectedIndex();
