@@ -20,7 +20,11 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.testfx.api.FxAssert;
 import org.testfx.framework.junit5.ApplicationTest;
+import org.testfx.matcher.control.ComboBoxMatchers;
+import org.testfx.matcher.control.TextInputControlMatchers;
 
 public class EmotionalRequestControllerTest extends ApplicationTest {
 
@@ -43,6 +47,7 @@ public class EmotionalRequestControllerTest extends ApplicationTest {
   }
 
   // TODO: Add @Test flag before testing
+  @Test
   public void testAddNewRequest() throws DBException {
 
     try {
@@ -51,9 +56,15 @@ public class EmotionalRequestControllerTest extends ApplicationTest {
 
       clickOn("#cmbo_text").write("Duncan Reid Confarence");
       clickOn("Duncan Reid Conference Room");
+      FxAssert.verifyThat(
+          "#cmbo_text", ComboBoxMatchers.hasSelectedItem("Duncan Reid Conference Room"));
 
       clickOn("#cmbo_selectSupport").type(KeyCode.DOWN).type(KeyCode.DOWN);
+      FxAssert.verifyThat("#cmbo_selectSupport", ComboBoxMatchers.hasSelectedItem("Family"));
+
       clickOn("#txtf_supportNotes").write("I wanna live!");
+      FxAssert.verifyThat("#txtf_supportNotes", TextInputControlMatchers.hasText("I wanna live!"));
+
       clickOn("#btn_submit");
 
       con.commit();
@@ -69,6 +80,7 @@ public class EmotionalRequestControllerTest extends ApplicationTest {
               && r.getReqNotes().equals("I wanna live!")
               && r.getServiceType().equals("Emotional Support")
               && ((EmotionalRequest) r).getSupportType().equals("Family")) {
+            Assertions.assertTrue(true);
             passedTest = true;
           }
         } catch (Exception e) {
@@ -76,7 +88,9 @@ public class EmotionalRequestControllerTest extends ApplicationTest {
         }
       }
 
-      Assertions.assertTrue(passedTest);
+      if (!passedTest) {
+        Assertions.fail();
+      }
 
       // deleting statements
     } catch (SQLException e) { // also wanna catch DBException e
