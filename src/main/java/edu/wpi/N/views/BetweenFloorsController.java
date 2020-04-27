@@ -61,11 +61,11 @@ public class BetweenFloorsController implements Controller, Initializable {
     this.potentialEdges = new HashMap<Integer, DbNode[]>(); // key is sum
     this.lineStatus = new HashMap<Line, Boolean>();
 
-    Circle circle1 = createCircle(65, 0, "1", 1);
-    Circle circle2 = createCircle(65, 75, "2", 2);
+    Circle circle5 = createCircle(65, 0, "5", 5);
+    Circle circle4 = createCircle(65, 75, "4", 4);
     Circle circle3 = createCircle(65, 150, "3", 3);
-    Circle circle4 = createCircle(65, 225, "4", 4);
-    Circle circle5 = createCircle(65, 300f, "5", 5);
+    Circle circle2 = createCircle(65, 225, "2", 2);
+    Circle circle1 = createCircle(65, 300f, "1", 1);
 
     nodes.put(1, circle1);
     nodes.put(2, circle2);
@@ -130,6 +130,7 @@ public class BetweenFloorsController implements Controller, Initializable {
   }
 
   public void setNode(DbNode node) throws DBException {
+    setFloor(node.getFloor());
     this.node = node;
     LinkedList<DbNode[]> edges = AbsAlgo.getEdgesBetweenFloors(node);
 
@@ -223,6 +224,7 @@ public class BetweenFloorsController implements Controller, Initializable {
   }
 
   public void onSaveButton() throws DBException {
+    setFloor(floor);
     LinkedList<DbNode[]> newEdges = new LinkedList<DbNode[]>();
     LinkedList<DbNode[]> removedEdges = new LinkedList<DbNode[]>();
     if (lineStatus.get(lines.get(3))) {
