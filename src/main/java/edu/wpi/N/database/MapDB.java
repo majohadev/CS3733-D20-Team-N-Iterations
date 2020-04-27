@@ -979,7 +979,7 @@ public class MapDB {
 
   /**
    * Sets the kiosk to the given nodeID and angle, which is transformed to be between 0 and 360
-   * degrees
+   * degrees. The old Kiosk tuple is deleted using triggers.
    *
    * @param nodeID the nodeID of the node you wish to be the Kiosk
    * @param angle The angle of the kiosk
