@@ -68,31 +68,4 @@ public class DFS extends AbsAlgo {
       return null;
     }
   }
-
-  //  /**
-  //   * Finds a path from Start to Goal node using DFS and recursion
-  //   *
-  //   * @param start: The start node
-  //   * @param end: The end node
-  //   * @param cameFrom: A hashmap that keeps track of which node visited which
-  //   * @param visited: A list of nodes that have been visited so far
-  //   * @param handicap: Boolean saying whether path should be handicap accessible
-  //   * @return: Path object indicating a path to the Goal node from the Start node
-  //   * @throws DBException
-  //   */
-  //  private Path DFSRecursion(Node start, Node end, Map<String, String> cameFrom, LinkedList<Node>
-  // visited, boolean handicap) throws DBException {
-  //    //Get the floor numbers of the
-  //    // Get the current nodes neighbors and check if it connects to the end node
-  //    LinkedList<Node> neighbors =
-  //            MapDB.getGAdjacent(start.ID, startFloorNum, endFloorNum, handicap);
-  //    if (neighbors.contains(endNode)) {
-  //      cameFrom.put(endNode.getNodeID(), currNode.ID);
-  //
-  //    }
-  //
-  //
-  //    //Return path found
-  //    return generatePath(start, end, cameFrom);
-  //  }
 }
