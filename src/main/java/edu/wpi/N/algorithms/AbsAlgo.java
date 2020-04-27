@@ -5,9 +5,12 @@ import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Node;
 import edu.wpi.N.entities.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Map;
+import org.bridj.util.Pair;
 
-public class Pathfinder {
+public abstract class AbsAlgo implements IPathFinder {
 
   /**
    * Function calculates Euclidean distance between the next Node and current Node (cost of given
@@ -34,78 +37,12 @@ public class Pathfinder {
   }
 
   /**
-   * Finds the shortest path from Start to Goal node
-   *
-   * @return Path object indicating the shortest path to the goal Node from Start Node
-   */
-  public static Path findPath(DbNode startNode, DbNode endNode) {
-    try {
-
-      int startFloorNum = startNode.getFloor();
-      int endFloorNum = endNode.getFloor();
-
-      Node start = MapDB.getGNode(startNode.getNodeID());
-      Node end = MapDB.getGNode(endNode.getNodeID());
-
-      // Initialize variables
-      PriorityQueue<Node> frontier = new PriorityQueue<Node>();
-      frontier.add(start);
-      Map<String, String> cameFrom = new HashMap<String, String>();
-      Map<String, Double> costSoFar = new HashMap<String, Double>();
-      cameFrom.put(start.ID, "");
-      costSoFar.put(start.ID, 0.0);
-      start.score = 0;
-
-      // While priority queue is not empty, get the node with highest Score (priority)
-      while (!frontier.isEmpty()) {
-        Node current = frontier.poll();
-
-        // if the goal node was found, break out of the loop
-        if (current.equals(end)) {
-          break;
-        }
-
-        // for every node (next node), current node has edge to:
-        LinkedList<Node> adjacentToCurrent =
-            MapDB.getGAdjacent(current.ID, startFloorNum, endFloorNum);
-
-        for (Node nextNode : adjacentToCurrent) {
-          String nextNodeID = nextNode.ID;
-
-          // calculate the cost of next node
-          double newCost = costSoFar.get(current.ID) + cost(nextNode, current);
-
-          if (!costSoFar.containsKey(nextNodeID) || newCost < costSoFar.get(nextNodeID)) {
-            // update the cost of nextNode
-            costSoFar.put(nextNodeID, newCost);
-            // calculate and update the Score of nextNode
-            double priority = newCost + heuristic(nextNode, end);
-
-            nextNode.score = priority;
-            // add to the priority queue
-            frontier.add(nextNode);
-            // keep track of where nodes come from
-            // to generate the path to goal node
-            cameFrom.put(nextNodeID, current.ID);
-          }
-        }
-      }
-
-      // Generate and return the path in proper order
-      return generatePath(start, end, cameFrom);
-    } catch (Exception e) {
-      e.printStackTrace();
-      return null;
-    }
-  }
-
-  /**
    * Helper function which generates Path given a Map
    *
    * @param cameFrom: Map, where key: NodeID, value: came-from-NodeID
    * @return Path object containing generated path
    */
-  private static Path generatePath(Node start, Node end, Map<String, String> cameFrom) {
+  static Path generatePath(Node start, Node end, Map<String, String> cameFrom) {
     try {
       String currentID = end.ID;
       LinkedList<DbNode> path = new LinkedList<DbNode>();
@@ -118,7 +55,7 @@ public class Pathfinder {
         }
       } catch (NullPointerException e) {
         System.out.println("Location was not found.");
-        return null;
+        throw e;
       }
 
       Path finalPath = new Path(path);
@@ -136,7 +73,7 @@ public class Pathfinder {
    * @return Path, path from start node to closest (eucledian) end node of requested type
    * @throws DBException
    */
-  public static Path findQuickAccess(DbNode start, String nodeType) throws DBException {
+  public Path findQuickAccess(DbNode start, String nodeType) throws DBException {
     try {
       LinkedList<DbNode> nodes =
           MapDB.searchNode(start.getFloor(), start.getBuilding(), nodeType, "");
@@ -151,7 +88,9 @@ public class Pathfinder {
             end = n;
           }
         }
-        return findPath(start, end);
+        //        Algorithm thePathFinder = new Algorithm();
+
+        return findPath(start, end, false);
       } else {
         return null;
       }
@@ -159,6 +98,75 @@ public class Pathfinder {
       e.printStackTrace();
       return null;
     }
+  }
+
+  /**
+   * Finds the best stairs to take based on score
+   *
+   * @param startNode: Starting Node
+   * @param endNode: End Node
+   * @return: Stair node and its score
+   * @throws DBException
+   */
+  private static DbNode getBestStopQuickAccess(DbNode startNode, DbNode endNode, String nodeType)
+      throws DBException {
+    LinkedList<DbNode> startFloorNodes =
+        MapDB.searchNode(startNode.getFloor(), startNode.getBuilding(), nodeType, "");
+    if (startNode.getFloor() != endNode.getFloor()) {
+      LinkedList<DbNode> endFloorNodes =
+          MapDB.searchNode(endNode.getFloor(), endNode.getBuilding(), nodeType, "");
+      startFloorNodes.addAll(endFloorNodes);
+    }
+
+    DbNode lowestSoFar = null;
+    double score = 1000000;
+    for (DbNode currentNode : startFloorNodes) {
+      Node GNode = MapDB.getGNode(currentNode.getNodeID());
+      double currentCost = cost(MapDB.getGNode(startNode.getNodeID()), GNode);
+      double currentScore = currentCost + heuristic(GNode, MapDB.getGNode(endNode.getNodeID()));
+      if (currentScore < score) {
+        lowestSoFar = currentNode;
+        score = currentScore;
+      }
+    }
+    return lowestSoFar;
+  }
+
+  /**
+   * Finds the best path from the start to the stop node given, then the best path from the stop to
+   * the end
+   *
+   * @param start: Start node
+   * @param end: End node
+   * @param stop: Stop node
+   * @param handicap: Boolean saying whether path should be handicap accessible only
+   * @return: A pair of paths (start to stop, stop to end)
+   * @throws DBException
+   */
+  public Pair<Path, Path> getPathWithStop(DbNode start, DbNode end, DbNode stop, boolean handicap)
+      throws DBException {
+    Path pathOne = findPath(start, stop, handicap);
+    Path pathTwo = findPath(stop, end, handicap);
+    return new Pair<>(pathOne, pathTwo);
+  }
+
+  /**
+   * Finds the best path from the start to a stop node of the type given, then the best path from
+   * the stop to the end
+   *
+   * @param start: Start node
+   * @param end: End node
+   * @param nodeType: nodeType desired for the stop node
+   * @param handicap: Boolean saying whether path should be handicap accessible only
+   * @return: A pair of paths (start to stop, stop to end)
+   * @throws DBException
+   */
+  public Pair<Path, Path> getPathWithStop(
+      DbNode start, DbNode end, String nodeType, boolean handicap) throws DBException {
+    DbNode stop = getBestStopQuickAccess(start, end, nodeType);
+    Path pathOne = findPath(start, stop, handicap);
+    Path pathTwo = findPath(stop, end, handicap);
+    return new Pair<>(pathOne, pathTwo);
   }
 
   /**
@@ -190,11 +198,10 @@ public class Pathfinder {
         thisFloorChangeNodes.add(n.getFloor() - 1, n);
       }
     }
-    for (int i = 0; i < thisFloorChangeNodes.size(); i++) {
-      for (DbNode adj : MapDB.getAdjacent(thisFloorChangeNodes.get(i).getNodeID())) {
-        if (thisFloorChangeNodes.get(i).getNodeType().equals(adj.getNodeType())
-            && adj.getFloor() > thisFloorChangeNodes.get(i).getFloor()) {
-          DbNode[] nodes = new DbNode[] {thisFloorChangeNodes.get(i), adj};
+    for (DbNode fCNOde : thisFloorChangeNodes) {
+      for (DbNode adj : MapDB.getAdjacent(fCNOde.getNodeID())) {
+        if (fCNOde.getNodeType().equals(adj.getNodeType()) && adj.getFloor() > fCNOde.getFloor()) {
+          DbNode[] nodes = new DbNode[] {fCNOde, adj};
           edges.add(nodes);
         }
       }

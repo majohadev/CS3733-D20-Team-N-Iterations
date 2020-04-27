@@ -2,11 +2,11 @@ package edu.wpi.N.entities.request;
 
 import java.util.GregorianCalendar;
 
-public class EmotionalRequest extends Request {
-  // Available types of support: Individual, Family, Couple, Group
-  private String supportType;
+public class ITRequest extends Request {
+  private String device;
+  private String problem;
 
-  public EmotionalRequest(
+  public ITRequest(
       int requestID,
       int emp_assigned,
       String reqNotes,
@@ -15,23 +15,23 @@ public class EmotionalRequest extends Request {
       GregorianCalendar timeRequested,
       GregorianCalendar timeCompleted,
       String status,
-      String supportType) {
+      String device,
+      String problem) {
     super(
         requestID, emp_assigned, reqNotes, compNotes, nodeID, timeRequested, timeCompleted, status);
-    this.supportType = supportType;
+    this.device = device;
+    this.problem = problem;
   }
 
-  @Override
   public String getAtr1() {
-    return supportType;
+    return device;
   }
 
-  @Override
+  public String getAtr2() {
+    return problem;
+  }
+
   public String getServiceType() {
-    return "Emotional Support";
-  }
-
-  public String getSupportType() {
-    return this.supportType;
+    return "IT";
   }
 }

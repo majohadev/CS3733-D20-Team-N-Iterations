@@ -2,8 +2,8 @@ package edu.wpi.N.views;
 
 import com.google.common.collect.HashBiMap;
 import edu.wpi.N.App;
+import edu.wpi.N.algorithms.Algorithm;
 import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
-import edu.wpi.N.algorithms.Pathfinder;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.database.ServiceDB;
@@ -209,7 +209,9 @@ public class MapDisplayController extends QRGenerator implements Controller {
       return;
     }
 
-    Path path = Pathfinder.findPath(firstNode, secondNode);
+    // Evan - hard coded map to use AStar algorithm for now and false for handicap
+    Algorithm myAStar = new Algorithm();
+    Path path = myAStar.findPath(firstNode, secondNode, false);
 
     if (path != null) {
       LinkedList<DbNode> pathNodes = path.getPath();
@@ -378,7 +380,13 @@ public class MapDisplayController extends QRGenerator implements Controller {
     DbNode startNode = defaultNode;
     if (selectedNodes.size() > 0) startNode = selectedNodes.getFirst();
     onResetClicked(event);
-    Path pathToBathroom = Pathfinder.findQuickAccess(startNode, "REST");
+
+    // TODO: Use SINGLETON to retrieve Algorithm object and call findQuickAccess
+    // TODO: Fix later
+
+    Algorithm algorithmSetting = new Algorithm();
+
+    Path pathToBathroom = algorithmSetting.findQuickAccess(startNode, "REST");
     if (pathToBathroom != null) {
       LinkedList<DbNode> pathNodes = pathToBathroom.getPath();
       drawPath(pathNodes);

@@ -14,14 +14,15 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 public class BetweenFloorsTest {
+
   @BeforeAll
   public static void initializeTest()
       throws SQLException, ClassNotFoundException, DBException, FileNotFoundException {
     MapDB.initTestDB();
     InputStream inputNodes =
-        PathfinderMethodsTest.class.getResourceAsStream("../csv/ThreeFloorsTestNode.csv");
+        BetweenFloorsTest.class.getResourceAsStream("../csv/ThreeFloorsTestNode.csv");
     InputStream inputEdges =
-        PathfinderMethodsTest.class.getResourceAsStream("../csv/ThreeFloorsTestEdges.csv");
+        BetweenFloorsTest.class.getResourceAsStream("../csv/ThreeFloorsTestEdges.csv");
     CSVParser.parseCSV(inputNodes);
     CSVParser.parseCSV(inputEdges);
   }
@@ -29,7 +30,7 @@ public class BetweenFloorsTest {
   @Test
   public void edgesBetweenFloorsTester() throws DBException {
     LinkedList<DbNode[]> edgesBetweenFloors =
-        Pathfinder.getEdgesBetweenFloors(MapDB.getNode("ELEV021000"));
+        AbsAlgo.getEdgesBetweenFloors(MapDB.getNode("ELEV021000"));
     DbNode[] firstEdge = edgesBetweenFloors.getFirst();
     DbNode[] secondEdge = edgesBetweenFloors.get(1);
     Assertions.assertEquals(firstEdge[0].getNodeID(), "ELEV021000");
@@ -42,7 +43,7 @@ public class BetweenFloorsTest {
   @Test
   public void edgesBetweenFloorsTester2() throws DBException {
     LinkedList<DbNode[]> edgesBetweenFloors =
-        Pathfinder.getEdgesBetweenFloors(MapDB.getNode("ELEV033000"));
+        AbsAlgo.getEdgesBetweenFloors(MapDB.getNode("ELEV033000"));
     DbNode[] firstEdge = edgesBetweenFloors.getFirst();
     System.out.println(firstEdge[0].getNodeID());
     System.out.println(firstEdge[1].getNodeID());
@@ -52,7 +53,7 @@ public class BetweenFloorsTest {
   @Test
   public void edgesBetweenFloorsTester3() throws DBException {
     LinkedList<DbNode[]> edgesBetweenFloors =
-        Pathfinder.getEdgesBetweenFloors(MapDB.getNode("STAI011000"));
+        AbsAlgo.getEdgesBetweenFloors(MapDB.getNode("STAI011000"));
     DbNode[] firstEdge = edgesBetweenFloors.getFirst();
     System.out.println(firstEdge[0].getNodeID());
     System.out.println(firstEdge[1].getNodeID());
@@ -62,7 +63,7 @@ public class BetweenFloorsTest {
   @Test
   public void edgesBetweenFloorsTester4() throws DBException {
     LinkedList<DbNode[]> edgesBetweenFloors =
-        Pathfinder.getEdgesBetweenFloors(MapDB.getNode("ELEV011000"));
+        AbsAlgo.getEdgesBetweenFloors(MapDB.getNode("ELEV011000"));
     DbNode[] firstEdge = edgesBetweenFloors.getFirst();
     DbNode[] secondEdge = edgesBetweenFloors.get(1);
     System.out.println(firstEdge[0].getNodeID());
