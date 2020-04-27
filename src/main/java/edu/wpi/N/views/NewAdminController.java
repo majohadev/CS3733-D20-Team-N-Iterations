@@ -443,7 +443,7 @@ public class NewAdminController implements Controller, Initializable {
     TableColumn<Request, String> notes = new TableColumn<>("Notes");
     notes.setMaxWidth(150);
     notes.setMinWidth(150);
-    notes.setCellValueFactory(new PropertyValueFactory<Request, String>("NOTES"));
+    notes.setCellValueFactory(new PropertyValueFactory<Request, String>("reqNotes"));
 
     TableColumn<Request, String> nodeID = new TableColumn<>("Location");
     nodeID.setMaxWidth(100);
@@ -458,7 +458,7 @@ public class NewAdminController implements Controller, Initializable {
     TableColumn<Request, String> language = new TableColumn<>("Language");
     language.setMaxWidth(100);
     language.setMinWidth(100);
-    language.setCellValueFactory(new PropertyValueFactory<Request, String>("LANGUAGE"));
+    language.setCellValueFactory(new PropertyValueFactory<Request, String>("Atr1"));
 
     TableColumn<Request, String> service = new TableColumn<>("Service");
     service.setMaxWidth(75);

@@ -110,7 +110,7 @@ public class TemplateController implements Controller {
       return;
     }
     int transReq = ServiceDB.addTransReq(notes, nodeID, langSelection);
-    App.adminDataStorage.addToList(transReq);
+    // App.adminDataStorage.addToList(transReq);
 
     txtf_langNotes.clear();
     cmbo_selectLang.getItems().clear();

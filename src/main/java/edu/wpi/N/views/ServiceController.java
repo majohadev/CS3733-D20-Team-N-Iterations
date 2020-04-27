@@ -38,4 +38,10 @@ public class ServiceController implements Controller {
     AnchorPane currentPane = FXMLLoader.load(getClass().getResource("fileManagementScreen.fxml"));
     service_anchor.getChildren().setAll(currentPane);
   }
+
+  @FXML
+  public void switchToEmotionalPage() throws IOException {
+    AnchorPane currentPane = FXMLLoader.load(getClass().getResource("emotionalSupportReq.fxml"));
+    service_anchor.getChildren().setAll(currentPane);
+  }
 }

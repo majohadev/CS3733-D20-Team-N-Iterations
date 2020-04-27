@@ -20,7 +20,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
 
 public class EmotionalRequestControllerTest extends ApplicationTest {
@@ -43,7 +42,7 @@ public class EmotionalRequestControllerTest extends ApplicationTest {
     primaryStage.show();
   }
 
-  //TODO: ADD @TEST TAG
+  // TODO: ADD @TEST TAG
   public void testAddNewRequest() throws DBException {
 
     try {
