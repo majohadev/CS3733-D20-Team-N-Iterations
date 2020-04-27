@@ -5,7 +5,6 @@ import edu.wpi.N.App;
 import edu.wpi.N.algorithms.Algorithm;
 import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.database.DBException;
-import edu.wpi.N.database.DoctorDB;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Path;
@@ -94,7 +93,6 @@ public class hamburgerTestController implements Controller, Initializable {
     initializeConversions();
     defaultKioskNode();
     acc_search.setExpandedPane(pn_locationSearch);
-
   }
 
   private void initializeConversions() {
