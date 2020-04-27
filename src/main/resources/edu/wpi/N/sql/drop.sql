@@ -1,11 +1,12 @@
 DROP TABLE flowertoflower;
 DROP TABLE flowerRequest;
+DROP TABLE ITrequest;
+DROP TABLE erequest;
 DROP TABLE sanitationRequests;
 DROP TABLE medicineRequests;
 DROP TABLE lrequest;
 DROP TABLE trequest;
 DROP TABLE wrequest;
-DROP TABLE ITrequest;
 DROP TABLE request;
 DROP TABLE location;
 DROP TABLE doctors;
@@ -19,8 +20,10 @@ DROP TABLE emotionalSupporter;
 DROP TABLE wheelchairEmployee;
 DROP TABLE flower;
 DROP TABLE IT;
+DROP TABLE emotionalSupporter;
 DROP TABLE employees;
 DROP TABLE service;
+DROP TABLE kiosk;
 DROP TABLE edges;
 DROP TABLE nodes;
-/* TODO: Add drop statements, make sure they are in correct order (reverse of setup.sql). */;
+
