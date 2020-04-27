@@ -91,9 +91,9 @@ public class SanitationRequestController implements Controller {
     cmbo_text.show();
   }
 
-  // Create Translator Request
+  // Create Sanitation Request
   @FXML
-  public void createNewTranslator() throws DBException {
+  public void createNewSanitation() throws DBException {
 
     String sizeSelection = cmbo_selectSpillSize.getSelectionModel().getSelectedItem();
     String dangerSelection = cmbo_selectDangerLevel.getSelectionModel().getSelectedItem();
