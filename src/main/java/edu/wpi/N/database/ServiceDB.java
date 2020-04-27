@@ -1103,7 +1103,7 @@ public class ServiceDB {
    * @throws DBException if there was an error adding the flower
    */
   public boolean addFlower(String name, double price) throws DBException {
-    try{
+    try {
       String query = "INSERT INTO flower (flowerName, price) VALUES (?, ?)";
       PreparedStatement st = con.prepareStatement(query);
       st.setString(1, name);
@@ -1122,7 +1122,7 @@ public class ServiceDB {
    * @throws DBException if there was an error removing the flower
    */
   public boolean removeFlower(String name) throws DBException {
-    try{
+    try {
       String query = "DELETE FROM flower WHERE flowerName = ?";
       PreparedStatement st = con.prepareStatement(query);
       st.setString(1, name);
@@ -1139,17 +1139,16 @@ public class ServiceDB {
    * @return a Flower object containing the name and price of the flower
    * @throws DBException if there is an error in getting the flower
    */
-  public Flower getFlower(String name) throws DBException{
-    try{
+  public Flower getFlower(String name) throws DBException {
+    try {
       String query = "SELECT * FROM flower WHERE flowerName = ?";
       PreparedStatement st = con.prepareStatement(query);
       st.setString(1, name);
       ResultSet rs = st.executeQuery();
 
-      if(rs.next()){
+      if (rs.next()) {
         return new Flower(name, rs.getDouble("price"));
-      }
-      else throw new DBException("Could not find \""+name+"\" in the flower table");
+      } else throw new DBException("Could not find \"" + name + "\" in the flower table");
     } catch (SQLException e) {
       throw new DBException("Unknown error: getFlower", e);
     }
