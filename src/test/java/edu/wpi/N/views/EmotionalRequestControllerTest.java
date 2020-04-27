@@ -20,6 +20,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
 
 public class EmotionalRequestControllerTest extends ApplicationTest {
@@ -42,14 +43,15 @@ public class EmotionalRequestControllerTest extends ApplicationTest {
     primaryStage.show();
   }
 
-  // TODO: ADD @TEST TAG
+  @Test
   public void testAddNewRequest() throws DBException {
 
     try {
       con.setAutoCommit(false);
       // Insertion statements, like addTranslator
 
-      clickOn("#cmbo_text").write("Duncan Reid Conference Room").push(KeyCode.ENTER);
+      clickOn("#cmbo_text").write("Duncan Reid Confarence");
+      clickOn("Duncan Reid Conference Room");
 
       clickOn("#cmbo_selectSupport").type(KeyCode.DOWN).type(KeyCode.DOWN);
       clickOn("#txtf_supportNotes").write("I wanna live!");
@@ -76,7 +78,7 @@ public class EmotionalRequestControllerTest extends ApplicationTest {
       }
 
       // TODO: Update once Controller is updated
-      Assertions.assertTrue(true);
+      Assertions.assertTrue(passedTest);
 
       // deleting statements
     } catch (SQLException e) { // also wanna catch DBException e
