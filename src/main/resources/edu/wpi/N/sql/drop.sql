@@ -1,3 +1,5 @@
+DROP TABLE flowertoflower;
+DROP TABLE flowerRequest;
 DROP TABLE sanitationRequests;
 DROP TABLE medicineRequests;
 DROP TABLE lrequest;
@@ -12,7 +14,10 @@ DROP TABLE sanitation;
 DROP TABLE laundry;
 DROP TABLE language;
 DROP TABLE translator;
+DROP TABLE flowerDeliverer;
+DROP TABLE emotionalSupporter;
 DROP TABLE wheelchairEmployee;
+DROP TABLE flower;
 DROP TABLE IT;
 DROP TABLE employees;
 DROP TABLE service;

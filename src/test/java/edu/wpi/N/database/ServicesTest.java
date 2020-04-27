@@ -641,6 +641,44 @@ public class ServicesTest {
     }
   }
 
+  //Chris
+  @Test
+  public void testgetEmployee_flower(){
+
+  }
+
+  //Nick
+  @Test
+  public void testgetRequest_flower(){
+
+  }
+
+  //Chris
+  @Test
+  public void testgetRequests_flower(){
+
+  }
+
+  //Nick
+  @Test
+  public void testgetEmployees_flower(){
+
+  }
+
+  //Chris
+  @Test
+  public void testgetOpenRequest_flower(){
+
+  }
+
+  //Nick
+  @Test
+  public void testgetflowerDeliverers(){
+
+  }
+
+
+
   @AfterEach
   public void clearDB() throws DBException {
     MapDB.clearNodes();
