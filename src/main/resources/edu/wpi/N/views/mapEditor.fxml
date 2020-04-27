@@ -15,14 +15,15 @@
           <AnchorPane disable="true" maxHeight="110.0" maxWidth="-Infinity" minHeight="110.0" minWidth="110.0" prefHeight="110.0" prefWidth="1920.0" />
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" style="-fx-background-color: d0e6d1;">
                <children>
-                  <StackPane layoutX="128.0" prefHeight="829.0" prefWidth="1028.0">
+                  <StackPane fx:id="pn_stack" layoutX="128.0" prefHeight="829.0" prefWidth="1028.0">
                      <children>
                         <ImageView fitHeight="997.0" fitWidth="1818.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../images/Floor1TeamN.png" />
                            </image>
                         </ImageView>
-                        <Pane fx:id="pn_display" onKeyPressed="#onPaneDisplayKeyPressed" onMouseClicked="#onPaneDisplayClicked" prefHeight="773.0" prefWidth="1257.0">
+                        <Pane fx:id="pn_edges" prefHeight="997.0" prefWidth="1696.0" />
+                        <Pane fx:id="pn_display" onMouseClicked="#onPaneDisplayClicked" prefHeight="773.0" prefWidth="1257.0">
                            <children>
                               <Pane fx:id="pn_editor" layoutX="1048.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="280.0" prefWidth="470.0" />
                               <JFXButton fx:id="btn_home" layoutX="144.0" layoutY="372.0" onMouseClicked="#onBtnHomeClicked" prefHeight="52.0" prefWidth="103.0" text="Home" />
