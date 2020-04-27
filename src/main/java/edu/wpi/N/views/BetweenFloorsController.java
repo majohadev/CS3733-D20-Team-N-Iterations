@@ -24,7 +24,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
 public class BetweenFloorsController implements Controller, Initializable {
-  App mainApp = null;
+  App mainApp;
   DbNode node;
   int floor;
   HashMap<Integer, Circle> nodes; // key is floor number
@@ -47,13 +47,12 @@ public class BetweenFloorsController implements Controller, Initializable {
   final double DEFAULT_LINE_WIDTH = 6;
 
   @FXML private AnchorPane parent;
-  @FXML private JFXButton button;
-  @FXML private JFXButton button2;
   @FXML private JFXButton btn_save;
   @FXML private JFXButton btn_cancel;
 
   @FXML
   public void initialize(URL url, ResourceBundle rb) {
+    System.out.println("Hello");
     this.lines = new HashMap<Integer, Line>();
     this.nodes = new HashMap<Integer, Circle>();
     this.labels = new HashMap<Integer, Text>();
@@ -62,11 +61,11 @@ public class BetweenFloorsController implements Controller, Initializable {
     this.potentialEdges = new HashMap<Integer, DbNode[]>(); // key is sum
     this.lineStatus = new HashMap<Line, Boolean>();
 
-    Circle circle1 = createCircle(1000, 600, "1", 1);
-    Circle circle2 = createCircle(1000, 525, "2", 2);
-    Circle circle3 = createCircle(1000, 450, "3", 3);
-    Circle circle4 = createCircle(1000, 375, "4", 4);
-    Circle circle5 = createCircle(1000, 300, "5", 5);
+    Circle circle1 = createCircle(65, 0, "1", 1);
+    Circle circle2 = createCircle(65, 75, "2", 2);
+    Circle circle3 = createCircle(65, 150, "3", 3);
+    Circle circle4 = createCircle(65, 225, "4", 4);
+    Circle circle5 = createCircle(65, 300f, "5", 5);
 
     nodes.put(1, circle1);
     nodes.put(2, circle2);
@@ -218,17 +217,9 @@ public class BetweenFloorsController implements Controller, Initializable {
                   }
                 });
             menu.getItems().addAll(activateEdge, deactivateEdge);
-            menu.show(mainApp.getStage(), event.getSceneX(), event.getSceneY());
+            menu.show(this.mainApp.getStage(), event.getSceneX(), event.getSceneY());
           }
         }));
-  }
-
-  public void onButton1() throws DBException {
-    setNode(MapDB.getNode("PELEV00Y05")); //  "NSTAI00704"
-  }
-
-  public void onButton2() throws DBException {
-    setFloor(MapDB.getNode("PELEV00Y05").getFloor());
   }
 
   public void onSaveButton() throws DBException {
@@ -264,65 +255,12 @@ public class BetweenFloorsController implements Controller, Initializable {
         MapDB.removeEdge(r[0].getNodeID(), r[1].getNodeID());
       }
     }
-
-    //    if (!newEdges.isEmpty() && !originalEdges.isEmpty()) {
-    //      for (DbNode[] n : newEdges) {
-    //        if (!originalEdges.contains(n)) {
-    //          MapDB.addEdge(n[0].getNodeID(), n[1].getNodeID());
-    //        }
-    //      }
-    //    } else if (!newEdges.isEmpty() && originalEdges.isEmpty()) {
-    //      for (DbNode[] n : newEdges) {
-    //        MapDB.addEdge(n[0].getNodeID(), n[1].getNodeID());
-    //      }
-    //    }
-    //    if (!removedEdges.isEmpty() && !originalEdges.isEmpty()) {
-    //      for (DbNode[] r : removedEdges) {
-    //        if (originalEdges.contains(r)) {
-    //          MapDB.removeEdge(r[0].getNodeID(), r[1].getNodeID());
-    //        }
-    //      }
-    //    }
-
-    //    //////
-    //    if (newEdges.isEmpty() && !originalEdges.isEmpty()) {
-    //      for (DbNode[] o : removedEdges) {
-    //        MapDB.removeEdge(o[0].getNodeID(), o[1].getNodeID());
-    //      }
-    //    } else if (originalEdges.isEmpty() && !newEdges.isEmpty()) {
-    //      for (DbNode[] n : newEdges) {
-    //        MapDB.addEdge(n[0].getNodeID(), n[1].getNodeID());
-    //      }
-    //    } else if (!newEdges.isEmpty() && !originalEdges.isEmpty()) {
-    //      for (DbNode[] n : newEdges) {
-    //        if (!originalEdges.contains(n)) {
-    //            MapDB.addEdge(n[0].getNodeID(), n[1].getNodeID());
-    //        }
-    //      }
-    //      for (DbNode[] o : originalEdges) {
-    //        if (!newEdges.contains(o)) {
-    //          try {
-    //            MapDB.removeEdge(o[0].getNodeID(), o[1].getNodeID());
-    //          } catch (Exception e) {
-    //            e.printStackTrace();
-    //          }
-    //        }
-    //      }
-    //    }
   }
 
   public void onCancelButton() {
     setFloor(this.floor);
   }
 
-  /**
-   * creates a line between two circles
-   *
-   * @param c1
-   * @param c2
-   * @param c
-   * @return
-   */
   private Line createLine(Circle c1, Circle c2, Color c) {
     double x1 = c1.getCenterX();
     double x2 = c2.getCenterX();
@@ -337,14 +275,6 @@ public class BetweenFloorsController implements Controller, Initializable {
     return line;
   }
 
-  /**
-   * creates a node at XY with text label
-   *
-   * @param x
-   * @param y
-   * @param text
-   * @return
-   */
   private Circle createCircle(double x, double y, String text, int num) {
     Circle circle = new Circle(DEFAULT_RADIUS, DEFAULT_CIRCLE_COLOR);
     circle.setCenterX(x);
@@ -358,13 +288,6 @@ public class BetweenFloorsController implements Controller, Initializable {
     return circle;
   }
 
-  /**
-   * Gets you the floors that are active for the given elevator/stair
-   *
-   * @param node
-   * @return LinkedList Integer, floor numbers of active floors
-   * @throws DBException
-   */
   private LinkedList<DbNode> getFloors(DbNode node) throws DBException {
     LinkedList<DbNode> floorChangeNodes = new LinkedList<DbNode>();
     for (int i = 1; i <= 5; i++) {
@@ -388,39 +311,4 @@ public class BetweenFloorsController implements Controller, Initializable {
   private void activateEdgeOnClick(Line line) throws IOException, DBException {
     this.lineStatus.put(line, true);
   }
-
-  //  public void textAnimation() {
-  //    Path path = new Path();
-  //    MoveTo moveTo =
-  //            new MoveTo(nodes.get(floor - 1).getCenterX(), nodes.get(floor - 1).getCenterY());
-  //    LineTo line1 = new LineTo(nodes.get(floor - 2).getCenterX(), nodes.get(floor -
-  // 1).getCenterY());
-  //    path.getElements().add(moveTo);
-  //    path.getElements().add(line1);
-  //    PathTransition pathTransition = new PathTransition();
-  //    pathTransition.setDuration(Duration.millis(1000));
-  //    pathTransition.setNode(nodes.get(floor - 2));
-  //    pathTransition.setOrientation(OrientationType.ORTHOGONAL_TO_TANGENT);
-  //    pathTransition.setCycleCount(50);
-  //    pathTransition.setAutoReverse(false);
-  //    nodes.get(floor - 1).setVisible(true);
-  //    pathTransition.play();
-  //  }
-
-  //  private static PathTransition newPathTransitionTo(Circle block, double toX, double toY) {
-  //    double fromX = block.getCenterX();
-  //    double fromY = block.getCenterY();
-  //
-  //    Path path = new Path();
-  //    path.getElements().add(new MoveTo(fromX, fromY));
-  //    path.getElements().add(new LineTo(toX, toY));
-  //
-  //    PathTransition transition = new PathTransition();
-  //    transition.setPath(path);
-  //    transition.setNode(block);
-  //    transition.setDelay(Duration.seconds(1));
-  //    transition.setDuration(Duration.seconds(2));
-  //
-  //    return transition;
-  //  }
 }
