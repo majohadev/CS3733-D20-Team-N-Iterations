@@ -8,6 +8,7 @@ import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Path;
+import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -42,6 +43,7 @@ public class hamburgerTestController implements Controller, Initializable {
   @FXML JFXListView lst_firstLocation;
   @FXML JFXListView lst_secondLocation;
   @FXML JFXButton btn_findPath;
+  @FXML JFXButton btn_home;
 
   private JFXButton btn_floors, btn_floor1, btn_floor2, btn_floor3, btn_floor4, btn_floor5;
   private final int DEFAULT_FLOOR = 1;
@@ -134,8 +136,14 @@ public class hamburgerTestController implements Controller, Initializable {
 
   private void findPath(DbNode node1, DbNode node2) throws DBException {
     if (node1.getFloor() <= node2.getFloor()) {
+      Path path;
       Algorithm myAStar = new Algorithm();
-      Path path = myAStar.findPath(node1, node2, false);
+      try {
+        path = myAStar.findPath(node1, node2, false);
+      } catch (NullPointerException e) {
+        displayErrorMessage("The path does not exist");
+        return;
+      }
       pathNodes = path.getPath();
     } else {
       Algorithm myAStar = new Algorithm();
@@ -164,8 +172,8 @@ public class hamburgerTestController implements Controller, Initializable {
   }
 
   private void drawPath(LinkedList<DbNode> pathNodes) {
-    DbNode firstNode = pathNodes.get(0);
-    DbNode secondNode = pathNodes.get(1);
+    DbNode firstNode;
+    DbNode secondNode;
     for (int i = 0; i < pathNodes.size() - 1; i++) {
       firstNode = pathNodes.get(i);
       secondNode = pathNodes.get(i + 1);
@@ -182,6 +190,16 @@ public class hamburgerTestController implements Controller, Initializable {
     }
   }
 
+  public void onBtnResetPathClicked() {
+    mode = Mode.NO_STATE;
+    enableAllFloorButtons();
+    pn_display.getChildren().removeIf(node -> node instanceof Line);
+    txt_firstLocation.clear();
+    txt_secondLocation.clear();
+    lst_firstLocation.getItems().clear();
+    lst_secondLocation.getItems().clear();
+  }
+
   private double scaleX(double x) {
     return x * HORIZONTAL_SCALE;
   }
@@ -189,17 +207,6 @@ public class hamburgerTestController implements Controller, Initializable {
   private double scaleY(double y) {
     return y * VERTICAL_SCALE;
   }
-
-  //      Line line =
-  //              new Line(
-  //                      (firstNode.getX() * HORIZONTAL_SCALE) + HORIZONTAL_OFFSET,
-  //                      (firstNode.getY() * VERTICAL_SCALE) + VERTICAL_OFFSET,
-  //                      (secondNode.getX() * HORIZONTAL_SCALE) + HORIZONTAL_OFFSET,
-  //                      (secondNode.getY() * VERTICAL_SCALE) + VERTICAL_OFFSET);
-  //      line.setStrokeWidth(5);
-  //      pn_path.getChildren().add(line);
-  //    }
-  //  }
 
   public void initializeChangeFloorButtons() {
     btn_floors = new JFXButton("Floors");
@@ -286,6 +293,10 @@ public class hamburgerTestController implements Controller, Initializable {
 
   public void setMainApp(App mainApp) {
     this.mainApp = mainApp;
+  }
+
+  public void onBtnHomeClicked() throws IOException {
+    mainApp.switchScene("views/home.fxml");
   }
 
   public void displayErrorMessage(String str) {
