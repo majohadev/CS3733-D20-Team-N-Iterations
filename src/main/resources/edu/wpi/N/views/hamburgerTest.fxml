@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXDrawer?>
+<?import com.jfoenix.controls.JFXHamburger?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #D3D3D3;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.hamburgerTestController">
+   <children>
+      <Pane prefHeight="75.0" prefWidth="1920.0" style="-fx-background-color: #0e4D92;">
+         <children>
+            <Label layoutX="38.0" layoutY="14.0" text="4/23/2020" textFill="WHITE">
+               <font>
+                  <Font name="Calibri Bold" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="48.0" layoutY="38.0" text="3:48 PM" textFill="WHITE">
+               <font>
+                  <Font name="Calibri Bold" size="20.0" />
+               </font>
+            </Label>
+         </children></Pane>
+      <JFXHamburger fx:id="hm_ham1" layoutX="1876.0" layoutY="14.0" />
+      <JFXDrawer fx:id="dw_drawer" defaultDrawerSize="300.0" layoutY="75.0" prefHeight="1005.0" prefWidth="300.0" />
+   </children>
+</AnchorPane>
