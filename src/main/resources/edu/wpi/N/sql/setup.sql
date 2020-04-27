@@ -46,6 +46,11 @@ CREATE TABLE laundry(
       l_employeeID INT NOT NULL References employees(employeeID) ON DELETE CASCADE,
       PRIMARY KEY(l_employeeID));
 
+CREATE TABLE sanitation(
+    sanitationEmployeeID INT NOT NULL REFERENCES employees(employeeID) ON DELETE CASCADE,
+    PRIMARY KEY(sanitationEmployeeID)
+);
+
 CREATE TABLE credential(
     username VARCHAR(255) NOT NULL PRIMARY KEY,
     password VARCHAR(255) NOT NULL,
@@ -104,6 +109,15 @@ CREATE TABLE medicineRequests(
     patient VARCHAR(255) NOT NULL
 );
 
+CREATE TABLE sanitationRequests(
+    requestID INT NOT NULL PRIMARY KEY REFERENCES request(requestID) ON DELETE CASCADE,
+    size VARCHAR(7) NOT NULL,
+    sanitationType VARCHAR(255),
+    danger VARCHAR(7),
+    CONSTRAINT size_ck CHECK (LOWER(size) IN ('small', 'medium', 'large', 'unknown')),
+    CONSTRAINT danger_ck CHECK (LOWER(danger) IN ('low', 'medium', 'high', 'unknown'))
+);
+
 /*TODO: Add request table */
 CREATE TABLE wrequest(
               requestID INT NOT NULL PRIMARY KEY REFERENCES request(requestID) ON DELETE CASCADE,
@@ -120,6 +134,7 @@ CREATE TABLE ITrequest(
 INSERT INTO service VALUES ('Translator', '00:00', '00:00', 'Make a request for our translation services!');
 INSERT INTO service VALUES ('Laundry', '00:00', '00:00', 'Make a request for laundry services!');
 INSERT INTO service VALUES ('Medicine', '00:00', '00:00', 'Request medicine delivery!');
+INSERT INTO service VALUES ('Sanitation', '00:00', '00:00', 'Request sanitation service!');
 /*TODO: Insert your service tuple */
 INSERT INTO service VALUES ('Wheelchair', '00:00', '00:00', 'Request a wheelchair!');
 INSERT INTO service VALUES ('Emotional Support', '00:00', '00:00', 'Request emotional support, please?!');
