@@ -26,11 +26,11 @@
          <font>
             <Font name="Calibri" size="12.0" />
          </font></Button>
-        <Button fx:id="btn_logout" layoutX="113.0" layoutY="502.0" mnemonicParsing="false" onMouseClicked="#closeScreen" text="Logout" AnchorPane.leftAnchor="113.0">
+        <Button fx:id="btn_logout" layoutX="113.0" layoutY="502.0" mnemonicParsing="false" text="Logout" AnchorPane.leftAnchor="113.0">
          <font>
             <Font name="Calibri" size="12.0" />
          </font></Button>
-        <TableView fx:id="tbMockData" layoutX="334.0" layoutY="61.0" maxWidth="591.0" minWidth="400.0" prefHeight="429.0" prefWidth="568.0" AnchorPane.leftAnchor="322.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="61.0" />
+        <TableView fx:id="tb_RequestTable" layoutX="334.0" layoutY="61.0" maxWidth="591.0" minWidth="400.0" prefHeight="429.0" prefWidth="568.0" AnchorPane.leftAnchor="322.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="61.0" />
         <Line endX="100.0" layoutX="138.0" layoutY="173.0" startX="-100.0" AnchorPane.leftAnchor="37.5" AnchorPane.topAnchor="172.5" />
       <Button fx:id="btn_editMap" disable="true" layoutX="43.0" layoutY="440.0" mnemonicParsing="false" onMouseClicked="#editMap" prefHeight="50.0" prefWidth="190.0" text="Edit Map" visible="false">
          <font>
