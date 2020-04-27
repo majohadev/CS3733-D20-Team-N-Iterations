@@ -92,7 +92,7 @@ public class MapEditorController implements Controller {
 
   private void loadFloor() throws DBException {
     LinkedList<DbNode> floorNodes = MapDB.floorNodes(currentFloor, currentBuilding);
-    LinkedList<DbNode[]> floorEdges = MapDB.getFloorEdges(currentFloor);
+    LinkedList<DbNode[]> floorEdges = MapDB.getFloorEdges(currentFloor, "Faulkner");
     HashMap<String, UINode> conversion = createUINodes(floorNodes, DEFAULT_CIRCLE_COLOR);
     createUIEdges(conversion, floorEdges, DEFAULT_LINE_COLOR);
   }

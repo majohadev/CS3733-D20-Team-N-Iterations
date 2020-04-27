@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:id="parent" accessibleText="kkm" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@BetweenFloorLines.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.BetweenFloorsController" />
+<AnchorPane fx:id="parent" accessibleText="kkm" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@BetweenFloorLines.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.BetweenFloorsController">
+   <children>
+      <JFXButton fx:id="button" layoutX="462.0" layoutY="313.0" onAction="#onButton1" text="Node" />
+      <JFXButton fx:id="button2" layoutX="482.0" layoutY="164.0" onAction="#onButton2" text="Floor" />
+   </children>
+</AnchorPane>
