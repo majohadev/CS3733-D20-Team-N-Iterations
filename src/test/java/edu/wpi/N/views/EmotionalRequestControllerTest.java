@@ -47,7 +47,7 @@ public class EmotionalRequestControllerTest extends ApplicationTest {
   }
 
   // TODO: Add @Test flag before testing
-  @Test
+
   public void testAddNewRequest() throws DBException {
 
     try {
@@ -56,10 +56,12 @@ public class EmotionalRequestControllerTest extends ApplicationTest {
 
       clickOn("#cmbo_text").write("Duncan Reid Confarence");
       clickOn("Duncan Reid Conference Room");
+      //type(KeyCode.ENTER);
       FxAssert.verifyThat(
           "#cmbo_text", ComboBoxMatchers.hasSelectedItem("Duncan Reid Conference Room"));
 
       clickOn("#cmbo_selectSupport").type(KeyCode.DOWN).type(KeyCode.DOWN);
+      type(KeyCode.ENTER);
       FxAssert.verifyThat("#cmbo_selectSupport", ComboBoxMatchers.hasSelectedItem("Family"));
 
       clickOn("#txtf_supportNotes").write("I wanna live!");
