@@ -6,7 +6,6 @@ import edu.wpi.N.database.ServiceDB;
 import edu.wpi.N.entities.employees.Employee;
 import edu.wpi.N.entities.employees.Translator;
 import edu.wpi.N.entities.request.Request;
-import java.io.IOException;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.ResourceBundle;
@@ -16,7 +15,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
@@ -25,7 +23,6 @@ import javafx.util.Callback;
 public class AdminController implements Initializable, Controller {
 
   private App mainApp;
-  private HomeController homeController;
 
   @FXML Button btn_logout;
   @FXML Button btn_Accept;
@@ -37,8 +34,6 @@ public class AdminController implements Initializable, Controller {
 
   ObservableList<Request> tableData = FXCollections.observableArrayList();
   ObservableList<String> languageData = FXCollections.observableArrayList();
-
-  Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
 
   private static class selfFactory<G>
       implements Callback<TableColumn.CellDataFeatures<G, G>, ObservableValue<G>> {
@@ -64,10 +59,6 @@ public class AdminController implements Initializable, Controller {
     }
     initializeTable();
   }
-
-  /*
-    Initializes the table with all of the needed parameters for display on the Admin Page
-  */
 
   private void initializeTable() {
 
@@ -159,17 +150,6 @@ public class AdminController implements Initializable, Controller {
     tb_languages.setItems(languageData);
   }
 
-  @FXML
-  public void closeScreen(MouseEvent event) {
-    ((Node) (event.getSource())).getScene().getWindow().hide();
-  }
-
-  @FXML
-  public void editMap(MouseEvent e) throws IOException {
-    this.mainApp.switchScene("editMap.fxml");
-    // ((Node) (e.getSource())).getScene().getWindow().hide();
-  }
-
   @Override
   public void setMainApp(App mainApp) {
     this.mainApp = mainApp;
@@ -178,9 +158,6 @@ public class AdminController implements Initializable, Controller {
   @FXML
   private void acceptRow(MouseEvent e) {
     try {
-
-      // Checks if a row is selected within the table and checks if there is an assigned employee to
-      // that request
       if (e.getSource() == btn_Accept
           && (ServiceDB.getRequest(
                       tb_RequestTable.getSelectionModel().getSelectedItems().get(0).getRequestID())
@@ -263,27 +240,7 @@ public class AdminController implements Initializable, Controller {
       errorAlert.show();
       return;
     }
-
     assignEmployeeToRequest(eID, rID);
-
-    // NEEDS MORE TESTING - PRETTY SURE WE DON'T NEED THIS CODE
-
-    /*
-    try {
-      if (ch_requestFilter.isSelected()) {
-        LinkedList<Request> reqs = ServiceDB.getOpenRequests();
-        tableData.setAll(reqs);
-      } else {
-        LinkedList<Request> reqs = ServiceDB.getRequests();
-        tableData.setAll(reqs);
-      }
-
-    } catch (DBException ev) {
-      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-      errorAlert.setContentText(ev.getMessage());
-      errorAlert.show();
-    }
-     */
   }
 
   public void populateChoiceBox() throws DBException {
