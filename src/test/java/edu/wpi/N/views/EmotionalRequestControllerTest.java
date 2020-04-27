@@ -20,7 +20,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 import org.testfx.api.FxAssert;
 import org.testfx.framework.junit5.ApplicationTest;
 import org.testfx.matcher.control.ComboBoxMatchers;
@@ -56,7 +55,7 @@ public class EmotionalRequestControllerTest extends ApplicationTest {
 
       clickOn("#cmbo_text").write("Duncan Reid Confarence");
       clickOn("Duncan Reid Conference Room");
-      //type(KeyCode.ENTER);
+      // type(KeyCode.ENTER);
       FxAssert.verifyThat(
           "#cmbo_text", ComboBoxMatchers.hasSelectedItem("Duncan Reid Conference Room"));
 
