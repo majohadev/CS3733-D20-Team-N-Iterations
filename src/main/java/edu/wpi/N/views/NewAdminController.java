@@ -8,6 +8,7 @@ import edu.wpi.N.App;
 import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.database.*;
 import edu.wpi.N.entities.DbNode;
+import edu.wpi.N.entities.Service;
 import edu.wpi.N.entities.employees.Employee;
 import edu.wpi.N.entities.employees.Translator;
 import edu.wpi.N.entities.request.Request;
@@ -72,6 +73,7 @@ public class NewAdminController implements Controller, Initializable {
   @FXML Button btn_Accept;
   @FXML Button btn_Deny;
   @FXML ChoiceBox<Employee> cb_Employee;
+  @FXML ChoiceBox<Service> cb_employeeTypes;
   @FXML TableView<Request> tb_RequestTable = new TableView<Request>();
   @FXML TableView<String> tb_languages = new TableView<String>();
   @FXML CheckBox ch_requestFilter;
@@ -109,6 +111,7 @@ public class NewAdminController implements Controller, Initializable {
       populateLanguageTable();
       tableSetup();
       populateTable();
+      populateEmployeeType();
 
       cb_translator
           .selectedProperty()
@@ -120,6 +123,35 @@ public class NewAdminController implements Controller, Initializable {
                 } else {
                   txtf_languages.setVisible(false);
                   lbl_languages.setVisible(false);
+                }
+              });
+
+      cb_employeeTypes
+          .valueProperty()
+          .addListener(
+              (ob, old, newVal) -> {
+                if (newVal.getServiceType().equals("Translator")) {
+                  System.out.println("Translator");
+                } else if (cb_employeeTypes
+                    .valueProperty()
+                    .get()
+                    .getServiceType()
+                    .equals("Laundry")) {
+                  System.out.println("Laundry");
+                } else if (cb_employeeTypes
+                    .valueProperty()
+                    .get()
+                    .getServiceType()
+                    .equals("Wheelchair")) {
+                  System.out.println("Wheelchair");
+                } else if (cb_employeeTypes
+                    .valueProperty()
+                    .get()
+                    .getServiceType()
+                    .equals("Emotional Support")) {
+                  System.out.println("Emotional Support");
+                } else if (cb_employeeTypes.valueProperty().get().getServiceType().equals("IT")) {
+                  System.out.println("IT");
                 }
               });
 
@@ -257,40 +289,58 @@ public class NewAdminController implements Controller, Initializable {
   public void addEmployee() throws DBException {
     String name = txtf_empfn.getText() + " " + txtf_empln.getText();
     try {
-      if (cb_translator.isSelected()) {
-        String[] arrOfString = txtf_languages.getText().split(",");
-        LinkedList<String> languages = new LinkedList<>();
-        for (String a : arrOfString) {
-          languages.add(a);
-        }
-        tbl_Employees
-            .getSelectionModel()
-            .selectedItemProperty()
-            .addListener(
-                (obs, old, newVal) -> {
-                  try {
-                    emps.setAll(ServiceDB.getEmployees());
-                  } catch (DBException e) {
-                    e.printStackTrace();
+      cb_employeeTypes
+          .valueProperty()
+          .addListener(
+              (ob, old, newVal) -> {
+                if (newVal.getServiceType().equals("Translator")) {
+                  String[] arrOfString = txtf_languages.getText().split(",");
+                  LinkedList<String> languages = new LinkedList<>();
+                  for (String a : arrOfString) {
+                    languages.add(a);
                   }
-                });
-        // else if() (Sanatation Condition)
-        ServiceDB.addTranslator(name, languages);
-      } else {
-        ServiceDB.addLaundry(name);
-
-        tbl_Employees
-            .getSelectionModel()
-            .selectedItemProperty()
-            .addListener(
-                (obs, old, newVal) -> {
                   try {
-                    emps.setAll(ServiceDB.getEmployees());
-                  } catch (DBException e) {
-                    e.printStackTrace();
+                    ServiceDB.addTranslator(name, languages);
+                    System.out.println("IT");
+                  } catch (DBException ex) {
+                    ex.printStackTrace();
                   }
-                });
-      }
+                } else if (cb_employeeTypes
+                    .valueProperty()
+                    .get()
+                    .getServiceType()
+                    .equals("Laundry")) {
+                  try {
+                    ServiceDB.addLaundry(name);
+                    System.out.println("IT");
+                  } catch (DBException ex) {
+                    ex.printStackTrace();
+                  }
+                } else if (cb_employeeTypes
+                    .valueProperty()
+                    .get()
+                    .getServiceType()
+                    .equals("Wheelchair")) {
+                } else if (cb_employeeTypes
+                    .valueProperty()
+                    .get()
+                    .getServiceType()
+                    .equals("Emotional Support")) {
+                } else if (cb_employeeTypes.valueProperty().get().getServiceType().equals("IT")) {
+                }
+              });
+      // else if() (Sanatation Condition)
+      tbl_Employees
+          .getSelectionModel()
+          .selectedItemProperty()
+          .addListener(
+              (obs, old, newVal) -> {
+                try {
+                  emps.setAll(ServiceDB.getEmployees());
+                } catch (DBException e) {
+                  e.printStackTrace();
+                }
+              });
       populateTable();
     } catch (DBException e) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
@@ -624,5 +674,13 @@ public class NewAdminController implements Controller, Initializable {
 
   public void editMap() throws IOException {
     mainApp.switchScene("views/mapEdit.fxml");
+  }
+
+  public void populateEmployeeType() throws DBException {
+    LinkedList<Service> employeeList = new LinkedList<Service>();
+    employeeList.addAll(ServiceDB.getServices());
+    ObservableList<Service> empTypeList = FXCollections.observableArrayList();
+    empTypeList.addAll(employeeList);
+    cb_employeeTypes.setItems(empTypeList);
   }
 }

@@ -68,7 +68,7 @@
                <children>
                   <StackPane fx:id="sp_getpanes" prefHeight="1005.0" prefWidth="1820.0">
                      <children>
-                        <Pane fx:id="pn_pane3" prefHeight="200.0" prefWidth="200.0">
+                        <Pane fx:id="pn_pane3" prefHeight="200.0" prefWidth="200.0" visible="false">
                            <children>
                               <Label layoutX="828.0" layoutY="7.0" text="Service Requests">
                                  <font>
@@ -148,7 +148,7 @@
                               <JFXTextField fx:id="txtf_cpnewpass" layoutX="1127.0" layoutY="747.0" />
                               <JFXButton buttonType="RAISED" layoutX="1156.0" layoutY="780.0" onMouseClicked="#changeAccountPass" text="Submit" />
                            </children></Pane>
-                        <Pane fx:id="pn_pane2" prefHeight="200.0" prefWidth="200.0" visible="false">
+                        <Pane fx:id="pn_pane2" prefHeight="200.0" prefWidth="200.0">
                            <children>
                               <Label layoutX="155.0" layoutY="87.0" text="Add Doctor">
                                  <font>
@@ -245,6 +245,7 @@
                               <JFXTextField fx:id="txtf_empid" layoutX="601.0" layoutY="508.0" prefHeight="25.0" prefWidth="138.0" />
                               <JFXButton fx:id="btn_addLanguage" buttonType="RAISED" layoutX="493.0" layoutY="612.0" onMouseClicked="#updateTranslator" text="Add Language" />
                               <JFXButton fx:id="btn_removeLanguage" buttonType="RAISED" layoutX="642.0" layoutY="612.0" onMouseClicked="#updateTranslator" text="Remove Language" />
+                              <ChoiceBox fx:id="cb_employeeTypes" layoutX="226.0" layoutY="687.0" prefWidth="150.0" />
                            </children></Pane>
                      </children>
                   </StackPane>

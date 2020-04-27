@@ -20,10 +20,10 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javax.swing.*;
 
-public class LoginController extends QRReader implements Controller {
+public class LoginControllerOUTDATED extends QRReader implements Controller {
   private App mainApp;
-  private static LoginController controller;
-  public AdminController adminController;
+  private static LoginControllerOUTDATED controller;
+  public AdminControllerOUTDATED adminController;
 
   Boolean loggedin = false;
   MapDisplayController mdc;

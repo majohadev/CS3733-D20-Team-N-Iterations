@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1005.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1005.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.drawercontroller">
    <children>
       <Pane prefHeight="215.0" prefWidth="0.0">
          <children>
@@ -45,8 +45,8 @@
                            </image>
                         </ImageView>
                         <JFXListView layoutX="49.0" layoutY="103.0" prefHeight="75.0" prefWidth="200.0" AnchorPane.leftAnchor="45.0" AnchorPane.rightAnchor="45.0" />
-                        <JFXTextField layoutX="59.0" layoutY="58.0" prefHeight="29.0" prefWidth="151.0" promptText="Search by Doctor" />
-                        <JFXButton buttonType="RAISED" layoutX="63.0" layoutY="285.0" prefHeight="27.0" prefWidth="178.0" style="-fx-background-radius: 10;" text="   Find Path To Location" textAlignment="CENTER">
+                        <JFXTextField fx:id="txtf_test" layoutX="59.0" layoutY="58.0" prefHeight="29.0" prefWidth="151.0" promptText="Search by Doctor" />
+                        <JFXButton buttonType="RAISED" layoutX="63.0" layoutY="285.0" onMouseClicked="#printLine" prefHeight="27.0" prefWidth="178.0" style="-fx-background-radius: 10;" text="   Find Path To Location" textAlignment="CENTER">
                            <font>
                               <Font name="Calibri Bold" size="14.0" />
                            </font>

@@ -20,7 +20,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 
-public class AdminController implements Initializable, Controller {
+public class AdminControllerOUTDATED implements Initializable, Controller {
 
   private App mainApp;
 
