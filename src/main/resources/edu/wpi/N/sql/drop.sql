@@ -1,9 +1,10 @@
+DROP TABLE ITrequest;
+DROP TABLE erequest;
 DROP TABLE sanitationRequests;
 DROP TABLE medicineRequests;
 DROP TABLE lrequest;
 DROP TABLE trequest;
 DROP TABLE wrequest;
-DROP TABLE ITrequest;
 DROP TABLE request;
 DROP TABLE location;
 DROP TABLE doctors;
@@ -14,8 +15,10 @@ DROP TABLE language;
 DROP TABLE translator;
 DROP TABLE wheelchairEmployee;
 DROP TABLE IT;
+DROP TABLE emotionalSupporter;
 DROP TABLE employees;
 DROP TABLE service;
+DROP TABLE kiosk;
 DROP TABLE edges;
 DROP TABLE nodes;
-/* TODO: Add drop statements, make sure they are in correct order (reverse of setup.sql). */;
+
