@@ -21,4 +21,16 @@ public class HomeController implements Controller {
   public void onBtnFileClicked() throws IOException {
     this.mainApp.switchScene("views/servicesPage.fxml");
   }
+
+  public void onBtnHamClicked() throws IOException {
+    this.mainApp.switchScene("/edu/wpi/N/views/hamburgerTest.fxml");
+  }
+
+  public void onBtnLoginClicked() throws IOException {
+    this.mainApp.switchScene("/edu/wpi/N/views/newLogin.fxml");
+  }
+
+  public void onBtnAdminClick() throws IOException {
+    this.mainApp.switchScene("/edu/wpi/N/views/adminPortal.fxml");
+  }
 }

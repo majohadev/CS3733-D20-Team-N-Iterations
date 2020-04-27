@@ -56,6 +56,31 @@ public class DoctorDB {
   }
 
   /**
+   * Gets a doctor based on username. Works well since username is a unique key in Doctor
+   *
+   * @param username The username of the doctor you want to get
+   * @return The doctor with the specified username
+   * @throws DBException When there is no doctor with that username or on error
+   */
+  public static Doctor getDoctor(String username) throws DBException {
+    String query = "SELECT doctorID FROM doctors WHERE username = ?";
+    try {
+      PreparedStatement stmt = con.prepareStatement(query);
+      stmt.setString(1, username);
+      ResultSet rs = stmt.executeQuery();
+      rs.next();
+      return getDoctor(rs.getInt("doctorID"));
+    } catch (SQLException e) {
+      if (e.getSQLState().equals("24000")) {
+        throw new DBException("There is no doctor associated with that username!");
+      } else {
+        e.printStackTrace();
+        throw new DBException("Unknown error: getDoctor username: " + username, e);
+      }
+    }
+  }
+
+  /**
    * Adds a doctor to the database
    *
    * @param name The doctor's name
