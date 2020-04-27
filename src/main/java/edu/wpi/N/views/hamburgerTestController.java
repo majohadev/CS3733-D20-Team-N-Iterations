@@ -105,33 +105,34 @@ public class hamburgerTestController implements Controller, Initializable {
     Algorithm myAStar = new Algorithm();
     Path path = myAStar.findPath(node1, node2, false);
     LinkedList<DbNode> pathNodes = path.getPath();
-    drawPath(pathNodes);
+    // drawPath(pathNodes);
   }
 
-//  private void drawPath(LinkedList<DbNode> pathNodes) {
-//    DbNode firstNode = pathNodes.get(0);
-//    DbNode secondNode = pathNodes.get(1);
-//    for (int i = 0; (i < pathNodes.size() - 1) && secondNode.getFloor() == currentFloor; i++) {
-//      firstNode = pathNodes.get(i);
-//      secondNode = pathNodes.get(i + 1);
-//      //        Line line = new Line(
-//      //                              (firstNode.getX() * HORIZONTAL_SCALE) + HORIZONTAL_OFFSET,
-//      //                              (firstNode.getY() * VERTICAL_SCALE) + VERTICAL_OFFSET,
-//      //                              (secondNode.getX() * HORIZONTAL_SCALE) + HORIZONTAL_OFFSET,
-//      //                              (secondNode.getY() * VERTICAL_SCALE) + VERTICAL_OFFSET);
-//    }
-//  }
-//
-//  //      Line line =
-//  //              new Line(
-//  //                      (firstNode.getX() * HORIZONTAL_SCALE) + HORIZONTAL_OFFSET,
-//  //                      (firstNode.getY() * VERTICAL_SCALE) + VERTICAL_OFFSET,
-//  //                      (secondNode.getX() * HORIZONTAL_SCALE) + HORIZONTAL_OFFSET,
-//  //                      (secondNode.getY() * VERTICAL_SCALE) + VERTICAL_OFFSET);
-//  //      line.setStrokeWidth(5);
-//  //      pn_path.getChildren().add(line);
-//  //    }
-//  //  }
+  //  private void drawPath(LinkedList<DbNode> pathNodes) {
+  //    DbNode firstNode = pathNodes.get(0);
+  //    DbNode secondNode = pathNodes.get(1);
+  //    for (int i = 0; (i < pathNodes.size() - 1) && secondNode.getFloor() == currentFloor; i++) {
+  //      firstNode = pathNodes.get(i);
+  //      secondNode = pathNodes.get(i + 1);
+  //      //        Line line = new Line(
+  //      //                              (firstNode.getX() * HORIZONTAL_SCALE) + HORIZONTAL_OFFSET,
+  //      //                              (firstNode.getY() * VERTICAL_SCALE) + VERTICAL_OFFSET,
+  //      //                              (secondNode.getX() * HORIZONTAL_SCALE) +
+  // HORIZONTAL_OFFSET,
+  //      //                              (secondNode.getY() * VERTICAL_SCALE) + VERTICAL_OFFSET);
+  //    }
+  //  }
+  //
+  //  //      Line line =
+  //  //              new Line(
+  //  //                      (firstNode.getX() * HORIZONTAL_SCALE) + HORIZONTAL_OFFSET,
+  //  //                      (firstNode.getY() * VERTICAL_SCALE) + VERTICAL_OFFSET,
+  //  //                      (secondNode.getX() * HORIZONTAL_SCALE) + HORIZONTAL_OFFSET,
+  //  //                      (secondNode.getY() * VERTICAL_SCALE) + VERTICAL_OFFSET);
+  //  //      line.setStrokeWidth(5);
+  //  //      pn_path.getChildren().add(line);
+  //  //    }
+  //  //  }
 
   public void initializeChangeFloorButtons() {
     btn_floors = new JFXButton("Floors");

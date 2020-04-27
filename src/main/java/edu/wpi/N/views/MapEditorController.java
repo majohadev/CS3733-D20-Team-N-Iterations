@@ -1,6 +1,8 @@
 package edu.wpi.N.views;
 
 import com.google.common.collect.HashBiMap;
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXNodesList;
 import edu.wpi.N.App;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
@@ -16,6 +18,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -32,10 +36,13 @@ public class MapEditorController implements Controller {
   @FXML Button btn_home;
   @FXML StackPane pn_stack;
   @FXML Pane pn_edges;
+  @FXML Pane pn_changeFloor;
+  @FXML ImageView img_map;
+  private JFXButton btn_floors, btn_floor1, btn_floor2, btn_floor3, btn_floor4, btn_floor5;
 
-  final int DEFAULT_FLOOR = 4;
+  final int DEFAULT_FLOOR = 1;
   final String DEFAULT_BUILDING = "Faulkner";
-  final Color DEFAULT_CIRCLE_COLOR = Color.PURPLE;
+  final Color DEFAULT_CIRCLE_COLOR = Color.MEDIUMPURPLE;
   final Color DEFAULT_LINE_COLOR = Color.BLACK;
   final double DEFAULT_LINE_WIDTH = 4;
   final Color ADD_NODE_COLOR = Color.BLACK;
@@ -103,9 +110,14 @@ public class MapEditorController implements Controller {
     addEdgeLine = new Line();
     pn_edges.getChildren().add(addEdgeLine);
     deleteEdgeLines = new LinkedList<>();
+    initializeChangeFloorButtons();
   }
 
   private void loadFloor() throws DBException {
+    clearNodes();
+    clearEdges();
+    nodesMap = HashBiMap.create();
+    edgesMap = HashBiMap.create();
     LinkedList<DbNode> floorNodes = MapDB.floorNodes(currentFloor, currentBuilding);
     LinkedList<DbNode[]> floorEdges = MapDB.getFloorEdges(currentFloor, currentBuilding);
     HashMap<String, UINode> conversion = createUINodes(floorNodes, DEFAULT_CIRCLE_COLOR);
@@ -123,6 +135,18 @@ public class MapEditorController implements Controller {
   private void displayNodes() {
     for (Circle circle : nodesMap.keySet()) {
       pn_display.getChildren().add(circle);
+    }
+  }
+
+  private void clearEdges() {
+    for (Line line : edgesMap.keySet()) {
+      pn_edges.getChildren().removeIf(node -> node instanceof Line);
+    }
+  }
+
+  private void clearNodes() {
+    for (Circle circle : nodesMap.keySet()) {
+      pn_display.getChildren().removeIf(node -> node instanceof Circle);
     }
   }
 
@@ -383,14 +407,24 @@ public class MapEditorController implements Controller {
   }
 
   private void onCircleDeleteNodeClicked(MouseEvent event, Circle circle) {
-    if (circle.getFill() == DEFAULT_CIRCLE_COLOR) {
-      circle.setFill(DELETE_NODE_COLOR);
-      deleteNodeCircles.add(circle);
-      controllerDeleteNode.addLstDeleteNode(nodesMap.get(circle).getDBNode().getShortName());
-    } else if (circle.getFill() == DELETE_NODE_COLOR) {
-      circle.setFill(DEFAULT_CIRCLE_COLOR);
-      deleteNodeCircles.remove(circle);
-      controllerDeleteNode.removeLstDeleteNode(nodesMap.get(circle).getDBNode().getShortName());
+    String deleteNodeType = nodesMap.get(circle).getDBNode().getNodeType();
+    String deleteNodeID = nodesMap.get(circle).getDBNode().getNodeID();
+
+    // Check to make sure that a stair or elevator node is not selected
+    if (deleteNodeType.equals("STAI") || deleteNodeType.equals("ELEV"))
+      displayErrorMessage("Cannot Delete Stair or Elevator Nodes");
+    else if (deleteNodeID.equals("NSERV00301") || deleteNodeID.equals("NSERV00103")) {
+      displayErrorMessage("Cannot Delete Kiosk Nodes");
+    } else {
+      if (circle.getFill() == DEFAULT_CIRCLE_COLOR) {
+        circle.setFill(DELETE_NODE_COLOR);
+        deleteNodeCircles.add(circle);
+        controllerDeleteNode.addLstDeleteNode(nodesMap.get(circle).getDBNode().getShortName());
+      } else if (circle.getFill() == DELETE_NODE_COLOR) {
+        circle.setFill(DEFAULT_CIRCLE_COLOR);
+        deleteNodeCircles.remove(circle);
+        controllerDeleteNode.removeLstDeleteNode(nodesMap.get(circle).getDBNode().getShortName());
+      }
     }
   }
 
@@ -817,6 +851,89 @@ public class MapEditorController implements Controller {
       addEdgeLine = new Line();
       pn_edges.getChildren().add(addEdgeLine);
       mode = Mode.NO_STATE;
+    }
+  }
+
+  public void initializeChangeFloorButtons() {
+    btn_floors = new JFXButton("Floors");
+    btn_floor1 = new JFXButton("1");
+    btn_floor2 = new JFXButton("2");
+    btn_floor3 = new JFXButton("3");
+    btn_floor4 = new JFXButton("4");
+    btn_floor5 = new JFXButton("5");
+    btn_floors.setButtonType(JFXButton.ButtonType.RAISED);
+    btn_floor1.setButtonType(JFXButton.ButtonType.RAISED);
+    btn_floor2.setButtonType(JFXButton.ButtonType.RAISED);
+    btn_floor3.setButtonType(JFXButton.ButtonType.RAISED);
+    btn_floor4.setButtonType(JFXButton.ButtonType.RAISED);
+    btn_floor5.setButtonType(JFXButton.ButtonType.RAISED);
+    btn_floors
+        .getStylesheets()
+        .addAll(getClass().getResource("/edu/wpi/N/views/MapDisplayFloors.css").toExternalForm());
+    btn_floors.getStyleClass().addAll("animated-option-button", "animated-option-sub-button");
+    btn_floor1
+        .getStylesheets()
+        .addAll(getClass().getResource("/edu/wpi/N/views/MapDisplayFloors.css").toExternalForm());
+    btn_floor1.getStyleClass().addAll("animated-option-button", "animated-option-sub-button");
+    btn_floor1.setOnMouseClicked(
+        e -> {
+          currentFloor = 1;
+          setFloorImg("/edu/wpi/N/images/Floor1Reclor.png");
+        });
+    btn_floor2
+        .getStylesheets()
+        .addAll(getClass().getResource("/edu/wpi/N/views/MapDisplayFloors.css").toExternalForm());
+    btn_floor2.getStyleClass().addAll("animated-option-button", "animated-option-sub-button");
+    btn_floor2.setOnMouseClicked(
+        e -> {
+          currentFloor = 2;
+          setFloorImg("/edu/wpi/N/images/Floor2TeamN.png");
+        });
+    btn_floor3
+        .getStylesheets()
+        .addAll(getClass().getResource("/edu/wpi/N/views/MapDisplayFloors.css").toExternalForm());
+    btn_floor3.getStyleClass().addAll("animated-option-button", "animated-option-sub-button");
+    btn_floor3.setOnMouseClicked(
+        e -> {
+          currentFloor = 3;
+          setFloorImg("/edu/wpi/N/images/Floor3TeamN.png");
+        });
+    btn_floor4
+        .getStylesheets()
+        .addAll(getClass().getResource("/edu/wpi/N/views/MapDisplayFloors.css").toExternalForm());
+    btn_floor4.getStyleClass().addAll("animated-option-button", "animated-option-sub-button");
+    btn_floor4.setOnMouseClicked(
+        e -> {
+          currentFloor = 4;
+          setFloorImg("/edu/wpi/N/images/Floor4TeamN.png");
+        });
+    btn_floor5
+        .getStylesheets()
+        .addAll(getClass().getResource("/edu/wpi/N/views/MapDisplayFloors.css").toExternalForm());
+    btn_floor5.getStyleClass().addAll("animated-option-button", "animated-option-sub-button");
+    btn_floor5.setOnMouseClicked(
+        e -> {
+          currentFloor = 5;
+          setFloorImg("/edu/wpi/N/images/Floor5TeamN.png");
+        });
+    JFXNodesList nodesList = new JFXNodesList();
+    nodesList.addAnimatedNode(btn_floors);
+    nodesList.addAnimatedNode(btn_floor1);
+    nodesList.addAnimatedNode(btn_floor2);
+    nodesList.addAnimatedNode(btn_floor3);
+    nodesList.addAnimatedNode(btn_floor4);
+    nodesList.addAnimatedNode(btn_floor5);
+    nodesList.setSpacing(20);
+    pn_changeFloor.getChildren().add(nodesList);
+  }
+
+  private void setFloorImg(String path) {
+    Image img = new Image(getClass().getResourceAsStream(path));
+    img_map.setImage(img);
+    try {
+      loadFloor();
+    } catch (DBException e) {
+      e.printStackTrace();
     }
   }
 }
