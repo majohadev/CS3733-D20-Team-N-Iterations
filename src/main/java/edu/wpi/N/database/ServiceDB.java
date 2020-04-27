@@ -1095,6 +1095,25 @@ public class ServiceDB {
   }
 
   /**
+   * Adds a new flower to the database
+   *
+   * @param name Name of the new flower
+   * @param price Price of the new flower
+   * @return True if the addition was successful
+   */
+  public boolean addFlower(String name, double price) throws DBException {
+    try{
+      String query = "INSERT INTO flower (flowerName, price) VALUES (?, ?)";
+      PreparedStatement st = con.prepareStatement(query);
+      st.setString(1, name);
+      st.setDouble(2, price);
+      return st.executeUpdate() > 0;
+    } catch (SQLException e) {
+      throw new DBException("Unknown error: addFlower", e);
+    }
+  }
+
+  /**
    * Adds a request for emotional support
    *
    * @param reqNotes some notes for the emotional support request

@@ -66,7 +66,7 @@ CREATE TABLE doctors (
 
 CREATE TABLE flower(
     flowerName VARCHAR(255) PRIMARY KEY,
-    price INT NOT NULL
+    price FLOAT NOT NULL
 );
 
 /*TODO add the employees table */
