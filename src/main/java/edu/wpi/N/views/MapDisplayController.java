@@ -1,6 +1,5 @@
 package edu.wpi.N.views;
 
-import com.google.common.collect.HashBiMap;
 import edu.wpi.N.App;
 import edu.wpi.N.algorithms.Algorithm;
 import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
@@ -14,12 +13,10 @@ import edu.wpi.N.qrcontrol.QRGenerator;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.NoSuchElementException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -29,13 +26,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -61,7 +53,8 @@ public class MapDisplayController extends QRGenerator implements Controller {
   @FXML ComboBox<String> cb_languages;
   @FXML Button btn_Login;
 
-  //HashBiMap<Circle, DbNode> masterNodes; // stores the map nodes and their respective database nodes
+  // HashBiMap<Circle, DbNode> masterNodes; // stores the map nodes and their respective database
+  // nodes
 
   // Sidebar search by location initializations
   @FXML TextField txtf_searchlocation;
@@ -88,10 +81,10 @@ public class MapDisplayController extends QRGenerator implements Controller {
   @FXML Pane pn_directionsBox;
 
   // Embedded map viewer
-  @FXML private MapBaseController mapBase;
+  @FXML private MapBaseController mapBaseController;
 
-  //LinkedList<DbNode> allFloorNodes; // stores all the nodes on the floor
-  //LinkedList<DbNode> selectedNodes; // stores all the selected nodes on the map
+  // LinkedList<DbNode> allFloorNodes; // stores all the nodes on the floor
+  // LinkedList<DbNode> selectedNodes; // stores all the selected nodes on the map
   LinkedList<String> longNamesList = new LinkedList<>(); // Stores Floor Node names
 
   private ObservableList<String> fuzzySearchTextList =
@@ -128,13 +121,13 @@ public class MapDisplayController extends QRGenerator implements Controller {
   @FXML
   private void onBtnFindClicked(MouseEvent event) throws DBException {
 
-    mapBase.clearPath();
+    mapBaseController.clearPath();
 
-    if (mapBase.selectedNodes.size() != 2) {
+    if (mapBaseController.selectedNodes.size() != 2) {
       return;
     }
-    DbNode firstNode = mapBase.getDbFromUi(mapBase.selectedNodes.get(0));
-    DbNode secondNode = mapBase.getDbFromUi(mapBase.selectedNodes.get(1));
+    DbNode firstNode = mapBaseController.getDbFromUi(mapBaseController.selectedNodes.get(0));
+    DbNode secondNode = mapBaseController.getDbFromUi(mapBaseController.selectedNodes.get(1));
     if (MapDB.getAdjacent(firstNode.getNodeID()).size() == 0
         || MapDB.getAdjacent(secondNode.getNodeID()).size() == 0) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
@@ -159,7 +152,7 @@ public class MapDisplayController extends QRGenerator implements Controller {
 
     if (path != null) {
       LinkedList<DbNode> pathNodes = path.getPath();
-      mapBase.drawPath(pathNodes);
+      mapBaseController.drawPath(pathNodes);
       GenerateQRDirections(path);
     } else {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
@@ -181,9 +174,9 @@ public class MapDisplayController extends QRGenerator implements Controller {
   @FXML
   private void onResetClicked(MouseEvent event) throws Exception {
     pn_directionsBox.setVisible(false);
-    mapBase.showNodes();
-    mapBase.showEdges();
-    mapBase.deselectAll();
+    mapBaseController.showNodes();
+    mapBaseController.showEdges();
+    mapBaseController.deselectAll();
   }
 
   public void onReturnClicked() throws IOException {
@@ -212,20 +205,22 @@ public class MapDisplayController extends QRGenerator implements Controller {
   // Upon clicking find path to location button call this method
   @FXML
   private void onLocationPathFindClicked(MouseEvent event) throws Exception {
-    mapBase.hideEdges();
+    mapBaseController.hideEdges();
     int currentSelection = lst_locationsorted.getSelectionModel().getSelectedIndex();
     DbNode destinationNode = fuzzySearchNodeList.get(currentSelection);
-    if (mapBase.selectedNodes.size() < 1) mapBase.forceSelect(mapBase.defaultNode, true);
-    mapBase.forceSelect(mapBase.getUiFromDb(destinationNode), true);
+    if (mapBaseController.selectedNodes.size() < 1)
+      mapBaseController.forceSelect(mapBaseController.defaultNode, true);
+    mapBaseController.forceSelect(mapBaseController.getUiFromDb(destinationNode), true);
     onBtnFindClicked(event);
-    mapBase.deselectAll();
+    mapBaseController.deselectAll();
   }
 
   @FXML
   private void onNearestBathroomClicked(MouseEvent event) throws Exception {
-    mapBase.clearPath();
-    DbNode startNode = mapBase.getDbFromUi(mapBase.defaultNode);
-    if (mapBase.selectedNodes.size() > 0) startNode = mapBase.getDbFromUi(mapBase.selectedNodes.getFirst());
+    mapBaseController.clearPath();
+    DbNode startNode = mapBaseController.getDbFromUi(mapBaseController.defaultNode);
+    if (mapBaseController.selectedNodes.size() > 0)
+      startNode = mapBaseController.getDbFromUi(mapBaseController.selectedNodes.getFirst());
     onResetClicked(event);
 
     // TODO: Use SINGLETON to retrieve Algorithm object and call findQuickAccess
@@ -236,7 +231,7 @@ public class MapDisplayController extends QRGenerator implements Controller {
     Path pathToBathroom = algorithmSetting.findQuickAccess(startNode, "REST");
     if (pathToBathroom != null) {
       LinkedList<DbNode> pathNodes = pathToBathroom.getPath();
-      mapBase.drawPath(pathNodes);
+      mapBaseController.drawPath(pathNodes);
       GenerateQRDirections(pathToBathroom);
     }
   }
@@ -273,14 +268,15 @@ public class MapDisplayController extends QRGenerator implements Controller {
   // Upon clicking find path to location button call this method
   @FXML
   private void onDoctorPathFindClicked(MouseEvent event) throws Exception {
-    mapBase.clearPath();
+    mapBaseController.clearPath();
     int currentSelection = lst_doctorlocations.getSelectionModel().getSelectedIndex();
     DbNode destinationNode = doctorNodes.get(currentSelection);
-    if (mapBase.selectedNodes.size() < 1) mapBase.selectedNodes.add(mapBase.defaultNode);
-    mapBase.forceSelect(mapBase.getUiFromDb(destinationNode), true);
+    if (mapBaseController.selectedNodes.size() < 1)
+      mapBaseController.selectedNodes.add(mapBaseController.defaultNode);
+    mapBaseController.forceSelect(mapBaseController.getUiFromDb(destinationNode), true);
     // if (selectedNodes.size() < 2) selectedNodes.add(defaultNode);
     onBtnFindClicked(event);
-    mapBase.deselectAll();
+    mapBaseController.deselectAll();
   }
 
   public void fuzzySearchLaundryRequest(KeyEvent keyInput) throws DBException {

@@ -8,9 +8,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.StrokeLineCap;
 
-public class UIEdge {
+public class UIDispEdge {
 
-  private UINode nodeA, nodeB;
+  private UIDispNode nodeA, nodeB;
   private boolean selected;
   private boolean highlighted;
   private Line marker;
@@ -21,15 +21,15 @@ public class UIEdge {
   private final Color PATH_LINE_COLOR = Color.DODGERBLUE;
   final double DEFAULT_LINE_WIDTH = 4;
 
-  public UIEdge(boolean showing, UINode nodeA, UINode nodeB) {
+  public UIDispEdge(boolean showing, UIDispNode nodeA, UIDispNode nodeB) {
 
     marker = new Line();
     marker.setStrokeWidth(DEFAULT_LINE_WIDTH);
     marker.setStroke(DEFAULT_LINE_COLOR);
     marker.setStrokeLineCap(StrokeLineCap.ROUND);
-    // marker.setOpacity(0.7);
-    marker.setOnMouseClicked(mouseEvent -> this.onMarkerClicked(mouseEvent));
-    marker.setCursor(Cursor.HAND); // Cursor points when over nodes
+    marker.setOpacity(0.7);
+    //marker.setOnMouseClicked(mouseEvent -> this.onMarkerClicked(mouseEvent));
+    //marker.setCursor(Cursor.HAND); // Cursor points when over nodes
     this.selected = false;
     this.highlighted = false;
     setVisible(showing);
@@ -80,7 +80,7 @@ public class UIEdge {
     marker.setVisible(visible);
   }
 
-  public void setHighlighted (boolean highlighted) {
+  public void setHighlighted(boolean highlighted) {
     this.highlighted = highlighted;
     if (highlighted) {
       // Path appearance
@@ -97,7 +97,7 @@ public class UIEdge {
     }
   }
 
-  public void setNodes(UINode nodeA, UINode nodeB) {
+  public void setNodes(UIDispNode nodeA, UIDispNode nodeB) {
     if (nodeA != null && nodeB != null) {
       if (nodeA != nodeB && nodeA.edgeTo(nodeB) == null) {
         this.nodeA = nodeA;
@@ -107,15 +107,15 @@ public class UIEdge {
   }
 
   // Assuming bi-directionality
-  public boolean leadsTo(UINode node) {
+  public boolean leadsTo(UIDispNode node) {
     return (node == nodeA || node == nodeB);
   }
 
   // Edges are equal if they have the same end UINodes
   @Override
   public boolean equals(Object other) {
-    if (other instanceof UIEdge) {
-      UIEdge otherEdge = (UIEdge) other;
+    if (other instanceof UIDispEdge) {
+      UIDispEdge otherEdge = (UIDispEdge) other;
       return (otherEdge.nodeA == nodeA && otherEdge.nodeB == nodeB)
           || (otherEdge.nodeB == nodeA && otherEdge.nodeA == nodeB);
     }

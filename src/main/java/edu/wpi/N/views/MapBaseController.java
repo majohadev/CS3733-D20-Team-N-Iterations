@@ -5,8 +5,9 @@ import edu.wpi.N.App;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
-import edu.wpi.N.entities.UIEdge;
-import edu.wpi.N.entities.UINode;
+import edu.wpi.N.entities.UIDispEdge;
+import edu.wpi.N.entities.UIDispNode;
+
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
@@ -25,22 +26,21 @@ import javafx.scene.layout.StackPane;
 
 public class MapBaseController {
 
-  // Node information
-  int currentFloor;
+  int currentFloor = 4;
   String currentBuilding = "Faulkner";
 
   LinkedList<DbNode> allFloorNodes = new LinkedList<DbNode>(); // stores all the nodes on the floor
-  LinkedList<UINode> selectedNodes =
-      new LinkedList<UINode>(); // stores all the selected nodes on the map
-  LinkedList<UIEdge> selectedEdges =
-      new LinkedList<UIEdge>(); // stores all the selected edges on the map
+  LinkedList<UIDispNode> selectedNodes =
+      new LinkedList<UIDispNode>(); // stores all the selected nodes on the map
+  LinkedList<UIDispEdge> selectedEdges =
+      new LinkedList<UIDispEdge>(); // stores all the selected edges on the map
   // LinkedList<String> longNamesList = new LinkedList<>(); // Stores Floor Node names
 
-  public UINode defaultNode;
+  public UIDispNode defaultNode;
 
-  private HashBiMap<UINode, DbNode>
+  private HashBiMap<UIDispNode, DbNode>
       masterNodes; // Maps UINodes from pool to DbNodes from current floor
-  private LinkedList<UIEdge> masterEdges =
+  private LinkedList<UIDispEdge> masterEdges =
       new LinkedList<>(); // Maps UINodes from pool to DbNodes from current floor
 
   // Screen constants
@@ -80,10 +80,8 @@ public class MapBaseController {
 
   public void initialize() throws DBException {
 
-    changeFloor(4);
     masterNodes = HashBiMap.create();
-
-    populateMap();
+    changeFloor(4);
 
     try {
       defaultNode = masterNodes.inverse().get(allFloorNodes.getFirst());
@@ -98,17 +96,18 @@ public class MapBaseController {
     // Change floor
     currentFloor = newFloor;
     img_map.setImage(App.mapData.getMap(newFloor));
+    populateMap();
   }
 
-  private UINode makeUINode() {
-    UINode newNode = new UINode(true);
+  private UIDispNode makeUINode() {
+    UIDispNode newNode = new UIDispNode(true);
     newNode.placeOnPane(pn_routeNodes);
     newNode.setBaseMap(this);
     return newNode;
   }
 
-  private void addEdge(UINode nodeA, UINode nodeB) {
-    UIEdge newEdge = nodeA.addEdgeTo(nodeB);
+  private void addEdge(UIDispNode nodeA, UIDispNode nodeB) {
+    UIDispEdge newEdge = nodeA.addEdgeTo(nodeB);
     if (newEdge != null) {
       masterEdges.add(newEdge);
       newEdge.placeOnPane(pn_path);
@@ -116,26 +115,29 @@ public class MapBaseController {
     }
   }
 
-  private void breakEdge(UINode nodeA, UINode nodeB) {
+  private void breakEdge(UIDispNode nodeA, UIDispNode nodeB) {
     nodeA.breakEdgeTo(nodeB);
   }
 
-  public DbNode getDbFromUi(UINode uiNode) {
+  public DbNode getDbFromUi(UIDispNode uiNode) {
     return masterNodes.get(uiNode);
   }
 
-  public UINode getUiFromDb(DbNode dbNode) {
+  public UIDispNode getUiFromDb(DbNode dbNode) {
     return masterNodes.inverse().get(dbNode);
   }
 
-  public UINode getDefaultNode() {
+  public UIDispNode getDefaultNode() {
     return defaultNode;
   }
 
-  // Replace (or create) link between a UINode and a DbNode
-  private void setLink(UINode uiNode, DbNode dbNode, boolean showKey) {
+  // Replace (or create) link between a UIDispNode and a DbNode
+  private void setLink(UIDispNode uiNode, DbNode dbNode, boolean showKey) {
     if (uiNode != null && dbNode != null) {
-      uiNode.setVisible(showKey);
+
+      //if (dbNode.getNodeType().equals("HALL")) uiNode.setVisible(false);
+      //else uiNode.setVisible(showKey);
+
       uiNode.setPos(
           dbNode.getX() * HORIZONTAL_SCALE + HORIZONTAL_OFFSET,
           dbNode.getY() * VERTICAL_SCALE + VERTICAL_OFFSET);
@@ -143,7 +145,7 @@ public class MapBaseController {
         masterNodes.put(uiNode, dbNode); // Add the new key
       }
       try { // Add any attached edges
-        UINode otherAsUI;
+        UIDispNode otherAsUI;
         for (DbNode other : MapDB.getAdjacent(dbNode.getNodeID())) {
           otherAsUI = getUiFromDb(other);
           if (otherAsUI != null) {
@@ -158,8 +160,8 @@ public class MapBaseController {
     }
   }
 
-  // Called by the UINode that was clicked
-  public void onUINodeClicked(MouseEvent e, UINode clickedNode) {
+  // Called by the UIDispNode that was clicked
+  public void onUINodeClicked(MouseEvent e, UIDispNode clickedNode) {
 
     if (clickedNode.getSelected()) {
       selectedNodes.add(clickedNode);
@@ -170,8 +172,8 @@ public class MapBaseController {
     }
   }
 
-  // Called by the UIEdge that was clicked
-  public void onUIEdgeClicked(MouseEvent e, UIEdge clickedEdge) {
+  // Called by the UIDispEdge that was clicked
+  public void onUIEdgeClicked(MouseEvent e, UIDispEdge clickedEdge) {
 
     if (clickedEdge.getSelected()) {
       selectedEdges.add(clickedEdge);
@@ -184,8 +186,8 @@ public class MapBaseController {
 
   public void populateMap() {
     try {
-      Set<UINode> keys = masterNodes.keySet();
-      Stream<UINode> keyStream = keys.stream();
+      Set<UIDispNode> keys = masterNodes.keySet();
+      Stream<UIDispNode> keyStream = keys.stream();
 
       allFloorNodes = MapDB.floorNodes(currentFloor, currentBuilding); // Reference copy
 
@@ -213,9 +215,9 @@ public class MapBaseController {
 
   // Draw lines between each pair of nodes in given path
   public void drawPath(LinkedList<DbNode> pathNodes) {
-    UINode uiFirst, uiSecond;
+    UIDispNode uiFirst, uiSecond;
     DbNode dbFirst, dbSecond;
-    UIEdge edge;
+    UIDispEdge edge;
 
     for (int i = 0; i < pathNodes.size() - 1; i++) {
       dbFirst = pathNodes.get(i);
@@ -235,15 +237,19 @@ public class MapBaseController {
       if (edge != null) {
         edge.setHighlighted(true);
       } else {
-        System.out.println("Edge between " + dbFirst.getNodeID() + " and " + dbSecond.getNodeID() + " doesn't exist.");
+        System.out.println(
+            "Edge between "
+                + dbFirst.getNodeID()
+                + " and "
+                + dbSecond.getNodeID()
+                + " doesn't exist.");
       }
-
     }
   }
 
   // Resets highlighted edges to their default state
   public void clearPath() {
-    for (UIEdge edge : masterEdges) {
+    for (UIDispEdge edge : masterEdges) {
       edge.setHighlighted(false);
     }
   }
@@ -253,10 +259,12 @@ public class MapBaseController {
     pn_path.setVisible(false);
   }
 
+  /*
   // Hide all nodes
   public void hideNodes() {
     pn_routeNodes.setVisible(false);
   }
+   */
 
   // Show all edges
   public void showEdges() {
@@ -264,24 +272,25 @@ public class MapBaseController {
   }
 
   // Show all nodes
+  /*
   public void showNodes() {
     pn_routeNodes.setVisible(true);
   }
-
+   */
 
   // Deselect nodes and remove lines
   public void deselectAll() {
-    for (UINode uiNode : masterNodes.keySet()) {
+    for (UIDispNode uiNode : masterNodes.keySet()) {
       uiNode.setSelected(false);
     }
     selectedNodes.clear();
 
-    for (UIEdge edge : masterEdges) {
+    for (UIDispEdge edge : masterEdges) {
       edge.setSelected(false);
     }
   }
 
-  public void forceSelect(UINode uiNode, boolean selected) { // Don't really want
+  public void forceSelect(UIDispNode uiNode, boolean selected) { // Don't really want
     uiNode.setSelected(selected);
   }
 

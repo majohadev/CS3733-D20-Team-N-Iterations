@@ -1,9 +1,11 @@
 package edu.wpi.N.views;
 
+import com.google.common.collect.HashBiMap;
 import edu.wpi.N.App;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
+import edu.wpi.N.entities.UIEdge;
 import edu.wpi.N.entities.UINode;
 import java.io.IOException;
 import java.util.LinkedList;
@@ -13,33 +15,34 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.*;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
+import javax.swing.*;
 
 public class MapEditorController implements Controller {
-  private App mainApp;
-
-  @FXML private MapBaseController mapBase;
+  App mainApp;
 
   @FXML Pane pn_display;
   @FXML Pane pn_editor;
   @FXML Button btn_home;
+  @FXML StackPane pn_stack;
+  @FXML Pane pn_edges;
 
   final int DEFAULT_FLOOR = 4;
   final String DEFAULT_BUILDING = "Faulkner";
-  /*
   final Color DEFAULT_CIRCLE_COLOR = Color.PURPLE;
   final Color DEFAULT_LINE_COLOR = Color.BLACK;
   final double DEFAULT_LINE_WIDTH = 4;
   final Color ADD_NODE_COLOR = Color.BLACK;
   final Color DELETE_NODE_COLOR = Color.RED;
   final Color EDIT_NODE_COLOR = Color.RED;
-  final double DEFAULT_CIRCLE_OPACITY = 0.7;
+  final double DEFAULT_CIRCLE_OPACITY = 1;
   final double DEFAULT_CIRCLE_RADIUS = 7;
-   */
+  final Color DELETE_EDGE_COLOR = Color.RED;
 
   final double SCREEN_WIDTH = 1920;
   final double SCREEN_HEIGHT = 1080;
@@ -61,21 +64,25 @@ public class MapEditorController implements Controller {
     EDIT_EDGE
   }
 
-  // HashBiMap<Circle, UINode> nodesMap;
-  // HashBiMap<Line, UIEdge> edgesMap;
+  HashBiMap<Circle, UINode> nodesMap;
+  HashBiMap<Line, UIEdge> edgesMap;
   MapEditorAddNodeController controllerAddNode;
   MapEditorDeleteNodeController controllerDeleteNode;
   MapEditorEditNodeController controllerEditNode;
+  MapEditorDeleteEdgeController controllerDeleteEdge;
 
   int currentFloor;
   String currentBuilding;
   // Add Node Variable
-  UINode tempUINode;
+  Circle addNodeCircle;
   // Delete Node Variable
-  LinkedList<UINode> deleteNodeCircles;
+  LinkedList<Circle> deleteNodeCircles;
   // Edit Node Variable
-  UINode editNodeCircle;
-  UINode lastEditNodeCircle;
+  Circle editNodeCircle;
+  // Add Edge Variable
+  Line addEdgeLine;
+  // Delete Edge Variable
+  LinkedList<Line> deleteEdgeLines;
 
   @Override
   public void setMainApp(App mainApp) {
@@ -85,38 +92,50 @@ public class MapEditorController implements Controller {
   public void initialize() throws DBException {
     currentFloor = DEFAULT_FLOOR;
     currentBuilding = DEFAULT_BUILDING;
-    // nodesMap = HashBiMap.create();
-    // edgesMap = HashBiMap.create();
+    nodesMap = HashBiMap.create();
+    edgesMap = HashBiMap.create();
     mode = Mode.NO_STATE;
     loadFloor();
-    tempUINode = null;
+    addNodeCircle = null;
     deleteNodeCircles = new LinkedList<>();
     editNodeCircle = null;
-    lastEditNodeCircle = null;
+    addEdgeLine = new Line();
+    pn_edges.getChildren().add(addEdgeLine);
+    deleteEdgeLines = new LinkedList<>();
   }
 
   private void loadFloor() throws DBException {
-    // LinkedList<DbNode> floorNodes = MapDB.floorNodes(currentFloor, currentBuilding);
-    // LinkedList<DbNode[]> floorEdges = MapDB.getFloorEdges(currentFloor);
-    // HashMap<String, UINode> conversion = createUINodes(floorNodes, DEFAULT_CIRCLE_COLOR);
-    // createUIEdges(conversion, floorEdges, DEFAULT_LINE_COLOR);
-    mapBase.populateMap();
+    LinkedList<DbNode> floorNodes = MapDB.floorNodes(currentFloor, currentBuilding);
+    LinkedList<DbNode[]> floorEdges = MapDB.getFloorEdges(currentFloor, currentBuilding);
+    HashMap<String, UINode> conversion = createUINodes(floorNodes, DEFAULT_CIRCLE_COLOR);
+    createUIEdges(conversion, floorEdges, DEFAULT_LINE_COLOR);
+    displayEdges();
+    displayNodes();
   }
 
-  /*
+  private void displayEdges() {
+    for (Line line : edgesMap.keySet()) {
+      pn_edges.getChildren().add(line);
+    }
+  }
+
+  private void displayNodes() {
+    for (Circle circle : nodesMap.keySet()) {
+      pn_display.getChildren().add(circle);
+    }
+  }
+
   private HashMap<String, UINode> createUINodes(LinkedList<DbNode> nodes, Color c) {
     HashMap<String, UINode> conversion = new HashMap<>();
     for (DbNode DBnode : nodes) {
-       UINode node = createCircle(scaleX(DBnode.getX()), scaleY(DBnode.getY()), c);
+      Circle circle = createCircle(scaleX(DBnode.getX()), scaleY(DBnode.getY()), c);
       UINode UInode = new UINode(circle, DBnode);
       nodesMap.put(circle, UInode);
       conversion.put(DBnode.getNodeID(), UInode);
     }
     return conversion;
   }
-   */
 
-  /*
   private void createUIEdges(
       HashMap<String, UINode> conversion, LinkedList<DbNode[]> edges, Color c) {
     for (DbNode[] edge : edges) {
@@ -137,7 +156,7 @@ public class MapEditorController implements Controller {
 
   /*
   private Circle createCircle(double x, double y, Color c) {
-     UINode node = new Circle();
+    Circle circle = new Circle();
     circle.setRadius(DEFAULT_CIRCLE_RADIUS);
     circle.setCenterX(x);
     circle.setCenterY(y);
@@ -145,12 +164,18 @@ public class MapEditorController implements Controller {
     circle.setOpacity(DEFAULT_CIRCLE_OPACITY);
     circle.setOnMouseDragged(event -> this.handleCircleDragEvents(event, circle));
     circle.setOnMouseClicked(event -> this.handleCircleClickedEvents(event, circle));
-    pn_display.getChildren().add(circle);
+    circle.setOnMouseReleased(
+        event -> {
+          try {
+            this.handleCircleDragReleased(event, circle);
+          } catch (DBException e) {
+            e.printStackTrace();
+          }
+        });
+    //    pn_display.getChildren().add(circle);
     return circle;
   }
-   */
 
-  /*
   private Line createLine(double x1, double y1, double x2, double y2, Color c) {
     Line line = new Line(x1, y1, x2, y2);
     line.setStroke(c);

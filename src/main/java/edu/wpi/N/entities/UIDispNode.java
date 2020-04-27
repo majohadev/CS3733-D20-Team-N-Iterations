@@ -9,11 +9,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 
-public class UINode {
+public class UIDispNode {
 
-  private LinkedList<UIEdge> connectedEdges = new LinkedList<>();
+  private LinkedList<UIDispEdge> connectedEdges = new LinkedList<>();
   private boolean selected = false;
-  private char mode = 'n';
   private Shape marker;
   private MapBaseController mbc;
 
@@ -26,14 +25,14 @@ public class UINode {
 
   private Color currentSelectColor = EDIT_NODE_COLOR;
 
-  public UINode(boolean showing) {
+  public UIDispNode(boolean showing) {
     marker = new Circle();
     ((Circle) marker).setRadius(DEFAULT_NODE_RADIUS);
     marker.setFill(DEFAULT_NODE_COLOR);
     marker.setOpacity(DEFAULT_NODE_OPACITY);
     marker.setOnMouseClicked(mouseEvent -> this.onMarkerClicked(mouseEvent));
     marker.setCursor(Cursor.HAND); // Cursor points when over nodes
-    setVisible(showing);
+    setVisible(false);
   }
 
   public boolean toggleSelected() {
@@ -56,28 +55,6 @@ public class UINode {
     marker.setVisible(visible);
   }
 
-  // Set node mode
-
-  public void enterEditMode() {
-    mode = 'e';
-    currentSelectColor = EDIT_NODE_COLOR;
-  }
-
-  public void enterAddMode() {
-    mode = 'a';
-    currentSelectColor = ADD_NODE_COLOR;
-  }
-
-  public void enterDeleteMode() {
-    mode = 'd';
-    currentSelectColor = DELETE_NODE_COLOR;
-  }
-
-  public void enterNormalMode() {
-    mode = 'n';
-    currentSelectColor = DEFAULT_NODE_COLOR;
-  }
-
   // Place node marker on given plane
   public void placeOnPane(Pane pane) {
     if (marker.getParent() == null) {
@@ -91,7 +68,7 @@ public class UINode {
       this.marker.setLayoutX(x);
       this.marker.setLayoutY(y);
 
-      for (UIEdge edge : connectedEdges) {
+      for (UIDispEdge edge : connectedEdges) {
         edge.updateMarkerPos(); // Move all lines with the node
       }
     }
@@ -125,25 +102,11 @@ public class UINode {
     }
   }
 
-  /*
-  public void handleNodeDragEvents(MouseEvent event, UINode node) {
-    if (mode == MapEditorController.Mode.ADD_NODE && node == tempUINode) {
-      onCircleAddNodeDragged(event, node);
-    }
-    if (mode == MapEditorController.Mode.EDIT_NODE) {
-      onBtnCancelEditNodeClicked();
-      onBtnConfirmEditNodeClicked();
-      onTxtPosEditNodeTextChanged(node);
-      onCircleEditNodeDragged(event, node);
-    }
-  }
-   */
-
   // Return added edge
-  public UIEdge addEdgeTo(UINode other) {
+  public UIDispEdge addEdgeTo(UIDispNode other) {
 
     if (edgeTo(other) == null) {
-      UIEdge newEdge = new UIEdge(true, this, other);
+      UIDispEdge newEdge = new UIDispEdge(true, this, other);
       this.connectedEdges.add(newEdge);
       other.connectedEdges.add(newEdge);
       newEdge.updateMarkerPos();
@@ -153,8 +116,8 @@ public class UINode {
   }
 
   // Return whether edge was broken
-  public boolean breakEdgeTo(UINode other) {
-    UIEdge toBreak = edgeTo(other);
+  public boolean breakEdgeTo(UIDispNode other) {
+    UIDispEdge toBreak = edgeTo(other);
     if (toBreak != null) {
       connectedEdges.remove(toBreak);
       other.connectedEdges.remove(toBreak);
@@ -164,8 +127,8 @@ public class UINode {
   }
 
   // Assuming bi-directionality
-  public UIEdge edgeTo(UINode other) {
-    for (UIEdge edge : connectedEdges) {
+  public UIDispEdge edgeTo(UIDispNode other) {
+    for (UIDispEdge edge : connectedEdges) {
       if (edge.leadsTo(other)) {
         return edge;
       }
