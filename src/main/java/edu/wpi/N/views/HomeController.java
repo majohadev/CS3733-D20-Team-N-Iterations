@@ -15,11 +15,11 @@ public class HomeController implements Controller {
   }
 
   public void onBtnEditClicked() throws IOException {
-    this.mainApp.switchScene("views/mapEdit.fxml");
+    this.mainApp.switchScene("views/mapEditor.fxml");
   }
 
   public void onBtnFileClicked() throws IOException {
-    this.mainApp.switchScene("views/fileManagementScreen.fxml");
+    this.mainApp.switchScene("views/servicesPage.fxml");
   }
 
   public void onBtnHamClicked() throws IOException {

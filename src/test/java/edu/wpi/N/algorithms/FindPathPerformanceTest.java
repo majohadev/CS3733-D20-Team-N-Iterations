@@ -13,6 +13,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 public class FindPathPerformanceTest {
+  Algorithm myAStar = new Algorithm();
 
   @BeforeAll
   public static void initialize()
@@ -35,7 +36,7 @@ public class FindPathPerformanceTest {
 
     long startTime = System.nanoTime();
 
-    Path actual = Pathfinder.findPath(start, end);
+    Path actual = myAStar.findPath(start, end, false);
 
     long endTime = System.nanoTime();
 
