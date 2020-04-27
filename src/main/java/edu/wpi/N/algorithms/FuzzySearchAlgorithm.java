@@ -4,7 +4,7 @@ import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.DoctorDB;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
-import edu.wpi.N.entities.Doctor;
+import edu.wpi.N.entities.employees.Doctor;
 import java.util.*;
 import java.util.Arrays;
 import java.util.LinkedList;

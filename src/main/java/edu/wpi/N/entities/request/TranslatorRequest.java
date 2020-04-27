@@ -1,4 +1,4 @@
-package edu.wpi.N.entities;
+package edu.wpi.N.entities.request;
 
 import java.util.GregorianCalendar;
 
@@ -8,17 +8,19 @@ public class TranslatorRequest extends Request {
   public TranslatorRequest(
       int requestID,
       int emp_assigned,
-      String notes,
+      String reqNotes,
+      String compNotes,
       String nodeID,
       GregorianCalendar timeRequested,
       GregorianCalendar timeCompleted,
       String status,
       String language) {
-    super(requestID, emp_assigned, notes, nodeID, timeRequested, timeCompleted, status);
+    super(
+        requestID, emp_assigned, reqNotes, compNotes, nodeID, timeRequested, timeCompleted, status);
     this.language = language;
   }
 
-  public String getLanguage() {
+  public String getAtr1() {
     return language;
   }
 
