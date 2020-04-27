@@ -650,7 +650,7 @@ public class ServicesTest {
   // Nick
   @Test
   public void testGetAndAddRequest_flower() {
-    
+    ServiceDB.addFlower()
   }
 
   // Chris

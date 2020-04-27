@@ -14,14 +14,14 @@ public class Flower {
   }
 
   String flowerName;
-  int price;
+  double price;
 
-  public Flower(String name, int price) {
+  public Flower(String name, double price) {
     this.flowerName = name;
     this.price = price;
   }
 
-  public int getPrice() {
+  public double getPrice() {
     return price;
   }
 }

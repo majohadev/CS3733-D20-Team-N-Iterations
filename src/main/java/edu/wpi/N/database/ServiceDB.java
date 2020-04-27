@@ -1133,6 +1133,29 @@ public class ServiceDB {
   }
 
   /**
+   * Gets a flower from the database
+   *
+   * @param name Name of the flower
+   * @return a Flower object containing the name and price of the flower
+   * @throws DBException if there is an error in getting the flower
+   */
+  public Flower getFlower(String name) throws DBException{
+    try{
+      String query = "SELECT * FROM flower WHERE flowerName = ?";
+      PreparedStatement st = con.prepareStatement(query);
+      st.setString(1, name);
+      ResultSet rs = st.executeQuery();
+
+      if(rs.next()){
+        return new Flower(name, rs.getDouble("price"));
+      }
+      else throw new DBException("Could not find \""+name+"\" in the flower table");
+    } catch (SQLException e) {
+      throw new DBException("Unknown error: getFlower", e);
+    }
+  }
+
+  /**
    * Adds a request for emotional support
    *
    * @param reqNotes some notes for the emotional support request
