@@ -215,7 +215,7 @@ public class MapBaseController {
   public void drawPath(LinkedList<DbNode> pathNodes) {
     UINode uiFirst, uiSecond;
     DbNode dbFirst, dbSecond;
-    UIEdge newEdge;
+    UIEdge edge;
 
     for (int i = 0; i < pathNodes.size() - 1; i++) {
       dbFirst = pathNodes.get(i);
@@ -228,17 +228,46 @@ public class MapBaseController {
         return;
       }
 
-      // float startX = (dbFirst.getX() * HORIZONTAL_SCALE) + HORIZONTAL_OFFSET;
-      // float startY = (dbFirst.getY() * VERTICAL_SCALE) + VERTICAL_OFFSET;
-      // float endX = (dbSecond.getX() * HORIZONTAL_SCALE) + HORIZONTAL_OFFSET;
-      // float endY = (dbSecond.getY() * VERTICAL_SCALE) + VERTICAL_OFFSET;
-
       uiFirst = masterNodes.inverse().get(dbFirst);
       uiSecond = masterNodes.inverse().get(dbSecond);
 
-      // Highlight edge
+      edge = uiFirst.edgeTo(uiSecond);
+      if (edge != null) {
+        edge.setHighlighted(true);
+      } else {
+        System.out.println("Edge between " + dbFirst.getNodeID() + " and " + dbSecond.getNodeID() + " doesn't exist.");
+      }
+
     }
   }
+
+  // Resets highlighted edges to their default state
+  public void clearPath() {
+    for (UIEdge edge : masterEdges) {
+      edge.setHighlighted(false);
+    }
+  }
+
+  // Hide all edges
+  public void hideEdges() {
+    pn_path.setVisible(false);
+  }
+
+  // Hide all nodes
+  public void hideNodes() {
+    pn_routeNodes.setVisible(false);
+  }
+
+  // Show all edges
+  public void showEdges() {
+    pn_path.setVisible(true);
+  }
+
+  // Show all nodes
+  public void showNodes() {
+    pn_routeNodes.setVisible(true);
+  }
+
 
   // Deselect nodes and remove lines
   public void deselectAll() {

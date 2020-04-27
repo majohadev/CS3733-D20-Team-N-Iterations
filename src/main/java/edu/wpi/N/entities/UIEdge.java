@@ -18,6 +18,7 @@ public class UIEdge {
 
   private final Color DEFAULT_LINE_COLOR = Color.BLACK;
   private final Color SELECTED_LINE_COLOR = Color.LAWNGREEN;
+  private final Color PATH_LINE_COLOR = Color.DODGERBLUE;
   final double DEFAULT_LINE_WIDTH = 4;
 
   public UIEdge(boolean showing, UINode nodeA, UINode nodeB) {
@@ -77,6 +78,17 @@ public class UIEdge {
 
   public void setVisible(boolean visible) {
     marker.setVisible(visible);
+  }
+
+  public void setHighlighted (boolean highlighted) {
+    this.highlighted = highlighted;
+    if (highlighted) {
+      // Path appearance
+      marker.setStroke(PATH_LINE_COLOR);
+    } else {
+      // Non-path appearance
+      marker.setStroke(DEFAULT_LINE_COLOR);
+    }
   }
 
   public void placeOnPane(Pane pane) {
