@@ -1,7 +1,7 @@
 package edu.wpi.N.database;
 
 import edu.wpi.N.Main;
-import edu.wpi.N.algorithms.Pathfinder;
+import edu.wpi.N.algorithms.AStar;
 import edu.wpi.N.entities.Node;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -102,9 +102,7 @@ public class MapDBGMethodsTest {
   @Test
   public void heuristicTester() throws DBException {
     Assertions.assertEquals(
-        Pathfinder.heuristic(MapDB.getGNode("AAAAAAAAAA"), MapDB.getGNode("BBBBBBBBBB")),
-        455,
-        0.01);
+        AStar.heuristic(MapDB.getGNode("AAAAAAAAAA"), MapDB.getGNode("BBBBBBBBBB")), 455, 0.01);
   }
 
   /**
@@ -169,7 +167,7 @@ public class MapDBGMethodsTest {
   @Test
   public void costTester() throws DBException {
     Assertions.assertEquals(
-        Pathfinder.cost(MapDB.getGNode("AAAAAAAAAA"), MapDB.getGNode("EEEEEEEEEE")), 1196.75, 0.05);
+        AStar.cost(MapDB.getGNode("AAAAAAAAAA"), MapDB.getGNode("EEEEEEEEEE")), 1196.75, 0.05);
   }
 
   /**
@@ -180,7 +178,7 @@ public class MapDBGMethodsTest {
   public void costNotInGraphTester() {
     Node testNode7 = new Node(0, 0, "node7");
     Node testNode8 = new Node(3, 4, "node8");
-    Assertions.assertEquals(Pathfinder.cost(testNode7, testNode8), 5, 0.0001);
+    Assertions.assertEquals(AStar.cost(testNode7, testNode8), 5, 0.0001);
   }
 
   @AfterAll
