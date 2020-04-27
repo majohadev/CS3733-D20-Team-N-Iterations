@@ -814,7 +814,18 @@ public class ServicesTest {
 
   // Nick
   @Test
-  public void testgetflowerDeliverers() {}
+  public void testgetflowerDeliverers() throws DBException {
+    int id1 = ServiceDB.addFlowerDeliverer("Lucas Winfield");
+    int id2 = ServiceDB.addFlowerDeliverer("Araxis");
+
+    LinkedList<FlowerDeliverer> result = ServiceDB.getFlowerDeliverers();
+
+    assertTrue(result.contains(new FlowerDeliverer(id1, "Lucas Winfield")));
+    assertTrue(result.contains(new FlowerDeliverer(id2, "Araxis")));
+
+    ServiceDB.removeEmployee(id1);
+    ServiceDB.removeEmployee(id2);
+  }
 
   @AfterEach
   public void clearDB() throws DBException {
