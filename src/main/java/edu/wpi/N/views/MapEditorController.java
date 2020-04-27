@@ -791,21 +791,28 @@ public class MapEditorController implements Controller {
         DbNode[] nodes1 = {nodes.get(0), nodes.get(1)};
         DbNode[] nodes2 = {nodes.get(1), nodes.get(0)};
         UIEdge edge;
+        Line line =
+            new Line(
+                addEdgeLine.getStartX(),
+                addEdgeLine.getStartY(),
+                addEdgeLine.getEndX(),
+                addEdgeLine.getEndY());
+        line.setStrokeWidth(DEFAULT_LINE_WIDTH);
         if (circles.get(0).contains(addEdgeLine.getStartX(), addEdgeLine.getStartY())) {
-          edge = new UIEdge(addEdgeLine, nodes1);
+          edge = new UIEdge(line, nodes1);
         } else {
-          edge = new UIEdge(addEdgeLine, nodes2);
+          edge = new UIEdge(line, nodes2);
         }
-        edgesMap.put(addEdgeLine, edge);
+        edgesMap.put(line, edge);
         addEdgeLine.setOnMouseClicked(e -> this.handleLineClickedEvents(event, edge.getLine()));
-        pn_edges.getChildren().remove(addEdgeLine);
         pn_edges.getChildren().add(edge.getLine());
+        pn_edges.getChildren().remove(addEdgeLine);
         UInode.get(0).addEdge(edge);
         UInode.get(1).addEdge(edge);
       }
       nodes.clear();
-      addEdgeLine = new Line();
       pn_edges.getChildren().remove(addEdgeLine);
+      addEdgeLine = new Line();
       pn_edges.getChildren().add(addEdgeLine);
       mode = Mode.NO_STATE;
     }
