@@ -92,6 +92,7 @@ public class DFSMultipleFloorsTest {
     actualPath.add(MapDB.getNode("H041000000"));
 
     Assertions.assertEquals(actualPath, testPath.getPath());
+    Assertions.assertTrue(testPath.getPath().contains(startNode));
   }
 
   /**
