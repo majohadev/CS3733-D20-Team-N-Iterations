@@ -180,7 +180,7 @@ public class MapEditorController implements Controller {
     Line line = new Line(x1, y1, x2, y2);
     line.setStroke(c);
     line.setStrokeWidth(DEFAULT_LINE_WIDTH);
-    //    pn_display.getChildren().add(line);
+    pn_display.getChildren().add(line);
     return line;
   }
 
@@ -259,9 +259,53 @@ public class MapEditorController implements Controller {
     }
   }
 
+  private void cancelDeleteEdge() {
+    controllerDeleteEdge
+        .getBtnCancel()
+        .setOnMouseClicked(
+            e -> {
+              resetDeleteEdge();
+              mode = Mode.NO_STATE;
+            });
+  }
+
+  private void confirmDeleteEdge() {
+    controllerDeleteEdge
+        .getBtnConfirm()
+        .setOnMouseClicked(
+            e -> {
+              for (Line line : deleteEdgeLines) {
+                DbNode[] nodes = edgesMap.get(line).getDBNodes();
+                pn_edges.getChildren().remove(line);
+                edgesMap.remove(line);
+                for (UINode node : nodesMap.values()) {
+                  if (node.getDBNode().getNodeID() == nodes[0].getNodeID()
+                      || node.getDBNode().getNodeID() == nodes[1].getNodeID()) {
+                    node.getEdges().remove(nodesMap.get(line));
+                  }
+                }
+                try {
+                  MapDB.removeEdge(nodes[0].getNodeID(), nodes[1].getNodeID());
+                } catch (DBException ex) {
+                  ex.printStackTrace();
+                }
+              }
+              resetDeleteEdge();
+              mode = Mode.NO_STATE;
+            });
+  }
+
   private void resetDeleteEdge() {
+    pn_editor.setVisible(false);
     pn_stack.getChildren().remove(pn_display);
     pn_stack.getChildren().add(pn_display);
+    if (!pn_display.getChildren().contains(pn_editor)) {
+      pn_display.getChildren().add(pn_editor);
+    }
+    for (Line line : deleteEdgeLines) {
+      line.setStroke(DEFAULT_LINE_COLOR);
+    }
+    deleteEdgeLines.clear();
   }
   // TODO ASLDKFJAS;LKDFJA;LSDKFJAS;LDKFJA;LKDFJA;LKSDJF;ALKSDJF
   private void handleCircleClickedEvents(MouseEvent event, Circle circle) {
@@ -364,9 +408,12 @@ public class MapEditorController implements Controller {
 
   private void handleDeleteEdgeRightClick() throws IOException {
     mode = Mode.DELETE_EDGE;
+    changeEditor();
     pn_stack.getChildren().remove(pn_edges);
     pn_stack.getChildren().add(pn_edges);
-    changeEditor();
+    pn_edges.getChildren().add(pn_editor);
+    cancelDeleteEdge();
+    confirmDeleteEdge();
   }
 
   // Pane Display Clicked
@@ -539,10 +586,15 @@ public class MapEditorController implements Controller {
                 }
                 DbNode newNode =
                     MapDB.addNode(x, y, currentFloor, currentBuilding, type, longName, shortName);
-                LinkedList list = new LinkedList();
-                list.add(newNode);
-                createUINodes(list, DEFAULT_CIRCLE_COLOR);
+                //                LinkedList list = new LinkedList();
+                //                list.add(newNode);
+                //                createUINodes(list, DEFAULT_CIRCLE_COLOR);
+                Circle circle1 = createCircle(scaleX(x), scaleY(y), DEFAULT_CIRCLE_COLOR);
+                UINode uiNode = new UINode(circle1, newNode);
+                nodesMap.put(circle1, uiNode);
+                pn_display.getChildren().add(circle1);
                 pn_display.getChildren().remove(circle);
+                //                pn_display.getChildren().add();
                 pn_editor.setVisible(false);
               } catch (DBException e) {
                 e.printStackTrace();
@@ -661,6 +713,7 @@ public class MapEditorController implements Controller {
     resetAddNode();
     resetDeleteNode();
     resetEditNode();
+    resetDeleteEdge();
   }
 
   private void resetAddNode() {
@@ -743,8 +796,8 @@ public class MapEditorController implements Controller {
         } else {
           edge = new UIEdge(addEdgeLine, nodes2);
         }
-        addEdgeLine.setOnMouseClicked(e -> this.handleLineClickedEvents(event, addEdgeLine));
         edgesMap.put(addEdgeLine, edge);
+        addEdgeLine.setOnMouseClicked(e -> this.handleLineClickedEvents(event, edge.getLine()));
         pn_edges.getChildren().remove(addEdgeLine);
         pn_edges.getChildren().add(edge.getLine());
         UInode.get(0).addEdge(edge);
