@@ -1,11 +1,8 @@
 package edu.wpi.N.views;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXListView;
-import com.jfoenix.controls.JFXPasswordField;
-import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.*;
 import edu.wpi.N.App;
-import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
+import edu.wpi.N.algorithms.*;
 import edu.wpi.N.database.*;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Service;
@@ -66,6 +63,7 @@ public class NewAdminController implements Controller, Initializable {
   @FXML JFXButton btn_EditMap;
   @FXML JFXButton btn_addLanguage;
   @FXML JFXButton btn_removeLanguage;
+  @FXML JFXButton btn_changeAlgo;
   @FXML TableView<Employee> tbl_Employees;
   @FXML CheckBox cb_translator;
   @FXML Label lbl_languages;
@@ -77,6 +75,8 @@ public class NewAdminController implements Controller, Initializable {
   @FXML TableView<Request> tb_RequestTable = new TableView<Request>();
   @FXML TableView<String> tb_languages = new TableView<String>();
   @FXML CheckBox ch_requestFilter;
+  @FXML JFXComboBox cb_changeAlgo;
+  @FXML Label lbl_title;
 
   ObservableList<Request> tableData = FXCollections.observableArrayList();
   ObservableList<String> languageData = FXCollections.observableArrayList();
@@ -87,6 +87,7 @@ public class NewAdminController implements Controller, Initializable {
   LinkedList<String> longNamesList = new LinkedList<>(); // Stores Floor Node names
   LinkedList<DbNode> allFloorNodes; // stores all the nodes on the floor
   ObservableList<Employee> emps = FXCollections.observableArrayList();
+  Algorithm algo = new Algorithm();
 
   private static class selfFactory<G>
       implements Callback<TableColumn.CellDataFeatures<G, G>, ObservableValue<G>> {
@@ -107,6 +108,9 @@ public class NewAdminController implements Controller, Initializable {
     public ObservableValue<String> call(TableColumn.CellDataFeatures<Request, String> param) {
       try {
         DbNode node = MapDB.getNode(param.getValue().getNodeID());
+        if (node == null) {
+          return new ReadOnlyObjectWrapper<>("Invalid Location");
+        }
         return new ReadOnlyObjectWrapper<>(node.getLongName());
       } catch (DBException e) {
         return new ReadOnlyObjectWrapper<>("Invalid Location");
@@ -128,46 +132,21 @@ public class NewAdminController implements Controller, Initializable {
       tableSetup();
       populateTable();
       populateEmployeeType();
-
-      cb_translator
-          .selectedProperty()
-          .addListener(
-              (ob, old, newVal) -> {
-                if (cb_translator.isSelected()) {
-                  txtf_languages.setVisible(true);
-                  lbl_languages.setVisible(true);
-                } else {
-                  txtf_languages.setVisible(false);
-                  lbl_languages.setVisible(false);
-                }
-              });
+      populateChangeAlgo();
+      changeAlgorithm();
+      setTitleLabel();
+      addEmployee();
 
       cb_employeeTypes
           .valueProperty()
           .addListener(
               (ob, old, newVal) -> {
-                if (newVal.getServiceType().equals("Translator")) {
-                  System.out.println("Translator");
-                } else if (cb_employeeTypes
-                    .valueProperty()
-                    .get()
-                    .getServiceType()
-                    .equals("Laundry")) {
-                  System.out.println("Laundry");
-                } else if (cb_employeeTypes
-                    .valueProperty()
-                    .get()
-                    .getServiceType()
-                    .equals("Wheelchair")) {
-                  System.out.println("Wheelchair");
-                } else if (cb_employeeTypes
-                    .valueProperty()
-                    .get()
-                    .getServiceType()
-                    .equals("Emotional Support")) {
-                  System.out.println("Emotional Support");
-                } else if (cb_employeeTypes.valueProperty().get().getServiceType().equals("IT")) {
-                  System.out.println("IT");
+                if (newVal.equals("Translator")) {
+                  txtf_languages.setVisible(true);
+                  lbl_languages.setVisible(true);
+                } else {
+                  txtf_languages.setVisible(false);
+                  lbl_languages.setVisible(false);
                 }
               });
 
@@ -317,26 +296,21 @@ public class NewAdminController implements Controller, Initializable {
                   }
                   try {
                     ServiceDB.addTranslator(name, languages);
-                    System.out.println("IT");
                   } catch (DBException ex) {
                     ex.printStackTrace();
                   }
-                } else if (cb_employeeTypes
-                    .valueProperty()
-                    .get()
-                    .getServiceType()
-                    .equals("Laundry")) {
+                } else if (newVal.getServiceType().equals("Laundry")) {
                   try {
                     ServiceDB.addLaundry(name);
-                    System.out.println("IT");
                   } catch (DBException ex) {
                     ex.printStackTrace();
                   }
-                } else if (cb_employeeTypes
-                    .valueProperty()
-                    .get()
-                    .getServiceType()
-                    .equals("Wheelchair")) {
+                } else if (newVal.getServiceType().equals("Wheelchair")) {
+                  try {
+                    ServiceDB.addWheelchairEmployee(name);
+                  } catch (DBException ex) {
+                    ex.printStackTrace();
+                  }
                 } else if (cb_employeeTypes
                     .valueProperty()
                     .get()
@@ -698,5 +672,53 @@ public class NewAdminController implements Controller, Initializable {
     ObservableList<Service> empTypeList = FXCollections.observableArrayList();
     empTypeList.addAll(employeeList);
     cb_employeeTypes.setItems(empTypeList);
+  }
+
+  public void populateChangeAlgo() {
+    LinkedList<String> algoTypes = new LinkedList<>();
+    algoTypes.add("BFS");
+    algoTypes.add("DFS");
+    algoTypes.add("AStar");
+    ObservableList<String> algos = FXCollections.observableArrayList();
+    algos.addAll(algoTypes);
+    cb_changeAlgo.setItems(algos);
+  }
+
+  public void setTitleLabel() throws DBException {
+    try {
+      lbl_title.setText("Welcome, " + LoginDB.currentLogin());
+    } catch (DBException e) {
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setContentText(e.getMessage());
+      errorAlert.show();
+    }
+  }
+
+  public void changeAlgorithm() {
+
+    /*
+    System.out.println(cb_changeAlgo.valueProperty().toString());
+    System.out.println(cb_changeAlgo.getSelectionModel().toString());
+    System.out.println(cb_changeAlgo.getValue().toString());
+    */
+
+    cb_changeAlgo
+        .valueProperty()
+        .addListener(
+            (ob, old, newVal) -> {
+              if (newVal.equals("BFS")) {
+                System.out.println(cb_changeAlgo.getSelectionModel().getSelectedItem());
+                algo.setPathFinder(new BFS());
+                System.out.println("BFS");
+              } else if (newVal.equals("DFS")) {
+                System.out.println(cb_changeAlgo.getSelectionModel().getSelectedItem());
+                algo.setPathFinder(new DFS());
+                System.out.println("DFS");
+              } else if (newVal.equals("AStar")) {
+                System.out.println(cb_changeAlgo.getSelectionModel().getSelectedItem());
+                algo.setPathFinder(new AStar());
+                System.out.println("AStar");
+              }
+            });
   }
 }

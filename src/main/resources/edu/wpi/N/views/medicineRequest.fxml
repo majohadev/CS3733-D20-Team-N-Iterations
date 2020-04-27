@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXDatePicker?>
+<?import com.jfoenix.controls.JFXListView?>
 <?import com.jfoenix.controls.JFXTextArea?>
 <?import com.jfoenix.controls.JFXTextField?>
-<?import com.jfoenix.controls.JFXTimePicker?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
@@ -36,7 +37,7 @@
                   <Font name="Calibri Bold" size="24.0" />
                </font>
             </Label>
-            <Label layoutX="411.0" layoutY="32.0" text="Welcome, Employee_Name" textFill="WHITE">
+            <Label fx:id="lbl_empname" layoutX="411.0" layoutY="32.0" text="Welcome, Employee_Name" textFill="WHITE">
                <font>
                   <Font name="Calibri Bold" size="24.0" />
                </font>
@@ -56,7 +57,7 @@
                      <children>
                         <Pane prefHeight="251.25" prefWidth="200.0" style="-fx-background-color: #D3D3D3;">
                            <children>
-                              <JFXButton buttonType="RAISED" layoutX="75.0" layoutY="103.0" style="-fx-background-radius: 10px;" text="Prescribe">
+                              <JFXButton buttonType="RAISED" layoutX="75.0" layoutY="103.0" onMouseClicked="#createMedRequest" style="-fx-background-radius: 10px;" text="Prescribe">
                                  <font>
                                     <Font size="24.0" />
                                  </font>
@@ -101,13 +102,11 @@
                         <Font name="Calibri" size="24.0" />
                      </font>
                   </Label>
-                  <JFXTextField layoutX="265.0" layoutY="118.0" prefHeight="39.0" prefWidth="250.0" AnchorPane.leftAnchor="265.0" AnchorPane.topAnchor="115.0">
+                  <JFXTextField fx:id="txtf_patient" layoutX="265.0" layoutY="118.0" prefHeight="39.0" prefWidth="250.0" AnchorPane.leftAnchor="265.0" AnchorPane.topAnchor="115.0">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </JFXTextField>
-                  <JFXDatePicker defaultColor="#003da6" layoutX="1201.0" layoutY="138.0" AnchorPane.rightAnchor="255.0" />
-                  <JFXTimePicker defaultColor="#003da6" layoutX="1215.0" layoutY="193.0" AnchorPane.rightAnchor="255.0" />
                   <Label layoutX="164.0" layoutY="185.0" text="Medicine: " AnchorPane.leftAnchor="164.0" AnchorPane.topAnchor="185.0">
                      <font>
                         <Font name="Calibri" size="24.0" />
@@ -123,7 +122,12 @@
                         <Font name="Calibri" size="24.0" />
                      </font>
                   </Label>
-                  <JFXTextField layoutX="263.0" layoutY="174.0" prefHeight="39.0" prefWidth="250.0" AnchorPane.leftAnchor="263.0" AnchorPane.topAnchor="174.0">
+                  <JFXTextField fx:id="txtf_medicine" layoutX="263.0" layoutY="174.0" prefHeight="39.0" prefWidth="250.0" AnchorPane.leftAnchor="263.0" AnchorPane.topAnchor="174.0">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </JFXTextField>
+                  <JFXTextField fx:id="txtf_dosage" layoutX="263.0" layoutY="231.0" prefHeight="39.0" prefWidth="250.0">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -133,21 +137,20 @@
                         <Font name="Calibri" size="24.0" />
                      </font>
                   </Label>
-                  <JFXTextArea layoutX="262.0" layoutY="210.0" prefHeight="52.0" prefWidth="250.0" AnchorPane.leftAnchor="262.0" AnchorPane.topAnchor="210.0">
+                  <JFXTextArea fx:id="txtf_notes" layoutX="260.0" layoutY="337.0" prefHeight="55.0" prefWidth="257.0">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </JFXTextArea>
-                  <JFXTextArea layoutX="260.0" layoutY="337.0" prefHeight="55.0" prefWidth="257.0">
+                  <ComboBox fx:id="cb_doctors" layoutX="267.0" layoutY="301.0" prefWidth="150.0" />
+                  <TableView fx:id="tb_patients" layoutX="571.0" layoutY="70.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="750.0" />
+                  <Label layoutX="168.0" layoutY="423.0" text="Location:">
                      <font>
-                        <Font size="18.0" />
+                        <Font name="Calibri" size="24.0" />
                      </font>
-                  </JFXTextArea>
-                  <JFXTextArea layoutX="266.0" layoutY="272.0" prefHeight="55.0" prefWidth="250.0">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </JFXTextArea>
+                  </Label>
+                  <JFXListView fx:id="lst_patientLocations" layoutX="261.0" layoutY="457.0" prefHeight="120.0" prefWidth="257.0" />
+                  <JFXTextField fx:id="txtf_patientLocation" layoutX="261.0" layoutY="425.0" onKeyTyped="#searchByLocationTextFill" prefHeight="25.0" prefWidth="256.0" />
                </children>
             </AnchorPane>
         </items>

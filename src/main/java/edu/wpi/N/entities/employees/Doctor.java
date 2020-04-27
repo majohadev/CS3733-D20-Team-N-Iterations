@@ -41,4 +41,9 @@ public class Doctor extends Employee {
 
     return this.getID() == other.getID();
   }
+
+  @Override
+  public String toString() {
+    return this.getName();
+  }
 }

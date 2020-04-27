@@ -61,6 +61,4 @@ public class newLoginController implements Controller {
   public void setMainApp(App mainApp) {
     this.mainApp = mainApp;
   }
-
-  public void childrenSwap() {}
 }
