@@ -14,6 +14,8 @@ import org.junit.jupiter.api.Test;
 
 public class AbsAlgoTests {
 
+  Algorithm algorithm = new Algorithm();
+
   @BeforeAll
   public static void initializeTest()
       throws SQLException, ClassNotFoundException, DBException, FileNotFoundException {
@@ -27,14 +29,14 @@ public class AbsAlgoTests {
   /** Tests that findQuickAccess chooses finds the path to the closest node of the given nodeType */
   @Test
   public void findQuickAccessTester1() throws DBException {
-    Path path = AStar.findQuickAccess(MapDB.getNode("H200000000"), "REST");
+    Path path = algorithm.findQuickAccess(MapDB.getNode("H200000000"), "REST");
     Assertions.assertEquals(path.getPath().getLast(), MapDB.getNode("AAAAAAAAAA"));
   }
 
   /** Tests that findQuickAccess chooses finds the path to the closest node of the given nodeType */
   @Test
   public void findQuickAccessTester2() throws DBException {
-    Path path = AStar.findQuickAccess(MapDB.getNode("H700000000"), "LABS");
+    Path path = algorithm.findQuickAccess(MapDB.getNode("H700000000"), "LABS");
     Assertions.assertEquals(path.getPath().getLast(), MapDB.getNode("BBBBBBBBBB"));
   }
 
@@ -43,7 +45,7 @@ public class AbsAlgoTests {
    */
   @Test
   public void findQuickAccessNullTester() throws DBException {
-    Assertions.assertNull(AStar.findQuickAccess(MapDB.getNode("H700000000"), "ELEV"));
+    Assertions.assertNull(algorithm.findQuickAccess(MapDB.getNode("H700000000"), "ELEV"));
   }
 
   /**
@@ -53,7 +55,7 @@ public class AbsAlgoTests {
   @Test
   public void findQuickAccessNoPathTester() throws DBException {
     MapDB.addNode("NHALL00104", 1250, 850, 1, "MainBuil", "ELEV", "Hall 1", "Hall 1", 'N');
-    Assertions.assertNull(AStar.findQuickAccess(MapDB.getNode("H700000000"), "ELEV"));
+    Assertions.assertNull(algorithm.findQuickAccess(MapDB.getNode("H700000000"), "ELEV"));
     MapDB.deleteNode("NHALL00104");
   }
 
