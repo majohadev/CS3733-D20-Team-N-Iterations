@@ -645,7 +645,26 @@ public class ServicesTest {
 
   // Chris
   @Test
-  public void testgetEmployee_flower() {}
+  public void testgetEmployee_flower() throws  DBException {
+    try{
+      con.setAutoCommit(false);
+      int id = ServiceDB.addflowerDeliverer("Chris");
+
+      con.commit();
+      con.setAutoCommit(true);
+      Assertions.assertTrue("Chris".equals(ServiceDB.getEmployee(id).getName()));
+      Assertions.assertTrue("Flower".equals(ServiceDB.getEmployee(id).getServiceType()));
+
+      ServiceDB.removeEmployee(id);
+    }catch(DBException | SQLException e){
+      try {
+        con.rollback();
+        con.setAutoCommit(true);
+      } catch (SQLException ex) {
+        throw new DBException("Error: flower is not a employee");
+      }
+    }
+  }
 
   // Nick
   @Test
@@ -693,7 +712,32 @@ public class ServicesTest {
 
   // Chris
   @Test
-  public void testgetRequests_flower() {}
+  public void testgetRequests_flower() throws DBException {
+    try {
+      con.setAutoCommit(false);
+      DbNode node = MapDB.addNode(5, 5, 1, "TestBuilding", "STAI", "My test", "Short");
+      int id =
+              ServiceDB.addFlowerReq(
+                      "Had device for 1000000 year", node.getNodeID(), "Chris", "Nick", "1111-1111-1111-1111", null);
+
+      con.commit();
+      con.setAutoCommit(true);
+
+      String type = ServiceDB.getRequest(id).getServiceType();
+      Assertions.assertTrue("Flower".equals(type));
+      Assertions.assertTrue(id != 0);
+
+      ServiceDB.denyRequest(id, "Don't request ever again.");
+
+    } catch (SQLException | DBException e) {
+      try {
+        con.rollback();
+        con.setAutoCommit(true);
+      } catch (SQLException ex) {
+        throw new DBException("Oh no");
+      }
+    }
+  }
 
   // Nick
   @Test
@@ -701,7 +745,37 @@ public class ServicesTest {
 
   // Chris
   @Test
-  public void testgetOpenRequest_flower() {}
+  public void testgetOpenRequest_flower() throws DBException {
+    try {
+      con.setAutoCommit(false);
+      // Insertion statements, like addTranslator
+      DbNode node = MapDB.addNode(5, 5, 1, "TestBuilding", "STAI", "My test", "Short");
+      // add Emotional support
+      int idE =
+              ServiceDB.addFlowerReq("Software Engineering class", node.getNodeID(), "annie", "ivan", "2222-2222-2222-2222", null);
+      // add Laundry
+      int idL = ServiceDB.addFlowerReq("I shit my pants", node.getNodeID(), "nick", "mike", "3333-3333-3333-3333", null);
+      // add Translator
+      int idT = ServiceDB.addFlowerReq("Помогите!", node.getNodeID(), "Russian", "Korean", "4444-4444-4444-4444", null);
+      con.commit();
+      con.setAutoCommit(true);
+      // checking statements
+      LinkedList<Request> openReqs = ServiceDB.getOpenRequests();
+      Assertions.assertTrue(openReqs.size() >= 3);
+      Assertions.assertTrue(openReqs.contains(ServiceDB.getRequest(idE)));
+      // deleting statements
+      ServiceDB.denyRequest(idE, "Nope");
+      ServiceDB.denyRequest(idL, "Nope");
+      ServiceDB.denyRequest(idT, "Nope");
+    } catch (SQLException | DBException e) { // also wanna catch DBException e
+      try {
+        con.rollback();
+        con.setAutoCommit(true);
+      } catch (SQLException ex) {
+        throw new DBException("Oh no");
+      }
+    }
+  }
 
   // Nick
   @Test
