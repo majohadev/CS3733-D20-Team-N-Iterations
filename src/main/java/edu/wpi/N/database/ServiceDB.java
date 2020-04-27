@@ -236,12 +236,13 @@ public class ServiceDB {
             status,
             rs.getString("device"),
             rs.getString("problem"));
-      } else if (sType.equals("flower")) {
+      } else if (sType.equals("Flower")) {
         query =
             "SELECT requestID, patientName, visitorName, creditNum FROM flowerRequest WHERE requestID = ?";
         stmt = con.prepareStatement(query);
         stmt.setInt(1, id);
         rs = stmt.executeQuery();
+        rs.next();
         String a = rs.getString("patientName");
         String b = rs.getString("visitorName");
         String c = rs.getString("creditNum");
@@ -250,13 +251,14 @@ public class ServiceDB {
         stmt = con.prepareStatement(query);
         stmt.setInt(1, rs.getInt("requestID"));
         rs = stmt.executeQuery();
-        LinkedList<Flower> list = new LinkedList<Flower>();
+        LinkedList<String> list = new LinkedList<>();
         while (rs.next()) {
-          list.add(new Flower(rs.getString("flowerName"), rs.getInt("price")));
+          list.add(rs.getString("flowerName"));
         }
         return new FlowerRequest(
             rid, empId, reqNotes, compNotes, nodeID, timeReq, timeComp, status, a, b, c, list);
-      } else throw new DBException("Invalid request! ID = " + id);
+      } else
+        throw new DBException("Invalid request! ID = " + id + ", Request type = \"" + sType + "\"");
     } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Unknown error: getRequest", e);
@@ -402,9 +404,9 @@ public class ServiceDB {
         stmt = con.prepareStatement(query);
         stmt.setInt(1, rs.getInt("requestID"));
         ResultSet rx = stmt.executeQuery();
-        LinkedList<Flower> list = new LinkedList<Flower>();
+        LinkedList<String> list = new LinkedList<>();
         while (rx.next()) {
-          list.add(new Flower(rx.getString("flowerName"), rx.getInt("price")));
+          list.add(rx.getString("flowerName"));
         }
         requests.add(
             new FlowerRequest(
@@ -553,9 +555,9 @@ public class ServiceDB {
         stmt = con.prepareStatement(query);
         stmt.setInt(1, rs.getInt("requestID"));
         ResultSet rx = stmt.executeQuery();
-        LinkedList<Flower> list = new LinkedList<Flower>();
+        LinkedList<String> list = new LinkedList<>();
         while (rx.next()) {
-          list.add(new Flower(rx.getString("flowerName"), rx.getInt("price")));
+          list.add(rx.getString("flowerName"));
         }
         openList.add(
             new FlowerRequest(
@@ -1099,16 +1101,17 @@ public class ServiceDB {
    *
    * @param name Name of the new flower
    * @param price Price of the new flower
-   * @return True if the addition was successful
+   * @return The flower that was added to the database
    * @throws DBException if there was an error adding the flower
    */
-  public boolean addFlower(String name, double price) throws DBException {
-    try{
+  public static Flower addFlower(String name, double price) throws DBException {
+    try {
       String query = "INSERT INTO flower (flowerName, price) VALUES (?, ?)";
       PreparedStatement st = con.prepareStatement(query);
       st.setString(1, name);
       st.setDouble(2, price);
-      return st.executeUpdate() > 0;
+      if (st.executeUpdate() > 0) return new Flower(name, price);
+      else throw new DBException("The flower \"" + name + "\" was not added to the database");
     } catch (SQLException e) {
       throw new DBException("Unknown error: addFlower", e);
     }
@@ -1121,8 +1124,8 @@ public class ServiceDB {
    * @return True if deletion was successful
    * @throws DBException if there was an error removing the flower
    */
-  public boolean removeFlower(String name) throws DBException {
-    try{
+  public static boolean removeFlower(String name) throws DBException {
+    try {
       String query = "DELETE FROM flower WHERE flowerName = ?";
       PreparedStatement st = con.prepareStatement(query);
       st.setString(1, name);
@@ -1139,17 +1142,16 @@ public class ServiceDB {
    * @return a Flower object containing the name and price of the flower
    * @throws DBException if there is an error in getting the flower
    */
-  public Flower getFlower(String name) throws DBException{
-    try{
+  public static Flower getFlower(String name) throws DBException {
+    try {
       String query = "SELECT * FROM flower WHERE flowerName = ?";
       PreparedStatement st = con.prepareStatement(query);
       st.setString(1, name);
       ResultSet rs = st.executeQuery();
 
-      if(rs.next()){
+      if (rs.next()) {
         return new Flower(name, rs.getDouble("price"));
-      }
-      else throw new DBException("Could not find \""+name+"\" in the flower table");
+      } else throw new DBException("Could not find \"" + name + "\" in the flower table");
     } catch (SQLException e) {
       throw new DBException("Unknown error: getFlower", e);
     }

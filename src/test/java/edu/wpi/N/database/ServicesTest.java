@@ -8,10 +8,12 @@ import edu.wpi.N.entities.employees.EmotionalSupporter;
 import edu.wpi.N.entities.employees.Employee;
 import edu.wpi.N.entities.employees.IT;
 import edu.wpi.N.entities.employees.WheelchairEmployee;
+import edu.wpi.N.entities.request.FlowerRequest;
 import edu.wpi.N.entities.request.Request;
 import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.GregorianCalendar;
 import java.util.LinkedList;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.AfterEach;
@@ -643,39 +645,67 @@ public class ServicesTest {
 
   // Chris
   @Test
-  public void testgetEmployee_flower() {
-
-  }
+  public void testgetEmployee_flower() {}
 
   // Nick
   @Test
-  public void testGetAndAddRequest_flower() {
-    ServiceDB.addFlower()
+  public void testGetAndAddRequest_flower() throws DBException {
+    Flower rose = ServiceDB.addFlower("Rose", 20.22);
+    Flower tulip = ServiceDB.addFlower("Tulip", 123.45);
+
+    DbNode node =
+        MapDB.addNode(
+            345, 123, 3, "Faulkner", "SERV", "the room of the great Snirp", "Snirp's room");
+
+    LinkedList<String> flowers = new LinkedList<>();
+    flowers.add(rose.getFlowerName());
+    flowers.add(rose.getFlowerName());
+    flowers.add(tulip.getFlowerName());
+
+    int id =
+        ServiceDB.addFlowerReq(
+            "pretty", node.getNodeID(), "Snirp", "Wrat", "1234-5678-9012-3456", flowers);
+
+    GregorianCalendar cal = (GregorianCalendar) GregorianCalendar.getInstance();
+
+    FlowerRequest expected =
+        new FlowerRequest(
+            id,
+            0,
+            "pretty",
+            null,
+            node.getNodeID(),
+            cal,
+            cal,
+            "OPEN",
+            "Snirp",
+            "Wrat",
+            "1234-5678-9012-3456",
+            flowers);
+
+    assertEquals(expected, ServiceDB.getRequest(id));
+
+    ServiceDB.removeFlower("Rose");
+    ServiceDB.removeFlower("Tulip");
+
+    MapDB.deleteNode(node.getNodeID());
   }
 
   // Chris
   @Test
-  public void testgetRequests_flower() {
-
-  }
+  public void testgetRequests_flower() {}
 
   // Nick
   @Test
-  public void testgetEmployees_flower() {
-
-  }
+  public void testgetEmployees_flower() {}
 
   // Chris
   @Test
-  public void testgetOpenRequest_flower() {
-
-  }
+  public void testgetOpenRequest_flower() {}
 
   // Nick
   @Test
-  public void testgetflowerDeliverers() {
-
-  }
+  public void testgetflowerDeliverers() {}
 
   @AfterEach
   public void clearDB() throws DBException {
