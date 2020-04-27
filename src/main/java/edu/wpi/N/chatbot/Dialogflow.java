@@ -4,7 +4,6 @@ import com.google.api.gax.core.FixedCredentialsProvider;
 import com.google.auth.Credentials;
 import com.google.auth.oauth2.ServiceAccountCredentials;
 import com.google.cloud.dialogflow.v2.*;
-import com.google.common.collect.Maps;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
@@ -17,8 +16,6 @@ import java.security.PrivateKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Base64;
-import java.util.List;
-import java.util.Map;
 import javax.swing.*;
 
 public class Dialogflow {
@@ -126,43 +123,52 @@ public class Dialogflow {
   }
 
   /**
-   * Returns the result of detect intent with texts as inputs.
+   * Returns the result of detect intent with text as input.
    *
    * <p>Using the same `session_id` between requests allows continuation of the conversation.
    *
-   * @param texts The text intents to be detected based on what a user says.
+   * @param text The text intent to be detected based on what a user says.
    * @param languageCode Language code of the query.
-   * @return The QueryResult for each input text.
+   * @return The QueryResult for input text.
    */
-  public Map<String, QueryResult> detectIntentTexts(List<String> texts, String languageCode)
-      throws Exception {
-    Map<String, QueryResult> queryResults = Maps.newHashMap();
+  public QueryResult detectIntentTexts(String text, String languageCode) throws Exception {
 
-    // Detect intents for each text input
-    for (String text : texts) {
-      // Set the text (hello) and language code (en-US) for the query
-      TextInput.Builder textInput =
-          TextInput.newBuilder().setText(text).setLanguageCode(languageCode);
+    // Set the text (hello) and language code (en-US) for the query
+    TextInput.Builder textInput =
+        TextInput.newBuilder().setText(text).setLanguageCode(languageCode);
 
-      // Build the query with the TextInput
-      QueryInput queryInput = QueryInput.newBuilder().setText(textInput).build();
+    // Build the query with the TextInput
+    QueryInput queryInput = QueryInput.newBuilder().setText(textInput).build();
 
-      // Performs the detect intent request
-      DetectIntentResponse response = this.sessionClient.detectIntent(session, queryInput);
+    // Performs the detect intent request
+    DetectIntentResponse response = this.sessionClient.detectIntent(session, queryInput);
 
-      // Display the query result
-      QueryResult queryResult = response.getQueryResult();
+    // Display the query result
+    QueryResult queryResult = response.getQueryResult();
 
-      System.out.println("====================");
-      System.out.format("Query Text: '%s'\n", queryResult.getQueryText());
-      System.out.format(
-          "Detected Intent: %s (confidence: %f)\n",
-          queryResult.getIntent().getDisplayName(), queryResult.getIntentDetectionConfidence());
-      System.out.format("Fulfillment Text: '%s'\n", queryResult.getFulfillmentText());
+    System.out.println("====================");
+    System.out.format("Query Text: '%s'\n", queryResult.getQueryText());
+    System.out.format(
+        "Detected Intent: %s (confidence: %f)\n",
+        queryResult.getIntent().getDisplayName(), queryResult.getIntentDetectionConfidence());
+    System.out.format("Fulfillment Text: '%s'\n", queryResult.getFulfillmentText());
 
-      queryResults.put(text, queryResult);
+    return queryResult;
+  }
+
+  /**
+   * Call the function to get chatbot's reply to user's input
+   *
+   * @param userText: user input
+   * @return: chatbot's reply for given user's text
+   */
+  public String replyToUserInput(String userText) throws Exception {
+    try {
+      QueryResult queryResults = detectIntentTexts(userText, "en-US");
+      return queryResults.getFulfillmentText();
+    } catch (Exception e) {
+      e.printStackTrace();
+      return null;
     }
-
-    return queryResults;
   }
 }
