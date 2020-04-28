@@ -2,7 +2,10 @@ package edu.wpi.N.views;
 
 import edu.wpi.N.App;
 import edu.wpi.N.database.DBException;
+import edu.wpi.N.database.MapDB;
 import edu.wpi.N.database.ServiceDB;
+import edu.wpi.N.entities.DbNode;
+import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.entities.employees.Employee;
 import edu.wpi.N.entities.employees.Translator;
 import edu.wpi.N.entities.request.Request;
@@ -20,7 +23,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 
-public class AdminController implements Initializable, Controller {
+public class AdminControllerOUTDATED implements Initializable, Controller {
 
   private App mainApp;
 
@@ -42,6 +45,22 @@ public class AdminController implements Initializable, Controller {
     @Override
     public ObservableValue<G> call(TableColumn.CellDataFeatures<G, G> param) {
       return new ReadOnlyObjectWrapper<>(param.getValue());
+    }
+  }
+
+  private static class nodeLongName
+      implements Callback<TableColumn.CellDataFeatures<Request, String>, ObservableValue<String>> {
+
+    public nodeLongName() {}
+
+    @Override
+    public ObservableValue<String> call(TableColumn.CellDataFeatures<Request, String> param) {
+      try {
+        DbNode node = MapDB.getNode(param.getValue().getNodeID());
+        return new ReadOnlyObjectWrapper<>(node.getLongName());
+      } catch (DBException e) {
+        return new ReadOnlyObjectWrapper<>("Invalid Location");
+      }
     }
   }
 
@@ -81,7 +100,7 @@ public class AdminController implements Initializable, Controller {
     TableColumn<Request, String> nodeID = new TableColumn<>("Location");
     nodeID.setMaxWidth(100);
     nodeID.setMinWidth(100);
-    nodeID.setCellValueFactory(new PropertyValueFactory<Request, String>("nodeID"));
+    nodeID.setCellValueFactory(new nodeLongName());
 
     TableColumn<Request, String> status = new TableColumn<>("Status");
     status.setMaxWidth(100);
@@ -154,6 +173,9 @@ public class AdminController implements Initializable, Controller {
   public void setMainApp(App mainApp) {
     this.mainApp = mainApp;
   }
+
+  @Override
+  public void setSingleton(StateSingleton singleton) {}
 
   @FXML
   private void acceptRow(MouseEvent e) {

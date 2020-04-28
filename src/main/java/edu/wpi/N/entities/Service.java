@@ -47,4 +47,9 @@ public class Service {
         && serviceType.equals(other.serviceType)
         && description.equals(other.description);
   }
+
+  @Override
+  public String toString() {
+    return serviceType;
+  }
 }

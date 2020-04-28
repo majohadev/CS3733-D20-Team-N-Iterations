@@ -7,6 +7,7 @@ import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.ServiceDB;
 import edu.wpi.N.entities.DbNode;
+import edu.wpi.N.entities.States.StateSingleton;
 import java.util.LinkedList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,6 +18,13 @@ import javafx.scene.input.KeyEvent;
 public class sanitationController implements Controller {
 
   private App mainApp;
+
+  private StateSingleton singleton;
+
+  @Override
+  public void setSingleton(StateSingleton singleton) {
+    this.singleton = singleton;
+  }
 
   // Add FXML Tags Here
   @FXML JFXComboBox<String> cmbo_text;
@@ -117,7 +125,7 @@ public class sanitationController implements Controller {
     cmbo_text.getItems().clear();
 
     Alert confAlert = new Alert(Alert.AlertType.CONFIRMATION);
-    confAlert.setContentText("Request Recieved");
+    confAlert.setContentText("Request Received");
     confAlert.show();
   }
 }

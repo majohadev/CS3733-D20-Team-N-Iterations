@@ -1,0 +1,15 @@
+/*Icon Button Stylesheet, Raised button*/
+.jfx-button {
+    -fx-font-size: 16px;
+    -fx-font-family: Calibri;
+    -jfx-button-type: RAISED;
+    -jfx-rippler-fill: #ffd965;
+    -fx-background-color: #002186;
+    -fx-background-radius: 150;
+    -fx-text-fill: white;
+    -fx-min-width: 55;
+    -fx-min-height: 55;
+}
+.jfx-button:hover{
+    -fx-background-color: #f7b80f ;
+}
