@@ -102,7 +102,7 @@
                               <CheckBox fx:id="ch_requestFilter" layoutX="755.0" layoutY="503.0" mnemonicParsing="false" text="Filter to Open Requests" />
                            </children>
                         </Pane>
-                        <Pane fx:id="pn_pane1" prefHeight="1005.0" prefWidth="1762.0">
+                        <Pane fx:id="pn_pane1" prefHeight="1005.0" prefWidth="1762.0" visible="false">
                            <children>
                               <TableView fx:id="tbl_Employees" layoutX="595.0" layoutY="68.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="437.0" prefWidth="300.0" />
                               <JFXButton fx:id="btn_delemp" layoutX="657.0" layoutY="515.0" onMouseClicked="#deleteEmployee" text="Delete Employee" />
@@ -149,7 +149,7 @@
                               <JFXTextField fx:id="txtf_cpnewpass" layoutX="1127.0" layoutY="747.0" />
                               <JFXButton buttonType="RAISED" layoutX="1156.0" layoutY="780.0" onMouseClicked="#changeAccountPass" text="Submit" />
                            </children></Pane>
-                        <Pane fx:id="pn_pane2" onMouseClicked="#changeAlgorithm" prefHeight="200.0" prefWidth="200.0" visible="false">
+                        <Pane fx:id="pn_pane2" onMouseClicked="#changeAlgorithm" prefHeight="200.0" prefWidth="200.0">
                            <children>
                               <Label layoutX="155.0" layoutY="87.0" text="Add Doctor">
                                  <font>

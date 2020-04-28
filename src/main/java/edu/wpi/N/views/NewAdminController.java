@@ -264,16 +264,16 @@ public class NewAdminController implements Controller, Initializable {
       errorAlert.setContentText(e.getMessage());
       errorAlert.show();
     }
+    populateChoiceBox();
   }
 
   /*
   REFACTOR TO SUPPORT ALL NEW EMPLOYEES
    */
   public void addEmployee() throws DBException {
-    System.out.println(cb_employeeTypes.getValue().getServiceType());
     String name = txtf_empfn.getText() + " " + txtf_empln.getText();
     try {
-      if (cb_employeeTypes.valueProperty().equals("Translator")) {
+      if (cb_employeeTypes.getValue().getServiceType().equals("Translator")) {
 
         String[] arrOfString = txtf_languages.getText().split(",");
         LinkedList<String> languages = new LinkedList<>();
@@ -284,16 +284,17 @@ public class NewAdminController implements Controller, Initializable {
         ServiceDB.addTranslator(name, languages);
 
       } else if (cb_employeeTypes.getValue().getServiceType().equals("Laundry")) {
+
         ServiceDB.addLaundry(name);
+
       } else if (cb_employeeTypes.getValue().getServiceType().equals("Wheelchair")) {
         ServiceDB.addWheelchairEmployee(name);
       } else if (cb_employeeTypes.getValue().getServiceType().equals("IT")) {
         ServiceDB.addIT(name);
       } else if (cb_employeeTypes.getValue().getServiceType().equals("Emotional Support")) {
         ServiceDB.addEmotionalSupporter(name);
-
       } else if (cb_employeeTypes.getValue().getServiceType().equals("Sanitation")) {
-
+        ServiceDB.addSanitationEmp(name);
       }
 
     } catch (DBException e) {
@@ -301,12 +302,11 @@ public class NewAdminController implements Controller, Initializable {
       errorAlert.setContentText(e.getMessage());
       errorAlert.show();
     }
-    tbl_Employees.getItems().clear();
-    /*
-    LinkedList<Employee> empList = ServiceDB.getEmployees();
-    emps.addAll(empList);
-    tbl_Employees.setItems(emps);
-     */
+    txtf_empfn.clear();
+    txtf_empln.clear();
+    txtf_languages.clear();
+    populateTable();
+    populateChoiceBox();
   }
 
   public void adminEditMap() throws IOException {
@@ -623,7 +623,14 @@ public class NewAdminController implements Controller, Initializable {
   public void populateChoiceBox() throws DBException {
     try {
       LinkedList<Employee> empList = ServiceDB.getEmployees();
-      ObservableList<Employee> empObv = FXCollections.observableArrayList(empList);
+      ObservableList<Employee> empObv = FXCollections.observableArrayList();
+
+      for (Employee emp : empList) {
+        if (!emp.getServiceType().equals("Medicine")) {
+          empObv.add(emp);
+        }
+      }
+
       cb_Employee.setItems(empObv);
     } catch (DBException e) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);

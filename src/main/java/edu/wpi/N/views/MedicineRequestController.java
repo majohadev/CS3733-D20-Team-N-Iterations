@@ -117,7 +117,7 @@ public class MedicineRequestController implements Controller, Initializable {
     TableColumn<MedicineRequest, String> notes = new TableColumn<>("Notes");
     notes.setMaxWidth(150);
     notes.setMinWidth(150);
-    notes.setCellValueFactory(new PropertyValueFactory<MedicineRequest, String>("compNotes"));
+    notes.setCellValueFactory(new PropertyValueFactory<MedicineRequest, String>("reqNotes"));
 
     tb_patients.getColumns().addAll(patient, meds, dosage, units, assignedDoctor, notes);
   }
@@ -212,8 +212,9 @@ public class MedicineRequestController implements Controller, Initializable {
     try {
       LinkedList<Request> medReq = new LinkedList<>();
       for (Request allReq : ServiceDB.getRequests()) {
-        if (allReq.getServiceType().equals("MedicineRequest")) ;
-        medReq.add(allReq);
+        if (allReq.getServiceType().equals("Medicine")) {
+          medReq.add(allReq);
+        }
       }
 
       tb_patients.getItems().clear();
