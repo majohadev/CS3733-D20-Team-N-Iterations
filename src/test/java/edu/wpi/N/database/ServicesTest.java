@@ -314,7 +314,9 @@ public class ServicesTest {
    * @throws SQLException
    */
   @Test
-  public void testGetAllWheelchairEmployees() throws DBException, SQLException {
+  public void testGetAllWheelchairEmployees()
+      throws DBException, SQLException, FileNotFoundException, ClassNotFoundException {
+    MapDB.initTestDB();
     try {
       con.setAutoCommit(false);
       int bobID = ServiceDB.addWheelchairEmployee("Bob Joe");
@@ -1116,6 +1118,38 @@ public class ServicesTest {
 
     MapDB.deleteNode(nodeID1);
     MapDB.deleteNode(nodeID2);
+  }
+
+  @Test
+  public void medReqTest()
+      throws DBException, FileNotFoundException, SQLException, ClassNotFoundException {
+    DbNode node = MapDB.addNode(5, 5, 1, "TestBuilding", "STAI", "My test", "Short");
+    int id =
+        ServiceDB.addMedReq("Notes", node.getNodeID(), "Zolpidem Tartrate", 12, "mg", "cantsleep");
+    Request r = ServiceDB.getRequest(id);
+    assertEquals("12.0mg", r.getAtr2());
+    assertEquals("Zolpidem Tartrate", r.getAtr1());
+    assertEquals("cantsleep", r.getAtr3());
+    assertEquals("N/A", r.getAtr4());
+    int eid = ServiceDB.addTranslator("Name", null);
+    int did = DoctorDB.addDoctor("Doctor", "who", "thedoctor", "password", null);
+    assertThrows(DBException.class, () -> ServiceDB.assignToRequest(eid, id));
+    ServiceDB.assignToRequest(did, id);
+    assertThrows(
+        DBException.class,
+        () ->
+            ServiceDB.completeRequest(
+                id, "notes")); // throws exception because not logged in as doctor
+    LoginDB.createAdminLogin("Admin", "admin");
+    LoginDB.verifyLogin("Admin", "admin");
+    assertThrows(
+        DBException.class,
+        () ->
+            ServiceDB.completeRequest(
+                id, "notes")); // throws exception because not logged in as doctor
+    LoginDB.verifyLogin("thedoctor", "password");
+    ServiceDB.completeRequest(id, "notes");
+    MapDB.initTestDB();
   }
 
   @AfterEach
