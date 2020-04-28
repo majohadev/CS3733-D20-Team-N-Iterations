@@ -83,7 +83,8 @@ public class ITServiceController implements Controller {
 
     String userLocationName = cmbo_text.getEditor().getText().toLowerCase().trim();
     LinkedList<DbNode> checkNodes = MapDB.searchVisNode(-1, null, null, userLocationName);
-    // Find the exact match and get the nodeID
+
+    // Find the exact match and get the nodeID when selected
     for (DbNode node : checkNodes) {
       if (node.getLongName().toLowerCase().equals(userLocationName)) {
         nodeID = node.getNodeID();
