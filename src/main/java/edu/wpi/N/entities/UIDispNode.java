@@ -17,13 +17,12 @@ public class UIDispNode {
   private MapBaseController mbc;
 
   final Color DEFAULT_NODE_COLOR = Color.PURPLE;
-  final Color ADD_NODE_COLOR = Color.BLACK;
-  final Color DELETE_NODE_COLOR = Color.RED;
-  final Color EDIT_NODE_COLOR = Color.RED;
+  final Color START_NODE_COLOR = Color.RED;
+  final Color END_NODE_COLOR = Color.GREEN;
   final double DEFAULT_NODE_OPACITY = 0.7;
   final double DEFAULT_NODE_RADIUS = 7;
 
-  private Color currentSelectColor = EDIT_NODE_COLOR;
+  private Color currentSelectColor = DEFAULT_NODE_COLOR;
 
   public UIDispNode(boolean showing) {
     marker = new Circle();
@@ -53,6 +52,17 @@ public class UIDispNode {
 
   public void setVisible(boolean visible) {
     marker.setVisible(visible);
+  }
+
+  public void setStart() {
+
+    marker.setFill(START_NODE_COLOR);
+    setVisible(true);
+  }
+
+  public void setEnd() {
+    marker.setFill(END_NODE_COLOR);
+    setVisible(true);
   }
 
   // Place node marker on given plane

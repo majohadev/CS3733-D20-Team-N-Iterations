@@ -83,8 +83,6 @@ public class MapDisplayController extends QRGenerator implements Controller {
   // Embedded map viewer
   @FXML private MapBaseController mapBaseController;
 
-  // LinkedList<DbNode> allFloorNodes; // stores all the nodes on the floor
-  // LinkedList<DbNode> selectedNodes; // stores all the selected nodes on the map
   LinkedList<String> longNamesList = new LinkedList<>(); // Stores Floor Node names
 
   private ObservableList<String> fuzzySearchTextList =
@@ -107,12 +105,6 @@ public class MapDisplayController extends QRGenerator implements Controller {
   }
 
   public void initialize() throws DBException {
-    // MapDB.clearNodes();
-    // InputStream nodes = Main.class.getResourceAsStream("csv/UPDATEDTeamNnodes.csv");
-    // InputStream edges = Main.class.getResourceAsStream("csv/UPDATEDTeamNedges.csv");
-    // CSVParser.parseCSV(nodes);
-    // CSVParser.parseCSV(edges);
-
     LinkedList<String> languages = ServiceDB.getLanguages();
     ObservableList<String> obvList = FXCollections.observableList(languages);
     cb_languages.setItems(obvList);
@@ -174,7 +166,7 @@ public class MapDisplayController extends QRGenerator implements Controller {
   @FXML
   private void onResetClicked(MouseEvent event) throws Exception {
     pn_directionsBox.setVisible(false);
-    mapBaseController.showNodes();
+    // mapBaseController.showNodes();
     mapBaseController.showEdges();
     mapBaseController.deselectAll();
   }
@@ -223,12 +215,7 @@ public class MapDisplayController extends QRGenerator implements Controller {
       startNode = mapBaseController.getDbFromUi(mapBaseController.selectedNodes.getFirst());
     onResetClicked(event);
 
-    // TODO: Use SINGLETON to retrieve Algorithm object and call findQuickAccess
-    // TODO: Fix later
-
-    Algorithm algorithmSetting = new Algorithm();
-
-    Path pathToBathroom = algorithmSetting.findQuickAccess(startNode, "REST");
+    Path pathToBathroom = mainApp.mapData.getAlgorithmSetting().findQuickAccess(startNode, "REST");
     if (pathToBathroom != null) {
       LinkedList<DbNode> pathNodes = pathToBathroom.getPath();
       mapBaseController.drawPath(pathNodes);

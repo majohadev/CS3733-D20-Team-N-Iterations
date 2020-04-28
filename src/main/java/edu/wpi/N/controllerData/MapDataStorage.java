@@ -1,6 +1,10 @@
 package edu.wpi.N.controllerData;
 
 import com.google.common.collect.HashBiMap;
+import edu.wpi.N.algorithms.AStar;
+import edu.wpi.N.algorithms.Algorithm;
+import edu.wpi.N.algorithms.BFS;
+import edu.wpi.N.algorithms.DFS;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.UIDispNode;
 import java.net.URL;
@@ -16,6 +20,7 @@ public class MapDataStorage {
   // private LinkedList<DbNode> thisFloor = new LinkedList<DbNode>();
 
   private HashMap<String, Image> floorMaps = new HashMap<>();
+  private Algorithm algorithmSetting = new Algorithm();
 
   public MapDataStorage() {
     URL res;
@@ -26,6 +31,22 @@ public class MapDataStorage {
       res = getClass().getClassLoader().getResource(path);
       floorMaps.put(name, new Image(res.toString()));
     }
+  }
+
+  public Algorithm getAlgorithmSetting() {
+    return algorithmSetting;
+  }
+
+  public void setDFS() {
+    algorithmSetting.setPathFinder(new DFS());
+  }
+
+  public void setBFS() {
+    algorithmSetting.setPathFinder(new BFS());
+  }
+
+  public void setAStar() {
+    algorithmSetting.setPathFinder(new AStar());
   }
 
   public Image getMap(int floorNum) {

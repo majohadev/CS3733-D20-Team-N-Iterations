@@ -1,40 +1,72 @@
 package edu.wpi.N.entities;
 
 import edu.wpi.N.views.MapBaseController;
-import javafx.scene.Cursor;
+import java.util.ArrayList;
+import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.StrokeLineCap;
+import javafx.util.Duration;
 
 public class UIDispEdge {
 
   private UIDispNode nodeA, nodeB;
   private boolean selected;
   private boolean highlighted;
-  private Line marker;
+  private Line marker = new Line();
   private MapBaseController mbc;
 
   private final Color DEFAULT_LINE_COLOR = Color.BLACK;
   private final Color SELECTED_LINE_COLOR = Color.LAWNGREEN;
   private final Color PATH_LINE_COLOR = Color.DODGERBLUE;
-  final double DEFAULT_LINE_WIDTH = 4;
+  private final double DEFAULT_LINE_WIDTH = 4;
+  private final double LIGHT_OPACITY = 0.05;
+  private final double HEAVY_OPACITY = 0.8;
+  private final ArrayList<Double> DASH_PATTERN =
+      new ArrayList<>() {
+        {
+          add(20d);
+          add(10d);
+        }
+      };
+
+  private double maxOffset() {
+    return DASH_PATTERN.stream().reduce(0d, (a, b) -> (a + b));
+  }
+
+  private Timeline pathAnimTimeline = new Timeline();
 
   public UIDispEdge(boolean showing, UIDispNode nodeA, UIDispNode nodeB) {
 
-    marker = new Line();
+    marker.getStrokeDashArray().setAll(DASH_PATTERN);
     marker.setStrokeWidth(DEFAULT_LINE_WIDTH);
     marker.setStroke(DEFAULT_LINE_COLOR);
     marker.setStrokeLineCap(StrokeLineCap.ROUND);
-    marker.setOpacity(0.7);
-    //marker.setOnMouseClicked(mouseEvent -> this.onMarkerClicked(mouseEvent));
-    //marker.setCursor(Cursor.HAND); // Cursor points when over nodes
-    this.selected = false;
-    this.highlighted = false;
-    setVisible(showing);
+    marker.setOpacity(LIGHT_OPACITY);
+
+    // marker.setOnMouseClicked(mouseEvent -> this.onMarkerClicked(mouseEvent));
+    // marker.setCursor(Cursor.HAND); // Cursor points when over edges
 
     setNodes(nodeA, nodeB);
+
+    pathAnimTimeline.setCycleCount(Timeline.INDEFINITE);
+    KeyFrame keyS =
+        new KeyFrame(
+            Duration.ZERO, new KeyValue(marker.strokeDashOffsetProperty(), 0, Interpolator.LINEAR));
+    KeyFrame keyE =
+        new KeyFrame(
+            Duration.millis(2000),
+            new KeyValue(marker.strokeDashOffsetProperty(), maxOffset(), Interpolator.LINEAR));
+    pathAnimTimeline.getKeyFrames().addAll(keyS, keyE);
+
+    setVisible(showing);
+    setSelected(false);
+    setHighlighted(false);
   }
 
   public void updateMarkerPos() {
@@ -42,6 +74,15 @@ public class UIDispEdge {
     marker.setStartY(nodeA.getY());
     marker.setEndX(nodeB.getX());
     marker.setEndY(nodeB.getY());
+  }
+
+  // Needed to flip direction of animated line toward destination
+  public void pointEdgeToward(UIDispNode node) {
+    if (node != null && node == this.nodeB) {
+      this.nodeB = this.nodeA;
+      this.nodeA = node;
+      updateMarkerPos();
+    }
   }
 
   public boolean toggleSelected() {
@@ -54,9 +95,11 @@ public class UIDispEdge {
     if (selected) {
       // Selected appearance
       marker.setStroke(SELECTED_LINE_COLOR);
+      marker.setOpacity(HEAVY_OPACITY);
     } else {
       // Deselected appearance
       marker.setStroke(DEFAULT_LINE_COLOR);
+      marker.setOpacity(LIGHT_OPACITY);
     }
   }
 
@@ -85,10 +128,25 @@ public class UIDispEdge {
     if (highlighted) {
       // Path appearance
       marker.setStroke(PATH_LINE_COLOR);
+      marker.setOpacity(HEAVY_OPACITY);
+      startAnim();
     } else {
       // Non-path appearance
       marker.setStroke(DEFAULT_LINE_COLOR);
+      marker.setOpacity(LIGHT_OPACITY);
+      stopAnim();
     }
+  }
+
+  private void startAnim() {
+    pathAnimTimeline.stop();
+    marker.getStrokeDashArray().setAll(DASH_PATTERN);
+    pathAnimTimeline.play();
+  }
+
+  private void stopAnim() {
+    pathAnimTimeline.stop();
+    marker.getStrokeDashArray().clear();
   }
 
   public void placeOnPane(Pane pane) {

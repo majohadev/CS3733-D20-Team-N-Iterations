@@ -7,7 +7,6 @@ import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.UIDispEdge;
 import edu.wpi.N.entities.UIDispNode;
-
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
@@ -135,8 +134,8 @@ public class MapBaseController {
   private void setLink(UIDispNode uiNode, DbNode dbNode, boolean showKey) {
     if (uiNode != null && dbNode != null) {
 
-      //if (dbNode.getNodeType().equals("HALL")) uiNode.setVisible(false);
-      //else uiNode.setVisible(showKey);
+      // if (dbNode.getNodeType().equals("HALL")) uiNode.setVisible(false);
+      // else uiNode.setVisible(showKey);
 
       uiNode.setPos(
           dbNode.getX() * HORIZONTAL_SCALE + HORIZONTAL_OFFSET,
@@ -223,18 +222,18 @@ public class MapBaseController {
       dbFirst = pathNodes.get(i);
       dbSecond = pathNodes.get(i + 1);
 
-      try {
-        MapDB.getAdjacent(dbFirst.getNodeID());
-      } catch (DBException e) {
-        e.printStackTrace();
-        return;
-      }
-
       uiFirst = masterNodes.inverse().get(dbFirst);
       uiSecond = masterNodes.inverse().get(dbSecond);
 
+      if (i == 0) {
+        uiFirst.setStart();
+      } else if (i == pathNodes.size() - 2) {
+        uiSecond.setEnd();
+      }
+
       edge = uiFirst.edgeTo(uiSecond);
       if (edge != null) {
+        edge.pointEdgeToward(uiSecond); // Set correct direction of line!
         edge.setHighlighted(true);
       } else {
         System.out.println(
