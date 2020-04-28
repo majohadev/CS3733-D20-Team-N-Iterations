@@ -112,6 +112,23 @@ public class ServiceDB {
     }
   }
 
+  private static String createFlowerString(ResultSet rs) throws SQLException {
+    String flowers = "";
+    String name;
+    int amount;
+    while (rs.next()) {
+      name = rs.getString("flowerName");
+      amount = rs.getInt("flowerCount");
+      if (amount > 1) {
+        flowers += "" + amount + " " + name + "s, ";
+      } else {
+        flowers += "" + amount + " " + name + ", ";
+      }
+    }
+    if (flowers.length() > 0) flowers = flowers.substring(0, flowers.length() - 2);
+    return flowers;
+  }
+
   // TODO: Add your service request here
   public static Request getRequest(int id) throws DBException {
     try {
@@ -247,16 +264,15 @@ public class ServiceDB {
         String b = rs.getString("visitorName");
         String c = rs.getString("creditNum");
         query =
-            "SELECT flower.* FROM flower, flowertoflower WHERE flower.flowerName = flowertoflower.flowerName AND flowertoflower.requestID = ?";
+            "SELECT flower.flowerName, count(flower.flowerName) AS flowerCount FROM flower, flowertoflower "
+                + "WHERE flower.flowerName = flowertoflower.flowerName AND flowertoflower.requestID = ? "
+                + "GROUP BY flower.flowerName";
         stmt = con.prepareStatement(query);
         stmt.setInt(1, rs.getInt("requestID"));
         rs = stmt.executeQuery();
-        LinkedList<String> list = new LinkedList<>();
-        while (rs.next()) {
-          list.add(rs.getString("flowerName"));
-        }
+        String flowers = createFlowerString(rs);
         return new FlowerRequest(
-            rid, empId, reqNotes, compNotes, nodeID, timeReq, timeComp, status, a, b, c, list);
+            rid, empId, reqNotes, compNotes, nodeID, timeReq, timeComp, status, a, b, c, flowers);
       } else
         throw new DBException("Invalid request! ID = " + id + ", Request type = \"" + sType + "\"");
     } catch (SQLException e) {
@@ -400,14 +416,13 @@ public class ServiceDB {
       rs = stmt.executeQuery();
       while (rs.next()) {
         query =
-            "SELECT flower.* FROM flower, flowertoflower WHERE flower.flowerName = flowertoflower.flowerName AND flowertoflower.requestID = ?";
+            "SELECT flower.flowerName, count(flower.flowerName) AS flowerCount FROM flower, flowertoflower "
+                + "WHERE flower.flowerName = flowertoflower.flowerName AND flowertoflower.requestID = ? "
+                + "GROUP BY flower.flowerName";
         stmt = con.prepareStatement(query);
         stmt.setInt(1, rs.getInt("requestID"));
         ResultSet rx = stmt.executeQuery();
-        LinkedList<String> list = new LinkedList<>();
-        while (rx.next()) {
-          list.add(rx.getString("flowerName"));
-        }
+        String flowers = createFlowerString(rx);
         requests.add(
             new FlowerRequest(
                 rs.getInt("requestID"),
@@ -421,7 +436,7 @@ public class ServiceDB {
                 rs.getString("patientName"),
                 rs.getString("visitorName"),
                 rs.getString("creditNum"),
-                list));
+                flowers));
       }
       return requests;
     } catch (SQLException e) {
@@ -551,14 +566,13 @@ public class ServiceDB {
       rs = stmt.executeQuery();
       while (rs.next()) {
         query =
-            "SELECT flower.* FROM flower, flowertoflower WHERE flower.flowerName = flowertoflower.flowerName AND flowertoflower.requestID = ?";
+            "SELECT flower.flowerName, count(flower.flowerName) AS flowerCount FROM flower, flowertoflower "
+                + "WHERE flower.flowerName = flowertoflower.flowerName AND flowertoflower.requestID = ? "
+                + "GROUP BY flower.flowerName";
         stmt = con.prepareStatement(query);
         stmt.setInt(1, rs.getInt("requestID"));
         ResultSet rx = stmt.executeQuery();
-        LinkedList<String> list = new LinkedList<>();
-        while (rx.next()) {
-          list.add(rx.getString("flowerName"));
-        }
+        String flowers = createFlowerString(rx);
         openList.add(
             new FlowerRequest(
                 rs.getInt("requestID"),
@@ -572,7 +586,7 @@ public class ServiceDB {
                 rs.getString("patientName"),
                 rs.getString("visitorName"),
                 rs.getString("creditNum"),
-                list));
+                flowers));
       }
       return openList;
     } catch (SQLException ex) {
@@ -1103,7 +1117,7 @@ public class ServiceDB {
    * Adds a new flower to the database
    *
    * @param name Name of the new flower
-   * @param price Price of the new flower
+   * @param price Price of the new flower in cents
    * @return The flower that was added to the database
    * @throws DBException if there was an error adding the flower
    */
