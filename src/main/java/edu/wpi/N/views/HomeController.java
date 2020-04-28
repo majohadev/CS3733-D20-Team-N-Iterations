@@ -33,4 +33,8 @@ public class HomeController implements Controller {
   public void onBtnAdminClick() throws IOException {
     this.mainApp.switchScene("/edu/wpi/N/views/adminPortal.fxml");
   }
+
+  public void onBtnSanClick() throws IOException {
+    this.mainApp.switchScene("/edu/wpi/N/sa");
+  }
 }

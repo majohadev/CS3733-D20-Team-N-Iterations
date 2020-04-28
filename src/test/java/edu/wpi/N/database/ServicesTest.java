@@ -371,8 +371,8 @@ public class ServicesTest {
           ServiceDB.getRequests().contains(ServiceDB.getRequest(wheelchairReqID1)));
       ServiceDB.denyRequest(wheelchairReqID2, "done");
 
-      //ServiceDB.removeEmployee(wheelchairReqID1);
-      //ServiceDB.removeEmployee(wheelchairReqID2);
+      // ServiceDB.removeEmployee(wheelchairReqID1);
+      // ServiceDB.removeEmployee(wheelchairReqID2);
 
       MapDB.clearNodes();
     } catch (SQLException | DBException e) {

@@ -274,19 +274,14 @@ public class NewAdminController implements Controller, Initializable {
     String name = txtf_empfn.getText() + " " + txtf_empln.getText();
     try {
       if (cb_employeeTypes.getValue().getServiceType().equals("Translator")) {
-
         String[] arrOfString = txtf_languages.getText().split(",");
         LinkedList<String> languages = new LinkedList<>();
         for (String a : arrOfString) {
           languages.add(a);
         }
-
         ServiceDB.addTranslator(name, languages);
-
       } else if (cb_employeeTypes.getValue().getServiceType().equals("Laundry")) {
-
         ServiceDB.addLaundry(name);
-
       } else if (cb_employeeTypes.getValue().getServiceType().equals("Wheelchair")) {
         ServiceDB.addWheelchairEmployee(name);
       } else if (cb_employeeTypes.getValue().getServiceType().equals("IT")) {
@@ -295,6 +290,8 @@ public class NewAdminController implements Controller, Initializable {
         ServiceDB.addEmotionalSupporter(name);
       } else if (cb_employeeTypes.getValue().getServiceType().equals("Sanitation")) {
         ServiceDB.addSanitationEmp(name);
+      } else if (cb_employeeTypes.getValue().getServiceType().equals("Flower")) {
+        ServiceDB.addFlowerDeliverer(name);
       }
 
     } catch (DBException e) {

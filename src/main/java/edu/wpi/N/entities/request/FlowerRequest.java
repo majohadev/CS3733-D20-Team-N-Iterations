@@ -77,7 +77,6 @@ public class FlowerRequest extends Request {
     return flowerList;
   }
 
-
   @Override
   public boolean equals(Object o) {
     if (!(o instanceof FlowerRequest)) {
