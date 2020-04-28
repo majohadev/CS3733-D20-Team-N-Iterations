@@ -15,14 +15,14 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.input.KeyEvent;
 
-public class WheelchairRequestController implements Controller {
+public class TemplateController implements Controller {
 
   private App mainApp;
   private StateSingleton singleton;
   // Add FXML Tags Here
   @FXML JFXComboBox<String> cmbo_text;
   @FXML JFXComboBox<String> cmbo_selectLang;
-  @FXML JFXTextArea txtf_wheelchairNotes;
+  @FXML JFXTextArea txtf_langNotes;
 
   private ObservableList<String> fuzzySearchTextList =
       // List that fills TextViews
@@ -32,7 +32,7 @@ public class WheelchairRequestController implements Controller {
 
   private String countVal = "";
 
-  public WheelchairRequestController() throws DBException {}
+  public TemplateController() throws DBException {}
 
   public void setMainApp(App mainApp) {
     this.mainApp = mainApp;
@@ -46,11 +46,10 @@ public class WheelchairRequestController implements Controller {
   public void initialize() throws DBException {
 
     cmbo_text.getEditor().setOnKeyTyped(this::locationTextChanged);
-    LinkedList<String> options = new LinkedList<String>();
-    options.add("Yes");
-    options.add("No");
-    ObservableList<String> yesOrNo = FXCollections.observableList(options);
-    cmbo_selectLang.setItems(yesOrNo);
+    LinkedList<String> languages = ServiceDB.getLanguages();
+    languages.add("French");
+    ObservableList<String> langList = FXCollections.observableList(languages);
+    cmbo_selectLang.setItems(langList);
   }
 
   @FXML
@@ -88,7 +87,7 @@ public class WheelchairRequestController implements Controller {
   @FXML
   public void createNewTranslator() throws DBException {
 
-    String assistanceOption = cmbo_selectLang.getSelectionModel().getSelectedItem();
+    String langSelection = cmbo_selectLang.getSelectionModel().getSelectedItem();
     String nodeID;
     int nodeIndex = 0;
 
@@ -109,18 +108,17 @@ public class WheelchairRequestController implements Controller {
       return;
     }
 
-    String notes = txtf_wheelchairNotes.getText();
-    if (assistanceOption == null) {
+    String notes = txtf_langNotes.getText();
+    if (langSelection == null) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-      errorAlert.setContentText("Please select a needs assistance option!");
+      errorAlert.setContentText("Please select a language for your translation request!");
       errorAlert.show();
       return;
     }
+    int transReq = ServiceDB.addTransReq(notes, nodeID, langSelection);
+    // App.adminDataStorage.addToList(transReq);
 
-    int wheelchairReq = ServiceDB.addWheelchairRequest(notes, nodeID, assistanceOption);
-    // App.adminDataStorage.addToList(wheelchairReq);
-
-    txtf_wheelchairNotes.clear();
+    txtf_langNotes.clear();
     cmbo_selectLang.getItems().clear();
     cmbo_text.getItems().clear();
 

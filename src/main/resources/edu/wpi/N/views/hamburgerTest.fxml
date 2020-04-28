@@ -80,14 +80,14 @@
                                     </ImageView>
                                     <JFXListView fx:id="lst_doctornames" layoutX="48.0" layoutY="103.0" prefHeight="75.0" prefWidth="200.0" />
                                     <JFXTextField fx:id="txtf_doctorname" layoutX="49.0" layoutY="64.0" onKeyTyped="#searchByDoctorTextFill" prefHeight="29.0" prefWidth="151.0" promptText="Search by Doctor" />
-                                    <JFXButton fx:id="btn_findpathdoc" buttonType="RAISED" layoutX="45.0" layoutY="301.0" onAction="#onFindDoctorClicked" prefHeight="39.0" prefWidth="204.0" style="-fx-background-color: #32CD32;" text="   Find Path To Location" textAlignment="CENTER" textFill="WHITE">
+                                    <JFXButton fx:id="btn_findpathdoc" buttonType="RAISED" layoutX="45.0" layoutY="301.0" onMouseClicked="#onDoctorPathFindClicked" prefHeight="39.0" prefWidth="204.0" style="-fx-background-color: #32CD32;" text="   Find Path To Location" textAlignment="CENTER" textFill="WHITE">
                                        <font>
                                           <Font size="18.0" />
                                        </font>
                                     </JFXButton>
                                     <JFXListView fx:id="lst_doctorlocations" layoutX="47.0" layoutY="218.0" prefHeight="75.0" prefWidth="200.0" />
                                     <Label layoutX="47.0" layoutY="196.0" text="Select a Location from the list below" />
-                                    <JFXCheckBox checkedColor="LIMEGREEN" layoutX="49.0" layoutY="31.0" style="-fx-background-color: #ffffff; -fx-text-fill: #002186#002186 #002186;" text="Handicap accessible path" unCheckedColor="#002186">
+                                    <JFXCheckBox fx:id="handicapp1" checkedColor="LIMEGREEN" layoutX="49.0" layoutY="31.0" style="-fx-background-color: #ffffff; -fx-text-fill: #002186#002186 #002186;" text="Handicap accessible path" unCheckedColor="#002186">
                                        <font>
                                           <Font size="15.0" />
                                        </font>
@@ -144,7 +144,7 @@
                                           </ImageView>
                                        </graphic>
                                     </JFXButton>
-                                    <JFXCheckBox checkedColor="LIMEGREEN" layoutX="49.0" layoutY="31.0" style="-fx-background-color: #ffffff; -fx-text-fill: #002186#002186 #002186;" text="Handicap accessible path" unCheckedColor="#002186">
+                                    <JFXCheckBox fx:id="handicapp2" checkedColor="LIMEGREEN" layoutX="49.0" layoutY="31.0" style="-fx-background-color: #ffffff; -fx-text-fill: #002186#002186 #002186;" text="Handicap accessible path" unCheckedColor="#002186">
                                        <font>
                                           <Font size="15.0" />
                                        </font>

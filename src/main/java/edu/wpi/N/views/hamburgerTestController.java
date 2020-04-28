@@ -71,6 +71,9 @@ public class hamburgerTestController implements Controller, Initializable {
   @FXML TitledPane pn_locationSearch;
   @FXML Accordion acc_search;
   @FXML Text txt_description;
+  @FXML JFXCheckBox handicapp1;
+  @FXML JFXCheckBox handicapp2;
+
   private final int DEFAULT_FLOOR = 1;
   private final String DEFAULT_BUILDING = "FAULKNER";
   private int currentFloor;
@@ -209,6 +212,23 @@ public class hamburgerTestController implements Controller, Initializable {
     }
   }
 
+  @FXML
+  private void onDoctorPathFindClicked(MouseEvent event) throws Exception {
+    this.mode = Mode.PATH_STATE;
+    pn_display.getChildren().removeIf(node -> node instanceof Line);
+    enableAllFloorButtons();
+    String firstSelection = (String) lst_firstLocation.getSelectionModel().getSelectedItem();
+    String secondSelection = (String) lst_doctorlocations.getSelectionModel().getSelectedItem();
+    jumpToFloor(imgPaths[stringNodeConversion.get(firstSelection).getFloor() - 1]);
+    currentFloor = stringNodeConversion.get(firstSelection).getFloor();
+    try {
+      findPath(stringNodeConversion.get(firstSelection), stringNodeConversion.get(secondSelection));
+    } catch (NullPointerException e) {
+      displayErrorMessage("Path does not exist");
+      return;
+    }
+  }
+
   private void enableAllFloorButtons() {
     for (int i = 1; i < nodesList.getChildren().size(); i++) {
       JFXButton btn = (JFXButton) nodesList.getChildren().get(i);
@@ -217,28 +237,33 @@ public class hamburgerTestController implements Controller, Initializable {
   }
 
   private void findPath(DbNode node1, DbNode node2) throws DBException {
+    boolean handicap = false;
+    if (handicapp1.isSelected() || handicapp2.isSelected()) {
+      handicap = true;
+    }
     if (node1.getFloor() <= node2.getFloor()) {
       Path path;
       Algorithm myAStar = new Algorithm();
       try {
-        path = myAStar.findPath(node1, node2, false);
+        path = myAStar.findPath(node1, node2, handicap);
         ArrayList<String> directions = path.getDirections();
         for (String s : directions) {
           System.out.println(s);
         }
+        System.out.println("Start angle " + path.getStartAngle());
       } catch (NullPointerException e) {
         displayErrorMessage("The path does not exist");
         return;
       }
       pathNodes = path.getPath();
     } else {
-      Algorithm myAStar = new Algorithm();
-      Path path = myAStar.findPath(node2, node1, false);
+      Path path = singleton.savedAlgo.findPath(node2, node1, handicap);
       pathNodes = path.getPath();
       ArrayList<String> directions = path.getDirections();
       for (String s : directions) {
         System.out.println(s);
       }
+      System.out.println("Start angle " + path.getStartAngle());
     }
     disableNonPathFloors(pathNodes);
     drawPath(pathNodes);
@@ -465,14 +490,20 @@ public class hamburgerTestController implements Controller, Initializable {
       this.mode = Mode.PATH_STATE;
       pn_display.getChildren().removeIf(node -> node instanceof Line);
       enableAllFloorButtons();
+
+      boolean handicap = false;
+      if (handicapp1.isSelected() || handicapp2.isSelected()) {
+        handicap = true;
+      }
+
       String startSelection = (String) lst_firstLocation.getSelectionModel().getSelectedItem();
       DbNode startNode = stringNodeConversion.get(startSelection);
 
       DbNode endNode = MapDB.getNode("NRETL00201");
 
-      // TODO: get the Handicap setting from the user
+
       if (endNode != null) {
-        Path pathToStarBucks = singleton.savedAlgo.findPath(startNode, endNode, false);
+        Path pathToStarBucks = singleton.savedAlgo.findPath(startNode, endNode, handicap);
         drawPath(pathToStarBucks.getPath());
         // set textual descriptions
         setTextDecription(pathToStarBucks);
@@ -577,7 +608,7 @@ public class hamburgerTestController implements Controller, Initializable {
     }
   }
   // Upon clicking find path to location button call this method
-  /*  @FXML
+  /*    @FXML
   private void onDoctorPathFindClicked(MouseEvent event) throws Exception {
     pn_path.getChildren().removeIf(node -> node instanceof Line);
     int currentSelection = lst_doctorlocations.getSelectionModel().getSelectedIndex();

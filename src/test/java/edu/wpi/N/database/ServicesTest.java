@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import edu.wpi.N.entities.*;
 import edu.wpi.N.entities.employees.*;
 import edu.wpi.N.entities.request.FlowerRequest;
+import edu.wpi.N.entities.request.InternalTransportationRequest;
 import edu.wpi.N.entities.request.Request;
 import java.io.FileNotFoundException;
 import java.sql.Connection;
@@ -827,6 +828,73 @@ public class ServicesTest {
 
     ServiceDB.removeEmployee(id1);
     ServiceDB.removeEmployee(id2);
+  }
+
+  @Test
+  public void testGetAndAddEmployees_inTr() throws DBException {
+    int id1 = ServiceDB.addInternalTransportationEmployee("Bombus Clockmort");
+    int id2 = ServiceDB.addInternalTransportationEmployee("Sharkey Finn");
+
+    InternalTransportationEmployee expected1 =
+        new InternalTransportationEmployee(id1, "Bombus Clockmort");
+    InternalTransportationEmployee expected2 =
+        new InternalTransportationEmployee(id2, "Sharkey Finn");
+
+    assertEquals(expected1, ServiceDB.getEmployee(id1));
+    assertEquals(expected2, ServiceDB.getEmployee(id2));
+
+    LinkedList<Employee> result1 = ServiceDB.getEmployees();
+    LinkedList<InternalTransportationEmployee> result2 =
+        ServiceDB.getInternalTransportationEmployees();
+
+    assertTrue(result1.contains(expected1));
+    assertTrue(result1.contains(expected2));
+    assertTrue(result2.contains(expected1));
+    assertTrue(result2.contains(expected2));
+
+    ServiceDB.removeEmployee(id1);
+    ServiceDB.removeEmployee(id2);
+  }
+
+  @Test
+  public void testAddAndGetRequests_inTr() throws DBException {
+    DbNode node1 = MapDB.addNode(457, 3458, 5, "Faulkner", "DEPT", "The Room", "A good movie");
+    DbNode node2 =
+        MapDB.addNode(890, 4589, 5, "Faulkner", "DEPT", "The Room 2", "Electric Boogaloo");
+    String nodeID1 = node1.getNodeID();
+    String nodeID2 = node2.getNodeID();
+
+    int id1 = ServiceDB.addInternalTransportationReq("move", nodeID1, "fast", "03:00", nodeID2);
+    int id2 = ServiceDB.addInternalTransportationReq("go", nodeID2, "slow", "06:00", nodeID1);
+
+    GregorianCalendar cal = (GregorianCalendar) GregorianCalendar.getInstance();
+    InternalTransportationRequest expected1 =
+        new InternalTransportationRequest(
+            id1, 0, "move", null, nodeID1, cal, cal, "OPEN", "fast", "03:00", nodeID2);
+    InternalTransportationRequest expected2 =
+        new InternalTransportationRequest(
+            id2, 0, "go", null, nodeID2, cal, cal, "OPEN", "slow", "06:00", nodeID1);
+
+    InternalTransportationRequest result1 =
+        (InternalTransportationRequest) ServiceDB.getRequest(id1);
+    InternalTransportationRequest result2 =
+        (InternalTransportationRequest) ServiceDB.getRequest(id2);
+
+    assertEquals(expected1, result1);
+    assertEquals(expected2, result2);
+
+    LinkedList<Request> result = ServiceDB.getRequests();
+
+    assertTrue(result.contains(expected1));
+    assertTrue(result.contains(expected2));
+
+    result = ServiceDB.getOpenRequests();
+
+    assertTrue(result.contains(expected1));
+    assertTrue(result.contains(expected2));
+
+    MapDB.deleteNode(nodeID1);
+    MapDB.deleteNode(nodeID2);
   }
 
   @AfterEach

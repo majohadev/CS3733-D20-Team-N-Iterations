@@ -332,25 +332,4 @@ public class Directions {
       return null;
     }
   }
-
-  /*    */
-  /**
-   * Determines if a node is the last node in a hallway
-   *
-   * @param node, DbNode
-   * @return true, if the node is at the end of the hall, false otherwise
-   */
-  /*
-  private static boolean atEndOfHall(DbNode node) throws DBException {
-      int hallNodeCount = 0;
-      if (node.getNodeType().equals("HALL")) {
-          for (DbNode n : MapDB.getAdjacent(node.getNodeID())) {
-              if (n.getNodeType().equals("HALL")) {
-                  hallNodeCount++;
-              }
-          }
-        return hallNodeCount <= 1;
-      }
-      return false;
-  }*/
 }
