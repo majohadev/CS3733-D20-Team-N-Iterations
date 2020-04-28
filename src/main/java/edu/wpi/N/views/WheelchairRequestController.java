@@ -140,6 +140,7 @@ public class WheelchairRequestController implements Controller {
     }
 
     ServiceDB.addWheelchairRequest(notes, nodeID, assistanceOption);
+
     // App.adminDataStorage.addToList(wheelchairReq);
 
     txtf_wheelchairNotes.clear();

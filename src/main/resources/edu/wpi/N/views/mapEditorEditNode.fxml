@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="280.0" prefWidth="470.0" style="-fx-background-color: #4A69C6; -fx-background-radius: 10; -fx-border-radius: 10;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.MapEditorEditNodeController">
+<AnchorPane prefHeight="280.0" prefWidth="470.0" style="-fx-background-color: #002186; -fx-background-radius: 10; -fx-border-radius: 10;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.MapEditorEditNodeController">
    <children>
       <Label layoutX="54.0" layoutY="24.0" prefHeight="39.0" prefWidth="246.0" text="Edit Node" textFill="WHITE">
          <font>
