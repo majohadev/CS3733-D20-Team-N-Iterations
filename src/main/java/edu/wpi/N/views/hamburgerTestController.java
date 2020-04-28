@@ -64,6 +64,8 @@ public class hamburgerTestController implements Controller, Initializable {
   @FXML private JFXButton btn_floors, btn_floor1, btn_floor2, btn_floor3, btn_floor4, btn_floor5;
   @FXML TitledPane pn_locationSearch;
   @FXML Accordion acc_search;
+  @FXML JFXCheckBox handicapp1;
+  @FXML JFXCheckBox handicapp2;
   private final int DEFAULT_FLOOR = 1;
   private final String DEFAULT_BUILDING = "FAULKNER";
   private int currentFloor;
@@ -198,6 +200,23 @@ public class hamburgerTestController implements Controller, Initializable {
     }
   }
 
+  @FXML
+  private void onDoctorPathFindClicked(MouseEvent event) throws Exception {
+    this.mode = Mode.PATH_STATE;
+    pn_display.getChildren().removeIf(node -> node instanceof Line);
+    enableAllFloorButtons();
+    String firstSelection = (String) lst_firstLocation.getSelectionModel().getSelectedItem();
+    String secondSelection = (String) lst_doctorlocations.getSelectionModel().getSelectedItem();
+    jumpToFloor(imgPaths[stringNodeConversion.get(firstSelection).getFloor() - 1]);
+    currentFloor = stringNodeConversion.get(firstSelection).getFloor();
+    try {
+      findPath(stringNodeConversion.get(firstSelection), stringNodeConversion.get(secondSelection));
+    } catch (NullPointerException e) {
+      displayErrorMessage("Path does not exist");
+      return;
+    }
+  }
+
   private void enableAllFloorButtons() {
     for (int i = 1; i < nodesList.getChildren().size(); i++) {
       JFXButton btn = (JFXButton) nodesList.getChildren().get(i);
@@ -206,11 +225,17 @@ public class hamburgerTestController implements Controller, Initializable {
   }
 
   private void findPath(DbNode node1, DbNode node2) throws DBException {
+    boolean handicap;
+    if (handicapp1.isSelected() || handicapp2.isSelected()) {
+      handicap = true;
+    } else {
+      handicap = false;
+    }
     if (node1.getFloor() <= node2.getFloor()) {
       Path path;
       Algorithm myAStar = new Algorithm();
       try {
-        path = myAStar.findPath(node1, node2, false);
+        path = myAStar.findPath(node1, node2, handicap);
         ArrayList<String> directions = path.getDirections();
         for (String s : directions) {
           System.out.println(s);
@@ -223,7 +248,7 @@ public class hamburgerTestController implements Controller, Initializable {
       pathNodes = path.getPath();
     } else {
       Algorithm myAStar = new Algorithm();
-      Path path = myAStar.findPath(node2, node1, false);
+      Path path = myAStar.findPath(node2, node1, handicap);
       pathNodes = path.getPath();
       ArrayList<String> directions = path.getDirections();
       for (String s : directions) {
@@ -508,7 +533,7 @@ public class hamburgerTestController implements Controller, Initializable {
     }
   }
   // Upon clicking find path to location button call this method
-  /*  @FXML
+  /*    @FXML
   private void onDoctorPathFindClicked(MouseEvent event) throws Exception {
     pn_path.getChildren().removeIf(node -> node instanceof Line);
     int currentSelection = lst_doctorlocations.getSelectionModel().getSelectedIndex();
