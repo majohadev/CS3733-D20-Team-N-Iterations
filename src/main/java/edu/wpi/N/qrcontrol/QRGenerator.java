@@ -36,7 +36,7 @@ public abstract class QRGenerator {
 
   // Generate QR code as JavaFX Image using concatenated list of strings, optionally storing the
   // result
-  protected Image generateImage(ArrayList<String> linesToEncode, boolean storeImage) {
+  public Image generateImage(ArrayList<String> linesToEncode, boolean storeImage) {
 
     if (linesToEncode != null) {
 

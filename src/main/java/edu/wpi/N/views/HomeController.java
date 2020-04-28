@@ -45,4 +45,8 @@ public class HomeController implements Controller {
   public void onBtnSanClick() throws IOException {
     this.mainApp.switchScene("/edu/wpi/N/views/sanitationRequestPage.fxml", singleton);
   }
+
+  public void onBtnFloorEdgesClicked() throws IOException {
+    this.mainApp.switchScene("views/BetweenFloorsEditor.fxml", singleton);
+  }
 }
