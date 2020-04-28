@@ -87,6 +87,7 @@ public class ServiceDB {
     allEmployee.addAll(getWheelchairEmployees());
     allEmployee.addAll(getITs());
     allEmployee.addAll(getFlowerDeliverers());
+    allEmployee.addAll(getSanitationEmp());
     allEmployee.addAll(getInternalTransportationEmployees());
     allEmployee.addAll(getSecurityOfficers());
     return allEmployee;

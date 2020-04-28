@@ -52,7 +52,7 @@
                         <Insets top="50.0" />
                      </VBox.margin>
                   </Label>
-                  <JFXTextArea fx:id="txtf_langNotes1" maxWidth="394.0" minWidth="394.0" prefHeight="127.0" prefWidth="394.0" promptText="Enter Device Here" style="-fx-font-size: 18;" />
+                  <JFXTextArea fx:id="txtf_device" maxWidth="394.0" minWidth="394.0" prefHeight="127.0" prefWidth="394.0" promptText="Enter Device Here" style="-fx-font-size: 18;" />
                </children>
             </VBox>
             <VBox alignment="CENTER" maxHeight="500.0" maxWidth="500.0" minWidth="500.0" prefHeight="200.0" prefWidth="100.0" spacing="30.0">
@@ -62,7 +62,7 @@
                         <Font name="Calibri" size="24.0" />
                      </font>
                   </Label>
-                  <JFXTextArea fx:id="txtf_langNotes11" maxWidth="394.0" minWidth="394.0" prefHeight="79.0" prefWidth="394.0" promptText="Enter Problem Here" style="-fx-font-size: 18;" />
+                  <JFXTextArea fx:id="txtf_problem" maxWidth="394.0" minWidth="394.0" prefHeight="79.0" prefWidth="394.0" promptText="Enter Problem Here" style="-fx-font-size: 18;" />
                   <Label text="Please Enter Additional Notes Below">
                      <font>
                         <Font name="Calibri" size="24.0" />
@@ -71,7 +71,7 @@
                         <Insets top="50.0" />
                      </VBox.margin>
                   </Label>
-                  <JFXTextArea fx:id="txtf_langNotes" maxWidth="394.0" minWidth="394.0" prefHeight="129.0" prefWidth="394.0" promptText="Enter Notes Here" style="-fx-font-size: 18;" />
+                  <JFXTextArea fx:id="txtf_ITnotes" maxWidth="394.0" minWidth="394.0" prefHeight="129.0" prefWidth="394.0" promptText="Enter Notes Here" style="-fx-font-size: 18;" />
                </children></VBox>
          </children>
       </HBox>
