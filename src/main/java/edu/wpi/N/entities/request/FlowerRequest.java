@@ -77,9 +77,6 @@ public class FlowerRequest extends Request {
     return flowerList;
   }
 
-  public void setFlowerList(String flowerList) {
-    this.flowerList = flowerList;
-  }
 
   @Override
   public boolean equals(Object o) {

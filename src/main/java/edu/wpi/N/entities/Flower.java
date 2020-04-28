@@ -14,11 +14,11 @@ public class Flower {
   }
 
   String flowerName;
-  double price;
+  int price;
 
-  public Flower(String name, double price) {
+  public Flower(String name, int price) {
     this.flowerName = name;
-    this.price = price;
+    this.price = price; //can convert it using "$" + price/100 + String.format(".%02d", price % 100)
   }
 
   public double getPrice() {

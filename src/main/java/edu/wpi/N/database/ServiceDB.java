@@ -1107,12 +1107,12 @@ public class ServiceDB {
    * @return The flower that was added to the database
    * @throws DBException if there was an error adding the flower
    */
-  public static Flower addFlower(String name, double price) throws DBException {
+  public static Flower addFlower(String name, int price) throws DBException {
     try {
       String query = "INSERT INTO flower (flowerName, price) VALUES (?, ?)";
       PreparedStatement st = con.prepareStatement(query);
       st.setString(1, name);
-      st.setDouble(2, price);
+      st.setInt(2, price);
       if (st.executeUpdate() > 0) return new Flower(name, price);
       else throw new DBException("The flower \"" + name + "\" was not added to the database");
     } catch (SQLException e) {
@@ -1153,7 +1153,7 @@ public class ServiceDB {
       ResultSet rs = st.executeQuery();
 
       if (rs.next()) {
-        return new Flower(name, rs.getDouble("price"));
+        return new Flower(name, rs.getInt("price"));
       } else throw new DBException("Could not find \"" + name + "\" in the flower table");
     } catch (SQLException e) {
       throw new DBException("Unknown error: getFlower", e);
