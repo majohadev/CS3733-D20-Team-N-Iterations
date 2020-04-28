@@ -198,6 +198,7 @@ public class hamburgerTestController implements Controller, Initializable {
         for (String s : directions) {
           System.out.println(s);
         }
+        System.out.println("Start angle " + path.getStartAngle());
       } catch (NullPointerException e) {
         displayErrorMessage("The path does not exist");
         return;
@@ -211,6 +212,7 @@ public class hamburgerTestController implements Controller, Initializable {
       for (String s : directions) {
         System.out.println(s);
       }
+      System.out.println("Start angle " + path.getStartAngle());
     }
     disableNonPathFloors(pathNodes);
     drawPath(pathNodes);
