@@ -25,8 +25,7 @@ public class DFS extends AbsAlgo {
   @Override
   public Path findPath(DbNode startNode, DbNode endNode, boolean handicap) throws DBException {
     try {
-      // TODO: delete later
-      System.out.println("DFS!!!!");
+
       // Initialize variables
       Stack<Node> stack = new Stack<>();
       Map<String, String> cameFrom = new HashMap<>();

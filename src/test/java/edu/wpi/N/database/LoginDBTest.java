@@ -18,7 +18,7 @@ public class LoginDBTest {
 
   @Test
   public void testLogin() throws DBException {
-    LoginDB.createAdminLogin("Gaben", "MoolyFTW");
+    // LoginDB.createAdminLogin("Gaben", "MoolyFTW");
     LoginDB.verifyLogin("Gaben", "MoolyFTW");
     assertEquals("Gaben", LoginDB.currentLogin());
     assertEquals("ADMIN", LoginDB.currentAccess());

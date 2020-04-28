@@ -5,6 +5,7 @@ import edu.wpi.N.App;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
+import edu.wpi.N.entities.States.StateSingleton;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -22,6 +23,13 @@ import javafx.scene.shape.Line;
 
 public class MapEditController implements Controller {
   App mainApp = null;
+
+  private StateSingleton singleton;
+
+  @Override
+  public void setSingleton(StateSingleton singleton) {
+    this.singleton = singleton;
+  }
 
   @Override
   public void setMainApp(App mainApp) {
@@ -814,6 +822,6 @@ public class MapEditController implements Controller {
   }
 
   public void onReturnClicked() throws IOException {
-    mainApp.switchScene("views/home.fxml");
+    mainApp.switchScene("views/home.fxml", singleton);
   }
 }
