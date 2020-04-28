@@ -34,7 +34,7 @@ public class MedicineRequest extends Request {
     return "Medicine";
   }
 
-  public String getMedicineName() {
+  public String getAtr1() {
     return medicineName;
   }
 
@@ -50,7 +50,7 @@ public class MedicineRequest extends Request {
     this.dosage = dosage;
   }
 
-  public String getUnits() {
+  public String getAtr2() {
     return units;
   }
 
@@ -58,7 +58,7 @@ public class MedicineRequest extends Request {
     this.units = units;
   }
 
-  public String getPatient() {
+  public String getAtr3() {
     return patient;
   }
 

@@ -48,15 +48,15 @@ public class SanitationRequest extends Request {
     return "Sanitation";
   }
 
-  public String getSpillType() {
+  public String getAtr1() {
     return spillType;
   }
 
-  public String getSize() {
+  public String getAtr2() {
     return size;
   }
 
-  public String getDanger() {
+  public String getAtr3() {
     return danger;
   }
 
