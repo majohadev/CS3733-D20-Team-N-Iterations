@@ -61,19 +61,19 @@ public class FlowerRequest extends Request {
     return "Flower";
   }
 
-  public String getPatientName() {
+  public String getAtr1() {
     return patientName;
   }
 
-  public String getVisitorName() {
+  public String getAtr2() {
     return visitorName;
   }
 
-  public String getCreditNum() {
+  public String getAtr3() {
     return creditNum;
   }
 
-  public String getFlowerList() {
+  public String getAtr4() {
     return flowerList;
   }
 
