@@ -46,34 +46,34 @@
                </font>
             </Label>
          </children></Pane>
-      <SplitPane dividerPositions="0.1" layoutY="75.0" prefHeight="970.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0">
+      <SplitPane dividerPositions="0.1" layoutY="75.0" prefHeight="970.0" prefWidth="1920.0" style="-fx-background-color: #fff8e4;" AnchorPane.bottomAnchor="0.0">
         <items>
           <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="970.0" prefWidth="200.0">
                <children>
                   <VBox prefHeight="1005.0" prefWidth="192.0">
                      <children>
-                        <Pane prefHeight="251.25" prefWidth="192.0">
+                        <Pane prefHeight="242.5" prefWidth="192.0">
                            <children>
                               <JFXButton fx:id="btn_EmployeeEdit" layoutX="16.0" layoutY="65.0" onMouseClicked="#changePanes" prefHeight="121.0" prefWidth="160.0" text="Add / Edit / Delete Employee" textAlignment="CENTER" wrapText="true">
                                  <font>
                                     <Font name="Calibri" size="24.0" />
                                  </font></JFXButton>
                            </children></Pane>
-                        <Pane prefHeight="251.25" prefWidth="192.0">
+                        <Pane prefHeight="242.5" prefWidth="192.0">
                            <children>
                               <JFXButton fx:id="btn_AccountEdit" layoutX="15.0" layoutY="48.0" onMouseClicked="#changePanes" prefHeight="155.0" prefWidth="162.0" text="Add / Edit / Delete Account" textAlignment="CENTER" wrapText="true">
                                  <font>
                                     <Font name="Calibri" size="24.0" />
                                  </font></JFXButton>
                            </children></Pane>
-                        <Pane prefHeight="251.25" prefWidth="192.0">
+                        <Pane prefHeight="242.5" prefWidth="192.0">
                            <children>
                               <JFXButton fx:id="btn_ViewRequests" layoutX="16.0" layoutY="65.0" onMouseClicked="#changePanes" prefHeight="121.0" prefWidth="160.0" text="View Service Requests" textAlignment="CENTER" wrapText="true">
                                  <font>
                                     <Font size="24.0" />
                                  </font></JFXButton>
                            </children></Pane>
-                        <Pane prefHeight="251.25" prefWidth="192.0">
+                        <Pane prefHeight="242.5" prefWidth="192.0">
                            <children>
                               <JFXButton fx:id="btn_EditMap" layoutX="36.0" layoutY="104.0" onMouseClicked="#adminEditMap" text="Edit Map">
                                  <font>
@@ -147,12 +147,12 @@
                               <JFXTextField fx:id="txtf_empfn" layoutX="239.0" layoutY="553.0" maxHeight="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
                               <JFXTextField fx:id="txtf_empln" layoutX="239.0" layoutY="588.0" maxHeight="-Infinity" minWidth="-Infinity" prefWidth="150.0" />
                               <JFXCheckBox fx:id="cb_translator" layoutX="127.0" layoutY="655.0" text="Translator" visible="false" />
-                              <Label fx:id="lbl_languages" layoutX="34.0" layoutY="628.0" text="Known Languages:">
+                              <Label fx:id="lbl_languages" layoutX="34.0" layoutY="628.0" text="Known Languages:" visible="false">
                                  <font>
                                     <Font size="24.0" />
                                  </font>
                               </Label>
-                              <JFXTextField fx:id="txtf_languages" layoutX="237.0" layoutY="628.0" maxHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="150.0" />
+                              <JFXTextField fx:id="txtf_languages" layoutX="237.0" layoutY="628.0" maxHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="150.0" visible="false" />
                               <JFXButton buttonType="RAISED" layoutX="139.0" layoutY="700.0" onMouseClicked="#addEmployee" text="Add Employee">
                                  <font>
                                     <Font size="24.0" />
