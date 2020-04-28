@@ -752,6 +752,8 @@ public class ServicesTest {
 
       ServiceDB.denyRequest(id, "Don't request ever again.");
 
+      ServiceDB.removeFlower("Rose");
+
     } catch (SQLException | DBException e) {
       try {
         con.rollback();
@@ -817,6 +819,8 @@ public class ServicesTest {
       ServiceDB.denyRequest(idE, "Nope");
       ServiceDB.denyRequest(idL, "Nope");
       ServiceDB.denyRequest(idT, "Nope");
+
+      ServiceDB.removeFlower("Daisy");
     } catch (SQLException | DBException e) { // also wanna catch DBException e
       try {
         con.rollback();
@@ -862,8 +866,10 @@ public class ServicesTest {
     assertTrue(result.contains(expected1));
     assertTrue(result.contains(expected2));
 
-    ServiceDB.removeFlower("White Rose");
-    ServiceDB.removeFlower("Red Rose");
+    assertTrue(ServiceDB.removeFlower("White Rose"));
+    assertTrue(ServiceDB.removeFlower("Red Rose"));
+
+    result = ServiceDB.getFlowers();
 
     assertFalse(result.contains(expected1));
     assertFalse(result.contains(expected2));

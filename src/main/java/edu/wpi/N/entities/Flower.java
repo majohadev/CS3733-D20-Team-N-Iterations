@@ -15,7 +15,18 @@ public class Flower {
     return flowerName;
   }
 
-  public double getPrice() {
+  public int getPrice() {
     return price;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (!(obj instanceof Flower)) {
+      return false;
+    }
+
+    Flower other = (Flower) obj;
+
+    return flowerName.equals(other.flowerName) && price == other.price;
   }
 }
