@@ -8,7 +8,6 @@ import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.ServiceDB;
 import edu.wpi.N.entities.DbNode;
-import edu.wpi.N.entities.Flower;
 import edu.wpi.N.entities.States.StateSingleton;
 import java.util.LinkedList;
 import javafx.collections.FXCollections;

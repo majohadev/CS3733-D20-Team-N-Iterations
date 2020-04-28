@@ -843,6 +843,32 @@ public class ServicesTest {
     ServiceDB.removeEmployee(id2);
   }
 
+  @Test
+  public void testAddAndGetFlowers() throws DBException {
+    Flower result1 = ServiceDB.addFlower("White Rose", 1599);
+    Flower result2 = ServiceDB.addFlower("Red Rose", 1099);
+
+    Flower expected1 = new Flower("White Rose", 1599);
+    Flower expected2 = new Flower("Red Rose", 1099);
+
+    assertEquals(expected1, result1);
+    assertEquals(expected2, result2);
+
+    assertEquals(expected1, ServiceDB.getFlower("White Rose"));
+    assertEquals(expected2, ServiceDB.getFlower("Red Rose"));
+
+    LinkedList<Flower> result = ServiceDB.getFlowers();
+
+    assertTrue(result.contains(expected1));
+    assertTrue(result.contains(expected2));
+
+    ServiceDB.removeFlower("White Rose");
+    ServiceDB.removeFlower("Red Rose");
+
+    assertFalse(result.contains(expected1));
+    assertFalse(result.contains(expected2));
+  }
+
   @AfterEach
   public void clearDB() throws DBException {
     MapDB.clearNodes();
