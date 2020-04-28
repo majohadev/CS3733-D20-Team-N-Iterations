@@ -8,6 +8,8 @@ import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.ServiceDB;
 import edu.wpi.N.entities.DbNode;
 import java.util.LinkedList;
+
+import edu.wpi.N.entities.States.StateSingleton;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -17,7 +19,7 @@ import javafx.scene.input.KeyEvent;
 public class WheelchairRequestController implements Controller {
 
     private App mainApp;
-
+    private StateSingleton singleton;
     // Add FXML Tags Here
     @FXML JFXComboBox<String> cmbo_text;
     @FXML JFXComboBox<String> cmbo_selectLang;
@@ -35,6 +37,10 @@ public class WheelchairRequestController implements Controller {
 
     public void setMainApp(App mainApp) {
         this.mainApp = mainApp;
+    }
+    @Override
+    public void setSingleton(StateSingleton singleton) {
+        this.singleton = singleton;
     }
 
     public void initialize() throws DBException {
