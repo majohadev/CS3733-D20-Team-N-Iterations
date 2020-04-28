@@ -28,7 +28,7 @@ public class App extends Application {
     this.masterStage.setTitle("Brigham and Women's Hospital Kiosk Application");
     StateSingleton newSingleton = StateSingleton.getInstance();
     // TODO: update to home or what not
-    switchScene("views/home.fxml", newSingleton);
+    switchScene("views/hamburgerTest.fxml", newSingleton);
     masterStage.setMaximized(true);
   }
 

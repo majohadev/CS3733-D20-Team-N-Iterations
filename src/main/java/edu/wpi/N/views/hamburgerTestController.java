@@ -9,6 +9,8 @@ import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Path;
 import edu.wpi.N.entities.States.StateSingleton;
+import edu.wpi.N.entities.employees.Doctor;
+import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -17,13 +19,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.StrokeLineCap;
 import lombok.SneakyThrows;
 
 public class hamburgerTestController implements Controller, Initializable {
@@ -49,9 +52,17 @@ public class hamburgerTestController implements Controller, Initializable {
   @FXML JFXTextField txt_secondLocation;
   @FXML JFXListView lst_firstLocation;
   @FXML JFXListView lst_secondLocation;
+  // @FXML JFXButton btn_searchdoc;
+  @FXML TextField txtf_doctorname;
+  @FXML ListView lst_doctornames;
+  // @FXML Button btn_searchdoc;
+  @FXML ListView lst_doctorlocations;
+  @FXML Button btn_findpathdoc;
   @FXML JFXButton btn_findPath;
-
-  private JFXButton btn_floors, btn_floor1, btn_floor2, btn_floor3, btn_floor4, btn_floor5;
+  @FXML JFXButton btn_home;
+  @FXML private JFXButton btn_floors, btn_floor1, btn_floor2, btn_floor3, btn_floor4, btn_floor5;
+  @FXML TitledPane pn_locationSearch;
+  @FXML Accordion acc_search;
   private final int DEFAULT_FLOOR = 1;
   private final String DEFAULT_BUILDING = "FAULKNER";
   private int currentFloor;
@@ -59,8 +70,19 @@ public class hamburgerTestController implements Controller, Initializable {
   HashMap<String, DbNode> stringNodeConversion = new HashMap<>();
   LinkedList<String> allLongNames = new LinkedList<>();
   LinkedList<DbNode> allFloorNodes = new LinkedList<>();
+  private ObservableList<String> fuzzySearchDoctorList = FXCollections.observableArrayList();
+  private LinkedList<Doctor> searchedDoc = new LinkedList<>();
+  private LinkedList<DbNode> doctorNodes = new LinkedList<>();
   JFXNodesList nodesList;
   LinkedList<DbNode> pathNodes;
+  String[] imgPaths =
+      new String[] {
+        "/edu/wpi/N/images/Floor1TeamN.png",
+        "/edu/wpi/N/images/Floor2TeamN.png",
+        "/edu/wpi/N/images/Floor3TeamN.png",
+        "/edu/wpi/N/images/Floor4TeamN.png",
+        "/edu/wpi/N/images/Floor5TeamN.png"
+      };
 
   private enum Mode {
     NO_STATE,
@@ -72,12 +94,23 @@ public class hamburgerTestController implements Controller, Initializable {
   @SneakyThrows
   @Override
   public void initialize(URL location, ResourceBundle resourceBundle) {
-    initializeChangeFloorButtons();
-    this.currentFloor = DEFAULT_FLOOR;
-    this.currentBuilding = DEFAULT_BUILDING;
-    this.mode = Mode.NO_STATE;
-    this.allFloorNodes = MapDB.allNodes();
-    initializeConversions();
+    try {
+      initializeChangeFloorButtons();
+      this.currentFloor = DEFAULT_FLOOR;
+      this.currentBuilding = DEFAULT_BUILDING;
+      this.mode = Mode.NO_STATE;
+      this.allFloorNodes = MapDB.allNodes();
+      initializeConversions();
+      defaultKioskNode();
+      acc_search.setExpandedPane(pn_locationSearch);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setHeaderText("Oops... Something went Wong");
+      errorAlert.setContentText(
+          "Map view couldn't be opened. Make sure to upload Nodes and Edges as CSVs");
+      errorAlert.showAndWait();
+    }
   }
 
   private void initializeConversions() {
@@ -119,12 +152,43 @@ public class hamburgerTestController implements Controller, Initializable {
     lst_secondLocation.setItems(fuzzySearchTextList);
   }
 
+  @FXML
+  private void searchByDoctorTextFill(KeyEvent keyEvent) throws DBException {
+    String currentText = txtf_doctorname.getText();
+    if (currentText.length() > 1) {
+      searchedDoc = FuzzySearchAlgorithm.suggestDoctors(currentText);
+      LinkedList<String> fuzzySearchStringList = new LinkedList<>();
+      for (Doctor doctors : searchedDoc) {
+        fuzzySearchStringList.add(doctors.getName());
+      }
+      fuzzySearchDoctorList = FXCollections.observableList(fuzzySearchStringList);
+      lst_doctornames.setItems(fuzzySearchDoctorList);
+    }
+  }
+
+  @FXML
+  private void onFindDoctorClicked(MouseEvent event) throws Exception {
+    int currentSelection = lst_doctornames.getSelectionModel().getSelectedIndex();
+    System.out.println(currentSelection);
+    Doctor selectedDoc = searchedDoc.get(currentSelection);
+    System.out.println(selectedDoc);
+    doctorNodes = selectedDoc.getLoc();
+    LinkedList<String> docNames = new LinkedList<>();
+    for (DbNode nodes : doctorNodes) {
+      docNames.add(nodes.getLongName());
+    }
+    ObservableList<String> doctorsLocations = FXCollections.observableList(docNames);
+    lst_doctorlocations.setItems(doctorsLocations);
+  }
+
   public void onBtnPathfindClicked(MouseEvent event) throws Exception {
     this.mode = Mode.PATH_STATE;
     pn_display.getChildren().removeIf(node -> node instanceof Line);
     enableAllFloorButtons();
     String firstSelection = (String) lst_firstLocation.getSelectionModel().getSelectedItem();
     String secondSelection = (String) lst_secondLocation.getSelectionModel().getSelectedItem();
+    jumpToFloor(imgPaths[stringNodeConversion.get(firstSelection).getFloor() - 1]);
+    currentFloor = stringNodeConversion.get(firstSelection).getFloor();
     try {
       findPath(stringNodeConversion.get(firstSelection), stringNodeConversion.get(secondSelection));
     } catch (NullPointerException e) {
@@ -142,8 +206,14 @@ public class hamburgerTestController implements Controller, Initializable {
 
   private void findPath(DbNode node1, DbNode node2) throws DBException {
     if (node1.getFloor() <= node2.getFloor()) {
+      Path path;
       Algorithm myAStar = new Algorithm();
-      Path path = myAStar.findPath(node1, node2, false);
+      try {
+        path = myAStar.findPath(node1, node2, false);
+      } catch (NullPointerException e) {
+        displayErrorMessage("The path does not exist");
+        return;
+      }
       pathNodes = path.getPath();
     } else {
       Algorithm myAStar = new Algorithm();
@@ -172,8 +242,8 @@ public class hamburgerTestController implements Controller, Initializable {
   }
 
   private void drawPath(LinkedList<DbNode> pathNodes) {
-    DbNode firstNode = pathNodes.get(0);
-    DbNode secondNode = pathNodes.get(1);
+    DbNode firstNode;
+    DbNode secondNode;
     for (int i = 0; i < pathNodes.size() - 1; i++) {
       firstNode = pathNodes.get(i);
       secondNode = pathNodes.get(i + 1);
@@ -185,9 +255,21 @@ public class hamburgerTestController implements Controller, Initializable {
                 scaleX(secondNode.getX()),
                 scaleY(secondNode.getY()));
         line.setStrokeWidth(5);
+        line.setStrokeLineCap(StrokeLineCap.ROUND);
         pn_display.getChildren().add(line);
       }
     }
+  }
+
+  public void onBtnResetPathClicked() throws DBException {
+    mode = Mode.NO_STATE;
+    defaultKioskNode();
+    enableAllFloorButtons();
+    pn_display.getChildren().removeIf(node -> node instanceof Line);
+    txt_firstLocation.clear();
+    txt_secondLocation.clear();
+    lst_firstLocation.getItems().clear();
+    lst_secondLocation.getItems().clear();
   }
 
   private double scaleX(double x) {
@@ -197,17 +279,6 @@ public class hamburgerTestController implements Controller, Initializable {
   private double scaleY(double y) {
     return y * VERTICAL_SCALE;
   }
-
-  //      Line line =
-  //              new Line(
-  //                      (firstNode.getX() * HORIZONTAL_SCALE) + HORIZONTAL_OFFSET,
-  //                      (firstNode.getY() * VERTICAL_SCALE) + VERTICAL_OFFSET,
-  //                      (secondNode.getX() * HORIZONTAL_SCALE) + HORIZONTAL_OFFSET,
-  //                      (secondNode.getY() * VERTICAL_SCALE) + VERTICAL_OFFSET);
-  //      line.setStrokeWidth(5);
-  //      pn_path.getChildren().add(line);
-  //    }
-  //  }
 
   public void initializeChangeFloorButtons() {
     btn_floors = new JFXButton("Floors");
@@ -225,51 +296,71 @@ public class hamburgerTestController implements Controller, Initializable {
     btn_floors
         .getStylesheets()
         .addAll(getClass().getResource("/edu/wpi/N/views/MapDisplayFloors.css").toExternalForm());
-    btn_floors.getStyleClass().addAll("animated-option-button", "animated-option-sub-button");
+    btn_floors.getStyleClass().addAll("animated-option-button");
     btn_floor1
         .getStylesheets()
         .addAll(getClass().getResource("/edu/wpi/N/views/MapDisplayFloors.css").toExternalForm());
-    btn_floor1.getStyleClass().addAll("animated-option-button", "animated-option-sub-button");
+    btn_floor1.getStyleClass().addAll("animated-option-button");
     btn_floor1.setOnMouseClicked(
         e -> {
           currentFloor = 1;
-          setFloorImg("/edu/wpi/N/images/Floor1TeamN.png");
+          try {
+            setFloorImg("/edu/wpi/N/images/Floor1TeamN.png");
+          } catch (DBException ex) {
+            ex.printStackTrace();
+          }
         });
     btn_floor2
         .getStylesheets()
         .addAll(getClass().getResource("/edu/wpi/N/views/MapDisplayFloors.css").toExternalForm());
-    btn_floor2.getStyleClass().addAll("animated-option-button", "animated-option-sub-button");
+    btn_floor2.getStyleClass().addAll("animated-option-button");
     btn_floor2.setOnMouseClicked(
         e -> {
           currentFloor = 2;
-          setFloorImg("/edu/wpi/N/images/Floor2TeamN.png");
+          try {
+            setFloorImg("/edu/wpi/N/images/Floor2TeamN.png");
+          } catch (DBException ex) {
+            ex.printStackTrace();
+          }
         });
     btn_floor3
         .getStylesheets()
         .addAll(getClass().getResource("/edu/wpi/N/views/MapDisplayFloors.css").toExternalForm());
-    btn_floor3.getStyleClass().addAll("animated-option-button", "animated-option-sub-button");
+    btn_floor3.getStyleClass().addAll("animated-option-button");
     btn_floor3.setOnMouseClicked(
         e -> {
           currentFloor = 3;
-          setFloorImg("/edu/wpi/N/images/Floor3TeamN.png");
+          try {
+            setFloorImg("/edu/wpi/N/images/Floor3TeamN.png");
+          } catch (DBException ex) {
+            ex.printStackTrace();
+          }
         });
     btn_floor4
         .getStylesheets()
         .addAll(getClass().getResource("/edu/wpi/N/views/MapDisplayFloors.css").toExternalForm());
-    btn_floor4.getStyleClass().addAll("animated-option-button", "animated-option-sub-button");
+    btn_floor4.getStyleClass().addAll("animated-option-button");
     btn_floor4.setOnMouseClicked(
         e -> {
           currentFloor = 4;
-          setFloorImg("/edu/wpi/N/images/Floor4TeamN.png");
+          try {
+            setFloorImg("/edu/wpi/N/images/Floor4TeamN.png");
+          } catch (DBException ex) {
+            ex.printStackTrace();
+          }
         });
     btn_floor5
         .getStylesheets()
         .addAll(getClass().getResource("/edu/wpi/N/views/MapDisplayFloors.css").toExternalForm());
-    btn_floor5.getStyleClass().addAll("animated-option-button", "animated-option-sub-button");
+    btn_floor5.getStyleClass().addAll("animated-option-button");
     btn_floor5.setOnMouseClicked(
         e -> {
           currentFloor = 5;
-          setFloorImg("/edu/wpi/N/images/Floor5TeamN.png");
+          try {
+            setFloorImg("/edu/wpi/N/images/Floor5TeamN.png");
+          } catch (DBException ex) {
+            ex.printStackTrace();
+          }
         });
     nodesList = new JFXNodesList();
     nodesList.addAnimatedNode(btn_floors);
@@ -282,12 +373,19 @@ public class hamburgerTestController implements Controller, Initializable {
     pn_changeFloor.getChildren().add(nodesList);
   }
 
-  private void setFloorImg(String path) {
+  private void setFloorImg(String path) throws DBException {
     pn_display.getChildren().removeIf(node -> node instanceof Line);
-    System.out.println(mode);
     if (mode == Mode.PATH_STATE) {
       drawPath(pathNodes);
     }
+    if (mode == Mode.NO_STATE) {
+      defaultKioskNode();
+    }
+    Image img = new Image(getClass().getResourceAsStream(path));
+    img_map.setImage(img);
+  }
+
+  private void jumpToFloor(String path) throws DBException {
     Image img = new Image(getClass().getResourceAsStream(path));
     img_map.setImage(img);
   }
@@ -298,10 +396,13 @@ public class hamburgerTestController implements Controller, Initializable {
    * @param e
    */
   @FXML
-  private void findPathToBathroom(MouseEvent e) {
-    String startSelection = (String) lst_firstLocation.getSelectionModel().getSelectedItem();
-    DbNode startNode = stringNodeConversion.get(startSelection);
+  private void findPathToBathroom(MouseEvent e) throws DBException {
     try {
+      this.mode = Mode.PATH_STATE;
+      pn_display.getChildren().removeIf(node -> node instanceof Line);
+      enableAllFloorButtons();
+      String startSelection = (String) lst_firstLocation.getSelectionModel().getSelectedItem();
+      DbNode startNode = stringNodeConversion.get(startSelection);
       Path pathToBathroom = singleton.savedAlgo.findQuickAccess(startNode, "REST");
       drawPath(pathToBathroom.getPath());
     } catch (Exception ex) {
@@ -319,7 +420,10 @@ public class hamburgerTestController implements Controller, Initializable {
    * @param e
    */
   @FXML
-  private void findPathToCafeteria(MouseEvent e) {
+  private void findPathToCafeteria(MouseEvent e) throws DBException {
+    this.mode = Mode.PATH_STATE;
+    pn_display.getChildren().removeIf(node -> node instanceof Line);
+    enableAllFloorButtons();
     Alert errorAlert = new Alert(Alert.AlertType.ERROR);
     errorAlert.setHeaderText("Oops... Something went Wong");
     errorAlert.setContentText("Path to cafeteria wasn't found");
@@ -334,18 +438,21 @@ public class hamburgerTestController implements Controller, Initializable {
   @FXML
   private void findPathToStarBucks(MouseEvent e) {
     try {
+      this.mode = Mode.PATH_STATE;
+      pn_display.getChildren().removeIf(node -> node instanceof Line);
+      enableAllFloorButtons();
       String startSelection = (String) lst_firstLocation.getSelectionModel().getSelectedItem();
       DbNode startNode = stringNodeConversion.get(startSelection);
 
       DbNode endNode = MapDB.getNode("NRETL00201");
 
-      //TODO: get the Handicap setting from the user
-      if (endNode != null){
+      // TODO: get the Handicap setting from the user
+      if (endNode != null) {
         Path pathToStarBucks = singleton.savedAlgo.findPath(startNode, endNode, false);
         drawPath(pathToStarBucks.getPath());
       }
 
-    } catch (Exception ex){
+    } catch (Exception ex) {
       ex.printStackTrace();
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
       errorAlert.setHeaderText("Oops... Something went Wong");
@@ -358,10 +465,47 @@ public class hamburgerTestController implements Controller, Initializable {
     this.mainApp = mainApp;
   }
 
+  public void onBtnHomeClicked() throws IOException {
+    mainApp.switchScene("views/home.fxml", singleton);
+  }
+
   public void displayErrorMessage(String str) {
     Alert errorAlert = new Alert(Alert.AlertType.ERROR);
     errorAlert.setHeaderText("Invalid input");
     errorAlert.setContentText(str);
     errorAlert.showAndWait();
   }
+
+  private void defaultKioskNode() throws DBException {
+    LinkedList<String> kiosks = new LinkedList<>();
+    if (currentFloor == 1) {
+      txt_firstLocation.setText(MapDB.getNode("NSERV00301").getLongName());
+      kiosks.add(MapDB.getNode("NSERV00301").getLongName());
+      ObservableList<String> textList = FXCollections.observableList(kiosks);
+      lst_firstLocation.setItems(textList);
+      lst_firstLocation.getSelectionModel().select(0);
+
+    } else if (currentFloor == 3) {
+      txt_firstLocation.setText(MapDB.getNode("NSERV00103").getLongName());
+      kiosks.add(MapDB.getNode("NSERV00103").getLongName());
+      ObservableList<String> textList = FXCollections.observableList(kiosks);
+      lst_firstLocation.setItems(textList);
+      lst_firstLocation.getSelectionModel().select(0);
+    } else {
+      txt_firstLocation.clear();
+      lst_firstLocation.getItems().clear();
+    }
+  }
+  // Upon clicking find path to location button call this method
+  /*  @FXML
+  private void onDoctorPathFindClicked(MouseEvent event) throws Exception {
+    pn_path.getChildren().removeIf(node -> node instanceof Line);
+    int currentSelection = lst_doctorlocations.getSelectionModel().getSelectedIndex();
+    DbNode destinationNode = doctorNodes.get(currentSelection);
+    if (selectedNodes.size() < 1) selectedNodes.add(defaultNode);
+    selectedNodes.add(destinationNode);
+    // if (selectedNodes.size() < 2) selectedNodes.add(defaultNode);
+    onBtnFindClicked(event);
+    selectedNodes.clear();
+  }*/
 }
