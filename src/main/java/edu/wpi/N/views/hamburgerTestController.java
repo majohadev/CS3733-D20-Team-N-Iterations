@@ -501,7 +501,6 @@ public class hamburgerTestController implements Controller, Initializable {
 
       DbNode endNode = MapDB.getNode("NRETL00201");
 
-
       if (endNode != null) {
         Path pathToStarBucks = singleton.savedAlgo.findPath(startNode, endNode, handicap);
         drawPath(pathToStarBucks.getPath());

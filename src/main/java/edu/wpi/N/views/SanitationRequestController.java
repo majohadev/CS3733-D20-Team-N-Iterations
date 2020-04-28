@@ -6,6 +6,7 @@ import com.jfoenix.controls.JFXTextField;
 import edu.wpi.N.App;
 import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.database.DBException;
+import edu.wpi.N.database.MapDB;
 import edu.wpi.N.database.ServiceDB;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.States.StateSingleton;
@@ -58,7 +59,7 @@ public class SanitationRequestController implements Controller {
     dangerLevels.add("Medium");
     dangerLevels.add("High");
     dangerLevels.add("Unknown");
-    ObservableList<String> dangerList = FXCollections.observableList(dangerLevels);
+    ObservableList<String> dangerList = FXCollections.observableArrayList(dangerLevels);
     cmbo_selectDangerLevel.setItems(dangerList);
   }
 
@@ -69,7 +70,7 @@ public class SanitationRequestController implements Controller {
     spillSizes.add("Medium");
     spillSizes.add("Large");
     spillSizes.add("Unknown");
-    ObservableList<String> sizeList = FXCollections.observableList(spillSizes);
+    ObservableList<String> sizeList = FXCollections.observableArrayList(spillSizes);
     cmbo_selectSpillSize.setItems(sizeList);
   }
 
@@ -111,10 +112,30 @@ public class SanitationRequestController implements Controller {
     String sizeSelection = cmbo_selectSpillSize.getSelectionModel().getSelectedItem();
     String dangerSelection = cmbo_selectDangerLevel.getSelectionModel().getSelectedItem();
     String spillType = txtf_spillType.getText();
-    String nodeID;
+    String nodeID = "";
     int nodeIndex = 0;
 
     try {
+      String userLocationName = cmbo_text.getEditor().getText().toLowerCase().trim();
+      LinkedList<DbNode> checkNodes = MapDB.searchVisNode(-1, null, null, userLocationName);
+
+      // Find the exact match and get the nodeID when selected
+      for (DbNode node : checkNodes) {
+        if (node.getLongName().toLowerCase().equals(userLocationName)) {
+          nodeID = node.getNodeID();
+          break;
+        }
+      }
+      // Check to see if such node was found
+      if (nodeID == null) {
+        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+        errorAlert.setContentText(
+            "Please select a location for your service request from suggestions menu!");
+        errorAlert.show();
+        return;
+      }
+
+      /*
       String curr = cmbo_text.getEditor().getText();
       for (String name : fuzzySearchTextList) {
         if (name.equals(curr)) {
@@ -124,6 +145,7 @@ public class SanitationRequestController implements Controller {
       }
       nodeID = fuzzySearchNodeList.get(nodeIndex).getNodeID();
       System.out.println(nodeID);
+       */
     } catch (IndexOutOfBoundsException e) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
       errorAlert.setContentText("Please select a location for your service request!");

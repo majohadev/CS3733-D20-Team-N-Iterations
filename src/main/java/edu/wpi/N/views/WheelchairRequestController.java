@@ -5,6 +5,7 @@ import com.jfoenix.controls.JFXTextArea;
 import edu.wpi.N.App;
 import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.database.DBException;
+import edu.wpi.N.database.MapDB;
 import edu.wpi.N.database.ServiceDB;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.States.StateSingleton;
@@ -89,9 +90,29 @@ public class WheelchairRequestController implements Controller {
   public void createNewTranslator() throws DBException {
 
     String assistanceOption = cmbo_selectLang.getSelectionModel().getSelectedItem();
-    String nodeID;
+    String nodeID = null;
     int nodeIndex = 0;
 
+    String userLocationName = cmbo_text.getEditor().getText().toLowerCase().trim();
+    LinkedList<DbNode> checkNodes = MapDB.searchVisNode(-1, null, null, userLocationName);
+
+    // Find the exact match and get the nodeID when selected
+    for (DbNode node : checkNodes) {
+      if (node.getLongName().toLowerCase().equals(userLocationName)) {
+        nodeID = node.getNodeID();
+        break;
+      }
+    }
+    // Check to see if such node was found
+    if (nodeID == null) {
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setContentText(
+          "Please select a location for your service request from suggestions menu!");
+      errorAlert.show();
+      return;
+    }
+
+    /*
     try {
       String curr = cmbo_text.getEditor().getText();
       for (String name : fuzzySearchTextList) {
@@ -108,6 +129,7 @@ public class WheelchairRequestController implements Controller {
       errorAlert.show();
       return;
     }
+     */
 
     String notes = txtf_wheelchairNotes.getText();
     if (assistanceOption == null) {
@@ -117,7 +139,8 @@ public class WheelchairRequestController implements Controller {
       return;
     }
 
-    int wheelchairReq = ServiceDB.addWheelchairRequest(notes, nodeID, assistanceOption);
+    ServiceDB.addWheelchairRequest(notes, nodeID, assistanceOption);
+
     // App.adminDataStorage.addToList(wheelchairReq);
 
     txtf_wheelchairNotes.clear();
