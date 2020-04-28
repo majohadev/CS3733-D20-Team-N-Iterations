@@ -30,4 +30,8 @@ public class EmotionalRequest extends Request {
   public String getServiceType() {
     return "Emotional Support";
   }
+
+  public String getSupportType() {
+    return this.supportType;
+  }
 }

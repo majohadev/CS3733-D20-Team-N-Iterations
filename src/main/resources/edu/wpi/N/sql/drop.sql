@@ -1,14 +1,24 @@
+DROP TABLE ITrequest;
+DROP TABLE erequest;
+DROP TABLE sanitationRequests;
 DROP TABLE medicineRequests;
 DROP TABLE lrequest;
 DROP TABLE trequest;
+DROP TABLE wrequest;
 DROP TABLE request;
 DROP TABLE location;
 DROP TABLE doctors;
 DROP TABLE credential;
+DROP TABLE sanitation;
 DROP TABLE laundry;
 DROP TABLE language;
 DROP TABLE translator;
+DROP TABLE wheelchairEmployee;
+DROP TABLE IT;
+DROP TABLE emotionalSupporter;
 DROP TABLE employees;
 DROP TABLE service;
+DROP TABLE kiosk;
 DROP TABLE edges;
 DROP TABLE nodes;
+

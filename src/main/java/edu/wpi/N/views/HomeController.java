@@ -15,10 +15,26 @@ public class HomeController implements Controller {
   }
 
   public void onBtnEditClicked() throws IOException {
-    this.mainApp.switchScene("views/mapEdit.fxml");
+    this.mainApp.switchScene("views/mapEditor.fxml");
   }
 
   public void onBtnFileClicked() throws IOException {
-    this.mainApp.switchScene("views/fileManagementScreen.fxml");
+    this.mainApp.switchScene("views/servicesPage.fxml");
+  }
+
+  public void onBtnHamClicked() throws IOException {
+    this.mainApp.switchScene("/edu/wpi/N/views/hamburgerTest.fxml");
+  }
+
+  public void onBtnLoginClicked() throws IOException {
+    this.mainApp.switchScene("/edu/wpi/N/views/newLogin.fxml");
+  }
+
+  public void onBtnAdminClick() throws IOException {
+    this.mainApp.switchScene("/edu/wpi/N/views/adminPortal.fxml");
+  }
+
+  public void onBtnFloorEdgesClicked() throws IOException {
+    this.mainApp.switchScene("views/BetweenFloorsEditor.fxml");
   }
 }
