@@ -19,7 +19,7 @@ public class HomeController implements Controller {
   }
 
   public void onBtnFileClicked() throws IOException {
-    this.mainApp.switchScene("views/servicesPage.fxml");
+    this.mainApp.switchScene("views/arduinoInterface.fxml");
   }
 
   public void onBtnHamClicked() throws IOException {
