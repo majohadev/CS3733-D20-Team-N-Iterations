@@ -51,4 +51,22 @@ public class ServiceController implements Controller {
     AnchorPane currentPane = FXMLLoader.load(getClass().getResource("emotionalSupportReq.fxml"));
     service_anchor.getChildren().setAll(currentPane);
   }
+
+  @FXML
+  public void switchToSanitationPage() throws IOException {
+    AnchorPane currentPane = FXMLLoader.load(getClass().getResource("sanitationRequestPage.fxml"));
+    service_anchor.getChildren().setAll(currentPane);
+  }
+
+  @FXML
+  public void switchToITServicePage() throws IOException {
+    AnchorPane currentPane = FXMLLoader.load(getClass().getResource("itService.fxml"));
+    service_anchor.getChildren().setAll(currentPane);
+  }
+
+  @FXML
+  public void switchToFloralPage() throws IOException {
+    AnchorPane currentPane = FXMLLoader.load(getClass().getResource("flowerRequestPage.fxml"));
+    service_anchor.getChildren().setAll(currentPane);
+  }
 }

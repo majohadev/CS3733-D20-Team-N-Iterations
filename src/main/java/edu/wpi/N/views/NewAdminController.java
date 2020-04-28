@@ -74,15 +74,16 @@ public class NewAdminController implements Controller, Initializable {
   @FXML CheckBox cb_translator;
   @FXML Label lbl_languages;
   @FXML JFXListView lst_docoffice;
-  @FXML Button btn_Accept;
-  @FXML Button btn_Deny;
+  @FXML JFXButton btn_Accept;
+  @FXML JFXButton btn_Deny;
   @FXML ChoiceBox<Employee> cb_Employee;
   @FXML ChoiceBox<Service> cb_employeeTypes;
   @FXML TableView<Request> tb_RequestTable = new TableView<Request>();
   @FXML TableView<String> tb_languages = new TableView<String>();
-  @FXML CheckBox ch_requestFilter;
+  @FXML JFXCheckBox ch_requestFilter;
   @FXML JFXComboBox cb_changeAlgo;
   @FXML Label lbl_title;
+  @FXML JFXTextField txtf_rmuser;
 
   ObservableList<Request> tableData = FXCollections.observableArrayList();
   ObservableList<String> languageData = FXCollections.observableArrayList();
@@ -93,7 +94,6 @@ public class NewAdminController implements Controller, Initializable {
   LinkedList<String> longNamesList = new LinkedList<>(); // Stores Floor Node names
   LinkedList<DbNode> allFloorNodes; // stores all the nodes on the floor
   ObservableList<Employee> emps = FXCollections.observableArrayList();
-  Algorithm algo = new Algorithm();
 
   private static class selfFactory<G>
       implements Callback<TableColumn.CellDataFeatures<G, G>, ObservableValue<G>> {
@@ -179,7 +179,12 @@ public class NewAdminController implements Controller, Initializable {
     name.setMinWidth(200);
     name.setCellValueFactory(new PropertyValueFactory<Employee, String>("name"));
 
-    tbl_Employees.getColumns().addAll(empID, name);
+    TableColumn<Employee, Service> serviceType = new TableColumn<>("Service Type");
+    serviceType.setMaxWidth(200);
+    serviceType.setMinWidth(200);
+    serviceType.setCellValueFactory(new PropertyValueFactory<Employee, Service>("ServiceType"));
+
+    tbl_Employees.getColumns().addAll(empID, name, serviceType);
   }
 
   public void populateTable() throws DBException {
@@ -240,22 +245,12 @@ public class NewAdminController implements Controller, Initializable {
     try {
       DoctorDB.addDoctor(
           fullName, txtf_docfield.getText(), txtf_docuser.getText(), txtf_docpass.getText(), null);
-      tbl_Employees
-          .getSelectionModel()
-          .selectedItemProperty()
-          .addListener(
-              (obs, old, newVal) -> {
-                try {
-                  emps.setAll(ServiceDB.getEmployees());
-                } catch (DBException e) {
-                  e.printStackTrace();
-                }
-              });
     } catch (DBException er) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
       errorAlert.setContentText(er.getMessage());
       errorAlert.show();
     }
+    populateTable();
   }
 
   /*
@@ -298,6 +293,7 @@ public class NewAdminController implements Controller, Initializable {
         ServiceDB.addEmotionalSupporter(name);
       } else if (cb_employeeTypes.getValue().getServiceType().equals("Sanitation")) {
         ServiceDB.addSanitationEmp(name);
+        System.out.println("added sanitation worker");
       } else if (cb_employeeTypes.getValue().getServiceType().equals("Flower")) {
         ServiceDB.addFlowerDeliverer(name);
       }
@@ -470,10 +466,10 @@ public class NewAdminController implements Controller, Initializable {
     status.setMinWidth(100);
     status.setCellValueFactory(new PropertyValueFactory<Request, String>("status"));
 
-    TableColumn<Request, String> language = new TableColumn<>("Language");
-    language.setMaxWidth(100);
-    language.setMinWidth(100);
-    language.setCellValueFactory(new PropertyValueFactory<Request, String>("Atr1"));
+    TableColumn<Request, String> attr1 = new TableColumn<>("Attribute 1");
+    attr1.setMaxWidth(100);
+    attr1.setMinWidth(100);
+    attr1.setCellValueFactory(new PropertyValueFactory<Request, String>("Atr1"));
 
     TableColumn<Request, String> service = new TableColumn<>("Service");
     service.setMaxWidth(75);
@@ -486,10 +482,26 @@ public class NewAdminController implements Controller, Initializable {
     languages.setMinWidth(150);
     languages.setCellValueFactory(new NewAdminController.selfFactory<String>());
 
+    TableColumn<Request, String> attr2 = new TableColumn<>("Attribute 2");
+    attr2.setMaxWidth(100);
+    attr2.setMinWidth(100);
+    attr2.setCellValueFactory(new PropertyValueFactory<Request, String>("Atr2"));
+
+    TableColumn<Request, String> attr3 = new TableColumn<>("Attribute 3");
+    attr3.setMaxWidth(100);
+    attr3.setMinWidth(100);
+    attr3.setCellValueFactory(new PropertyValueFactory<Request, String>("Atr3"));
+
+    TableColumn<Request, String> attr4 = new TableColumn<>("Attribute 4");
+    attr4.setMaxWidth(100);
+    attr4.setMinWidth(100);
+    attr4.setCellValueFactory(new PropertyValueFactory<Request, String>("Atr4"));
+
     // Initializes Columns
     tb_RequestTable
         .getColumns()
-        .addAll(requestID, service, emp_assigned, notes, nodeID, status, language);
+        .addAll(
+            requestID, service, emp_assigned, notes, nodeID, status, attr1, attr2, attr3, attr4);
     tb_languages.getColumns().addAll(languages);
   }
 
@@ -704,5 +716,15 @@ public class NewAdminController implements Controller, Initializable {
                 singleton.savedAlgo.setPathFinder(new AStar());
               }
             });
+  }
+
+  public void removeLogin() throws DBException {
+    try {
+      LoginDB.removeLogin(txtf_rmuser.getText());
+    } catch (DBException e) {
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setContentText(e.getMessage());
+      errorAlert.show();
+    }
   }
 }

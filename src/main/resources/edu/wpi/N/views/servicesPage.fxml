@@ -34,7 +34,7 @@
                <children>
                 <AnchorPane minHeight="900.0" minWidth="0.0" prefHeight="160.0">
                      <children>
-                        <ScrollPane hbarPolicy="NEVER" layoutX="328.0" layoutY="148.0" maxHeight="1242.0" maxWidth="656.0" minHeight="900.0" minWidth="656.0" prefHeight="880.0" prefWidth="656.0" style="-fx-background-color: #fff8e4;" styleClass="scroll-bar" stylesheets="@scrollStyle.css" vmax="3.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <ScrollPane hbarPolicy="NEVER" layoutY="14.0" maxHeight="1242.0" maxWidth="656.0" minHeight="900.0" minWidth="656.0" prefHeight="880.0" prefWidth="656.0" style="-fx-background-color: #fff8e4;" styleClass="scroll-bar" stylesheets="@scrollStyle.css" vmax="3.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="14.0">
                           <content>
                             <AnchorPane minHeight="997.0" prefHeight="1507.0" prefWidth="646.0" style="-fx-background-color: white;">
                                  <children>
@@ -100,7 +100,7 @@
                                                 <Font name="Calibri Bold" size="30.0" />
                                              </font>
                                           </JFXButton>
-                                          <JFXButton buttonType="RAISED" contentDisplay="TOP" minHeight="285.0" minWidth="256.0" ripplerFill="#ffd965" stylesheets="@iconButton.css" text="IT Help" GridPane.rowIndex="2">
+                                          <JFXButton buttonType="RAISED" contentDisplay="TOP" minHeight="285.0" minWidth="256.0" onMouseClicked="#switchToITServicePage" ripplerFill="#ffd965" stylesheets="@iconButton.css" text="IT Help" GridPane.rowIndex="2">
                                              <graphic>
                                                 <ImageView fitHeight="256.0" fitWidth="190.0" pickOnBounds="true" preserveRatio="true">
                                                    <image>
