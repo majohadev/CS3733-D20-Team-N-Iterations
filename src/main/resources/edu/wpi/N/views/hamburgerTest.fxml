@@ -65,7 +65,7 @@
                         </ImageView>
                      </children>
                   </Pane>
-                  <Accordion fx:id="acc_search" prefHeight="915.0" prefWidth="300.0" style="-fx-background-color: #ffffff;">
+                  <Accordion fx:id="acc_search" prefHeight="915.0" prefWidth="300.0" style="-fx-background-color: #ffffff;" stylesheets="@MapDisplayDrop.css">
                      <panes>
                         <TitledPane animated="false" prefHeight="350.0" prefWidth="92.0" style="-fx-background-color: #ffffff;" text="Search By Doctor">
                            <content>
@@ -157,7 +157,7 @@
                         </TitledPane>
                         <TitledPane prefHeight="200.0" prefWidth="200.0" text="Textual Directions">
                            <font>
-                              <Font size="16.0" />
+                              <Font name="Calibri" size="16.0" />
                            </font>
                            <content>
                               <AnchorPane prefHeight="200.0" prefWidth="200.0">
