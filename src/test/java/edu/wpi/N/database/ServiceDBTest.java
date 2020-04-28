@@ -5,9 +5,11 @@ import static org.junit.jupiter.api.Assertions.*;
 import edu.wpi.N.entities.*;
 import edu.wpi.N.entities.employees.Employee;
 import edu.wpi.N.entities.employees.Laundry;
+import edu.wpi.N.entities.employees.Sanitation;
 import edu.wpi.N.entities.employees.Translator;
 import edu.wpi.N.entities.request.MedicineRequest;
 import edu.wpi.N.entities.request.Request;
+import edu.wpi.N.entities.request.SanitationRequest;
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
@@ -237,15 +239,15 @@ public class ServiceDBTest {
 
   @Test
   public void testgetPatientbyMedType() throws DBException {
-    MapDB.addNode("NDEPT10004", 100, 100, 4, "Faulkner", "DEPT", "Hello", "Hell", 'N');
-    int id = ServiceDB.addMedReq("hello", "NDEPT10004", "weed", 100, "kg", "Max");
-    MapDB.addNode("NDEPT10014", 100, 100, 4, "Faulkner", "DEPT", "Hello", "Hell", 'N');
-    int id2 = ServiceDB.addMedReq("hello", "NDEPT10014", "Weed", 100, "kg", "Nick");
+    MapDB.addNode("NDEPT11004", 100, 100, 4, "Faulkner", "DEPT", "Hello", "Hell", 'N');
+    int id = ServiceDB.addMedReq("hello", "NDEPT11004", "weed", 100, "kg", "Max");
+    MapDB.addNode("NDEPT11014", 100, 100, 4, "Faulkner", "DEPT", "Hello", "Hell", 'N');
+    int id2 = ServiceDB.addMedReq("hello", "NDEPT11014", "Weed", 100, "kg", "Nick");
     LinkedList<String> list = ServiceDB.getPatientByMedType("weed");
     assertTrue(list.contains("Max"));
     assertTrue(list.contains("Nick"));
-    MapDB.deleteNode("NDEPT10004");
-    MapDB.deleteNode("NDEPT10014");
+    MapDB.deleteNode("NDEPT11004");
+    MapDB.deleteNode("NDEPT11014");
   }
 
   @Test
@@ -307,6 +309,45 @@ public class ServiceDBTest {
     assertTrue(meds.isEmpty());
   }
 
+  @Test
+  public void testaddSanitationEmp() throws DBException {
+    int id = ServiceDB.addSanitationEmp("Chicken Caesar Wrap");
+
+    Sanitation expected = new Sanitation(id, "Chicken Caesar Wrap");
+
+    assertEquals(expected, ServiceDB.getEmployee(id));
+
+    ServiceDB.removeEmployee(id);
+  }
+
+  @Test
+  public void testgetSanitationbyAmount() throws DBException {
+    MapDB.addNode("NDEPT12004", 100, 100, 4, "Faulkner", "DEPT", "Hello", "Hell", 'N');
+    int id = ServiceDB.addSanitationReq("hello", "NDEPT12004", "weed", "medium", "medium");
+    MapDB.addNode("NDEPT12014", 100, 100, 4, "Faulkner", "DEPT", "Hello", "Hell", 'N');
+    int id2 = ServiceDB.addSanitationReq("hello", "NDEPT12014", "Weed", "MeDiuM", "low");
+    LinkedList<SanitationRequest> list = ServiceDB.getsanitationbyAmount("medium");
+    assertTrue(list.contains(ServiceDB.getRequest(id)));
+    assertTrue(list.contains(ServiceDB.getRequest(id2)));
+    MapDB.deleteNode("NDEPT12004");
+    MapDB.deleteNode("NDEPT12014");
+  }
+
+  @Test
+  public void testsearchbySpillType() throws DBException {
+    MapDB.addNode("NDEPT13004", 100, 100, 4, "Faulkner", "DEPT", "Hello", "Hell", 'N');
+    int id = ServiceDB.addSanitationReq("hello", "NDEPT13004", "weeds", "medium", "medium");
+    MapDB.addNode("NDEPT13014", 100, 100, 4, "Faulkner", "DEPT", "Hello", "Hell", 'N');
+    int id2 =
+        ServiceDB.addSanitationReq(
+            "hello", "NDEPT13014", "weed smeling like Cocaine", "MeDiuM", "low");
+    LinkedList<SanitationRequest> list = ServiceDB.searchbyspillType("weed");
+    assertTrue(list.contains(ServiceDB.getRequest(id)));
+    assertTrue(list.contains(ServiceDB.getRequest(id2)));
+    MapDB.deleteNode("NDEPT13004");
+    MapDB.deleteNode("NDEPT13014");
+  }
+
   //  @Test
   //  public void testAddAndGetPatient() throws DBException {
   //    int id = ServiceDB.addPatient("Dippy Tikklekins", "ZDEPT00101");
@@ -315,6 +356,60 @@ public class ServiceDBTest {
   //
   //    assertEquals(dippy, ServiceDB.getPatient(id));
   //  }
+
+  @Test
+  public void testAddSanitationReq() throws DBException {
+    int id = ServiceDB.addSanitationReq("help", "ZHALL00102", "wet", "Large", "Unknown");
+    SanitationRequest req = (SanitationRequest) ServiceDB.getRequest(id);
+
+    GregorianCalendar cal = (GregorianCalendar) GregorianCalendar.getInstance();
+    SanitationRequest expected =
+        new SanitationRequest(
+            id, 0, "help", null, "ZHALL00102", cal, cal, "OPEN", "wet", "large", "unknown");
+
+    assertEquals(expected, req);
+
+    assertThrows(
+        DBException.class,
+        () -> ServiceDB.addSanitationReq("help", "ZHALL00102", "wet", "big", "unknown"));
+  }
+
+  @Test
+  public void testGetSanitationByDanger() throws DBException {
+    int id1 = ServiceDB.addSanitationReq("help", "ZHALL00102", "wet", "large", "High");
+    int id2 = ServiceDB.addSanitationReq("aaa", "ZHALL00101", "dry", "small", "HIGH");
+    int id3 = ServiceDB.addSanitationReq("woo", "ZHALL00102", "ehh", "medium", "Medium");
+
+    SanitationRequest high1 = (SanitationRequest) ServiceDB.getRequest(id1);
+    SanitationRequest high2 = (SanitationRequest) ServiceDB.getRequest(id2);
+    SanitationRequest medium1 = (SanitationRequest) ServiceDB.getRequest(id3);
+
+    LinkedList<SanitationRequest> result = ServiceDB.getSanitationByDanger("high");
+
+    assertTrue(result.contains(high1));
+    assertTrue(result.contains(high2));
+
+    result = ServiceDB.getSanitationByDanger("Medium");
+
+    assertTrue(result.contains(medium1));
+  }
+
+  @Test
+  public void testGetSanitationEmp() throws DBException {
+    int id1 = ServiceDB.addSanitationEmp("Fritz Coggelsgog");
+    int id2 = ServiceDB.addSanitationEmp("Bambimble Dignugget");
+
+    Sanitation expected1 = (Sanitation) ServiceDB.getEmployee(id1);
+    Sanitation expected2 = (Sanitation) ServiceDB.getEmployee(id2);
+
+    LinkedList<Sanitation> result = ServiceDB.getSanitationEmp();
+
+    assertTrue(result.contains(expected1));
+    assertTrue(result.contains(expected2));
+
+    ServiceDB.removeEmployee(id1);
+    ServiceDB.removeEmployee(id2);
+  }
 
   @AfterAll
   public static void cleanup() throws DBException {

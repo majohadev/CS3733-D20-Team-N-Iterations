@@ -6,7 +6,7 @@ import java.sql.*;
 import org.apache.ibatis.jdbc.ScriptRunner;
 
 public class setupDB {
-  public static void main(String[] args) throws SQLException, ClassNotFoundException {
+  public static void main(String[] args) throws SQLException, ClassNotFoundException, DBException {
 
     Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
     String URL;
