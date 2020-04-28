@@ -24,6 +24,16 @@ public class MapDBTest {
         "NDEPT01005", 1300, 1200, 5, "Faulkner", "DEPT", "Software Engineering", "Dept 10", 'N');
   }
 
+  @Test
+  public void testKiosk() throws DBException {
+    MapDB.setKiosk("NDEPT00204", 40);
+    MapDB.setKiosk("NHALL00104", -90);
+    assertEquals(MapDB.getKiosk(), MapDB.getNode("NHALL00104"));
+    assertEquals(MapDB.getKioskAngle(), 270);
+    MapDB.setKiosk("NHALL00104", 390);
+    assertEquals(MapDB.getKioskAngle(), 30);
+    assertThrows(DBException.class, () -> MapDB.setKiosk("INVALID", 10));
+  }
   // Noah
   @Test
   public void testAddNodeID() throws DBException {
@@ -388,20 +398,6 @@ public class MapDBTest {
 
     MapDB.deleteNode("NELEV00X03");
     MapDB.deleteNode("NELEV00X04");
-  }
-
-  @Test
-  public void testGetKiosk() throws DBException {
-    DbNode node = MapDB.getKiosk(4, "Faulkner");
-    assertNull(node);
-
-    MapDB.addNode("NSERV00104", 2, 3, 4, "Faulkner", "SERV", "4th Floor Kiosk", "Kiosk", 'N');
-    DbNode result =
-        new DbNode("NSERV00104", 2, 3, 4, "Faulkner", "SERV", "4th Floor Kiosk", "Kiosk", 'N');
-    node = MapDB.getKiosk(4, "Faulkner");
-    assertEquals(result, node);
-
-    MapDB.deleteNode("NSERV00104");
   }
 
   @AfterAll
