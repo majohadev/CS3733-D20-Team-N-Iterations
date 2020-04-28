@@ -181,6 +181,8 @@ INSERT INTO service VALUES ('Emotional Support', '00:00', '00:00', 'Request emot
 INSERT INTO service VALUES ('IT', '00:00', '00:00', 'Make a request for IT services!');
 INSERT INTO service VALUES ('Flower', '00:00', '00:00', 'Make a request for Flower Delivery services');
 
+INSERT INTO credential VALUES ('Gaben', 'MoolyFTW', 'ADMIN');
+
 
 
 CREATE TRIGGER doc_delete AFTER DELETE ON doctors

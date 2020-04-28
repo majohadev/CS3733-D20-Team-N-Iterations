@@ -5,6 +5,7 @@ import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.database.ServiceDB;
 import edu.wpi.N.entities.DbNode;
+import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.entities.employees.Employee;
 import edu.wpi.N.entities.employees.Translator;
 import edu.wpi.N.entities.request.Request;
@@ -172,6 +173,9 @@ public class AdminControllerOUTDATED implements Initializable, Controller {
   public void setMainApp(App mainApp) {
     this.mainApp = mainApp;
   }
+
+  @Override
+  public void setSingleton(StateSingleton singleton) {}
 
   @FXML
   private void acceptRow(MouseEvent e) {

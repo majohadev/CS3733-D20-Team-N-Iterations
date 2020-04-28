@@ -7,6 +7,7 @@ import edu.wpi.N.App;
 import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.database.*;
 import edu.wpi.N.entities.DbNode;
+import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.entities.employees.Doctor;
 import edu.wpi.N.entities.request.MedicineRequest;
 import edu.wpi.N.entities.request.Request;
@@ -23,6 +24,13 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 
 public class MedicineRequestController implements Controller, Initializable {
+
+  private StateSingleton singleton;
+
+  @Override
+  public void setSingleton(StateSingleton singleton) {
+    this.singleton = singleton;
+  }
 
   private App mainApp;
 
@@ -52,7 +60,7 @@ public class MedicineRequestController implements Controller, Initializable {
 
   // Temp Placeholder for Testing
   public void returnToRequests() throws IOException {
-    this.mainApp.switchScene("home.fxml");
+    this.mainApp.switchScene("home.fxml", singleton);
   }
 
   @Override

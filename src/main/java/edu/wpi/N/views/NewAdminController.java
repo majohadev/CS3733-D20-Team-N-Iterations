@@ -6,6 +6,7 @@ import edu.wpi.N.algorithms.*;
 import edu.wpi.N.database.*;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Service;
+import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.entities.employees.Employee;
 import edu.wpi.N.entities.employees.Translator;
 import edu.wpi.N.entities.request.Request;
@@ -30,6 +31,13 @@ import javafx.util.Callback;
 public class NewAdminController implements Controller, Initializable {
 
   private App mainApp = null;
+
+  private StateSingleton singleton;
+
+  @Override
+  public void setSingleton(StateSingleton singleton) {
+    this.singleton = singleton;
+  }
 
   @FXML JFXPasswordField pwf_newpass;
   @FXML JFXPasswordField pwf_confpass;
@@ -307,11 +315,11 @@ public class NewAdminController implements Controller, Initializable {
   }
 
   public void adminEditMap() throws IOException {
-    mainApp.switchScene("views/mapEdit.fxml");
+    mainApp.switchScene("views/mapEdit.fxml", singleton);
   }
 
   public void returnToPrev() throws IOException {
-    mainApp.switchScene("views/home.fxml");
+    mainApp.switchScene("views/home.fxml", singleton);
   }
 
   public void addAdmin() throws DBException {
@@ -340,7 +348,7 @@ public class NewAdminController implements Controller, Initializable {
   public void logoutUser() throws DBException {
     try {
       LoginDB.logout();
-      mainApp.switchScene("views/newLogin.fxml");
+      mainApp.switchScene("views/newLogin.fxml", singleton);
     } catch (DBException | IOException e) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
       errorAlert.setContentText(e.getMessage());
@@ -637,7 +645,7 @@ public class NewAdminController implements Controller, Initializable {
   }
 
   public void editMap() throws IOException {
-    mainApp.switchScene("views/mapEdit.fxml");
+    mainApp.switchScene("views/mapEdit.fxml", singleton);
   }
 
   /*
@@ -689,11 +697,11 @@ public class NewAdminController implements Controller, Initializable {
         .addListener(
             (ob, old, newVal) -> {
               if (newVal.equals("BFS")) {
-                algo.setPathFinder(new BFS());
+                singleton.savedAlgo.setPathFinder(new BFS());
               } else if (newVal.equals("DFS")) {
-                algo.setPathFinder(new DFS());
+                singleton.savedAlgo.setPathFinder(new DFS());
               } else if (newVal.equals("AStar")) {
-                algo.setPathFinder(new AStar());
+                singleton.savedAlgo.setPathFinder(new AStar());
               }
             });
   }

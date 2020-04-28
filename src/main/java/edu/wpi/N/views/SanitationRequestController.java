@@ -8,6 +8,7 @@ import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.ServiceDB;
 import edu.wpi.N.entities.DbNode;
+import edu.wpi.N.entities.States.StateSingleton;
 import java.util.LinkedList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,6 +19,12 @@ import javafx.scene.input.KeyEvent;
 public class SanitationRequestController implements Controller {
 
   private App mainApp;
+  private StateSingleton singleton;
+
+  @Override
+  public void setSingleton(StateSingleton singleton) {
+    this.singleton = singleton;
+  }
 
   // Add FXML Tags Here
   @FXML JFXComboBox<String> cmbo_text;
@@ -41,7 +48,21 @@ public class SanitationRequestController implements Controller {
   }
 
   public void initialize() throws DBException {
+    initializeSpillSizes();
+    initizlizeDangerList();
+  }
 
+  public void initizlizeDangerList() {
+    LinkedList<String> dangerLevels = new LinkedList<>();
+    dangerLevels.add("Low");
+    dangerLevels.add("Medium");
+    dangerLevels.add("High");
+    dangerLevels.add("Unknown");
+    ObservableList<String> dangerList = FXCollections.observableList(dangerLevels);
+    cmbo_selectDangerLevel.setItems(dangerList);
+  }
+
+  public void initializeSpillSizes() {
     cmbo_text.getEditor().setOnKeyTyped(this::locationTextChanged);
     LinkedList<String> spillSizes = new LinkedList<>();
     spillSizes.add("Small");
@@ -50,14 +71,6 @@ public class SanitationRequestController implements Controller {
     spillSizes.add("Unknown");
     ObservableList<String> sizeList = FXCollections.observableList(spillSizes);
     cmbo_selectSpillSize.setItems(sizeList);
-
-    LinkedList<String> dangerLevels = new LinkedList<>();
-    spillSizes.add("Low");
-    spillSizes.add("Medium");
-    spillSizes.add("High");
-    spillSizes.add("Unknown");
-    ObservableList<String> dangerList = FXCollections.observableList(dangerLevels);
-    cmbo_selectDangerLevel.setItems(dangerList);
   }
 
   @FXML
@@ -134,7 +147,7 @@ public class SanitationRequestController implements Controller {
 
     int sanitationReq =
         ServiceDB.addSanitationReq(notes, nodeID, spillType, sizeSelection, dangerSelection);
-    App.adminDataStorage.addToList(sanitationReq);
+    // App.adminDataStorage.addToList(sanitationReq);
 
     txtf_sanitationNotes.clear();
     txtf_spillType.clear();
