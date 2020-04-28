@@ -5,6 +5,7 @@ import edu.wpi.N.App;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
+import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.entities.UIEdge;
 import edu.wpi.N.entities.UINode;
 import java.io.IOException;
@@ -26,6 +27,13 @@ import javax.swing.*;
 
 public class MapEditorController implements Controller {
   App mainApp;
+
+  private StateSingleton singleton;
+
+  @Override
+  public void setSingleton(StateSingleton singleton) {
+    this.singleton = singleton;
+  }
 
   @FXML Pane pn_display;
   @FXML Pane pn_editor;
@@ -757,7 +765,7 @@ public class MapEditorController implements Controller {
   }
 
   public void onBtnHomeClicked() throws IOException {
-    mainApp.switchScene("views/home.fxml");
+    mainApp.switchScene("views/home.fxml", singleton);
   }
 
   private void handleCircleAddEdgeDragged(MouseEvent event, Circle circle) {

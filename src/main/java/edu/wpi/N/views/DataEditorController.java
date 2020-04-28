@@ -4,6 +4,7 @@ import edu.wpi.N.App;
 import edu.wpi.N.Main;
 import edu.wpi.N.database.*;
 import edu.wpi.N.entities.DbNode;
+import edu.wpi.N.entities.States.StateSingleton;
 import java.io.*;
 import java.util.LinkedList;
 import javafx.fxml.FXML;
@@ -13,6 +14,13 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 
 public class DataEditorController implements Controller {
+  private StateSingleton singleton;
+
+  @Override
+  public void setSingleton(StateSingleton singleton) {
+    this.singleton = singleton;
+  }
+
   App mainApp = null;
 
   @Override
@@ -188,7 +196,7 @@ public class DataEditorController implements Controller {
 
   @FXML
   public void onDoneClicked() throws IOException {
-    mainApp.switchScene("views/home.fxml");
+    mainApp.switchScene("views/home.fxml", singleton);
   }
 
   @FXML

@@ -8,6 +8,7 @@ import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Path;
+import edu.wpi.N.entities.States.StateSingleton;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -26,6 +27,13 @@ import javafx.scene.shape.Line;
 import lombok.SneakyThrows;
 
 public class hamburgerTestController implements Controller, Initializable {
+
+  private StateSingleton singleton;
+
+  @Override
+  public void setSingleton(StateSingleton singleton) {
+    this.singleton = singleton;
+  }
 
   private App mainApp = null;
   final float IMAGE_WIDTH = 2475;

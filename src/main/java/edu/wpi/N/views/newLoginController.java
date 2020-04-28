@@ -5,11 +5,19 @@ import com.jfoenix.controls.JFXTextField;
 import edu.wpi.N.App;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.LoginDB;
+import edu.wpi.N.entities.States.StateSingleton;
 import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 
 public class newLoginController implements Controller {
+
+  private StateSingleton singleton;
+
+  @Override
+  public void setSingleton(StateSingleton singleton) {
+    this.singleton = singleton;
+  }
 
   private App mainApp = null;
 
@@ -24,9 +32,9 @@ public class newLoginController implements Controller {
       LoginDB.verifyLogin(user, pass);
 
       if (LoginDB.currentAccess().equals("ADMIN")) {
-        mainApp.switchScene("views/adminPortal.fxml");
+        mainApp.switchScene("views/adminPortal.fxml", singleton);
       } else if (LoginDB.currentAccess().equals("DOCTOR")) {
-        mainApp.switchScene("views/medicineRequest.fxml");
+        mainApp.switchScene("views/medicineRequest.fxml", singleton);
       }
       System.out.println("Valid Login");
     } catch (DBException | IOException e) {
@@ -43,7 +51,7 @@ public class newLoginController implements Controller {
   }
 
   public void goBack() throws IOException {
-    mainApp.switchScene("views/home.fxml");
+    mainApp.switchScene("views/home.fxml", singleton);
   }
 
   @FXML
@@ -61,6 +69,4 @@ public class newLoginController implements Controller {
   public void setMainApp(App mainApp) {
     this.mainApp = mainApp;
   }
-
-  public void childrenSwap() {}
 }
