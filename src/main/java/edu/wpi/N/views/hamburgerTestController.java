@@ -11,6 +11,7 @@ import edu.wpi.N.entities.Path;
 import edu.wpi.N.entities.employees.Doctor;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.ResourceBundle;
@@ -193,6 +194,10 @@ public class hamburgerTestController implements Controller, Initializable {
       Algorithm myAStar = new Algorithm();
       try {
         path = myAStar.findPath(node1, node2, false);
+        ArrayList<String> directions = path.getDirections();
+        for (String s : directions) {
+          System.out.println(s);
+        }
       } catch (NullPointerException e) {
         displayErrorMessage("The path does not exist");
         return;
@@ -202,6 +207,10 @@ public class hamburgerTestController implements Controller, Initializable {
       Algorithm myAStar = new Algorithm();
       Path path = myAStar.findPath(node2, node1, false);
       pathNodes = path.getPath();
+      ArrayList<String> directions = path.getDirections();
+      for (String s : directions) {
+        System.out.println(s);
+      }
     }
     disableNonPathFloors(pathNodes);
     drawPath(pathNodes);
