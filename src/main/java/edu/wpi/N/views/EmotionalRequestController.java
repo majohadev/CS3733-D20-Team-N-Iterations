@@ -5,8 +5,10 @@ import com.jfoenix.controls.JFXTextArea;
 import edu.wpi.N.App;
 import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.database.DBException;
+import edu.wpi.N.database.MapDB;
 import edu.wpi.N.database.ServiceDB;
 import edu.wpi.N.entities.DbNode;
+import edu.wpi.N.entities.States.StateSingleton;
 import java.util.LinkedList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,6 +17,13 @@ import javafx.scene.control.Alert;
 import javafx.scene.input.KeyEvent;
 
 public class EmotionalRequestController implements Controller {
+
+  private StateSingleton singleton;
+
+  @Override
+  public void setSingleton(StateSingleton singleton) {
+    this.singleton = singleton;
+  }
 
   private App mainApp;
 
@@ -87,22 +96,40 @@ public class EmotionalRequestController implements Controller {
   public void createNewEmotionalRequest() throws DBException {
 
     String supportSelection = cmbo_selectSupport.getSelectionModel().getSelectedItem();
-    String nodeID;
-    int nodeIndex = 0;
+    String nodeID = null;
 
-    try {
-      String curr = cmbo_text.getEditor().getText();
-      for (String name : fuzzySearchTextList) {
-        if (name.equals(curr)) {
-          nodeIndex++;
-          break;
-        }
+    //    try {
+    //      String curr = cmbo_text.getEditor().getText();
+    //      for (String name : fuzzySearchTextList) {
+    //        if (name.equals(curr)) {
+    //          nodeIndex++;
+    //          break;
+    //        }
+    //      }
+    //      nodeID = fuzzySearchNodeList.get(nodeIndex).getNodeID();
+    //      System.out.println(nodeID);
+    //    } catch (IndexOutOfBoundsException e) {
+    //      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+    //      errorAlert.setContentText("Please select a location for your service request!");
+    //      errorAlert.show();
+    //      return;
+    //    }
+
+    String userLocationName = cmbo_text.getEditor().getText().toLowerCase().trim();
+    LinkedList<DbNode> checkNodes = MapDB.searchVisNode(-1, null, null, userLocationName);
+
+    // Find the exact match and get the nodeID
+    for (DbNode node : checkNodes) {
+      if (node.getLongName().toLowerCase().equals(userLocationName)) {
+        nodeID = node.getNodeID();
+        break;
       }
-      nodeID = fuzzySearchNodeList.get(nodeIndex).getNodeID();
-      System.out.println(nodeID);
-    } catch (IndexOutOfBoundsException e) {
+    }
+    // Check to see if such node was found
+    if (nodeID == null) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-      errorAlert.setContentText("Please select a location for your service request!");
+      errorAlert.setContentText(
+          "Please select a location for your service request from suggestions menu!");
       errorAlert.show();
       return;
     }
@@ -115,7 +142,7 @@ public class EmotionalRequestController implements Controller {
       return;
     }
     int emotSuppReq = ServiceDB.addEmotSuppReq(notes, nodeID, supportSelection);
-    // App.adminDataStorage.addToList(emotSuppReq);
+    //    App.adminDataStorage.addToList(emotSuppReq);
 
     txtf_supportNotes.clear();
     cmbo_selectSupport.getItems().clear();
@@ -124,5 +151,6 @@ public class EmotionalRequestController implements Controller {
     Alert confAlert = new Alert(Alert.AlertType.CONFIRMATION);
     confAlert.setContentText("Request Recieved");
     confAlert.show();
+    return;
   }
 }

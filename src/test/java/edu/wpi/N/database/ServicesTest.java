@@ -4,16 +4,15 @@ package edu.wpi.N.database;
 import static org.junit.jupiter.api.Assertions.*;
 
 import edu.wpi.N.entities.*;
-import edu.wpi.N.entities.employees.EmotionalSupporter;
-import edu.wpi.N.entities.employees.Employee;
-import edu.wpi.N.entities.employees.IT;
-import edu.wpi.N.entities.employees.WheelchairEmployee;
+import edu.wpi.N.entities.employees.*;
+import edu.wpi.N.entities.request.FlowerRequest;
+import edu.wpi.N.entities.request.InternalTransportationRequest;
 import edu.wpi.N.entities.request.Request;
 import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.GregorianCalendar;
 import java.util.LinkedList;
-import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -373,8 +372,8 @@ public class ServicesTest {
           ServiceDB.getRequests().contains(ServiceDB.getRequest(wheelchairReqID1)));
       ServiceDB.denyRequest(wheelchairReqID2, "done");
 
-      ServiceDB.removeEmployee(wheelchairReqID1);
-      ServiceDB.removeEmployee(wheelchairReqID2);
+      // ServiceDB.removeEmployee(wheelchairReqID1);
+      // ServiceDB.removeEmployee(wheelchairReqID2);
 
       MapDB.clearNodes();
     } catch (SQLException | DBException e) {
@@ -639,6 +638,263 @@ public class ServicesTest {
         throw new DBException("Oh no");
       }
     }
+  }
+
+  // Chris
+  @Test
+  public void testgetEmployee_flower() throws DBException, SQLException {
+    try {
+      con.setAutoCommit(false);
+      int id = ServiceDB.addFlowerDeliverer("Chris");
+
+      con.commit();
+      con.setAutoCommit(true);
+      assertEquals("Chris", ServiceDB.getEmployee(id).getName());
+      assertEquals("Flower", ServiceDB.getEmployee(id).getServiceType());
+
+      ServiceDB.removeEmployee(id);
+    } catch (DBException | SQLException e) {
+      try {
+        con.rollback();
+        con.setAutoCommit(true);
+      } catch (SQLException ex) {
+        throw new DBException("Error: flower is not a employee");
+      }
+      throw e;
+    }
+  }
+
+  // Nick
+  @Test
+  public void testGetAndAddRequest_flower() throws DBException {
+    Flower rose = ServiceDB.addFlower("Rose", 2022);
+    Flower tulip = ServiceDB.addFlower("Tulip", 12345);
+
+    DbNode node =
+        MapDB.addNode(
+            345, 123, 3, "Faulkner", "SERV", "the room of the great Snirp", "Snirp's room");
+
+    LinkedList<String> flowers = new LinkedList<>();
+    flowers.add(rose.getFlowerName());
+    flowers.add(rose.getFlowerName());
+    flowers.add(tulip.getFlowerName());
+
+    int id =
+        ServiceDB.addFlowerReq(
+            "pretty", node.getNodeID(), "Snirp", "Wrat", "1234-5678-9012-3456", flowers);
+
+    String flowerString = "2 Roses, 1 Tulip";
+
+    GregorianCalendar cal = (GregorianCalendar) GregorianCalendar.getInstance();
+
+    FlowerRequest expected =
+        new FlowerRequest(
+            id,
+            0,
+            "pretty",
+            null,
+            node.getNodeID(),
+            cal,
+            cal,
+            "OPEN",
+            "Snirp",
+            "Wrat",
+            "1234-5678-9012-3456",
+            flowerString);
+
+    assertEquals(expected, ServiceDB.getRequest(id));
+
+    ServiceDB.removeFlower("Rose");
+    ServiceDB.removeFlower("Tulip");
+
+    MapDB.deleteNode(node.getNodeID());
+  }
+
+  // Chris
+  @Test
+  public void testgetRequests_flower() throws DBException, SQLException {
+    try {
+      con.setAutoCommit(false);
+      DbNode node = MapDB.addNode(5, 5, 1, "TestBuilding", "STAI", "My test", "Short");
+
+      ServiceDB.addFlower("Rose", 123);
+      LinkedList<String> flowers = new LinkedList<>();
+      flowers.add("Rose");
+
+      int id =
+          ServiceDB.addFlowerReq(
+              "Had device for 1000000 year",
+              node.getNodeID(),
+              "Chris",
+              "Nick",
+              "1111-1111-1111-1111",
+              flowers);
+
+      con.commit();
+      con.setAutoCommit(true);
+
+      String type = ServiceDB.getRequest(id).getServiceType();
+      assertEquals("Flower", type);
+      Assertions.assertTrue(id != 0);
+
+      ServiceDB.denyRequest(id, "Don't request ever again.");
+
+    } catch (SQLException | DBException e) {
+      try {
+        con.rollback();
+        con.setAutoCommit(true);
+      } catch (SQLException ex) {
+        throw new DBException("Oh no");
+      }
+      throw e;
+    }
+  }
+
+  // Nick
+  @Test
+  public void testgetEmployees_flower() throws DBException {
+    int id1 = ServiceDB.addFlowerDeliverer("Lucas Winfield");
+    int id2 = ServiceDB.addFlowerDeliverer("Araxis");
+
+    LinkedList<Employee> result = ServiceDB.getEmployees();
+
+    assertTrue(result.contains(new FlowerDeliverer(id1, "Lucas Winfield")));
+    assertTrue(result.contains(new FlowerDeliverer(id2, "Araxis")));
+
+    ServiceDB.removeEmployee(id1);
+    ServiceDB.removeEmployee(id2);
+  }
+
+  // Chris
+  @Test
+  public void testgetOpenRequest_flower() throws DBException, SQLException {
+    try {
+      con.setAutoCommit(false);
+      // Insertion statements, like addTranslator
+      DbNode node = MapDB.addNode(5, 5, 1, "TestBuilding", "STAI", "My test", "Short");
+      // add Emotional support
+
+      ServiceDB.addFlower("Daisy", 1209);
+      LinkedList<String> flowers = new LinkedList<>();
+      flowers.add("Daisy");
+
+      int idE =
+          ServiceDB.addFlowerReq(
+              "Software Engineering class",
+              node.getNodeID(),
+              "annie",
+              "ivan",
+              "2222-2222-2222-2222",
+              flowers);
+
+      int idL =
+          ServiceDB.addFlowerReq(
+              "I shit my pants", node.getNodeID(), "nick", "mike", "3333-3333-3333-3333", flowers);
+
+      int idT =
+          ServiceDB.addFlowerReq(
+              "Помогите!", node.getNodeID(), "Russian", "Korean", "4444-4444-4444-4444", flowers);
+      con.commit();
+      con.setAutoCommit(true);
+      // checking statements
+      LinkedList<Request> openReqs = ServiceDB.getOpenRequests();
+      Assertions.assertTrue(openReqs.size() >= 3);
+      Assertions.assertTrue(openReqs.contains(ServiceDB.getRequest(idE)));
+      // deleting statements
+      ServiceDB.denyRequest(idE, "Nope");
+      ServiceDB.denyRequest(idL, "Nope");
+      ServiceDB.denyRequest(idT, "Nope");
+    } catch (SQLException | DBException e) { // also wanna catch DBException e
+      try {
+        con.rollback();
+        con.setAutoCommit(true);
+      } catch (SQLException ex) {
+        throw new DBException("Oh no");
+      }
+      throw e;
+    }
+  }
+
+  // Nick
+  @Test
+  public void testgetflowerDeliverers() throws DBException {
+    int id1 = ServiceDB.addFlowerDeliverer("Lucas Winfield");
+    int id2 = ServiceDB.addFlowerDeliverer("Araxis");
+
+    LinkedList<FlowerDeliverer> result = ServiceDB.getFlowerDeliverers();
+
+    assertTrue(result.contains(new FlowerDeliverer(id1, "Lucas Winfield")));
+    assertTrue(result.contains(new FlowerDeliverer(id2, "Araxis")));
+
+    ServiceDB.removeEmployee(id1);
+    ServiceDB.removeEmployee(id2);
+  }
+
+  @Test
+  public void testGetAndAddEmployees_inTr() throws DBException {
+    int id1 = ServiceDB.addInternalTransportationEmployee("Bombus Clockmort");
+    int id2 = ServiceDB.addInternalTransportationEmployee("Sharkey Finn");
+
+    InternalTransportationEmployee expected1 =
+        new InternalTransportationEmployee(id1, "Bombus Clockmort");
+    InternalTransportationEmployee expected2 =
+        new InternalTransportationEmployee(id2, "Sharkey Finn");
+
+    assertEquals(expected1, ServiceDB.getEmployee(id1));
+    assertEquals(expected2, ServiceDB.getEmployee(id2));
+
+    LinkedList<Employee> result1 = ServiceDB.getEmployees();
+    LinkedList<InternalTransportationEmployee> result2 =
+        ServiceDB.getInternalTransportationEmployees();
+
+    assertTrue(result1.contains(expected1));
+    assertTrue(result1.contains(expected2));
+    assertTrue(result2.contains(expected1));
+    assertTrue(result2.contains(expected2));
+
+    ServiceDB.removeEmployee(id1);
+    ServiceDB.removeEmployee(id2);
+  }
+
+  @Test
+  public void testAddAndGetRequests_inTr() throws DBException {
+    DbNode node1 = MapDB.addNode(457, 3458, 5, "Faulkner", "DEPT", "The Room", "A good movie");
+    DbNode node2 =
+        MapDB.addNode(890, 4589, 5, "Faulkner", "DEPT", "The Room 2", "Electric Boogaloo");
+    String nodeID1 = node1.getNodeID();
+    String nodeID2 = node2.getNodeID();
+
+    int id1 = ServiceDB.addInternalTransportationReq("move", nodeID1, "fast", "03:00", nodeID2);
+    int id2 = ServiceDB.addInternalTransportationReq("go", nodeID2, "slow", "06:00", nodeID1);
+
+    GregorianCalendar cal = (GregorianCalendar) GregorianCalendar.getInstance();
+    InternalTransportationRequest expected1 =
+        new InternalTransportationRequest(
+            id1, 0, "move", null, nodeID1, cal, cal, "OPEN", "fast", "03:00", nodeID2);
+    InternalTransportationRequest expected2 =
+        new InternalTransportationRequest(
+            id2, 0, "go", null, nodeID2, cal, cal, "OPEN", "slow", "06:00", nodeID1);
+
+    InternalTransportationRequest result1 =
+        (InternalTransportationRequest) ServiceDB.getRequest(id1);
+    InternalTransportationRequest result2 =
+        (InternalTransportationRequest) ServiceDB.getRequest(id2);
+
+    assertEquals(expected1, result1);
+    assertEquals(expected2, result2);
+
+    LinkedList<Request> result = ServiceDB.getRequests();
+
+    assertTrue(result.contains(expected1));
+    assertTrue(result.contains(expected2));
+
+    result = ServiceDB.getOpenRequests();
+
+    assertTrue(result.contains(expected1));
+    assertTrue(result.contains(expected2));
+
+    MapDB.deleteNode(nodeID1);
+    MapDB.deleteNode(nodeID2);
   }
 
   @AfterEach

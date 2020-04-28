@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXDatePicker?>
+<?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXTextArea?>
 <?import com.jfoenix.controls.JFXTextField?>
-<?import com.jfoenix.controls.JFXTimePicker?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.MenuButton?>
-<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -18,31 +19,6 @@
    <children>
       <Pane prefHeight="75.0" prefWidth="1920.0" style="-fx-background-color: #003DA6;" AnchorPane.topAnchor="0.0">
          <children>
-            <Label layoutX="832.0" layoutY="16.0" text="Medicine Request" textFill="WHITE">
-               <font>
-                  <Font name="Calibri Bold" size="44.0" />
-               </font>
-            </Label>
-            <JFXButton layoutX="1802.0" layoutY="10.0" text="Settings" textFill="WHITE">
-               <font>
-                  <Font size="24.0" />
-               </font>
-            </JFXButton>
-            <Label layoutX="18.0" layoutY="9.0" text="6:45 PM" textFill="WHITE">
-               <font>
-                  <Font name="Calibri Bold" size="24.0" />
-               </font>
-            </Label>
-            <Label layoutX="18.0" layoutY="35.0" text="Thursday April 23rd, 2020" textFill="WHITE">
-               <font>
-                  <Font name="Calibri Bold" size="24.0" />
-               </font>
-            </Label>
-            <Label layoutX="411.0" layoutY="32.0" text="Welcome, Employee_Name" textFill="WHITE">
-               <font>
-                  <Font name="Calibri Bold" size="24.0" />
-               </font>
-            </Label>
             <JFXButton buttonType="RAISED" layoutX="1696.0" layoutY="10.0" text="Logout" textFill="WHITE">
                <font>
                   <Font size="24.0" />
@@ -50,7 +26,7 @@
             </JFXButton>
          </children>
       </Pane>
-      <SplitPane dividerPositions="0.15" prefHeight="160.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="75.0">
+      <SplitPane dividerPositions="0.15641293013555788" prefHeight="160.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="75.0">
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
@@ -58,7 +34,7 @@
                      <children>
                         <Pane prefHeight="251.25" prefWidth="200.0" style="-fx-background-color: #D3D3D3;">
                            <children>
-                              <JFXButton buttonType="RAISED" layoutX="75.0" layoutY="103.0" style="-fx-background-radius: 10px;" text="Prescribe">
+                              <JFXButton buttonType="RAISED" layoutX="75.0" layoutY="103.0" onMouseClicked="#createMedRequest" style="-fx-background-radius: 10px;" text="Prescribe">
                                  <font>
                                     <Font size="24.0" />
                                  </font>
@@ -98,62 +74,112 @@
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" style="-fx-background-color: #D3D3D3;">
                <children>
-                  <Label layoutX="178.0" layoutY="123.0" text="Patient Name:" AnchorPane.leftAnchor="125.0" AnchorPane.topAnchor="125.0">
+                  <HBox alignment="CENTER_LEFT" layoutX="603.0" layoutY="32.0" prefHeight="150.0" prefWidth="629.0" spacing="30.0" style="-fx-background-color: #002186; -fx-background-radius: 10;" AnchorPane.leftAnchor="493.0" AnchorPane.rightAnchor="494.0">
+                     <children>
+                        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/languageWhite.png" />
+                           </image>
+                        </ImageView>
+                        <Label text="Medicine Request" textFill="WHITE">
+                           <font>
+                              <Font name="Calibri" size="55.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" layoutX="190.0" layoutY="190.0" prefHeight="542.0" prefWidth="1196.0" spacing="100.0">
+                     <children>
+                        <VBox alignment="CENTER" maxHeight="509.0" maxWidth="500.0" minHeight="300.0" minWidth="500.0" prefHeight="360.0" prefWidth="500.0" spacing="30.0">
+                           <children>
+                              <VBox alignment="CENTER" maxHeight="500.0" maxWidth="500.0" minWidth="500.0" prefHeight="200.0" prefWidth="100.0" spacing="30.0">
+                                 <children>
+                                    <Label text="Medicine Name">
+                                       <font>
+                                          <Font name="Calibri" size="24.0" />
+                                       </font>
+                                       <VBox.margin>
+                                          <Insets top="50.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <HBox prefHeight="100.0" prefWidth="200.0">
+                                       <children>
+                                          <JFXTextField alignment="CENTER" prefHeight="44.0" prefWidth="516.0">
+                                             <font>
+                                                <Font size="20.0" />
+                                             </font>
+                                          </JFXTextField>
+                                          <Pane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="100.0" prefWidth="8.0" />
+                                       </children>
+                                    </HBox>
+                                    <Label text="Patient Name">
+                                       <font>
+                                          <Font name="Calibri" size="24.0" />
+                                       </font>
+                                       <VBox.margin>
+                                          <Insets top="50.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                 </children>
+                              </VBox>
+                              <JFXTextField alignment="CENTER" prefHeight="44.0" prefWidth="516.0">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </JFXTextField>
+                              <Pane prefHeight="147.0" prefWidth="500.0" />
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" maxHeight="500.0" maxWidth="500.0" minWidth="500.0" prefHeight="200.0" prefWidth="100.0" spacing="30.0">
+                           <children>
+                              <Label text="Enter Dosage and Unit">
+                                 <font>
+                                    <Font name="Calibri" size="24.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets top="50.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <HBox prefHeight="100.0" prefWidth="200.0">
+                                 <children>
+                                    <JFXTextField alignment="CENTER" prefHeight="45.0" prefWidth="327.0">
+                                       <font>
+                                          <Font size="20.0" />
+                                       </font>
+                                    </JFXTextField>
+                                    <Pane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="100.0" prefWidth="8.0" />
+                                    <JFXComboBox labelFloat="true" prefHeight="45.0" prefWidth="112.0" promptText="Units" style="-fx-font-size: 18;" />
+                                 </children>
+                              </HBox>
+                              <Label text="Please Enter Aditional Notes Below">
+                                 <font>
+                                    <Font name="Calibri" size="24.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets top="50.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <JFXTextArea maxWidth="394.0" minWidth="394.0" prefHeight="138.0" prefWidth="394.0" promptText="Enter Notes Here" style="-fx-font-size: 18;" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <JFXButton fx:id="btn_submit" buttonType="RAISED" contentDisplay="RIGHT" graphicTextGap="20.0" layoutX="558.0" layoutY="837.0" minHeight="75.0" minWidth="200.0" onMouseClicked="#createMedRequest" ripplerFill="#c1c9eb" style="-fx-background-color: #002186;" stylesheets="@submitButton.css" text="Submit Request">
                      <font>
-                        <Font name="Calibri" size="24.0" />
+                        <Font size="48.0" />
                      </font>
-                  </Label>
-                  <JFXTextField layoutX="265.0" layoutY="118.0" prefWidth="250.0" AnchorPane.leftAnchor="265.0" AnchorPane.topAnchor="115.0">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </JFXTextField>
-                  <JFXDatePicker defaultColor="#003da6" layoutX="1201.0" layoutY="138.0" AnchorPane.rightAnchor="255.0" />
-                  <JFXTimePicker defaultColor="#003da6" layoutX="1215.0" layoutY="193.0" AnchorPane.rightAnchor="255.0" />
-                  <Label layoutX="128.0" layoutY="235.0" text="Medicine: " AnchorPane.leftAnchor="125.0" AnchorPane.topAnchor="235.0">
-                     <font>
-                        <Font name="Calibri" size="24.0" />
-                     </font>
-                  </Label>
-                  <MenuButton layoutX="221.0" layoutY="237.0" mnemonicParsing="false" text="MenuButton" AnchorPane.leftAnchor="230.0" AnchorPane.topAnchor="237.0">
-                    <items>
-                      <MenuItem mnemonicParsing="false" text="Action 1" />
-                      <MenuItem mnemonicParsing="false" text="Action 2" />
-                    </items>
-                  </MenuButton>
-                  <Label layoutX="135.0" layoutY="343.0" text="Dosage:" AnchorPane.leftAnchor="125.0" AnchorPane.topAnchor="343.0">
-                     <font>
-                        <Font name="Calibri" size="24.0" />
-                     </font>
-                  </Label>
-                  <MenuButton layoutX="236.0" layoutY="348.0" mnemonicParsing="false" text="MenuButton" AnchorPane.leftAnchor="230.0" AnchorPane.topAnchor="345.0">
-                     <items>
-                        <MenuItem mnemonicParsing="false" text="Action 1" />
-                        <MenuItem mnemonicParsing="false" text="Action 2" />
-                     </items>
-                  </MenuButton>
-                  <Label layoutX="158.0" layoutY="453.0" text="Prescriber: " AnchorPane.leftAnchor="125.0">
-                     <font>
-                        <Font name="Calibri" size="24.0" />
-                     </font>
-                  </Label>
-                  <JFXTextField layoutX="258.0" layoutY="439.0" prefWidth="250.0" AnchorPane.leftAnchor="230.0" AnchorPane.topAnchor="440.0">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </JFXTextField>
-                  <Label layoutX="184.0" layoutY="579.0" text="Notes:" AnchorPane.leftAnchor="125.0" AnchorPane.topAnchor="579.0">
-                     <font>
-                        <Font name="Calibri" size="24.0" />
-                     </font>
-                  </Label>
-                  <JFXTextArea layoutX="198.0" layoutY="583.0" prefHeight="19.0" prefWidth="257.0" AnchorPane.leftAnchor="198.0" AnchorPane.topAnchor="573.0">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </JFXTextArea>
-               </children>
-            </AnchorPane>
+                     <graphic>
+                        <ImageView fitHeight="54.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" style="fx-border-color: yellow;">
+                           <image>
+                              <Image url="@../images/yellowArrow.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </JFXButton>
+               </children></AnchorPane>
         </items>
       </SplitPane>
    </children>

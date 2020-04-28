@@ -44,6 +44,7 @@
             <Button mnemonicParsing="false" onMouseClicked="#onBtnHamClicked" text="Ham" />
             <Button mnemonicParsing="false" onMouseClicked="#onBtnLoginClicked" text="Login" />
             <Button fx:id="btn_Admin" mnemonicParsing="false" onMouseClicked="#onBtnAdminClick" text="Admin" />
+            <Button mnemonicParsing="false" onMouseClicked="#onBtnSanClick" text="Sanitation" />
          </children>
       </VBox>
    </children>

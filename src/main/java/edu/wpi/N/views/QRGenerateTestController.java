@@ -2,6 +2,7 @@ package edu.wpi.N.views;
 
 import com.jfoenix.controls.JFXButton;
 import edu.wpi.N.App;
+import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.qrcontrol.QRGenerator;
 import java.util.ArrayList;
 import javafx.fxml.FXML;
@@ -9,6 +10,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 
 public class QRGenerateTestController extends QRGenerator implements Controller {
+
+  private StateSingleton singleton;
+
+  @Override
+  public void setSingleton(StateSingleton singleton) {
+    this.singleton = singleton;
+  }
 
   @FXML JFXButton btn_generate;
   @FXML ImageView img_qrDisplay;
