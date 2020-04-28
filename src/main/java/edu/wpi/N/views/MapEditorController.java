@@ -773,8 +773,8 @@ public class MapEditorController implements Controller {
                 displayErrorMessage("Invalid input");
                 return;
               }
-              String longName = controllerEditNode.getShortName();
-              String shortName = controllerEditNode.getLongName();
+              String shortName = controllerEditNode.getShortName();
+              String longName = controllerEditNode.getLongName();
               if (longName == null || shortName == null) {
                 displayErrorMessage("Invalid input");
                 return;
@@ -782,6 +782,10 @@ public class MapEditorController implements Controller {
               String id = nodesMap.get(editNodeCircle).getDBNode().getNodeID();
               try {
                 MapDB.modifyNode(id, x, y, longName, shortName);
+                DbNode newNode = MapDB.getNode(id);
+                nodesMap.remove(editNodeCircle);
+                UINode UInode = new UINode(editNodeCircle, newNode);
+                nodesMap.put(editNodeCircle, UInode);
               } catch (DBException e) {
                 e.printStackTrace();
               }
