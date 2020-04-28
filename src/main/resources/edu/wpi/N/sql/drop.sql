@@ -1,5 +1,6 @@
 DROP TABLE flowertoflower;
 DROP TABLE flowerRequest;
+DROP TABLE internalTransportationRequest;
 DROP TABLE ITrequest;
 DROP TABLE erequest;
 DROP TABLE sanitationRequests;
@@ -10,6 +11,7 @@ DROP TABLE wrequest;
 DROP TABLE secrequest;
 DROP TABLE request;
 DROP TABLE location;
+DROP TABLE internalTransportationEmployee;
 DROP TABLE doctors;
 DROP TABLE credential;
 DROP TABLE sanitation;
