@@ -5,6 +5,7 @@ import com.jfoenix.controls.JFXTextField;
 import javafx.fxml.FXML;
 
 public class MapEditorEditNodeController {
+
   @FXML JFXTextField txt_shortName;
   @FXML JFXTextField txt_longName;
   @FXML JFXTextField txt_xPos;

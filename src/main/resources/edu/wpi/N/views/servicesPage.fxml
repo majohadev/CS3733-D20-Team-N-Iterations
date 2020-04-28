@@ -112,7 +112,7 @@
                                                 <Font name="Calibri Bold" size="30.0" />
                                              </font>
                                           </JFXButton>
-                                          <JFXButton buttonType="RAISED" contentDisplay="TOP" layoutX="20.0" layoutY="686.0" minHeight="285.0" minWidth="256.0" ripplerFill="#ffd965" stylesheets="@iconButton.css" text="Emotional Help" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                          <JFXButton buttonType="RAISED" contentDisplay="TOP" layoutX="20.0" layoutY="686.0" minHeight="285.0" minWidth="256.0" onMouseClicked="#switchToEmotionalPage" ripplerFill="#ffd965" stylesheets="@iconButton.css" text="Emotional Help" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="2">
                                              <font>
                                                 <Font name="Calibri Bold" size="30.0" />
                                              </font>

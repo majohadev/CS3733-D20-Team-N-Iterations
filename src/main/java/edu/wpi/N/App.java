@@ -1,5 +1,6 @@
 package edu.wpi.N;
 
+import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.views.Controller;
 import edu.wpi.N.views.HomeController;
 import java.io.IOException;
@@ -25,7 +26,8 @@ public class App extends Application {
     // Configure the primary Stage
     this.masterStage = primaryStage;
     this.masterStage.setTitle("Brigham and Women's Hospital Kiosk Application");
-    switchScene("views/home.fxml");
+    StateSingleton newSingleton = StateSingleton.getInstance();
+    switchScene("views/home.fxml", newSingleton);
     masterStage.setMaximized(true);
   }
 
@@ -38,7 +40,7 @@ public class App extends Application {
     log.info("Shutting Down");
   }
 
-  public void switchScene(String path) throws IOException {
+  public void switchScene(String path, StateSingleton singleton) throws IOException {
     FXMLLoader loader = new FXMLLoader();
     loader.setLocation(getClass().getResource(path));
     Pane pane = loader.load();
@@ -50,5 +52,6 @@ public class App extends Application {
     masterStage.show();
     Controller controller = loader.getController();
     controller.setMainApp(this);
+    controller.setSingleton(singleton);
   }
 }

@@ -2,6 +2,7 @@ package edu.wpi.N.views;
 
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
+import com.jfoenix.controls.JFXTextField;
 import edu.wpi.N.App;
 import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.database.DBException;
@@ -15,8 +16,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.input.KeyEvent;
 
-public class EmotionalRequestController implements Controller {
+public class SanitationRequestController implements Controller {
 
+  private App mainApp;
   private StateSingleton singleton;
 
   @Override
@@ -24,12 +26,12 @@ public class EmotionalRequestController implements Controller {
     this.singleton = singleton;
   }
 
-  private App mainApp;
-
   // Add FXML Tags Here
   @FXML JFXComboBox<String> cmbo_text;
-  @FXML JFXComboBox<String> cmbo_selectSupport;
-  @FXML JFXTextArea txtf_supportNotes;
+  @FXML JFXComboBox<String> cmbo_selectSpillSize;
+  @FXML JFXComboBox<String> cmbo_selectDangerLevel;
+  @FXML JFXTextField txtf_spillType;
+  @FXML JFXTextArea txtf_sanitationNotes;
 
   private ObservableList<String> fuzzySearchTextList =
       // List that fills TextViews
@@ -39,24 +41,36 @@ public class EmotionalRequestController implements Controller {
 
   private String countVal = "";
 
-  public EmotionalRequestController() throws DBException {}
+  public SanitationRequestController() throws DBException {}
 
   public void setMainApp(App mainApp) {
     this.mainApp = mainApp;
   }
 
   public void initialize() throws DBException {
+    initializeSpillSizes();
+    initizlizeDangerList();
+  }
 
+  public void initizlizeDangerList() {
+    LinkedList<String> dangerLevels = new LinkedList<>();
+    dangerLevels.add("Low");
+    dangerLevels.add("Medium");
+    dangerLevels.add("High");
+    dangerLevels.add("Unknown");
+    ObservableList<String> dangerList = FXCollections.observableList(dangerLevels);
+    cmbo_selectDangerLevel.setItems(dangerList);
+  }
+
+  public void initializeSpillSizes() {
     cmbo_text.getEditor().setOnKeyTyped(this::locationTextChanged);
-    // Available types of support: Individual, Family, Couple, Group
-    LinkedList<String> supportTypes = new LinkedList<String>();
-    supportTypes.add("Individual");
-    supportTypes.add("Family");
-    supportTypes.add("Couple");
-    supportTypes.add("Group");
-
-    ObservableList<String> supportTypeList = FXCollections.observableList(supportTypes);
-    cmbo_selectSupport.setItems(supportTypeList);
+    LinkedList<String> spillSizes = new LinkedList<>();
+    spillSizes.add("Small");
+    spillSizes.add("Medium");
+    spillSizes.add("Large");
+    spillSizes.add("Unknown");
+    ObservableList<String> sizeList = FXCollections.observableList(spillSizes);
+    cmbo_selectSpillSize.setItems(sizeList);
   }
 
   @FXML
@@ -90,11 +104,13 @@ public class EmotionalRequestController implements Controller {
     cmbo_text.show();
   }
 
-  // Create Emotional Request
+  // Create Sanitation Request
   @FXML
-  public void createNewEmotionalRequest() throws DBException {
+  public void createNewSanitation() throws DBException {
 
-    String supportSelection = cmbo_selectSupport.getSelectionModel().getSelectedItem();
+    String sizeSelection = cmbo_selectSpillSize.getSelectionModel().getSelectedItem();
+    String dangerSelection = cmbo_selectDangerLevel.getSelectionModel().getSelectedItem();
+    String spillType = txtf_spillType.getText();
     String nodeID;
     int nodeIndex = 0;
 
@@ -115,18 +131,28 @@ public class EmotionalRequestController implements Controller {
       return;
     }
 
-    String notes = txtf_supportNotes.getText();
-    if (supportSelection == null) {
+    String notes = txtf_sanitationNotes.getText();
+    if (sizeSelection == null) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-      errorAlert.setContentText("Please select a support type for your emotional support request!");
+      errorAlert.setContentText("Please select a size for your sanitation request!");
       errorAlert.show();
       return;
     }
-    int emotSuppReq = ServiceDB.addEmotSuppReq(notes, nodeID, supportSelection);
-    //    App.adminDataStorage.addToList(emotSuppReq);
+    if (dangerSelection == null) {
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setContentText("Please select a danger level for your sanitation request!");
+      errorAlert.show();
+      return;
+    }
 
-    txtf_supportNotes.clear();
-    cmbo_selectSupport.getItems().clear();
+    int sanitationReq =
+        ServiceDB.addSanitationReq(notes, nodeID, spillType, sizeSelection, dangerSelection);
+    // App.adminDataStorage.addToList(sanitationReq);
+
+    txtf_sanitationNotes.clear();
+    txtf_spillType.clear();
+    cmbo_selectSpillSize.getItems().clear();
+    cmbo_selectDangerLevel.getItems().clear();
     cmbo_text.getItems().clear();
 
     Alert confAlert = new Alert(Alert.AlertType.CONFIRMATION);

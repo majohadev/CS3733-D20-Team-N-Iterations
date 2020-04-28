@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane onMouseClicked="#checkUser" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #D3D3D3;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.newLoginController">
+<AnchorPane prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #D3D3D3;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.newLoginController">
    <children>
       <Pane prefHeight="110.0" prefWidth="1920.0" style="-fx-background-color: #0e4D92;">
          <children>
