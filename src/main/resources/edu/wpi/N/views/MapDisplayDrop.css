@@ -1,0 +1,15 @@
+.titled-pane > .title
+{
+    -fx-background-color: white, black, #002186;
+    -fx-pref-height: 32px;
+}
+
+.titled-pane {
+    -fx-text-fill: white;
+}
+
+.titled-pane > .title > .arrow-button > .arrow
+{
+    -fx-background-color: black, white;
+}
+
