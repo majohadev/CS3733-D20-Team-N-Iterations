@@ -24,6 +24,16 @@ public class MapDBTest {
         "NDEPT01005", 1300, 1200, 5, "Faulkner", "DEPT", "Software Engineering", "Dept 10", 'N');
   }
 
+  @Test
+  public void testKiosk() throws DBException {
+    MapDB.setKiosk("NDEPT00204", 40);
+    MapDB.setKiosk("NHALL00104", -90);
+    assertEquals(MapDB.getKiosk(), MapDB.getNode("NHALL00104"));
+    assertEquals(MapDB.getKioskAngle(), 270);
+    MapDB.setKiosk("NHALL00104", 390);
+    assertEquals(MapDB.getKioskAngle(), 30);
+    assertThrows(DBException.class, () -> MapDB.setKiosk("INVALID", 10));
+  }
   // Noah
   @Test
   public void testAddNodeID() throws DBException {

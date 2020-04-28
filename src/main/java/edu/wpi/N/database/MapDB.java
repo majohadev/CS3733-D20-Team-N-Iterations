@@ -34,21 +34,51 @@ public class MapDB {
     }
   }
 
-  /** Initializes a database in memory for tests */
+  //  /** Initializes a database in memory for tests */
+  //  public static void initTestDB()
+  //      throws SQLException, ClassNotFoundException, DBException, FileNotFoundException {
+  //    if (con == null || statement == null) {
+  //      Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
+  //      String URL;
+  //      URL = "jdbc:derby:memory:db;create=true";
+  //      con = DriverManager.getConnection(URL);
+  //      statement = con.createStatement();
+  //      ScriptRunner sr = new ScriptRunner(con);
+  //      Reader reader =
+  //          new BufferedReader(
+  //              new InputStreamReader(Main.class.getResourceAsStream("sql/setup.sql")));
+  //      sr.runScript(reader);
+  //    }
+  //  }
+
+  /**
+   * Same as initTestDB except the database is guarenteed to be completely empty after running this
+   * function. Use whenever possible.
+   *
+   * @throws SQLException on error
+   * @throws ClassNotFoundException on error
+   * @throws DBException on error
+   * @throws FileNotFoundException when it can't find the file I guess. Or on error.
+   */
   public static void initTestDB()
       throws SQLException, ClassNotFoundException, DBException, FileNotFoundException {
-    if (con == null || statement == null) {
+    if (con != null) {
+      ScriptRunner sr = new ScriptRunner(con);
+      Reader reader =
+          new BufferedReader(
+              new InputStreamReader(Main.class.getResourceAsStream("sql/drop.sql"))); // drop tables
+      sr.runScript(reader);
+    } else {
       Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
       String URL;
       URL = "jdbc:derby:memory:db;create=true";
       con = DriverManager.getConnection(URL);
       statement = con.createStatement();
-      ScriptRunner sr = new ScriptRunner(con);
-      Reader reader =
-          new BufferedReader(
-              new InputStreamReader(Main.class.getResourceAsStream("sql/setup.sql")));
-      sr.runScript(reader);
     }
+    ScriptRunner sr = new ScriptRunner(con);
+    Reader reader =
+        new BufferedReader(new InputStreamReader(Main.class.getResourceAsStream("sql/setup.sql")));
+    sr.runScript(reader);
   }
 
   /**
@@ -906,6 +936,82 @@ public class MapDB {
     } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Unknown error: clearNodes", e);
+    }
+  }
+
+  /**
+   * Gets the node currently set up as the kiosk
+   *
+   * @return a DBNode representing the current Kiosk
+   * @throws DBException When the kiosk hasn't been setup or on error.
+   */
+  public static DbNode getKiosk() throws DBException {
+    try {
+      String query = "SELECT nodeID from kiosk";
+      PreparedStatement stmt = con.prepareStatement(query);
+      ResultSet rs = stmt.executeQuery();
+      rs.next();
+      return getNode(rs.getString("nodeID"));
+    } catch (SQLException e) {
+      if (e.getSQLState().equals("24000")) {
+        throw new DBException("The kiosk has not been set up!");
+      }
+      e.printStackTrace();
+      throw new DBException("Error: getKiosk is not working properly", e);
+    }
+  }
+
+  public static int getKioskAngle() throws DBException {
+    try {
+      String query = "SELECT angle from kiosk";
+      PreparedStatement stmt = con.prepareStatement(query);
+      ResultSet rs = stmt.executeQuery();
+      rs.next();
+      return rs.getInt("angle");
+    } catch (SQLException e) {
+      if (e.getSQLState().equals("24000")) {
+        throw new DBException("The kiosk has not been set up!");
+      }
+      e.printStackTrace();
+      throw new DBException("Error: getKiosk is not working properly", e);
+    }
+  }
+
+  /**
+   * Sets the kiosk to the given nodeID and angle, which is transformed to be between 0 and 360
+   * degrees. The old Kiosk tuple is deleted using triggers.
+   *
+   * @param nodeID the nodeID of the node you wish to be the Kiosk
+   * @param angle The angle of the kiosk
+   * @throws DBException On error or when the kiosk node doesn't exist
+   */
+  public static void setKiosk(String nodeID, int angle) throws DBException {
+    angle -= 360 * (angle / 360);
+    if (angle < 0) angle += 360;
+    String query =
+        "INSERT INTO kiosk VALUES (?, ?)"; // The kiosk is kept as only one tuple using triggers
+    try {
+      PreparedStatement stmt = con.prepareStatement(query);
+      stmt.setString(1, nodeID);
+      stmt.setInt(2, angle);
+      stmt.executeUpdate();
+    } catch (SQLException e) {
+      if (e.getSQLState().equals("23503")) {
+        throw new DBException("That node doesn't exist and can not be the kiosk!");
+      } else if (e.getSQLState().equals("23505")) { // node is already kiosk
+        try {
+          query = "UPDATE kiosk SET angle = ? WHERE nodeID = ?";
+          PreparedStatement stmt = con.prepareStatement(query);
+          stmt.setString(2, nodeID);
+          stmt.setInt(1, angle);
+          stmt.executeUpdate();
+        } catch (SQLException ex) {
+          throw new DBException("Unknown error: setKiosk", e);
+        }
+      } else {
+        e.printStackTrace();
+        throw new DBException("Unknown error: setKiosk: " + nodeID + " " + angle, e);
+      }
     }
   }
 }
