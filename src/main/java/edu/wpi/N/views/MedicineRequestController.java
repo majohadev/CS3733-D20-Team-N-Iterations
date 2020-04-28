@@ -34,8 +34,6 @@ public class MedicineRequestController implements Controller, Initializable {
 
   private App mainApp;
 
-  ObservableList<Request> tableData = FXCollections.observableArrayList();
-  ObservableList<String> languageData = FXCollections.observableArrayList();
   private LinkedList<DbNode> fuzzySearchPatientLocation = new LinkedList<>();
   private ObservableList<String> fuzzySearchTextListPatientLocations =
       FXCollections.observableArrayList();
@@ -45,7 +43,6 @@ public class MedicineRequestController implements Controller, Initializable {
 
   @FXML ComboBox<Doctor> cb_doctors;
   @FXML TableView tb_patients;
-  @FXML Label lbl_empname;
   @FXML JFXTextField txtf_patient;
   @FXML JFXTextField txtf_medicine;
   @FXML JFXTextField txtf_dosage;
@@ -58,8 +55,8 @@ public class MedicineRequestController implements Controller, Initializable {
     this.mainApp = mainApp;
   }
 
-  // Temp Placeholder for Testing
-  public void returnToRequests() throws IOException {
+  public void logout() throws IOException, DBException {
+    LoginDB.logout();
     this.mainApp.switchScene("home.fxml", singleton);
   }
 
@@ -68,6 +65,7 @@ public class MedicineRequestController implements Controller, Initializable {
     initializeTableOfPatients();
 
     try {
+
       populateDoctorList();
       populateMedicineRequests();
 
@@ -186,34 +184,6 @@ public class MedicineRequestController implements Controller, Initializable {
     } else fuzzySearchTextListPatientLocations = FXCollections.observableList(longNamesList);
     lst_patientLocations.setItems(fuzzySearchTextListPatientLocations);
   }
-
-  /*
-  public void populateTable() throws DBException {
-    try {
-      tbl_Employees.getItems().clear();
-      LinkedList<Employee> empList = ServiceDB.getEmployees();
-      emps.addAll(empList);
-      tbl_Employees.setItems(emps);
-
-      tbl_Employees
-          .getSelectionModel()
-          .selectedItemProperty()
-          .addListener(
-              (obs, old, newVal) -> {
-                try {
-                  emps.setAll(ServiceDB.getEmployees());
-                } catch (DBException e) {
-                  e.printStackTrace();
-                }
-              });
-
-    } catch (DBException e) {
-      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-      errorAlert.setContentText(e.getMessage());
-      errorAlert.show();
-    }
-  }
-   */
 
   public void populateMedicineRequests() throws DBException {
 

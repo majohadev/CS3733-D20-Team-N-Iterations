@@ -125,7 +125,7 @@ public class sanitationController implements Controller {
     cmbo_text.getItems().clear();
 
     Alert confAlert = new Alert(Alert.AlertType.CONFIRMATION);
-    confAlert.setContentText("Request Recieved");
+    confAlert.setContentText("Request Received");
     confAlert.show();
   }
 }

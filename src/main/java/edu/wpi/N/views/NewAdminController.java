@@ -74,15 +74,16 @@ public class NewAdminController implements Controller, Initializable {
   @FXML CheckBox cb_translator;
   @FXML Label lbl_languages;
   @FXML JFXListView lst_docoffice;
-  @FXML Button btn_Accept;
-  @FXML Button btn_Deny;
+  @FXML JFXButton btn_Accept;
+  @FXML JFXButton btn_Deny;
   @FXML ChoiceBox<Employee> cb_Employee;
   @FXML ChoiceBox<Service> cb_employeeTypes;
   @FXML TableView<Request> tb_RequestTable = new TableView<Request>();
   @FXML TableView<String> tb_languages = new TableView<String>();
-  @FXML CheckBox ch_requestFilter;
+  @FXML JFXCheckBox ch_requestFilter;
   @FXML JFXComboBox cb_changeAlgo;
   @FXML Label lbl_title;
+  @FXML JFXTextField txtf_rmuser;
 
   ObservableList<Request> tableData = FXCollections.observableArrayList();
   ObservableList<String> languageData = FXCollections.observableArrayList();
@@ -93,7 +94,6 @@ public class NewAdminController implements Controller, Initializable {
   LinkedList<String> longNamesList = new LinkedList<>(); // Stores Floor Node names
   LinkedList<DbNode> allFloorNodes; // stores all the nodes on the floor
   ObservableList<Employee> emps = FXCollections.observableArrayList();
-  Algorithm algo = new Algorithm();
 
   private static class selfFactory<G>
       implements Callback<TableColumn.CellDataFeatures<G, G>, ObservableValue<G>> {
@@ -179,7 +179,12 @@ public class NewAdminController implements Controller, Initializable {
     name.setMinWidth(200);
     name.setCellValueFactory(new PropertyValueFactory<Employee, String>("name"));
 
-    tbl_Employees.getColumns().addAll(empID, name);
+    TableColumn<Employee, Service> serviceType = new TableColumn<>("Service Type");
+    serviceType.setMaxWidth(200);
+    serviceType.setMinWidth(200);
+    serviceType.setCellValueFactory(new PropertyValueFactory<Employee, Service>("ServiceType"));
+
+    tbl_Employees.getColumns().addAll(empID, name, serviceType);
   }
 
   public void populateTable() throws DBException {
@@ -188,23 +193,6 @@ public class NewAdminController implements Controller, Initializable {
       LinkedList<Employee> empList = ServiceDB.getEmployees();
       emps.addAll(empList);
       tbl_Employees.setItems(emps);
-
-    } catch (DBException e) {
-      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-      errorAlert.setContentText(e.getMessage());
-      errorAlert.show();
-    }
-  }
-
-  @FXML
-  public void addNewAdmin() throws DBException {
-    try {
-      String newUser = txtf_newuser.getText();
-      String newPass = pwf_newpass.getText();
-      System.out.println(
-          "Original Pass: " + pwf_newpass.getText() + " Conf Pass: " + pwf_confpass.getText());
-      LoginDB.createAdminLogin(newUser, newPass);
-      System.out.println("Admin Created");
 
     } catch (DBException e) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
@@ -237,25 +225,33 @@ public class NewAdminController implements Controller, Initializable {
 
   public void addDoc() throws DBException {
     String fullName = (txtf_docfn.getText() + " " + txtf_docln.getText());
+
     try {
+
+      if (txtf_docuser.getText().equals("")
+          || txtf_docpass.getText().equals("")
+          || txtf_docfn.getText().equals(""))
+        throw new DBException("One or more arguments is NULL");
+
       DoctorDB.addDoctor(
           fullName, txtf_docfield.getText(), txtf_docuser.getText(), txtf_docpass.getText(), null);
-      tbl_Employees
-          .getSelectionModel()
-          .selectedItemProperty()
-          .addListener(
-              (obs, old, newVal) -> {
-                try {
-                  emps.setAll(ServiceDB.getEmployees());
-                } catch (DBException e) {
-                  e.printStackTrace();
-                }
-              });
+
+      Alert confAlert = new Alert(Alert.AlertType.CONFIRMATION);
+      confAlert.setContentText("Doctor " + fullName + " was added.");
+      confAlert.show();
+
     } catch (DBException er) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
       errorAlert.setContentText(er.getMessage());
       errorAlert.show();
     }
+
+    populateTable();
+    txtf_docfn.clear();
+    txtf_docln.clear();
+    txtf_docfield.clear();
+    txtf_docuser.clear();
+    txtf_docpass.clear();
   }
 
   /*
@@ -281,6 +277,7 @@ public class NewAdminController implements Controller, Initializable {
   public void addEmployee() throws DBException {
     String name = txtf_empfn.getText() + " " + txtf_empln.getText();
     try {
+      if (txtf_empfn.getText().equals("")) throw new DBException("Employee has no first name");
       if (cb_employeeTypes.getValue().getServiceType().equals("Translator")) {
         String[] arrOfString = txtf_languages.getText().split(",");
         LinkedList<String> languages = new LinkedList<>();
@@ -288,18 +285,52 @@ public class NewAdminController implements Controller, Initializable {
           languages.add(a);
         }
         ServiceDB.addTranslator(name, languages);
+
+        Alert acceptReq = new Alert(Alert.AlertType.CONFIRMATION);
+        acceptReq.setContentText("Employee " + name + " was added.");
+        acceptReq.show();
       } else if (cb_employeeTypes.getValue().getServiceType().equals("Laundry")) {
         ServiceDB.addLaundry(name);
+
+        Alert acceptReq = new Alert(Alert.AlertType.CONFIRMATION);
+        acceptReq.setContentText("Employee " + name + " was added.");
+        acceptReq.show();
       } else if (cb_employeeTypes.getValue().getServiceType().equals("Wheelchair")) {
         ServiceDB.addWheelchairEmployee(name);
+
+        Alert acceptReq = new Alert(Alert.AlertType.CONFIRMATION);
+        acceptReq.setContentText("Employee " + name + " was added.");
+        acceptReq.show();
       } else if (cb_employeeTypes.getValue().getServiceType().equals("IT")) {
         ServiceDB.addIT(name);
+
+        Alert acceptReq = new Alert(Alert.AlertType.CONFIRMATION);
+        acceptReq.setContentText("Employee " + name + " was added.");
+        acceptReq.show();
       } else if (cb_employeeTypes.getValue().getServiceType().equals("Emotional Support")) {
         ServiceDB.addEmotionalSupporter(name);
+
+        Alert acceptReq = new Alert(Alert.AlertType.CONFIRMATION);
+        acceptReq.setContentText("Employee " + name + " was added.");
+        acceptReq.show();
       } else if (cb_employeeTypes.getValue().getServiceType().equals("Sanitation")) {
         ServiceDB.addSanitationEmp(name);
+
+        Alert acceptReq = new Alert(Alert.AlertType.CONFIRMATION);
+        acceptReq.setContentText("Employee " + name + " was added.");
+        acceptReq.show();
       } else if (cb_employeeTypes.getValue().getServiceType().equals("Flower")) {
         ServiceDB.addFlowerDeliverer(name);
+
+        Alert acceptReq = new Alert(Alert.AlertType.CONFIRMATION);
+        acceptReq.setContentText("Employee " + name + " was added.");
+        acceptReq.show();
+      } else if (cb_employeeTypes.getValue().getServiceType().equals("Internal Transportation")) {
+        ServiceDB.addInternalTransportationEmployee(name);
+
+        Alert acceptReq = new Alert(Alert.AlertType.CONFIRMATION);
+        acceptReq.setContentText("Employee " + name + " was added.");
+        acceptReq.show();
       }
 
     } catch (DBException e) {
@@ -307,6 +338,7 @@ public class NewAdminController implements Controller, Initializable {
       errorAlert.setContentText(e.getMessage());
       errorAlert.show();
     }
+
     txtf_empfn.clear();
     txtf_empln.clear();
     txtf_languages.clear();
@@ -325,11 +357,19 @@ public class NewAdminController implements Controller, Initializable {
   public void addAdmin() throws DBException {
     try {
       LoginDB.createAdminLogin(txtf_adminuser.getText(), txtf_adminpass.getText());
+
+      Alert acceptReq = new Alert(Alert.AlertType.CONFIRMATION);
+      acceptReq.setContentText("Admin " + txtf_adminuser.getText() + " was added.");
+      acceptReq.show();
+
     } catch (DBException e) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
       errorAlert.setContentText(e.getMessage());
       errorAlert.show();
     }
+
+    txtf_adminuser.clear();
+    txtf_adminpass.clear();
   }
 
   public void changeAccountPass() throws DBException {
@@ -337,12 +377,20 @@ public class NewAdminController implements Controller, Initializable {
       if (txtf_cpnewpass.getText().equals(txtf_cpoldpass.getText()))
         throw new DBException("New password same as old password");
       LoginDB.changePass(txtf_cpuser.getText(), txtf_cpoldpass.getText(), txtf_cpnewpass.getText());
-      System.out.println("Password Updated");
+
+      Alert acceptReq = new Alert(Alert.AlertType.CONFIRMATION);
+      acceptReq.setContentText("Password Changed");
+      acceptReq.show();
+
     } catch (DBException e) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
       errorAlert.setContentText(e.getMessage());
       errorAlert.show();
     }
+
+    txtf_cpnewpass.clear();
+    txtf_cpoldpass.clear();
+    txtf_cpuser.clear();
   }
 
   public void logoutUser() throws DBException {
@@ -371,6 +419,13 @@ public class NewAdminController implements Controller, Initializable {
       errorAlert.setContentText(e.getMessage());
       errorAlert.show();
     }
+
+    Alert acceptReq = new Alert(Alert.AlertType.CONFIRMATION);
+    acceptReq.setContentText("Office " + addOfficeNode.getLongName() + " was added.");
+    acceptReq.show();
+
+    txtf_docid.clear();
+    txtf_docoffices.clear();
   }
 
   public void fuzzySearchDoctorsOffices(KeyEvent keyInput) throws DBException {
@@ -420,11 +475,19 @@ public class NewAdminController implements Controller, Initializable {
           DoctorDB.removeOffice(doctorID, removeOfficeNode);
         }
       }
+
+      Alert acceptReq = new Alert(Alert.AlertType.CONFIRMATION);
+      acceptReq.setContentText("Office " + removeOfficeNode.getLongName() + " was removed.");
+      acceptReq.show();
+
     } catch (DBException e) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
       errorAlert.setContentText(e.getMessage());
       errorAlert.show();
     }
+
+    txtf_docoffices.clear();
+    txtf_docid.clear();
   }
 
   public void updateTranslator(MouseEvent event) throws DBException {
@@ -432,14 +495,27 @@ public class NewAdminController implements Controller, Initializable {
     try {
       if (event.getSource() == btn_addLanguage) {
         ServiceDB.addLanguage(empID, txtf_newLang.getText());
+
+        Alert acceptReq = new Alert(Alert.AlertType.CONFIRMATION);
+        acceptReq.setContentText(ServiceDB.getEmployee(empID).getName() + " languages were added");
+        acceptReq.show();
+
       } else if (event.getSource() == btn_removeLanguage) {
         ServiceDB.removeLanguage(empID, txtf_newLang.getText());
+
+        Alert acceptReq = new Alert(Alert.AlertType.CONFIRMATION);
+        acceptReq.setContentText(
+            ServiceDB.getEmployee(empID).getName() + " languages were removed");
+        acceptReq.show();
       }
     } catch (DBException e) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
       errorAlert.setContentText(e.getMessage());
       errorAlert.show();
     }
+
+    txtf_empid.clear();
+    txtf_newLang.clear();
   }
 
   private void initializeTable() {
@@ -470,10 +546,10 @@ public class NewAdminController implements Controller, Initializable {
     status.setMinWidth(100);
     status.setCellValueFactory(new PropertyValueFactory<Request, String>("status"));
 
-    TableColumn<Request, String> language = new TableColumn<>("Language");
-    language.setMaxWidth(100);
-    language.setMinWidth(100);
-    language.setCellValueFactory(new PropertyValueFactory<Request, String>("Atr1"));
+    TableColumn<Request, String> attr1 = new TableColumn<>("Attribute 1");
+    attr1.setMaxWidth(100);
+    attr1.setMinWidth(100);
+    attr1.setCellValueFactory(new PropertyValueFactory<Request, String>("Atr1"));
 
     TableColumn<Request, String> service = new TableColumn<>("Service");
     service.setMaxWidth(75);
@@ -486,10 +562,26 @@ public class NewAdminController implements Controller, Initializable {
     languages.setMinWidth(150);
     languages.setCellValueFactory(new NewAdminController.selfFactory<String>());
 
+    TableColumn<Request, String> attr2 = new TableColumn<>("Attribute 2");
+    attr2.setMaxWidth(100);
+    attr2.setMinWidth(100);
+    attr2.setCellValueFactory(new PropertyValueFactory<Request, String>("Atr2"));
+
+    TableColumn<Request, String> attr3 = new TableColumn<>("Attribute 3");
+    attr3.setMaxWidth(100);
+    attr3.setMinWidth(100);
+    attr3.setCellValueFactory(new PropertyValueFactory<Request, String>("Atr3"));
+
+    TableColumn<Request, String> attr4 = new TableColumn<>("Attribute 4");
+    attr4.setMaxWidth(100);
+    attr4.setMinWidth(100);
+    attr4.setCellValueFactory(new PropertyValueFactory<Request, String>("Atr4"));
+
     // Initializes Columns
     tb_RequestTable
         .getColumns()
-        .addAll(requestID, service, emp_assigned, notes, nodeID, status, language);
+        .addAll(
+            requestID, service, emp_assigned, notes, nodeID, status, attr1, attr2, attr3, attr4);
     tb_languages.getColumns().addAll(languages);
   }
 
@@ -594,7 +686,7 @@ public class NewAdminController implements Controller, Initializable {
     }
   }
 
-  private void assignEmployeeToRequest(int employee, int ID) {
+  private void assignEmployeeToRequest(int employee, int ID) throws DBException {
     Alert confAlert = new Alert(Alert.AlertType.CONFIRMATION);
     try {
       ServiceDB.assignToRequest(employee, ID);
@@ -607,10 +699,11 @@ public class NewAdminController implements Controller, Initializable {
       errorAlert.setContentText(e.getMessage());
       errorAlert.show();
     }
+    populateRequestTable();
   }
 
   @FXML
-  private void assignPressed(MouseEvent e) {
+  private void assignPressed(MouseEvent e) throws DBException {
     int eID;
     int rID;
     try {
@@ -704,5 +797,21 @@ public class NewAdminController implements Controller, Initializable {
                 singleton.savedAlgo.setPathFinder(new AStar());
               }
             });
+  }
+
+  public void removeLogin() throws DBException {
+    try {
+      LoginDB.removeLogin(txtf_rmuser.getText());
+    } catch (DBException e) {
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setContentText(e.getMessage());
+      errorAlert.show();
+    }
+
+    Alert acceptReq = new Alert(Alert.AlertType.CONFIRMATION);
+    acceptReq.setContentText("Login " + txtf_rmuser.getText() + " was removed.");
+    acceptReq.show();
+
+    txtf_rmuser.clear();
   }
 }

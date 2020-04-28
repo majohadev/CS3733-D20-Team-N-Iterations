@@ -53,7 +53,7 @@
                         <Insets top="25.0" />
                      </VBox.margin>
                   </Label>
-                  <JFXComboBox fx:id="cmbo_selectLang" labelFloat="true" layoutX="63.0" layoutY="279.0" prefHeight="46.0" prefWidth="394.0" promptText="Select Size From List" style="-fx-font-size: 18;" />
+                  <JFXComboBox fx:id="cmbo_selectSpillSize" labelFloat="true" layoutX="63.0" layoutY="279.0" prefHeight="46.0" prefWidth="394.0" promptText="Select Size From List" style="-fx-font-size: 18;" />
                   <Label text="Please Select the Danger Level of the Spill">
                      <font>
                         <Font name="Calibri" size="24.0" />
@@ -62,7 +62,7 @@
                         <Insets top="25.0" />
                      </VBox.margin>
                   </Label>
-                  <JFXComboBox fx:id="cmbo_selectLang1" labelFloat="true" prefHeight="46.0" prefWidth="394.0" promptText="Select Danger Level From List" style="-fx-font-size: 18;" />
+                  <JFXComboBox fx:id="cmbo_selectDangerLevel" labelFloat="true" prefHeight="46.0" prefWidth="394.0" promptText="Select Danger Level From List" style="-fx-font-size: 18;" />
                </children>
             </VBox>
             <VBox alignment="CENTER" maxHeight="500.0" maxWidth="500.0" minWidth="500.0" prefHeight="200.0" prefWidth="100.0" spacing="30.0">
@@ -72,7 +72,7 @@
                         <Font name="Calibri" size="24.0" />
                      </font>
                   </Label>
-                  <JFXTextField labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="46.0" prefWidth="394.0" promptText="Enter Type of Spill" style="-fx-font-size: 18;">
+                  <JFXTextField fx:id="txtf_spillType" labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="46.0" prefWidth="394.0" promptText="Enter Type of Spill" style="-fx-font-size: 18;">
                      <font>
                         <Font size="18.0" />
                      </font>
