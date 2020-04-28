@@ -65,7 +65,7 @@
                      <children>
                         <VBox alignment="CENTER">
                            <children>
-                              <JFXButton contentDisplay="TOP" prefHeight="307.0" prefWidth="309.0" stylesheets="@IconButtons.css" text="Login" textFill="WHITE">
+                              <JFXButton contentDisplay="TOP" prefHeight="307.0" prefWidth="309.0" stylesheets="@iconButton.css" text="Login" textFill="WHITE">
                                  <graphic>
                                     <ImageView fitHeight="186.0" fitWidth="190.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
@@ -81,7 +81,7 @@
                         </VBox>
                         <VBox alignment="CENTER">
                            <children>
-                              <JFXButton fx:id="btn_map" contentDisplay="TOP" onMouseClicked="#onBtnMapClicked" prefHeight="307.0" prefWidth="309.0" stylesheets="@IconButtons.css" text="Map" textFill="WHITE">
+                              <JFXButton fx:id="btn_map" contentDisplay="TOP" onMouseClicked="#onBtnMapClicked" prefHeight="307.0" prefWidth="309.0" stylesheets="@iconButton.css" text="Map" textFill="WHITE">
                                  <graphic>
                                     <ImageView fitHeight="284.0" fitWidth="190.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
@@ -100,7 +100,7 @@
                         </VBox>
                         <VBox alignment="CENTER">
                            <children>
-                              <JFXButton contentDisplay="TOP" graphicTextGap="10.0" prefHeight="307.0" prefWidth="309.0" stylesheets="@IconButtons.css" text="Services" textAlignment="CENTER" textFill="WHITE">
+                              <JFXButton contentDisplay="TOP" graphicTextGap="10.0" prefHeight="307.0" prefWidth="309.0" stylesheets="@iconButton.css" text="Services" textAlignment="CENTER" textFill="WHITE">
                                  <graphic>
                                     <ImageView fitHeight="184.0" fitWidth="190.0" pickOnBounds="true" preserveRatio="true" translateX="24.0">
                                        <image>
