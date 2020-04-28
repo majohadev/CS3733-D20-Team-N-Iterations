@@ -4,7 +4,7 @@ import java.util.GregorianCalendar;
 
 public class SecurityRequest extends Request {
 
-  private Boolean isEmergency;
+  private String isEmergency;
 
   public SecurityRequest(
       int requestID,
@@ -15,18 +15,14 @@ public class SecurityRequest extends Request {
       GregorianCalendar timeRequested,
       GregorianCalendar timeCompleted,
       String status,
-      boolean isEmergency) {
+      String isEmergency) {
     super(
         requestID, emp_assigned, reqNotes, compNotes, nodeID, timeRequested, timeCompleted, status);
     this.isEmergency = isEmergency;
   }
 
   public String getAtr1() {
-    if (isEmergency) {
-      return "Emergency";
-    } else {
-      return "Non-emergency";
-    }
+    return this.isEmergency;
   }
 
   public String getServiceType() {

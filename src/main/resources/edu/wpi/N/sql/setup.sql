@@ -166,7 +166,7 @@ CREATE TABLE ITrequest(
 
 CREATE TABLE secrequest(
               requestID INT NOT NULL PRIMARY KEY REFERENCES request(requestID) ON DELETE CASCADE,
-              isEmergency BIT NOT NULL);
+              isEmergency VARCHAR(255) NOT NULL);
 
 CREATE TABLE flowerRequest(
             requestID INT NOT NULL PRIMARY KEY REFERENCES request(requestID) ON DELETE CASCADE,

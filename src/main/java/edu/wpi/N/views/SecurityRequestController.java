@@ -8,6 +8,7 @@ import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.ServiceDB;
 import edu.wpi.N.entities.DbNode;
+import edu.wpi.N.entities.States.StateSingleton;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import javafx.collections.FXCollections;
@@ -42,6 +43,9 @@ public class SecurityRequestController implements Controller {
   public void setMainApp(App mainApp) {
     this.mainApp = mainApp;
   }
+
+  @Override
+  public void setSingleton(StateSingleton singleton) {}
 
   public void initialize() throws DBException {
 
@@ -129,13 +133,22 @@ public class SecurityRequestController implements Controller {
       notes = notes + "\n" + txtf_description;
     }
 
-    int securityRequest = ServiceDB.addSecurityReq(notes, nodeID, cb_isEmergency.isSelected());
+    String isEmergency = "";
+
+    if (cb_isEmergency.isSelected()) {
+      isEmergency = "Emergency";
+    } else {
+      isEmergency = "Non-emergency";
+    }
+
+    int securityRequest = ServiceDB.addSecurityReq(notes, nodeID, isEmergency);
 
     txtf_description.clear();
     for (JFXCheckBox cb : checkBoxes) {
       cb.setSelected(false);
     }
     cmbo_text.getItems().clear();
+    cb_isEmergency.setSelected(false);
 
     Alert confAlert = new Alert(Alert.AlertType.CONFIRMATION);
     confAlert.setContentText("Request Recieved");

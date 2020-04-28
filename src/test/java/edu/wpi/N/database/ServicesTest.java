@@ -689,7 +689,8 @@ public class ServicesTest {
       con.setAutoCommit(false);
       DbNode node = MapDB.addNode(5, 5, 1, "TestBuilding", "STAI", "My test", "Short");
       int idSecurityReq =
-          ServiceDB.addSecurityReq("I'm vibing, nothing's wrong", node.getNodeID(), false);
+          ServiceDB.addSecurityReq(
+              "I'm vibing, nothing's wrong", node.getNodeID(), "Non-emergency");
       int idL = ServiceDB.addLaundReq("Clean my clothes", node.getNodeID());
       int idT = ServiceDB.addTransReq("Помогите!", node.getNodeID(), "Russian");
 
@@ -723,10 +724,10 @@ public class ServicesTest {
     try {
       con.setAutoCommit(false);
       DbNode node = MapDB.addNode(5, 5, 1, "TestBuilding", "STAI", "My test", "Short");
-      int idSecurityReq = ServiceDB.addSecurityReq("Vibing", node.getNodeID(), false);
+      int idSecurityReq = ServiceDB.addSecurityReq("Vibing", node.getNodeID(), "Non-emergency");
       int idL = ServiceDB.addLaundReq("Clean my clothes, please", node.getNodeID());
       int idT = ServiceDB.addTransReq("Помогите!", node.getNodeID(), "Russian");
-      int idSecurityReq2 = ServiceDB.addSecurityReq("NOT VIBING", node.getNodeID(), true);
+      int idSecurityReq2 = ServiceDB.addSecurityReq("NOT VIBING", node.getNodeID(), "Emergency");
       int idLO = ServiceDB.addLaundReq("Filthy clothes", node.getNodeID());
       int idTO = ServiceDB.addTransReq("Помогите! Пожалуйста", node.getNodeID(), "Russian");
 
@@ -770,7 +771,8 @@ public class ServicesTest {
     try {
       con.setAutoCommit(false);
       DbNode node = MapDB.addNode(5, 5, 1, "TestBuilding", "STAI", "My test", "Short");
-      int idSecRequest = ServiceDB.addSecurityReq("Can't stop vibing", node.getNodeID(), true);
+      int idSecRequest =
+          ServiceDB.addSecurityReq("Can't stop vibing", node.getNodeID(), "Emergency");
       int idL = ServiceDB.addLaundReq("Clean my stuff", node.getNodeID());
       int idT = ServiceDB.addTransReq("Помогите!", node.getNodeID(), "Russian");
 
@@ -809,8 +811,8 @@ public class ServicesTest {
       con.commit();
       con.setAutoCommit(true);
 
-      Assertions.assertTrue("Matt".equals(ServiceDB.getEmployee(id).getName()));
-      Assertions.assertTrue("Security".equals(ServiceDB.getEmployee(id).getServiceType()));
+      Assertions.assertEquals("Matt", ServiceDB.getEmployee(id).getName());
+      Assertions.assertEquals("Security", ServiceDB.getEmployee(id).getServiceType());
 
       ServiceDB.removeEmployee(id);
 
@@ -834,14 +836,17 @@ public class ServicesTest {
     try {
       con.setAutoCommit(false);
       DbNode node = MapDB.addNode(5, 5, 1, "TestBuilding", "STAI", "My test", "Short");
-      int id = ServiceDB.addSecurityReq("Vibing for the last time", node.getNodeID(), false);
+      int id =
+          ServiceDB.addSecurityReq("Vibing for the last time", node.getNodeID(), "Non-emergency");
 
       con.commit();
       con.setAutoCommit(true);
 
       String type = ServiceDB.getRequest(id).getServiceType();
+      String isEmergency = ServiceDB.getRequest(id).getAtr1();
       Assertions.assertTrue("Security".equals(type));
       Assertions.assertTrue(id != 0);
+      Assertions.assertEquals("Non-emergency", isEmergency);
 
       ServiceDB.denyRequest(id, "Don't request ever again.");
 

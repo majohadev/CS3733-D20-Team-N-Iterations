@@ -291,7 +291,7 @@ public class ServiceDB {
             timeReq,
             timeComp,
             status,
-            rs.getBoolean("isEmergency")); // TODO: Is this a boolean?
+            rs.getString("isEmergency"));
 
       } else throw new DBException("Invalid request! ID = " + id);
     } catch (SQLException e) {
@@ -471,7 +471,7 @@ public class ServiceDB {
                 getJavatime(rs.getTimestamp("timeRequested")),
                 getJavatime(rs.getTimestamp("timeCompleted")),
                 rs.getString("status"),
-                rs.getBoolean("isEmergency")));
+                rs.getString("isEmergency")));
       }
       return requests;
     } catch (SQLException e) {
@@ -628,6 +628,7 @@ public class ServiceDB {
       stmt = con.prepareStatement(query);
       rs = stmt.executeQuery();
       while (rs.next()) {
+        System.out.println("Yeehaw!");
         openList.add(
             new SecurityRequest(
                 rs.getInt("requestID"),
@@ -638,7 +639,7 @@ public class ServiceDB {
                 getJavatime(rs.getTimestamp("timeRequested")),
                 getJavatime(rs.getTimestamp("timeCompleted")),
                 rs.getString("status"),
-                rs.getBoolean("isEmergency")));
+                rs.getString("isEmergency")));
       }
       return openList;
     } catch (SQLException ex) {
@@ -789,7 +790,7 @@ public class ServiceDB {
   public static LinkedList<SecurityOfficer> getSecurityOfficers() throws DBException {
     try {
       String query =
-          "SELECT sec_employeeID from employees, translator where employeeID = sec_employeeID";
+          "SELECT sec_employeeID from employees, security where employeeID = sec_employeeID";
       PreparedStatement stmt = con.prepareStatement(query);
       ResultSet rs = stmt.executeQuery();
       LinkedList<SecurityOfficer> secOffs = new LinkedList<>();
@@ -1389,7 +1390,7 @@ public class ServiceDB {
    * @param nodeID The ID of the node in which these services are requested
    * @return the id of the created request
    */
-  public static int addSecurityReq(String reqNotes, String nodeID, boolean isEmergency)
+  public static int addSecurityReq(String reqNotes, String nodeID, String isEmergency)
       throws DBException {
     try {
       String query =
@@ -1407,7 +1408,7 @@ public class ServiceDB {
       stmt = con.prepareStatement(query);
       int id = rs.getInt("1");
       stmt.setInt(1, id);
-      stmt.setBoolean(2, isEmergency);
+      stmt.setString(2, isEmergency);
       stmt.executeUpdate();
       return id;
     } catch (SQLException e) {

@@ -76,7 +76,7 @@
                                                 <Font name="Calibri Bold" size="30.0" />
                                              </font>
                                           </JFXButton>
-                                          <JFXButton buttonType="RAISED" contentDisplay="TOP" minHeight="285.0" minWidth="256.0" ripplerFill="#ffd965" stylesheets="@iconButton.css" text="Security" GridPane.rowIndex="1">
+                                          <JFXButton buttonType="RAISED" contentDisplay="TOP" minHeight="285.0" minWidth="256.0" onMouseClicked="#switchToSecurityPage" ripplerFill="#ffd965" stylesheets="@iconButton.css" text="Security" GridPane.rowIndex="1">
                                              <graphic>
                                                 <ImageView fitHeight="203.0" fitWidth="190.0" pickOnBounds="true" preserveRatio="true">
                                                    <image>
