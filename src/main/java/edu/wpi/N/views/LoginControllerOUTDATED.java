@@ -1,6 +1,7 @@
 package edu.wpi.N.views;
 
 import edu.wpi.N.App;
+import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.qrcontrol.QRReader;
 import java.awt.*;
 import java.io.IOException;
@@ -20,10 +21,10 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javax.swing.*;
 
-public class LoginController extends QRReader implements Controller {
+public class LoginControllerOUTDATED extends QRReader implements Controller {
   private App mainApp;
-  private static LoginController controller;
-  public AdminController adminController;
+  private static LoginControllerOUTDATED controller;
+  public AdminControllerOUTDATED adminController;
 
   Boolean loggedin = false;
   MapDisplayController mdc;
@@ -36,6 +37,9 @@ public class LoginController extends QRReader implements Controller {
   public void setMainApp(App mainApp) {
     this.mainApp = mainApp;
   }
+
+  @Override
+  public void setSingleton(StateSingleton singleton) {}
 
   @FXML TextField txtf_username;
   @FXML PasswordField pwf_password;

@@ -21,8 +21,7 @@ public class AStar extends AbsAlgo {
   @Override
   public Path findPath(DbNode startNode, DbNode endNode, boolean handicap) throws DBException {
     try {
-      // TODO: delete later
-      System.out.println("Astar!!!!");
+
       int startFloorNum = startNode.getFloor();
       int endFloorNum = endNode.getFloor();
 

@@ -4,6 +4,8 @@ import edu.wpi.N.entities.*;
 import edu.wpi.N.entities.employees.*;
 import edu.wpi.N.entities.request.*;
 import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Date;
 import java.util.regex.Pattern;
@@ -54,6 +56,10 @@ public class ServiceDB {
         return new IT(id, name);
       } else if (sType.equals("Flower")) {
         return new FlowerDeliverer(id, name);
+      } else if (sType.equals("Internal Transportation")) {
+        return new InternalTransportationEmployee(id, name);
+      } else if (sType.equals("Security")) {
+        return new SecurityOfficer(id, name);
       } else
         throw new DBException(
             "Invalid employee in table employees! ID: " + id + "Name: " + rs.getString("name"));
@@ -81,6 +87,9 @@ public class ServiceDB {
     allEmployee.addAll(getWheelchairEmployees());
     allEmployee.addAll(getITs());
     allEmployee.addAll(getFlowerDeliverers());
+    allEmployee.addAll(getSanitationEmp());
+    allEmployee.addAll(getInternalTransportationEmployees());
+    allEmployee.addAll(getSecurityOfficers());
     return allEmployee;
   }
 
@@ -273,8 +282,45 @@ public class ServiceDB {
         String flowers = createFlowerString(rs);
         return new FlowerRequest(
             rid, empId, reqNotes, compNotes, nodeID, timeReq, timeComp, status, a, b, c, flowers);
-      } else
-        throw new DBException("Invalid request! ID = " + id + ", Request type = \"" + sType + "\"");
+      } else if (sType.equals("Internal Transportation")) {
+        query =
+            "SELECT transportationType, scheduledTransportTime, destinationLocation FROM internalTransportationRequest "
+                + "WHERE requestID = ?";
+
+        stmt = con.prepareStatement(query);
+        stmt.setInt(1, id);
+        rs = stmt.executeQuery();
+        rs.next();
+        return new InternalTransportationRequest(
+            rid,
+            empId,
+            reqNotes,
+            compNotes,
+            nodeID,
+            timeReq,
+            timeComp,
+            status,
+            rs.getString("transportationType"),
+            rs.getTimestamp("scheduledTransportTime").toString().substring(11, 16),
+            rs.getString("destinationLocation"));
+      } else if (sType.equals("Security")) {
+        query = "SELECT device, problem FROM secrequest WHERE requestID = ?";
+        stmt = con.prepareStatement(query);
+        stmt.setInt(1, id);
+        rs = stmt.executeQuery();
+        rs.next();
+        return new SecurityRequest(
+            rid,
+            empId,
+            reqNotes,
+            compNotes,
+            nodeID,
+            timeReq,
+            timeComp,
+            status,
+            rs.getString("isEmergency"));
+
+      } else throw new DBException("Invalid request! ID = " + id);
     } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Unknown error: getRequest", e);
@@ -438,6 +484,41 @@ public class ServiceDB {
                 rs.getString("creditNum"),
                 flowers));
       }
+      query =
+          "SELECT * from request, internalTransportationRequest WHERE request.requestID = internalTransportationRequest.requestID";
+      stmt = con.prepareStatement(query);
+      rs = stmt.executeQuery();
+      while (rs.next()) {
+        requests.add(
+            new InternalTransportationRequest(
+                rs.getInt("requestID"),
+                rs.getInt("assigned_eID"),
+                rs.getString("reqNotes"),
+                rs.getString("compNotes"),
+                rs.getString("nodeID"),
+                getJavatime(rs.getTimestamp("timeRequested")),
+                getJavatime(rs.getTimestamp("timeCompleted")),
+                rs.getString("status"),
+                rs.getString("transportationType"),
+                rs.getTimestamp("scheduledTransportTime").toString().substring(11, 16),
+                rs.getString("destinationLocation")));
+      }
+      query = "SELECT * from request, secrequest WHERE request.requestID = secrequest.requestID";
+      stmt = con.prepareStatement(query);
+      rs = stmt.executeQuery();
+      while (rs.next()) {
+        requests.add(
+            new SecurityRequest(
+                rs.getInt("requestID"),
+                rs.getInt("assigned_eID"),
+                rs.getString("reqNotes"),
+                rs.getString("compNotes"),
+                rs.getString("nodeID"),
+                getJavatime(rs.getTimestamp("timeRequested")),
+                getJavatime(rs.getTimestamp("timeCompleted")),
+                rs.getString("status"),
+                rs.getString("isEmergency")));
+      }
       return requests;
     } catch (SQLException e) {
       e.printStackTrace();
@@ -588,6 +669,43 @@ public class ServiceDB {
                 rs.getString("creditNum"),
                 flowers));
       }
+      query =
+          "SELECT * from request, internalTransportationRequest "
+              + "WHERE request.requestID = internalTransportationRequest.requestID AND status = 'OPEN'";
+      stmt = con.prepareStatement(query);
+      rs = stmt.executeQuery();
+      while (rs.next()) {
+        openList.add(
+            new InternalTransportationRequest(
+                rs.getInt("requestID"),
+                rs.getInt("assigned_eID"),
+                rs.getString("reqNotes"),
+                rs.getString("compNotes"),
+                rs.getString("nodeID"),
+                getJavatime(rs.getTimestamp("timeRequested")),
+                getJavatime(rs.getTimestamp("timeCompleted")),
+                rs.getString("status"),
+                rs.getString("transportationType"),
+                rs.getTimestamp("scheduledTransportTime").toString().substring(11, 16),
+                rs.getString("destinationLocation")));
+      }
+      query =
+          "SELECT * from request, secrequest WHERE request.requestID = secrequest.requestID AND status = 'OPEN'";
+      stmt = con.prepareStatement(query);
+      rs = stmt.executeQuery();
+      while (rs.next()) {
+        openList.add(
+            new SecurityRequest(
+                rs.getInt("requestID"),
+                rs.getInt("assigned_eID"),
+                rs.getString("reqNotes"),
+                rs.getString("compNotes"),
+                rs.getString("nodeID"),
+                getJavatime(rs.getTimestamp("timeRequested")),
+                getJavatime(rs.getTimestamp("timeCompleted")),
+                rs.getString("status"),
+                rs.getString("isEmergency")));
+      }
       return openList;
     } catch (SQLException ex) {
       ex.printStackTrace();
@@ -640,6 +758,30 @@ public class ServiceDB {
     }
   }
   // TODO: GetEmployeeTypes (something which gets all the employees of your particular type)
+
+  /**
+   * Gets a list of all internal transportation requests
+   *
+   * @return a LinkedList of InternalTransportationRequest
+   * @throws DBException
+   */
+  public static LinkedList<InternalTransportationEmployee> getInternalTransportationEmployees()
+      throws DBException {
+    try {
+      String query =
+          "SELECT inTr_employeeID from employees, internalTransportationEmployee where employeeID = inTr_employeeID";
+      PreparedStatement stmt = con.prepareStatement(query);
+      ResultSet rs = stmt.executeQuery();
+      LinkedList<InternalTransportationEmployee> emps = new LinkedList<>();
+      while (rs.next()) {
+        emps.add((InternalTransportationEmployee) getEmployee(rs.getInt("inTr_employeeID")));
+      }
+      return emps;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown error: getInternalTransportationEmployees", e);
+    }
+  }
 
   /**
    * gets a list of all flower deliverers
@@ -726,6 +868,28 @@ public class ServiceDB {
     } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Unknown error: getITs", e);
+    }
+  }
+
+  /**
+   * Gets all the security officers in the database
+   *
+   * @return a linked list of all security officers in the database
+   */
+  public static LinkedList<SecurityOfficer> getSecurityOfficers() throws DBException {
+    try {
+      String query =
+          "SELECT sec_employeeID from employees, security where employeeID = sec_employeeID";
+      PreparedStatement stmt = con.prepareStatement(query);
+      ResultSet rs = stmt.executeQuery();
+      LinkedList<SecurityOfficer> secOffs = new LinkedList<>();
+      while (rs.next()) {
+        secOffs.add((SecurityOfficer) getEmployee(rs.getInt("sec_employeeID")));
+      }
+      return secOffs;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown error: getSecurityOfficers", e);
     }
   }
 
@@ -848,6 +1012,33 @@ public class ServiceDB {
   // TODO: Add a function to add your employee type to the database
 
   /**
+   * Adds an internal transportation employee to the database
+   *
+   * @param name The name of the employee
+   * @return The id of the newly added employee
+   * @throws DBException if there was an error in adding the employee
+   */
+  public static int addInternalTransportationEmployee(String name) throws DBException {
+    try {
+      String query =
+          "INSERT INTO employees (name, serviceType) VALUES (?, 'Internal Transportation')";
+      PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+      stmt.setString(1, name);
+      stmt.executeUpdate();
+      ResultSet rs = stmt.getGeneratedKeys();
+      rs.next();
+      query = "INSERT INTO INTERNALTRANSPORTATIONEMPLOYEE VALUES (?)";
+      stmt = con.prepareStatement(query);
+      int id = rs.getInt("1");
+      stmt.setInt(1, id);
+      stmt.executeUpdate();
+      return id;
+    } catch (SQLException e) {
+      throw new DBException("Unknown Error: addInternalTransportationEmployee", e);
+    }
+  }
+
+  /**
    * Adds a Flower Deliverer to the database
    *
    * @param name
@@ -949,6 +1140,33 @@ public class ServiceDB {
     } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Unknown error: addIT , name = " + name, e);
+    }
+  }
+
+  // Matt
+  /**
+   * Adds a security officer to the database
+   *
+   * @param name the security officer's name
+   * @return id of created request
+   */
+  public static int addSecurityOfficer(String name) throws DBException {
+    try {
+      String query = "INSERT INTO employees (name, serviceType) VALUES (?, 'Security')";
+      PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+      stmt.setString(1, name);
+      stmt.executeUpdate();
+      ResultSet rs = stmt.getGeneratedKeys();
+      rs.next(); // NullPointerException
+      query = "INSERT INTO security VALUES (?)";
+      stmt = con.prepareStatement(query);
+      int id = rs.getInt("1");
+      stmt.setInt(1, id);
+      stmt.executeUpdate();
+      return id;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown error: addSecurityOfficer , name = " + name, e);
     }
   }
 
@@ -1066,6 +1284,44 @@ public class ServiceDB {
   }
 
   // TODO: Create your addRequest call here
+
+  public static int addInternalTransportationReq(
+      String reqNotes,
+      String nodeID,
+      String transportationType,
+      String scheduledTransportTime,
+      String destinationLocation)
+      throws DBException {
+    try {
+      String query =
+          "INSERT INTO request (timeRequested, reqNotes, serviceType, nodeID, status) VALUES (?, ?, ?, ?, ?)";
+      PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+      stmt.setTimestamp(1, new Timestamp(new Date().getTime()));
+      stmt.setString(2, reqNotes);
+      stmt.setString(3, "Internal Transportation");
+      stmt.setString(4, nodeID);
+      stmt.setString(5, "OPEN");
+      stmt.execute();
+      ResultSet rs = stmt.getGeneratedKeys();
+      rs.next();
+      query =
+          "INSERT INTO INTERNALTRANSPORTATIONREQUEST (requestID, TRANSPORTATIONTYPE, SCHEDULEDTRANSPORTTIME, DESTINATIONLOCATION) VALUES (?, ?, ?, ?)";
+      stmt = con.prepareStatement(query);
+      int id = rs.getInt("1");
+      stmt.setInt(1, id);
+      stmt.setString(2, transportationType);
+
+      SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm");
+      Date parsedDate = dateFormat.parse(scheduledTransportTime);
+      stmt.setTimestamp(3, new Timestamp(parsedDate.getTime()));
+
+      stmt.setString(4, destinationLocation);
+      stmt.executeUpdate();
+      return id;
+    } catch (SQLException | ParseException e) {
+      throw new DBException("Error: addInternalTransportationReq", e);
+    }
+  }
 
   public static int addFlowerReq(
       String reqNotes,
@@ -1277,6 +1533,41 @@ public class ServiceDB {
     } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Error: addITReq", e);
+    }
+  }
+
+  // Matt
+  /**
+   * Adds a request for security
+   *
+   * @param reqNotes Description of the incident being reported
+   * @param nodeID The ID of the node in which these services are requested
+   * @return the id of the created request
+   */
+  public static int addSecurityReq(String reqNotes, String nodeID, String isEmergency)
+      throws DBException {
+    try {
+      String query =
+          "INSERT INTO request (timeRequested, reqNotes, serviceType, nodeID, status) VALUES (?, ?, ?, ?, ?)";
+      PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+      stmt.setTimestamp(1, new Timestamp(new Date().getTime()));
+      stmt.setString(2, reqNotes);
+      stmt.setString(3, "Security");
+      stmt.setString(4, nodeID);
+      stmt.setString(5, "OPEN");
+      stmt.execute();
+      ResultSet rs = stmt.getGeneratedKeys();
+      rs.next();
+      query = "INSERT INTO secrequest (requestID, isEmergency) VALUES (?, ?)";
+      stmt = con.prepareStatement(query);
+      int id = rs.getInt("1");
+      stmt.setInt(1, id);
+      stmt.setString(2, isEmergency);
+      stmt.executeUpdate();
+      return id;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Error: addSecurityReq", e);
     }
   }
 

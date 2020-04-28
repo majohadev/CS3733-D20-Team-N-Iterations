@@ -1,7 +1,6 @@
 package edu.wpi.N.entities;
 
 public class Flower {
-
   String flowerName;
   String price;
 

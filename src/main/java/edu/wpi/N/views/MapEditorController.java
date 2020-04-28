@@ -1,10 +1,13 @@
 package edu.wpi.N.views;
 
 import com.google.common.collect.HashBiMap;
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXNodesList;
 import edu.wpi.N.App;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
+import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.entities.UIEdge;
 import edu.wpi.N.entities.UINode;
 import java.io.IOException;
@@ -16,6 +19,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -25,17 +30,52 @@ import javafx.scene.shape.Line;
 import javax.swing.*;
 
 public class MapEditorController implements Controller {
+  // TODO MAP BETWEEN MULTIPLE FLOORS STUFF
+  // ALSDKFJLSKDJFLSKDFJLSKDFJSLKDFJSLKDFJSLKDFJSLKDFJSLKDFJKDFJKDFJDKFJKDJFKDJFKDJFKDJFKJFKDJFDKFJKDJFKDFJKDJFKDFJKDJFKDJFKDFJ
+  //  DbNode node;
+  //  HashMap<Integer, Circle> nodes; // key is floor number
+  //  HashMap<Integer, Line> lines; // key is sum
+  //  HashMap<Integer, Text> labels;
+  //  LinkedList<DbNode[]> originalEdges;
+  //  LinkedList<DbNode[]> finalEdges;
+  //  HashMap<Integer, DbNode[]> potentialEdges; // key is sum
+  //  HashMap<Line, Boolean> lineStatus;
+  //  final Color DEFAULT_CIRCLE_COLOR2 = Color.GRAY;
+  //  final Color DEFAULT_TEXT_COLOR = Color.WHITE;
+  //  final Color ACTIVE_LINE_COLOR = Color.BLACK;
+  //  final Color INACTIVE_LINE_COLOR = Color.GRAY;
+  //  final Color DEFAULT_SELECTED_COLOR = Color.RED;
+  //  final int DEFAULT_RADIUS = 20;
+  //  final int TEXT_OFFSETX = -6;
+  //  final int TEXT_OFFSETY = 6;
+  //  @FXML private AnchorPane parent;
+  //  @FXML private JFXButton btn_save;
+  //  @FXML private JFXButton btn_cancel;
+  ////  final double DEFAULT_LINE_WIDTH = 6;
+  // TODO MAP BETWEEN MULTIPLE FLOORS STUFF
+  // ALSDKFJLSKDJFLSKDFJLSKDFJSLKDFJSLKDFJSLKDFJSLKDFJSLKDFJKDFJKDFJDKFJKDJFKDJFKDJFKDJFKJFKDJFDKFJKDJFKDFJKDJFKDFJKDJFKDJFKDFJ
   App mainApp;
+
+  private StateSingleton singleton;
+
+  @Override
+  public void setSingleton(StateSingleton singleton) {
+    this.singleton = singleton;
+  }
 
   @FXML Pane pn_display;
   @FXML Pane pn_editor;
+  @FXML Pane pn_elev;
   @FXML Button btn_home;
   @FXML StackPane pn_stack;
   @FXML Pane pn_edges;
+  @FXML Pane pn_changeFloor;
+  @FXML ImageView img_map;
+  private JFXButton btn_floors, btn_floor1, btn_floor2, btn_floor3, btn_floor4, btn_floor5;
 
   final int DEFAULT_FLOOR = 1;
   final String DEFAULT_BUILDING = "Faulkner";
-  final Color DEFAULT_CIRCLE_COLOR = Color.PURPLE;
+  final Color DEFAULT_CIRCLE_COLOR = Color.MEDIUMPURPLE;
   final Color DEFAULT_LINE_COLOR = Color.BLACK;
   final double DEFAULT_LINE_WIDTH = 4;
   final Color ADD_NODE_COLOR = Color.BLACK;
@@ -44,6 +84,8 @@ public class MapEditorController implements Controller {
   final double DEFAULT_CIRCLE_OPACITY = 1;
   final double DEFAULT_CIRCLE_RADIUS = 7;
   final Color DELETE_EDGE_COLOR = Color.RED;
+  final Color EDIT_ELEV_COLOR = Color.RED;
+  final Color EDIT_ELEV_SELECTED_COLOR = Color.GREEN;
 
   final double SCREEN_WIDTH = 1920;
   final double SCREEN_HEIGHT = 1080;
@@ -62,7 +104,7 @@ public class MapEditorController implements Controller {
     EDIT_NODE,
     ADD_EDGE,
     DELETE_EDGE,
-    EDIT_EDGE
+    EDIT_ELEV
   }
 
   HashBiMap<Circle, UINode> nodesMap;
@@ -71,7 +113,7 @@ public class MapEditorController implements Controller {
   MapEditorDeleteNodeController controllerDeleteNode;
   MapEditorEditNodeController controllerEditNode;
   MapEditorDeleteEdgeController controllerDeleteEdge;
-
+  BetweenFloorsController controllerEditElev;
   int currentFloor;
   String currentBuilding;
   // Add Node Variable
@@ -84,6 +126,8 @@ public class MapEditorController implements Controller {
   Line addEdgeLine;
   // Delete Edge Variable
   LinkedList<Line> deleteEdgeLines;
+  // Edit Edit Elevator Variable
+  LinkedList<Circle> editElevNodes;
 
   @Override
   public void setMainApp(App mainApp) {
@@ -91,6 +135,7 @@ public class MapEditorController implements Controller {
   }
 
   public void initialize() throws DBException {
+    editElevNodes = new LinkedList<>();
     currentFloor = DEFAULT_FLOOR;
     currentBuilding = DEFAULT_BUILDING;
     nodesMap = HashBiMap.create();
@@ -103,9 +148,14 @@ public class MapEditorController implements Controller {
     addEdgeLine = new Line();
     pn_edges.getChildren().add(addEdgeLine);
     deleteEdgeLines = new LinkedList<>();
+    initializeChangeFloorButtons();
   }
 
   private void loadFloor() throws DBException {
+    clearNodes();
+    clearEdges();
+    nodesMap = HashBiMap.create();
+    edgesMap = HashBiMap.create();
     LinkedList<DbNode> floorNodes = MapDB.floorNodes(currentFloor, currentBuilding);
     LinkedList<DbNode[]> floorEdges = MapDB.getFloorEdges(currentFloor, currentBuilding);
     HashMap<String, UINode> conversion = createUINodes(floorNodes, DEFAULT_CIRCLE_COLOR);
@@ -126,12 +176,27 @@ public class MapEditorController implements Controller {
     }
   }
 
+  private void clearEdges() {
+    for (Line line : edgesMap.keySet()) {
+      pn_edges.getChildren().removeIf(node -> node instanceof Line);
+    }
+  }
+
+  private void clearNodes() {
+    for (Circle circle : nodesMap.keySet()) {
+      pn_display.getChildren().removeIf(node -> node instanceof Circle);
+    }
+  }
+
   private HashMap<String, UINode> createUINodes(LinkedList<DbNode> nodes, Color c) {
     HashMap<String, UINode> conversion = new HashMap<>();
     for (DbNode DBnode : nodes) {
       Circle circle = createCircle(scaleX(DBnode.getX()), scaleY(DBnode.getY()), c);
       UINode UInode = new UINode(circle, DBnode);
       nodesMap.put(circle, UInode);
+      if (DBnode.getNodeType().equals("STAI") || DBnode.getNodeType().equals("ELEV")) {
+        editElevNodes.add(circle);
+      }
       conversion.put(DBnode.getNodeID(), UInode);
     }
     return conversion;
@@ -163,7 +228,14 @@ public class MapEditorController implements Controller {
     circle.setFill(c);
     circle.setOpacity(DEFAULT_CIRCLE_OPACITY);
     circle.setOnMouseDragged(event -> this.handleCircleDragEvents(event, circle));
-    circle.setOnMouseClicked(event -> this.handleCircleClickedEvents(event, circle));
+    circle.setOnMouseClicked(
+        event -> {
+          try {
+            this.handleCircleClickedEvents(event, circle);
+          } catch (DBException e) {
+            e.printStackTrace();
+          }
+        });
     circle.setOnMouseReleased(
         event -> {
           try {
@@ -202,6 +274,8 @@ public class MapEditorController implements Controller {
       loadEditor("/edu/wpi/N/views/mapEditorEditNode.fxml");
     } else if (mode == Mode.DELETE_EDGE) {
       loadEditor("/edu/wpi/N/views/mapEditorDeleteEdge.fxml");
+    } else if (mode == Mode.EDIT_ELEV) {
+      loadEditor("/edu/wpi/N/views/BetweenFloorsEditor.fxml");
     }
   }
 
@@ -216,9 +290,16 @@ public class MapEditorController implements Controller {
       controllerEditNode = loader.getController();
     } else if (mode == Mode.DELETE_EDGE) {
       controllerDeleteEdge = loader.getController();
+    } else if (mode == Mode.EDIT_ELEV) {
+      controllerEditElev = loader.getController();
+      controllerEditElev.setMainApp(mainApp);
     }
-    pn_editor.getChildren().add(pane);
-    pn_editor.setVisible(true);
+    if (mode == Mode.EDIT_ELEV) {
+      pn_elev.getChildren().add(pane);
+    } else {
+      pn_editor.getChildren().add(pane);
+      pn_editor.setVisible(true);
+    }
   }
 
   private void handleCircleDragEvents(MouseEvent event, Circle circle) {
@@ -236,8 +317,7 @@ public class MapEditorController implements Controller {
       handleCircleAddEdgeDragged(event, circle);
     }
   }
-  // TODO
-  // SDFKJSDLFKJSLKDFJSLKDFJSLKDJFLKSDJFLSKJDFLKSJDFLKSJDFLKSJDFLKSJDFLKSJDFLKSJFLKSJDFLKSJDFLKSJDF
+
   private void handleLineClickedEvents(MouseEvent event, Line line) {
     if (mode == Mode.DELETE_EDGE) {
       onLineDeleteEdgeClicked(event, line);
@@ -307,8 +387,8 @@ public class MapEditorController implements Controller {
     }
     deleteEdgeLines.clear();
   }
-  // TODO ASLDKFJAS;LKDFJA;LSDKFJAS;LDKFJA;LKDFJA;LKSDJF;ALKSDJF
-  private void handleCircleClickedEvents(MouseEvent event, Circle circle) {
+
+  private void handleCircleClickedEvents(MouseEvent event, Circle circle) throws DBException {
     if (mode == Mode.DELETE_NODE) {
       onCircleDeleteNodeClicked(event, circle);
     }
@@ -317,6 +397,14 @@ public class MapEditorController implements Controller {
       onBtnConfirmEditNodeClicked();
       onTxtPosEditNodeTextChanged(circle);
       onCircleEditNodeClicked(event, circle);
+    }
+    if (mode == Mode.EDIT_ELEV && editElevNodes.contains(circle)) {
+      pn_elev.setVisible(true);
+      circle.setFill(EDIT_ELEV_SELECTED_COLOR);
+      controllerEditElev.setFloor(nodesMap.get(circle).getDBNode().getFloor());
+      controllerEditElev.setNode(nodesMap.get(circle).getDBNode());
+
+      // alskdfjal;ksfdjla;ksdjfl;skdfjslkdfjslkfjslkdfjlskdfjslkdfjlskdfjlksdjflskdfjlksdjflksdfjlksdjflksdjflksdfjlksdfjlksdjflksdfjlksdjflksdjflkdsjf
     }
   }
 
@@ -383,14 +471,24 @@ public class MapEditorController implements Controller {
   }
 
   private void onCircleDeleteNodeClicked(MouseEvent event, Circle circle) {
-    if (circle.getFill() == DEFAULT_CIRCLE_COLOR) {
-      circle.setFill(DELETE_NODE_COLOR);
-      deleteNodeCircles.add(circle);
-      controllerDeleteNode.addLstDeleteNode(nodesMap.get(circle).getDBNode().getShortName());
-    } else if (circle.getFill() == DELETE_NODE_COLOR) {
-      circle.setFill(DEFAULT_CIRCLE_COLOR);
-      deleteNodeCircles.remove(circle);
-      controllerDeleteNode.removeLstDeleteNode(nodesMap.get(circle).getDBNode().getShortName());
+    String deleteNodeType = nodesMap.get(circle).getDBNode().getNodeType();
+    String deleteNodeID = nodesMap.get(circle).getDBNode().getNodeID();
+
+    // Check to make sure that a stair or elevator node is not selected
+    if (deleteNodeType.equals("STAI") || deleteNodeType.equals("ELEV"))
+      displayErrorMessage("Cannot Delete Stair or Elevator Nodes");
+    else if (deleteNodeID.equals("NSERV00301") || deleteNodeID.equals("NSERV00103")) {
+      displayErrorMessage("Cannot Delete Kiosk Nodes");
+    } else {
+      if (circle.getFill() == DEFAULT_CIRCLE_COLOR) {
+        circle.setFill(DELETE_NODE_COLOR);
+        deleteNodeCircles.add(circle);
+        controllerDeleteNode.addLstDeleteNode(nodesMap.get(circle).getDBNode().getShortName());
+      } else if (circle.getFill() == DELETE_NODE_COLOR) {
+        circle.setFill(DEFAULT_CIRCLE_COLOR);
+        deleteNodeCircles.remove(circle);
+        controllerDeleteNode.removeLstDeleteNode(nodesMap.get(circle).getDBNode().getShortName());
+      }
     }
   }
 
@@ -427,6 +525,8 @@ public class MapEditorController implements Controller {
       MenuItem deleteNode = new MenuItem("Delete Node");
       MenuItem editNode = new MenuItem("Edit Node");
       MenuItem deleteEdge = new MenuItem("Delete Edge");
+      MenuItem editElev = new MenuItem("Edit Elevator/Stair Edges");
+
       deleteNode.setOnAction(
           e -> {
             try {
@@ -451,9 +551,25 @@ public class MapEditorController implements Controller {
               ex.printStackTrace();
             }
           });
-      menu.getItems().addAll(deleteNode, editNode, deleteEdge);
+      editElev.setOnAction(
+          e -> {
+            try {
+              handleEditElevRightClick();
+            } catch (IOException ex) {
+              ex.printStackTrace();
+            }
+          });
+      menu.getItems().addAll(deleteNode, editNode, deleteEdge, editElev);
       menu.show(mainApp.getStage(), event.getSceneX(), event.getSceneY());
     }
+  }
+
+  private void handleEditElevRightClick() throws IOException {
+    mode = Mode.EDIT_ELEV;
+    for (Circle circle : editElevNodes) {
+      circle.setFill(EDIT_ELEV_COLOR);
+    }
+    changeEditor();
   }
 
   private void onPaneDisplayClickedAddNode(MouseEvent event) throws IOException {
@@ -710,10 +826,16 @@ public class MapEditorController implements Controller {
 
   private void resetAll() {
     pn_editor.setVisible(false);
+    //    pn_elev.setVisible(false);
     resetAddNode();
     resetDeleteNode();
     resetEditNode();
     resetDeleteEdge();
+    resetEditElev();
+  }
+
+  private void resetEditElev() {
+    //    editElevNodes.clear();
   }
 
   private void resetAddNode() {
@@ -757,7 +879,7 @@ public class MapEditorController implements Controller {
   }
 
   public void onBtnHomeClicked() throws IOException {
-    mainApp.switchScene("views/home.fxml");
+    mainApp.switchScene("views/home.fxml", singleton);
   }
 
   private void handleCircleAddEdgeDragged(MouseEvent event, Circle circle) {
@@ -817,6 +939,89 @@ public class MapEditorController implements Controller {
       addEdgeLine = new Line();
       pn_edges.getChildren().add(addEdgeLine);
       mode = Mode.NO_STATE;
+    }
+  }
+
+  public void initializeChangeFloorButtons() {
+    btn_floors = new JFXButton("Floors");
+    btn_floor1 = new JFXButton("1");
+    btn_floor2 = new JFXButton("2");
+    btn_floor3 = new JFXButton("3");
+    btn_floor4 = new JFXButton("4");
+    btn_floor5 = new JFXButton("5");
+    btn_floors.setButtonType(JFXButton.ButtonType.RAISED);
+    btn_floor1.setButtonType(JFXButton.ButtonType.RAISED);
+    btn_floor2.setButtonType(JFXButton.ButtonType.RAISED);
+    btn_floor3.setButtonType(JFXButton.ButtonType.RAISED);
+    btn_floor4.setButtonType(JFXButton.ButtonType.RAISED);
+    btn_floor5.setButtonType(JFXButton.ButtonType.RAISED);
+    btn_floors
+        .getStylesheets()
+        .addAll(getClass().getResource("/edu/wpi/N/views/MapDisplayFloors.css").toExternalForm());
+    btn_floors.getStyleClass().addAll("animated-option-button", "animated-option-sub-button");
+    btn_floor1
+        .getStylesheets()
+        .addAll(getClass().getResource("/edu/wpi/N/views/MapDisplayFloors.css").toExternalForm());
+    btn_floor1.getStyleClass().addAll("animated-option-button", "animated-option-sub-button");
+    btn_floor1.setOnMouseClicked(
+        e -> {
+          currentFloor = 1;
+          setFloorImg("/edu/wpi/N/images/Floor1Reclor.png");
+        });
+    btn_floor2
+        .getStylesheets()
+        .addAll(getClass().getResource("/edu/wpi/N/views/MapDisplayFloors.css").toExternalForm());
+    btn_floor2.getStyleClass().addAll("animated-option-button", "animated-option-sub-button");
+    btn_floor2.setOnMouseClicked(
+        e -> {
+          currentFloor = 2;
+          setFloorImg("/edu/wpi/N/images/Floor2TeamN.png");
+        });
+    btn_floor3
+        .getStylesheets()
+        .addAll(getClass().getResource("/edu/wpi/N/views/MapDisplayFloors.css").toExternalForm());
+    btn_floor3.getStyleClass().addAll("animated-option-button", "animated-option-sub-button");
+    btn_floor3.setOnMouseClicked(
+        e -> {
+          currentFloor = 3;
+          setFloorImg("/edu/wpi/N/images/Floor3TeamN.png");
+        });
+    btn_floor4
+        .getStylesheets()
+        .addAll(getClass().getResource("/edu/wpi/N/views/MapDisplayFloors.css").toExternalForm());
+    btn_floor4.getStyleClass().addAll("animated-option-button", "animated-option-sub-button");
+    btn_floor4.setOnMouseClicked(
+        e -> {
+          currentFloor = 4;
+          setFloorImg("/edu/wpi/N/images/Floor4TeamN.png");
+        });
+    btn_floor5
+        .getStylesheets()
+        .addAll(getClass().getResource("/edu/wpi/N/views/MapDisplayFloors.css").toExternalForm());
+    btn_floor5.getStyleClass().addAll("animated-option-button", "animated-option-sub-button");
+    btn_floor5.setOnMouseClicked(
+        e -> {
+          currentFloor = 5;
+          setFloorImg("/edu/wpi/N/images/Floor5TeamN.png");
+        });
+    JFXNodesList nodesList = new JFXNodesList();
+    nodesList.addAnimatedNode(btn_floors);
+    nodesList.addAnimatedNode(btn_floor1);
+    nodesList.addAnimatedNode(btn_floor2);
+    nodesList.addAnimatedNode(btn_floor3);
+    nodesList.addAnimatedNode(btn_floor4);
+    nodesList.addAnimatedNode(btn_floor5);
+    nodesList.setSpacing(10);
+    pn_changeFloor.getChildren().add(nodesList);
+  }
+
+  private void setFloorImg(String path) {
+    Image img = new Image(getClass().getResourceAsStream(path));
+    img_map.setImage(img);
+    try {
+      loadFloor();
+    } catch (DBException e) {
+      e.printStackTrace();
     }
   }
 }
