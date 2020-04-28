@@ -78,7 +78,7 @@ public class ServiceController implements Controller {
 
   @FXML
   public void backHome() throws IOException {
-    mainApp.switchScene("home.fxml", singleton);
+    mainApp.switchScene("views/home.fxml", singleton);
   }
 
   @FXML

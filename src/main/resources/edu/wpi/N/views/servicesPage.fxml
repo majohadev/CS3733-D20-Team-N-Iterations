@@ -29,7 +29,7 @@
                         <Font name="Calibri Bold" size="96.0" />
                      </font>
                   </Label>
-                  <JFXButton buttonType="RAISED" layoutX="14.0" layoutY="33.0" text="Back" textFill="WHITE">
+                  <JFXButton buttonType="RAISED" layoutX="14.0" layoutY="33.0" onMouseClicked="#backHome" text="Back" textFill="WHITE">
                      <font>
                         <Font name="Calibri" size="24.0" />
                      </font>

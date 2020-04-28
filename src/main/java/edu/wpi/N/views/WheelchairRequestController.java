@@ -5,6 +5,7 @@ import com.jfoenix.controls.JFXTextArea;
 import edu.wpi.N.App;
 import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.database.DBException;
+import edu.wpi.N.database.MapDB;
 import edu.wpi.N.database.ServiceDB;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.States.StateSingleton;
@@ -22,7 +23,7 @@ public class WheelchairRequestController implements Controller {
   // Add FXML Tags Here
   @FXML JFXComboBox<String> cmbo_text;
   @FXML JFXComboBox<String> cmbo_selectLang;
-  @FXML JFXTextArea txtf_wheelchairNotes;
+  @FXML JFXTextArea txtf_notes;
 
   private ObservableList<String> fuzzySearchTextList =
       // List that fills TextViews
@@ -89,10 +90,11 @@ public class WheelchairRequestController implements Controller {
   public void createNewTranslator() throws DBException {
 
     String assistanceOption = cmbo_selectLang.getSelectionModel().getSelectedItem();
-    String nodeID;
+    String nodeID = null;
     int nodeIndex = 0;
 
     try {
+      /*
       String curr = cmbo_text.getEditor().getText();
       for (String name : fuzzySearchTextList) {
         if (name.equals(curr)) {
@@ -100,6 +102,27 @@ public class WheelchairRequestController implements Controller {
           break;
         }
       }
+       */
+
+      String userLocationName = cmbo_text.getEditor().getText().toLowerCase().trim();
+      LinkedList<DbNode> checkNodes = MapDB.searchVisNode(-1, null, null, userLocationName);
+
+      // Find the exact match and get the nodeID
+      for (DbNode node : checkNodes) {
+        if (node.getLongName().toLowerCase().equals(userLocationName)) {
+          nodeID = node.getNodeID();
+          break;
+        }
+      }
+      // Check to see if such node was found
+      if (nodeID == null) {
+        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+        errorAlert.setContentText(
+            "Please select a location for your service request from suggestions menu!");
+        errorAlert.show();
+        return;
+      }
+
       nodeID = fuzzySearchNodeList.get(nodeIndex).getNodeID();
       System.out.println(nodeID);
     } catch (IndexOutOfBoundsException e) {
@@ -109,7 +132,9 @@ public class WheelchairRequestController implements Controller {
       return;
     }
 
-    String notes = txtf_wheelchairNotes.getText();
+    System.out.println(txtf_notes.getText() + "here");
+
+    String notes = txtf_notes.getText();
     if (assistanceOption == null) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
       errorAlert.setContentText("Please select a needs assistance option!");
@@ -117,17 +142,20 @@ public class WheelchairRequestController implements Controller {
       return;
     }
 
-
-    int wheelchairReq = ServiceDB.addWheelchairRequest(notes, nodeID, assistanceOption);
+    ServiceDB.addWheelchairRequest(notes, nodeID, assistanceOption);
 
     // App.adminDataStorage.addToList(wheelchairReq);
 
-    txtf_wheelchairNotes.clear();
+    txtf_notes.clear();
     cmbo_selectLang.getItems().clear();
     cmbo_text.getItems().clear();
 
     Alert confAlert = new Alert(Alert.AlertType.CONFIRMATION);
     confAlert.setContentText("Request Recieved");
     confAlert.show();
+  }
+
+  public void printAreaText() {
+    System.out.println(txtf_notes.getText());
   }
 }

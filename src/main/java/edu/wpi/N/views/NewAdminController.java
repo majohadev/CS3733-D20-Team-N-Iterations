@@ -722,13 +722,7 @@ public class NewAdminController implements Controller, Initializable {
     try {
       LinkedList<Employee> empList = ServiceDB.getEmployees();
       ObservableList<Employee> empObv = FXCollections.observableArrayList();
-
-      for (Employee emp : empList) {
-        if (!emp.getServiceType().equals("Medicine")) {
-          empObv.add(emp);
-        }
-      }
-
+      empObv.addAll(empList);
       cb_Employee.setItems(empObv);
     } catch (DBException e) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
@@ -742,13 +736,18 @@ public class NewAdminController implements Controller, Initializable {
   }
 
   /*
-  Populates employee table based on the getEmployees()
+  Populates employee table based on the getEmployees() besides doctors
    */
 
   public void populateEmployeeType() throws DBException {
     LinkedList<Service> employeeList = new LinkedList<Service>();
-    employeeList.addAll(ServiceDB.getServices());
     ObservableList<Service> empTypeList = FXCollections.observableArrayList();
+
+    for (Service services : ServiceDB.getServices()) {
+      if (!services.getServiceType().equals("Medicine")) {
+        employeeList.add(services);
+      }
+    }
     empTypeList.addAll(employeeList);
     cb_employeeTypes.setItems(empTypeList);
   }

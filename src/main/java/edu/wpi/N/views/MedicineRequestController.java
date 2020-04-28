@@ -1,5 +1,6 @@
 package edu.wpi.N.views;
 
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
@@ -8,7 +9,6 @@ import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.database.*;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.States.StateSingleton;
-import edu.wpi.N.entities.employees.Doctor;
 import edu.wpi.N.entities.request.MedicineRequest;
 import edu.wpi.N.entities.request.Request;
 import java.io.IOException;
@@ -22,6 +22,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 
 public class MedicineRequestController implements Controller, Initializable {
 
@@ -41,7 +43,7 @@ public class MedicineRequestController implements Controller, Initializable {
   LinkedList<String> longNamesList = new LinkedList<>(); // Stores Floor Node names
   LinkedList<DbNode> allFloorNodes; // stores all the nodes on the floor
 
-  @FXML ComboBox<Doctor> cb_doctors;
+  @FXML ComboBox<String> cb_units;
   @FXML TableView tb_patients;
   @FXML JFXTextField txtf_patient;
   @FXML JFXTextField txtf_medicine;
@@ -49,6 +51,10 @@ public class MedicineRequestController implements Controller, Initializable {
   @FXML JFXTextArea txtf_notes;
   @FXML JFXTextField txtf_patientLocation;
   @FXML JFXListView lst_patientLocations;
+  @FXML AnchorPane ap_prep;
+  @FXML AnchorPane ap_tableview;
+  @FXML JFXButton btn_prescribe;
+  @FXML JFXButton btn_viewreq;
 
   @Override
   public void setMainApp(App mainApp) {
@@ -60,13 +66,27 @@ public class MedicineRequestController implements Controller, Initializable {
     this.mainApp.switchScene("home.fxml", singleton);
   }
 
+  public void changeScene(MouseEvent e) {
+    if (e.getSource() == btn_prescribe) {
+      ap_prep.setVisible(true);
+      ap_tableview.setVisible(false);
+    } else if (e.getSource() == btn_viewreq) {
+      ap_prep.setVisible(false);
+      ap_tableview.setVisible(true);
+    }
+  }
+
   @Override
   public void initialize(URL location, ResourceBundle resources) {
     initializeTableOfPatients();
+    populateChoiceBox();
+
+    ap_tableview.setVisible(false);
+    ap_prep.setVisible(false);
 
     try {
 
-      populateDoctorList();
+      // populateDoctorList();
       populateMedicineRequests();
 
       allFloorNodes = MapDB.allNodes();
@@ -81,6 +101,7 @@ public class MedicineRequestController implements Controller, Initializable {
     }
   }
 
+  /*
   public void populateDoctorList() throws DBException {
     ObservableList<Doctor> docs = FXCollections.observableArrayList();
     try {
@@ -92,17 +113,18 @@ public class MedicineRequestController implements Controller, Initializable {
       errorAlert.show();
     }
   }
+   */
 
   public void initializeTableOfPatients() {
     TableColumn<MedicineRequest, String> patient = new TableColumn<>("Patient Name");
     patient.setMaxWidth(150);
     patient.setMinWidth(150);
-    patient.setCellValueFactory(new PropertyValueFactory<MedicineRequest, String>("patient"));
+    patient.setCellValueFactory(new PropertyValueFactory<MedicineRequest, String>("attr1"));
 
     TableColumn<MedicineRequest, String> meds = new TableColumn<>("Medicine");
     meds.setMaxWidth(150);
     meds.setMinWidth(150);
-    meds.setCellValueFactory(new PropertyValueFactory<MedicineRequest, String>("medicineName"));
+    meds.setCellValueFactory(new PropertyValueFactory<MedicineRequest, String>("attr2"));
 
     TableColumn<MedicineRequest, Double> dosage = new TableColumn<>("Dosage");
     dosage.setMaxWidth(75);
@@ -112,7 +134,7 @@ public class MedicineRequestController implements Controller, Initializable {
     TableColumn<MedicineRequest, String> units = new TableColumn<>("Units");
     units.setMaxWidth(75);
     units.setMinWidth(75);
-    units.setCellValueFactory(new PropertyValueFactory<MedicineRequest, String>("units"));
+    units.setCellValueFactory(new PropertyValueFactory<MedicineRequest, String>("attr3"));
 
     TableColumn<MedicineRequest, String> assignedDoctor = new TableColumn<>("Assigned Doctor");
     assignedDoctor.setMaxWidth(150);
@@ -128,11 +150,22 @@ public class MedicineRequestController implements Controller, Initializable {
     tb_patients.getColumns().addAll(patient, meds, dosage, units, assignedDoctor, notes);
   }
 
+  public void populateChoiceBox() {
+    LinkedList<String> dosages = new LinkedList<>();
+    ObservableList<String> population = FXCollections.observableArrayList();
+    dosages.add("MG");
+    dosages.add("CC");
+    population.setAll(dosages);
+    cb_units.setItems(population);
+  }
+
   @FXML
   public void createMedRequest() throws DBException {
 
     int currentSelection = lst_patientLocations.getSelectionModel().getSelectedIndex();
     DbNode medLocation = fuzzySearchNodeList.get(currentSelection);
+
+    String dosage = cb_units.getSelectionModel().getSelectedItem();
 
     try {
 
@@ -143,8 +176,12 @@ public class MedicineRequestController implements Controller, Initializable {
               medLocation.getNodeID(),
               txtf_medicine.getText(),
               Double.parseDouble(txtf_dosage.getText()),
-              "ml",
+              dosage,
               txtf_patient.getText());
+
+          System.out.println("Request Created");
+          populateMedicineRequests();
+          break;
         }
       }
     } catch (DBException e) {
