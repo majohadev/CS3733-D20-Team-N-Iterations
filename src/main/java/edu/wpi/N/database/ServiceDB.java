@@ -694,7 +694,6 @@ public class ServiceDB {
       stmt = con.prepareStatement(query);
       rs = stmt.executeQuery();
       while (rs.next()) {
-        System.out.println("Yeehaw!");
         openList.add(
             new SecurityRequest(
                 rs.getInt("requestID"),
