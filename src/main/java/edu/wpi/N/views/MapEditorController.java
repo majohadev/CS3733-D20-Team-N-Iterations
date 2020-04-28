@@ -128,6 +128,7 @@ public class MapEditorController implements Controller {
   LinkedList<Line> deleteEdgeLines;
   // Edit Edit Elevator Variable
   LinkedList<Circle> editElevNodes;
+  Circle elevCircle;
 
   @Override
   public void setMainApp(App mainApp) {
@@ -143,6 +144,7 @@ public class MapEditorController implements Controller {
     mode = Mode.NO_STATE;
     loadFloor();
     addNodeCircle = null;
+    elevCircle = null;
     deleteNodeCircles = new LinkedList<>();
     editNodeCircle = null;
     addEdgeLine = new Line();
@@ -307,8 +309,8 @@ public class MapEditorController implements Controller {
       onCircleAddNodeDragged(event, circle);
     }
     if (mode == Mode.EDIT_NODE) {
-      onBtnCancelEditNodeClicked();
-      onBtnConfirmEditNodeClicked();
+      //      onBtnCancelEditNodeClicked();
+      //      onBtnConfirmEditNodeClicked();
       onTxtPosEditNodeTextChanged(circle);
       onCircleEditNodeDragged(event, circle);
     }
@@ -399,12 +401,15 @@ public class MapEditorController implements Controller {
       onCircleEditNodeClicked(event, circle);
     }
     if (mode == Mode.EDIT_ELEV && editElevNodes.contains(circle)) {
-      pn_elev.setVisible(true);
-      circle.setFill(EDIT_ELEV_SELECTED_COLOR);
+      if (elevCircle != null && elevCircle != circle) {
+        elevCircle.setFill(EDIT_ELEV_COLOR);
+        pn_elev.setVisible(false);
+      }
+      elevCircle = circle;
+      elevCircle.setFill(EDIT_ELEV_SELECTED_COLOR);
       controllerEditElev.setFloor(nodesMap.get(circle).getDBNode().getFloor());
       controllerEditElev.setNode(nodesMap.get(circle).getDBNode());
-
-      // alskdfjal;ksfdjla;ksdjfl;skdfjslkdfjslkfjslkdfjlskdfjslkdfjlskdfjlksdjflskdfjlksdjflksdfjlksdjflksdjflksdfjlksdfjlksdjflksdfjlksdjflksdjflkdsjf
+      pn_elev.setVisible(true);
     }
   }
 
@@ -502,6 +507,8 @@ public class MapEditorController implements Controller {
   private void handleEditNodeRightClick() throws IOException {
     mode = Mode.EDIT_NODE;
     changeEditor();
+    onBtnCancelEditNodeClicked();
+    onBtnConfirmEditNodeClicked();
   }
 
   private void handleDeleteEdgeRightClick() throws IOException {
@@ -566,10 +573,10 @@ public class MapEditorController implements Controller {
 
   private void handleEditElevRightClick() throws IOException {
     mode = Mode.EDIT_ELEV;
+    changeEditor();
     for (Circle circle : editElevNodes) {
       circle.setFill(EDIT_ELEV_COLOR);
     }
-    changeEditor();
   }
 
   private void onPaneDisplayClickedAddNode(MouseEvent event) throws IOException {
@@ -815,12 +822,14 @@ public class MapEditorController implements Controller {
         .setOnMouseClicked(
             event -> {
               mode = Mode.NO_STATE;
-              editNodeCircle.setFill(DEFAULT_CIRCLE_COLOR);
-              editNodeCircle.setCenterX(scaleX(nodesMap.get(editNodeCircle).getDBNode().getX()));
-              editNodeCircle.setCenterY(scaleY(nodesMap.get(editNodeCircle).getDBNode().getY()));
-              cancelEditNode();
-              editNodeCircle = null;
               pn_editor.setVisible(false);
+              if (editNodeCircle != null) {
+                editNodeCircle.setFill(DEFAULT_CIRCLE_COLOR);
+                editNodeCircle.setCenterX(scaleX(nodesMap.get(editNodeCircle).getDBNode().getX()));
+                editNodeCircle.setCenterY(scaleY(nodesMap.get(editNodeCircle).getDBNode().getY()));
+                cancelEditNode();
+              }
+              editNodeCircle = null;
             });
   }
 
@@ -835,7 +844,11 @@ public class MapEditorController implements Controller {
   }
 
   private void resetEditElev() {
-    //    editElevNodes.clear();
+    for (Circle circle : editElevNodes) {
+      circle.setFill(DEFAULT_CIRCLE_COLOR);
+    }
+    editNodeCircle = null;
+    pn_elev.setVisible(false);
   }
 
   private void resetAddNode() {
@@ -1018,6 +1031,7 @@ public class MapEditorController implements Controller {
   }
 
   private void setFloorImg(String path) {
+    resetAll();
     Image img = new Image(getClass().getResourceAsStream(path));
     img_map.setImage(img);
     try {
