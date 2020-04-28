@@ -43,12 +43,15 @@ public class Directions {
     String startFloor = "";
     String message = "";
     boolean messageCheck = false;
+    double totalDistance = 0;
+    double totalTime = 0;
     for (int i = 0; i <= path.size() - 1; i++) {
       currNode = path.get(i);
       if (i < path.size() - 1) {
         nextNode = path.get(i + 1);
         angle = getAngle(i);
         stateChange = !getState(i + 1).equals(state);
+        totalDistance += getDistance(path.get(i), path.get(i + 1));
       }
       state = getState(i);
       switch (state) {
@@ -120,6 +123,7 @@ public class Directions {
           }
           break;
         case CHANGING_FLOOR:
+          totalTime += 37; // add 37 sec for average floor change time
           if (!getState(i - 1).equals(CHANGING_FLOOR)) {
             startFloor = currNode.getLongName();
           }
@@ -128,7 +132,7 @@ public class Directions {
             message = "";
             messageCheck = true;
           }
-          if (stateChange) {
+          if (stateChange && getState(i - 1).equals(CHANGING_FLOOR)) {
             if (messageCheck) {
               directions.add("Take " + startFloor + " to floor " + currNode.getFloor());
               messageCheck = false;
@@ -140,14 +144,39 @@ public class Directions {
         case ARRIVING:
           if (getState(i - 1).equals(TURNING)) {
             String turnMessage = "Turn " + getTurnType(angle, getAngle(i - 2));
-            directions.add(turnMessage + " and arrive at " + currNode.getLongName());
+            directions.add(
+                turnMessage
+                    + " and arrive at "
+                    + currNode.getLongName()
+                    + " "
+                    + getTotalTimeString(totalDistance, totalTime));
           } else if (!message.equals("")) {
-            directions.add(message + " and arrive at destination");
+            directions.add(
+                message
+                    + " and arrive at destination "
+                    + getTotalTimeString(totalDistance, totalTime));
           } else {
-            directions.add("Arrive at destination");
+            directions.add("Arrive at destination " + getTotalTimeString(totalDistance, totalTime));
           }
           break;
       }
+    }
+  }
+
+  /**
+   * gets string for total time using average walking speed of 4.6 ft/s and avg elevator ride of 37
+   * sec
+   *
+   * @param totalDistance
+   * @param time
+   * @return String
+   */
+  public static String getTotalTimeString(double totalDistance, double time) {
+    int totalTime = (int) Math.round((totalDistance / 4.6 + time) / 60);
+    if (totalTime <= 0) {
+      return "(Estimated time less than 1 minute)";
+    } else {
+      return "(Estimated time " + totalTime + " minutes)";
     }
   }
 
@@ -162,14 +191,15 @@ public class Directions {
       return STARTING;
     } else if (i == path.size() - 1) {
       return ARRIVING;
-    } else if (Math.abs(getAngle(i) - getAngle(i - 1)) > TURN_THRESHOLD
-        && Math.abs(getAngle(i) - getAngle(i - 1)) < 360 - TURN_THRESHOLD) {
-      return TURNING;
     } else if ((path.get(i).getNodeType().equals("ELEV")
             || path.get(i).getNodeType().equals("STAI"))
         && (path.get(i).getFloor() != path.get(i + 1).getFloor()
             || path.get(i).getNodeType().equals(path.get(i - 1).getNodeType()))) {
       return CHANGING_FLOOR;
+    } else if (Math.abs(getAngle(i) - getAngle(i - 1)) > TURN_THRESHOLD
+        && Math.abs(getAngle(i) - getAngle(i - 1)) < 360 - TURN_THRESHOLD) {
+      return TURNING;
+
     } else if (!path.get(i).getBuilding().equals(path.get(i + 1).getBuilding())) {
       return EXITING;
     } else {
