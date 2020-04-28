@@ -1,6 +1,5 @@
 package edu.wpi.N;
 
-import edu.wpi.N.controllerData.AdminDataStorage;
 import edu.wpi.N.views.Controller;
 import edu.wpi.N.views.HomeController;
 import java.io.IOException;
@@ -14,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class App extends Application {
   private Stage masterStage;
-  public static AdminDataStorage adminDataStorage = new AdminDataStorage();
   public static HomeController homeController = new HomeController();
 
   @Override
@@ -47,7 +45,7 @@ public class App extends Application {
 
     Scene scene = new Scene(pane);
     masterStage.setScene(scene);
-    masterStage.setMaximized(true);
+    // masterStage.setMaximized(true);
     masterStage.setFullScreenExitHint("");
     masterStage.show();
     Controller controller = loader.getController();
