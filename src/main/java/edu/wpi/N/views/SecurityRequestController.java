@@ -1,5 +1,6 @@
 package edu.wpi.N.views;
 
+import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
 import edu.wpi.N.App;
@@ -8,6 +9,7 @@ import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.ServiceDB;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.States.StateSingleton;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,14 +17,18 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.input.KeyEvent;
 
-public class WheelchairRequestController implements Controller {
+public class SecurityRequestController implements Controller {
 
   private App mainApp;
-  private StateSingleton singleton;
+
   // Add FXML Tags Here
   @FXML JFXComboBox<String> cmbo_text;
-  @FXML JFXComboBox<String> cmbo_selectLang;
-  @FXML JFXTextArea txtf_wheelchairNotes;
+  @FXML JFXCheckBox cb_isEmergency;
+  @FXML JFXTextArea txtf_description;
+  @FXML
+  JFXCheckBox cb_susPerson, cb_susPackage, cb_harassment, cb_weapons, cb_shouting, cb_violence;
+
+  private ArrayList<JFXCheckBox> checkBoxes = new ArrayList<>();
 
   private ObservableList<String> fuzzySearchTextList =
       // List that fills TextViews
@@ -32,25 +38,27 @@ public class WheelchairRequestController implements Controller {
 
   private String countVal = "";
 
-  public WheelchairRequestController() throws DBException {}
+  public SecurityRequestController() throws DBException {}
 
   public void setMainApp(App mainApp) {
     this.mainApp = mainApp;
   }
 
   @Override
-  public void setSingleton(StateSingleton singleton) {
-    this.singleton = singleton;
-  }
+  public void setSingleton(StateSingleton singleton) {}
 
   public void initialize() throws DBException {
 
     cmbo_text.getEditor().setOnKeyTyped(this::locationTextChanged);
-    LinkedList<String> options = new LinkedList<String>();
-    options.add("Yes");
-    options.add("No");
-    ObservableList<String> yesOrNo = FXCollections.observableList(options);
-    cmbo_selectLang.setItems(yesOrNo);
+    LinkedList<String> languages = ServiceDB.getLanguages();
+    ObservableList<String> langList = FXCollections.observableList(languages);
+
+    checkBoxes.add(cb_susPerson);
+    checkBoxes.add(cb_susPackage);
+    checkBoxes.add(cb_harassment);
+    checkBoxes.add(cb_weapons);
+    checkBoxes.add(cb_shouting);
+    checkBoxes.add(cb_violence);
   }
 
   @FXML
@@ -84,11 +92,10 @@ public class WheelchairRequestController implements Controller {
     cmbo_text.show();
   }
 
-  // Create Translator Request
+  // Create Security Request
   @FXML
-  public void createNewTranslator() throws DBException {
+  public void createNewSecRequest() throws DBException {
 
-    String assistanceOption = cmbo_selectLang.getSelectionModel().getSelectedItem();
     String nodeID;
     int nodeIndex = 0;
 
@@ -109,22 +116,39 @@ public class WheelchairRequestController implements Controller {
       return;
     }
 
-    String notes = txtf_wheelchairNotes.getText();
-    if (assistanceOption == null) {
-      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-      errorAlert.setContentText("Please select a needs assistance option!");
-      errorAlert.show();
-      return;
+    String notes = "Report details:\n\n";
+
+    for (JFXCheckBox cb : checkBoxes) {
+      if (cb.isSelected()) {
+        notes = notes + cb.getText() + "\n";
+      }
     }
 
+    if (txtf_description.getText().isBlank() && !cb_isEmergency.isSelected()) {
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setContentText("Description required for non-emergencies.");
+      errorAlert.show();
+      return;
+    } else {
+      notes = notes + "\n" + txtf_description;
+    }
 
-    int wheelchairReq = ServiceDB.addWheelchairRequest(notes, nodeID, assistanceOption);
+    String isEmergency = "";
 
-    // App.adminDataStorage.addToList(wheelchairReq);
+    if (cb_isEmergency.isSelected()) {
+      isEmergency = "Emergency";
+    } else {
+      isEmergency = "Non-emergency";
+    }
 
-    txtf_wheelchairNotes.clear();
-    cmbo_selectLang.getItems().clear();
+    int securityRequest = ServiceDB.addSecurityReq(notes, nodeID, isEmergency);
+
+    txtf_description.clear();
+    for (JFXCheckBox cb : checkBoxes) {
+      cb.setSelected(false);
+    }
     cmbo_text.getItems().clear();
+    cb_isEmergency.setSelected(false);
 
     Alert confAlert = new Alert(Alert.AlertType.CONFIRMATION);
     confAlert.setContentText("Request Recieved");

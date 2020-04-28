@@ -640,6 +640,227 @@ public class ServicesTest {
     }
   }
 
+  /**
+   * Tests that getSecurityOfficers returns a list of only Security Officers
+   *
+   * @throws DBException
+   */
+  @Test
+  public void getAllSecurityOfficersTest() throws DBException {
+    try {
+      con.setAutoCommit(false);
+      int idJerry = ServiceDB.addSecurityOfficer("Jerry");
+      int idLucy = ServiceDB.addSecurityOfficer("Lucy");
+      int idFrank = ServiceDB.addLaundry("Frank");
+      LinkedList<String> langs = new LinkedList<>();
+      int idDrew = ServiceDB.addTranslator("Drew", langs);
+
+      con.commit();
+      con.setAutoCommit(true);
+
+      LinkedList<SecurityOfficer> employees = ServiceDB.getSecurityOfficers();
+      Assertions.assertTrue(employees.contains(ServiceDB.getEmployee(idJerry)));
+      Assertions.assertTrue(employees.contains(ServiceDB.getEmployee(idLucy)));
+      Assertions.assertFalse(employees.contains(ServiceDB.getEmployee(idFrank)));
+      Assertions.assertFalse(employees.contains(ServiceDB.getEmployee(idDrew)));
+
+      ServiceDB.removeEmployee(idJerry);
+      ServiceDB.removeEmployee(idLucy);
+      ServiceDB.removeEmployee(idFrank);
+      ServiceDB.removeEmployee(idDrew);
+
+    } catch (DBException | SQLException e) {
+      try {
+        con.rollback();
+        con.setAutoCommit(true);
+      } catch (SQLException ex) {
+        throw new DBException("Oh no");
+      }
+    }
+  }
+
+  /**
+   * Tests that function returns a Security Request if given ID matches it
+   *
+   * @throws DBException
+   */
+  @Test
+  public void getSecurityRequestsTest() throws DBException {
+    try {
+      con.setAutoCommit(false);
+      DbNode node = MapDB.addNode(5, 5, 1, "TestBuilding", "STAI", "My test", "Short");
+      int idSecurityReq =
+          ServiceDB.addSecurityReq(
+              "I'm vibing, nothing's wrong", node.getNodeID(), "Non-emergency");
+      int idL = ServiceDB.addLaundReq("Clean my clothes", node.getNodeID());
+      int idT = ServiceDB.addTransReq("Помогите!", node.getNodeID(), "Russian");
+
+      con.commit();
+      con.setAutoCommit(true);
+
+      Request request = ServiceDB.getRequest(idSecurityReq);
+      Assertions.assertTrue(request.equals(ServiceDB.getRequest(idSecurityReq)));
+
+      ServiceDB.denyRequest(idSecurityReq, "Nope");
+      ServiceDB.denyRequest(idL, "Nope");
+      ServiceDB.denyRequest(idT, "Nope");
+
+    } catch (SQLException | DBException e) {
+      try {
+        con.rollback();
+        con.setAutoCommit(true);
+      } catch (SQLException ex) {
+        throw new DBException("Oh no");
+      }
+    }
+  }
+
+  /**
+   * Tests that function getRequests returns all available requests including Security Requests
+   *
+   * @throws DBException
+   */
+  @Test
+  public void getAllRequestsIncludingSecurityRequestsTest() throws DBException {
+    try {
+      con.setAutoCommit(false);
+      DbNode node = MapDB.addNode(5, 5, 1, "TestBuilding", "STAI", "My test", "Short");
+      int idSecurityReq = ServiceDB.addSecurityReq("Vibing", node.getNodeID(), "Non-emergency");
+      int idL = ServiceDB.addLaundReq("Clean my clothes, please", node.getNodeID());
+      int idT = ServiceDB.addTransReq("Помогите!", node.getNodeID(), "Russian");
+      int idSecurityReq2 = ServiceDB.addSecurityReq("NOT VIBING", node.getNodeID(), "Emergency");
+      int idLO = ServiceDB.addLaundReq("Filthy clothes", node.getNodeID());
+      int idTO = ServiceDB.addTransReq("Помогите! Пожалуйста", node.getNodeID(), "Russian");
+
+      ServiceDB.denyRequest(idSecurityReq, "Nope");
+      ServiceDB.denyRequest(idL, "Nope");
+      ServiceDB.denyRequest(idT, "Nope");
+
+      con.commit();
+      con.setAutoCommit(true);
+
+      LinkedList<Request> allRequests = ServiceDB.getRequests();
+      Assertions.assertTrue(allRequests.size() >= 6);
+      Assertions.assertTrue(allRequests.contains(ServiceDB.getRequest(idSecurityReq)));
+      Assertions.assertTrue(allRequests.contains(ServiceDB.getRequest(idL)));
+      Assertions.assertTrue(allRequests.contains(ServiceDB.getRequest(idT)));
+      Assertions.assertTrue(allRequests.contains(ServiceDB.getRequest(idSecurityReq2)));
+      Assertions.assertTrue(allRequests.contains(ServiceDB.getRequest(idLO)));
+      Assertions.assertTrue(allRequests.contains(ServiceDB.getRequest(idTO)));
+
+      ServiceDB.denyRequest(idSecurityReq2, "Nope");
+      ServiceDB.denyRequest(idLO, "Nope");
+      ServiceDB.denyRequest(idTO, "Nope");
+
+    } catch (SQLException | DBException e) {
+      try {
+        con.rollback();
+        con.setAutoCommit(true);
+      } catch (SQLException ex) {
+        throw new DBException("Oh no");
+      }
+    }
+  }
+
+  /**
+   * Tests that get all open requests returns all Open requests including open Security requests
+   *
+   * @throws DBException
+   */
+  @Test
+  public void getAllOpenRequestsIncludingSecurityRequestsTest() throws DBException {
+    try {
+      con.setAutoCommit(false);
+      DbNode node = MapDB.addNode(5, 5, 1, "TestBuilding", "STAI", "My test", "Short");
+      int idSecRequest =
+          ServiceDB.addSecurityReq("Can't stop vibing", node.getNodeID(), "Emergency");
+      int idL = ServiceDB.addLaundReq("Clean my stuff", node.getNodeID());
+      int idT = ServiceDB.addTransReq("Помогите!", node.getNodeID(), "Russian");
+
+      con.commit();
+      con.setAutoCommit(true);
+
+      LinkedList<Request> openReqs = ServiceDB.getOpenRequests();
+      Assertions.assertTrue(openReqs.size() >= 3);
+      Assertions.assertTrue(openReqs.contains(ServiceDB.getRequest(idSecRequest)));
+
+      ServiceDB.denyRequest(idSecRequest, "Your loss.");
+      ServiceDB.denyRequest(idL, "Nope");
+      ServiceDB.denyRequest(idT, "Nope");
+
+    } catch (SQLException | DBException e) {
+      try {
+        con.rollback();
+        con.setAutoCommit(true);
+      } catch (SQLException ex) {
+        throw new DBException("Oh no");
+      }
+    }
+  }
+
+  /**
+   * Tests adding security officer to the database
+   *
+   * @throws DBException
+   */
+  @Test
+  public void addSecurityOfficerTest() throws DBException {
+    try {
+      con.setAutoCommit(false);
+      int id = ServiceDB.addSecurityOfficer("Matt");
+
+      con.commit();
+      con.setAutoCommit(true);
+
+      Assertions.assertEquals("Matt", ServiceDB.getEmployee(id).getName());
+      Assertions.assertEquals("Security", ServiceDB.getEmployee(id).getServiceType());
+
+      ServiceDB.removeEmployee(id);
+
+    } catch (SQLException | DBException e) {
+      try {
+        con.rollback();
+        con.setAutoCommit(true);
+      } catch (SQLException ex) {
+        throw new DBException("Oh no");
+      }
+    }
+  }
+
+  /**
+   * Tests that security request gets added correctly to the database
+   *
+   * @throws DBException
+   */
+  @Test
+  public void addSecurityRequestTest() throws DBException {
+    try {
+      con.setAutoCommit(false);
+      DbNode node = MapDB.addNode(5, 5, 1, "TestBuilding", "STAI", "My test", "Short");
+      int id =
+          ServiceDB.addSecurityReq("Vibing for the last time", node.getNodeID(), "Non-emergency");
+
+      con.commit();
+      con.setAutoCommit(true);
+
+      String type = ServiceDB.getRequest(id).getServiceType();
+      String isEmergency = ServiceDB.getRequest(id).getAtr1();
+      Assertions.assertTrue("Security".equals(type));
+      Assertions.assertTrue(id != 0);
+      Assertions.assertEquals("Non-emergency", isEmergency);
+
+      ServiceDB.denyRequest(id, "Don't request ever again.");
+
+    } catch (SQLException | DBException e) {
+      try {
+        con.rollback();
+        con.setAutoCommit(true);
+      } catch (SQLException ex) {
+        throw new DBException("Oh no");
+      }
+    }
+  }
+
   // Chris
   @Test
   public void testgetEmployee_flower() throws DBException, SQLException {

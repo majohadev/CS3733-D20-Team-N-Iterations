@@ -58,6 +58,8 @@ public class ServiceDB {
         return new FlowerDeliverer(id, name);
       } else if (sType.equals("Internal Transportation")) {
         return new InternalTransportationEmployee(id, name);
+      } else if (sType.equals("Security")) {
+        return new SecurityOfficer(id, name);
       } else
         throw new DBException(
             "Invalid employee in table employees! ID: " + id + "Name: " + rs.getString("name"));
@@ -87,6 +89,7 @@ public class ServiceDB {
     allEmployee.addAll(getFlowerDeliverers());
     allEmployee.addAll(getSanitationEmp());
     allEmployee.addAll(getInternalTransportationEmployees());
+    allEmployee.addAll(getSecurityOfficers());
     return allEmployee;
   }
 
@@ -300,8 +303,24 @@ public class ServiceDB {
             rs.getString("transportationType"),
             rs.getTimestamp("scheduledTransportTime").toString().substring(11, 16),
             rs.getString("destinationLocation"));
-      } else
-        throw new DBException("Invalid request! ID = " + id + ", Request type = \"" + sType + "\"");
+      } else if (sType.equals("Security")) {
+        query = "SELECT device, problem FROM secrequest WHERE requestID = ?";
+        stmt = con.prepareStatement(query);
+        stmt.setInt(1, id);
+        rs = stmt.executeQuery();
+        rs.next();
+        return new SecurityRequest(
+            rid,
+            empId,
+            reqNotes,
+            compNotes,
+            nodeID,
+            timeReq,
+            timeComp,
+            status,
+            rs.getString("isEmergency"));
+
+      } else throw new DBException("Invalid request! ID = " + id);
     } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Unknown error: getRequest", e);
@@ -484,6 +503,22 @@ public class ServiceDB {
                 rs.getTimestamp("scheduledTransportTime").toString().substring(11, 16),
                 rs.getString("destinationLocation")));
       }
+      query = "SELECT * from request, secrequest WHERE request.requestID = secrequest.requestID";
+      stmt = con.prepareStatement(query);
+      rs = stmt.executeQuery();
+      while (rs.next()) {
+        requests.add(
+            new SecurityRequest(
+                rs.getInt("requestID"),
+                rs.getInt("assigned_eID"),
+                rs.getString("reqNotes"),
+                rs.getString("compNotes"),
+                rs.getString("nodeID"),
+                getJavatime(rs.getTimestamp("timeRequested")),
+                getJavatime(rs.getTimestamp("timeCompleted")),
+                rs.getString("status"),
+                rs.getString("isEmergency")));
+      }
       return requests;
     } catch (SQLException e) {
       e.printStackTrace();
@@ -654,6 +689,23 @@ public class ServiceDB {
                 rs.getTimestamp("scheduledTransportTime").toString().substring(11, 16),
                 rs.getString("destinationLocation")));
       }
+      query =
+          "SELECT * from request, secrequest WHERE request.requestID = secrequest.requestID AND status = 'OPEN'";
+      stmt = con.prepareStatement(query);
+      rs = stmt.executeQuery();
+      while (rs.next()) {
+        openList.add(
+            new SecurityRequest(
+                rs.getInt("requestID"),
+                rs.getInt("assigned_eID"),
+                rs.getString("reqNotes"),
+                rs.getString("compNotes"),
+                rs.getString("nodeID"),
+                getJavatime(rs.getTimestamp("timeRequested")),
+                getJavatime(rs.getTimestamp("timeCompleted")),
+                rs.getString("status"),
+                rs.getString("isEmergency")));
+      }
       return openList;
     } catch (SQLException ex) {
       ex.printStackTrace();
@@ -816,6 +868,28 @@ public class ServiceDB {
     } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Unknown error: getITs", e);
+    }
+  }
+
+  /**
+   * Gets all the security officers in the database
+   *
+   * @return a linked list of all security officers in the database
+   */
+  public static LinkedList<SecurityOfficer> getSecurityOfficers() throws DBException {
+    try {
+      String query =
+          "SELECT sec_employeeID from employees, security where employeeID = sec_employeeID";
+      PreparedStatement stmt = con.prepareStatement(query);
+      ResultSet rs = stmt.executeQuery();
+      LinkedList<SecurityOfficer> secOffs = new LinkedList<>();
+      while (rs.next()) {
+        secOffs.add((SecurityOfficer) getEmployee(rs.getInt("sec_employeeID")));
+      }
+      return secOffs;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown error: getSecurityOfficers", e);
     }
   }
 
@@ -1066,6 +1140,33 @@ public class ServiceDB {
     } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Unknown error: addIT , name = " + name, e);
+    }
+  }
+
+  // Matt
+  /**
+   * Adds a security officer to the database
+   *
+   * @param name the security officer's name
+   * @return id of created request
+   */
+  public static int addSecurityOfficer(String name) throws DBException {
+    try {
+      String query = "INSERT INTO employees (name, serviceType) VALUES (?, 'Security')";
+      PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+      stmt.setString(1, name);
+      stmt.executeUpdate();
+      ResultSet rs = stmt.getGeneratedKeys();
+      rs.next(); // NullPointerException
+      query = "INSERT INTO security VALUES (?)";
+      stmt = con.prepareStatement(query);
+      int id = rs.getInt("1");
+      stmt.setInt(1, id);
+      stmt.executeUpdate();
+      return id;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown error: addSecurityOfficer , name = " + name, e);
     }
   }
 
@@ -1432,6 +1533,41 @@ public class ServiceDB {
     } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Error: addITReq", e);
+    }
+  }
+
+  // Matt
+  /**
+   * Adds a request for security
+   *
+   * @param reqNotes Description of the incident being reported
+   * @param nodeID The ID of the node in which these services are requested
+   * @return the id of the created request
+   */
+  public static int addSecurityReq(String reqNotes, String nodeID, String isEmergency)
+      throws DBException {
+    try {
+      String query =
+          "INSERT INTO request (timeRequested, reqNotes, serviceType, nodeID, status) VALUES (?, ?, ?, ?, ?)";
+      PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+      stmt.setTimestamp(1, new Timestamp(new Date().getTime()));
+      stmt.setString(2, reqNotes);
+      stmt.setString(3, "Security");
+      stmt.setString(4, nodeID);
+      stmt.setString(5, "OPEN");
+      stmt.execute();
+      ResultSet rs = stmt.getGeneratedKeys();
+      rs.next();
+      query = "INSERT INTO secrequest (requestID, isEmergency) VALUES (?, ?)";
+      stmt = con.prepareStatement(query);
+      int id = rs.getInt("1");
+      stmt.setInt(1, id);
+      stmt.setString(2, isEmergency);
+      stmt.executeUpdate();
+      return id;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Error: addSecurityReq", e);
     }
   }
 
