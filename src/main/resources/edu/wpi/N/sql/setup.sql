@@ -194,6 +194,8 @@ INSERT INTO service VALUES ('IT', '00:00', '00:00', 'Make a request for IT servi
 INSERT INTO service VALUES ('Internal Transportation', '00:00', '00:00', 'Make a request for Internal Transportation!');
 INSERT INTO service VALUES ('Flower', '00:00', '00:00', 'Make a request for Flower Delivery services');
 
+INSERT INTO credential VALUES ('Gaben', 'MoolyFTW', 'ADMIN');
+
 CREATE TRIGGER doc_delete AFTER DELETE ON doctors
 REFERENCING OLD AS oldRow
 FOR EACH ROW MODE DB2SQL

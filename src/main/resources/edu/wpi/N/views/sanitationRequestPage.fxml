@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXTextArea?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="sanitationRequestPage" prefHeight="900.0" prefWidth="1264.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.SanitationRequestController">
+   <children>
+      <HBox alignment="CENTER_LEFT" layoutX="318.0" layoutY="14.0" prefHeight="150.0" prefWidth="629.0" spacing="30.0" style="-fx-background-color: #002186; -fx-background-radius: 10;">
+         <children>
+            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/languageWhite.png" />
+               </image>
+            </ImageView>
+            <Label text="Sanitation Request" textFill="WHITE">
+               <font>
+                  <Font name="Calibri" size="55.0" />
+               </font>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </Label>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" layoutX="34.0" layoutY="160.0" prefHeight="542.0" prefWidth="1196.0" spacing="100.0">
+         <children>
+            <VBox alignment="CENTER" maxHeight="509.0" maxWidth="500.0" minWidth="500.0" prefHeight="509.0" prefWidth="500.0" spacing="30.0">
+               <children>
+                  <Label prefHeight="71.0" prefWidth="500.0" text="Please Enter A Location To Send Sanitation Services" textAlignment="CENTER" wrapText="true">
+                     <font>
+                        <Font name="Calibri" size="24.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </Label>
+                  <JFXComboBox fx:id="cmbo_text" editable="true" labelFloat="true" onKeyTyped="#locationTextChanged" prefHeight="46.0" prefWidth="394.0" promptText="Enter Location" style="-fx-font-size: 18;" />
+                  <Label text="Please Select the Size of the Spill if Applicable">
+                     <font>
+                        <Font name="Calibri" size="24.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="25.0" />
+                     </VBox.margin>
+                  </Label>
+                  <JFXComboBox fx:id="cmbo_selectLang" labelFloat="true" layoutX="63.0" layoutY="279.0" prefHeight="46.0" prefWidth="394.0" promptText="Select Size From List" style="-fx-font-size: 18;" />
+                  <Label text="Please Select the Danger Level of the Spill">
+                     <font>
+                        <Font name="Calibri" size="24.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="25.0" />
+                     </VBox.margin>
+                  </Label>
+                  <JFXComboBox fx:id="cmbo_selectLang1" labelFloat="true" prefHeight="46.0" prefWidth="394.0" promptText="Select Danger Level From List" style="-fx-font-size: 18;" />
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" maxHeight="500.0" maxWidth="500.0" minWidth="500.0" prefHeight="200.0" prefWidth="100.0" spacing="30.0">
+               <children>
+                  <Label text="Enter the Type of Spill if Known">
+                     <font>
+                        <Font name="Calibri" size="24.0" />
+                     </font>
+                  </Label>
+                  <JFXTextField labelFloat="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="46.0" prefWidth="394.0" promptText="Enter Type of Spill" style="-fx-font-size: 18;">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </JFXTextField>
+                  <Label text="Please Enter Aditional Notes Below">
+                     <font>
+                        <Font name="Calibri" size="24.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="50.0" />
+                     </VBox.margin>
+                  </Label>
+                  <JFXTextArea fx:id="txtf_sanitationNotes" maxWidth="394.0" minWidth="394.0" prefHeight="138.0" prefWidth="394.0" promptText="Enter Notes Here" style="-fx-font-size: 18;" />
+               </children></VBox>
+         </children>
+      </HBox>
+      <JFXButton fx:id="btn_submit" buttonType="RAISED" contentDisplay="RIGHT" graphicTextGap="20.0" layoutX="382.0" layoutY="743.0" minHeight="75.0" minWidth="200.0" onMouseClicked="#createNewSanitation" ripplerFill="#c1c9eb" style="-fx-background-color: #002186;" stylesheets="@submitButton.css" text="Submit Request">
+         <font>
+            <Font size="48.0" />
+         </font>
+         <graphic>
+            <ImageView fitHeight="54.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" style="fx-border-color: yellow;">
+               <image>
+                  <Image url="@../images/yellowArrow.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </JFXButton>
+   </children>
+</AnchorPane>

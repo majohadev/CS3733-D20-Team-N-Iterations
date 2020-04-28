@@ -9,6 +9,7 @@ import edu.wpi.N.database.MapDB;
 import edu.wpi.N.database.ServiceDB;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Path;
+import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.entities.employees.Doctor;
 import edu.wpi.N.qrcontrol.QRGenerator;
 import java.io.IOException;
@@ -40,6 +41,14 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class MapDisplayController extends QRGenerator implements Controller {
+
+  private StateSingleton singleton;
+
+  @Override
+  public void setSingleton(StateSingleton singleton) {
+    this.singleton = singleton;
+  }
+
   private App mainApp;
   final float BAR_WIDTH = 300;
   final float IMAGE_WIDTH = 2475;
@@ -207,9 +216,7 @@ public class MapDisplayController extends QRGenerator implements Controller {
       return;
     }
 
-    // Evan - hard coded map to use AStar algorithm for now and false for handicap
-    Algorithm myAStar = new Algorithm();
-    Path path = myAStar.findPath(firstNode, secondNode, false);
+    Path path = singleton.savedAlgo.findPath(firstNode, secondNode, false);
 
     if (path != null) {
       LinkedList<DbNode> pathNodes = path.getPath();
@@ -264,7 +271,7 @@ public class MapDisplayController extends QRGenerator implements Controller {
   }
 
   public void onReturnClicked() throws IOException {
-    mainApp.switchScene("views/home.fxml");
+    mainApp.switchScene("views/home.fxml", singleton);
   }
   // Zoom controls
 

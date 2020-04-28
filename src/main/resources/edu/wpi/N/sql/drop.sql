@@ -22,7 +22,6 @@ DROP TABLE emotionalSupporter;
 DROP TABLE wheelchairEmployee;
 DROP TABLE flower;
 DROP TABLE IT;
-DROP TABLE emotionalSupporter;
 DROP TABLE employees;
 DROP TABLE service;
 DROP TABLE kiosk;
