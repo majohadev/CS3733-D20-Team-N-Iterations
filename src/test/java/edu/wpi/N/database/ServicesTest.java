@@ -65,7 +65,7 @@ public class ServicesTest {
    * @throws DBException
    */
   @Test
-  public void testGetAllEmotionalSupporters() throws DBException {
+  public void testGetAllEmotionalSupporters() throws DBException, SQLException {
     try {
       con.setAutoCommit(false);
       // Insertion statements, like addTranslator
@@ -107,6 +107,7 @@ public class ServicesTest {
       } catch (SQLException ex) {
         throw new DBException("Oh no");
       }
+      throw e;
     }
   }
 
@@ -116,7 +117,7 @@ public class ServicesTest {
    * @throws DBException
    */
   @Test
-  public void testGetRequestEmotionalSupport() throws DBException {
+  public void testGetRequestEmotionalSupport() throws DBException, SQLException {
     try {
       con.setAutoCommit(false);
       // Insertion statements, like addTranslator
@@ -147,6 +148,7 @@ public class ServicesTest {
       } catch (SQLException ex) {
         throw new DBException("Oh no");
       }
+      throw e;
     }
   }
 
@@ -156,7 +158,7 @@ public class ServicesTest {
    * @throws DBException
    */
   @Test
-  public void testGetAllRequestsIncludingEmotionalSupport() throws DBException {
+  public void testGetAllRequestsIncludingEmotionalSupport() throws DBException, SQLException {
     try {
       con.setAutoCommit(false);
       // Insertion statements, like addTranslator
@@ -206,6 +208,7 @@ public class ServicesTest {
       } catch (SQLException ex) {
         throw new DBException("Oh no");
       }
+      throw e;
     }
   }
 
@@ -215,7 +218,7 @@ public class ServicesTest {
    * @throws DBException
    */
   @Test
-  public void testGetAllOpenRequestsIncludingEmotionalSupport() throws DBException {
+  public void testGetAllOpenRequestsIncludingEmotionalSupport() throws DBException, SQLException {
     try {
       con.setAutoCommit(false);
       // Insertion statements, like addTranslator
@@ -244,6 +247,7 @@ public class ServicesTest {
       } catch (SQLException ex) {
         throw new DBException("Oh no");
       }
+      throw e;
     }
   }
 
@@ -253,7 +257,7 @@ public class ServicesTest {
    * @throws DBException
    */
   @Test
-  public void testAddEmotionalSupporter() throws DBException {
+  public void testAddEmotionalSupporter() throws DBException, SQLException {
     try {
       con.setAutoCommit(false);
       // Insertion statements, like addTranslator
@@ -274,6 +278,7 @@ public class ServicesTest {
       } catch (SQLException ex) {
         throw new DBException("Oh no");
       }
+      throw e;
     }
     con = MapDB.getCon();
   }
@@ -303,6 +308,7 @@ public class ServicesTest {
       } catch (SQLException ex) {
         throw new DBException("Oh no");
       }
+      throw e;
     }
   }
 
@@ -342,6 +348,7 @@ public class ServicesTest {
       } catch (SQLException ex) {
         throw new DBException("Oh no");
       }
+      throw e;
     }
   }
 
@@ -373,8 +380,8 @@ public class ServicesTest {
           ServiceDB.getRequests().contains(ServiceDB.getRequest(wheelchairReqID1)));
       ServiceDB.denyRequest(wheelchairReqID2, "done");
 
-      ServiceDB.removeEmployee(wheelchairReqID1);
-      ServiceDB.removeEmployee(wheelchairReqID2);
+      // ServiceDB.removeEmployee(wheelchairReqID1);
+      // ServiceDB.removeEmployee(wheelchairReqID2);
 
       MapDB.clearNodes();
     } catch (SQLException | DBException e) {
@@ -384,6 +391,7 @@ public class ServicesTest {
       } catch (SQLException ex) {
         throw new DBException("Oh no");
       }
+      throw e;
     }
     con = MapDB.getCon();
   }
@@ -394,7 +402,7 @@ public class ServicesTest {
    * @throws DBException
    */
   @Test
-  public void getListOfITEmployeesTest() throws DBException {
+  public void getListOfITEmployeesTest() throws DBException, SQLException {
     try {
       con.setAutoCommit(false);
       int idJerry = ServiceDB.addIT("Jerry");
@@ -424,6 +432,7 @@ public class ServicesTest {
       } catch (SQLException ex) {
         throw new DBException("Oh no");
       }
+      throw e;
     }
   }
 
@@ -433,7 +442,7 @@ public class ServicesTest {
    * @throws DBException
    */
   @Test
-  public void testAddEmotSuppReq() throws DBException {
+  public void testAddEmotSuppReq() throws DBException, SQLException {
     try {
       con.setAutoCommit(false);
       DbNode node = MapDB.addNode(5, 5, 1, "TestBuilding", "STAI", "My test", "Short");
@@ -454,6 +463,7 @@ public class ServicesTest {
       } catch (SQLException ex) {
         throw new DBException("Oh no");
       }
+      throw e;
     }
   }
 
@@ -463,7 +473,7 @@ public class ServicesTest {
    * @throws DBException
    */
   @Test
-  public void getITRequestsTest() throws DBException {
+  public void getITRequestsTest() throws DBException, SQLException {
     try {
       con.setAutoCommit(false);
       DbNode node = MapDB.addNode(5, 5, 1, "TestBuilding", "STAI", "My test", "Short");
@@ -490,6 +500,7 @@ public class ServicesTest {
       } catch (SQLException ex) {
         throw new DBException("Oh no");
       }
+      throw e;
     }
   }
 
@@ -499,7 +510,7 @@ public class ServicesTest {
    * @throws DBException
    */
   @Test
-  public void getAllRequestsIncludingITRequestsTest() throws DBException {
+  public void getAllRequestsIncludingITRequestsTest() throws DBException, SQLException {
     try {
       con.setAutoCommit(false);
       DbNode node = MapDB.addNode(5, 5, 1, "TestBuilding", "STAI", "My test", "Short");
@@ -539,6 +550,7 @@ public class ServicesTest {
       } catch (SQLException ex) {
         throw new DBException("Oh no");
       }
+      throw e;
     }
   }
 
@@ -548,7 +560,7 @@ public class ServicesTest {
    * @throws DBException
    */
   @Test
-  public void getAllOpenRequestsIncludingITRequestsTest() throws DBException {
+  public void getAllOpenRequestsIncludingITRequestsTest() throws DBException, SQLException {
     try {
       con.setAutoCommit(false);
       DbNode node = MapDB.addNode(5, 5, 1, "TestBuilding", "STAI", "My test", "Short");
@@ -576,6 +588,7 @@ public class ServicesTest {
       } catch (SQLException ex) {
         throw new DBException("Oh no");
       }
+      throw e;
     }
   }
 
@@ -614,7 +627,7 @@ public class ServicesTest {
    * @throws DBException
    */
   @Test
-  public void addITRequestTest() throws DBException {
+  public void addITRequestTest() throws DBException, SQLException {
     try {
       con.setAutoCommit(false);
       DbNode node = MapDB.addNode(5, 5, 1, "TestBuilding", "STAI", "My test", "Short");
@@ -638,6 +651,7 @@ public class ServicesTest {
       } catch (SQLException ex) {
         throw new DBException("Oh no");
       }
+      throw e;
     }
   }
 
