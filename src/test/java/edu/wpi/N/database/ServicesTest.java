@@ -666,8 +666,8 @@ public class ServicesTest {
   // Nick
   @Test
   public void testGetAndAddRequest_flower() throws DBException {
-    Flower rose = ServiceDB.addFlower("Rose", 20.22);
-    Flower tulip = ServiceDB.addFlower("Tulip", 123.45);
+    Flower rose = ServiceDB.addFlower("Rose", 2022);
+    Flower tulip = ServiceDB.addFlower("Tulip", 12345);
 
     DbNode node =
         MapDB.addNode(
@@ -681,6 +681,8 @@ public class ServicesTest {
     int id =
         ServiceDB.addFlowerReq(
             "pretty", node.getNodeID(), "Snirp", "Wrat", "1234-5678-9012-3456", flowers);
+
+    String flowerString = "2 Roses, 1 Tulip";
 
     GregorianCalendar cal = (GregorianCalendar) GregorianCalendar.getInstance();
 
@@ -697,7 +699,7 @@ public class ServicesTest {
             "Snirp",
             "Wrat",
             "1234-5678-9012-3456",
-            flowers);
+            flowerString);
 
     assertEquals(expected, ServiceDB.getRequest(id));
 
@@ -714,7 +716,7 @@ public class ServicesTest {
       con.setAutoCommit(false);
       DbNode node = MapDB.addNode(5, 5, 1, "TestBuilding", "STAI", "My test", "Short");
 
-      ServiceDB.addFlower("Rose", 1.23);
+      ServiceDB.addFlower("Rose", 123);
       LinkedList<String> flowers = new LinkedList<>();
       flowers.add("Rose");
 
@@ -771,7 +773,7 @@ public class ServicesTest {
       DbNode node = MapDB.addNode(5, 5, 1, "TestBuilding", "STAI", "My test", "Short");
       // add Emotional support
 
-      ServiceDB.addFlower("Daisy", 12.09);
+      ServiceDB.addFlower("Daisy", 1209);
       LinkedList<String> flowers = new LinkedList<>();
       flowers.add("Daisy");
 

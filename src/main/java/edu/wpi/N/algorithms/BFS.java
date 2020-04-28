@@ -21,8 +21,7 @@ public class BFS extends AbsAlgo {
   @Override
   public Path findPath(DbNode startNode, DbNode endNode, boolean handicap) throws DBException {
     try {
-      // TODO: delete later
-      System.out.println("BFS!!!!");
+
       // Initialize variables
       Queue<Node> queue = new LinkedList<>();
       ArrayList<Node> checked = new ArrayList<>();

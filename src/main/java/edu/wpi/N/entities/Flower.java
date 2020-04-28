@@ -1,9 +1,7 @@
 package edu.wpi.N.entities;
 
 public class Flower {
-  public String getFlowerName() {
-    return flowerName;
-  }
+
 
   public void setFlowerName(String flowerName) {
     this.flowerName = flowerName;
@@ -14,12 +12,15 @@ public class Flower {
   }
 
   String flowerName;
-  int price;
+  String price;
 
   public Flower(String name, int price) {
     this.flowerName = name;
-    this.price =
-        price; // can convert it using "$" + price/100 + String.format(".%02d", price % 100)
+    this.price = "$" + price/100 + String.format(".%02d", price % 100);
+  }
+
+  public String getFlowerName() {
+    return flowerName;
   }
 
   public double getPrice() {
