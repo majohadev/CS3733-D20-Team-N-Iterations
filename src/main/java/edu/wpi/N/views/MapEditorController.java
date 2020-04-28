@@ -408,8 +408,7 @@ public class MapEditorController implements Controller {
       }
       elevCircle = circle;
       elevCircle.setFill(EDIT_ELEV_SELECTED_COLOR);
-      // controllerEditElev.setFloor(nodesMap.get(circle).getDBNode().getFloor());
-      controllerEditElev.setFloor(currentFloor);
+      controllerEditElev.setFloor(nodesMap.get(circle).getDBNode().getFloor());
       controllerEditElev.setNode(nodesMap.get(circle).getDBNode());
       pn_elev.setVisible(true);
     }
