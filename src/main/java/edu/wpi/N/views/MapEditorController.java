@@ -967,6 +967,7 @@ public class MapEditorController implements Controller {
         e -> {
           currentFloor = 1;
           setFloorImg("/edu/wpi/N/images/Floor1Reclor.png");
+          btn_floor1.setStyle("fx-background-color: #ffc911");
         });
     btn_floor2
         .getStylesheets()
@@ -1006,11 +1007,12 @@ public class MapEditorController implements Controller {
         });
     JFXNodesList nodesList = new JFXNodesList();
     nodesList.addAnimatedNode(btn_floors);
-    nodesList.addAnimatedNode(btn_floor1);
-    nodesList.addAnimatedNode(btn_floor2);
-    nodesList.addAnimatedNode(btn_floor3);
-    nodesList.addAnimatedNode(btn_floor4);
     nodesList.addAnimatedNode(btn_floor5);
+    nodesList.addAnimatedNode(btn_floor4);
+    nodesList.addAnimatedNode(btn_floor3);
+    nodesList.addAnimatedNode(btn_floor2);
+    nodesList.addAnimatedNode(btn_floor1);
+
     nodesList.setSpacing(10);
     pn_changeFloor.getChildren().add(nodesList);
   }

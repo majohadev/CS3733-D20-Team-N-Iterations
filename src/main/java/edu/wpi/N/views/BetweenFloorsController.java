@@ -32,10 +32,11 @@ public class BetweenFloorsController implements Controller, Initializable {
   @FXML private AnchorPane parent;
   @FXML private JFXButton btn_save;
   @FXML private JFXButton btn_cancel;
-  final Color DEFAULT_CIRCLE_COLOR = Color.PURPLE;
+  @FXML private Text text;
+  final Color DEFAULT_CIRCLE_COLOR = Color.web("#002186"); // Color.PURPLE;
   final Color INACTIVE_CIRCLE_COLOR = Color.GRAY;
   final Color DEFAULT_TEXT_COLOR = Color.WHITE;
-  final Color DEFAULT_SELECTED_COLOR = Color.RED;
+  final Color DEFAULT_SELECTED_COLOR = Color.web("#ffc911"); // Color.RED;
   final int DEFAULT_RADIUS = 20;
   final int TEXT_OFFSETX = -6;
   final int TEXT_OFFSETY = 6;
@@ -57,16 +58,20 @@ public class BetweenFloorsController implements Controller, Initializable {
     this.floors = new LinkedList<Integer>();
     this.originalEdges = new LinkedList<DbNode[]>();
 
-    Circle circle5 = createCircle(65, 0, "5", 5);
-    Circle circle4 = createCircle(65, 75, "4", 4);
-    Circle circle3 = createCircle(65, 150, "3", 3);
-    Circle circle2 = createCircle(65, 225, "2", 2);
-    Circle circle1 = createCircle(65, 300f, "1", 1);
+    Circle circle5 = createCircle(65, 10, "5", 5);
+    Circle circle4 = createCircle(65, 85, "4", 4);
+    Circle circle3 = createCircle(65, 160, "3", 3);
+    Circle circle2 = createCircle(65, 235, "2", 2);
+    Circle circle1 = createCircle(65, 310f, "1", 1);
   }
 
   public void setFloor(int floor) {
     this.floor = floor;
+    this.nodeStatus = new HashMap<Integer, Pair<DbNode, Boolean>>();
+    this.floors = new LinkedList<Integer>();
+    this.originalEdges = new LinkedList<DbNode[]>();
     currNode = false;
+    text.setVisible(false);
     for (int i = 1; i <= 5; i++) {
       Circle circle = nodes.get(i);
       circle.setFill(INACTIVE_CIRCLE_COLOR);
@@ -97,6 +102,8 @@ public class BetweenFloorsController implements Controller, Initializable {
       nodes.get(n[0].getFloor()).setFill(DEFAULT_CIRCLE_COLOR);
       nodes.get(n[1].getFloor()).setFill(DEFAULT_CIRCLE_COLOR);
     }
+    text.setVisible(true);
+    text.setText(node.getLongName());
   }
 
   @Override
