@@ -118,7 +118,7 @@ public class ITServiceController implements Controller {
     String notes = txtf_ITnotes.getText();
 
     int ITReq = ServiceDB.addITReq(notes, nodeID, device, problem);
-    App.adminDataStorage.addToList(ITReq);
+    // App.newAdminController.addToList(ITReq);
 
     txtf_device.clear();
     txtf_problem.clear();
