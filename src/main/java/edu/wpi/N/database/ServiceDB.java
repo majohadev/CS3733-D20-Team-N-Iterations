@@ -940,6 +940,7 @@ public class ServiceDB {
       int id = rs.getInt("1");
       st.setInt(1, id);
       st.executeUpdate();
+      if (languages == null) return id;
       Iterator<String> langIt = languages.iterator();
       while (langIt.hasNext()) {
         query = "INSERT INTO language VALUES (?, ?)";
@@ -1209,17 +1210,22 @@ public class ServiceDB {
   /**
    * Adds a request for a medicine
    *
-   * @param reqNotes
-   * @param nodeID
-   * @param type
-   * @param dosage
-   * @param units
-   * @param patient
+   * @param reqNotes notes for the request
+   * @param nodeID the nodeID of the location for the request
+   * @param medicineName the name of the medicine to be delivered
+   * @param dosage the dosage of the request
+   * @param units the units for the dosage
+   * @param patient The patient that the medicine should be delivered to
    * @return the id of the created request
-   * @throws DBException
+   * @throws DBException on error
    */
   public static int addMedReq(
-      String reqNotes, String nodeID, String type, double dosage, String units, String patient)
+      String reqNotes,
+      String nodeID,
+      String medicineName,
+      double dosage,
+      String units,
+      String patient)
       throws DBException {
     try {
       String query =
@@ -1238,7 +1244,7 @@ public class ServiceDB {
       stmt = con.prepareStatement(query);
       int id = rs.getInt("1");
       stmt.setInt(1, id);
-      stmt.setString(2, type);
+      stmt.setString(2, medicineName);
       stmt.setDouble(3, dosage);
       stmt.setString(4, units);
       stmt.setString(5, patient);

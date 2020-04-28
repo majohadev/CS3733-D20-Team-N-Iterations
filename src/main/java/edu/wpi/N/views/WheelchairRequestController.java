@@ -154,8 +154,4 @@ public class WheelchairRequestController implements Controller {
     confAlert.setContentText("Request Recieved");
     confAlert.show();
   }
-
-  public void printAreaText() {
-    System.out.println(txtf_notes.getText());
-  }
 }
