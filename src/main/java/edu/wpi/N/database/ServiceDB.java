@@ -4,6 +4,8 @@ import edu.wpi.N.entities.*;
 import edu.wpi.N.entities.employees.*;
 import edu.wpi.N.entities.request.*;
 import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Date;
 import java.util.regex.Pattern;
@@ -54,9 +56,10 @@ public class ServiceDB {
         return new IT(id, name);
       } else if (sType.equals("Flower")) {
         return new FlowerDeliverer(id, name);
-      } else if (sType.equals("Internal Transportation")){
+      } else if (sType.equals("Internal Transportation")) {
         return new InternalTransportationEmployee(id, name);
-      } else throw new DBException(
+      } else
+        throw new DBException(
             "Invalid employee in table employees! ID: " + id + "Name: " + rs.getString("name"));
 
     } catch (SQLException e) {
@@ -276,25 +279,26 @@ public class ServiceDB {
         return new FlowerRequest(
             rid, empId, reqNotes, compNotes, nodeID, timeReq, timeComp, status, a, b, c, flowers);
       } else if (sType.equals("Internal Transportation")) {
-        query = "SELECT transportationType, scheduledTransportTime, destinationLocation FROM internalTransportationRequest " +
-                "WHERE requestID = ?";
+        query =
+            "SELECT transportationType, scheduledTransportTime, destinationLocation FROM internalTransportationRequest "
+                + "WHERE requestID = ?";
 
         stmt = con.prepareStatement(query);
         stmt.setInt(1, id);
         rs = stmt.executeQuery();
         rs.next();
         return new InternalTransportationRequest(
-                rid,
-                empId,
-                reqNotes,
-                compNotes,
-                nodeID,
-                timeReq,
-                timeComp,
-                status,
-                rs.getString("transportationType"),
-                rs.getTimestamp("scheduledTransportTime").toString().substring(11, 16),
-                rs.getString("destinationLocation"));
+            rid,
+            empId,
+            reqNotes,
+            compNotes,
+            nodeID,
+            timeReq,
+            timeComp,
+            status,
+            rs.getString("transportationType"),
+            rs.getTimestamp("scheduledTransportTime").toString().substring(11, 16),
+            rs.getString("destinationLocation"));
       } else
         throw new DBException("Invalid request! ID = " + id + ", Request type = \"" + sType + "\"");
     } catch (SQLException e) {
@@ -460,23 +464,24 @@ public class ServiceDB {
                 rs.getString("creditNum"),
                 flowers));
       }
-      query = "SELECT * from request, internalTransportationRequest WHERE request.requestID = internalTransportationRequest.requestID";
+      query =
+          "SELECT * from request, internalTransportationRequest WHERE request.requestID = internalTransportationRequest.requestID";
       stmt = con.prepareStatement(query);
       rs = stmt.executeQuery();
       while (rs.next()) {
         requests.add(
-                new InternalTransportationRequest(
-                        rs.getInt("requestID"),
-                        rs.getInt("assigned_eID"),
-                        rs.getString("reqNotes"),
-                        rs.getString("compNotes"),
-                        rs.getString("nodeID"),
-                        getJavatime(rs.getTimestamp("timeRequested")),
-                        getJavatime(rs.getTimestamp("timeCompleted")),
-                        rs.getString("status"),
-                        rs.getString("transportationRequest"),
-                        rs.getTimestamp("scheduledTransportationTime").toString().substring(11, 16),
-                        rs.getString("destinationLocation")));
+            new InternalTransportationRequest(
+                rs.getInt("requestID"),
+                rs.getInt("assigned_eID"),
+                rs.getString("reqNotes"),
+                rs.getString("compNotes"),
+                rs.getString("nodeID"),
+                getJavatime(rs.getTimestamp("timeRequested")),
+                getJavatime(rs.getTimestamp("timeCompleted")),
+                rs.getString("status"),
+                rs.getString("transportationType"),
+                rs.getTimestamp("scheduledTransportTime").toString().substring(11, 16),
+                rs.getString("destinationLocation")));
       }
       return requests;
     } catch (SQLException e) {
@@ -628,24 +633,25 @@ public class ServiceDB {
                 rs.getString("creditNum"),
                 flowers));
       }
-      query = "SELECT * from request, internalTransportationRequest " +
-              "WHERE request.requestID = internalTransportationRequest.requestID AND status = 'OPEN'";
+      query =
+          "SELECT * from request, internalTransportationRequest "
+              + "WHERE request.requestID = internalTransportationRequest.requestID AND status = 'OPEN'";
       stmt = con.prepareStatement(query);
       rs = stmt.executeQuery();
       while (rs.next()) {
         openList.add(
-                new InternalTransportationRequest(
-                        rs.getInt("requestID"),
-                        rs.getInt("assigned_eID"),
-                        rs.getString("reqNotes"),
-                        rs.getString("compNotes"),
-                        rs.getString("nodeID"),
-                        getJavatime(rs.getTimestamp("timeRequested")),
-                        getJavatime(rs.getTimestamp("timeCompleted")),
-                        rs.getString("status"),
-                        rs.getString("transportationRequest"),
-                        rs.getTimestamp("scheduledTransportationTime").toString().substring(11, 16),
-                        rs.getString("destinationLocation")));
+            new InternalTransportationRequest(
+                rs.getInt("requestID"),
+                rs.getInt("assigned_eID"),
+                rs.getString("reqNotes"),
+                rs.getString("compNotes"),
+                rs.getString("nodeID"),
+                getJavatime(rs.getTimestamp("timeRequested")),
+                getJavatime(rs.getTimestamp("timeCompleted")),
+                rs.getString("status"),
+                rs.getString("transportationType"),
+                rs.getTimestamp("scheduledTransportTime").toString().substring(11, 16),
+                rs.getString("destinationLocation")));
       }
       return openList;
     } catch (SQLException ex) {
@@ -706,9 +712,11 @@ public class ServiceDB {
    * @return a LinkedList of InternalTransportationRequest
    * @throws DBException
    */
-  public static LinkedList<InternalTransportationEmployee> getInternalTransportationEmployees() throws DBException {
+  public static LinkedList<InternalTransportationEmployee> getInternalTransportationEmployees()
+      throws DBException {
     try {
-      String query = "SELECT inTr_employeeID from employees, internalTransportationEmployee where employeeID = inTr_employeeID";
+      String query =
+          "SELECT inTr_employeeID from employees, internalTransportationEmployee where employeeID = inTr_employeeID";
       PreparedStatement stmt = con.prepareStatement(query);
       ResultSet rs = stmt.executeQuery();
       LinkedList<InternalTransportationEmployee> emps = new LinkedList<>();
@@ -937,7 +945,8 @@ public class ServiceDB {
    */
   public static int addInternalTransportationEmployee(String name) throws DBException {
     try {
-      String query = "INSERT INTO employees (name, serviceType) VALUES (?, 'Internal Transportation')";
+      String query =
+          "INSERT INTO employees (name, serviceType) VALUES (?, 'Internal Transportation')";
       PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
       stmt.setString(1, name);
       stmt.executeUpdate();
@@ -1174,32 +1183,40 @@ public class ServiceDB {
 
   // TODO: Create your addRequest call here
 
-  public static int addInternalTransportationReq(String reqNotes, String nodeID,
-                                                 String transportationType,
-                                                 String scheduledTransportTime,
-                                                 String destinationLocation) throws DBException {
+  public static int addInternalTransportationReq(
+      String reqNotes,
+      String nodeID,
+      String transportationType,
+      String scheduledTransportTime,
+      String destinationLocation)
+      throws DBException {
     try {
       String query =
-              "INSERT INTO request (timeRequested, reqNotes, serviceType, nodeID, status) VALUES (?, ?, ?, ?, ?)";
+          "INSERT INTO request (timeRequested, reqNotes, serviceType, nodeID, status) VALUES (?, ?, ?, ?, ?)";
       PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
       stmt.setTimestamp(1, new Timestamp(new Date().getTime()));
       stmt.setString(2, reqNotes);
-      stmt.setString(3, "Emotional Support");
+      stmt.setString(3, "Internal Transportation");
       stmt.setString(4, nodeID);
       stmt.setString(5, "OPEN");
       stmt.execute();
       ResultSet rs = stmt.getGeneratedKeys();
       rs.next();
-      query = "INSERT INTO INTERNALTRANSPORTATIONREQUEST (requestID, TRANSPORTATIONTYPE, SCHEDULEDTRANSPORTTIME, DESTINATIONLOCATION) VALUES (?, ?, ?, ?)";
+      query =
+          "INSERT INTO INTERNALTRANSPORTATIONREQUEST (requestID, TRANSPORTATIONTYPE, SCHEDULEDTRANSPORTTIME, DESTINATIONLOCATION) VALUES (?, ?, ?, ?)";
       stmt = con.prepareStatement(query);
       int id = rs.getInt("1");
       stmt.setInt(1, id);
       stmt.setString(2, transportationType);
-      stmt.setString(3, scheduledTransportTime);
+
+      SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm");
+      Date parsedDate = dateFormat.parse(scheduledTransportTime);
+      stmt.setTimestamp(3, new Timestamp(parsedDate.getTime()));
+
       stmt.setString(4, destinationLocation);
       stmt.executeUpdate();
       return id;
-    } catch (SQLException e) {
+    } catch (SQLException | ParseException e) {
       throw new DBException("Error: addInternalTransportationReq", e);
     }
   }
