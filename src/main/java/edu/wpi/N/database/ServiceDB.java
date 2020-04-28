@@ -1175,14 +1175,14 @@ public class ServiceDB {
   }
 
   public static LinkedList<Flower> getFlowers() throws DBException {
-    try{
+    try {
       String query = "SELECT * FROM flower";
       PreparedStatement st = con.prepareStatement(query);
       ResultSet rs = st.executeQuery();
 
       LinkedList<Flower> flowers = new LinkedList<>();
-      while(rs.next()){
-        flowers.add(new Flower(rs.getString("flowerName"), rs.getInt("price")););
+      while (rs.next()) {
+        flowers.add(new Flower(rs.getString("flowerName"), rs.getInt("price")));
       }
 
       return flowers;

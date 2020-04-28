@@ -37,6 +37,12 @@
          <children>
             <VBox alignment="CENTER" maxHeight="509.0" maxWidth="500.0" minWidth="500.0" prefHeight="509.0" prefWidth="500.0" spacing="30.0">
                <children>
+                  <Label alignment="CENTER" text="Enter the location you want to send to">
+                     <font>
+                        <Font name="Calibri" size="24.0" />
+                     </font>
+                  </Label>
+                  <JFXComboBox fx:id="cmbo_text" prefHeight="43.0" prefWidth="498.0" promptText="Enter Location" style="-fx-font-size: 18;" />
                   <Label text="Patient Name">
                      <font>
                         <Font name="Calibri" size="24.0" />
@@ -45,13 +51,13 @@
                         <Insets />
                      </VBox.margin>
                   </Label>
-                  <JFXTextField fx:id="txt_patientName" />
+                  <JFXTextField fx:id="txt_patientName" style="-fx-font-size: 18;" text="Enter the Patient Name" />
                   <Label text="Visitor Name">
                      <font>
                         <Font name="Calibri" size="24.0" />
                      </font>
                   </Label>
-                  <JFXTextField fx:id="txt_visitorName" />
+                  <JFXTextField fx:id="txt_visitorName" style="-fx-font-size: 18;" text="Enter Your Name" />
                   <Label text="Credit Card Number">
                      <font>
                         <Font name="Calibri" size="24.0" />
@@ -94,7 +100,7 @@
                </children></VBox>
          </children>
       </HBox>
-      <JFXButton fx:id="btn_submit" buttonType="RAISED" contentDisplay="RIGHT" graphicTextGap="20.0" layoutX="382.0" layoutY="743.0" minHeight="75.0" minWidth="200.0" onMouseClicked="#createNewTranslator" ripplerFill="#c1c9eb" style="-fx-background-color: #002186;" stylesheets="@submitButton.css" text="Submit Request">
+      <JFXButton fx:id="btn_submit" buttonType="RAISED" contentDisplay="RIGHT" graphicTextGap="20.0" layoutX="382.0" layoutY="743.0" minHeight="75.0" minWidth="200.0" onMouseClicked="#createNewFlowerReq" ripplerFill="#c1c9eb" style="-fx-background-color: #002186;" stylesheets="@submitButton.css" text="Submit Request">
          <font>
             <Font size="48.0" />
          </font>
