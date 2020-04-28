@@ -1174,6 +1174,23 @@ public class ServiceDB {
     }
   }
 
+  public static LinkedList<Flower> getFlowers() throws DBException {
+    try{
+      String query = "SELECT * FROM flower";
+      PreparedStatement st = con.prepareStatement(query);
+      ResultSet rs = st.executeQuery();
+
+      LinkedList<Flower> flowers = new LinkedList<>();
+      while(rs.next()){
+        flowers.add(new Flower(rs.getString("flowerName"), rs.getInt("price")););
+      }
+
+      return flowers;
+    } catch (SQLException e) {
+      throw new DBException("Unknown error: getFlowers");
+    }
+  }
+
   /**
    * Adds a request for emotional support
    *
