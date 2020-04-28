@@ -121,7 +121,7 @@
                                           <Font name="Calibri Bold" size="14.0" />
                                        </font>
                                     </JFXButton>
-                                    <JFXButton layoutX="50.0" layoutY="444.0" prefHeight="50.0" prefWidth="73.0" ripplerFill="WHITE" style="-fx-background-color: #002186#002186;" text=" ">
+                                    <JFXButton layoutX="50.0" layoutY="444.0" onAction="#findPathToBathroom" prefHeight="50.0" prefWidth="73.0" ripplerFill="#ffffff00" style="-fx-background-color: #002186#002186;" text=" ">
                                        <graphic>
                                           <ImageView fitHeight="32.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
                                              <image>
@@ -129,7 +129,7 @@
                                              </image>
                                           </ImageView>
                                        </graphic></JFXButton>
-                                    <JFXButton layoutX="177.0" layoutY="444.0" prefHeight="50.0" prefWidth="73.0" style="-fx-background-color: #002186#002186;" text=" ">
+                                    <JFXButton layoutX="177.0" layoutY="444.0" onAction="#findPathToStarBucks" prefHeight="50.0" prefWidth="73.0" style="-fx-background-color: #002186#002186;" text=" ">
                                        <graphic>
                                           <ImageView fitHeight="38.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true" translateX="6.0">
                                              <image>
@@ -137,7 +137,7 @@
                                              </image>
                                           </ImageView>
                                        </graphic></JFXButton>
-                                    <JFXButton layoutX="117.0" layoutY="444.0" prefHeight="50.0" prefWidth="66.0" style="-fx-background-color: #002186#002186;" text=" ">
+                                    <JFXButton layoutX="117.0" layoutY="444.0" onAction="#findPathToCafeteria" prefHeight="50.0" prefWidth="66.0" style="-fx-background-color: #002186#002186;" text=" ">
                                        <graphic>
                                           <ImageView fitHeight="32.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true" translateX="4.0">
                                              <image>

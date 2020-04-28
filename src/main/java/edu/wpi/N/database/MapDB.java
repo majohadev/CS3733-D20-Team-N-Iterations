@@ -377,7 +377,7 @@ public class MapDB {
    * @param nodeType The node's type
    * @param longName The node's longName
    * @param shortName The node's shortName
-   * @return True if valid and inserted properly, false otherwise.
+   * @return a DBNode containing the information of the node that was just created.
    */
   // Chris
   public static DbNode addNode(

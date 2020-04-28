@@ -8,6 +8,7 @@ import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Path;
+import edu.wpi.N.entities.States.StateSingleton;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -27,6 +28,13 @@ import lombok.SneakyThrows;
 
 public class hamburgerTestController implements Controller, Initializable {
 
+  private StateSingleton singleton;
+
+  @Override
+  public void setSingleton(StateSingleton singleton) {
+    this.singleton = singleton;
+  }
+
   private App mainApp = null;
   final float IMAGE_WIDTH = 2475;
   final float IMAGE_HEIGHT = 1485;
@@ -42,7 +50,6 @@ public class hamburgerTestController implements Controller, Initializable {
   @FXML JFXListView lst_firstLocation;
   @FXML JFXListView lst_secondLocation;
   @FXML JFXButton btn_findPath;
-
 
   private JFXButton btn_floors, btn_floor1, btn_floor2, btn_floor3, btn_floor4, btn_floor5;
   private final int DEFAULT_FLOOR = 1;
@@ -183,8 +190,6 @@ public class hamburgerTestController implements Controller, Initializable {
     }
   }
 
-
-
   private double scaleX(double x) {
     return x * HORIZONTAL_SCALE;
   }
@@ -288,12 +293,65 @@ public class hamburgerTestController implements Controller, Initializable {
   }
 
   /**
-   * Finds path to the nearest bathroom
+   * Finds and draws path to the nearest bathroom
+   *
    * @param e
    */
   @FXML
-  private void findPathToBathroom(MouseEvent e){
-    //lst_secondLocation.getSelectionModel().setSelectionMode();
+  private void findPathToBathroom(MouseEvent e) {
+    String startSelection = (String) lst_firstLocation.getSelectionModel().getSelectedItem();
+    DbNode startNode = stringNodeConversion.get(startSelection);
+    try {
+      Path pathToBathroom = singleton.savedAlgo.findQuickAccess(startNode, "REST");
+      drawPath(pathToBathroom.getPath());
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setHeaderText("Oops... Something went Wong");
+      errorAlert.setContentText("Path to bathroom wasn't found");
+      errorAlert.showAndWait();
+    }
+  }
+
+  /**
+   * Finds and draws path to the cafeteria
+   *
+   * @param e
+   */
+  @FXML
+  private void findPathToCafeteria(MouseEvent e) {
+    Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+    errorAlert.setHeaderText("Oops... Something went Wong");
+    errorAlert.setContentText("Path to cafeteria wasn't found");
+    errorAlert.showAndWait();
+  }
+
+  /**
+   * Finds and draws path to the Starbucks
+   *
+   * @param e
+   */
+  @FXML
+  private void findPathToStarBucks(MouseEvent e) {
+    try {
+      String startSelection = (String) lst_firstLocation.getSelectionModel().getSelectedItem();
+      DbNode startNode = stringNodeConversion.get(startSelection);
+
+      DbNode endNode = MapDB.getNode("NRETL00201");
+
+      //TODO: get the Handicap setting from the user
+      if (endNode != null){
+        Path pathToStarBucks = singleton.savedAlgo.findPath(startNode, endNode, false);
+        drawPath(pathToStarBucks.getPath());
+      }
+
+    } catch (Exception ex){
+      ex.printStackTrace();
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setHeaderText("Oops... Something went Wong");
+      errorAlert.setContentText("Path to cafeteria wasn't found");
+      errorAlert.showAndWait();
+    }
   }
 
   public void setMainApp(App mainApp) {

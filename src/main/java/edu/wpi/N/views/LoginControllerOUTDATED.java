@@ -1,6 +1,7 @@
 package edu.wpi.N.views;
 
 import edu.wpi.N.App;
+import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.qrcontrol.QRReader;
 import java.awt.*;
 import java.io.IOException;
@@ -36,6 +37,9 @@ public class LoginControllerOUTDATED extends QRReader implements Controller {
   public void setMainApp(App mainApp) {
     this.mainApp = mainApp;
   }
+
+  @Override
+  public void setSingleton(StateSingleton singleton) {}
 
   @FXML TextField txtf_username;
   @FXML PasswordField pwf_password;

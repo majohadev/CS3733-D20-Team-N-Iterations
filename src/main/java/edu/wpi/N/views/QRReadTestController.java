@@ -3,6 +3,7 @@ package edu.wpi.N.views;
 import com.github.sarxos.webcam.WebcamPanel;
 import com.jfoenix.controls.JFXButton;
 import edu.wpi.N.App;
+import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.qrcontrol.QRReader;
 import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
@@ -12,6 +13,13 @@ import javafx.scene.layout.Pane;
 import javax.swing.*;
 
 public class QRReadTestController extends QRReader implements Controller {
+
+  private StateSingleton singleton;
+
+  @Override
+  public void setSingleton(StateSingleton singleton) {
+    this.singleton = singleton;
+  }
 
   @FXML JFXButton btn_scanButton;
   @FXML Label lbl_output;
