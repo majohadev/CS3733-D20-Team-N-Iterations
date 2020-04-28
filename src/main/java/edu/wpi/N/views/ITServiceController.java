@@ -9,6 +9,8 @@ import edu.wpi.N.database.MapDB;
 import edu.wpi.N.database.ServiceDB;
 import edu.wpi.N.entities.DbNode;
 import java.util.LinkedList;
+
+import edu.wpi.N.entities.States.StateSingleton;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -37,6 +39,11 @@ public class ITServiceController implements Controller {
 
   public void setMainApp(App mainApp) {
     this.mainApp = mainApp;
+  }
+
+  @Override
+  public void setSingleton(StateSingleton singleton) {
+
   }
 
   public void initialize() throws DBException {
