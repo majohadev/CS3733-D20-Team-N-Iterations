@@ -2,11 +2,13 @@ package edu.wpi.N.views;
 
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
+import com.jfoenix.controls.JFXTextField;
 import edu.wpi.N.App;
 import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.ServiceDB;
 import edu.wpi.N.entities.DbNode;
+import edu.wpi.N.entities.Flower;
 import edu.wpi.N.entities.States.StateSingleton;
 import java.util.LinkedList;
 import javafx.collections.FXCollections;
@@ -27,17 +29,14 @@ public class FlowerRequestController implements Controller {
   private App mainApp;
 
   // Add FXML Tags Here
-  @FXML JFXComboBox<String> cmbo_text;
-  @FXML JFXComboBox<String> cmbo_selectLang;
-  @FXML JFXTextArea txtf_langNotes;
+  @FXML JFXTextField txt_visitorName;
+  @FXML JFXTextField txt_patientName;
+  @FXML JFXTextField txt_creditNum;
+  @FXML JFXComboBox cb_flowerType;
+  @FXML JFXTextArea txt_notes;
+  @FXML JFXTextField txt_quantity;
 
-  private ObservableList<String> fuzzySearchTextList =
-      // List that fills TextViews
-      FXCollections.observableArrayList();
-  LinkedList<DbNode> fuzzySearchNodeList = new LinkedList<>();
-  DbNode currentNode = null;
-
-  private String countVal = "";
+  ObservableList<String> flowers;
 
   public FlowerRequestController() throws DBException {}
 
@@ -46,12 +45,7 @@ public class FlowerRequestController implements Controller {
   }
 
   public void initialize() throws DBException {
-
-    cmbo_text.getEditor().setOnKeyTyped(this::locationTextChanged);
-    LinkedList<String> languages = ServiceDB.getLanguages();
-    languages.add("French");
-    ObservableList<String> langList = FXCollections.observableList(languages);
-    cmbo_selectLang.setItems(langList);
+    flowers = FXCollections.observableArrayList("ROSE", "TULIPS");
   }
 
   @FXML

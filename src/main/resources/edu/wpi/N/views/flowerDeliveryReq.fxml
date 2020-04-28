@@ -10,6 +10,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -44,32 +45,43 @@
                         <Insets />
                      </VBox.margin>
                   </Label>
-                  <JFXTextField />
+                  <JFXTextField fx:id="txt_patientName" />
                   <Label text="Visitor Name">
                      <font>
                         <Font name="Calibri" size="24.0" />
                      </font>
                   </Label>
-                  <JFXTextField />
+                  <JFXTextField fx:id="txt_visitorName" />
                   <Label text="Credit Card Number">
                      <font>
                         <Font name="Calibri" size="24.0" />
                      </font>
                   </Label>
-                  <JFXTextField />
+                  <JFXTextField fx:id="txt_creditNum" />
                </children>
             </VBox>
             <VBox alignment="CENTER" maxHeight="500.0" maxWidth="500.0" minWidth="500.0" prefHeight="200.0" prefWidth="100.0" spacing="30.0">
                <children>
-                  <Label text="Flower Type">
-                     <font>
-                        <Font name="Calibri" size="24.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets top="50.0" />
-                     </VBox.margin>
-                  </Label>
-                  <JFXComboBox fx:id="cmbo_selectLang" labelFloat="true" prefHeight="46.0" prefWidth="394.0" promptText="Select flowers to be delivered" style="-fx-font-size: 18;" />
+                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <Label alignment="CENTER" text="Flower Type">
+                           <font>
+                              <Font name="Calibri" size="24.0" />
+                           </font>
+                        </Label>
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <JFXTextField fx:id="txt_quantity" alignment="CENTER" prefHeight="46.0" prefWidth="121.0" promptText="quantity">
+                                 <font>
+                                    <Font name="Calibri" size="18.0" />
+                                 </font>
+                              </JFXTextField>
+                              <Pane prefHeight="100.0" prefWidth="22.0" />
+                              <JFXComboBox fx:id="cb_flowerType" labelFloat="true" prefHeight="46.0" prefWidth="394.0" promptText="Select flowers to be delivered" style="-fx-font-size: 18;" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
                   <Label text="Please Enter Aditional Notes Below">
                      <font>
                         <Font name="Calibri" size="24.0" />
@@ -78,7 +90,7 @@
                         <Insets top="50.0" />
                      </VBox.margin>
                   </Label>
-                  <JFXTextArea fx:id="txtf_langNotes" maxWidth="394.0" minWidth="394.0" prefHeight="138.0" prefWidth="394.0" promptText="Enter Notes Here" style="-fx-font-size: 18;" />
+                  <JFXTextArea fx:id="txt_notes" maxWidth="394.0" minWidth="394.0" prefHeight="138.0" prefWidth="394.0" promptText="Enter Notes Here" style="-fx-font-size: 18;" />
                </children></VBox>
          </children>
       </HBox>
