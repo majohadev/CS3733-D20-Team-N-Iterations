@@ -1,12 +1,8 @@
 package edu.wpi.N.controllerData;
 
-import com.google.common.collect.HashBiMap;
-import edu.wpi.N.algorithms.AStar;
-import edu.wpi.N.algorithms.Algorithm;
-import edu.wpi.N.algorithms.BFS;
-import edu.wpi.N.algorithms.DFS;
+import edu.wpi.N.database.DBException;
+import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
-import edu.wpi.N.entities.UIDispNode;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -16,11 +12,10 @@ public class MapDataStorage {
 
   private int numOfFloors = 5;
 
-  private LinkedList<HashBiMap<UIDispNode, DbNode>> allFloors = new LinkedList<>();
-  // private LinkedList<DbNode> thisFloor = new LinkedList<DbNode>();
+  // private LinkedList<HashBiMap<UIDispNode, DbNode>> allFloors = new LinkedList<>();
+  private LinkedList<DbNode> allDbNodes = new LinkedList<DbNode>();
 
   private HashMap<String, Image> floorMaps = new HashMap<>();
-  private Algorithm algorithmSetting = new Algorithm();
 
   public MapDataStorage() {
     URL res;
@@ -33,23 +28,19 @@ public class MapDataStorage {
     }
   }
 
-  public Algorithm getAlgorithmSetting() {
-    return algorithmSetting;
-  }
-
-  public void setDFS() {
-    algorithmSetting.setPathFinder(new DFS());
-  }
-
-  public void setBFS() {
-    algorithmSetting.setPathFinder(new BFS());
-  }
-
-  public void setAStar() {
-    algorithmSetting.setPathFinder(new AStar());
-  }
-
-  public Image getMap(int floorNum) {
+  public Image getMap(String building, int floorNum) {
     return floorMaps.get("Floor" + floorNum);
+  }
+
+  public void refreshAllNodes() {
+    try {
+      allDbNodes = MapDB.allNodes();
+    } catch (DBException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public LinkedList<DbNode> getAllDbNodes() {
+    return allDbNodes;
   }
 }

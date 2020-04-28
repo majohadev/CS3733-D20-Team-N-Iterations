@@ -22,11 +22,16 @@
    <children>
       <StackPane layoutX="300.0" layoutY="75.0" prefHeight="1005.0" prefWidth="1425.0">
          <children>
+
+            <!-- content from mapBase.fxml included here -->
+            <fx:include fx:id="mapBase" source="mapBase.fxml" />
+            <!-->
             <ImageView fx:id="img_map" fitHeight="1010.0" fitWidth="1678.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../images/Floor1TeamN.png" />
                </image>
             </ImageView>
+            <-->
             <Pane fx:id="pn_display" prefHeight="200.0" prefWidth="200.0">
                <children>
                   <Pane fx:id="pn_changeFloor" layoutX="1458.0" layoutY="14.0" prefHeight="490.0" prefWidth="206.0" />

@@ -31,7 +31,7 @@ public class UIDispNode {
     marker.setOpacity(DEFAULT_NODE_OPACITY);
     marker.setOnMouseClicked(mouseEvent -> this.onMarkerClicked(mouseEvent));
     marker.setCursor(Cursor.HAND); // Cursor points when over nodes
-    setVisible(false);
+    setVisible(showing);
   }
 
   public boolean toggleSelected() {

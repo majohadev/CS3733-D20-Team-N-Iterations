@@ -1,7 +1,6 @@
 package edu.wpi.N.views;
 
 import edu.wpi.N.App;
-import edu.wpi.N.algorithms.Algorithm;
 import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
@@ -222,7 +221,7 @@ public class MapDisplayController extends QRGenerator implements Controller {
       startNode = mapBaseController.getDbFromUi(mapBaseController.selectedNodes.getFirst());
     onResetClicked(event);
 
-    Path pathToBathroom = mainApp.mapData.getAlgorithmSetting().findQuickAccess(startNode, "REST");
+    Path pathToBathroom = singleton.savedAlgo.findQuickAccess(startNode, "REST");
     if (pathToBathroom != null) {
       LinkedList<DbNode> pathNodes = pathToBathroom.getPath();
       mapBaseController.drawPath(pathNodes);

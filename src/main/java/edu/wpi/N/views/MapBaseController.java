@@ -8,6 +8,7 @@ import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.UIDispEdge;
 import edu.wpi.N.entities.UIDispNode;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -25,8 +26,10 @@ import javafx.scene.layout.StackPane;
 
 public class MapBaseController {
 
-  int currentFloor = 4;
-  String currentBuilding = "Faulkner";
+  private final int DEFAULT_FLOOR = 1;
+  private final String DEFAULT_BUILDING = "Faulkner";
+  int currentFloor;
+  String currentBuilding;
 
   LinkedList<DbNode> allFloorNodes = new LinkedList<DbNode>(); // stores all the nodes on the floor
   LinkedList<UIDispNode> selectedNodes =
@@ -77,13 +80,24 @@ public class MapBaseController {
 
   public MapBaseController() throws DBException {}
 
+  public enum Mode {
+    NO_STATE,
+    PATH_STATE;
+  }
+
+  Mode mode;
+
   public void initialize() throws DBException {
 
+    // this.currentFloor = DEFAULT_FLOOR;
+    // this.currentBuilding = DEFAULT_BUILDING;
+
     masterNodes = HashBiMap.create();
-    changeFloor(4);
+    setMode(Mode.NO_STATE);
+    changeBuilding(DEFAULT_BUILDING);
 
     try {
-      defaultNode = masterNodes.inverse().get(allFloorNodes.getFirst());
+      defaultNode = getUiFromDb(allFloorNodes.getFirst());
     } catch (NoSuchElementException e) {
       Alert emptyMap = new Alert(Alert.AlertType.WARNING);
       emptyMap.setContentText("The map is empty!");
@@ -91,11 +105,58 @@ public class MapBaseController {
     }
   }
 
-  public void changeFloor(int newFloor) {
-    // Change floor
-    currentFloor = newFloor;
-    img_map.setImage(App.mapData.getMap(newFloor));
-    populateMap();
+  public void setMode(Mode mode) {
+    this.mode = mode;
+  }
+
+  public void changeBuilding(String newBuilding) {
+    // Change building, and show its default floor
+    currentBuilding = newBuilding;
+    changeFloor(DEFAULT_FLOOR, null);
+  }
+
+  public void changeFloor(int floorToDraw, LinkedList<DbNode> pathToDraw) {
+    // Change floor in current building
+    currentFloor = floorToDraw;
+    App.mapData.refreshAllNodes();
+    img_map.setImage(App.mapData.getMap(currentBuilding, floorToDraw));
+
+    clearPath(); // Erase lines
+    populateMap(); // Set up/recycle UIDispNodes
+
+    // If there's a path to draw, draw it - otherwise just show the default kiosk
+    if (mode == Mode.NO_STATE || pathToDraw == null || pathToDraw.isEmpty()) {
+      defaultKioskNode();
+    } else if (mode == Mode.PATH_STATE) {
+      drawPath(pathToDraw);
+    }
+  }
+
+  public LinkedList<String> defaultKioskNode() {
+
+    LinkedList<String> kiosks = new LinkedList<>();
+
+    if (currentFloor == 1) {
+      try {
+        DbNode floor1Kiosk = MapDB.getNode("NSERV00301"); // Should be specified elsewhere
+        defaultNode = getUiFromDb(floor1Kiosk);
+        kiosks.add(floor1Kiosk.getLongName());
+      } catch (DBException e) {
+        System.out.println("Couldn't find node NSERV00301 as 1st floor kiosk");
+        e.printStackTrace();
+      }
+
+    } else if (currentFloor == 3) {
+      try {
+        DbNode floor3Kiosk = MapDB.getNode("NSERV00103"); // Should be specified elsewhere
+        defaultNode = getUiFromDb(floor3Kiosk);
+        kiosks.add(floor3Kiosk.getLongName());
+      } catch (DBException e) {
+        System.out.println("Couldn't find node NSERV00103 as 3rd floor kiosk");
+        e.printStackTrace();
+      }
+    }
+    return kiosks;
   }
 
   private UIDispNode makeUINode() {
@@ -186,24 +247,23 @@ public class MapBaseController {
   public void populateMap() {
     try {
       Set<UIDispNode> keys = masterNodes.keySet();
-      Stream<UIDispNode> keyStream = keys.stream();
 
       allFloorNodes = MapDB.floorNodes(currentFloor, currentBuilding); // Reference copy
 
       LinkedList<DbNode> thisFloor = new LinkedList<>();
       thisFloor.addAll(allFloorNodes); // Make a copy of allFloorNodes to use pop or pull on
 
-      try {
-        keyStream.forEach(key -> setLink(key, thisFloor.pop(), true));
-      } catch (NoSuchElementException e) {
-        // If there are more keys than nodes, hide extras from searcher functions
-      }
-
-      DbNode keylessNode = thisFloor.poll();
-      while (keylessNode != null) {
-        // If there are DbNodes without keys, add keys
-        setLink(makeUINode(), keylessNode, true);
-        keylessNode = thisFloor.poll();
+      Iterator<UIDispNode> keysIterator = keys.iterator();
+      Iterator<DbNode> dbIterator = thisFloor.iterator();
+      while (dbIterator.hasNext()) {
+        DbNode value = dbIterator.next();
+        if (keysIterator.hasNext()) {
+          UIDispNode key = keysIterator.next();
+          setLink(key, value, true);
+        } else {
+          // If there are DbNodes without keys, add keys
+          setLink(makeUINode(), value, true);
+        }
       }
 
     } catch (DBException e) {
@@ -222,8 +282,8 @@ public class MapBaseController {
       dbFirst = pathNodes.get(i);
       dbSecond = pathNodes.get(i + 1);
 
-      uiFirst = masterNodes.inverse().get(dbFirst);
-      uiSecond = masterNodes.inverse().get(dbSecond);
+      uiFirst = getUiFromDb(dbFirst);
+      uiSecond = getUiFromDb(dbSecond);
 
       if (i == 0) {
         uiFirst.setStart();
