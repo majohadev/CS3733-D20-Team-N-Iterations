@@ -159,6 +159,13 @@
                            <font>
                               <Font size="16.0" />
                            </font>
+                           <content>
+                              <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                                 <children>
+                                    <Pane layoutX="25.0" layoutY="28.0" prefHeight="230.0" prefWidth="246.0" />
+                                 </children>
+                              </AnchorPane>
+                           </content>
                         </TitledPane>
                      </panes>
                   </Accordion>
