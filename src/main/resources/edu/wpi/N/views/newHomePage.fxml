@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.effect.Lighting?>
+<?import javafx.scene.effect.Shadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.HomeController">
+   <children>
+      <SplitPane dividerPositions="0.10575139146567718" layoutX="880.0" layoutY="462.0" orientation="VERTICAL" prefHeight="1080.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <items>
+          <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="75.0" minWidth="1920.0" prefHeight="110.0" prefWidth="1920.0" style="-fx-background-color: #002186;">
+               <children>
+                  <HBox alignment="CENTER_LEFT" layoutX="902.0" layoutY="-15.74609375" prefHeight="75.0" prefWidth="1920.0" spacing="1660.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <ImageView fitHeight="131.0" fitWidth="88.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../../../../../../OneDrive/Desktop/Brigham_and_Womens_Hospital_logo.svg.png" />
+                           </image>
+                        </ImageView>
+                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="9:12 AM" wrappingWidth="211.32942581176758">
+                           <font>
+                              <Font name="Calibri Bold" size="46.0" />
+                           </font>
+                        </Text>
+                     </children>
+                     <padding>
+                        <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+                     </padding>
+                  </HBox>
+                  <HBox alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="110.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <ImageView fitHeight="75.0" fitWidth="92.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../../../../../../Downloads/WHITEf6719692a2d19.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </HBox>
+               </children>
+            </AnchorPane>
+          <AnchorPane maxWidth="-Infinity" minHeight="0.0" minWidth="1920.0" prefHeight="100.0" prefWidth="1920.0">
+               <children>
+                  <ImageView fitHeight="1331.0" fitWidth="1961.0" opacity="0.31" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/HomeScreenImages/BostonSkyline.jpg" />
+                     </image>
+                     <effect>
+                        <Lighting>
+                           <bumpInput>
+                              <Shadow />
+                           </bumpInput>
+                        </Lighting>
+                     </effect>
+                  </ImageView>
+                  <HBox alignment="CENTER" layoutY="448.0" prefHeight="372.0" prefWidth="1920.0" spacing="130.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                     <children>
+                        <VBox alignment="CENTER">
+                           <children>
+                              <JFXButton contentDisplay="TOP" prefHeight="307.0" prefWidth="309.0" stylesheets="@IconButtons.css" text="Login" textFill="WHITE">
+                                 <graphic>
+                                    <ImageView fitHeight="186.0" fitWidth="190.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../images/HomeScreenImages/UserIcon.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <font>
+                                    <Font size="29.0" />
+                                 </font>
+                              </JFXButton>
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER">
+                           <children>
+                              <JFXButton fx:id="btn_map" contentDisplay="TOP" onMouseClicked="#onBtnMapClicked" prefHeight="307.0" prefWidth="309.0" stylesheets="@IconButtons.css" text="Map" textFill="WHITE">
+                                 <graphic>
+                                    <ImageView fitHeight="284.0" fitWidth="190.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../images/HomeScreenImages/MapIcon.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <font>
+                                    <Font name="Calibri" size="30.0" />
+                                 </font>
+                              </JFXButton>
+                           </children>
+                           <HBox.margin>
+                              <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
+                           </HBox.margin>
+                        </VBox>
+                        <VBox alignment="CENTER">
+                           <children>
+                              <JFXButton contentDisplay="TOP" graphicTextGap="10.0" prefHeight="307.0" prefWidth="309.0" stylesheets="@IconButtons.css" text="Services" textAlignment="CENTER" textFill="WHITE">
+                                 <graphic>
+                                    <ImageView fitHeight="184.0" fitWidth="190.0" pickOnBounds="true" preserveRatio="true" translateX="24.0">
+                                       <image>
+                                          <Image url="@../images/HomeScreenImages/ServiceBellIcon.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <font>
+                                    <Font name="Calibri" size="21.0" />
+                                 </font>
+                              </JFXButton>
+                           </children>
+                        </VBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </HBox>
+                  <VBox alignment="CENTER" layoutY="24.0" mouseTransparent="true" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                     <children>
+                        <ImageView fitHeight="288.0" fitWidth="274.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../../../../../../OneDrive/Desktop/Brigham_and_Womens_Hospital_logo.svg.png" />
+                           </image>
+                        </ImageView>
+                        <Text fill="#002186" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to Brigham and Women's Hospital" textAlignment="CENTER" wrappingWidth="1709.9830722808838">
+                           <font>
+                              <Font name="Calibri" size="86.0" />
+                           </font>
+                        </Text>
+                     </children>
+                     <padding>
+                        <Insets top="12.0" />
+                     </padding>
+                  </VBox>
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </children>
+</AnchorPane>
