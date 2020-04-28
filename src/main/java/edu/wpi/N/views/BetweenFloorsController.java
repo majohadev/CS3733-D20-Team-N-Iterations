@@ -152,11 +152,13 @@ public class BetweenFloorsController implements Controller, Initializable {
     setAllPotentialEdges(nodesAvaliable);
 
     // make lines visible for existent edges
-    for (DbNode[] edge : edges) {
-      Line line = lines.get(edge[0].getFloor() + edge[1].getFloor());
-      line.setStroke(ACTIVE_LINE_COLOR);
-      lineStatus.put(line, true);
-      originalEdges.add(edge);
+    if (!edges.isEmpty()) {
+      for (DbNode[] edge : edges) {
+        Line line = lines.get(edge[0].getFloor() + edge[1].getFloor());
+        line.setStroke(ACTIVE_LINE_COLOR);
+        lineStatus.put(line, true);
+        originalEdges.add(edge);
+      }
     }
   }
 
@@ -224,37 +226,50 @@ public class BetweenFloorsController implements Controller, Initializable {
   }
 
   public void onSaveButton() throws DBException {
-    setFloor(floor);
+    // setFloor(floor);
     LinkedList<DbNode[]> newEdges = new LinkedList<DbNode[]>();
     LinkedList<DbNode[]> removedEdges = new LinkedList<DbNode[]>();
     if (lineStatus.get(lines.get(3))) {
-      newEdges.add(potentialEdges.get(3));
+      if (!(potentialEdges.get(3) == null)) newEdges.add(potentialEdges.get(3));
     } else {
-      removedEdges.add(potentialEdges.get(3));
+      if (!(potentialEdges.get(3) == null)) removedEdges.add(potentialEdges.get(3));
     }
     if (lineStatus.get(lines.get(5))) {
-      newEdges.add(potentialEdges.get(5));
+      if (!(potentialEdges.get(5) == null)) newEdges.add(potentialEdges.get(5));
     } else {
-      removedEdges.add(potentialEdges.get(5));
+      if (!(potentialEdges.get(5) == null)) removedEdges.add(potentialEdges.get(5));
     }
     if (lineStatus.get(lines.get(7))) {
-      newEdges.add(potentialEdges.get(7));
+      if (!(potentialEdges.get(7) == null)) newEdges.add(potentialEdges.get(7));
     } else {
-      removedEdges.add(potentialEdges.get(7));
+      if (!(potentialEdges.get(7) == null)) removedEdges.add(potentialEdges.get(7));
     }
     if (lineStatus.get(lines.get(9))) {
-      newEdges.add(potentialEdges.get(9));
+      if (!(potentialEdges.get(9) == null)) newEdges.add(potentialEdges.get(9));
     } else {
-      removedEdges.add(potentialEdges.get(9));
+      if (!(potentialEdges.get(9) == null)) removedEdges.add(potentialEdges.get(9));
     }
     if (!newEdges.isEmpty()) {
       for (DbNode[] n : newEdges) {
-        MapDB.addEdge(n[0].getNodeID(), n[1].getNodeID());
+        if (!MapDB.getAdjacent(n[0].getNodeID()).contains(n[1])) {
+          try {
+            MapDB.addEdge(n[0].getNodeID(), n[1].getNodeID());
+          } catch (Exception e) {
+            e.printStackTrace();
+            ;
+          }
+        }
       }
     }
     if (!removedEdges.isEmpty()) {
       for (DbNode[] r : removedEdges) {
-        MapDB.removeEdge(r[0].getNodeID(), r[1].getNodeID());
+        if (MapDB.getAdjacent(r[0].getNodeID()).contains(r[1])) {
+          try {
+            MapDB.removeEdge(r[0].getNodeID(), r[1].getNodeID());
+          } catch (Exception e) {
+            e.printStackTrace();
+          }
+        }
       }
     }
   }

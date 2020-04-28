@@ -44,9 +44,10 @@ public class hamburgerTestController implements Controller, Initializable {
   @FXML JFXTextField txt_secondLocation;
   @FXML JFXListView lst_firstLocation;
   @FXML JFXListView lst_secondLocation;
+  // @FXML JFXButton btn_searchdoc;
   @FXML TextField txtf_doctorname;
   @FXML ListView lst_doctornames;
-  @FXML Button btn_searchdoc;
+  // @FXML Button btn_searchdoc;
   @FXML ListView lst_doctorlocations;
   @FXML Button btn_findpathdoc;
   @FXML JFXButton btn_findPath;
