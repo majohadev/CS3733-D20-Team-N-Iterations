@@ -19,7 +19,10 @@ import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -28,6 +31,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.text.Text;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import lombok.SneakyThrows;
 
 public class hamburgerTestController implements Controller, Initializable {
@@ -64,10 +70,15 @@ public class hamburgerTestController implements Controller, Initializable {
   @FXML private JFXButton btn_floors, btn_floor1, btn_floor2, btn_floor3, btn_floor4, btn_floor5;
   @FXML TitledPane pn_locationSearch;
   @FXML Accordion acc_search;
+  @FXML Text txt_description;
   private final int DEFAULT_FLOOR = 1;
   private final String DEFAULT_BUILDING = "FAULKNER";
   private int currentFloor;
   private String currentBuilding;
+
+  // sphagetting code I guesss
+  private ArrayList<String> directions;
+
   HashMap<String, DbNode> stringNodeConversion = new HashMap<>();
   LinkedList<String> allLongNames = new LinkedList<>();
   LinkedList<DbNode> allFloorNodes = new LinkedList<>();
@@ -231,6 +242,8 @@ public class hamburgerTestController implements Controller, Initializable {
     }
     disableNonPathFloors(pathNodes);
     drawPath(pathNodes);
+    // set textual decriptions
+    setTextDecription(new Path(pathNodes));
   }
 
   private void disableNonPathFloors(LinkedList<DbNode> pathNodes) {
@@ -414,6 +427,8 @@ public class hamburgerTestController implements Controller, Initializable {
       DbNode startNode = stringNodeConversion.get(startSelection);
       Path pathToBathroom = singleton.savedAlgo.findQuickAccess(startNode, "REST");
       drawPath(pathToBathroom.getPath());
+      // set textual decriptions
+      setTextDecription(pathToBathroom);
     } catch (Exception ex) {
       ex.printStackTrace();
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
@@ -459,6 +474,8 @@ public class hamburgerTestController implements Controller, Initializable {
       if (endNode != null) {
         Path pathToStarBucks = singleton.savedAlgo.findPath(startNode, endNode, false);
         drawPath(pathToStarBucks.getPath());
+        // set textual descriptions
+        setTextDecription(pathToStarBucks);
       }
 
     } catch (Exception ex) {
@@ -483,6 +500,60 @@ public class hamburgerTestController implements Controller, Initializable {
     errorAlert.setHeaderText("Invalid input");
     errorAlert.setContentText(str);
     errorAlert.showAndWait();
+  }
+
+  /**
+   * Function generates and sets textual description label to Textual Descriptions
+   *
+   * @param path
+   */
+  private void setTextDecription(Path path) {
+    try {
+      // Convert the array of textual descriptions to text
+      String directionsAsText = "";
+      directions = path.getDirections();
+      for (String s : directions) {
+        directionsAsText += s;
+        directionsAsText += "\n";
+      }
+
+      // Check to make sure that directionAsText isn't empty
+      if (!directionsAsText.equals("")) {
+        txt_description.setText(directionsAsText);
+      }
+
+    } catch (Exception ex) {
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setHeaderText("Oops... Something went Wong");
+      errorAlert.setContentText("Textual descriptions could not be generated");
+      errorAlert.showAndWait();
+    }
+  }
+
+  /** Function displays a pop-up window with user's directions */
+  @FXML
+  private void displayQRCode() throws IOException {
+    try {
+      Stage stage = new Stage();
+      Parent root;
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(getClass().getResource("qrPopUp.fxml"));
+      root = loader.load();
+      Scene scene = new Scene(root);
+      stage.setScene(scene);
+
+      QrPopUpController controller = (QrPopUpController) loader.getController();
+      controller.displayQrCode(directions);
+
+      stage.initModality(Modality.APPLICATION_MODAL);
+      stage.show();
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setHeaderText("Oops... Something went Wong");
+      errorAlert.setContentText("QR code with directions could not be generated");
+      errorAlert.showAndWait();
+    }
   }
 
   private void defaultKioskNode() throws DBException {
