@@ -41,7 +41,7 @@
       </HBox>
       <HBox alignment="CENTER" layoutX="50.0" layoutY="180.0" prefHeight="542.0" prefWidth="1196.0" spacing="50.0">
          <children>
-            <VBox alignment="CENTER" spacing="40.0">
+            <VBox alignment="CENTER" spacing="20.0">
                <children>
                   <Label text="Where is security needed?">
                      <font>
@@ -52,62 +52,72 @@
                      </VBox.margin>
                   </Label>
                   <JFXComboBox fx:id="cmbo_text" editable="true" labelFloat="true" onKeyTyped="#locationTextChanged" prefHeight="46.0" prefWidth="394.0" promptText="Enter Location" style="-fx-font-size: 24;" />
-                  <Separator prefWidth="200.0" />
-                  <GridPane alignment="CENTER" hgap="20.0" minHeight="-Infinity" minWidth="-Infinity" vgap="10.0">
+                  <Separator prefWidth="200.0">
+                     <padding>
+                        <Insets bottom="10.0" top="10.0" />
+                     </padding>
+                  </Separator>
+               </children>
+            </VBox>
+            <Separator orientation="VERTICAL" prefHeight="200.0" />
+            <VBox alignment="CENTER" maxHeight="509.0" maxWidth="500.0" minWidth="500.0" prefHeight="509.0" prefWidth="500.0" spacing="10.0">
+               <children>
+                  <Label text="I see/hear...">
+                     <font>
+                        <Font name="Calibri" size="36.0" />
+                     </font>
+                  </Label>
+                  <GridPane alignment="CENTER" hgap="20.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="168.0" prefWidth="519.0" vgap="10.0">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
                     <rowConstraints>
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="75.0" minHeight="10.0" prefHeight="46.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="87.0" minHeight="0.0" prefHeight="56.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="76.0" minHeight="0.0" prefHeight="47.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <JFXCheckBox fx:id="cb_observation" checkedColor="#002186" minHeight="-Infinity" minWidth="-Infinity" text="Suspicious person">
+                        <JFXCheckBox fx:id="cb_susPerson" checkedColor="#002186" minHeight="-Infinity" minWidth="-Infinity" onAction="#observationsChanged" prefHeight="77.0" prefWidth="230.0" text="Suspicious person">
                            <font>
-                              <Font size="24.0" />
+                              <Font size="25.0" />
                            </font>
                         </JFXCheckBox>
-                        <JFXCheckBox fx:id="cb_observation" checkedColor="#002186" layoutX="10.0" layoutY="8.0" minHeight="-Infinity" minWidth="-Infinity" text="Suspicious package" GridPane.columnIndex="1">
+                        <JFXCheckBox fx:id="cb_susPackage" checkedColor="#002186" layoutX="10.0" layoutY="8.0" minHeight="-Infinity" minWidth="-Infinity" onAction="#observationsChanged" text="Suspicious package" GridPane.columnIndex="1">
                            <font>
-                              <Font size="24.0" />
+                              <Font size="25.0" />
                            </font>
                         </JFXCheckBox>
-                        <JFXCheckBox fx:id="cb_observation" checkedColor="#002186" layoutX="10.0" layoutY="8.0" minHeight="-Infinity" minWidth="-Infinity" text="Harassment" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                        <JFXCheckBox fx:id="cb_weapons" checkedColor="#002186" layoutX="265.0" layoutY="8.0" minHeight="-Infinity" minWidth="-Infinity" onAction="#observationsChanged" prefHeight="36.0" prefWidth="166.0" text="Weapons " GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <font>
-                              <Font size="24.0" />
+                              <Font size="25.0" />
                            </font>
                         </JFXCheckBox>
-                        <JFXCheckBox fx:id="cb_observation" checkedColor="#002186" layoutX="265.0" layoutY="8.0" minHeight="-Infinity" minWidth="-Infinity" text="Weapons " GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <JFXCheckBox fx:id="cb_shouting" checkedColor="#002186" layoutX="10.0" layoutY="8.0" minHeight="-Infinity" minWidth="-Infinity" onAction="#observationsChanged" text="Shouting" GridPane.rowIndex="2">
                            <font>
-                              <Font size="24.0" />
+                              <Font size="25.0" />
                            </font>
                         </JFXCheckBox>
-                        <JFXCheckBox fx:id="cb_observation" checkedColor="#002186" layoutX="10.0" layoutY="8.0" minHeight="-Infinity" minWidth="-Infinity" text="Unconscious person" GridPane.rowIndex="2">
+                        <JFXCheckBox fx:id="cb_harassment" checkedColor="#002186" minHeight="-Infinity" minWidth="-Infinity" onAction="#observationsChanged" text="Harassment" GridPane.rowIndex="1">
                            <font>
-                              <Font size="24.0" />
+                              <Font size="25.0" />
                            </font>
                         </JFXCheckBox>
-                        <JFXCheckBox fx:id="cb_observation" checkedColor="#002186" minHeight="-Infinity" minWidth="-Infinity" text="Injured person" GridPane.rowIndex="1">
+                        <JFXCheckBox fx:id="cb_violence" checkedColor="#002186" minHeight="-Infinity" minWidth="-Infinity" onAction="#observationsChanged" text="Violence" GridPane.columnIndex="1" GridPane.rowIndex="2">
                            <font>
-                              <Font size="24.0" />
-                           </font>
-                        </JFXCheckBox>
-                        <JFXCheckBox fx:id="cb_observation" checkedColor="#002186" minHeight="-Infinity" minWidth="-Infinity" text="Shouting/Fighting" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                           <font>
-                              <Font size="24.0" />
+                              <Font size="25.0" />
                            </font>
                         </JFXCheckBox>
                      </children>
                   </GridPane>
-               </children>
-            </VBox>
-            <Separator orientation="VERTICAL" prefHeight="200.0" />
-            <VBox alignment="CENTER" maxHeight="509.0" maxWidth="500.0" minWidth="500.0" prefHeight="509.0" prefWidth="500.0" spacing="20.0">
-               <children>
-                  <Label prefHeight="90.0" prefWidth="466.0" text="Select everything you see/hear." wrapText="true" VBox.vgrow="ALWAYS">
+                  <Separator prefWidth="200.0">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                     <padding>
+                        <Insets bottom="10.0" top="10.0" />
+                     </padding></Separator>
+                  <Label text="Details">
                      <font>
                         <Font name="Calibri" size="36.0" />
                      </font>
@@ -115,25 +125,16 @@
                         <Insets />
                      </VBox.margin>
                   </Label>
-                  <Separator prefWidth="200.0" />
-                  <VBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="500.0" minWidth="430.0" prefWidth="500.0" spacing="10.0">
-                     <children>
-                        <Label text="Details">
-                           <font>
-                              <Font name="Calibri" size="24.0" />
-                           </font>
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                        </Label>
-                        <JFXTextArea fx:id="txtf_langNotes1" maxHeight="1.7976931348623157E308" maxWidth="394.0" minWidth="394.0" prefWidth="394.0" promptText="Please describe the situation here." style="-fx-font-size: 18;" />
-                     </children>
-                  </VBox>
+                  <JFXTextArea fx:id="txtf_description" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" promptText="Please describe the situation here." style="-fx-font-size: 18;">
+                     <font>
+                        <Font size="6.0" />
+                     </font>
+                  </JFXTextArea>
                </children>
             </VBox>
          </children>
       </HBox>
-      <JFXButton fx:id="btn_submit" buttonType="RAISED" contentDisplay="RIGHT" graphicTextGap="20.0" layoutX="382.0" layoutY="743.0" minHeight="75.0" minWidth="200.0" onMouseClicked="#createNewTranslator" ripplerFill="#c1c9eb" style="-fx-background-color: #002186;" stylesheets="@submitButton.css" text="Submit Request">
+      <JFXButton fx:id="btn_submit1" buttonType="RAISED" contentDisplay="RIGHT" disable="true" graphicTextGap="20.0" layoutX="392.0" layoutY="753.0" minHeight="75.0" minWidth="200.0" onMouseClicked="#createNewTranslator" ripplerFill="#c1c9eb" style="-fx-background-color: #002186;" stylesheets="@submitButton.css" text="Submit Request">
          <font>
             <Font size="48.0" />
          </font>

@@ -8,13 +8,13 @@ import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.ServiceDB;
 import edu.wpi.N.entities.DbNode;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.input.KeyEvent;
-
-import java.util.LinkedList;
 
 public class SecurityRequestController implements Controller {
 
@@ -24,6 +24,10 @@ public class SecurityRequestController implements Controller {
   @FXML JFXComboBox<String> cmbo_text;
   @FXML JFXCheckBox cb_isEmergency;
   @FXML JFXTextArea txtf_description;
+  @FXML
+  JFXCheckBox cb_susPerson, cb_susPackage, cb_harassment, cb_weapons, cb_shouting, cb_violence;
+
+  private ArrayList<JFXCheckBox> checkBoxes = new ArrayList<>();
 
   private ObservableList<String> fuzzySearchTextList =
       // List that fills TextViews
@@ -43,9 +47,14 @@ public class SecurityRequestController implements Controller {
 
     cmbo_text.getEditor().setOnKeyTyped(this::locationTextChanged);
     LinkedList<String> languages = ServiceDB.getLanguages();
-    languages.add("French");
     ObservableList<String> langList = FXCollections.observableList(languages);
-    //cmbo_selectLang.setItems(langList);
+
+    checkBoxes.add(cb_susPerson);
+    checkBoxes.add(cb_susPackage);
+    checkBoxes.add(cb_harassment);
+    checkBoxes.add(cb_weapons);
+    checkBoxes.add(cb_shouting);
+    checkBoxes.add(cb_violence);
   }
 
   @FXML
@@ -79,9 +88,9 @@ public class SecurityRequestController implements Controller {
     cmbo_text.show();
   }
 
-  // Create Translator Request
+  // Create Security Request
   @FXML
-  public void createNewTranslator() throws DBException {
+  public void createNewSecRequest() throws DBException {
 
     String nodeID;
     int nodeIndex = 0;
@@ -103,18 +112,29 @@ public class SecurityRequestController implements Controller {
       return;
     }
 
-    String notes = txtf_description.getText();
-    String isEmergency;
-    if (cb_isEmergency.selectedProperty().getValue()) {
-      isEmergency = "Emergency";
-    } else {
-      isEmergency = "Non-emergency";
+    String notes = "Report details:\n\n";
+
+    for (JFXCheckBox cb : checkBoxes) {
+      if (cb.isSelected()) {
+        notes = notes + cb.getText() + "\n";
+      }
     }
-    int transReq = ServiceDB.addTransReq(notes, nodeID, isEmergency);
-    App.adminDataStorage.addToList(transReq);
+
+    if (txtf_description.getText().isBlank() && !cb_isEmergency.isSelected()) {
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setContentText("Description required for non-emergencies.");
+      errorAlert.show();
+      return;
+    } else {
+      notes = notes + "\n" + txtf_description;
+    }
+
+    int securityRequest = ServiceDB.addSecurityReq(notes, nodeID, cb_isEmergency.isSelected());
 
     txtf_description.clear();
-    cb_isEmergency.setSelected(false);
+    for (JFXCheckBox cb : checkBoxes) {
+      cb.setSelected(false);
+    }
     cmbo_text.getItems().clear();
 
     Alert confAlert = new Alert(Alert.AlertType.CONFIRMATION);

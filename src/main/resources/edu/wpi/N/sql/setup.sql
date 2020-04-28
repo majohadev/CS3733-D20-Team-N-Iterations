@@ -86,6 +86,11 @@ CREATE TABLE IT(
       PRIMARY KEY(IT_employeeID),
       CONSTRAINT it_id FOREIGN KEY (IT_employeeID) REFERENCES employees(employeeID) ON DELETE CASCADE);
 
+CREATE TABLE security(
+      sec_employeeID INT NOT NULL,
+      PRIMARY KEY(sec_employeeID),
+      CONSTRAINT sec_id FOREIGN KEY (sec_employeeID) REFERENCES employees(employeeID) ON DELETE CASCADE);
+
 CREATE TABLE location (
       doctor INT NOT NULL,
       nodeID char(10) NOT NULL,
@@ -145,6 +150,10 @@ CREATE TABLE ITrequest(
               device VARCHAR(255) NOT NULL,
               problem VARCHAR(255) NOT NULL);
 
+CREATE TABLE secrequest(
+              requestID INT NOT NULL PRIMARY KEY REFERENCES request(requestID) ON DELETE CASCADE,
+              isEmergency BIT NOT NULL);
+
 INSERT INTO service VALUES ('Translator', '00:00', '00:00', 'Make a request for our translation services!');
 INSERT INTO service VALUES ('Laundry', '00:00', '00:00', 'Make a request for laundry services!');
 INSERT INTO service VALUES ('Medicine', '00:00', '00:00', 'Request medicine delivery!');
@@ -152,6 +161,8 @@ INSERT INTO service VALUES ('Sanitation', '00:00', '00:00', 'Request sanitation 
 INSERT INTO service VALUES ('Wheelchair', '00:00', '00:00', 'Request a wheelchair!');
 INSERT INTO service VALUES ('Emotional Support', '00:00', '00:00', 'Request emotional support, please?!');
 INSERT INTO service VALUES ('IT', '00:00', '00:00', 'Make a request for IT services!');
+INSERT INTO service VALUES ('Security', '00:00', '00:00', 'Make a security request!');
+
 
 
 

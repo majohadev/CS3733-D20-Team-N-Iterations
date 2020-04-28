@@ -14,14 +14,19 @@ public class SecurityRequest extends Request {
       String nodeID,
       GregorianCalendar timeRequested,
       GregorianCalendar timeCompleted,
-      String status, boolean isEmergency) {
+      String status,
+      boolean isEmergency) {
     super(
         requestID, emp_assigned, reqNotes, compNotes, nodeID, timeRequested, timeCompleted, status);
     this.isEmergency = isEmergency;
   }
 
   public String getAtr1() {
-    return isEmergency.toString();
+    if (isEmergency) {
+      return "Emergency";
+    } else {
+      return "Non-emergency";
+    }
   }
 
   public String getServiceType() {
