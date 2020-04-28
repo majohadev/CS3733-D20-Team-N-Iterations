@@ -27,6 +27,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.StrokeLineCap;
 import javax.swing.*;
 
 public class MapEditorController implements Controller {
@@ -148,6 +149,7 @@ public class MapEditorController implements Controller {
     deleteNodeCircles = new LinkedList<>();
     editNodeCircle = null;
     addEdgeLine = new Line();
+    addEdgeLine.setStrokeLineCap(StrokeLineCap.ROUND);
     pn_edges.getChildren().add(addEdgeLine);
     deleteEdgeLines = new LinkedList<>();
     initializeChangeFloorButtons();
@@ -215,6 +217,7 @@ public class MapEditorController implements Controller {
               scaleX(edge[1].getX()),
               scaleY(edge[1].getY()),
               c);
+      line.setStrokeLineCap(StrokeLineCap.ROUND);
       line.setOnMouseClicked(event -> this.handleLineClickedEvents(event, line));
       UIEdge UIedge = new UIEdge(line, edge);
       conversion.get(edge[0].getNodeID()).addEdge(UIedge);
@@ -254,6 +257,7 @@ public class MapEditorController implements Controller {
   private Line createLine(double x1, double y1, double x2, double y2, Color c) {
     Line line = new Line(x1, y1, x2, y2);
     line.setStroke(c);
+    line.setStrokeLineCap(StrokeLineCap.ROUND);
     line.setStrokeWidth(DEFAULT_LINE_WIDTH);
     pn_display.getChildren().add(line);
     return line;
@@ -938,6 +942,7 @@ public class MapEditorController implements Controller {
                 addEdgeLine.getStartY(),
                 addEdgeLine.getEndX(),
                 addEdgeLine.getEndY());
+        line.setStrokeLineCap(StrokeLineCap.ROUND);
         line.setStrokeWidth(DEFAULT_LINE_WIDTH);
         line.setOnMouseClicked(e -> this.handleLineClickedEvents(event, line));
 
@@ -956,6 +961,7 @@ public class MapEditorController implements Controller {
       nodes.clear();
       pn_edges.getChildren().remove(addEdgeLine);
       addEdgeLine = new Line();
+      addEdgeLine.setStrokeLineCap(StrokeLineCap.ROUND);
       pn_edges.getChildren().add(addEdgeLine);
       mode = Mode.NO_STATE;
     }
