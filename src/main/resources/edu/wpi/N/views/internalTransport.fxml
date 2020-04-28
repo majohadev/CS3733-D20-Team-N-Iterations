@@ -73,7 +73,7 @@
                      </font>
                   </Label>
                   <JFXTimePicker fx:id="tp_transporttime" defaultColor="#002186" prefHeight="46.0" prefWidth="394.0" style="-fx-font-size: 18;" />
-                  <Label text="Please Enter Aditional Notes Below">
+                  <Label text="Please Enter Additional Notes Below">
                      <font>
                         <Font name="Calibri" size="24.0" />
                      </font>
@@ -85,7 +85,7 @@
                </children></VBox>
          </children>
       </HBox>
-      <JFXButton fx:id="btn_submit" buttonType="RAISED" contentDisplay="RIGHT" graphicTextGap="20.0" layoutX="382.0" layoutY="742.0" minHeight="75.0" minWidth="200.0" onMouseClicked="#createNewTranslator" ripplerFill="#c1c9eb" style="-fx-background-color: #002186;" stylesheets="@submitButton.css" text="Submit Request">
+      <JFXButton fx:id="btn_submit" buttonType="RAISED" contentDisplay="RIGHT" graphicTextGap="20.0" layoutX="382.0" layoutY="742.0" minHeight="75.0" minWidth="200.0" onMouseClicked="#createNewTransportationRequest" ripplerFill="#c1c9eb" style="-fx-background-color: #002186;" stylesheets="@submitButton.css" text="Submit Request">
          <font>
             <Font size="48.0" />
          </font>

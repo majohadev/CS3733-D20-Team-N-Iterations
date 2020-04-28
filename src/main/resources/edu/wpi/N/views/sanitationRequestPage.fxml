@@ -17,9 +17,9 @@
    <children>
       <HBox alignment="CENTER_LEFT" layoutX="318.0" layoutY="14.0" prefHeight="150.0" prefWidth="629.0" spacing="30.0" style="-fx-background-color: #002186; -fx-background-radius: 10;">
          <children>
-            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="133.0" fitWidth="134.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../images/languageWhite.png" />
+                  <Image url="@../images/SanitationIconWhite.png" />
                </image>
             </ImageView>
             <Label text="Sanitation Request" textFill="WHITE">
@@ -36,7 +36,7 @@
          <children>
             <VBox alignment="CENTER" maxHeight="509.0" maxWidth="500.0" minWidth="500.0" prefHeight="509.0" prefWidth="500.0" spacing="30.0">
                <children>
-                  <Label prefHeight="71.0" prefWidth="500.0" text="Please Enter A Location To Send Sanitation Services" textAlignment="CENTER" wrapText="true">
+                  <Label prefHeight="71.0" prefWidth="527.0" text="Please Enter A Location To Send Sanitation Services" textAlignment="CENTER" wrapText="true">
                      <font>
                         <Font name="Calibri" size="24.0" />
                      </font>
@@ -77,7 +77,7 @@
                         <Font size="18.0" />
                      </font>
                   </JFXTextField>
-                  <Label text="Please Enter Aditional Notes Below">
+                  <Label text="Please Enter Additional Notes Below">
                      <font>
                         <Font name="Calibri" size="24.0" />
                      </font>

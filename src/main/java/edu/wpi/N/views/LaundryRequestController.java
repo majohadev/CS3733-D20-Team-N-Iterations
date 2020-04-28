@@ -5,6 +5,7 @@ import com.jfoenix.controls.JFXTextArea;
 import edu.wpi.N.App;
 import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.database.DBException;
+import edu.wpi.N.database.MapDB;
 import edu.wpi.N.database.ServiceDB;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.States.StateSingleton;
@@ -15,14 +16,20 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.input.KeyEvent;
 
-public class WheelchairRequestController implements Controller {
+public class LaundryRequestController implements Controller {
+
+  private StateSingleton singleton;
+
+  @Override
+  public void setSingleton(StateSingleton singleton) {
+    this.singleton = singleton;
+  }
 
   private App mainApp;
-  private StateSingleton singleton;
+
   // Add FXML Tags Here
   @FXML JFXComboBox<String> cmbo_text;
-  @FXML JFXComboBox<String> cmbo_selectLang;
-  @FXML JFXTextArea txtf_wheelchairNotes;
+  @FXML JFXTextArea txtf_supportNotes;
 
   private ObservableList<String> fuzzySearchTextList =
       // List that fills TextViews
@@ -32,30 +39,19 @@ public class WheelchairRequestController implements Controller {
 
   private String countVal = "";
 
-  public WheelchairRequestController() throws DBException {}
+  public LaundryRequestController() throws DBException {}
 
   public void setMainApp(App mainApp) {
     this.mainApp = mainApp;
   }
 
-  @Override
-  public void setSingleton(StateSingleton singleton) {
-    this.singleton = singleton;
-  }
-
   public void initialize() throws DBException {
 
     cmbo_text.getEditor().setOnKeyTyped(this::locationTextChanged);
-    LinkedList<String> options = new LinkedList<String>();
-    options.add("Yes");
-    options.add("No");
-    ObservableList<String> yesOrNo = FXCollections.observableList(options);
-    cmbo_selectLang.setItems(yesOrNo);
   }
 
   @FXML
   public void autofillLocation(String currentText) {
-    System.out.println(currentText);
     if (currentText.length() > 2) {
       try {
         fuzzySearchNodeList = FuzzySearchAlgorithm.suggestLocations(currentText);
@@ -84,49 +80,41 @@ public class WheelchairRequestController implements Controller {
     cmbo_text.show();
   }
 
-  // Create Translator Request
+  // Create Emotional Request
   @FXML
-  public void createNewTranslator() throws DBException {
+  public void createNewLaundryRequest() throws DBException {
 
-    String assistanceOption = cmbo_selectLang.getSelectionModel().getSelectedItem();
-    String nodeID;
-    int nodeIndex = 0;
+    String nodeID = null;
 
-    try {
-      String curr = cmbo_text.getEditor().getText();
-      for (String name : fuzzySearchTextList) {
-        if (name.equals(curr)) {
-          nodeIndex++;
-          break;
-        }
+    String userLocationName = cmbo_text.getEditor().getText().toLowerCase().trim();
+    LinkedList<DbNode> checkNodes = MapDB.searchVisNode(-1, null, null, userLocationName);
+
+    // Find the exact match and get the nodeID
+    for (DbNode node : checkNodes) {
+      if (node.getLongName().toLowerCase().equals(userLocationName)) {
+        nodeID = node.getNodeID();
+        break;
       }
-      nodeID = fuzzySearchNodeList.get(nodeIndex).getNodeID();
-      System.out.println(nodeID);
-    } catch (IndexOutOfBoundsException e) {
+    }
+    // Check to see if such node was found
+    if (nodeID == null) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-      errorAlert.setContentText("Please select a location for your service request!");
+      errorAlert.setContentText(
+          "Please select a location for your service request from suggestions menu!");
       errorAlert.show();
       return;
     }
 
-    String notes = txtf_wheelchairNotes.getText();
-    if (assistanceOption == null) {
-      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-      errorAlert.setContentText("Please select a needs assistance option!");
-      errorAlert.show();
-      return;
-    }
+    String notes = txtf_supportNotes.getText();
 
-    int wheelchairReq = ServiceDB.addWheelchairRequest(notes, nodeID, assistanceOption);
+    int laundReq = ServiceDB.addLaundReq(notes, nodeID);
 
-    // App.adminDataStorage.addToList(wheelchairReq);
-
-    txtf_wheelchairNotes.clear();
-    cmbo_selectLang.getItems().clear();
+    txtf_supportNotes.clear();
     cmbo_text.getItems().clear();
 
     Alert confAlert = new Alert(Alert.AlertType.CONFIRMATION);
     confAlert.setContentText("Request Recieved");
     confAlert.show();
+    return;
   }
 }

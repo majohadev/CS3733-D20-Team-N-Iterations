@@ -11,7 +11,6 @@ import javafx.scene.layout.AnchorPane;
 
 public class ServiceController implements Controller {
 
-  public AnchorPane servicePageTemplate;
   public AnchorPane service_anchor;
   private App mainApp;
   private StateSingleton singleton;
@@ -30,7 +29,10 @@ public class ServiceController implements Controller {
     this.singleton = singleton;
   }
 
-  public void initialize() throws DBException, IOException {}
+  public void initialize() throws DBException, IOException {
+    AnchorPane currentPane = FXMLLoader.load(getClass().getResource("mainServicePage.fxml"));
+    service_anchor.getChildren().setAll(currentPane);
+  }
 
   @FXML
   public void switchToTranslatorPage() throws IOException {
@@ -42,7 +44,7 @@ public class ServiceController implements Controller {
   @FXML
   public void switchToLaundryPage() throws IOException {
 
-    AnchorPane currentPane = FXMLLoader.load(getClass().getResource("fileManagementScreen.fxml"));
+    AnchorPane currentPane = FXMLLoader.load(getClass().getResource("laundryPage.fxml"));
     service_anchor.getChildren().setAll(currentPane);
   }
 
@@ -78,12 +80,12 @@ public class ServiceController implements Controller {
 
   @FXML
   public void backHome() throws IOException {
-    mainApp.switchScene("home.fxml", singleton);
+    mainApp.switchScene("views/home.fxml", singleton);
   }
 
   @FXML
   public void switchToTransportPage() throws IOException {
-    AnchorPane currentPane = FXMLLoader.load(getClass().getResource("wheelchairRequest.fxml"));
+    AnchorPane currentPane = FXMLLoader.load(getClass().getResource("internalTransport.fxml"));
     service_anchor.getChildren().setAll(currentPane);
   }
 

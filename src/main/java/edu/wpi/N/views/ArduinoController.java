@@ -7,10 +7,18 @@ import com.jfoenix.controls.JFXToggleButton;
 import edu.wpi.N.App;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
+import edu.wpi.N.entities.States.StateSingleton;
 import java.io.*;
 import javafx.fxml.FXML;
 
 public class ArduinoController implements Controller {
+
+  private StateSingleton singleton;
+
+  @Override
+  public void setSingleton(StateSingleton singleton) {
+    this.singleton = singleton;
+  }
 
   private App mainApp;
 

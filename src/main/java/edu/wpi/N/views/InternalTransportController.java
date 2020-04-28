@@ -6,15 +6,26 @@ import com.jfoenix.controls.JFXTimePicker;
 import edu.wpi.N.App;
 import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.database.DBException;
+import edu.wpi.N.database.MapDB;
+import edu.wpi.N.database.ServiceDB;
 import edu.wpi.N.entities.DbNode;
+import edu.wpi.N.entities.States.StateSingleton;
 import java.util.LinkedList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 
 public class InternalTransportController implements Controller {
+
+  private StateSingleton singleton;
+
+  @Override
+  public void setSingleton(StateSingleton singleton) {
+    this.singleton = singleton;
+  }
 
   private App mainApp;
 
@@ -24,6 +35,7 @@ public class InternalTransportController implements Controller {
   @FXML JFXTextArea txtf_transNotes;
   @FXML JFXComboBox<String> cmbo_type;
   @FXML JFXTimePicker tp_transporttime;
+  @FXML AnchorPane internalTransportPage;
 
   private ObservableList<String> fuzzySearchTextList =
       // List that fills TextViews
@@ -47,7 +59,6 @@ public class InternalTransportController implements Controller {
 
     cmbo_dest.getEditor().setOnKeyTyped(this::locationTextChanged);
     cmbo_pickup.getEditor().setOnKeyTyped(this::locationTextChanged1);
-    // Available types of support: Individual, Family, Couple, Group
     LinkedList<String> transportTypes = new LinkedList<String>();
     transportTypes.add("Wheelchair");
     transportTypes.add("Stretcher");
@@ -121,54 +132,59 @@ public class InternalTransportController implements Controller {
   public void createNewTransportationRequest() throws DBException {
 
     String typeSelection = cmbo_type.getSelectionModel().getSelectedItem();
-    String nodeID;
-    String pickupNodeID;
+    String destinationLocation = null;
+    String pickupNodeID = null;
     int nodeIndex = 0;
 
-    try {
-      String curr = cmbo_dest.getEditor().getText();
-      for (String name : fuzzySearchTextList) {
-        if (name.equals(curr)) {
-          nodeIndex++;
-          break;
-        }
+    String notes = txtf_transNotes.getText();
+
+    String userLocationName = cmbo_dest.getEditor().getText().toLowerCase().trim();
+    LinkedList<DbNode> checkNodes = MapDB.searchVisNode(-1, null, null, userLocationName);
+
+    String userPickupName = cmbo_pickup.getEditor().getText().toLowerCase().trim();
+    LinkedList<DbNode> checkNodesPickup = MapDB.searchVisNode(-1, null, null, userPickupName);
+
+    // Find the exact match and get the nodeID
+    for (DbNode node : checkNodes) {
+      if (node.getLongName().toLowerCase().equals(userLocationName)) {
+        destinationLocation = node.getNodeID();
+        break;
       }
-      nodeID = fuzzySearchNodeList.get(nodeIndex).getNodeID();
-    } catch (IndexOutOfBoundsException e) {
+    }
+    // Check to see if such node was found
+    if (destinationLocation == null) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
       errorAlert.setContentText("Please select a destination location for your service request!");
       errorAlert.show();
       return;
     }
 
-    try {
-      String curr1 = cmbo_pickup.getEditor().getText();
-      for (String name : fuzzySearchTextList1) {
-        if (name.equals(curr1)) {
-          nodeIndex++;
-          break;
-        }
+    for (DbNode node : checkNodesPickup) {
+      if (node.getLongName().toLowerCase().equals(userPickupName)) {
+        pickupNodeID = node.getNodeID();
+        break;
       }
-      pickupNodeID = fuzzySearchNodeList1.get(nodeIndex).getNodeID();
-    } catch (IndexOutOfBoundsException e) {
+    }
+
+    if (pickupNodeID == null) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
       errorAlert.setContentText("Please select a pickup location for your service request!");
       errorAlert.show();
       return;
     }
 
-    String notes = txtf_transNotes.getText();
     if (typeSelection == null) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-      errorAlert.setContentText("Please select a support type for your emotional support request!");
+      errorAlert.setContentText("Please select a transport type for your request!");
       errorAlert.show();
       return;
     }
 
     String time = tp_transporttime.getValue().toString();
 
-    // int emotSuppReq = ServiceDB.addEmotSuppReq(notes, nodeID, supportSelection);
-    //    App.adminDataStorage.addToList(emotSuppReq);
+    int transportRequest =
+        ServiceDB.addInternalTransportationReq(
+            notes, pickupNodeID, typeSelection, time, destinationLocation);
 
     txtf_transNotes.clear();
     cmbo_dest.getItems().clear();
@@ -178,5 +194,6 @@ public class InternalTransportController implements Controller {
     Alert confAlert = new Alert(Alert.AlertType.CONFIRMATION);
     confAlert.setContentText("Request Recieved");
     confAlert.show();
+    internalTransportPage.setVisible(false);
   }
 }

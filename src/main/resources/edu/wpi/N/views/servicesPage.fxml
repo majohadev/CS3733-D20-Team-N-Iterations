@@ -4,13 +4,13 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.effect.Shadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="1080.0" maxWidth="1920.0" minHeight="1080.0" minWidth="1920.0" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.ServiceController">
@@ -29,107 +29,268 @@
                         <Font name="Calibri Bold" size="96.0" />
                      </font>
                   </Label>
-                  <JFXButton buttonType="RAISED" layoutX="14.0" layoutY="33.0" text="Back" textFill="WHITE">
+                  <JFXButton fx:id="btn_back" buttonType="RAISED" layoutX="14.0" layoutY="33.0" onMouseClicked="#backHome" text="Back" textFill="WHITE">
                      <font>
                         <Font name="Calibri" size="24.0" />
                      </font>
                   </JFXButton>
                   <JFXButton layoutX="166.0" layoutY="44.0" onMouseClicked="#switchToTransportPage" text="testInternalTrans" textFill="WHITE" />
                </children></AnchorPane>
-          <AnchorPane maxHeight="900.0" minHeight="900.0" minWidth="0.0" prefHeight="900.0" prefWidth="1918.0" style="-fx-background-color: #fff8e4;">
+          <AnchorPane maxHeight="965.0" minHeight="900.0" minWidth="0.0" prefHeight="960.0" prefWidth="1918.0" style="-fx-background-color: white;">
                <children>
                 <AnchorPane minHeight="900.0" minWidth="0.0" prefHeight="160.0">
                      <children>
-                        <ScrollPane hbarPolicy="NEVER" layoutY="14.0" maxHeight="1242.0" maxWidth="656.0" minHeight="900.0" minWidth="656.0" prefHeight="880.0" prefWidth="656.0" style="-fx-background-color: #fff8e4;" styleClass="scroll-bar" stylesheets="@scrollStyle.css" vmax="3.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="14.0">
+                        <ScrollPane hbarPolicy="NEVER" layoutY="1.0" maxHeight="1242.0" maxWidth="656.0" minHeight="900.0" minWidth="656.0" prefHeight="958.0" prefWidth="656.0" style="-fx-background-color: #fff8e4;" styleClass="scroll-bar" stylesheets="@scrollStyle.css" vbarPolicy="ALWAYS" vmax="1.2" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="4.0">
                           <content>
-                            <AnchorPane minHeight="997.0" prefHeight="1507.0" prefWidth="646.0" style="-fx-background-color: white;">
+                            <AnchorPane minHeight="997.0" prefHeight="1819.0" prefWidth="646.0" style="-fx-background-color: white;">
                                  <children>
-                                    <GridPane alignment="CENTER" layoutX="-19.0" maxHeight="1370.0" minHeight="1000.0" prefHeight="1018.0" prefWidth="646.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="115.0">
+                                    <GridPane alignment="CENTER" minHeight="1000.0" prefWidth="646.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="115.0">
                                       <columnConstraints>
                                         <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="315.0" prefWidth="300.0" />
                                         <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="315.0" prefWidth="300.0" />
                                       </columnConstraints>
                                       <rowConstraints>
-                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="335.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="335.0" vgrow="SOMETIMES" />
+                                        <RowConstraints minHeight="335.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="335.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="335.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                       </rowConstraints>
                                        <children>
-                                          <JFXButton fx:id="btn_laundry" buttonType="RAISED" contentDisplay="TOP" minHeight="285.0" minWidth="256.0" onMouseClicked="#switchToLaundryPage" prefHeight="290.0" prefWidth="290.0" ripplerFill="#ffd965" stylesheets="@iconButton.css" text="Laundry">
-                                             <graphic>
-                                                <ImageView fitHeight="203.0" fitWidth="190.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@../images/LaundryWhite.png" />
-                                                   </image>
-                                                </ImageView>
-                                             </graphic>
-                                             <font>
-                                                <Font name="Calibri Bold" size="30.0" />
-                                             </font>
-                                             <effect>
-                                                <Shadow />
-                                             </effect>
-                                          </JFXButton>
-                                          <JFXButton fx:id="btn_translator" buttonType="RAISED" contentDisplay="TOP" minHeight="268.0" minWidth="256.0" onMouseClicked="#switchToTranslatorPage" prefHeight="290.0" prefWidth="290.0" ripplerFill="#ffd965" style="-fx-background-color: #002186;" stylesheets="@iconButton.css" text="Translator" textFill="WHITE" GridPane.columnIndex="1">
-                                             <graphic>
-                                                <ImageView fitHeight="203.0" fitWidth="190.0" onMouseClicked="#switchToTranslatorPage" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@../images/languageWhite.png" />
-                                                   </image>
-                                                </ImageView>
-                                             </graphic>
-                                             <font>
-                                                <Font name="Calibri Bold" size="30.0" />
-                                             </font>
-                                          </JFXButton>
-                                          <JFXButton buttonType="RAISED" contentDisplay="TOP" minHeight="285.0" minWidth="256.0" onMouseClicked="#switchToSecurityPage" ripplerFill="#ffd965" stylesheets="@iconButton.css" text="Security" GridPane.rowIndex="1">
-                                             <graphic>
-                                                <ImageView fitHeight="203.0" fitWidth="190.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@../images/securityWhite.png" />
-                                                   </image>
-                                                </ImageView>
-                                             </graphic>
-                                             <font>
-                                                <Font name="Calibri Bold" size="30.0" />
-                                             </font>
-                                          </JFXButton>
-                                          <JFXButton buttonType="RAISED" contentDisplay="TOP" minHeight="285.0" minWidth="256.0" onMouseClicked="#switchToWheelchairPage" ripplerFill="#ffd965" stylesheets="@iconButton.css" text="Wheelchair" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                                             <graphic>
-                                                <ImageView fitHeight="203.0" fitWidth="190.0" onMouseClicked="#switchToWheelchairPage" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@../images/WheelchairWhite.png" />
-                                                   </image>
-                                                </ImageView>
-                                             </graphic>
-                                             <font>
-                                                <Font name="Calibri Bold" size="30.0" />
-                                             </font>
-                                          </JFXButton>
-                                          <JFXButton buttonType="RAISED" contentDisplay="TOP" minHeight="285.0" minWidth="256.0" onMouseClicked="#switchToITServicePage" ripplerFill="#ffd965" stylesheets="@iconButton.css" text="IT Help" GridPane.rowIndex="2">
-                                             <graphic>
-                                                <ImageView fitHeight="256.0" fitWidth="190.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@../images/ITservicesWhite.png" />
-                                                   </image>
-                                                </ImageView>
-                                             </graphic>
-                                             <font>
-                                                <Font name="Calibri Bold" size="30.0" />
-                                             </font>
-                                          </JFXButton>
-                                          <JFXButton buttonType="RAISED" contentDisplay="TOP" layoutX="20.0" layoutY="686.0" minHeight="285.0" minWidth="256.0" onMouseClicked="#switchToEmotionalPage" ripplerFill="#ffd965" stylesheets="@iconButton.css" text="Emotional Help" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                                             <font>
-                                                <Font name="Calibri Bold" size="30.0" />
-                                             </font>
-                                             <graphic>
-                                                <ImageView fitHeight="256.0" fitWidth="190.0" pickOnBounds="true" preserveRatio="true">
-                                                   <image>
-                                                      <Image url="@../images/friendWhite.png" />
-                                                   </image>
-                                                </ImageView>
-                                             </graphic>
-                                          </JFXButton>
+                                          <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                                             <children>
+                                                <JFXButton fx:id="btn_laundry" buttonType="RAISED" contentDisplay="GRAPHIC_ONLY" onMouseClicked="#switchToLaundryPage" ripplerFill="#ffd965" stylesheets="@iconButton.css" text="Laundry">
+                                                   <graphic>
+                                                      <ImageView fitHeight="203.0" fitWidth="160.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@../images/LaundryWhite.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                   </graphic>
+                                                   <font>
+                                                      <Font name="Calibri Bold" size="30.0" />
+                                                   </font>
+                                                </JFXButton>
+                                                <Label text="Laundry">
+                                                   <font>
+                                                      <Font size="36.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label text="Your Name Here">
+                                                   <font>
+                                                      <Font name="Calibri" size="14.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                          </VBox>
+                                          <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1">
+                                             <children>
+                                                <JFXButton fx:id="btn_translator" buttonType="RAISED" contentDisplay="GRAPHIC_ONLY" onMouseClicked="#switchToTranslatorPage" ripplerFill="#ffd965" style="-fx-background-color: #002186;" stylesheets="@iconButton.css" text="Translator" textFill="WHITE">
+                                                   <graphic>
+                                                      <ImageView fitHeight="203.0" fitWidth="160.0" onMouseClicked="#switchToTranslatorPage" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@../images/languageWhite.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                   </graphic>
+                                                   <font>
+                                                      <Font name="Calibri Bold" size="30.0" />
+                                                   </font>
+                                                </JFXButton>
+                                                <Label text="Translator">
+                                                   <font>
+                                                      <Font size="36.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label text="Your Name Here">
+                                                   <font>
+                                                      <Font name="Calibri" size="14.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                          </VBox>
+                                          <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
+                                             <children>
+                                                <JFXButton fx:id="btn_security" buttonType="RAISED" contentDisplay="GRAPHIC_ONLY" onMouseClicked="#switchToSecurityPage" ripplerFill="#ffd965" stylesheets="@iconButton.css" text="Security">
+                                                   <graphic>
+                                                      <ImageView fitHeight="203.0" fitWidth="160.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@../images/securityWhite.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                   </graphic>
+                                                   <font>
+                                                      <Font name="Calibri Bold" size="30.0" />
+                                                   </font>
+                                                </JFXButton>
+                                                <Label text="Security">
+                                                   <font>
+                                                      <Font size="36.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label text="Your Name Here">
+                                                   <font>
+                                                      <Font name="Calibri" size="14.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                          </VBox>
+                                          <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                             <children>
+                                                <JFXButton fx:id="btn_wheelchair" buttonType="RAISED" contentDisplay="GRAPHIC_ONLY" onMouseClicked="#switchToWheelchairPage" ripplerFill="#ffd965" stylesheets="@iconButton.css" text="Wheelchair">
+                                                   <graphic>
+                                                      <ImageView fitHeight="203.0" fitWidth="160.0" onMouseClicked="#switchToWheelchairPage" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@../images/WheelchairWhite.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                   </graphic>
+                                                   <font>
+                                                      <Font name="Calibri Bold" size="30.0" />
+                                                   </font>
+                                                </JFXButton>
+                                                <Label text="Wheelchair">
+                                                   <font>
+                                                      <Font size="36.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label text="Your Name Here">
+                                                   <font>
+                                                      <Font name="Calibri" size="14.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                          </VBox>
+                                          <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="2">
+                                             <children>
+                                                <JFXButton fx:id="btn_IT" buttonType="RAISED" contentDisplay="GRAPHIC_ONLY" onMouseClicked="#switchToITServicePage" ripplerFill="#ffd965" stylesheets="@iconButton.css" text="IT Help">
+                                                   <graphic>
+                                                      <ImageView fitHeight="256.0" fitWidth="160.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@../images/ITservicesWhite.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                   </graphic>
+                                                   <font>
+                                                      <Font name="Calibri Bold" size="30.0" />
+                                                   </font>
+                                                </JFXButton>
+                                                <Label text="IT Help">
+                                                   <font>
+                                                      <Font size="36.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label text="Your Name Here">
+                                                   <font>
+                                                      <Font name="Calibri" size="14.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                          </VBox>
+                                          <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                             <children>
+                                                <JFXButton fx:id="btn_emotional" buttonType="RAISED" contentDisplay="GRAPHIC_ONLY" onMouseClicked="#switchToEmotionalPage" ripplerFill="#ffd965" stylesheets="@iconButton.css" text="Emotional Help" wrapText="true">
+                                                   <font>
+                                                      <Font name="Calibri Bold" size="30.0" />
+                                                   </font>
+                                                   <graphic>
+                                                      <ImageView fitHeight="256.0" fitWidth="160.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@../images/friendWhite.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                   </graphic>
+                                                </JFXButton>
+                                                <Label text="Emotional Support">
+                                                   <font>
+                                                      <Font size="36.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label text="Your Name Here">
+                                                   <font>
+                                                      <Font name="Calibri" size="14.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                          </VBox>
+                                          <VBox alignment="CENTER" layoutX="333.0" layoutY="485.0" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="3">
+                                             <children>
+                                                <JFXButton fx:id="btn_itransport" buttonType="RAISED" contentDisplay="GRAPHIC_ONLY" onMouseClicked="#switchToTransportPage" ripplerFill="#ffd965" stylesheets="@iconButton.css" text="Emotional Help" wrapText="true">
+                                                   <font>
+                                                      <Font name="Calibri Bold" size="30.0" />
+                                                   </font>
+                                                   <graphic>
+                                                      <ImageView fitHeight="256.0" fitWidth="160.0" pickOnBounds="true" preserveRatio="true">
+                                                         <image>
+                                                            <Image url="@../images/PatientTransportationIconWhite.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                   </graphic>
+                                                </JFXButton>
+                                                <Label text="Internal Transport">
+                                                   <font>
+                                                      <Font size="36.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label text="Michael Laks">
+                                                   <font>
+                                                      <Font name="Calibri" size="14.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                          </VBox>
+                                          <VBox alignment="CENTER" layoutX="10.0" layoutY="1015.0" prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                             <children>
+                                                <JFXButton fx:id="btn_floral" buttonType="RAISED" contentDisplay="GRAPHIC_ONLY" graphicTextGap="0.0" onMouseClicked="#switchToFloralPage" ripplerFill="#ffd965" stylesheets="@iconButton.css" text="Emotional Help" wrapText="true">
+                                                   <font>
+                                                      <Font name="Calibri Bold" size="30.0" />
+                                                   </font>
+                                                   <graphic>
+                                                      <ImageView fitHeight="256.0" fitWidth="160.0" pickOnBounds="true" preserveRatio="true" translateX="15.0">
+                                                         <image>
+                                                            <Image url="@../images/GivingFlowerWhite.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                   </graphic>
+                                                </JFXButton>
+                                                <Label text="Floral Delivery">
+                                                   <font>
+                                                      <Font size="36.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label text="Your Name Here">
+                                                   <font>
+                                                      <Font name="Calibri" size="14.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                          </VBox>
+                                          <VBox alignment="CENTER" layoutX="10.0" layoutY="1015.0" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="4">
+                                             <children>
+                                                <JFXButton fx:id="btn_sanitation" buttonType="RAISED" contentDisplay="GRAPHIC_ONLY" onMouseClicked="#switchToSanitationPage" ripplerFill="#ffd965" stylesheets="@iconButton.css" wrapText="true">
+                                                   <font>
+                                                      <Font name="Calibri Bold" size="30.0" />
+                                                   </font>
+                                                   <graphic>
+                                                      <ImageView fitHeight="256.0" fitWidth="160.0" pickOnBounds="true" preserveRatio="true" translateX="7.0">
+                                                         <image>
+                                                            <Image url="@../images/SanitationIconWhite.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                   </graphic>
+                                                </JFXButton>
+                                                <Label text="Sanitation">
+                                                   <font>
+                                                      <Font size="36.0" />
+                                                   </font>
+                                                </Label>
+                                                <Label text="Your Name Here">
+                                                   <font>
+                                                      <Font name="Calibri" size="14.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                          </VBox>
                                        </children>
                                     </GridPane>
                                     <Label layoutX="90.0" layoutY="36.0" text="Available Services">
@@ -143,7 +304,7 @@
                         </ScrollPane>
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="service_anchor" layoutX="657.0" maxHeight="890.0" maxWidth="1264.0" minHeight="890.0" minWidth="1264.0" prefHeight="900.0" prefWidth="1264.0">
+                  <AnchorPane fx:id="service_anchor" layoutX="657.0" layoutY="30.0" maxHeight="900.0" maxWidth="1264.0" minHeight="890.0" minWidth="1264.0" prefHeight="900.0" prefWidth="1264.0">
                      <children>
                      </children></AnchorPane>
                </children>

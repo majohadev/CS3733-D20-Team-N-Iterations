@@ -5,6 +5,7 @@ import com.jfoenix.controls.JFXTextArea;
 import edu.wpi.N.App;
 import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.database.DBException;
+import edu.wpi.N.database.MapDB;
 import edu.wpi.N.database.ServiceDB;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.States.StateSingleton;
@@ -47,7 +48,6 @@ public class TemplateController implements Controller {
 
     cmbo_text.getEditor().setOnKeyTyped(this::locationTextChanged);
     LinkedList<String> languages = ServiceDB.getLanguages();
-    languages.add("French");
     ObservableList<String> langList = FXCollections.observableList(languages);
     cmbo_selectLang.setItems(langList);
   }
@@ -88,22 +88,24 @@ public class TemplateController implements Controller {
   public void createNewTranslator() throws DBException {
 
     String langSelection = cmbo_selectLang.getSelectionModel().getSelectedItem();
-    String nodeID;
+    String nodeID = null;
     int nodeIndex = 0;
 
-    try {
-      String curr = cmbo_text.getEditor().getText();
-      for (String name : fuzzySearchTextList) {
-        if (name.equals(curr)) {
-          nodeIndex++;
-          break;
-        }
+    String userLocationName = cmbo_text.getEditor().getText().toLowerCase().trim();
+    LinkedList<DbNode> checkNodes = MapDB.searchVisNode(-1, null, null, userLocationName);
+
+    // Find the exact match and get the nodeID
+    for (DbNode node : checkNodes) {
+      if (node.getLongName().toLowerCase().equals(userLocationName)) {
+        nodeID = node.getNodeID();
+        break;
       }
-      nodeID = fuzzySearchNodeList.get(nodeIndex).getNodeID();
-      System.out.println(nodeID);
-    } catch (IndexOutOfBoundsException e) {
+    }
+    // Check to see if such node was found
+    if (nodeID == null) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-      errorAlert.setContentText("Please select a location for your service request!");
+      errorAlert.setContentText(
+          "Please select a location for your service request from suggestions menu!");
       errorAlert.show();
       return;
     }
