@@ -71,6 +71,13 @@ CREATE TABLE doctors (
       CONSTRAINT doc_user FOREIGN KEY (username) REFERENCES credential(username),
       CONSTRAINT doc_id FOREIGN KEY (doctorID) REFERENCES employees(employeeID) ON DELETE CASCADE);
 
+CREATE TABLE flower(
+    flowerName VARCHAR(255) PRIMARY KEY,
+    price INT NOT NULL
+);
+
+/*TODO add the employees table */
+
 CREATE TABLE wheelchairEmployee(
       w_employeeID INT NOT NULL,
       PRIMARY KEY(w_employeeID),
@@ -80,6 +87,12 @@ CREATE TABLE emotionalSupporter(
       l_employeeID INT NOT NULL,
       PRIMARY KEY(l_employeeID),
       CONSTRAINT emo_ID FOREIGN KEY (l_employeeID)REFERENCES employees(employeeID) ON DELETE CASCADE);
+
+CREATE TABLE flowerDeliverer(
+    f_employeeID INT NOT NULL REFERENCES employees(employeeID) on DELETE  CASCADE,
+    PRIMARY KEY(f_employeeID)
+);
+
 
 CREATE TABLE IT(
       IT_employeeID INT NOT NULL,
@@ -121,7 +134,8 @@ CREATE TABLE medicineRequests(
     medicineName VARCHAR(255),
     dosage FLOAT,
     units VARCHAR(3),
-    patient VARCHAR(255) NOT NULL
+    patient VARCHAR(255) NOT NULL,
+    CONSTRAINT units_ck CHECK (LOWER(units) IN ('mg', 'g', 'cc'))
 );
 
 CREATE TABLE sanitationRequests(
@@ -145,6 +159,19 @@ CREATE TABLE ITrequest(
               device VARCHAR(255) NOT NULL,
               problem VARCHAR(255) NOT NULL);
 
+CREATE TABLE flowerRequest(
+            requestID INT NOT NULL PRIMARY KEY REFERENCES request(requestID) ON DELETE CASCADE,
+            patientName VARCHAR(255) NOT NULL,
+            visitorName VARCHAR(255) NOT NULL,
+            creditNum CHAR(19));
+
+CREATE TABLE flowertoflower(
+            relationID INT NOT NULL PRIMARY KEY generated always as identity,
+            flowerName VARCHAR(255) NOT NULL references  flower(flowerName) on DELETE CASCADE,
+            requestID INT NOT NULL references flowerRequest(requestID) on DELETE CASCADE
+);
+
+
 INSERT INTO service VALUES ('Translator', '00:00', '00:00', 'Make a request for our translation services!');
 INSERT INTO service VALUES ('Laundry', '00:00', '00:00', 'Make a request for laundry services!');
 INSERT INTO service VALUES ('Medicine', '00:00', '00:00', 'Request medicine delivery!');
@@ -152,6 +179,7 @@ INSERT INTO service VALUES ('Sanitation', '00:00', '00:00', 'Request sanitation 
 INSERT INTO service VALUES ('Wheelchair', '00:00', '00:00', 'Request a wheelchair!');
 INSERT INTO service VALUES ('Emotional Support', '00:00', '00:00', 'Request emotional support, please?!');
 INSERT INTO service VALUES ('IT', '00:00', '00:00', 'Make a request for IT services!');
+INSERT INTO service VALUES ('Flower', '00:00', '00:00', 'Make a request for Flower Delivery services');
 
 
 

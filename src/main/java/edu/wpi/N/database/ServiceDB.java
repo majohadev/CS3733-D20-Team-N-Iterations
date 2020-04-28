@@ -52,6 +52,8 @@ public class ServiceDB {
         return new WheelchairEmployee(id, name);
       } else if (sType.equals("IT")) {
         return new IT(id, name);
+      } else if (sType.equals("Flower")) {
+        return new FlowerDeliverer(id, name);
       } else
         throw new DBException(
             "Invalid employee in table employees! ID: " + id + "Name: " + rs.getString("name"));
@@ -78,6 +80,7 @@ public class ServiceDB {
     allEmployee.addAll(DoctorDB.getDoctors());
     allEmployee.addAll(getWheelchairEmployees());
     allEmployee.addAll(getITs());
+    allEmployee.addAll(getFlowerDeliverers());
     return allEmployee;
   }
 
@@ -107,6 +110,23 @@ public class ServiceDB {
       e.printStackTrace();
       throw new DBException("Unknown error: getServices", e);
     }
+  }
+
+  private static String createFlowerString(ResultSet rs) throws SQLException {
+    String flowers = "";
+    String name;
+    int amount;
+    while (rs.next()) {
+      name = rs.getString("flowerName");
+      amount = rs.getInt("flowerCount");
+      if (amount > 1) {
+        flowers += "" + amount + " " + name + "s, ";
+      } else {
+        flowers += "" + amount + " " + name + ", ";
+      }
+    }
+    if (flowers.length() > 0) flowers = flowers.substring(0, flowers.length() - 2);
+    return flowers;
   }
 
   // TODO: Add your service request here
@@ -233,7 +253,28 @@ public class ServiceDB {
             status,
             rs.getString("device"),
             rs.getString("problem"));
-      } else throw new DBException("Invalid request! ID = " + id);
+      } else if (sType.equals("Flower")) {
+        query =
+            "SELECT requestID, patientName, visitorName, creditNum FROM flowerRequest WHERE requestID = ?";
+        stmt = con.prepareStatement(query);
+        stmt.setInt(1, id);
+        rs = stmt.executeQuery();
+        rs.next();
+        String a = rs.getString("patientName");
+        String b = rs.getString("visitorName");
+        String c = rs.getString("creditNum");
+        query =
+            "SELECT flower.flowerName, count(flower.flowerName) AS flowerCount FROM flower, flowertoflower "
+                + "WHERE flower.flowerName = flowertoflower.flowerName AND flowertoflower.requestID = ? "
+                + "GROUP BY flower.flowerName";
+        stmt = con.prepareStatement(query);
+        stmt.setInt(1, rs.getInt("requestID"));
+        rs = stmt.executeQuery();
+        String flowers = createFlowerString(rs);
+        return new FlowerRequest(
+            rid, empId, reqNotes, compNotes, nodeID, timeReq, timeComp, status, a, b, c, flowers);
+      } else
+        throw new DBException("Invalid request! ID = " + id + ", Request type = \"" + sType + "\"");
     } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Unknown error: getRequest", e);
@@ -369,6 +410,34 @@ public class ServiceDB {
                 rs.getString("device"),
                 rs.getString("problem")));
       }
+      query =
+          "SELECT * FROM request, flowerRequest WHERE request.requestID = flowerRequest.requestID";
+      stmt = con.prepareStatement(query);
+      rs = stmt.executeQuery();
+      while (rs.next()) {
+        query =
+            "SELECT flower.flowerName, count(flower.flowerName) AS flowerCount FROM flower, flowertoflower "
+                + "WHERE flower.flowerName = flowertoflower.flowerName AND flowertoflower.requestID = ? "
+                + "GROUP BY flower.flowerName";
+        stmt = con.prepareStatement(query);
+        stmt.setInt(1, rs.getInt("requestID"));
+        ResultSet rx = stmt.executeQuery();
+        String flowers = createFlowerString(rx);
+        requests.add(
+            new FlowerRequest(
+                rs.getInt("requestID"),
+                rs.getInt("assigned_eID"),
+                rs.getString("reqNotes"),
+                rs.getString("compNotes"),
+                rs.getString("nodeID"),
+                getJavatime(rs.getTimestamp("timeRequested")),
+                getJavatime(rs.getTimestamp("timeCompleted")),
+                rs.getString("status"),
+                rs.getString("patientName"),
+                rs.getString("visitorName"),
+                rs.getString("creditNum"),
+                flowers));
+      }
       return requests;
     } catch (SQLException e) {
       e.printStackTrace();
@@ -472,6 +541,53 @@ public class ServiceDB {
                 rs.getString("device"),
                 rs.getString("problem")));
       }
+      query =
+          "SELECT * from request, sanitationRequests WHERE request.requestID = sanitationRequests.requestID AND status = 'OPEN'";
+      stmt = con.prepareStatement(query);
+      rs = stmt.executeQuery();
+      while (rs.next()) {
+        openList.add(
+            new SanitationRequest(
+                rs.getInt("requestID"),
+                rs.getInt("assigned_eID"),
+                rs.getString("reqNotes"),
+                rs.getString("compNotes"),
+                rs.getString("nodeID"),
+                getJavatime(rs.getTimestamp("timeRequested")),
+                getJavatime(rs.getTimestamp("timeCompleted")),
+                rs.getString("status"),
+                rs.getString("sanitationType"),
+                rs.getString("size"),
+                rs.getString("danger")));
+      }
+      query =
+          "SELECT * FROM request, flowerRequest WHERE request.requestID = flowerRequest.requestID AND status = 'OPEN'";
+      stmt = con.prepareStatement(query);
+      rs = stmt.executeQuery();
+      while (rs.next()) {
+        query =
+            "SELECT flower.flowerName, count(flower.flowerName) AS flowerCount FROM flower, flowertoflower "
+                + "WHERE flower.flowerName = flowertoflower.flowerName AND flowertoflower.requestID = ? "
+                + "GROUP BY flower.flowerName";
+        stmt = con.prepareStatement(query);
+        stmt.setInt(1, rs.getInt("requestID"));
+        ResultSet rx = stmt.executeQuery();
+        String flowers = createFlowerString(rx);
+        openList.add(
+            new FlowerRequest(
+                rs.getInt("requestID"),
+                rs.getInt("assigned_eID"),
+                rs.getString("reqNotes"),
+                rs.getString("compNotes"),
+                rs.getString("nodeID"),
+                getJavatime(rs.getTimestamp("timeRequested")),
+                getJavatime(rs.getTimestamp("timeCompleted")),
+                rs.getString("status"),
+                rs.getString("patientName"),
+                rs.getString("visitorName"),
+                rs.getString("creditNum"),
+                flowers));
+      }
       return openList;
     } catch (SQLException ex) {
       ex.printStackTrace();
@@ -524,6 +640,29 @@ public class ServiceDB {
     }
   }
   // TODO: GetEmployeeTypes (something which gets all the employees of your particular type)
+
+  /**
+   * gets a list of all flower deliverers
+   *
+   * @return list of all flower deliverers
+   * @throws DBException
+   */
+  public static LinkedList<FlowerDeliverer> getFlowerDeliverers() throws DBException {
+    try {
+      String query =
+          "SELECT f_employeeID from employees, flowerDeliverer where employeeID = f_employeeID";
+      PreparedStatement stmt = con.prepareStatement(query);
+      ResultSet rs = stmt.executeQuery();
+      LinkedList<FlowerDeliverer> list = new LinkedList<FlowerDeliverer>();
+      while (rs.next()) {
+        list.add((FlowerDeliverer) getEmployee(rs.getInt("f_employeeID")));
+      }
+      return list;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown error: getflowerDeliverer", e);
+    }
+  }
 
   /**
    * Gets all the emotional supporters in the database
@@ -707,6 +846,33 @@ public class ServiceDB {
   }
 
   // TODO: Add a function to add your employee type to the database
+
+  /**
+   * Adds a Flower Deliverer to the database
+   *
+   * @param name
+   * @return the employeeID of the generated Employee
+   * @throws DBException
+   */
+  public static int addFlowerDeliverer(String name) throws DBException {
+    try {
+      String query = "INSERT INTO employees (name, serviceType) VALUES (?, 'Flower')";
+      PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+      stmt.setString(1, name);
+      stmt.executeUpdate();
+      ResultSet rs = stmt.getGeneratedKeys();
+      rs.next();
+      query = "INSERT INTO flowerDeliverer VALUES (?)";
+      stmt = con.prepareStatement(query);
+      int id = rs.getInt("1");
+      stmt.setInt(1, id);
+      stmt.executeUpdate();
+      return id;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown Error: addflowerDeliverer", e);
+    }
+  }
 
   /**
    * Adds a Emotional Supporter employee to the database
@@ -900,6 +1066,113 @@ public class ServiceDB {
   }
 
   // TODO: Create your addRequest call here
+
+  public static int addFlowerReq(
+      String reqNotes,
+      String nodeID,
+      String patientName,
+      String visitorName,
+      String creditNum,
+      LinkedList<String> flowerList)
+      throws DBException {
+    if (flowerList == null || flowerList.size() == 0) {
+      throw new DBException("addFlowerReq: The list of flowers is either empty or null");
+    }
+    try {
+      String query =
+          "INSERT INTO request (timeRequested, reqNotes, serviceType, nodeID, status) VALUES (?, ?, ?, ?, ?)";
+      PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+      stmt.setTimestamp(1, new Timestamp(new Date().getTime()));
+      stmt.setString(2, reqNotes);
+      stmt.setString(3, "Flower");
+      stmt.setString(4, nodeID);
+      stmt.setString(5, "OPEN");
+      stmt.execute();
+      ResultSet rs = stmt.getGeneratedKeys();
+      rs.next();
+      query =
+          "INSERT INTO flowerRequest (requestID, patientName, visitorName, creditNum) VALUES (?, ?, ?, ?)";
+      stmt = con.prepareStatement(query);
+      int id = rs.getInt("1");
+      stmt.setInt(1, id);
+      stmt.setString(2, patientName);
+      stmt.setString(3, visitorName);
+      stmt.setString(4, creditNum);
+      stmt.executeUpdate();
+      query = "INSERT INTO flowertoflower (requestID, flowerName) VALUES (?, ?)";
+      stmt = con.prepareStatement(query);
+      stmt.setInt(1, id);
+      for (String f : flowerList) {
+        stmt.setString(2, f);
+        stmt.executeUpdate();
+      }
+      return id;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown error: addFlowerReq", e);
+    }
+  }
+
+  /**
+   * Adds a new flower to the database
+   *
+   * @param name Name of the new flower
+   * @param price Price of the new flower in cents
+   * @return The flower that was added to the database
+   * @throws DBException if there was an error adding the flower
+   */
+  public static Flower addFlower(String name, int price) throws DBException {
+    try {
+      String query = "INSERT INTO flower (flowerName, price) VALUES (?, ?)";
+      PreparedStatement st = con.prepareStatement(query);
+      st.setString(1, name);
+      st.setInt(2, price);
+      if (st.executeUpdate() > 0) return new Flower(name, price);
+      else throw new DBException("The flower \"" + name + "\" was not added to the database");
+    } catch (SQLException e) {
+      throw new DBException("Unknown error: addFlower", e);
+    }
+  }
+
+  /**
+   * Deletes a flower from the database
+   *
+   * @param name The name of the flower to be deleted
+   * @return True if deletion was successful
+   * @throws DBException if there was an error removing the flower
+   */
+  public static boolean removeFlower(String name) throws DBException {
+    try {
+      String query = "DELETE FROM flower WHERE flowerName = ?";
+      PreparedStatement st = con.prepareStatement(query);
+      st.setString(1, name);
+      return st.executeUpdate() > 0;
+    } catch (SQLException e) {
+      throw new DBException("Unknown error: removeFlower", e);
+    }
+  }
+
+  /**
+   * Gets a flower from the database
+   *
+   * @param name Name of the flower
+   * @return a Flower object containing the name and price of the flower
+   * @throws DBException if there is an error in getting the flower
+   */
+  public static Flower getFlower(String name) throws DBException {
+    try {
+      String query = "SELECT * FROM flower WHERE flowerName = ?";
+      PreparedStatement st = con.prepareStatement(query);
+      st.setString(1, name);
+      ResultSet rs = st.executeQuery();
+
+      if (rs.next()) {
+        return new Flower(name, rs.getInt("price"));
+      } else throw new DBException("Could not find \"" + name + "\" in the flower table");
+    } catch (SQLException e) {
+      throw new DBException("Unknown error: getFlower", e);
+    }
+  }
 
   /**
    * Adds a request for emotional support
