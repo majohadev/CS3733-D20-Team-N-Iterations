@@ -86,6 +86,10 @@ CREATE TABLE IT(
       PRIMARY KEY(IT_employeeID),
       CONSTRAINT it_id FOREIGN KEY (IT_employeeID) REFERENCES employees(employeeID) ON DELETE CASCADE);
 
+CREATE TABLE internalTransportationEmployee(
+    inTr_employeeID INT NOT NULL PRIMARY KEY,
+    CONSTRAINT inTr_id FOREIGN KEY (inTr_employeeID) REFERENCES employees(employeeID) ON DELETE CASCADE);
+
 CREATE TABLE location (
       doctor INT NOT NULL,
       nodeID char(10) NOT NULL,
@@ -145,6 +149,15 @@ CREATE TABLE ITrequest(
               device VARCHAR(255) NOT NULL,
               problem VARCHAR(255) NOT NULL);
 
+CREATE TABLE internalTransportationRequest(
+    requestID INT NOT NULL PRIMARY KEY,
+    transportationType VARCHAR(255),
+    scheduledTransportTime TIMESTAMP NOT NULL,
+    destinationLocation CHAR(10),
+    CONSTRAINT inTr_req_id FOREIGN KEY (requestID) REFERENCES request(requestID) ON DELETE CASCADE,
+    CONSTRAINT inTr_destination_node FOREIGN KEY (destinationLocation) REFERENCES nodes(nodeID) ON DELETE SET NULL
+);
+
 INSERT INTO service VALUES ('Translator', '00:00', '00:00', 'Make a request for our translation services!');
 INSERT INTO service VALUES ('Laundry', '00:00', '00:00', 'Make a request for laundry services!');
 INSERT INTO service VALUES ('Medicine', '00:00', '00:00', 'Request medicine delivery!');
@@ -152,8 +165,7 @@ INSERT INTO service VALUES ('Sanitation', '00:00', '00:00', 'Request sanitation 
 INSERT INTO service VALUES ('Wheelchair', '00:00', '00:00', 'Request a wheelchair!');
 INSERT INTO service VALUES ('Emotional Support', '00:00', '00:00', 'Request emotional support, please?!');
 INSERT INTO service VALUES ('IT', '00:00', '00:00', 'Make a request for IT services!');
-
-
+INSERT INTO service VALUES ('Internal Transportation', '00:00', '00:00', 'Make a request for Internal Transportation!');
 
 CREATE TRIGGER doc_delete AFTER DELETE ON doctors
 REFERENCING OLD AS oldRow
