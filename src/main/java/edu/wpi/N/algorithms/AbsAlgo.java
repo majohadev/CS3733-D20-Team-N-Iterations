@@ -55,7 +55,7 @@ public abstract class AbsAlgo implements IPathFinder {
         }
       } catch (NullPointerException e) {
         System.out.println("Location was not found.");
-        throw e;
+        return null;
       }
 
       Path finalPath = new Path(path);

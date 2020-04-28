@@ -17,7 +17,7 @@
    <children>
       <SplitPane dividerPositions="0.5" maxHeight="1080.0" maxWidth="1920.0" minHeight="1080.0" minWidth="1920.0" orientation="VERTICAL" prefHeight="1080.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
-          <AnchorPane maxHeight="110.0" maxWidth="1920.0" minHeight="110.0" minWidth="0.0" prefHeight="190.0" prefWidth="1918.0" style="-fx-background-color: #002186;" SplitPane.resizableWithParent="false">
+          <AnchorPane maxHeight="110.0" maxWidth="1920.0" minHeight="110.0" minWidth="0.0" onMouseClicked="#backHome" prefHeight="190.0" prefWidth="1918.0" style="-fx-background-color: #002186;" SplitPane.resizableWithParent="false">
                <children>
                   <ImageView fitHeight="110.0" fitWidth="167.0" layoutX="385.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -29,12 +29,18 @@
                         <Font name="Calibri Bold" size="96.0" />
                      </font>
                   </Label>
+                  <JFXButton buttonType="RAISED" layoutX="14.0" layoutY="33.0" text="Back" textFill="WHITE">
+                     <font>
+                        <Font name="Calibri" size="24.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton layoutX="166.0" layoutY="44.0" onMouseClicked="#switchToTransportPage" text="testInternalTrans" textFill="WHITE" />
                </children></AnchorPane>
           <AnchorPane maxHeight="900.0" minHeight="900.0" minWidth="0.0" prefHeight="900.0" prefWidth="1918.0" style="-fx-background-color: #fff8e4;">
                <children>
                 <AnchorPane minHeight="900.0" minWidth="0.0" prefHeight="160.0">
                      <children>
-                        <ScrollPane hbarPolicy="NEVER" layoutX="328.0" layoutY="148.0" maxHeight="1242.0" maxWidth="656.0" minHeight="900.0" minWidth="656.0" prefHeight="880.0" prefWidth="656.0" style="-fx-background-color: #fff8e4;" styleClass="scroll-bar" stylesheets="@scrollStyle.css" vmax="3.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <ScrollPane hbarPolicy="NEVER" layoutY="14.0" maxHeight="1242.0" maxWidth="656.0" minHeight="900.0" minWidth="656.0" prefHeight="880.0" prefWidth="656.0" style="-fx-background-color: #fff8e4;" styleClass="scroll-bar" stylesheets="@scrollStyle.css" vmax="3.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="14.0">
                           <content>
                             <AnchorPane minHeight="997.0" prefHeight="1507.0" prefWidth="646.0" style="-fx-background-color: white;">
                                  <children>
@@ -66,7 +72,7 @@
                                           </JFXButton>
                                           <JFXButton fx:id="btn_translator" buttonType="RAISED" contentDisplay="TOP" minHeight="268.0" minWidth="256.0" onMouseClicked="#switchToTranslatorPage" prefHeight="290.0" prefWidth="290.0" ripplerFill="#ffd965" style="-fx-background-color: #002186;" stylesheets="@iconButton.css" text="Translator" textFill="WHITE" GridPane.columnIndex="1">
                                              <graphic>
-                                                <ImageView fitHeight="203.0" fitWidth="190.0" pickOnBounds="true" preserveRatio="true">
+                                                <ImageView fitHeight="203.0" fitWidth="190.0" onMouseClicked="#switchToTranslatorPage" pickOnBounds="true" preserveRatio="true">
                                                    <image>
                                                       <Image url="@../images/languageWhite.png" />
                                                    </image>
@@ -76,7 +82,7 @@
                                                 <Font name="Calibri Bold" size="30.0" />
                                              </font>
                                           </JFXButton>
-                                          <JFXButton buttonType="RAISED" contentDisplay="TOP" minHeight="285.0" minWidth="256.0" ripplerFill="#ffd965" stylesheets="@iconButton.css" text="Security" GridPane.rowIndex="1">
+                                          <JFXButton buttonType="RAISED" contentDisplay="TOP" minHeight="285.0" minWidth="256.0" onMouseClicked="#switchToSecurityPage" ripplerFill="#ffd965" stylesheets="@iconButton.css" text="Security" GridPane.rowIndex="1">
                                              <graphic>
                                                 <ImageView fitHeight="203.0" fitWidth="190.0" pickOnBounds="true" preserveRatio="true">
                                                    <image>
@@ -88,9 +94,9 @@
                                                 <Font name="Calibri Bold" size="30.0" />
                                              </font>
                                           </JFXButton>
-                                          <JFXButton buttonType="RAISED" contentDisplay="TOP" minHeight="285.0" minWidth="256.0" ripplerFill="#ffd965" stylesheets="@iconButton.css" text="Wheelchair" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                          <JFXButton buttonType="RAISED" contentDisplay="TOP" minHeight="285.0" minWidth="256.0" onMouseClicked="#switchToWheelchairPage" ripplerFill="#ffd965" stylesheets="@iconButton.css" text="Wheelchair" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                              <graphic>
-                                                <ImageView fitHeight="203.0" fitWidth="190.0" pickOnBounds="true" preserveRatio="true">
+                                                <ImageView fitHeight="203.0" fitWidth="190.0" onMouseClicked="#switchToWheelchairPage" pickOnBounds="true" preserveRatio="true">
                                                    <image>
                                                       <Image url="@../images/WheelchairWhite.png" />
                                                    </image>
@@ -100,7 +106,7 @@
                                                 <Font name="Calibri Bold" size="30.0" />
                                              </font>
                                           </JFXButton>
-                                          <JFXButton buttonType="RAISED" contentDisplay="TOP" minHeight="285.0" minWidth="256.0" ripplerFill="#ffd965" stylesheets="@iconButton.css" text="IT Help" GridPane.rowIndex="2">
+                                          <JFXButton buttonType="RAISED" contentDisplay="TOP" minHeight="285.0" minWidth="256.0" onMouseClicked="#switchToITServicePage" ripplerFill="#ffd965" stylesheets="@iconButton.css" text="IT Help" GridPane.rowIndex="2">
                                              <graphic>
                                                 <ImageView fitHeight="256.0" fitWidth="190.0" pickOnBounds="true" preserveRatio="true">
                                                    <image>
