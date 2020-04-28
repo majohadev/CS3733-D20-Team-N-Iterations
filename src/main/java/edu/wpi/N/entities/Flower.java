@@ -1,6 +1,7 @@
 package edu.wpi.N.entities;
 
 public class Flower {
+
   String flowerName;
   String price;
 
@@ -15,5 +16,16 @@ public class Flower {
 
   public String getPrice() {
     return price;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (!(obj instanceof Flower)) {
+      return false;
+    }
+
+    Flower other = (Flower) obj;
+
+    return flowerName.equals(other.flowerName) && price.equals(other.price);
   }
 }

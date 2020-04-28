@@ -2,11 +2,13 @@ package edu.wpi.N.views;
 
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
+import com.jfoenix.controls.JFXTextField;
 import edu.wpi.N.App;
 import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.ServiceDB;
 import edu.wpi.N.entities.DbNode;
+import edu.wpi.N.entities.Flower;
 import edu.wpi.N.entities.States.StateSingleton;
 import java.util.LinkedList;
 import javafx.collections.FXCollections;
@@ -27,9 +29,13 @@ public class FlowerRequestController implements Controller {
   private App mainApp;
 
   // Add FXML Tags Here
+  @FXML JFXTextField txt_visitorName;
+  @FXML JFXTextField txt_patientName;
+  @FXML JFXTextField txt_creditNum;
+  @FXML JFXComboBox<String> cb_flowerType;
+  @FXML JFXTextArea txt_notes;
+  @FXML JFXTextField txt_quantity;
   @FXML JFXComboBox<String> cmbo_text;
-  @FXML JFXComboBox<String> cmbo_selectLang;
-  @FXML JFXTextArea txtf_langNotes;
 
   private ObservableList<String> fuzzySearchTextList =
       // List that fills TextViews
@@ -37,7 +43,7 @@ public class FlowerRequestController implements Controller {
   LinkedList<DbNode> fuzzySearchNodeList = new LinkedList<>();
   DbNode currentNode = null;
 
-  private String countVal = "";
+  ObservableList<String> flowers;
 
   public FlowerRequestController() throws DBException {}
 
@@ -46,12 +52,13 @@ public class FlowerRequestController implements Controller {
   }
 
   public void initialize() throws DBException {
-
-    cmbo_text.getEditor().setOnKeyTyped(this::locationTextChanged);
-    LinkedList<String> languages = ServiceDB.getLanguages();
-    languages.add("French");
-    ObservableList<String> langList = FXCollections.observableList(languages);
-    cmbo_selectLang.setItems(langList);
+    LinkedList<Flower> listFlower = ServiceDB.getFlowers();
+    LinkedList<String> list = new LinkedList<>();
+    for (Flower f : listFlower) {
+      list.add(f.getFlowerName());
+    }
+    flowers = FXCollections.observableList(list);
+    cb_flowerType.setItems(flowers);
   }
 
   @FXML
@@ -85,11 +92,15 @@ public class FlowerRequestController implements Controller {
     cmbo_text.show();
   }
 
-  // Create Translator Request
+  // Create Flower Request
   @FXML
-  public void createNewTranslator() throws DBException {
+  public void createNewFlowerReq() throws DBException {
 
-    String langSelection = cmbo_selectLang.getSelectionModel().getSelectedItem();
+    String visitorName = txt_visitorName.getText();
+    String patientName = txt_patientName.getText();
+    String creditNum = txt_creditNum.getText();
+    String quantity = txt_quantity.getText();
+    String flowerSelection = cb_flowerType.getSelectionModel().getSelectedItem();
     String nodeID;
     int nodeIndex = 0;
 
@@ -110,22 +121,38 @@ public class FlowerRequestController implements Controller {
       return;
     }
 
-    String notes = txtf_langNotes.getText();
-    if (langSelection == null) {
+    String notes = txt_notes.getText();
+    if (flowerSelection == null) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
       errorAlert.setContentText("Please select a language for your translation request!");
       errorAlert.show();
       return;
     }
-    int transReq = ServiceDB.addTransReq(notes, nodeID, langSelection);
-    //    App.adminDataStorage.addToList(transReq);
+    LinkedList<String> flowers = new LinkedList<>();
+    for (int i = 0; i < Integer.parseInt(quantity); i++) {
+      flowers.add(flowerSelection);
+    }
+    int flowerReq =
+        ServiceDB.addFlowerReq(notes, nodeID, patientName, visitorName, creditNum, flowers);
+    // App.adminDataStorage.addToList(transReq);
 
-    txtf_langNotes.clear();
-    cmbo_selectLang.getItems().clear();
+    txt_notes.clear();
+    cb_flowerType.getItems().clear();
     cmbo_text.getItems().clear();
+    txt_creditNum.clear();
+    txt_patientName.clear();
+    txt_quantity.clear();
+    txt_visitorName.clear();
 
     Alert confAlert = new Alert(Alert.AlertType.CONFIRMATION);
     confAlert.setContentText("Request Recieved");
     confAlert.show();
+  }
+
+  public void displayErrorMessage(String str) {
+    Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+    errorAlert.setHeaderText(str);
+    errorAlert.setContentText(str);
+    errorAlert.showAndWait();
   }
 }
