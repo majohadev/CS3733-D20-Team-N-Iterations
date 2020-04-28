@@ -33,7 +33,7 @@
       </HBox>
       <HBox alignment="CENTER" layoutX="34.0" layoutY="160.0" prefHeight="542.0" prefWidth="1196.0" spacing="100.0">
          <children>
-            <VBox alignment="CENTER" maxHeight="509.0" maxWidth="615.0" minWidth="500.0" prefHeight="509.0" prefWidth="615.0" spacing="30.0">
+            <VBox alignment="CENTER" maxHeight="509.0" maxWidth="500.0" minWidth="500.0" prefHeight="509.0" prefWidth="500.0" spacing="30.0">
                <children>
                   <Label prefHeight="80.0" prefWidth="416.0" text="Please Enter A Location Where You Want To Meet IT Services" textAlignment="CENTER" wrapText="true">
                      <font>
@@ -52,7 +52,7 @@
                         <Insets top="50.0" />
                      </VBox.margin>
                   </Label>
-                  <JFXTextArea fx:id="txtf_langNotes1" maxWidth="394.0" minWidth="394.0" prefHeight="127.0" prefWidth="394.0" promptText="Enter Problem Here" style="-fx-font-size: 18;" text="Enter Device Here" />
+                  <JFXTextArea fx:id="txtf_langNotes1" maxWidth="394.0" minWidth="394.0" prefHeight="127.0" prefWidth="394.0" promptText="Enter Device Here" style="-fx-font-size: 18;" />
                </children>
             </VBox>
             <VBox alignment="CENTER" maxHeight="500.0" maxWidth="500.0" minWidth="500.0" prefHeight="200.0" prefWidth="100.0" spacing="30.0">
