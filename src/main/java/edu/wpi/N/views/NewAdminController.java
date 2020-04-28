@@ -1,13 +1,12 @@
 package edu.wpi.N.views;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXListView;
-import com.jfoenix.controls.JFXPasswordField;
-import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.*;
 import edu.wpi.N.App;
-import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
+import edu.wpi.N.algorithms.*;
 import edu.wpi.N.database.*;
 import edu.wpi.N.entities.DbNode;
+import edu.wpi.N.entities.Service;
+import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.entities.employees.Employee;
 import edu.wpi.N.entities.employees.Translator;
 import edu.wpi.N.entities.request.Request;
@@ -33,8 +32,13 @@ public class NewAdminController implements Controller, Initializable {
 
   private App mainApp = null;
 
-  @FXML Label lbl_Time;
-  @FXML Label lbl_Date;
+  private StateSingleton singleton;
+
+  @Override
+  public void setSingleton(StateSingleton singleton) {
+    this.singleton = singleton;
+  }
+
   @FXML JFXPasswordField pwf_newpass;
   @FXML JFXPasswordField pwf_confpass;
   @FXML JFXTextField txtf_docoffices;
@@ -65,6 +69,7 @@ public class NewAdminController implements Controller, Initializable {
   @FXML JFXButton btn_EditMap;
   @FXML JFXButton btn_addLanguage;
   @FXML JFXButton btn_removeLanguage;
+  @FXML JFXButton btn_changeAlgo;
   @FXML TableView<Employee> tbl_Employees;
   @FXML CheckBox cb_translator;
   @FXML Label lbl_languages;
@@ -72,9 +77,12 @@ public class NewAdminController implements Controller, Initializable {
   @FXML Button btn_Accept;
   @FXML Button btn_Deny;
   @FXML ChoiceBox<Employee> cb_Employee;
+  @FXML ChoiceBox<Service> cb_employeeTypes;
   @FXML TableView<Request> tb_RequestTable = new TableView<Request>();
   @FXML TableView<String> tb_languages = new TableView<String>();
   @FXML CheckBox ch_requestFilter;
+  @FXML JFXComboBox cb_changeAlgo;
+  @FXML Label lbl_title;
 
   ObservableList<Request> tableData = FXCollections.observableArrayList();
   ObservableList<String> languageData = FXCollections.observableArrayList();
@@ -85,6 +93,7 @@ public class NewAdminController implements Controller, Initializable {
   LinkedList<String> longNamesList = new LinkedList<>(); // Stores Floor Node names
   LinkedList<DbNode> allFloorNodes; // stores all the nodes on the floor
   ObservableList<Employee> emps = FXCollections.observableArrayList();
+  Algorithm algo = new Algorithm();
 
   private static class selfFactory<G>
       implements Callback<TableColumn.CellDataFeatures<G, G>, ObservableValue<G>> {
@@ -93,6 +102,25 @@ public class NewAdminController implements Controller, Initializable {
     @Override
     public ObservableValue<G> call(TableColumn.CellDataFeatures<G, G> param) {
       return new ReadOnlyObjectWrapper<>(param.getValue());
+    }
+  }
+
+  private static class nodeLongName
+      implements Callback<TableColumn.CellDataFeatures<Request, String>, ObservableValue<String>> {
+
+    public nodeLongName() {}
+
+    @Override
+    public ObservableValue<String> call(TableColumn.CellDataFeatures<Request, String> param) {
+      try {
+        DbNode node = MapDB.getNode(param.getValue().getNodeID());
+        if (node == null) {
+          return new ReadOnlyObjectWrapper<>("Invalid Location");
+        }
+        return new ReadOnlyObjectWrapper<>(node.getLongName());
+      } catch (DBException e) {
+        return new ReadOnlyObjectWrapper<>("Invalid Location");
+      }
     }
   }
 
@@ -109,12 +137,16 @@ public class NewAdminController implements Controller, Initializable {
       populateLanguageTable();
       tableSetup();
       populateTable();
+      populateEmployeeType();
+      populateChangeAlgo();
+      changeAlgorithm();
+      setTitleLabel();
 
-      cb_translator
-          .selectedProperty()
+      cb_employeeTypes
+          .valueProperty()
           .addListener(
               (ob, old, newVal) -> {
-                if (cb_translator.isSelected()) {
+                if (newVal.getServiceType().equals("Translator")) {
                   txtf_languages.setVisible(true);
                   lbl_languages.setVisible(true);
                 } else {
@@ -123,7 +155,7 @@ public class NewAdminController implements Controller, Initializable {
                 }
               });
 
-      allFloorNodes = MapDB.visNodes(4, "Faulkner");
+      allFloorNodes = MapDB.allNodes();
       for (DbNode node : allFloorNodes) {
         longNamesList.add(node.getLongName());
       }
@@ -157,18 +189,6 @@ public class NewAdminController implements Controller, Initializable {
       emps.addAll(empList);
       tbl_Employees.setItems(emps);
 
-      tbl_Employees
-          .getSelectionModel()
-          .selectedItemProperty()
-          .addListener(
-              (obs, old, newVal) -> {
-                try {
-                  emps.setAll(ServiceDB.getEmployees());
-                } catch (DBException e) {
-                  e.printStackTrace();
-                }
-              });
-
     } catch (DBException e) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
       errorAlert.setContentText(e.getMessage());
@@ -193,22 +213,25 @@ public class NewAdminController implements Controller, Initializable {
     }
   }
 
-  public void changePanes(MouseEvent e) {
+  public void changePanes(MouseEvent e) throws DBException {
     if (e.getSource() == btn_AccountEdit) {
       System.out.println("In Account Edit");
       pn_pane1.setVisible(true);
       pn_pane2.setVisible(false);
       pn_pane3.setVisible(false);
+      populateTable();
     } else if (e.getSource() == btn_EmployeeEdit) {
       System.out.println("In Employee Edit");
       pn_pane2.setVisible(true);
       pn_pane1.setVisible(false);
       pn_pane3.setVisible(false);
+      populateTable();
     } else if (e.getSource() == btn_ViewRequests) {
       System.out.println("In View Requests");
       pn_pane3.setVisible(true);
       pn_pane1.setVisible(false);
       pn_pane2.setVisible(false);
+      populateTable();
     }
   }
 
@@ -249,6 +272,7 @@ public class NewAdminController implements Controller, Initializable {
       errorAlert.setContentText(e.getMessage());
       errorAlert.show();
     }
+    populateChoiceBox();
   }
 
   /*
@@ -257,54 +281,45 @@ public class NewAdminController implements Controller, Initializable {
   public void addEmployee() throws DBException {
     String name = txtf_empfn.getText() + " " + txtf_empln.getText();
     try {
-      if (cb_translator.isSelected()) {
+      if (cb_employeeTypes.getValue().getServiceType().equals("Translator")) {
         String[] arrOfString = txtf_languages.getText().split(",");
         LinkedList<String> languages = new LinkedList<>();
         for (String a : arrOfString) {
           languages.add(a);
         }
-        tbl_Employees
-            .getSelectionModel()
-            .selectedItemProperty()
-            .addListener(
-                (obs, old, newVal) -> {
-                  try {
-                    emps.setAll(ServiceDB.getEmployees());
-                  } catch (DBException e) {
-                    e.printStackTrace();
-                  }
-                });
-        // else if() (Sanatation Condition)
         ServiceDB.addTranslator(name, languages);
-      } else {
+      } else if (cb_employeeTypes.getValue().getServiceType().equals("Laundry")) {
         ServiceDB.addLaundry(name);
-
-        tbl_Employees
-            .getSelectionModel()
-            .selectedItemProperty()
-            .addListener(
-                (obs, old, newVal) -> {
-                  try {
-                    emps.setAll(ServiceDB.getEmployees());
-                  } catch (DBException e) {
-                    e.printStackTrace();
-                  }
-                });
+      } else if (cb_employeeTypes.getValue().getServiceType().equals("Wheelchair")) {
+        ServiceDB.addWheelchairEmployee(name);
+      } else if (cb_employeeTypes.getValue().getServiceType().equals("IT")) {
+        ServiceDB.addIT(name);
+      } else if (cb_employeeTypes.getValue().getServiceType().equals("Emotional Support")) {
+        ServiceDB.addEmotionalSupporter(name);
+      } else if (cb_employeeTypes.getValue().getServiceType().equals("Sanitation")) {
+        ServiceDB.addSanitationEmp(name);
+      } else if (cb_employeeTypes.getValue().getServiceType().equals("Flower")) {
+        ServiceDB.addFlowerDeliverer(name);
       }
-      populateTable();
+
     } catch (DBException e) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
       errorAlert.setContentText(e.getMessage());
       errorAlert.show();
     }
+    txtf_empfn.clear();
+    txtf_empln.clear();
+    txtf_languages.clear();
+    populateTable();
+    populateChoiceBox();
   }
 
   public void adminEditMap() throws IOException {
-    mainApp.switchScene("views/mapEdit.fxml");
+    mainApp.switchScene("views/mapEdit.fxml", singleton);
   }
 
   public void returnToPrev() throws IOException {
-    mainApp.switchScene("views/home.fxml");
+    mainApp.switchScene("views/home.fxml", singleton);
   }
 
   public void addAdmin() throws DBException {
@@ -333,7 +348,7 @@ public class NewAdminController implements Controller, Initializable {
   public void logoutUser() throws DBException {
     try {
       LoginDB.logout();
-      mainApp.switchScene("views/newLogin.fxml");
+      mainApp.switchScene("views/newLogin.fxml", singleton);
     } catch (DBException | IOException e) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
       errorAlert.setContentText(e.getMessage());
@@ -443,12 +458,12 @@ public class NewAdminController implements Controller, Initializable {
     TableColumn<Request, String> notes = new TableColumn<>("Notes");
     notes.setMaxWidth(150);
     notes.setMinWidth(150);
-    notes.setCellValueFactory(new PropertyValueFactory<Request, String>("NOTES"));
+    notes.setCellValueFactory(new PropertyValueFactory<Request, String>("reqNotes"));
 
     TableColumn<Request, String> nodeID = new TableColumn<>("Location");
     nodeID.setMaxWidth(100);
     nodeID.setMinWidth(100);
-    nodeID.setCellValueFactory(new PropertyValueFactory<Request, String>("nodeID"));
+    nodeID.setCellValueFactory(new nodeLongName());
 
     TableColumn<Request, String> status = new TableColumn<>("Status");
     status.setMaxWidth(100);
@@ -458,7 +473,7 @@ public class NewAdminController implements Controller, Initializable {
     TableColumn<Request, String> language = new TableColumn<>("Language");
     language.setMaxWidth(100);
     language.setMinWidth(100);
-    language.setCellValueFactory(new PropertyValueFactory<Request, String>("LANGUAGE"));
+    language.setCellValueFactory(new PropertyValueFactory<Request, String>("Atr1"));
 
     TableColumn<Request, String> service = new TableColumn<>("Service");
     service.setMaxWidth(75);
@@ -613,7 +628,14 @@ public class NewAdminController implements Controller, Initializable {
   public void populateChoiceBox() throws DBException {
     try {
       LinkedList<Employee> empList = ServiceDB.getEmployees();
-      ObservableList<Employee> empObv = FXCollections.observableArrayList(empList);
+      ObservableList<Employee> empObv = FXCollections.observableArrayList();
+
+      for (Employee emp : empList) {
+        if (!emp.getServiceType().equals("Medicine")) {
+          empObv.add(emp);
+        }
+      }
+
       cb_Employee.setItems(empObv);
     } catch (DBException e) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
@@ -623,6 +645,64 @@ public class NewAdminController implements Controller, Initializable {
   }
 
   public void editMap() throws IOException {
-    mainApp.switchScene("views/mapEdit.fxml");
+    mainApp.switchScene("views/mapEdit.fxml", singleton);
+  }
+
+  /*
+  Populates employee table based on the getEmployees()
+   */
+
+  public void populateEmployeeType() throws DBException {
+    LinkedList<Service> employeeList = new LinkedList<Service>();
+    employeeList.addAll(ServiceDB.getServices());
+    ObservableList<Service> empTypeList = FXCollections.observableArrayList();
+    empTypeList.addAll(employeeList);
+    cb_employeeTypes.setItems(empTypeList);
+  }
+
+  /*
+  Populate the choicebox for changing the algorithm
+   */
+
+  public void populateChangeAlgo() {
+    LinkedList<String> algoTypes = new LinkedList<>();
+    algoTypes.add("BFS");
+    algoTypes.add("DFS");
+    algoTypes.add("AStar");
+    ObservableList<String> algos = FXCollections.observableArrayList();
+    algos.addAll(algoTypes);
+    cb_changeAlgo.setItems(algos);
+  }
+
+  /*
+  Sets the "Welcome" message based on the username
+   */
+  public void setTitleLabel() throws DBException {
+    try {
+      lbl_title.setText("Welcome, " + LoginDB.currentLogin());
+    } catch (DBException e) {
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setContentText(e.getMessage());
+      errorAlert.show();
+    }
+  }
+
+  /*
+  Updates the given algorithm for pathfinder
+   */
+  public void changeAlgorithm() {
+
+    cb_changeAlgo
+        .valueProperty()
+        .addListener(
+            (ob, old, newVal) -> {
+              if (newVal.equals("BFS")) {
+                singleton.savedAlgo.setPathFinder(new BFS());
+              } else if (newVal.equals("DFS")) {
+                singleton.savedAlgo.setPathFinder(new DFS());
+              } else if (newVal.equals("AStar")) {
+                singleton.savedAlgo.setPathFinder(new AStar());
+              }
+            });
   }
 }

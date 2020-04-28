@@ -16,21 +16,15 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.input.KeyEvent;
 
-public class EmotionalRequestController implements Controller {
-
-  private StateSingleton singleton;
-
-  @Override
-  public void setSingleton(StateSingleton singleton) {
-    this.singleton = singleton;
-  }
+public class ITServiceController implements Controller {
 
   private App mainApp;
 
   // Add FXML Tags Here
   @FXML JFXComboBox<String> cmbo_text;
-  @FXML JFXComboBox<String> cmbo_selectSupport;
-  @FXML JFXTextArea txtf_supportNotes;
+  @FXML JFXTextArea txtf_device;
+  @FXML JFXTextArea txtf_problem;
+  @FXML JFXTextArea txtf_ITnotes;
 
   private ObservableList<String> fuzzySearchTextList =
       // List that fills TextViews
@@ -40,24 +34,17 @@ public class EmotionalRequestController implements Controller {
 
   private String countVal = "";
 
-  public EmotionalRequestController() throws DBException {}
+  public ITServiceController() throws DBException {}
 
   public void setMainApp(App mainApp) {
     this.mainApp = mainApp;
   }
 
+  @Override
+  public void setSingleton(StateSingleton singleton) {}
+
   public void initialize() throws DBException {
-
     cmbo_text.getEditor().setOnKeyTyped(this::locationTextChanged);
-    // Available types of support: Individual, Family, Couple, Group
-    LinkedList<String> supportTypes = new LinkedList<String>();
-    supportTypes.add("Individual");
-    supportTypes.add("Family");
-    supportTypes.add("Couple");
-    supportTypes.add("Group");
-
-    ObservableList<String> supportTypeList = FXCollections.observableList(supportTypes);
-    cmbo_selectSupport.setItems(supportTypeList);
   }
 
   @FXML
@@ -91,34 +78,17 @@ public class EmotionalRequestController implements Controller {
     cmbo_text.show();
   }
 
-  // Create Emotional Request
+  // Create IT Request
   @FXML
-  public void createNewEmotionalRequest() throws DBException {
+  public void createNewITRequest() throws DBException {
 
-    String supportSelection = cmbo_selectSupport.getSelectionModel().getSelectedItem();
-    String nodeID = null;
-
-    //    try {
-    //      String curr = cmbo_text.getEditor().getText();
-    //      for (String name : fuzzySearchTextList) {
-    //        if (name.equals(curr)) {
-    //          nodeIndex++;
-    //          break;
-    //        }
-    //      }
-    //      nodeID = fuzzySearchNodeList.get(nodeIndex).getNodeID();
-    //      System.out.println(nodeID);
-    //    } catch (IndexOutOfBoundsException e) {
-    //      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-    //      errorAlert.setContentText("Please select a location for your service request!");
-    //      errorAlert.show();
-    //      return;
-    //    }
+    String nodeID = "";
+    int nodeIndex = 0;
 
     String userLocationName = cmbo_text.getEditor().getText().toLowerCase().trim();
     LinkedList<DbNode> checkNodes = MapDB.searchVisNode(-1, null, null, userLocationName);
 
-    // Find the exact match and get the nodeID
+    // Find the exact match and get the nodeID when selected
     for (DbNode node : checkNodes) {
       if (node.getLongName().toLowerCase().equals(userLocationName)) {
         nodeID = node.getNodeID();
@@ -134,23 +104,34 @@ public class EmotionalRequestController implements Controller {
       return;
     }
 
-    String notes = txtf_supportNotes.getText();
-    if (supportSelection == null) {
+    String device = txtf_device.getText();
+    if (device == null) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-      errorAlert.setContentText("Please select a support type for your emotional support request!");
+      errorAlert.setContentText("Please enter the device you need help with!");
       errorAlert.show();
       return;
     }
-    int emotSuppReq = ServiceDB.addEmotSuppReq(notes, nodeID, supportSelection);
-    //    App.adminDataStorage.addToList(emotSuppReq);
 
-    txtf_supportNotes.clear();
-    cmbo_selectSupport.getItems().clear();
+    String problem = txtf_problem.getText();
+    if (problem == null) {
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setContentText("Please enter the problem with your device!");
+      errorAlert.show();
+      return;
+    }
+
+    String notes = txtf_ITnotes.getText();
+
+    int ITReq = ServiceDB.addITReq(notes, nodeID, device, problem);
+    // App.adminDataStorage.addToList(ITReq);
+
+    txtf_device.clear();
+    txtf_problem.clear();
+    txtf_ITnotes.clear();
     cmbo_text.getItems().clear();
 
     Alert confAlert = new Alert(Alert.AlertType.CONFIRMATION);
-    confAlert.setContentText("Request Recieved");
+    confAlert.setContentText("Request Received");
     confAlert.show();
-    return;
   }
 }

@@ -15,17 +15,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.input.KeyEvent;
 
-public class FlowerRequestController implements Controller {
-
-  private StateSingleton singleton;
-
-  @Override
-  public void setSingleton(StateSingleton singleton) {
-    this.singleton = singleton;
-  }
+public class TemplateController implements Controller {
 
   private App mainApp;
-
+  private StateSingleton singleton;
   // Add FXML Tags Here
   @FXML JFXComboBox<String> cmbo_text;
   @FXML JFXComboBox<String> cmbo_selectLang;
@@ -39,10 +32,15 @@ public class FlowerRequestController implements Controller {
 
   private String countVal = "";
 
-  public FlowerRequestController() throws DBException {}
+  public TemplateController() throws DBException {}
 
   public void setMainApp(App mainApp) {
     this.mainApp = mainApp;
+  }
+
+  @Override
+  public void setSingleton(StateSingleton singleton) {
+    this.singleton = singleton;
   }
 
   public void initialize() throws DBException {
@@ -118,7 +116,7 @@ public class FlowerRequestController implements Controller {
       return;
     }
     int transReq = ServiceDB.addTransReq(notes, nodeID, langSelection);
-    //    App.adminDataStorage.addToList(transReq);
+    // App.adminDataStorage.addToList(transReq);
 
     txtf_langNotes.clear();
     cmbo_selectLang.getItems().clear();
