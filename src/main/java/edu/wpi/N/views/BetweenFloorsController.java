@@ -44,6 +44,7 @@ public class BetweenFloorsController implements Controller, Initializable {
   LinkedList<Integer> floors; // set on list of floors that have nodes
   LinkedList<DbNode[]> originalEdges;
   int floor;
+  boolean currNode;
 
   @FXML
   public void initialize(URL url, ResourceBundle rb) {
@@ -62,6 +63,7 @@ public class BetweenFloorsController implements Controller, Initializable {
 
   public void setFloor(int floor) {
     this.floor = floor;
+    currNode = false;
     for (int i = 1; i <= 5; i++) {
       Circle circle = nodes.get(i);
       circle.setFill(INACTIVE_CIRCLE_COLOR);
@@ -75,6 +77,7 @@ public class BetweenFloorsController implements Controller, Initializable {
 
   public void setNode(DbNode node) throws DBException {
     setFloor(node.getFloor());
+    currNode = true;
     this.originalEdges = AbsAlgo.getEdgesBetweenFloors(node);
     LinkedList<DbNode> nodesAvaliable = getFloors(node);
     nodes.get(node.getFloor()).setFill(INACTIVE_CIRCLE_COLOR);
@@ -149,21 +152,23 @@ public class BetweenFloorsController implements Controller, Initializable {
   }
 
   public void onSaveButton() throws DBException {
-    ArrayList<DbNode> activeNodes = new ArrayList<DbNode>();
-    for (DbNode[] n : originalEdges) {
-      MapDB.removeEdge(n[0].getNodeID(), n[1].getNodeID());
-    }
-    for (Integer i : floors) {
-      if (nodeStatus.get(i).getValue()) {
-        activeNodes.add(nodeStatus.get(i).getKey());
+    if (currNode) {
+      ArrayList<DbNode> activeNodes = new ArrayList<DbNode>();
+      for (DbNode[] n : originalEdges) {
+        MapDB.removeEdge(n[0].getNodeID(), n[1].getNodeID());
       }
-    }
-    if (activeNodes.size() >= 1) {
-      for (int i = 0; i < activeNodes.size() - 1; i++) {
-        MapDB.addEdge(activeNodes.get(i).getNodeID(), activeNodes.get(i + 1).getNodeID());
+      for (Integer i : floors) {
+        if (nodeStatus.get(i).getValue()) {
+          activeNodes.add(nodeStatus.get(i).getKey());
+        }
       }
+      if (activeNodes.size() >= 1) {
+        for (int i = 0; i < activeNodes.size() - 1; i++) {
+          MapDB.addEdge(activeNodes.get(i).getNodeID(), activeNodes.get(i + 1).getNodeID());
+        }
+      }
+      setFloor(this.floor);
     }
-    setFloor(this.floor);
   }
 
   public void onCancelButton() {
