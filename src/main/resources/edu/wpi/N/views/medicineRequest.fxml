@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXDatePicker?>
+<?import com.jfoenix.controls.JFXTextArea?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import com.jfoenix.controls.JFXTimePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.MedicineRequestController">
+   <children>
+      <Pane prefHeight="75.0" prefWidth="1920.0" style="-fx-background-color: #003DA6;" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label layoutX="832.0" layoutY="16.0" text="Medicine Request" textFill="WHITE">
+               <font>
+                  <Font name="Calibri Bold" size="44.0" />
+               </font>
+            </Label>
+            <JFXButton layoutX="1802.0" layoutY="10.0" text="Settings" textFill="WHITE">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </JFXButton>
+            <Label layoutX="18.0" layoutY="9.0" text="6:45 PM" textFill="WHITE">
+               <font>
+                  <Font name="Calibri Bold" size="24.0" />
+               </font>
+            </Label>
+            <Label layoutX="18.0" layoutY="35.0" text="Thursday April 23rd, 2020" textFill="WHITE">
+               <font>
+                  <Font name="Calibri Bold" size="24.0" />
+               </font>
+            </Label>
+            <Label layoutX="411.0" layoutY="32.0" text="Welcome, Employee_Name" textFill="WHITE">
+               <font>
+                  <Font name="Calibri Bold" size="24.0" />
+               </font>
+            </Label>
+            <JFXButton buttonType="RAISED" layoutX="1696.0" layoutY="10.0" text="Logout" textFill="WHITE">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </JFXButton>
+         </children>
+      </Pane>
+      <SplitPane dividerPositions="0.15" prefHeight="160.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="75.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+               <children>
+                  <VBox layoutX="50.0" layoutY="114.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <Pane prefHeight="251.25" prefWidth="200.0" style="-fx-background-color: #D3D3D3;">
+                           <children>
+                              <JFXButton buttonType="RAISED" layoutX="75.0" layoutY="103.0" style="-fx-background-radius: 10px;" text="Prescribe">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </JFXButton>
+                           </children>
+                        </Pane>
+                        <Pane prefHeight="251.25" prefWidth="200.0" style="-fx-background-color: #D3D3D3;">
+                           <children>
+                              <JFXButton buttonType="RAISED" layoutX="110.0" layoutY="103.0" text="Edit">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </JFXButton>
+                           </children>
+                        </Pane>
+                        <Pane prefHeight="251.25" prefWidth="200.0" style="-fx-background-color: #D3D3D3;">
+                           <children>
+                              <JFXButton buttonType="RAISED" layoutX="91.0" layoutY="107.0" text="Remove">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </JFXButton>
+                           </children>
+                        </Pane>
+                        <Pane prefHeight="251.25" prefWidth="200.0" style="-fx-background-color: #D3D3D3;">
+                           <children>
+                              <JFXButton buttonType="RAISED" layoutX="107.0" layoutY="110.0" text="Exit">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </JFXButton>
+                           </children>
+                        </Pane>
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" style="-fx-background-color: #D3D3D3;">
+               <children>
+                  <Label layoutX="178.0" layoutY="123.0" text="Patient Name:" AnchorPane.leftAnchor="125.0" AnchorPane.topAnchor="125.0">
+                     <font>
+                        <Font name="Calibri" size="24.0" />
+                     </font>
+                  </Label>
+                  <JFXTextField layoutX="265.0" layoutY="118.0" prefWidth="250.0" AnchorPane.leftAnchor="265.0" AnchorPane.topAnchor="115.0">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </JFXTextField>
+                  <JFXDatePicker defaultColor="#003da6" layoutX="1201.0" layoutY="138.0" AnchorPane.rightAnchor="255.0" />
+                  <JFXTimePicker defaultColor="#003da6" layoutX="1215.0" layoutY="193.0" AnchorPane.rightAnchor="255.0" />
+                  <Label layoutX="128.0" layoutY="235.0" text="Medicine: " AnchorPane.leftAnchor="125.0" AnchorPane.topAnchor="235.0">
+                     <font>
+                        <Font name="Calibri" size="24.0" />
+                     </font>
+                  </Label>
+                  <MenuButton layoutX="221.0" layoutY="237.0" mnemonicParsing="false" text="MenuButton" AnchorPane.leftAnchor="230.0" AnchorPane.topAnchor="237.0">
+                    <items>
+                      <MenuItem mnemonicParsing="false" text="Action 1" />
+                      <MenuItem mnemonicParsing="false" text="Action 2" />
+                    </items>
+                  </MenuButton>
+                  <Label layoutX="135.0" layoutY="343.0" text="Dosage:" AnchorPane.leftAnchor="125.0" AnchorPane.topAnchor="343.0">
+                     <font>
+                        <Font name="Calibri" size="24.0" />
+                     </font>
+                  </Label>
+                  <MenuButton layoutX="236.0" layoutY="348.0" mnemonicParsing="false" text="MenuButton" AnchorPane.leftAnchor="230.0" AnchorPane.topAnchor="345.0">
+                     <items>
+                        <MenuItem mnemonicParsing="false" text="Action 1" />
+                        <MenuItem mnemonicParsing="false" text="Action 2" />
+                     </items>
+                  </MenuButton>
+                  <Label layoutX="158.0" layoutY="453.0" text="Prescriber: " AnchorPane.leftAnchor="125.0">
+                     <font>
+                        <Font name="Calibri" size="24.0" />
+                     </font>
+                  </Label>
+                  <JFXTextField layoutX="258.0" layoutY="439.0" prefWidth="250.0" AnchorPane.leftAnchor="230.0" AnchorPane.topAnchor="440.0">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </JFXTextField>
+                  <Label layoutX="184.0" layoutY="579.0" text="Notes:" AnchorPane.leftAnchor="125.0" AnchorPane.topAnchor="579.0">
+                     <font>
+                        <Font name="Calibri" size="24.0" />
+                     </font>
+                  </Label>
+                  <JFXTextArea layoutX="198.0" layoutY="583.0" prefHeight="19.0" prefWidth="257.0" AnchorPane.leftAnchor="198.0" AnchorPane.topAnchor="573.0">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </JFXTextArea>
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </children>
+</AnchorPane>

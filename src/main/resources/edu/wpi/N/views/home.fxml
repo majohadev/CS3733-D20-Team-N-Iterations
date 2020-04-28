@@ -11,7 +11,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.HomeController">
    <children>
-      <VBox alignment="CENTER" layoutX="640.0" layoutY="519.0" spacing="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox fx:id="btn_Ham" alignment="CENTER" layoutX="640.0" layoutY="519.0" spacing="15.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <ImageView fitHeight="233.0" fitWidth="298.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -41,6 +41,9 @@
                <font>
                   <Font name="Calibri" size="16.0" />
                </font></Button>
+            <Button mnemonicParsing="false" onMouseClicked="#onBtnHamClicked" text="Ham" />
+            <Button mnemonicParsing="false" onMouseClicked="#onBtnLoginClicked" text="Login" />
+            <Button fx:id="btn_Admin" mnemonicParsing="false" onMouseClicked="#onBtnAdminClick" text="Admin" />
          </children>
       </VBox>
    </children>
