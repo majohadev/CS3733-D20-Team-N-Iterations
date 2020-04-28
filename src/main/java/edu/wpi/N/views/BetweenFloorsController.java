@@ -6,6 +6,7 @@ import edu.wpi.N.algorithms.AbsAlgo;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
+import edu.wpi.N.entities.States.StateSingleton;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,6 +27,8 @@ import javafx.util.Pair;
 
 public class BetweenFloorsController implements Controller, Initializable {
   App mainApp;
+  private StateSingleton singleton;
+
   @FXML private AnchorPane parent;
   @FXML private JFXButton btn_save;
   @FXML private JFXButton btn_cancel;
@@ -99,6 +102,11 @@ public class BetweenFloorsController implements Controller, Initializable {
   @Override
   public void setMainApp(App mainApp) {
     this.mainApp = mainApp;
+  }
+
+  @Override
+  public void setSingleton(StateSingleton singleton) {
+    this.singleton = singleton;
   }
 
   public Text setText(double x, double y, String text) {

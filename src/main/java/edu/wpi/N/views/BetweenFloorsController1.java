@@ -6,6 +6,7 @@ import edu.wpi.N.algorithms.AbsAlgo;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
+import edu.wpi.N.entities.States.StateSingleton;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
@@ -27,6 +28,8 @@ public class BetweenFloorsController1 implements Controller, Initializable {
   App mainApp;
   DbNode node;
   int floor;
+  private StateSingleton singleton;
+
   HashMap<Integer, Circle> nodes; // key is floor number
   HashMap<Integer, Line> lines; // key is sum
   HashMap<Integer, Text> labels;
@@ -91,6 +94,11 @@ public class BetweenFloorsController1 implements Controller, Initializable {
   @Override
   public void setMainApp(App mainApp) {
     this.mainApp = mainApp;
+  }
+
+  @Override
+  public void setSingleton(StateSingleton singleton) {
+    this.singleton = singleton;
   }
 
   public Text setText(double x, double y, String text) {

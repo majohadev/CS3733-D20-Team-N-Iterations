@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXCheckBox?>
+<?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXListView?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.scene.control.Button?>
@@ -35,7 +36,7 @@
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label layoutX="946.0" layoutY="27.0" text="Label" />
+            <Label fx:id="lbl_title" layoutX="946.0" layoutY="27.0" text="Label" />
             <JFXButton layoutX="370.0" layoutY="23.0" onMouseClicked="#returnToPrev" text="BACK" />
          </children></Pane>
       <SplitPane dividerPositions="0.1" layoutY="75.0" prefHeight="1005.0" prefWidth="1920.0">
@@ -68,7 +69,7 @@
                <children>
                   <StackPane fx:id="sp_getpanes" prefHeight="1005.0" prefWidth="1820.0">
                      <children>
-                        <Pane fx:id="pn_pane3" prefHeight="200.0" prefWidth="200.0">
+                        <Pane fx:id="pn_pane3" prefHeight="200.0" prefWidth="200.0" visible="false">
                            <children>
                               <Label layoutX="828.0" layoutY="7.0" text="Service Requests">
                                  <font>
@@ -103,7 +104,7 @@
                         </Pane>
                         <Pane fx:id="pn_pane1" prefHeight="1005.0" prefWidth="1762.0" visible="false">
                            <children>
-                              <TableView fx:id="tbl_Employees" layoutX="595.0" layoutY="68.0" prefHeight="437.0" prefWidth="230.0" />
+                              <TableView fx:id="tbl_Employees" layoutX="595.0" layoutY="68.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="437.0" prefWidth="300.0" />
                               <JFXButton fx:id="btn_delemp" layoutX="657.0" layoutY="515.0" onMouseClicked="#deleteEmployee" text="Delete Employee" />
                               <Label layoutX="166.0" layoutY="104.0" text="ADD ADMIN">
                                  <font>
@@ -148,7 +149,7 @@
                               <JFXTextField fx:id="txtf_cpnewpass" layoutX="1127.0" layoutY="747.0" />
                               <JFXButton buttonType="RAISED" layoutX="1156.0" layoutY="780.0" onMouseClicked="#changeAccountPass" text="Submit" />
                            </children></Pane>
-                        <Pane fx:id="pn_pane2" prefHeight="200.0" prefWidth="200.0" visible="false">
+                        <Pane fx:id="pn_pane2" onMouseClicked="#changeAlgorithm" prefHeight="200.0" prefWidth="200.0">
                            <children>
                               <Label layoutX="155.0" layoutY="87.0" text="Add Doctor">
                                  <font>
@@ -203,13 +204,13 @@
                               </Label>
                               <JFXTextField fx:id="txtf_empfn" layoutX="247.0" layoutY="508.0" />
                               <JFXTextField fx:id="txtf_empln" layoutX="247.0" layoutY="551.0" />
-                              <JFXCheckBox fx:id="cb_translator" layoutX="127.0" layoutY="655.0" text="Translator" />
-                              <Label fx:id="lbl_languages" layoutX="42.0" layoutY="594.0" text="Known Languages:">
+                              <JFXCheckBox fx:id="cb_translator" layoutX="127.0" layoutY="655.0" text="Translator" visible="false" />
+                              <Label fx:id="lbl_languages" layoutX="42.0" layoutY="594.0" text="Known Languages:" visible="false">
                                  <font>
                                     <Font size="24.0" />
                                  </font>
                               </Label>
-                              <JFXTextField fx:id="txtf_languages" layoutX="245.0" layoutY="599.0" prefHeight="25.0" prefWidth="138.0" />
+                              <JFXTextField fx:id="txtf_languages" layoutX="245.0" layoutY="599.0" prefHeight="25.0" prefWidth="138.0" visible="false" />
                               <JFXButton buttonType="RAISED" layoutX="255.0" layoutY="652.0" onMouseClicked="#addEmployee" text="Add Employee" />
                               <Label layoutX="501.0" layoutY="87.0" text="Update Doctor">
                                  <font>
@@ -245,6 +246,9 @@
                               <JFXTextField fx:id="txtf_empid" layoutX="601.0" layoutY="508.0" prefHeight="25.0" prefWidth="138.0" />
                               <JFXButton fx:id="btn_addLanguage" buttonType="RAISED" layoutX="493.0" layoutY="612.0" onMouseClicked="#updateTranslator" text="Add Language" />
                               <JFXButton fx:id="btn_removeLanguage" buttonType="RAISED" layoutX="642.0" layoutY="612.0" onMouseClicked="#updateTranslator" text="Remove Language" />
+                              <ChoiceBox fx:id="cb_employeeTypes" layoutX="226.0" layoutY="687.0" prefWidth="150.0" />
+                              <JFXComboBox fx:id="cb_changeAlgo" layoutX="1260.0" layoutY="114.0" prefHeight="25.0" prefWidth="170.0" promptText="Change Algorithm" />
+                              <JFXButton fx:id="btn_changeAlgo" layoutX="1289.0" layoutY="153.0" onMouseClicked="#changeAlgorithm" text="Change Algorithm" />
                            </children></Pane>
                      </children>
                   </StackPane>

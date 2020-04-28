@@ -8,6 +8,7 @@ import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Path;
+import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.entities.employees.Doctor;
 import java.io.IOException;
 import java.net.URL;
@@ -30,6 +31,13 @@ import javafx.scene.shape.StrokeLineCap;
 import lombok.SneakyThrows;
 
 public class hamburgerTestController implements Controller, Initializable {
+
+  private StateSingleton singleton;
+
+  @Override
+  public void setSingleton(StateSingleton singleton) {
+    this.singleton = singleton;
+  }
 
   private App mainApp = null;
   final float IMAGE_WIDTH = 2475;
@@ -87,14 +95,23 @@ public class hamburgerTestController implements Controller, Initializable {
   @SneakyThrows
   @Override
   public void initialize(URL location, ResourceBundle resourceBundle) {
-    initializeChangeFloorButtons();
-    this.currentFloor = DEFAULT_FLOOR;
-    this.currentBuilding = DEFAULT_BUILDING;
-    this.mode = Mode.NO_STATE;
-    this.allFloorNodes = MapDB.allNodes();
-    initializeConversions();
-    defaultKioskNode();
-    acc_search.setExpandedPane(pn_locationSearch);
+    try {
+      initializeChangeFloorButtons();
+      this.currentFloor = DEFAULT_FLOOR;
+      this.currentBuilding = DEFAULT_BUILDING;
+      this.mode = Mode.NO_STATE;
+      this.allFloorNodes = MapDB.allNodes();
+      initializeConversions();
+      defaultKioskNode();
+      acc_search.setExpandedPane(pn_locationSearch);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setHeaderText("Oops... Something went Wong");
+      errorAlert.setContentText(
+          "Map view couldn't be opened. Make sure to upload Nodes and Edges as CSVs");
+      errorAlert.showAndWait();
+    }
   }
 
   private void initializeConversions() {
@@ -384,12 +401,83 @@ public class hamburgerTestController implements Controller, Initializable {
     img_map.setImage(img);
   }
 
+  /**
+   * Finds and draws path to the nearest bathroom
+   *
+   * @param e
+   */
+  @FXML
+  private void findPathToBathroom(MouseEvent e) throws DBException {
+    try {
+      this.mode = Mode.PATH_STATE;
+      pn_display.getChildren().removeIf(node -> node instanceof Line);
+      enableAllFloorButtons();
+      String startSelection = (String) lst_firstLocation.getSelectionModel().getSelectedItem();
+      DbNode startNode = stringNodeConversion.get(startSelection);
+      Path pathToBathroom = singleton.savedAlgo.findQuickAccess(startNode, "REST");
+      drawPath(pathToBathroom.getPath());
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setHeaderText("Oops... Something went Wong");
+      errorAlert.setContentText("Path to bathroom wasn't found");
+      errorAlert.showAndWait();
+    }
+  }
+
+  /**
+   * Finds and draws path to the cafeteria
+   *
+   * @param e
+   */
+  @FXML
+  private void findPathToCafeteria(MouseEvent e) throws DBException {
+    this.mode = Mode.PATH_STATE;
+    pn_display.getChildren().removeIf(node -> node instanceof Line);
+    enableAllFloorButtons();
+    Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+    errorAlert.setHeaderText("Oops... Something went Wong");
+    errorAlert.setContentText("Path to cafeteria wasn't found");
+    errorAlert.showAndWait();
+  }
+
+  /**
+   * Finds and draws path to the Starbucks
+   *
+   * @param e
+   */
+  @FXML
+  private void findPathToStarBucks(MouseEvent e) {
+    try {
+      this.mode = Mode.PATH_STATE;
+      pn_display.getChildren().removeIf(node -> node instanceof Line);
+      enableAllFloorButtons();
+      String startSelection = (String) lst_firstLocation.getSelectionModel().getSelectedItem();
+      DbNode startNode = stringNodeConversion.get(startSelection);
+
+      DbNode endNode = MapDB.getNode("NRETL00201");
+
+      // TODO: get the Handicap setting from the user
+      if (endNode != null) {
+        Path pathToStarBucks = singleton.savedAlgo.findPath(startNode, endNode, false);
+        drawPath(pathToStarBucks.getPath());
+      }
+
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setHeaderText("Oops... Something went Wong");
+      errorAlert.setContentText("Path to cafeteria wasn't found");
+      errorAlert.showAndWait();
+    }
+  }
+
   public void setMainApp(App mainApp) {
     this.mainApp = mainApp;
   }
 
   public void onBtnHomeClicked() throws IOException {
-    mainApp.switchScene("views/home.fxml");
+    mainApp.switchScene("views/home.fxml", singleton);
   }
 
   public void displayErrorMessage(String str) {
