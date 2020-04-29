@@ -77,6 +77,7 @@ public class AStar extends AbsAlgo {
     } catch (Exception e) {
       e.printStackTrace();
       return null;
+      // throw e;
     }
   }
 }

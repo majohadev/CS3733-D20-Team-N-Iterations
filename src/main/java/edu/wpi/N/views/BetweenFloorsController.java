@@ -98,9 +98,14 @@ public class BetweenFloorsController implements Controller, Initializable {
     this.floor = node.getFloor();
     currNode = true;
     this.originalEdges = AbsAlgo.searchAccessible(node);
-    LinkedList<DbNode> nodesAvaliable = getFloors(node);
+    LinkedList<DbNode> nodesAvailable;
+    try {
+      nodesAvailable = MapDB.getInShaft(node.getNodeID());
+    } catch (DBException e) {
+      nodesAvailable = null;
+    }
     nodes.get(node.getFloor()).setFill(INACTIVE_CIRCLE_COLOR);
-    for (DbNode n : nodesAvaliable) {
+    for (DbNode n : nodesAvailable) {
       this.floors.add(n.getFloor());
       nodes.get(n.getFloor()).setVisible(true);
       labels.get(n.getFloor()).setVisible(true);
