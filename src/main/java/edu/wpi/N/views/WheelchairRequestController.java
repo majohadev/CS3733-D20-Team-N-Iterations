@@ -26,7 +26,7 @@ public class WheelchairRequestController implements Controller {
   // Add FXML Tags Here
   @FXML JFXComboBox<String> cmbo_text;
   @FXML JFXComboBox<String> cmbo_selectLang;
-  @FXML JFXTextArea txtf_wheelchairNotes;
+  @FXML JFXTextArea txtf_notes;
   @FXML AnchorPane wheelchairRequest;
 
   private ObservableList<String> fuzzySearchTextList =
@@ -91,7 +91,7 @@ public class WheelchairRequestController implements Controller {
 
   // Create Translator Request
   @FXML
-  public void createNewTranslator() throws DBException, IOException {
+  public void createNewWheelchairRequest() throws DBException, IOException {
 
     String assistanceOption = cmbo_selectLang.getSelectionModel().getSelectedItem();
     String nodeID = null;
@@ -136,7 +136,7 @@ public class WheelchairRequestController implements Controller {
       return;
     }
 
-    String notes = txtf_wheelchairNotes.getText();
+    String notes = txtf_notes.getText();
     if (assistanceOption == null) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
       errorAlert.setContentText("Please select a needs assistance option!");
@@ -148,7 +148,7 @@ public class WheelchairRequestController implements Controller {
 
     // App.adminDataStorage.addToList(wheelchairReq);
 
-    txtf_wheelchairNotes.clear();
+    txtf_notes.clear();
     cmbo_selectLang.getItems().clear();
     cmbo_text.getItems().clear();
 
