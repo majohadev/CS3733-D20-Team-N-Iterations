@@ -205,6 +205,8 @@ INSERT INTO service VALUES ('Security', '00:00', '00:00', 'Make a security reque
 INSERT INTO service VALUES ('Flower', '00:00', '00:00', 'Make a request for Flower Delivery services');
 
 INSERT INTO credential VALUES ('Gaben', 'MoolyFTW', 'ADMIN');
+INSERT INTO credential VALUES ('admin', 'admin', 'ADMIN');
+
 
 CREATE TRIGGER doc_delete AFTER DELETE ON doctors
 REFERENCING OLD AS oldRow

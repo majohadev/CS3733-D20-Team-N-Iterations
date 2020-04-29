@@ -351,11 +351,11 @@ public class NewAdminController implements Controller, Initializable {
   }
 
   public void adminEditMap() throws IOException {
-    mainApp.switchScene("views/mapEdit.fxml", singleton);
+    mainApp.switchScene("views/mapEditor.fxml", singleton);
   }
 
   public void returnToPrev() throws IOException {
-    mainApp.switchScene("views/home.fxml", singleton);
+    mainApp.switchScene("views/newHomePage.fxml", singleton);
   }
 
   public void addAdmin() throws DBException {
