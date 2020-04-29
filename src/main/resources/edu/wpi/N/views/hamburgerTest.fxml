@@ -39,27 +39,15 @@
             </Pane>
          </children>
       </StackPane>
-      <Pane prefHeight="75.0" prefWidth="1978.0" style="-fx-background-color: #00339A;">
+      <Pane prefHeight="75.0" prefWidth="1978.0" style="-fx-background-color: #002186;" />
+      <JFXDrawer fx:id="dw_drawer" defaultDrawerSize="300.0" layoutY="75.0" maxHeight="-Infinity" minWidth="-Infinity" prefHeight="970.0" prefWidth="300.0">
          <children>
-            <Label layoutX="38.0" layoutY="14.0" text="4/23/2020" textFill="WHITE">
-               <font>
-                  <Font name="Calibri Bold" size="20.0" />
-               </font>
-            </Label>
-            <Label layoutX="48.0" layoutY="38.0" text="3:48 PM" textFill="WHITE">
-               <font>
-                  <Font name="Calibri Bold" size="20.0" />
-               </font>
-            </Label>
-         </children></Pane>
-      <JFXDrawer fx:id="dw_drawer" defaultDrawerSize="300.0" layoutY="75.0" prefHeight="1005.0" prefWidth="300.0">
-         <children>
-            <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1005.0" prefWidth="300.0">
+            <VBox layoutX="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="970.0" prefWidth="300.0">
                <children>
                   <Pane prefHeight="95.0" prefWidth="300.0" style="-fx-background-color: #ffffff;">
                      <children>
                         <Separator layoutY="214.0" prefHeight="3.0" prefWidth="300.0" />
-                        <ImageView fitHeight="73.0" fitWidth="68.0" layoutX="121.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="73.0" fitWidth="68.0" layoutX="119.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../images/Brigham_and_Womens_Hospital_logo.svg.png" />
                            </image>
@@ -72,15 +60,17 @@
                            <content>
                               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="722.0" prefWidth="298.0" style="-fx-background-color: #ffffff;">
                                  <children>
-                                    <JFXButton buttonType="RAISED" ellipsisString="" layoutX="213.0" layoutY="48.0" prefHeight="51.0" prefWidth="54.0" text="   " textAlignment="CENTER" />
-                                    <ImageView fx:id="btn_searchdoc" fitHeight="28.0" fitWidth="29.0" layoutX="218.0" layoutY="65.0" onMouseClicked="#onFindDoctorClicked" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../images/Find%20A%20Doctor.png" />
-                                       </image>
-                                    </ImageView>
+                                    <JFXButton buttonType="RAISED" ellipsisString="" layoutX="213.0" layoutY="48.0" prefHeight="51.0" prefWidth="54.0" text="   " textAlignment="CENTER">
+                                       <graphic>
+                                          <ImageView fx:id="btn_searchdoc" fitHeight="28.0" fitWidth="29.0" mouseTransparent="true" onMouseClicked="#onFindDoctorClicked" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../images/Find%20A%20Doctor.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic></JFXButton>
                                     <JFXListView fx:id="lst_doctornames" layoutX="48.0" layoutY="103.0" prefHeight="75.0" prefWidth="200.0" />
                                     <JFXTextField fx:id="txtf_doctorname" layoutX="49.0" layoutY="64.0" onKeyTyped="#searchByDoctorTextFill" prefHeight="29.0" prefWidth="151.0" promptText="Search by Doctor" />
-                                    <JFXButton fx:id="btn_findpathdoc" buttonType="RAISED" layoutX="45.0" layoutY="301.0" onMouseClicked="#onDoctorPathFindClicked" prefHeight="39.0" prefWidth="204.0" style="-fx-background-color: #32CD32;" text="   Find Path To Location" textAlignment="CENTER" textFill="WHITE">
+                                    <JFXButton fx:id="btn_findpathdoc" buttonType="RAISED" layoutX="45.0" layoutY="301.0" onMouseClicked="#onDoctorPathFindClicked" prefHeight="39.0" prefWidth="204.0" style="-fx-background-color: #002186;" text="   Find Path To Location" textAlignment="CENTER" textFill="WHITE">
                                        <font>
                                           <Font size="18.0" />
                                        </font>
@@ -92,6 +82,18 @@
                                           <Font size="15.0" />
                                        </font>
                                     </JFXCheckBox>
+                                    <JFXButton fx:id="btn_resetPath1" buttonType="RAISED" layoutX="61.0" layoutY="353.0" onMouseClicked="#onBtnResetPathClicked" prefHeight="27.0" prefWidth="171.0" text="Reset" textAlignment="CENTER">
+                                       <font>
+                                          <Font name="Calibri Bold" size="24.0" />
+                                       </font>
+                                       <graphic>
+                                          <ImageView fitHeight="92.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../images/Reset.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                    </JFXButton>
                                  </children>
                               </AnchorPane>
                            </content>
@@ -105,17 +107,24 @@
                                  <children>
                                     <JFXListView fx:id="lst_firstLocation" layoutX="49.0" layoutY="105.0" prefHeight="172.0" prefWidth="200.0" />
                                     <JFXTextField fx:id="txt_firstLocation" layoutX="49.0" layoutY="66.0" onKeyTyped="#onSearchFirstLocation" prefWidth="200.0" promptText="Search by Location" />
-                                    <JFXButton fx:id="btn_findPath" buttonType="RAISED" layoutX="48.0" layoutY="572.0" onMouseClicked="#onBtnPathfindClicked" prefHeight="39.0" prefWidth="204.0" ripplerFill="#7bff66" style="-fx-background-color: #32CD32;" text="Find Path To Location" textAlignment="CENTER" textFill="WHITE">
+                                    <JFXButton fx:id="btn_findPath" buttonType="RAISED" layoutX="48.0" layoutY="556.0" onMouseClicked="#onBtnPathfindClicked" prefHeight="39.0" prefWidth="204.0" ripplerFill="#7bff66" style="-fx-background-color: #002186;" text="Find Path To Location" textAlignment="CENTER" textFill="WHITE">
                                        <font>
                                           <Font size="18.0" />
                                        </font>
                                     </JFXButton>
                                     <JFXTextField fx:id="txt_secondLocation" layoutX="49.0" layoutY="287.0" onKeyTyped="#onSearchSecondLocation" prefWidth="200.0" promptText="Search by Location" />
                                     <JFXListView fx:id="lst_secondLocation" layoutX="50.0" layoutY="326.0" prefHeight="172.0" prefWidth="200.0" />
-                                    <JFXButton fx:id="btn_resetPath" buttonType="RAISED" layoutX="64.0" layoutY="544.0" onMouseClicked="#onBtnResetPathClicked" prefHeight="27.0" prefWidth="171.0" text="Reset" textAlignment="CENTER">
+                                    <JFXButton fx:id="btn_resetPath" buttonType="RAISED" layoutX="59.0" layoutY="606.0" onMouseClicked="#onBtnResetPathClicked" prefHeight="27.0" prefWidth="171.0" text="Reset" textAlignment="CENTER">
                                        <font>
-                                          <Font name="Calibri Bold" size="14.0" />
+                                          <Font name="Calibri Bold" size="24.0" />
                                        </font>
+                                       <graphic>
+                                          <ImageView fitHeight="92.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../images/Reset.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
                                     </JFXButton>
                                     <JFXButton layoutX="51.0" layoutY="496.0" onMouseClicked="#findPathToBathroom" prefHeight="50.0" prefWidth="67.0" ripplerFill="#ffd965" style="-fx-background-color: #002186#002186; -fx-background-radius: 0;" text=" ">
                                        <graphic>
@@ -161,7 +170,7 @@
                               <Font name="Calibri" size="16.0" />
                            </font>
                            <content>
-                              <AnchorPane prefHeight="816.0" prefWidth="285.0">
+                              <AnchorPane prefHeight="780.0" prefWidth="298.0">
                                  <children>
                                     <Pane layoutX="24.0" layoutY="81.0" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" prefHeight="402.0" prefWidth="248.0" style="-fx-background-radius: 5; -fx-background-color: #dfe3ee;">
                                        <children>
@@ -171,7 +180,7 @@
                                              </font>
                                           </Text>
                                        </children></Pane>
-                                    <JFXButton buttonType="RAISED" layoutX="22.0" layoutY="25.0" onMouseClicked="#displayQRCode" prefHeight="39.0" prefWidth="249.0" ripplerFill="#7bff66" style="-fx-background-color: #32CD32;" text="Generate QR Code" textAlignment="CENTER" textFill="WHITE">
+                                    <JFXButton buttonType="RAISED" layoutX="22.0" layoutY="25.0" onMouseClicked="#displayQRCode" prefHeight="39.0" prefWidth="249.0" ripplerFill="#7bff66" style="-fx-background-color: #002186;" text="Generate QR Code" textAlignment="CENTER" textFill="WHITE">
                                        <font>
                                           <Font size="18.0" />
                                        </font>
