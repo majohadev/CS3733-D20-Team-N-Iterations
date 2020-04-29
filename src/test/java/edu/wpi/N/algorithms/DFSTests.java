@@ -28,21 +28,21 @@ public class DFSTests {
   }
 
   /** Tests that findPath returns a Path object with the best route from H9 to EEE */
-//  @Test
-//  public void findPathNormalCaseDFSTest() throws DBException {
-//    myDFS.setPathFinder(new DFS());
-//    LinkedList<DbNode> actualPath = new LinkedList<DbNode>();
-//    actualPath.add(MapDB.getNode("H100000001"));
-//    actualPath.add(MapDB.getNode("H900000000"));
-//    actualPath.add(MapDB.getNode("H120000000"));
-//    actualPath.add(MapDB.getNode("H130000000"));
-//    actualPath.add(MapDB.getNode("EEEEEEEEEE"));
-//
-//    Path testingPath =
-//        myDFS.findPath(MapDB.getNode("H100000001"), MapDB.getNode("EEEEEEEEEE"), false);
-//
-//    Assertions.assertEquals(actualPath, testingPath.getPath());
-//  }
+  //  @Test
+  //  public void findPathNormalCaseDFSTest() throws DBException {
+  //    myDFS.setPathFinder(new DFS());
+  //    LinkedList<DbNode> actualPath = new LinkedList<DbNode>();
+  //    actualPath.add(MapDB.getNode("H100000001"));
+  //    actualPath.add(MapDB.getNode("H900000000"));
+  //    actualPath.add(MapDB.getNode("H120000000"));
+  //    actualPath.add(MapDB.getNode("H130000000"));
+  //    actualPath.add(MapDB.getNode("EEEEEEEEEE"));
+  //
+  //    Path testingPath =
+  //        myDFS.findPath(MapDB.getNode("H100000001"), MapDB.getNode("EEEEEEEEEE"), false);
+  //
+  //    Assertions.assertEquals(actualPath, testingPath.getPath());
+  //  }
 
   /**
    * Tests that findPath method return a Path object with route consisting of 2 Nodes, since start
