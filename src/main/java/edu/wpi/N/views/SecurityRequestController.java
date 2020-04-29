@@ -134,7 +134,7 @@ public class SecurityRequestController implements Controller {
     String notes = "Report details:\n\n";
 
     for (JFXCheckBox cb : checkBoxes) {
-      if (cb.isSelected()) {
+      if (cb.isSelected() == true) {
         notes = notes + cb.getText() + "\n";
       }
     }
