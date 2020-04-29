@@ -59,7 +59,7 @@ public class FlowerRequestController implements Controller {
     LinkedList<Flower> listFlower = ServiceDB.getFlowers();
     LinkedList<String> list = new LinkedList<>();
     for (Flower f : listFlower) {
-      list.add(f.getFlowerName());
+      list.add(f.getFlowerName() + ", " + f.getPrice());
     }
     flowers = FXCollections.observableList(list);
     cb_flowerType.setItems(flowers);
