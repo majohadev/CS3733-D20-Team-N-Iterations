@@ -14,7 +14,6 @@ import java.util.LinkedList;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseButton;
@@ -99,9 +98,14 @@ public class BetweenFloorsController implements Controller, Initializable {
     this.floor = node.getFloor();
     currNode = true;
     this.originalEdges = AbsAlgo.getEdgesBetweenFloors(node);
-    LinkedList<DbNode> nodesAvaliable = MapDB.getInShaft(node.getNodeID());
+    LinkedList<DbNode> nodesAvailable;
+    try {
+      nodesAvailable = MapDB.getInShaft(node.getNodeID());
+    } catch (DBException e) {
+      nodesAvailable = null;
+    }
     nodes.get(node.getFloor()).setFill(INACTIVE_CIRCLE_COLOR);
-    for (DbNode n : nodesAvaliable) {
+    for (DbNode n : nodesAvailable) {
       this.floors.add(n.getFloor());
       nodes.get(n.getFloor()).setVisible(true);
       labels.get(n.getFloor()).setVisible(true);
@@ -219,5 +223,4 @@ public class BetweenFloorsController implements Controller, Initializable {
     btn_cancel.setVisible(false);
     // setFloor(this.floor);
   }
-
 }
