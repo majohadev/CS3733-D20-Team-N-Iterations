@@ -9,12 +9,15 @@ import edu.wpi.N.database.MapDB;
 import edu.wpi.N.database.ServiceDB;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.States.StateSingleton;
+import java.io.IOException;
 import java.util.LinkedList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 
 public class ITServiceController implements Controller {
 
@@ -25,6 +28,7 @@ public class ITServiceController implements Controller {
   @FXML JFXTextArea txtf_device;
   @FXML JFXTextArea txtf_problem;
   @FXML JFXTextArea txtf_ITnotes;
+  @FXML AnchorPane itService;
 
   private ObservableList<String> fuzzySearchTextList =
       // List that fills TextViews
@@ -80,7 +84,7 @@ public class ITServiceController implements Controller {
 
   // Create IT Request
   @FXML
-  public void createNewITRequest() throws DBException {
+  public void createNewITRequest() throws DBException, IOException {
 
     String nodeID = "";
     int nodeIndex = 0;
@@ -133,5 +137,10 @@ public class ITServiceController implements Controller {
     Alert confAlert = new Alert(Alert.AlertType.CONFIRMATION);
     confAlert.setContentText("Request Received");
     confAlert.show();
+
+    itService.setVisible(false);
+    AnchorPane currentPane = FXMLLoader.load(getClass().getResource("mainServicePage.fxml"));
+    itService.getChildren().setAll(currentPane);
+    itService.setVisible(true);
   }
 }

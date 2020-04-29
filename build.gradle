@@ -19,6 +19,7 @@ repositories {
 
 dependencies {
     implementation(
+            'com.fazecast:jSerialComm:[2.0.0,3.0.0)',
             'com.jfoenix:jfoenix:9.0.9',
 
             // You may comment out the database dependency you do not use

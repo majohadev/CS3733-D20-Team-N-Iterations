@@ -10,12 +10,15 @@ import edu.wpi.N.database.ServiceDB;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Flower;
 import edu.wpi.N.entities.States.StateSingleton;
+import java.io.IOException;
 import java.util.LinkedList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 
 public class FlowerRequestController implements Controller {
 
@@ -36,6 +39,7 @@ public class FlowerRequestController implements Controller {
   @FXML JFXTextArea txt_notes;
   @FXML JFXTextField txt_quantity;
   @FXML JFXComboBox<String> cmbo_text;
+  @FXML AnchorPane flowerDeliveryRequest;
 
   private ObservableList<String> fuzzySearchTextList =
       // List that fills TextViews
@@ -94,7 +98,7 @@ public class FlowerRequestController implements Controller {
 
   // Create Flower Request
   @FXML
-  public void createNewFlowerReq() throws DBException {
+  public void createNewFlowerReq() throws DBException, IOException {
 
     String visitorName = txt_visitorName.getText();
     String patientName = txt_patientName.getText();
@@ -147,6 +151,11 @@ public class FlowerRequestController implements Controller {
     Alert confAlert = new Alert(Alert.AlertType.CONFIRMATION);
     confAlert.setContentText("Request Recieved");
     confAlert.show();
+
+    flowerDeliveryRequest.setVisible(false);
+    AnchorPane currentPane = FXMLLoader.load(getClass().getResource("mainServicePage.fxml"));
+    flowerDeliveryRequest.getChildren().setAll(currentPane);
+    flowerDeliveryRequest.setVisible(true);
   }
 
   public void displayErrorMessage(String str) {
