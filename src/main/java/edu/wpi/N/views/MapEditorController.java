@@ -405,6 +405,8 @@ public class MapEditorController implements Controller {
       onCircleEditNodeClicked(event, circle);
     }
     if (mode == Mode.EDIT_ELEV && editElevNodes.contains(circle)) {
+      onBtnSaveEditElevClicked();
+      onBtnCancelEditElevClicked();
       if (elevCircle != null && elevCircle != circle) {
         elevCircle.setFill(EDIT_ELEV_COLOR);
         pn_elev.setVisible(false);
@@ -841,6 +843,28 @@ public class MapEditorController implements Controller {
             });
   }
 
+  private void onBtnCancelEditElevClicked() {
+    controllerEditElev
+        .getBtnCancel()
+        .setOnMouseClicked(
+            e -> {
+              elevCircle.setFill(EDIT_ELEV_COLOR);
+              elevCircle = null;
+              pn_elev.setVisible(false);
+            });
+  }
+
+  private void onBtnSaveEditElevClicked() {
+    controllerEditElev
+        .getBtnSave()
+        .setOnMouseClicked(
+            e -> {
+              elevCircle.setFill(EDIT_ELEV_COLOR);
+              elevCircle = null;
+              pn_elev.setVisible(false);
+            });
+  }
+
   private void resetAll() {
     pn_editor.setVisible(false);
     //    pn_elev.setVisible(false);
@@ -857,6 +881,7 @@ public class MapEditorController implements Controller {
     }
     editNodeCircle = null;
     pn_elev.setVisible(false);
+    pn_elev.getChildren().clear();
   }
 
   private void resetAddNode() {
