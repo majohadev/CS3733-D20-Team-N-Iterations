@@ -112,12 +112,7 @@ public abstract class Request extends RecursiveTreeObject<Request> {
       compNotesEqual = compNotes.equals(other.compNotes);
     }
 
-    return requestID == other.requestID
-        && emp_assignedEqual
-        && reqNotes.equals(other.reqNotes)
-        && compNotesEqual
-        && nodeID.equals(other.nodeID)
-        && status.equals(other.status);
+    return requestID == other.requestID;
   }
 }
 /*TODO: Make your request entity */

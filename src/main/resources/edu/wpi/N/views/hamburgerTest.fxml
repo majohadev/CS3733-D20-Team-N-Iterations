@@ -66,9 +66,9 @@
                            <content>
                               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="722.0" prefWidth="298.0" style="-fx-background-color: #ffffff;">
                                  <children>
-                                    <JFXButton buttonType="RAISED" ellipsisString="" layoutX="213.0" layoutY="48.0" prefHeight="51.0" prefWidth="54.0" text="   " textAlignment="CENTER">
+                                    <JFXButton buttonType="RAISED" ellipsisString="" layoutX="213.0" layoutY="48.0" prefHeight="51.0" prefWidth="54.0" onMouseClicked="#onFindDoctorClicked" text="   " textAlignment="CENTER">
                                        <graphic>
-                                          <ImageView fx:id="btn_searchdoc" fitHeight="28.0" fitWidth="29.0" mouseTransparent="true" onMouseClicked="#onFindDoctorClicked" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fx:id="btn_searchdoc" fitHeight="28.0" fitWidth="29.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../images/Find%20A%20Doctor.png" />
                                              </image>
