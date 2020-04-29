@@ -10,7 +10,6 @@ import edu.wpi.N.database.*;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.entities.employees.Employee;
-import edu.wpi.N.entities.request.MedicineRequest;
 import edu.wpi.N.entities.request.Request;
 import java.io.IOException;
 import java.net.URL;
@@ -100,12 +99,6 @@ public class MedicineRequestController implements Controller, Initializable {
   }
 
   public void initializeTableOfPatients() {
-
-    TableColumn<Request, Integer> id = new TableColumn<>("ID");
-    id.setMaxWidth(150);
-    id.setMinWidth(150);
-    id.setCellValueFactory(new PropertyValueFactory<Request, Integer>("requestID"));
-
     TableColumn<Request, String> patient = new TableColumn<>("Patient Name");
     patient.setMaxWidth(150);
     patient.setMinWidth(150);
@@ -121,23 +114,27 @@ public class MedicineRequestController implements Controller, Initializable {
     dosage.setMinWidth(75);
     dosage.setCellValueFactory(new PropertyValueFactory<Request, Double>("atr2"));
 
-    TableColumn<MedicineRequest, Employee> assignedDoctor = new TableColumn<>("Assigned Doctor");
+    TableColumn<Request, Employee> assignedDoctor = new TableColumn<>("Assigned Doctor");
     assignedDoctor.setMaxWidth(150);
     assignedDoctor.setMinWidth(150);
-    assignedDoctor.setCellValueFactory(
-        new PropertyValueFactory<MedicineRequest, Employee>("emp_assigned"));
+    assignedDoctor.setCellValueFactory(new PropertyValueFactory<Request, Employee>("emp_assigned"));
 
     TableColumn<Request, String> notes = new TableColumn<>("Notes");
     notes.setMaxWidth(150);
     notes.setMinWidth(150);
     notes.setCellValueFactory(new PropertyValueFactory<Request, String>("reqNotes"));
 
+    TableColumn<Request, String> location = new TableColumn<>("Location");
+    location.setMaxWidth(150);
+    location.setMinWidth(150);
+    location.setCellValueFactory(new NewAdminController.nodeLongName());
+
     TableColumn<Request, String> status = new TableColumn<>("Status");
     status.setMaxWidth(150);
     status.setMinWidth(150);
     status.setCellValueFactory(new PropertyValueFactory<Request, String>("status"));
 
-    tb_patients.getColumns().addAll(id, patient, meds, dosage, assignedDoctor, notes, status);
+    tb_patients.getColumns().addAll(patient, meds, dosage, assignedDoctor, notes, location, status);
   }
 
   public void populateChoiceBox() {

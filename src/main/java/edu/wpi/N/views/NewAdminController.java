@@ -113,7 +113,7 @@ public class NewAdminController implements Controller, Initializable {
     }
   }
 
-  private static class nodeLongName
+  public static class nodeLongName
       implements Callback<TableColumn.CellDataFeatures<Request, String>, ObservableValue<String>> {
 
     public nodeLongName() {}
