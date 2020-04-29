@@ -9,6 +9,10 @@ public class Main {
   public static void main(String[] args)
       throws SQLException, DBException, ClassNotFoundException, FileNotFoundException {
     MapDB.initDB();
+    // ArduinoController periperal = new ArduinoController();
+    // periperal.initialize();
+    // MapDB.setKiosk("NSERV00301", 180);
+
     /*final String DEFAULT_NODES = "csv/UPDATEDTeamNnodes.csv";
     final String DEFAULT_PATHS = "csv/UPDATEDTeamNedges.csv";
     final InputStream INPUT_NODES_DEFAULT = Main.class.getResourceAsStream(DEFAULT_NODES);

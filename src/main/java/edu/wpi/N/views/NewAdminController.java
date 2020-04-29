@@ -19,13 +19,17 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 
 public class NewAdminController implements Controller, Initializable {
@@ -84,6 +88,7 @@ public class NewAdminController implements Controller, Initializable {
   @FXML JFXComboBox cb_changeAlgo;
   @FXML Label lbl_title;
   @FXML JFXTextField txtf_rmuser;
+  @FXML JFXButton btn_arduino;
 
   ObservableList<Request> tableData = FXCollections.observableArrayList();
   ObservableList<String> languageData = FXCollections.observableArrayList();
@@ -813,5 +818,20 @@ public class NewAdminController implements Controller, Initializable {
     acceptReq.show();
 
     txtf_rmuser.clear();
+  }
+
+  @FXML
+  public void loadArduino() {
+    Stage stage = new Stage();
+    Parent root = null;
+    try {
+      root = FXMLLoader.load(getClass().getResource("arduinoInterface.fxml"));
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    Scene scene = new Scene(root);
+    stage.setScene(scene);
+    // stage.initModality(Modality.APPLICATION_MODAL);
+    stage.show();
   }
 }

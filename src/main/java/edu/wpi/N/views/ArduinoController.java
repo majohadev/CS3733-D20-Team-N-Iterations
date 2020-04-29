@@ -1,5 +1,7 @@
 package edu.wpi.N.views;
 
+import static java.lang.Math.abs;
+
 import com.fazecast.jSerialComm.*;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
@@ -13,6 +15,9 @@ import javafx.fxml.FXML;
 
 public class ArduinoController implements Controller {
 
+  private static PrintWriter outPut;
+  private static SerialPort arduinoPort = SerialPort.getCommPort("COM14");
+  private static double arrowAngle = 0;
   private StateSingleton singleton;
 
   @Override
@@ -33,11 +38,6 @@ public class ArduinoController implements Controller {
   @FXML JFXTextField txtf_angle;
   @FXML JFXToggleButton tog_serial;
 
-  private PrintWriter outPut;
-  // private InputStream inPut;
-
-  SerialPort arduinoPort = SerialPort.getCommPort("COM14");
-
   private int kioskAngle;
 
   public ArduinoController() throws DBException {}
@@ -49,8 +49,8 @@ public class ArduinoController implements Controller {
   public void initialize() {
     arduinoPort.setBaudRate(9600);
     arduinoPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 200, 200);
-    try {
-      MapDB.setKiosk("NHALL01904", 180);
+    /*try {
+      if (MapDB.getKiosk() == null) MapDB.setKiosk("NSERV00301", 180);
     } catch (DBException e) {
       e.printStackTrace();
     }
@@ -58,7 +58,10 @@ public class ArduinoController implements Controller {
       kioskAngle = MapDB.getKioskAngle();
     } catch (DBException e) {
       e.printStackTrace();
-    }
+    }*/
+    System.out.println("leggo");
+    arduinoPort.openPort();
+    arrowAngle = 0;
   }
 
   @FXML
@@ -84,9 +87,9 @@ public class ArduinoController implements Controller {
   }
 
   @FXML
-  private void homeArrow() {
+  public void homeArrow() {
     outPut = new PrintWriter(arduinoPort.getOutputStream());
-    String msg = "home";
+    String msg = "home" + kioskAngle;
     outPut.print(msg);
     outPut.flush();
   }
@@ -113,5 +116,49 @@ public class ArduinoController implements Controller {
     outPut = new PrintWriter(arduinoPort.getOutputStream());
     outPut.print(kioskAngs);
     outPut.flush();
+  }
+
+  @FXML
+  public static void turnArrow(double angle) throws DBException {
+    outPut = new PrintWriter(arduinoPort.getOutputStream());
+    if (arrowAngle == MapDB.getKioskAngle()) {
+      if (angle >= 0) {
+        outPut.print("f" + angle);
+        arrowAngle += angle;
+      } else {
+        arrowAngle += angle;
+        outPut.print("b" + abs(angle));
+        arrowAngle -= 360 * (arrowAngle / 360);
+        if (arrowAngle < 0) arrowAngle += 360;
+      }
+    } else{
+      int turnAngle = (int) (MapDB.getKioskAngle() + angle);
+      turnAngle -= 360 * (turnAngle / 360);
+      if (turnAngle < 0) turnAngle += 360;
+      setUpArrow(turnAngle);
+    }
+    outPut.flush();
+  }
+
+  @FXML
+  public static void setUpArrow(double angle) {
+    String kioskAngs = String.valueOf((int) angle);
+    arrowAngle = angle;
+    String output = "h" + kioskAngs;
+    System.out.println(output);
+    outPut = new PrintWriter(arduinoPort.getOutputStream());
+    outPut.print(output);
+    outPut.flush();
+    arrowAngle = angle;
+  }
+
+  @FXML
+  public static void resetToCurrentKiosk() {
+    try {
+      arrowAngle = MapDB.getKioskAngle();
+    } catch (DBException e) {
+      e.printStackTrace();
+    }
+    setUpArrow(arrowAngle);
   }
 }
