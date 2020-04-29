@@ -94,7 +94,8 @@ def codeCoverageExcludes = [
         'edu.wpi.N.views.*',
         'edu.wpi.N.qrcontrol.*',
         'edu.wpi.N.controllerData.*',
-        'edu.wpi.N.database.setupDB'
+        'edu.wpi.N.database.setupDB',
+        'edu.wpi.N.algorithms.AbsAlgo.floorSortNodes*'
 ]
 
 jacoco {
