@@ -131,7 +131,7 @@ public class ArduinoController implements Controller {
         arrowAngle -= 360 * (arrowAngle / 360);
         if (arrowAngle < 0) arrowAngle += 360;
       }
-    } else{
+    } else {
       int turnAngle = (int) (MapDB.getKioskAngle() + angle);
       turnAngle -= 360 * (turnAngle / 360);
       if (turnAngle < 0) turnAngle += 360;
