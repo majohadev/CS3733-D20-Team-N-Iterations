@@ -246,9 +246,11 @@ public class hamburgerTestController implements Controller, Initializable {
       try {
         path = singleton.savedAlgo.findPath(node1, node2, handicap);
         ArrayList<String> directions = path.getDirections();
-        //        for (String s : directions) {
-        //          System.out.println(s);
-        //        }
+
+        for (String s : directions) {
+          System.out.println(s);
+        }
+
         System.out.println("Start angle " + path.getStartAngle(MapDB.getKioskAngle()));
       } catch (NullPointerException e) {
         displayErrorMessage("The path does not exist");
@@ -259,9 +261,11 @@ public class hamburgerTestController implements Controller, Initializable {
       Path path = singleton.savedAlgo.findPath(node2, node1, handicap);
       pathNodes = path.getPath();
       ArrayList<String> directions = path.getDirections();
-      //      for (String s : directions) {
-      //        System.out.println(s);
-      //      }
+
+      for (String s : directions) {
+        System.out.println(s);
+      }
+
       System.out.println("Start angle " + path.getStartAngle(MapDB.getKioskAngle()));
     }
     disableNonPathFloors(pathNodes);
@@ -325,7 +329,9 @@ public class hamburgerTestController implements Controller, Initializable {
     return y * VERTICAL_SCALE;
   }
 
-  public void initializeChangeFloorButtons() {
+  public void initializeChangeFloorButtons() throws DBException {
+    // MapDB.setKiosk("NSERV00301", 0);
+    // MapDB.setKiosk("NSERV00103", 0);
     btn_floors = new JFXButton("Floors");
     btn_floor1 = new JFXButton("1");
     btn_floor2 = new JFXButton("2");
