@@ -32,10 +32,11 @@ public class BetweenFloorsController implements Controller, Initializable {
   @FXML private AnchorPane parent;
   @FXML private JFXButton btn_save;
   @FXML private JFXButton btn_cancel;
-  final Color DEFAULT_CIRCLE_COLOR = Color.PURPLE;
+  @FXML private Text text;
+  final Color DEFAULT_CIRCLE_COLOR = Color.web("#002186"); // Color.PURPLE;
   final Color INACTIVE_CIRCLE_COLOR = Color.GRAY;
   final Color DEFAULT_TEXT_COLOR = Color.WHITE;
-  final Color DEFAULT_SELECTED_COLOR = Color.RED;
+  final Color DEFAULT_SELECTED_COLOR = Color.web("#ffc911"); // Color.RED;
   final int DEFAULT_RADIUS = 20;
   final int TEXT_OFFSETX = -6;
   final int TEXT_OFFSETY = 6;
@@ -57,16 +58,20 @@ public class BetweenFloorsController implements Controller, Initializable {
     this.floors = new LinkedList<Integer>();
     this.originalEdges = new LinkedList<DbNode[]>();
 
-    Circle circle5 = createCircle(65, 0, "5", 5);
-    Circle circle4 = createCircle(65, 75, "4", 4);
-    Circle circle3 = createCircle(65, 150, "3", 3);
-    Circle circle2 = createCircle(65, 225, "2", 2);
-    Circle circle1 = createCircle(65, 300f, "1", 1);
+    Circle circle5 = createCircle(65, 10, "5", 5);
+    Circle circle4 = createCircle(65, 85, "4", 4);
+    Circle circle3 = createCircle(65, 160, "3", 3);
+    Circle circle2 = createCircle(65, 235, "2", 2);
+    Circle circle1 = createCircle(65, 310f, "1", 1);
   }
 
   public void setFloor(int floor) {
     this.floor = floor;
+    this.nodeStatus = new HashMap<Integer, Pair<DbNode, Boolean>>();
+    this.floors = new LinkedList<Integer>();
+    this.originalEdges = new LinkedList<DbNode[]>();
     currNode = false;
+    text.setVisible(false);
     for (int i = 1; i <= 5; i++) {
       Circle circle = nodes.get(i);
       circle.setFill(INACTIVE_CIRCLE_COLOR);
@@ -79,7 +84,10 @@ public class BetweenFloorsController implements Controller, Initializable {
   }
 
   public void setNode(DbNode node) throws DBException {
+    btn_cancel.setVisible(true);
+    btn_save.setVisible(true);
     setFloor(node.getFloor());
+    this.floor = node.getFloor();
     currNode = true;
     this.originalEdges = AbsAlgo.getEdgesBetweenFloors(node);
     LinkedList<DbNode> nodesAvaliable = getFloors(node);
@@ -97,6 +105,8 @@ public class BetweenFloorsController implements Controller, Initializable {
       nodes.get(n[0].getFloor()).setFill(DEFAULT_CIRCLE_COLOR);
       nodes.get(n[1].getFloor()).setFill(DEFAULT_CIRCLE_COLOR);
     }
+    text.setVisible(true);
+    text.setText(node.getLongName());
   }
 
   @Override
@@ -175,23 +185,40 @@ public class BetweenFloorsController implements Controller, Initializable {
           MapDB.addEdge(activeNodes.get(i).getNodeID(), activeNodes.get(i + 1).getNodeID());
         }
       }
-      setFloor(this.floor);
     }
+    text.setVisible(false);
+    for (int i = 1; i <= 5; i++) {
+      Circle circle = nodes.get(i);
+      circle.setFill(INACTIVE_CIRCLE_COLOR);
+      circle.setVisible(false);
+      labels.get(i).setVisible(false);
+    }
+    btn_save.setVisible(false);
+    btn_cancel.setVisible(false);
+    // setFloor(this.floor);
   }
 
   public void onCancelButton() {
-    setFloor(this.floor);
+    text.setVisible(false);
+    for (int i = 1; i <= 5; i++) {
+      Circle circle = nodes.get(i);
+      circle.setFill(INACTIVE_CIRCLE_COLOR);
+      circle.setVisible(false);
+      labels.get(i).setVisible(false);
+    }
+    btn_save.setVisible(false);
+    btn_cancel.setVisible(false);
+    // setFloor(this.floor);
   }
 
   private LinkedList<DbNode> getFloors(DbNode node) throws DBException {
     LinkedList<DbNode> floorChangeNodes = new LinkedList<DbNode>();
     for (int i = 1; i <= 5; i++) {
-      // will need to change when we add another building with different number of floors
       floorChangeNodes.addAll(MapDB.searchNode(i, node.getBuilding(), node.getNodeType(), ""));
     }
     LinkedList<DbNode> thisFloorChangeNodes = new LinkedList<DbNode>();
     for (DbNode n : floorChangeNodes) {
-      if (node.getX() == n.getX() && node.getY() == n.getY()) {
+      if (Math.abs(node.getX() - n.getX()) <= 10 && Math.abs(node.getY() - n.getY()) <= 10) {
         thisFloorChangeNodes.add(n);
       }
     }
