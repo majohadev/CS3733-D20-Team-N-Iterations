@@ -9,12 +9,15 @@ import edu.wpi.N.database.MapDB;
 import edu.wpi.N.database.ServiceDB;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.States.StateSingleton;
+import java.io.IOException;
 import java.util.LinkedList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 
 public class TemplateController implements Controller {
 
@@ -24,6 +27,7 @@ public class TemplateController implements Controller {
   @FXML JFXComboBox<String> cmbo_text;
   @FXML JFXComboBox<String> cmbo_selectLang;
   @FXML JFXTextArea txtf_langNotes;
+  @FXML AnchorPane translatorRequestPage;
 
   private ObservableList<String> fuzzySearchTextList =
       // List that fills TextViews
@@ -85,7 +89,7 @@ public class TemplateController implements Controller {
 
   // Create Translator Request
   @FXML
-  public void createNewTranslator() throws DBException {
+  public void createNewTranslator() throws DBException, IOException {
 
     String langSelection = cmbo_selectLang.getSelectionModel().getSelectedItem();
     String nodeID = null;
@@ -127,5 +131,10 @@ public class TemplateController implements Controller {
     Alert confAlert = new Alert(Alert.AlertType.CONFIRMATION);
     confAlert.setContentText("Request Recieved");
     confAlert.show();
+
+    translatorRequestPage.setVisible(false);
+    AnchorPane currentPane = FXMLLoader.load(getClass().getResource("mainServicePage.fxml"));
+    translatorRequestPage.getChildren().setAll(currentPane);
+    translatorRequestPage.setVisible(true);
   }
 }

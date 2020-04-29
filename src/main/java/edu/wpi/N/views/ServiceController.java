@@ -68,7 +68,7 @@ public class ServiceController implements Controller {
 
   @FXML
   public void switchToFloralPage() throws IOException {
-    AnchorPane currentPane = FXMLLoader.load(getClass().getResource("flowerRequestPage.fxml"));
+    AnchorPane currentPane = FXMLLoader.load(getClass().getResource("flowerDeliveryReq.fxml"));
     service_anchor.getChildren().setAll(currentPane);
   }
 

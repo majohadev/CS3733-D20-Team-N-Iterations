@@ -10,10 +10,12 @@ import edu.wpi.N.database.MapDB;
 import edu.wpi.N.database.ServiceDB;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.States.StateSingleton;
+import java.io.IOException;
 import java.util.LinkedList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
@@ -129,7 +131,7 @@ public class InternalTransportController implements Controller {
 
   // Create Transport Request
   @FXML
-  public void createNewTransportationRequest() throws DBException {
+  public void createNewTransportationRequest() throws DBException, IOException {
 
     String typeSelection = cmbo_type.getSelectionModel().getSelectedItem();
     String destinationLocation = null;
@@ -195,5 +197,8 @@ public class InternalTransportController implements Controller {
     confAlert.setContentText("Request Recieved");
     confAlert.show();
     internalTransportPage.setVisible(false);
+    AnchorPane currentPane = FXMLLoader.load(getClass().getResource("mainServicePage.fxml"));
+    internalTransportPage.getChildren().setAll(currentPane);
+    internalTransportPage.setVisible(true);
   }
 }
