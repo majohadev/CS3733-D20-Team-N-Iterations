@@ -5,9 +5,11 @@ import edu.wpi.N.Main;
 import edu.wpi.N.database.*;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.States.StateSingleton;
+import edu.wpi.N.entities.employees.Employee;
 import java.io.*;
 import java.util.LinkedList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
@@ -30,22 +32,33 @@ public class DataEditorController implements Controller {
 
   @FXML Button btn_select;
   @FXML Button btn_done;
+
   @FXML Label lbl_filePath;
-  @FXML Button btn_select_edges;
   @FXML Label lbl_filePath_edges;
+  @FXML Label lbl_filePath_employees;
+
+  @FXML Button btn_select_edges;
+  @FXML Button btn_select_employees;
+
   @FXML Button btn_default;
   @FXML Button btn_uploadedge;
+  @FXML Button reset_employees;
+
+  // download buttons
   @FXML Button btn_downloadnode;
   @FXML Button btn_downloadedge;
 
-  final String DEFAULT_NODES = "csv/UPDATEDTeamNnodes.csv";
-  final String DEFAULT_PATHS = "csv/UPDATEDTeamNedges.csv";
+  final String DEFAULT_NODES = "csv/newNodes.csv";
+  final String DEFAULT_PATHS = "csv/newEdges.csv";
+  final String DEFAULT_EMPLOYEES = "csv/Employees.csv";
   final InputStream INPUT_NODES_DEFAULT = Main.class.getResourceAsStream(DEFAULT_NODES);
   final InputStream INPUT_EDGES_DEFAULT = Main.class.getResourceAsStream(DEFAULT_PATHS);
+  final InputStream INPUT_EMPLOYEES_DEFAULT = Main.class.getResourceAsStream(DEFAULT_EMPLOYEES);
 
   public void initialize() {
     lbl_filePath.setText(DEFAULT_NODES);
     lbl_filePath_edges.setText(DEFAULT_PATHS);
+    lbl_filePath_employees.setText(DEFAULT_EMPLOYEES);
   }
 
   @FXML
@@ -75,6 +88,19 @@ public class DataEditorController implements Controller {
   }
 
   @FXML
+  public void onSelectEmployeesClicked(MouseEvent event) {
+    FileChooser fc = new FileChooser();
+    fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+    File selectedFile = fc.showOpenDialog(null);
+    if (selectedFile != null) {
+      lbl_filePath_employees.setText(selectedFile.getAbsolutePath());
+      lbl_filePath_employees.setDisable(false);
+    } else {
+      System.out.println("The file is invalid");
+    }
+  }
+
+  @FXML
   public void onUploadEdgesClicked() throws IOException, DBException {
     MapDB.clearNodes();
 
@@ -91,6 +117,49 @@ public class DataEditorController implements Controller {
       CSVParser.parseCSV(INPUT_EDGES_DEFAULT);
     } else {
       CSVParser.parseCSVfromPath(path_edges);
+    }
+  }
+
+  /**
+   * Loads selected employees.csv or default
+   *
+   * @throws IOException
+   * @throws DBException
+   */
+  @FXML
+  public void onUploadEmployeesClicked() throws IOException, DBException {
+    try {
+      // Clear previous employees
+      deleteAllEmployees();
+      // Upload employees
+      String path = lbl_filePath_employees.getText();
+      if (path.equals(DEFAULT_EMPLOYEES)) {
+        CSVParser.parseCSVEmployees(INPUT_EMPLOYEES_DEFAULT);
+      } else {
+        CSVParser.parseCSVEmployeesFromPath(path);
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setHeaderText("Oops... Something went Wong");
+      errorAlert.setContentText(
+          "Couldn't load employee file. Make sure to select correct file. Make sure to uploaded Nodes first");
+      errorAlert.showAndWait();
+    }
+  }
+
+  /** Function removes all employees from database, including doctors */
+  private void deleteAllEmployees() {
+    try {
+      for (Employee employee : ServiceDB.getEmployees()) {
+        ServiceDB.removeEmployee(employee.getID());
+      }
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setHeaderText("Oops... Something went Wong");
+      errorAlert.setContentText("Clear previous employees. Please try again later");
+      errorAlert.showAndWait();
     }
   }
 
@@ -194,14 +263,30 @@ public class DataEditorController implements Controller {
     }
   }
 
+  // TODO: change name of the function or a button to match
   @FXML
   public void onDoneClicked() throws IOException {
     mainApp.switchScene("views/newHomePage.fxml", singleton);
   }
 
+  /**
+   * Function loads and displays default paths to Nodes and Edges
+   *
+   * @param event
+   */
   @FXML
-  public void onDefaultClicked(MouseEvent event) {
+  private void onDefaultClicked(MouseEvent event) {
     lbl_filePath.setText(DEFAULT_NODES);
     lbl_filePath_edges.setText(DEFAULT_PATHS);
+  }
+
+  /**
+   * Function loads and displays default path to Employees.csv
+   *
+   * @param event
+   */
+  @FXML
+  private void onDefaultEmployeesClicked(MouseEvent event) {
+    lbl_filePath_employees.setText(DEFAULT_EMPLOYEES);
   }
 }
