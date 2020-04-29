@@ -11,7 +11,7 @@ public class Main {
     MapDB.initDB();
     // ArduinoController periperal = new ArduinoController();
     // periperal.initialize();
-    MapDB.setKiosk("NSERV00301", 180);
+    //    MapDB.setKiosk("NSERV00301", 180);
 
     /*final String DEFAULT_NODES = "csv/UPDATEDTeamNnodes.csv";
     final String DEFAULT_PATHS = "csv/UPDATEDTeamNedges.csv";

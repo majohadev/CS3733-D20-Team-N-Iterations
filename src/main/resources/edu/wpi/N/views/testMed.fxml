@@ -10,11 +10,10 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="MedicineRequestPage" prefHeight="900.0" prefWidth="1264.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.HomeController">
+<AnchorPane fx:id="medicineRequestPage" prefHeight="900.0" prefWidth="1264.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.MedicineRequestController">
     <children>
         <HBox alignment="CENTER_LEFT" layoutX="318.0" layoutY="14.0" prefHeight="150.0" prefWidth="629.0" spacing="30.0" style="-fx-background-color: #002186; -fx-background-radius: 10;">
             <children>
@@ -33,11 +32,11 @@
                 </Label>
             </children>
         </HBox>
-        <HBox alignment="CENTER" layoutX="35.0" layoutY="171.0" prefHeight="542.0" prefWidth="1196.0" spacing="100.0">
+        <HBox alignment="CENTER" layoutX="34.0" layoutY="160.0" prefHeight="542.0" prefWidth="1196.0" spacing="100.0">
             <children>
                 <VBox alignment="CENTER" maxHeight="509.0" maxWidth="500.0" minWidth="500.0" prefHeight="509.0" prefWidth="500.0" spacing="30.0">
                     <children>
-                        <Label text="Medicine Name">
+                        <Label text="Please Enter A Patient for Medicine ">
                             <font>
                                 <Font name="Calibri" size="24.0" />
                             </font>
@@ -45,18 +44,8 @@
                                 <Insets />
                             </VBox.margin>
                         </Label>
-                        <JFXTextField />
-                        <Label text="Patient Name">
-                            <font>
-                                <Font name="Calibri" size="24.0" />
-                            </font>
-                        </Label>
-                        <JFXTextField />
-                    </children>
-                </VBox>
-                <VBox alignment="CENTER" maxHeight="500.0" maxWidth="500.0" minWidth="500.0" prefHeight="200.0" prefWidth="100.0" spacing="30.0">
-                    <children>
-                        <Label text="Enter Dosage and Unit">
+                  <JFXTextField />
+                        <Label text="Medicine Type">
                             <font>
                                 <Font name="Calibri" size="24.0" />
                             </font>
@@ -64,17 +53,22 @@
                                 <Insets top="50.0" />
                             </VBox.margin>
                         </Label>
-                        <HBox prefHeight="100.0" prefWidth="200.0">
-                            <children>
-                                <JFXTextField alignment="CENTER" prefHeight="45.0" prefWidth="327.0">
-                                    <font>
-                                        <Font size="20.0" />
-                                    </font>
-                                </JFXTextField>
-                                <Pane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="100.0" prefWidth="8.0" />
-                                <JFXComboBox fx:id="cmbo_selectLang" labelFloat="true" prefHeight="45.0" prefWidth="112.0" promptText="Units" style="-fx-font-size: 18;" />
-                            </children>
-                        </HBox>
+                  <JFXTextField />
+                    </children>
+                </VBox>
+                <VBox alignment="CENTER" maxHeight="500.0" maxWidth="500.0" minWidth="500.0" prefHeight="200.0" prefWidth="100.0" spacing="30.0">
+                    <children>
+                  <Label text="Dosage and Units">
+                     <font>
+                        <Font name="Calibri" size="24.0" />
+                     </font>
+                  </Label>
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="30.0">
+                     <children>
+                        <JFXTextField maxWidth="-Infinity" minHeight="-Infinity" minWidth="100.0" prefHeight="25.0" prefWidth="215.0" />
+                        <JFXComboBox />
+                     </children>
+                  </HBox>
                         <Label text="Please Enter Aditional Notes Below">
                             <font>
                                 <Font name="Calibri" size="24.0" />

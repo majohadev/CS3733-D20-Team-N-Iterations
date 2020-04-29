@@ -9,6 +9,8 @@ import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.database.*;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.States.StateSingleton;
+import edu.wpi.N.entities.employees.Employee;
+import edu.wpi.N.entities.request.MedicineRequest;
 import edu.wpi.N.entities.request.Request;
 import java.io.IOException;
 import java.net.URL;
@@ -119,10 +121,11 @@ public class MedicineRequestController implements Controller, Initializable {
     dosage.setMinWidth(75);
     dosage.setCellValueFactory(new PropertyValueFactory<Request, Double>("atr2"));
 
-    TableColumn<Request, String> assignedDoctor = new TableColumn<>("Assigned Doctor");
+    TableColumn<MedicineRequest, Employee> assignedDoctor = new TableColumn<>("Assigned Doctor");
     assignedDoctor.setMaxWidth(150);
     assignedDoctor.setMinWidth(150);
-    assignedDoctor.setCellValueFactory(new PropertyValueFactory<Request, String>("emp_assigned"));
+    assignedDoctor.setCellValueFactory(
+        new PropertyValueFactory<MedicineRequest, Employee>("emp_assigned"));
 
     TableColumn<Request, String> notes = new TableColumn<>("Notes");
     notes.setMaxWidth(150);

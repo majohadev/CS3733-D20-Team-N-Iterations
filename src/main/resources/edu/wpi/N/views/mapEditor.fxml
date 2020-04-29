@@ -42,7 +42,13 @@
                         <Pane fx:id="pn_display" onMouseClicked="#onPaneDisplayClicked" prefHeight="773.0" prefWidth="1664.0">
                            <children>
                               <JFXComboBox fx:id="cb_changeAlgo" layoutX="-85.0" layoutY="220.0" prefHeight="25.0" prefWidth="170.0" promptText="Change Algorithm" />
-                           </children></Pane>
+                              <JFXButton fx:id="btn_cancel_elev" buttonType="RAISED" disable="true" layoutX="145.0" layoutY="438.0" onMouseClicked="#onBtnCancelElevClicked" prefHeight="52.0" prefWidth="104.0" ripplerFill="#002186" style="-fx-background-color: #00339A;" styleClass="animated-option-button" stylesheets="@MapDisplayFloors.css" text="Exit" textFill="WHITE">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </JFXButton>
+                           </children>
+                        </Pane>
                      </children>
                   </StackPane>
                   <JFXButton fx:id="btn_home" buttonType="RAISED" layoutX="275.0" layoutY="378.0" onMouseClicked="#onBtnHomeClicked" prefHeight="52.0" prefWidth="104.0" ripplerFill="#002186" style="-fx-background-color: #00339A;" styleClass="animated-option-button" stylesheets="@MapDisplayFloors.css" text="Home" textFill="WHITE">

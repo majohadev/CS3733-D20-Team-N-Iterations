@@ -77,6 +77,7 @@ public class MapEditorController implements Controller {
   @FXML Pane pn_edges;
   @FXML Pane pn_changeFloor;
   @FXML ImageView img_map;
+  @FXML JFXButton btn_cancel_elev;
   private JFXButton btn_floors, btn_floor1, btn_floor2, btn_floor3, btn_floor4, btn_floor5;
 
   final int DEFAULT_FLOOR = 1;
@@ -143,6 +144,8 @@ public class MapEditorController implements Controller {
 
   public void initialize() throws DBException {
     editElevNodes = new LinkedList<>();
+    btn_cancel_elev.setDisable(true);
+    btn_cancel_elev.setVisible(false);
     currentFloor = DEFAULT_FLOOR;
     currentBuilding = DEFAULT_BUILDING;
     nodesMap = HashBiMap.create();
@@ -515,6 +518,7 @@ public class MapEditorController implements Controller {
 
   private void handleDeleteNodeRightClick() throws IOException, DBException {
     mode = Mode.DELETE_NODE;
+    hideEditElevButton();
     changeEditor();
     onBtnCancelDeleteNodeClicked();
     onBtnConfirmDeleteNodeClicked();
@@ -522,6 +526,7 @@ public class MapEditorController implements Controller {
 
   private void handleEditNodeRightClick() throws IOException {
     mode = Mode.EDIT_NODE;
+    hideEditElevButton();
     changeEditor();
     onBtnCancelEditNodeClicked();
     onBtnConfirmEditNodeClicked();
@@ -529,6 +534,7 @@ public class MapEditorController implements Controller {
 
   private void handleDeleteEdgeRightClick() throws IOException {
     mode = Mode.DELETE_EDGE;
+    hideEditElevButton();
     changeEditor();
     pn_stack.getChildren().remove(pn_edges);
     pn_stack.getChildren().add(pn_edges);
@@ -541,6 +547,7 @@ public class MapEditorController implements Controller {
   public void onPaneDisplayClicked(MouseEvent event) throws IOException {
     // Add Node
     if (event.getClickCount() == 2 && mode != Mode.ADD_NODE) {
+      hideEditElevButton();
       onPaneDisplayClickedAddNode(event);
     }
     if (event.getButton() == MouseButton.SECONDARY) {
@@ -583,12 +590,14 @@ public class MapEditorController implements Controller {
             }
           });
       menu.getItems().addAll(deleteNode, editNode, deleteEdge, editElev);
-      menu.show(mainApp.getStage(), event.getSceneX(), event.getSceneY());
+      menu.show(mainApp.getStage(), event.getScreenX(), event.getScreenY());
     }
   }
 
   private void handleEditElevRightClick() throws IOException {
     mode = Mode.EDIT_ELEV;
+    btn_cancel_elev.setDisable(false);
+    btn_cancel_elev.setVisible(true);
     changeEditor();
     for (Circle circle : editElevNodes) {
       circle.setFill(EDIT_ELEV_COLOR);
@@ -597,6 +606,7 @@ public class MapEditorController implements Controller {
 
   private void onPaneDisplayClickedAddNode(MouseEvent event) throws IOException {
     mode = Mode.ADD_NODE;
+    hideEditElevButton();
     changeEditor();
     addNodeCircle = createCircle(event.getX(), event.getY(), ADD_NODE_COLOR);
     pn_display.getChildren().add(addNodeCircle);
@@ -886,6 +896,9 @@ public class MapEditorController implements Controller {
   }
 
   private void resetEditElev() {
+    //    btn_cancel_elev.setDisable(true);
+    //    btn_cancel_elev.setVisible(false);
+
     for (Circle circle : editElevNodes) {
       circle.setFill(DEFAULT_CIRCLE_COLOR);
     }
@@ -1082,6 +1095,7 @@ public class MapEditorController implements Controller {
 
   private void setFloorImg(String path) {
     resetAll();
+    hideEditElevButton();
     Image img = new Image(getClass().getResourceAsStream(path));
     img_map.setImage(img);
     try {
@@ -1099,6 +1113,18 @@ public class MapEditorController implements Controller {
     ObservableList<String> algos = FXCollections.observableArrayList();
     algos.addAll(algoTypes);
     cb_changeAlgo.setItems(algos);
+  }
+
+  public void onBtnCancelElevClicked() {
+    resetEditElev();
+    mode = Mode.NO_STATE;
+    btn_cancel_elev.setDisable(true);
+    btn_cancel_elev.setVisible(false);
+  }
+
+  public void hideEditElevButton() {
+    btn_cancel_elev.setDisable(true);
+    btn_cancel_elev.setVisible(false);
   }
 
   public void changeAlgorithm() {
