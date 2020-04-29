@@ -61,11 +61,6 @@ public class MedicineRequestController implements Controller, Initializable {
     this.mainApp = mainApp;
   }
 
-  public void logout() throws IOException, DBException {
-    mainApp.switchScene("/views/newMedRequest.fxml", singleton);
-    LoginDB.logout();
-  }
-
   public void changeScene(MouseEvent e) {
     if (e.getSource() == btn_prescribe) {
       ap_prep.setVisible(true);
@@ -256,7 +251,8 @@ public class MedicineRequestController implements Controller, Initializable {
     }
   }
 
-  public void goBack() throws IOException {
-    mainApp.switchScene("/views/newHomePage.fxml", singleton);
+  public void logout() throws IOException, DBException {
+    mainApp.switchScene("views/newHomePage.fxml", singleton);
+    LoginDB.logout();
   }
 }
