@@ -583,7 +583,7 @@ public class MapEditorController implements Controller {
             }
           });
       menu.getItems().addAll(deleteNode, editNode, deleteEdge, editElev);
-      menu.show(mainApp.getStage(), event.getSceneX(), event.getSceneY());
+      menu.show(mainApp.getStage(), event.getScreenX(), event.getScreenY());
     }
   }
 
