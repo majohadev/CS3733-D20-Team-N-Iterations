@@ -185,13 +185,17 @@ public class MedicineRequestController implements Controller, Initializable {
 
       for (DbNode node : allFloorNodes) {
         if (node.getNodeID().equals(medLocation.getNodeID())) {
-          ServiceDB.addMedReq(
-              txtf_notes.getText(),
-              medLocation.getNodeID(),
-              txtf_medicine.getText(),
-              Double.parseDouble(txtf_dosage.getText()),
-              dosage,
-              txtf_patient.getText());
+
+          int requestid =
+              ServiceDB.addMedReq(
+                  txtf_notes.getText(),
+                  medLocation.getNodeID(),
+                  txtf_medicine.getText(),
+                  Double.parseDouble(txtf_dosage.getText()),
+                  dosage,
+                  txtf_patient.getText());
+
+          ServiceDB.assignToRequest(DoctorDB.getDoctor(LoginDB.currentLogin()).getID(), requestid);
 
           Alert confAlert = new Alert(Alert.AlertType.CONFIRMATION);
           confAlert.setContentText(
@@ -271,9 +275,6 @@ public class MedicineRequestController implements Controller, Initializable {
     try {
       if (e.getSource() == btn_Accept) {
 
-        ServiceDB.assignToRequest(
-            DoctorDB.getDoctor(LoginDB.currentLogin()).getID(),
-            tb_patients.getSelectionModel().getSelectedItems().get(0).getRequestID());
         ServiceDB.completeRequest(
             tb_patients.getSelectionModel().getSelectedItems().get(0).getRequestID(), "");
 
