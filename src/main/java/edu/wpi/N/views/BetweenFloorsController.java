@@ -14,6 +14,7 @@ import java.util.LinkedList;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseButton;
@@ -184,17 +185,26 @@ public class BetweenFloorsController implements Controller, Initializable {
   }
 
   private LinkedList<DbNode> getFloors(DbNode node) throws DBException {
-    LinkedList<DbNode> floorChangeNodes = new LinkedList<DbNode>();
-    for (int i = 1; i <= 5; i++) {
-      // will need to change when we add another building with different number of floors
-      floorChangeNodes.addAll(MapDB.searchNode(i, node.getBuilding(), node.getNodeType(), ""));
+    try {
+      return MapDB.getInShaft(node.getNodeID());
+    } catch (DBException e) {
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setContentText(e.getMessage());
+      errorAlert.show();
+      return new LinkedList<DbNode>();
     }
-    LinkedList<DbNode> thisFloorChangeNodes = new LinkedList<DbNode>();
-    for (DbNode n : floorChangeNodes) {
-      if (node.getX() == n.getX() && node.getY() == n.getY()) {
-        thisFloorChangeNodes.add(n);
-      }
-    }
-    return thisFloorChangeNodes;
+    //    LinkedList<DbNode> floorChangeNodes = new LinkedList<DbNode>();
+    //    for (int i = 1; i <= 5; i++) {
+    //      // will need to change when we add another building with different number of floors
+    //      floorChangeNodes.addAll(MapDB.searchNode(i, node.getBuilding(), node.getNodeType(),
+    // ""));
+    //    }
+    //    LinkedList<DbNode> thisFloorChangeNodes = new LinkedList<DbNode>();
+    //    for (DbNode n : floorChangeNodes) {
+    //      if (node.getX() == n.getX() && node.getY() == n.getY()) {
+    //        thisFloorChangeNodes.add(n);
+    //      }
+    //    }
+    //    return thisFloorChangeNodes;
   }
 }
