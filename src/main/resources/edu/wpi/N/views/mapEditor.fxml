@@ -13,7 +13,13 @@
    <children>
       <SplitPane dividerPositions="0.0027829313543599257" orientation="VERTICAL" prefHeight="1080.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
-          <AnchorPane disable="true" maxHeight="110.0" maxWidth="-Infinity" minHeight="110.0" minWidth="110.0" prefHeight="110.0" prefWidth="1920.0" />
+          <AnchorPane disable="true" maxHeight="110.0" maxWidth="-Infinity" minHeight="110.0" minWidth="110.0" prefHeight="110.0" prefWidth="1920.0">
+               <children>
+                  <Pane prefHeight="110.0" prefWidth="1918.0" style="-fx-background-color: #00339A;">
+                     <children>
+                         <fx:include fx:id="time" layoutX="1.0" layoutY="36.0" source="timeTab.fxml"/>
+                     </children></Pane>
+               </children></AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" style="-fx-background-color: fff8e4;">
                <children>
                   <StackPane fx:id="pn_stack" layoutX="128.0" prefHeight="829.0" prefWidth="1028.0">
@@ -27,9 +33,9 @@
                         <Pane fx:id="pn_display" onMouseClicked="#onPaneDisplayClicked" prefHeight="773.0" prefWidth="1664.0" />
                      </children>
                   </StackPane>
-                  <JFXButton fx:id="btn_home" buttonType="RAISED" layoutX="275.0" layoutY="378.0" onMouseClicked="#onBtnHomeClicked" prefHeight="52.0" prefWidth="104.0" ripplerFill="#002186" text="Home">
+                  <JFXButton fx:id="btn_home" buttonType="RAISED" layoutX="275.0" layoutY="378.0" onMouseClicked="#onBtnHomeClicked" prefHeight="52.0" prefWidth="104.0" ripplerFill="#002186" style="-fx-background-color: #00339A;" styleClass="animated-option-button" stylesheets="@MapDisplayFloors.css" text="Home" textFill="WHITE">
                      <font>
-                        <Font name="Calibri" size="24.0" />
+                        <Font size="24.0" />
                      </font>
                   </JFXButton>
                   <Pane fx:id="pn_changeFloor" layoutX="1790.0" layoutY="9.0" prefHeight="490.0" prefWidth="131.0" />
