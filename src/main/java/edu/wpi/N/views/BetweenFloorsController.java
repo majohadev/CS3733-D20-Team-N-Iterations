@@ -8,10 +8,7 @@ import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.States.StateSingleton;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.ResourceBundle;
+import java.util.*;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ContextMenu;
@@ -97,12 +94,18 @@ public class BetweenFloorsController implements Controller, Initializable {
     setFloor(node.getFloor());
     this.floor = node.getFloor();
     currNode = true;
-    this.originalEdges = AbsAlgo.searchAccessible(node);
     LinkedList<DbNode> nodesAvailable;
     try {
       nodesAvailable = MapDB.getInShaft(node.getNodeID());
     } catch (DBException e) {
       nodesAvailable = null;
+    }
+    Iterator<DbNode> nodeIt = nodesAvailable.iterator();
+    this.originalEdges = new LinkedList<DbNode>();
+    while (nodeIt.hasNext()) {
+      DbNode next = nodeIt.next();
+      LinkedList<DbNode> connectedNodes = AbsAlgo.searchAccessible(next);
+      if (connectedNodes != null) this.originalEdges.addAll(connectedNodes);
     }
     nodes.get(node.getFloor()).setFill(INACTIVE_CIRCLE_COLOR);
     for (DbNode n : nodesAvailable) {

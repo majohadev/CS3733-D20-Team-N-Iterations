@@ -252,6 +252,7 @@ public abstract class AbsAlgo implements IPathFinder {
         }
       }
     }
+    if (nodes.size() == 1) return null;
     Collections.sort(nodes, new floorSortNodes());
     return nodes;
   }
