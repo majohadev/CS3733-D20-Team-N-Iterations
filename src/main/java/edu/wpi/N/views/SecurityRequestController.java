@@ -30,6 +30,7 @@ public class SecurityRequestController implements Controller {
   @FXML JFXCheckBox cb_isEmergency;
   @FXML JFXTextArea txtf_description;
   @FXML AnchorPane securityPage;
+  @FXML
   JFXCheckBox cb_susPerson, cb_susPackage, cb_harassment, cb_weapons, cb_shouting, cb_violence;
 
   private ArrayList<JFXCheckBox> checkBoxes = new ArrayList<>();
@@ -134,7 +135,7 @@ public class SecurityRequestController implements Controller {
     String notes = "Report details:\n\n";
 
     for (JFXCheckBox cb : checkBoxes) {
-      if (cb.isSelected() == true) {
+      if (cb.isSelected()) {
         notes = notes + cb.getText() + "\n";
       }
     }
