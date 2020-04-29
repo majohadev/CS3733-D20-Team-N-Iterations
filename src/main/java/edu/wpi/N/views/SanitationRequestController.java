@@ -10,12 +10,15 @@ import edu.wpi.N.database.MapDB;
 import edu.wpi.N.database.ServiceDB;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.States.StateSingleton;
+import java.io.IOException;
 import java.util.LinkedList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 
 public class SanitationRequestController implements Controller {
 
@@ -33,6 +36,7 @@ public class SanitationRequestController implements Controller {
   @FXML JFXComboBox<String> cmbo_selectDangerLevel;
   @FXML JFXTextField txtf_spillType;
   @FXML JFXTextArea txtf_sanitationNotes;
+  @FXML AnchorPane sanitationRequestPage;
 
   private ObservableList<String> fuzzySearchTextList =
       // List that fills TextViews
@@ -107,7 +111,7 @@ public class SanitationRequestController implements Controller {
 
   // Create Sanitation Request
   @FXML
-  public void createNewSanitation() throws DBException {
+  public void createNewSanitation() throws DBException, IOException {
 
     String sizeSelection = cmbo_selectSpillSize.getSelectionModel().getSelectedItem();
     String dangerSelection = cmbo_selectDangerLevel.getSelectionModel().getSelectedItem();
@@ -180,5 +184,10 @@ public class SanitationRequestController implements Controller {
     Alert confAlert = new Alert(Alert.AlertType.CONFIRMATION);
     confAlert.setContentText("Request Recieved");
     confAlert.show();
+
+    sanitationRequestPage.setVisible(false);
+    AnchorPane currentPane = FXMLLoader.load(getClass().getResource("mainServicePage.fxml"));
+    sanitationRequestPage.getChildren().setAll(currentPane);
+    sanitationRequestPage.setVisible(true);
   }
 }

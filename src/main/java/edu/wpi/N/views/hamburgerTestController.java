@@ -31,6 +31,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -250,7 +251,7 @@ public class hamburgerTestController implements Controller, Initializable {
         for (String s : directions) {
           System.out.println(s);
         }
-        System.out.println("Start angle " + path.getStartAngle());
+        System.out.println("Start angle " + path.getStartAngle(MapDB.getKioskAngle()));
       } catch (NullPointerException e) {
         displayErrorMessage("The path does not exist");
         return;
@@ -263,7 +264,7 @@ public class hamburgerTestController implements Controller, Initializable {
       for (String s : directions) {
         System.out.println(s);
       }
-      System.out.println("Start angle " + path.getStartAngle());
+      System.out.println("Start angle " + path.getStartAngle(MapDB.getKioskAngle()));
     }
     disableNonPathFloors(pathNodes);
     drawPath(pathNodes);
@@ -301,8 +302,7 @@ public class hamburgerTestController implements Controller, Initializable {
                 scaleY(firstNode.getY()),
                 scaleX(secondNode.getX()),
                 scaleY(secondNode.getY()));
-        line.setStrokeWidth(5);
-        line.setStrokeLineCap(StrokeLineCap.ROUND);
+        styleLine(line);
         pn_display.getChildren().add(line);
       }
     }
@@ -605,6 +605,12 @@ public class hamburgerTestController implements Controller, Initializable {
       txt_firstLocation.clear();
       lst_firstLocation.getItems().clear();
     }
+  }
+
+  private void styleLine(Line line) {
+    line.setStrokeWidth(5);
+    line.setStrokeLineCap(StrokeLineCap.ROUND);
+    line.setStrokeLineJoin(StrokeLineJoin.ROUND);
   }
   // Upon clicking find path to location button call this method
   /*    @FXML
