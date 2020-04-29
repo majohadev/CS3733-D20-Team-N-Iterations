@@ -207,7 +207,7 @@ public abstract class AbsAlgo implements IPathFinder {
     return edges;
   }
 
-  private static class floorSortNodes implements Comparator<DbNode> {
+  private static class FloorSortNodes implements Comparator<DbNode> {
 
     @Override
     public int compare(DbNode o1, DbNode o2) {
@@ -253,7 +253,7 @@ public abstract class AbsAlgo implements IPathFinder {
       }
     }
     if (nodes.size() == 1) return null;
-    Collections.sort(nodes, new floorSortNodes());
+    Collections.sort(nodes, new FloorSortNodes());
     return nodes;
   }
 }
