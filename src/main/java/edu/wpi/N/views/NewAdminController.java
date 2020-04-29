@@ -69,7 +69,6 @@ public class NewAdminController implements Controller, Initializable {
   @FXML JFXButton btn_EditMap;
   @FXML JFXButton btn_addLanguage;
   @FXML JFXButton btn_removeLanguage;
-  @FXML JFXButton btn_changeAlgo;
   @FXML TableView<Employee> tbl_Employees;
   @FXML CheckBox cb_translator;
   @FXML Label lbl_languages;
@@ -81,7 +80,6 @@ public class NewAdminController implements Controller, Initializable {
   @FXML TableView<Request> tb_RequestTable = new TableView<Request>();
   @FXML TableView<String> tb_languages = new TableView<String>();
   @FXML JFXCheckBox ch_requestFilter;
-  @FXML JFXComboBox cb_changeAlgo;
   @FXML Label lbl_title;
   @FXML JFXTextField txtf_rmuser;
   @FXML TableView<String> tb_languagesRemove;
@@ -142,8 +140,6 @@ public class NewAdminController implements Controller, Initializable {
       tableSetup();
       populateTable();
       populateEmployeeType();
-      populateChangeAlgo();
-      changeAlgorithm();
       setTitleLabel();
 
       cb_employeeTypes
@@ -810,20 +806,6 @@ public class NewAdminController implements Controller, Initializable {
   }
 
   /*
-  Populate the choicebox for changing the algorithm
-   */
-
-  public void populateChangeAlgo() {
-    LinkedList<String> algoTypes = new LinkedList<>();
-    algoTypes.add("BFS");
-    algoTypes.add("DFS");
-    algoTypes.add("AStar");
-    ObservableList<String> algos = FXCollections.observableArrayList();
-    algos.addAll(algoTypes);
-    cb_changeAlgo.setItems(algos);
-  }
-
-  /*
   Sets the "Welcome" message based on the username
    */
   public void setTitleLabel() throws DBException {
@@ -834,25 +816,6 @@ public class NewAdminController implements Controller, Initializable {
       errorAlert.setContentText(e.getMessage());
       errorAlert.show();
     }
-  }
-
-  /*
-  Updates the given algorithm for pathfinder
-   */
-  public void changeAlgorithm() {
-
-    cb_changeAlgo
-        .valueProperty()
-        .addListener(
-            (ob, old, newVal) -> {
-              if (newVal.equals("BFS")) {
-                singleton.savedAlgo.setPathFinder(new BFS());
-              } else if (newVal.equals("DFS")) {
-                singleton.savedAlgo.setPathFinder(new DFS());
-              } else if (newVal.equals("AStar")) {
-                singleton.savedAlgo.setPathFinder(new AStar());
-              }
-            });
   }
 
   public void removeLogin() throws DBException {

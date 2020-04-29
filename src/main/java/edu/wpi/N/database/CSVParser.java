@@ -136,7 +136,7 @@ public class CSVParser {
    *
    * @param pathToFile: path to the CSV file as an InputStream
    */
-  private static void parseCSVEmployees(InputStream pathToFile) {
+  public static void parseCSVEmployees(InputStream pathToFile) {
     try {
 
       // create csvReader object passing

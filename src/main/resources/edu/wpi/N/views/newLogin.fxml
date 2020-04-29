@@ -15,6 +15,7 @@
 <AnchorPane prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #fff8e4;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.newLoginController">
    <children>
       <Pane prefHeight="110.0" prefWidth="1920.0" style="-fx-background-color: #002186;">
+         <fx:include fx:id="time" layoutX="1750.0" layoutY="20.0" source="timeTab.fxml" />
          <children>
             <Label layoutX="803.0" layoutY="28.0" text="Employee Login" textFill="WHITE">
                <font>

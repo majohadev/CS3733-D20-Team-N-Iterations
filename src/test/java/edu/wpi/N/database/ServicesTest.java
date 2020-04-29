@@ -904,7 +904,7 @@ public class ServicesTest {
   // Nick
   @Test
   public void testGetAndAddRequest_flower() throws DBException {
-    Flower rose = ServiceDB.addFlower("Rose", 2022);
+    Flower rose = ServiceDB.addFlower("Red Rose", 2022);
     Flower tulip = ServiceDB.addFlower("Tulip", 12345);
 
     DbNode node =
@@ -920,7 +920,7 @@ public class ServicesTest {
         ServiceDB.addFlowerReq(
             "pretty", node.getNodeID(), "Snirp", "Wrat", "1234-5678-9012-3456", flowers);
 
-    String flowerString = "2 Roses, 1 Tulip";
+    String flowerString = "2 Red Roses, 1 Tulip";
 
     GregorianCalendar cal = (GregorianCalendar) GregorianCalendar.getInstance();
 
@@ -941,7 +941,7 @@ public class ServicesTest {
 
     assertEquals(expected, ServiceDB.getRequest(id));
 
-    ServiceDB.removeFlower("Rose");
+    ServiceDB.removeFlower("Red Rose");
     ServiceDB.removeFlower("Tulip");
 
     MapDB.deleteNode(node.getNodeID());
@@ -954,9 +954,9 @@ public class ServicesTest {
       con.setAutoCommit(false);
       DbNode node = MapDB.addNode(5, 5, 1, "TestBuilding", "STAI", "My test", "Short");
 
-      ServiceDB.addFlower("Rose", 123);
+      ServiceDB.addFlower("Red Rose", 123);
       LinkedList<String> flowers = new LinkedList<>();
-      flowers.add("Rose");
+      flowers.add("Red Rose");
 
       int id =
           ServiceDB.addFlowerReq(
@@ -976,7 +976,7 @@ public class ServicesTest {
 
       ServiceDB.denyRequest(id, "Don't request ever again.");
 
-      ServiceDB.removeFlower("Rose");
+      ServiceDB.removeFlower("Red Rose");
 
     } catch (SQLException | DBException e) {
       try {
