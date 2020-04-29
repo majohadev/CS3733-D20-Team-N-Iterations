@@ -2,6 +2,7 @@ package edu.wpi.N.views;
 
 import com.jfoenix.controls.*;
 import edu.wpi.N.App;
+import edu.wpi.N.algorithms.Algorithm;
 import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
@@ -92,10 +93,10 @@ public class hamburgerTestController implements Controller, Initializable {
   LinkedList<DbNode> pathNodes;
   String[] imgPaths =
       new String[] {
-        "/edu/wpi/N/images/Floor1Reclor.png",
+        "/edu/wpi/N/images/Floor1TeamN.png",
         "/edu/wpi/N/images/Floor2TeamN.png",
         "/edu/wpi/N/images/Floor3TeamN.png",
-        "/edu/wpi/N/images/Floor4SolidBackground.png",
+        "/edu/wpi/N/images/Floor4TeamN.png",
         "/edu/wpi/N/images/Floor5TeamN.png"
       };
 
@@ -243,14 +244,13 @@ public class hamburgerTestController implements Controller, Initializable {
     }
     if (node1.getFloor() <= node2.getFloor()) {
       Path path;
+      Algorithm myAStar = new Algorithm();
       try {
-        path = singleton.savedAlgo.findPath(node1, node2, handicap);
+        path = myAStar.findPath(node1, node2, handicap);
         ArrayList<String> directions = path.getDirections();
-
         for (String s : directions) {
           System.out.println(s);
         }
-
         System.out.println("Start angle " + path.getStartAngle(MapDB.getKioskAngle()));
       } catch (NullPointerException e) {
         displayErrorMessage("The path does not exist");
@@ -261,17 +261,15 @@ public class hamburgerTestController implements Controller, Initializable {
       Path path = singleton.savedAlgo.findPath(node2, node1, handicap);
       pathNodes = path.getPath();
       ArrayList<String> directions = path.getDirections();
-
       for (String s : directions) {
         System.out.println(s);
       }
-
       System.out.println("Start angle " + path.getStartAngle(MapDB.getKioskAngle()));
     }
     disableNonPathFloors(pathNodes);
     drawPath(pathNodes);
     // set textual decriptions
-    setTextDescription(new Path(pathNodes));
+    setTextDecription(new Path(pathNodes));
   }
 
   private void disableNonPathFloors(LinkedList<DbNode> pathNodes) {
@@ -312,13 +310,13 @@ public class hamburgerTestController implements Controller, Initializable {
 
   public void onBtnResetPathClicked() throws DBException {
     mode = Mode.NO_STATE;
+    defaultKioskNode();
     enableAllFloorButtons();
     pn_display.getChildren().removeIf(node -> node instanceof Line);
     txt_firstLocation.clear();
     txt_secondLocation.clear();
     lst_firstLocation.getItems().clear();
     lst_secondLocation.getItems().clear();
-    defaultKioskNode();
   }
 
   private double scaleX(double x) {
@@ -356,7 +354,7 @@ public class hamburgerTestController implements Controller, Initializable {
         e -> {
           currentFloor = 1;
           try {
-            setFloorImg("/edu/wpi/N/images/Floor1Reclor.png");
+            setFloorImg("/edu/wpi/N/images/Floor1TeamN.png");
           } catch (DBException ex) {
             ex.printStackTrace();
           }
@@ -395,7 +393,7 @@ public class hamburgerTestController implements Controller, Initializable {
         e -> {
           currentFloor = 4;
           try {
-            setFloorImg("/edu/wpi/N/images/Floor4SolidBackground.png");
+            setFloorImg("/edu/wpi/N/images/Floor4TeamN.png");
           } catch (DBException ex) {
             ex.printStackTrace();
           }
@@ -457,7 +455,7 @@ public class hamburgerTestController implements Controller, Initializable {
       Path pathToBathroom = singleton.savedAlgo.findQuickAccess(startNode, "REST");
       drawPath(pathToBathroom.getPath());
       // set textual decriptions
-      setTextDescription(pathToBathroom);
+      setTextDecription(pathToBathroom);
     } catch (Exception ex) {
       ex.printStackTrace();
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
@@ -468,21 +466,42 @@ public class hamburgerTestController implements Controller, Initializable {
   }
 
   /**
-   * Finds and draws path to the cafeteria
+   * Finds and draws path to the Cafetaria
    *
    * @param e
    */
   @FXML
-  private void findPathToCafeteria(MouseEvent e) throws DBException {
-    this.mode = Mode.PATH_STATE;
-    pn_display.getChildren().removeIf(node -> node instanceof Line);
-    enableAllFloorButtons();
-    Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-    errorAlert.setHeaderText("Oops... Something went Wong");
-    errorAlert.setContentText("Path to cafeteria wasn't found");
-    errorAlert.showAndWait();
-  }
+  private void findPathToCafetaria(MouseEvent e) {
+    try {
+      this.mode = Mode.PATH_STATE;
+      pn_display.getChildren().removeIf(node -> node instanceof Line);
+      enableAllFloorButtons();
 
+      boolean handicap = false;
+      if (handicapp1.isSelected() || handicapp2.isSelected()) {
+        handicap = true;
+      }
+
+      String startSelection = (String) lst_firstLocation.getSelectionModel().getSelectedItem();
+      DbNode startNode = stringNodeConversion.get(startSelection);
+
+      DbNode endNode = MapDB.getNode("MRETL00203");
+
+      if (endNode != null) {
+        Path pathToCafetaria = singleton.savedAlgo.findPath(startNode, endNode, handicap);
+        drawPath(pathToCafetaria.getPath());
+        // set textual descriptions
+        setTextDecription(pathToCafetaria);
+      }
+
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setHeaderText("Oops... Something went Wong");
+      errorAlert.setContentText("Path to cafeteria wasn't found");
+      errorAlert.showAndWait();
+    }
+  }
   /**
    * Finds and draws path to the Starbucks
    *
@@ -509,7 +528,7 @@ public class hamburgerTestController implements Controller, Initializable {
         Path pathToStarBucks = singleton.savedAlgo.findPath(startNode, endNode, handicap);
         drawPath(pathToStarBucks.getPath());
         // set textual descriptions
-        setTextDescription(pathToStarBucks);
+        setTextDecription(pathToStarBucks);
       }
 
     } catch (Exception ex) {
@@ -526,7 +545,6 @@ public class hamburgerTestController implements Controller, Initializable {
   }
 
   public void onBtnHomeClicked() throws IOException {
-    ArduinoController.resetToCurrentKiosk();
     mainApp.switchScene("views/newHomePage.fxml", singleton);
   }
 
@@ -542,7 +560,7 @@ public class hamburgerTestController implements Controller, Initializable {
    *
    * @param path
    */
-  private void setTextDescription(Path path) {
+  private void setTextDecription(Path path) {
     try {
       // Convert the array of textual descriptions to text
       String directionsAsText = "";
@@ -551,10 +569,6 @@ public class hamburgerTestController implements Controller, Initializable {
         directionsAsText += s;
         directionsAsText += "\n";
       }
-      double currAngle = MapDB.getKioskAngle();
-      double turn = path.getStartAngle(currAngle);
-      System.out.println(turn);
-      ArduinoController.turnArrow(turn);
 
       // Check to make sure that directionAsText isn't empty
       if (!directionsAsText.equals("")) {
@@ -598,9 +612,6 @@ public class hamburgerTestController implements Controller, Initializable {
   private void defaultKioskNode() throws DBException {
     LinkedList<String> kiosks = new LinkedList<>();
     if (currentFloor == 1) {
-      if (MapDB.getKiosk().getNodeID() != "NSERV00301") {
-        MapDB.setKiosk("NSERV00301", 180);
-      }
       txt_firstLocation.setText(MapDB.getNode("NSERV00301").getLongName());
       kiosks.add(MapDB.getNode("NSERV00301").getLongName());
       ObservableList<String> textList = FXCollections.observableList(kiosks);
@@ -608,9 +619,6 @@ public class hamburgerTestController implements Controller, Initializable {
       lst_firstLocation.getSelectionModel().select(0);
 
     } else if (currentFloor == 3) {
-      if (MapDB.getKiosk().getNodeID() != "NSERV00103") {
-        MapDB.setKiosk("NSERV00103", 0);
-      }
       txt_firstLocation.setText(MapDB.getNode("NSERV00103").getLongName());
       kiosks.add(MapDB.getNode("NSERV00103").getLongName());
       ObservableList<String> textList = FXCollections.observableList(kiosks);
