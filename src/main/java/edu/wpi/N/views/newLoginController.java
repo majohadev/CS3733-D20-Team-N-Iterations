@@ -27,11 +27,12 @@ public class newLoginController implements Controller, Initializable {
   @FXML JFXPasswordField pwf_password;
   @FXML JFXTextField txtf_username;
 
-  String medReq = "views/testMed.fxml";
+  String medReq = "views/newMedRequest.fxml";
 
   @FXML
   public void checkUser() throws DBException {
     try {
+
       String pass = pwf_password.getText();
       String user = txtf_username.getText();
       LoginDB.verifyLogin(user, pass);
@@ -56,7 +57,7 @@ public class newLoginController implements Controller, Initializable {
   }
 
   public void goBack() throws IOException {
-    mainApp.switchScene("views/home.fxml", singleton);
+    mainApp.switchScene("views/newHomePage.fxml", singleton);
   }
 
   @FXML

@@ -196,7 +196,7 @@ public class DataEditorController implements Controller {
 
   @FXML
   public void onDoneClicked() throws IOException {
-    mainApp.switchScene("views/home.fxml", singleton);
+    mainApp.switchScene("views/newHomePage.fxml", singleton);
   }
 
   @FXML

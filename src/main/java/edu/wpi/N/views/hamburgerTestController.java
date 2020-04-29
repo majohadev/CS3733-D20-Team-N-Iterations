@@ -522,7 +522,7 @@ public class hamburgerTestController implements Controller, Initializable {
   }
 
   public void onBtnHomeClicked() throws IOException {
-    mainApp.switchScene("views/home.fxml", singleton);
+    mainApp.switchScene("views/newHomePage.fxml", singleton);
   }
 
   public void displayErrorMessage(String str) {

@@ -53,11 +53,11 @@
                   </HBox>
                </buttons>
             </ButtonBar>
-            <JFXTextField fx:id="txtf_username" focusColor="WHITE" layoutX="232.0" layoutY="50.0" prefWidth="150.0" unFocusColor="WHITE">
+            <JFXTextField fx:id="txtf_username" focusColor="WHITE" layoutX="235.0" layoutY="50.0" prefWidth="150.0" unFocusColor="WHITE">
                <font>
                   <Font name="Calibri" size="24.0" />
                </font></JFXTextField>
-            <JFXPasswordField fx:id="pwf_password" layoutX="232.0" layoutY="95.0" prefWidth="150.0" unFocusColor="WHITE">
+            <JFXPasswordField fx:id="pwf_password" layoutX="235.0" layoutY="95.0" prefWidth="150.0" unFocusColor="WHITE">
                <font>
                   <Font size="24.0" />
                </font></JFXPasswordField>

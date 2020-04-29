@@ -77,7 +77,7 @@
                         </Label>
                         <HBox prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <JFXTextField fx:id="txt_quantity" alignment="CENTER" prefHeight="46.0" prefWidth="121.0" promptText="quantity">
+                              <JFXTextField fx:id="txt_quantity" alignment="CENTER" prefHeight="46.0" prefWidth="121.0" promptText="Qty">
                                  <font>
                                     <Font name="Calibri" size="18.0" />
                                  </font>

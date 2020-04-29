@@ -23,7 +23,7 @@
                      <children>
                         <ImageView fitHeight="131.0" fitWidth="88.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../../../../../../../../OneDrive/Desktop/Brigham_and_Womens_Hospital_logo.svg.png" />
+                              <Image url="@../images/Brigham_and_Womens_Hospital_logo.svg.png" />
                            </image>
                         </ImageView>
                         <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="9:12 AM" wrappingWidth="211.32942581176758">
@@ -40,7 +40,7 @@
                      <children>
                         <ImageView fitHeight="75.0" fitWidth="92.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../../../../../../../../Downloads/WHITEf6719692a2d19.png" />
+                              <Image url="@../images/HomeScreenImages/WHITEf6719692a2d19.png" />
                            </image>
                         </ImageView>
                      </children>
@@ -65,7 +65,7 @@
                      <children>
                         <VBox alignment="CENTER">
                            <children>
-                              <JFXButton contentDisplay="TOP" prefHeight="307.0" prefWidth="309.0" stylesheets="@iconButton.css" text="Login" textFill="WHITE">
+                              <JFXButton contentDisplay="TOP" onMouseClicked="#onBtnLoginClicked" prefHeight="307.0" prefWidth="309.0" stylesheets="@iconButton.css" text="Login" textFill="WHITE">
                                  <graphic>
                                     <ImageView fitHeight="186.0" fitWidth="190.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
@@ -100,7 +100,7 @@
                         </VBox>
                         <VBox alignment="CENTER">
                            <children>
-                              <JFXButton contentDisplay="TOP" graphicTextGap="10.0" prefHeight="307.0" prefWidth="309.0" stylesheets="@iconButton.css" text="Services" textAlignment="CENTER" textFill="WHITE">
+                              <JFXButton contentDisplay="TOP" graphicTextGap="10.0" onMouseClicked="#onBtnServicesClick" prefHeight="307.0" prefWidth="309.0" stylesheets="@iconButton.css" text="Services" textAlignment="CENTER" textFill="WHITE">
                                  <graphic>
                                     <ImageView fitHeight="184.0" fitWidth="190.0" pickOnBounds="true" preserveRatio="true" translateX="24.0">
                                        <image>
@@ -123,7 +123,7 @@
                      <children>
                         <ImageView fitHeight="288.0" fitWidth="274.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../../../../../../../../OneDrive/Desktop/Brigham_and_Womens_Hospital_logo.svg.png" />
+                              <Image url="@../images/Brigham_and_Womens_Hospital_logo.svg.png" />
                            </image>
                         </ImageView>
                         <Text fill="#002186" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to Brigham and Women's Hospital" textAlignment="CENTER" wrappingWidth="1709.9830722808838">

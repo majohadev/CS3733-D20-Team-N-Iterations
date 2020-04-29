@@ -62,8 +62,8 @@ public class MedicineRequestController implements Controller, Initializable {
   }
 
   public void logout() throws IOException, DBException {
+    mainApp.switchScene("/views/newMedRequest.fxml", singleton);
     LoginDB.logout();
-    this.mainApp.switchScene("home.fxml", singleton);
   }
 
   public void changeScene(MouseEvent e) {
@@ -101,40 +101,21 @@ public class MedicineRequestController implements Controller, Initializable {
     }
   }
 
-  /*
-  public void populateDoctorList() throws DBException {
-    ObservableList<Doctor> docs = FXCollections.observableArrayList();
-    try {
-      docs.addAll(DoctorDB.getDoctors());
-      cb_doctors.getItems().addAll(docs);
-    } catch (DBException e) {
-      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-      errorAlert.setContentText(e.getMessage());
-      errorAlert.show();
-    }
-  }
-   */
-
   public void initializeTableOfPatients() {
     TableColumn<MedicineRequest, String> patient = new TableColumn<>("Patient Name");
     patient.setMaxWidth(150);
     patient.setMinWidth(150);
-    patient.setCellValueFactory(new PropertyValueFactory<MedicineRequest, String>("attr1"));
+    patient.setCellValueFactory(new PropertyValueFactory<MedicineRequest, String>("atr3"));
 
     TableColumn<MedicineRequest, String> meds = new TableColumn<>("Medicine");
     meds.setMaxWidth(150);
     meds.setMinWidth(150);
-    meds.setCellValueFactory(new PropertyValueFactory<MedicineRequest, String>("attr2"));
+    meds.setCellValueFactory(new PropertyValueFactory<MedicineRequest, String>("atr1"));
 
     TableColumn<MedicineRequest, Double> dosage = new TableColumn<>("Dosage");
     dosage.setMaxWidth(75);
     dosage.setMinWidth(75);
-    dosage.setCellValueFactory(new PropertyValueFactory<MedicineRequest, Double>("dosage"));
-
-    TableColumn<MedicineRequest, String> units = new TableColumn<>("Units");
-    units.setMaxWidth(75);
-    units.setMinWidth(75);
-    units.setCellValueFactory(new PropertyValueFactory<MedicineRequest, String>("attr3"));
+    dosage.setCellValueFactory(new PropertyValueFactory<MedicineRequest, Double>("atr2"));
 
     TableColumn<MedicineRequest, String> assignedDoctor = new TableColumn<>("Assigned Doctor");
     assignedDoctor.setMaxWidth(150);
@@ -147,14 +128,15 @@ public class MedicineRequestController implements Controller, Initializable {
     notes.setMinWidth(150);
     notes.setCellValueFactory(new PropertyValueFactory<MedicineRequest, String>("reqNotes"));
 
-    tb_patients.getColumns().addAll(patient, meds, dosage, units, assignedDoctor, notes);
+    tb_patients.getColumns().addAll(patient, meds, dosage, assignedDoctor, notes);
   }
 
   public void populateChoiceBox() {
     LinkedList<String> dosages = new LinkedList<>();
     ObservableList<String> population = FXCollections.observableArrayList();
-    dosages.add("MG");
-    dosages.add("CC");
+    dosages.add("mg");
+    dosages.add("cc");
+    dosages.add("g");
     population.setAll(dosages);
     cb_units.setItems(population);
   }
@@ -162,12 +144,38 @@ public class MedicineRequestController implements Controller, Initializable {
   @FXML
   public void createMedRequest() throws DBException {
 
-    int currentSelection = lst_patientLocations.getSelectionModel().getSelectedIndex();
-    DbNode medLocation = fuzzySearchNodeList.get(currentSelection);
-
-    String dosage = cb_units.getSelectionModel().getSelectedItem();
-
     try {
+
+      if (txtf_patient.getText().equals("")) {
+        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+        errorAlert.setContentText("No Patient");
+        errorAlert.show();
+        return;
+      } else if (txtf_medicine.getText().equals("")) {
+        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+        errorAlert.setContentText("No Medicine Given");
+        errorAlert.show();
+        return;
+      } else if (txtf_patientLocation.getText().equals("")) {
+        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+        errorAlert.setContentText("No Location");
+        errorAlert.show();
+        return;
+      } else if (txtf_dosage.getText().equals("")) {
+        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+        errorAlert.setContentText("Invalid Dosage");
+        errorAlert.show();
+        return;
+      } else if (cb_units.getSelectionModel().getSelectedItem() == null) {
+        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+        errorAlert.setContentText("No Dosage Given");
+        errorAlert.show();
+        return;
+      }
+
+      int currentSelection = lst_patientLocations.getSelectionModel().getSelectedIndex();
+      DbNode medLocation = fuzzySearchNodeList.get(currentSelection);
+      String dosage = cb_units.getSelectionModel().getSelectedItem();
 
       for (DbNode node : allFloorNodes) {
         if (node.getNodeID().equals(medLocation.getNodeID())) {
@@ -179,12 +187,16 @@ public class MedicineRequestController implements Controller, Initializable {
               dosage,
               txtf_patient.getText());
 
-          System.out.println("Request Created");
+          Alert confAlert = new Alert(Alert.AlertType.CONFIRMATION);
+          confAlert.setContentText(
+              txtf_medicine.getText() + " prescription made for " + txtf_patient.getText());
+          confAlert.show();
+
           populateMedicineRequests();
           break;
         }
       }
-    } catch (DBException e) {
+    } catch (DBException | NumberFormatException e) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
       errorAlert.setContentText(e.getMessage());
       errorAlert.show();
@@ -242,5 +254,9 @@ public class MedicineRequestController implements Controller, Initializable {
       errorAlert.setContentText(e.getMessage());
       errorAlert.show();
     }
+  }
+
+  public void goBack() throws IOException {
+    mainApp.switchScene("/views/newHomePage.fxml", singleton);
   }
 }
