@@ -6,6 +6,7 @@ import com.jfoenix.controls.JFXTextField;
 import edu.wpi.N.App;
 import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.database.DBException;
+import edu.wpi.N.database.MapDB;
 import edu.wpi.N.database.ServiceDB;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Flower;
@@ -35,7 +36,7 @@ public class FlowerRequestController implements Controller {
   @FXML JFXTextField txt_visitorName;
   @FXML JFXTextField txt_patientName;
   @FXML JFXTextField txt_creditNum;
-  @FXML JFXComboBox<String> cb_flowerType;
+  @FXML JFXComboBox<Flower> cb_flowerType;
   @FXML JFXTextArea txt_notes;
   @FXML JFXTextField txt_quantity;
   @FXML JFXComboBox<String> cmbo_text;
@@ -47,7 +48,7 @@ public class FlowerRequestController implements Controller {
   LinkedList<DbNode> fuzzySearchNodeList = new LinkedList<>();
   DbNode currentNode = null;
 
-  ObservableList<String> flowers;
+  ObservableList<Flower> flowers;
 
   public FlowerRequestController() throws DBException {}
 
@@ -57,12 +58,10 @@ public class FlowerRequestController implements Controller {
 
   public void initialize() throws DBException {
     LinkedList<Flower> listFlower = ServiceDB.getFlowers();
-    LinkedList<String> list = new LinkedList<>();
-    for (Flower f : listFlower) {
-      list.add(f.getFlowerName() + ", " + f.getPrice());
-    }
-    flowers = FXCollections.observableList(list);
+    flowers = FXCollections.observableList(listFlower);
     cb_flowerType.setItems(flowers);
+
+    cmbo_text.getEditor().setOnKeyTyped(this::locationTextChanged);
   }
 
   @FXML
@@ -104,23 +103,25 @@ public class FlowerRequestController implements Controller {
     String patientName = txt_patientName.getText();
     String creditNum = txt_creditNum.getText();
     String quantity = txt_quantity.getText();
-    String flowerSelection = cb_flowerType.getSelectionModel().getSelectedItem();
-    String nodeID;
+    String flowerSelection = cb_flowerType.getSelectionModel().getSelectedItem().getFlowerName();
+    String nodeID = null;
     int nodeIndex = 0;
 
-    try {
-      String curr = cmbo_text.getEditor().getText();
-      for (String name : fuzzySearchTextList) {
-        if (name.equals(curr)) {
-          nodeIndex++;
-          break;
-        }
+    String userLocationName = cmbo_text.getEditor().getText().toLowerCase().trim();
+    LinkedList<DbNode> checkNodes = MapDB.searchVisNode(-1, null, null, userLocationName);
+
+    // Find the exact match and get the nodeID
+    for (DbNode node : checkNodes) {
+      if (node.getLongName().toLowerCase().equals(userLocationName)) {
+        nodeID = node.getNodeID();
+        break;
       }
-      nodeID = fuzzySearchNodeList.get(nodeIndex).getNodeID();
-      System.out.println(nodeID);
-    } catch (IndexOutOfBoundsException e) {
+    }
+    // Check to see if such node was found
+    if (nodeID == null) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-      errorAlert.setContentText("Please select a location for your service request!");
+      errorAlert.setContentText(
+          "Please select a location for your service request from suggestions menu!");
       errorAlert.show();
       return;
     }
