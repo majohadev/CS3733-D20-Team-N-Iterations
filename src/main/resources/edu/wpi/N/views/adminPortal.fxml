@@ -167,14 +167,14 @@
                                     <Font name="Calibri" size="32.0" />
                                  </font>
                               </Label>
-                              <TableView fx:id="tb_RequestTable" layoutX="481.0" layoutY="185.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="429.0" prefWidth="955.0" />
+                              <TableView fx:id="tb_RequestTable" layoutX="481.0" layoutY="185.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="429.0" prefWidth="955.0" stylesheets="@adminTables.css" />
                               <Button fx:id="btn_editMap" disable="true" mnemonicParsing="false" onMouseClicked="#editMap" prefHeight="50.0" prefWidth="190.0" text="Edit Map" visible="false">
                                  <font>
                                     <Font name="Calibri" size="24.0" />
                                  </font>
                               </Button>
                               <ChoiceBox fx:id="cb_Employee" layoutX="288.0" layoutY="375.0" prefWidth="150.0" />
-                              <TableView fx:id="tb_languages" layoutX="288.0" layoutY="412.0" prefHeight="202.0" prefWidth="150.0" />
+                              <TableView fx:id="tb_languages" layoutX="288.0" layoutY="412.0" prefHeight="202.0" prefWidth="150.0" stylesheets="@adminTables.css" />
                               <JFXButton layoutX="1227.0" layoutY="624.0" onMouseClicked="#assignPressed" text="Assign">
                                  <font>
                                     <Font name="Calibri" size="18.0" />
@@ -197,7 +197,7 @@
                               </JFXCheckBox>
                            </children>
                         </Pane>
-                        <Pane fx:id="pn_pane2" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="970.0" prefWidth="1720.0" stylesheets="@adminTables.css">
+                        <Pane fx:id="pn_pane2" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="970.0" prefWidth="1720.0" stylesheets="@adminTables.css" visible="false">
                            <children>
                               <ChoiceBox fx:id="cb_EmployeeRemove" layoutX="892.0" layoutY="553.0" prefWidth="150.0" />
                               <TableView fx:id="tb_languagesRemove" layoutX="892.0" layoutY="599.0" prefHeight="202.0" prefWidth="150.0" />

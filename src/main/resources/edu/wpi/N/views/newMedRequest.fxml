@@ -86,7 +86,7 @@
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" style="-fx-background-color: fff8e4;">
                <children>
-                  <AnchorPane fx:id="ap_prep" layoutX="-10.0" layoutY="-2.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="970.0" prefWidth="1620.0" style="-fx-background-color: fff8e4;">
+                  <AnchorPane fx:id="ap_prep" layoutX="-10.0" layoutY="-2.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="970.0" prefWidth="1620.0" style="-fx-background-color: fff8e4;" visible="false">
                      <children>
                         <HBox alignment="CENTER_LEFT" layoutX="494.0" layoutY="14.0" prefHeight="150.0" prefWidth="629.0" spacing="30.0" style="-fx-background-color: #002186; -fx-background-radius: 10;" AnchorPane.leftAnchor="494.0" AnchorPane.rightAnchor="493.0">
                            <children>
@@ -176,9 +176,9 @@
                         </JFXButton>
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="ap_tableview" layoutX="-10.0" layoutY="-1.0" prefHeight="970.0" prefWidth="1620.0" style="-fx-background-color: fff8e4;" visible="false">
+                  <AnchorPane fx:id="ap_tableview" layoutX="-10.0" layoutY="-1.0" prefHeight="970.0" prefWidth="1620.0" style="-fx-background-color: fff8e4;">
                      <children>
-                        <TableView fx:id="tb_patients" layoutX="332.0" layoutY="285.0" prefHeight="400.0" prefWidth="975.0" />
+                        <TableView fx:id="tb_patients" layoutX="332.0" layoutY="285.0" prefHeight="400.0" prefWidth="975.0" stylesheets="@adminTables.css" />
                         <Label layoutX="695.0" layoutY="225.0" text="Current Requests">
                            <font>
                               <Font name="Calibri" size="36.0" />

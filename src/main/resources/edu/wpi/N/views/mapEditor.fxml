@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXComboBox?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -14,13 +15,20 @@
    <children>
       <SplitPane dividerPositions="0.0027829313543599257" orientation="VERTICAL" prefHeight="1080.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
-          <AnchorPane disable="true" maxHeight="110.0" maxWidth="-Infinity" minHeight="110.0" minWidth="110.0" prefHeight="110.0" prefWidth="1920.0">
-               <children>
-                  <Pane prefHeight="110.0" prefWidth="1918.0" style="-fx-background-color: #00339A;">
-                     <children>
-                         <fx:include fx:id="time" layoutX="1750.0" layoutY="20.0" source="timeTab.fxml" />
-                     </children></Pane>
-               </children></AnchorPane>
+            <AnchorPane maxHeight="110.0" maxWidth="1920.0" minHeight="110.0" minWidth="0.0" prefHeight="190.0" prefWidth="1918.0" style="-fx-background-color: #002186;" SplitPane.resizableWithParent="false">
+                <fx:include fx:id="time" layoutX="1750.0" layoutY="20.0" source="timeTab.fxml" />
+                <children>
+                    <ImageView fitHeight="110.0" fitWidth="167.0" layoutX="696.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                            <Image url="@../images/Brigham_and_Womens_Hospital_logo.svg.png" />
+                        </image>
+                    </ImageView>
+                    <Label layoutX="797.0" layoutY="-1.0" text="Edit Map" textAlignment="CENTER" textFill="WHITE">
+                        <font>
+                            <Font name="Calibri Bold" size="96.0" />
+                        </font>
+                    </Label>
+                </children></AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" style="-fx-background-color: fff8e4;">
                <children>
                   <StackPane fx:id="pn_stack" layoutX="128.0" prefHeight="829.0" prefWidth="1028.0">
