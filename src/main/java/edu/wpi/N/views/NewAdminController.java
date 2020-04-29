@@ -73,7 +73,6 @@ public class NewAdminController implements Controller, Initializable {
   @FXML JFXButton btn_EditMap;
   @FXML JFXButton btn_addLanguage;
   @FXML JFXButton btn_removeLanguage;
-  @FXML JFXButton btn_changeAlgo;
   @FXML TableView<Employee> tbl_Employees;
   @FXML CheckBox cb_translator;
   @FXML Label lbl_languages;
@@ -85,13 +84,17 @@ public class NewAdminController implements Controller, Initializable {
   @FXML TableView<Request> tb_RequestTable = new TableView<Request>();
   @FXML TableView<String> tb_languages = new TableView<String>();
   @FXML JFXCheckBox ch_requestFilter;
-  @FXML JFXComboBox cb_changeAlgo;
   @FXML Label lbl_title;
   @FXML JFXTextField txtf_rmuser;
   @FXML JFXButton btn_arduino;
+  @FXML TableView<String> tb_languagesRemove;
+  @FXML ChoiceBox<Employee> cb_EmployeeRemove;
+
 
   ObservableList<Request> tableData = FXCollections.observableArrayList();
   ObservableList<String> languageData = FXCollections.observableArrayList();
+  ObservableList<String> langDataRemove = FXCollections.observableArrayList();
+
   private LinkedList<DbNode> fuzzySearchDoctorOffice = new LinkedList<>();
   private ObservableList<String> fuzzySearchTextListDoctorOffices =
       FXCollections.observableArrayList();
@@ -143,8 +146,6 @@ public class NewAdminController implements Controller, Initializable {
       tableSetup();
       populateTable();
       populateEmployeeType();
-      populateChangeAlgo();
-      changeAlgorithm();
       setTitleLabel();
 
       cb_employeeTypes
@@ -265,7 +266,21 @@ public class NewAdminController implements Controller, Initializable {
 
   public void deleteEmployee() throws DBException {
     try {
+
+      if (tbl_Employees.getSelectionModel().getSelectedIndex() <= -1) {
+        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+        errorAlert.setContentText("Select an Employee");
+        errorAlert.show();
+
+        return;
+      }
+
       ServiceDB.removeEmployee(tbl_Employees.getSelectionModel().getSelectedItem().getID());
+
+      Alert confAlert = new Alert(Alert.AlertType.CONFIRMATION);
+      confAlert.setContentText("Employee removed");
+      confAlert.show();
+
       int removeLine = tbl_Employees.getSelectionModel().getSelectedIndex();
       tbl_Employees.getItems().remove(removeLine);
     } catch (DBException e) {
@@ -352,15 +367,24 @@ public class NewAdminController implements Controller, Initializable {
   }
 
   public void adminEditMap() throws IOException {
-    mainApp.switchScene("views/mapEdit.fxml", singleton);
+    mainApp.switchScene("views/mapEditor.fxml", singleton);
   }
 
   public void returnToPrev() throws IOException {
-    mainApp.switchScene("views/home.fxml", singleton);
+    mainApp.switchScene("views/newHomePage.fxml", singleton);
   }
 
   public void addAdmin() throws DBException {
     try {
+
+      if (txtf_adminuser.getText().equals("") | txtf_adminpass.getText().equals("")) {
+        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+        errorAlert.setContentText("Empty Username or Password");
+        errorAlert.show();
+
+        return;
+      }
+
       LoginDB.createAdminLogin(txtf_adminuser.getText(), txtf_adminpass.getText());
 
       Alert acceptReq = new Alert(Alert.AlertType.CONFIRMATION);
@@ -410,24 +434,40 @@ public class NewAdminController implements Controller, Initializable {
   }
 
   public void addOffice() throws DBException {
-
-    System.out.println(txtf_docid.getText());
-
     int currentSelection = lst_docoffice.getSelectionModel().getSelectedIndex();
+
+    if (currentSelection == -1) {
+      Alert acceptReq = new Alert(Alert.AlertType.ERROR);
+      acceptReq.setContentText("Invalid / No Location Selected");
+      acceptReq.show();
+
+      return;
+    }
+
     DbNode addOfficeNode = fuzzySearchNodeList.get(currentSelection);
+
+    if (txtf_docid.getText().equals("")) {
+      Alert invalidID = new Alert(Alert.AlertType.ERROR);
+      invalidID.setContentText("Invalid ID");
+      invalidID.show();
+
+      return;
+    }
+
     int doctorID = Integer.parseInt(txtf_docid.getText());
-    System.out.println("Doctor ID Parsed: " + doctorID);
+
     try {
       DoctorDB.addOffice(doctorID, addOfficeNode);
+
+      Alert acceptReq = new Alert(Alert.AlertType.CONFIRMATION);
+      acceptReq.setContentText("Office " + addOfficeNode.getLongName() + " was added.");
+      acceptReq.show();
+
     } catch (DBException e) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
       errorAlert.setContentText(e.getMessage());
       errorAlert.show();
     }
-
-    Alert acceptReq = new Alert(Alert.AlertType.CONFIRMATION);
-    acceptReq.setContentText("Office " + addOfficeNode.getLongName() + " was added.");
-    acceptReq.show();
 
     txtf_docid.clear();
     txtf_docoffices.clear();
@@ -468,9 +508,26 @@ public class NewAdminController implements Controller, Initializable {
     System.out.println(txtf_docid.getText());
 
     int currentSelection = lst_docoffice.getSelectionModel().getSelectedIndex();
+
+    if (currentSelection == -1) {
+      Alert acceptReq = new Alert(Alert.AlertType.ERROR);
+      acceptReq.setContentText("Invalid / No Location Selected");
+      acceptReq.show();
+
+      return;
+    }
+
     DbNode removeOfficeNode = fuzzySearchNodeList.get(currentSelection);
+
+    if (txtf_docid.getText().equals("")) {
+      Alert invalidID = new Alert(Alert.AlertType.ERROR);
+      invalidID.setContentText("Invalid ID");
+      invalidID.show();
+
+      return;
+    }
+
     int doctorID = Integer.parseInt(txtf_docid.getText());
-    System.out.println("Doctor ID Parsed: " + doctorID);
 
     try {
       for (DbNode node : DoctorDB.getDoctor(doctorID).getLoc()) {
@@ -478,12 +535,18 @@ public class NewAdminController implements Controller, Initializable {
         System.out.println(node.getNodeID());
         if (node.getNodeID().equals(removeOfficeNode.getNodeID())) {
           DoctorDB.removeOffice(doctorID, removeOfficeNode);
+
+          Alert acceptReq = new Alert(Alert.AlertType.CONFIRMATION);
+          acceptReq.setContentText("Office " + removeOfficeNode.getLongName() + " was removed.");
+          acceptReq.show();
+
+          return;
         }
       }
 
-      Alert acceptReq = new Alert(Alert.AlertType.CONFIRMATION);
-      acceptReq.setContentText("Office " + removeOfficeNode.getLongName() + " was removed.");
-      acceptReq.show();
+      Alert invalidLoc = new Alert(Alert.AlertType.ERROR);
+      invalidLoc.setContentText(DoctorDB.getDoctor(doctorID).getName() + " does not work there.");
+      invalidLoc.show();
 
     } catch (DBException e) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
@@ -496,21 +559,34 @@ public class NewAdminController implements Controller, Initializable {
   }
 
   public void updateTranslator(MouseEvent event) throws DBException {
+
+    if (txtf_empid.getText().equals("")) {
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setContentText("Needs user ID");
+      errorAlert.show();
+
+      return;
+    }
+
     int empID = Integer.parseInt(txtf_empid.getText());
+
     try {
       if (event.getSource() == btn_addLanguage) {
+
+        if (txtf_newLang.getText().equals("")) {
+          Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+          errorAlert.setContentText("Needs Language");
+          errorAlert.show();
+
+          return;
+        }
+
         ServiceDB.addLanguage(empID, txtf_newLang.getText());
+
+        tb_languagesRemove.getItems().add(txtf_newLang.getText());
 
         Alert acceptReq = new Alert(Alert.AlertType.CONFIRMATION);
         acceptReq.setContentText(ServiceDB.getEmployee(empID).getName() + " languages were added");
-        acceptReq.show();
-
-      } else if (event.getSource() == btn_removeLanguage) {
-        ServiceDB.removeLanguage(empID, txtf_newLang.getText());
-
-        Alert acceptReq = new Alert(Alert.AlertType.CONFIRMATION);
-        acceptReq.setContentText(
-            ServiceDB.getEmployee(empID).getName() + " languages were removed");
         acceptReq.show();
       }
     } catch (DBException e) {
@@ -567,6 +643,11 @@ public class NewAdminController implements Controller, Initializable {
     languages.setMinWidth(150);
     languages.setCellValueFactory(new NewAdminController.selfFactory<String>());
 
+    TableColumn<String, String> langRem = new TableColumn<>("Languages");
+    langRem.setMaxWidth(150);
+    langRem.setMinWidth(150);
+    langRem.setCellValueFactory(new NewAdminController.selfFactory<String>());
+
     TableColumn<Request, String> attr2 = new TableColumn<>("Attribute 2");
     attr2.setMaxWidth(100);
     attr2.setMinWidth(100);
@@ -588,6 +669,7 @@ public class NewAdminController implements Controller, Initializable {
         .addAll(
             requestID, service, emp_assigned, notes, nodeID, status, attr1, attr2, attr3, attr4);
     tb_languages.getColumns().addAll(languages);
+    tb_languagesRemove.getColumns().addAll(langRem);
   }
 
   public void populateRequestTable() throws DBException {
@@ -626,7 +708,20 @@ public class NewAdminController implements Controller, Initializable {
                 languageData.setAll(new LinkedList<String>());
               }
             });
+
+    cb_EmployeeRemove
+        .valueProperty()
+        .addListener(
+            (ov, old, emp) -> {
+              if (emp instanceof Translator) {
+                langDataRemove.setAll(((Translator) emp).getLanguages());
+              } else {
+                langDataRemove.setAll(new LinkedList<>());
+              }
+            });
+
     tb_languages.setItems(languageData);
+    tb_languagesRemove.setItems(langDataRemove);
   }
 
   @Override
@@ -727,14 +822,9 @@ public class NewAdminController implements Controller, Initializable {
     try {
       LinkedList<Employee> empList = ServiceDB.getEmployees();
       ObservableList<Employee> empObv = FXCollections.observableArrayList();
-
-      for (Employee emp : empList) {
-        if (!emp.getServiceType().equals("Medicine")) {
-          empObv.add(emp);
-        }
-      }
-
+      empObv.addAll(empList);
       cb_Employee.setItems(empObv);
+      cb_EmployeeRemove.setItems(empObv);
     } catch (DBException e) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
       errorAlert.setContentText(e.getMessage());
@@ -747,29 +837,20 @@ public class NewAdminController implements Controller, Initializable {
   }
 
   /*
-  Populates employee table based on the getEmployees()
+  Populates employee table based on the getEmployees() besides doctors
    */
 
   public void populateEmployeeType() throws DBException {
     LinkedList<Service> employeeList = new LinkedList<Service>();
-    employeeList.addAll(ServiceDB.getServices());
     ObservableList<Service> empTypeList = FXCollections.observableArrayList();
+
+    for (Service services : ServiceDB.getServices()) {
+      if (!services.getServiceType().equals("Medicine")) {
+        employeeList.add(services);
+      }
+    }
     empTypeList.addAll(employeeList);
     cb_employeeTypes.setItems(empTypeList);
-  }
-
-  /*
-  Populate the choicebox for changing the algorithm
-   */
-
-  public void populateChangeAlgo() {
-    LinkedList<String> algoTypes = new LinkedList<>();
-    algoTypes.add("BFS");
-    algoTypes.add("DFS");
-    algoTypes.add("AStar");
-    ObservableList<String> algos = FXCollections.observableArrayList();
-    algos.addAll(algoTypes);
-    cb_changeAlgo.setItems(algos);
   }
 
   /*
@@ -785,27 +866,16 @@ public class NewAdminController implements Controller, Initializable {
     }
   }
 
-  /*
-  Updates the given algorithm for pathfinder
-   */
-  public void changeAlgorithm() {
-
-    cb_changeAlgo
-        .valueProperty()
-        .addListener(
-            (ob, old, newVal) -> {
-              if (newVal.equals("BFS")) {
-                singleton.savedAlgo.setPathFinder(new BFS());
-              } else if (newVal.equals("DFS")) {
-                singleton.savedAlgo.setPathFinder(new DFS());
-              } else if (newVal.equals("AStar")) {
-                singleton.savedAlgo.setPathFinder(new AStar());
-              }
-            });
-  }
-
   public void removeLogin() throws DBException {
     try {
+
+      if (txtf_rmuser.getText().equals("")) {
+        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+        errorAlert.setContentText("Invalid Username or Input");
+        errorAlert.show();
+
+        return;
+      }
       LoginDB.removeLogin(txtf_rmuser.getText());
     } catch (DBException e) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
@@ -820,6 +890,7 @@ public class NewAdminController implements Controller, Initializable {
     txtf_rmuser.clear();
   }
 
+
   @FXML
   public void loadArduino() {
     Stage stage = new Stage();
@@ -833,5 +904,26 @@ public class NewAdminController implements Controller, Initializable {
     stage.setScene(scene);
     // stage.initModality(Modality.APPLICATION_MODAL);
     stage.show();
+  }
+  public void removeLanguage() throws DBException {
+
+    if (cb_EmployeeRemove.getSelectionModel().getSelectedIndex() <= -1) {
+
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setContentText("Needs user ID");
+      errorAlert.show();
+
+      return;
+    }
+
+    int empID = cb_EmployeeRemove.getSelectionModel().getSelectedItem().getID();
+
+    ServiceDB.removeLanguage(empID, tb_languagesRemove.getSelectionModel().getSelectedItem());
+    String remLang = tb_languagesRemove.getSelectionModel().getSelectedItem();
+    tb_languagesRemove.getItems().remove(remLang);
+
+    Alert acceptReq = new Alert(Alert.AlertType.CONFIRMATION);
+    acceptReq.setContentText(ServiceDB.getEmployee(empID).getName() + " languages were removed");
+    acceptReq.show();
   }
 }

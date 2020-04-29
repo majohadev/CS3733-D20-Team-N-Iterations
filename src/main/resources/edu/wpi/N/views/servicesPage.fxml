@@ -18,7 +18,8 @@
       <SplitPane dividerPositions="0.5" maxHeight="1080.0" maxWidth="1920.0" minHeight="1080.0" minWidth="1920.0" orientation="VERTICAL" prefHeight="1080.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
           <AnchorPane maxHeight="110.0" maxWidth="1920.0" minHeight="110.0" minWidth="0.0" onMouseClicked="#backHome" prefHeight="190.0" prefWidth="1918.0" style="-fx-background-color: #002186;" SplitPane.resizableWithParent="false">
-               <children>
+             <fx:include fx:id="time" layoutX="1750.0" layoutY="20.0" source="timeTab.fxml" />
+             <children>
                   <ImageView fitHeight="110.0" fitWidth="167.0" layoutX="385.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../images/Brigham_and_Womens_Hospital_logo.svg.png" />
@@ -34,7 +35,6 @@
                         <Font name="Calibri" size="24.0" />
                      </font>
                   </JFXButton>
-                  <JFXButton layoutX="166.0" layoutY="44.0" onMouseClicked="#switchToTransportPage" text="testInternalTrans" textFill="WHITE" />
                </children></AnchorPane>
           <AnchorPane maxHeight="965.0" minHeight="900.0" minWidth="0.0" prefHeight="960.0" prefWidth="1918.0" style="-fx-background-color: white;">
                <children>

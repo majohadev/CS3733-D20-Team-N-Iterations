@@ -203,8 +203,14 @@ INSERT INTO service VALUES ('IT', '00:00', '00:00', 'Make a request for IT servi
 INSERT INTO service VALUES ('Internal Transportation', '00:00', '00:00', 'Make a request for Internal Transportation!');
 INSERT INTO service VALUES ('Security', '00:00', '00:00', 'Make a security request!');
 INSERT INTO service VALUES ('Flower', '00:00', '00:00', 'Make a request for Flower Delivery services');
+/** Hard coded the flowers, need to be deleted for iteration 3*/
+INSERT INTO flower VALUES ('Rose', 100);
+INSERT INTO flower VALUES ('Tulips', 100);
+INSERT INTO flower VALUES ('SAM', 1000);
 
 INSERT INTO credential VALUES ('Gaben', 'MoolyFTW', 'ADMIN');
+INSERT INTO credential VALUES ('admin', 'admin', 'ADMIN');
+
 
 CREATE TRIGGER doc_delete AFTER DELETE ON doctors
 REFERENCING OLD AS oldRow

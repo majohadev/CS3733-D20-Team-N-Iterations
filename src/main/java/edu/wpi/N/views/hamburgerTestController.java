@@ -2,7 +2,6 @@ package edu.wpi.N.views;
 
 import com.jfoenix.controls.*;
 import edu.wpi.N.App;
-import edu.wpi.N.algorithms.Algorithm;
 import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
@@ -244,14 +243,15 @@ public class hamburgerTestController implements Controller, Initializable {
     }
     if (node1.getFloor() <= node2.getFloor()) {
       Path path;
-      Algorithm myAStar = new Algorithm();
       try {
-        path = myAStar.findPath(node1, node2, handicap);
+        path = singleton.savedAlgo.findPath(node1, node2, handicap);
         ArrayList<String> directions = path.getDirections();
+
         for (String s : directions) {
           System.out.println(s);
         }
-        // System.out.println("Start angle " + path.getStartAngle(MapDB.getKioskAngle()));
+
+        System.out.println("Start angle " + path.getStartAngle(MapDB.getKioskAngle()));
       } catch (NullPointerException e) {
         displayErrorMessage("The path does not exist");
         return;
@@ -261,15 +261,17 @@ public class hamburgerTestController implements Controller, Initializable {
       Path path = singleton.savedAlgo.findPath(node2, node1, handicap);
       pathNodes = path.getPath();
       ArrayList<String> directions = path.getDirections();
+
       for (String s : directions) {
         System.out.println(s);
       }
-      // System.out.println("Start angle " + path.getStartAngle(MapDB.getKioskAngle()));
+
+      System.out.println("Start angle " + path.getStartAngle(MapDB.getKioskAngle()));
     }
     disableNonPathFloors(pathNodes);
     drawPath(pathNodes);
     // set textual decriptions
-    setTextDecription(new Path(pathNodes));
+    setTextDescription(new Path(pathNodes));
   }
 
   private void disableNonPathFloors(LinkedList<DbNode> pathNodes) {
@@ -327,7 +329,9 @@ public class hamburgerTestController implements Controller, Initializable {
     return y * VERTICAL_SCALE;
   }
 
-  public void initializeChangeFloorButtons() {
+  public void initializeChangeFloorButtons() throws DBException {
+    // MapDB.setKiosk("NSERV00301", 0);
+    // MapDB.setKiosk("NSERV00103", 0);
     btn_floors = new JFXButton("Floors");
     btn_floor1 = new JFXButton("1");
     btn_floor2 = new JFXButton("2");
@@ -453,7 +457,7 @@ public class hamburgerTestController implements Controller, Initializable {
       Path pathToBathroom = singleton.savedAlgo.findQuickAccess(startNode, "REST");
       drawPath(pathToBathroom.getPath());
       // set textual decriptions
-      setTextDecription(pathToBathroom);
+      setTextDescription(pathToBathroom);
     } catch (Exception ex) {
       ex.printStackTrace();
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
@@ -505,7 +509,7 @@ public class hamburgerTestController implements Controller, Initializable {
         Path pathToStarBucks = singleton.savedAlgo.findPath(startNode, endNode, handicap);
         drawPath(pathToStarBucks.getPath());
         // set textual descriptions
-        setTextDecription(pathToStarBucks);
+        setTextDescription(pathToStarBucks);
       }
 
     } catch (Exception ex) {
@@ -522,8 +526,8 @@ public class hamburgerTestController implements Controller, Initializable {
   }
 
   public void onBtnHomeClicked() throws IOException {
-    mainApp.switchScene("views/home.fxml", singleton);
     ArduinoController.resetToCurrentKiosk();
+    mainApp.switchScene("views/newHomePage.fxml", singleton);
   }
 
   public void displayErrorMessage(String str) {
@@ -538,7 +542,7 @@ public class hamburgerTestController implements Controller, Initializable {
    *
    * @param path
    */
-  private void setTextDecription(Path path) {
+  private void setTextDescription(Path path) {
     try {
       // Convert the array of textual descriptions to text
       String directionsAsText = "";
