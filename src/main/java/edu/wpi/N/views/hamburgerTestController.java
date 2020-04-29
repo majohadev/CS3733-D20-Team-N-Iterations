@@ -450,57 +450,45 @@ public class hamburgerTestController implements Controller, Initializable {
     }
   }
 
-
-
   /**
    * Finds and draws path to the cafeteria
    *
    * @param e
    */
-  /*
   @FXML
   private void findPathToCafetaria(MouseEvent e) {
-      try {
-          this.mode = Mode.PATH_STATE;
-          pn_display.getChildren().removeIf(node -> node instanceof Line);
-          enableAllFloorButtons();
+    try {
+      // this.mode = Mode.PATH_STATE;
+      mapBaseController.setMode(MapBaseController.Mode.PATH_STATE);
+      // pn_display.getChildren().removeIf(node -> node instanceof Line);
+      mapBaseController.clearPath();
 
-          boolean handicap = false;
-          if (handicapp1.isSelected() || handicapp2.isSelected()) {
-              handicap = true;
-          }
+      enableAllFloorButtons();
 
-          String startSelection = (String) lst_firstLocation.getSelectionModel().getSelectedItem();
-          DbNode startNode = stringNodeConversion.get(startSelection);
-
-          DbNode endNode = MapDB.getNode("MRETL00203");
-
-          if (endNode != null) {
-              Path pathToCafetaria = singleton.savedAlgo.findPath(startNode, endNode, handicap);
-              drawPath(pathToCafetaria.getPath());
-              // set textual descriptions
-              setTextDecription(pathToCafetaria);
-          }
-
-      } catch (Exception ex) {
-          ex.printStackTrace();
-          Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-          errorAlert.setHeaderText("Oops... Something went Wong");
-          errorAlert.setContentText("Path to cafeteria wasn't found");
-          errorAlert.showAndWait();
+      boolean handicap = false;
+      if (handicapp1.isSelected() || handicapp2.isSelected()) {
+        handicap = true;
       }
-  }
-  */
-  private void findPathToCafeteria(MouseEvent e) throws DBException {
-    // this.mode = Mode.PATH_STATE;
-    mapBaseController.setMode(MapBaseController.Mode.PATH_STATE);
-    // pn_display.getChildren().removeIf(node -> node instanceof Line);
-    mapBaseController.clearPath();
-    enableAllFloorButtons();
-    Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-    errorAlert.setHeaderText("Oops... Something went Wong");
-    errorAlert.setContentText("Path to cafeteria wasn't found");
-    errorAlert.showAndWait();
+
+      String startSelection = (String) lst_firstLocation.getSelectionModel().getSelectedItem();
+      DbNode startNode = stringNodeConversion.get(startSelection);
+
+      DbNode endNode = MapDB.getNode("MRETL00203");
+
+      if (endNode != null) {
+        Path pathToCafetaria = singleton.savedAlgo.findPath(startNode, endNode, handicap);
+        mapBaseController.drawPath(pathToCafetaria.getPath());
+        // set textual descriptions
+        setTextDecription(pathToCafetaria);
+      }
+
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setHeaderText("Oops... Something went Wong");
+      errorAlert.setContentText("Path to cafeteria wasn't found");
+      errorAlert.showAndWait();
+    }
   }
 
   /**
