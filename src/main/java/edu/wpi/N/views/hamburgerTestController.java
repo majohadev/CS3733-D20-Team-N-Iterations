@@ -27,6 +27,11 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+/*
+import javafx.scene.shape.Line;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.shape.StrokeLineJoin;
+ */
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -313,8 +318,7 @@ public class hamburgerTestController implements Controller, Initializable {
                 scaleY(firstNode.getY()),
                 scaleX(secondNode.getX()),
                 scaleY(secondNode.getY()));
-        line.setStrokeWidth(5);
-        line.setStrokeLineCap(StrokeLineCap.ROUND);
+        styleLine(line);
         pn_display.getChildren().add(line);
       }
     }
@@ -664,6 +668,14 @@ public class hamburgerTestController implements Controller, Initializable {
       lst_firstLocation.getSelectionModel().select(0);
     }
   }
+
+/*
+  private void styleLine(Line line) {
+    line.setStrokeWidth(5);
+    line.setStrokeLineCap(StrokeLineCap.ROUND);
+    line.setStrokeLineJoin(StrokeLineJoin.ROUND);
+  }
+ */
 
   // Upon clicking find path to location button call this method
   /*    @FXML

@@ -84,7 +84,10 @@ public class BetweenFloorsController implements Controller, Initializable {
   }
 
   public void setNode(DbNode node) throws DBException {
+    btn_cancel.setVisible(true);
+    btn_save.setVisible(true);
     setFloor(node.getFloor());
+    this.floor = node.getFloor();
     currNode = true;
     this.originalEdges = AbsAlgo.getEdgesBetweenFloors(node);
     LinkedList<DbNode> nodesAvaliable = getFloors(node);
@@ -182,23 +185,40 @@ public class BetweenFloorsController implements Controller, Initializable {
           MapDB.addEdge(activeNodes.get(i).getNodeID(), activeNodes.get(i + 1).getNodeID());
         }
       }
-      setFloor(this.floor);
     }
+    text.setVisible(false);
+    for (int i = 1; i <= 5; i++) {
+      Circle circle = nodes.get(i);
+      circle.setFill(INACTIVE_CIRCLE_COLOR);
+      circle.setVisible(false);
+      labels.get(i).setVisible(false);
+    }
+    btn_save.setVisible(false);
+    btn_cancel.setVisible(false);
+    // setFloor(this.floor);
   }
 
   public void onCancelButton() {
-    setFloor(this.floor);
+    text.setVisible(false);
+    for (int i = 1; i <= 5; i++) {
+      Circle circle = nodes.get(i);
+      circle.setFill(INACTIVE_CIRCLE_COLOR);
+      circle.setVisible(false);
+      labels.get(i).setVisible(false);
+    }
+    btn_save.setVisible(false);
+    btn_cancel.setVisible(false);
+    // setFloor(this.floor);
   }
 
   private LinkedList<DbNode> getFloors(DbNode node) throws DBException {
     LinkedList<DbNode> floorChangeNodes = new LinkedList<DbNode>();
     for (int i = 1; i <= 5; i++) {
-      // will need to change when we add another building with different number of floors
       floorChangeNodes.addAll(MapDB.searchNode(i, node.getBuilding(), node.getNodeType(), ""));
     }
     LinkedList<DbNode> thisFloorChangeNodes = new LinkedList<DbNode>();
     for (DbNode n : floorChangeNodes) {
-      if (node.getX() == n.getX() && node.getY() == n.getY()) {
+      if (Math.abs(node.getX() - n.getX()) <= 10 && Math.abs(node.getY() - n.getY()) <= 10) {
         thisFloorChangeNodes.add(n);
       }
     }
