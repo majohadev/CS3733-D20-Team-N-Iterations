@@ -769,13 +769,13 @@ public class MapDB {
       st.setString(2, nodeID2);
       ResultSet result = st.executeQuery();
       result.next();
-      String floor1 = result.getString("floor");
+      int floor1 = result.getInt("floor");
       String type1 = result.getString("nodeType");
       result.next();
-      String floor2 = result.getString("floor");
+      int floor2 = result.getInt("floor");
       String type2 = result.getString("nodeType");
 
-      if (!floor1.equals(floor2)) {
+      if (floor1 != floor2) {
         if (!type1.equals(type2) || !(type1.equals("STAI") || type1.equals("ELEV"))) {
           throw new DBException(
               "Cannot add edge between "
@@ -809,9 +809,7 @@ public class MapDB {
       st.setString(3, nodeID2);
 
       boolean updated = st.executeUpdate() > 0;
-      if (type1.equals(type2)
-          && (type1.equals("STAI")
-              || type1.equals("ELEV"))) { // want to do this after the edge is added
+      if (floor1 != floor2) { // want to do this after the edge is added
         addToShaft(nodeID1, nodeID2);
       }
       return updated;
