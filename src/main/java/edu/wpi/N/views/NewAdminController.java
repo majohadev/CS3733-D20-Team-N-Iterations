@@ -90,7 +90,6 @@ public class NewAdminController implements Controller, Initializable {
   @FXML TableView<String> tb_languagesRemove;
   @FXML ChoiceBox<Employee> cb_EmployeeRemove;
 
-
   ObservableList<Request> tableData = FXCollections.observableArrayList();
   ObservableList<String> languageData = FXCollections.observableArrayList();
   ObservableList<String> langDataRemove = FXCollections.observableArrayList();
@@ -890,7 +889,6 @@ public class NewAdminController implements Controller, Initializable {
     txtf_rmuser.clear();
   }
 
-
   @FXML
   public void loadArduino() {
     Stage stage = new Stage();
@@ -905,6 +903,7 @@ public class NewAdminController implements Controller, Initializable {
     // stage.initModality(Modality.APPLICATION_MODAL);
     stage.show();
   }
+
   public void removeLanguage() throws DBException {
 
     if (cb_EmployeeRemove.getSelectionModel().getSelectedIndex() <= -1) {
