@@ -93,7 +93,6 @@ public class NewAdminController implements Controller, Initializable {
   @FXML TableView<String> tb_languagesRemove;
   @FXML ChoiceBox<Employee> cb_EmployeeRemove;
 
-
   ObservableList<Request> tableData = FXCollections.observableArrayList();
   ObservableList<String> languageData = FXCollections.observableArrayList();
   ObservableList<String> langDataRemove = FXCollections.observableArrayList();
