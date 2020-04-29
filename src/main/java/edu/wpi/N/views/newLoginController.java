@@ -7,10 +7,13 @@ import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.LoginDB;
 import edu.wpi.N.entities.States.StateSingleton;
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 
-public class newLoginController implements Controller {
+public class newLoginController implements Controller, Initializable {
 
   private StateSingleton singleton;
 
@@ -24,9 +27,12 @@ public class newLoginController implements Controller {
   @FXML JFXPasswordField pwf_password;
   @FXML JFXTextField txtf_username;
 
+  String medReq = "views/newMedRequest.fxml";
+
   @FXML
   public void checkUser() throws DBException {
     try {
+
       String pass = pwf_password.getText();
       String user = txtf_username.getText();
       LoginDB.verifyLogin(user, pass);
@@ -34,7 +40,7 @@ public class newLoginController implements Controller {
       if (LoginDB.currentAccess().equals("ADMIN")) {
         mainApp.switchScene("views/adminPortal.fxml", singleton);
       } else if (LoginDB.currentAccess().equals("DOCTOR")) {
-        mainApp.switchScene("views/medicineRequest.fxml", singleton);
+        mainApp.switchScene(medReq, singleton);
       }
       System.out.println("Valid Login");
     } catch (DBException | IOException e) {
@@ -51,7 +57,7 @@ public class newLoginController implements Controller {
   }
 
   public void goBack() throws IOException {
-    mainApp.switchScene("views/home.fxml", singleton);
+    mainApp.switchScene("views/newHomePage.fxml", singleton);
   }
 
   @FXML
@@ -68,5 +74,11 @@ public class newLoginController implements Controller {
   @Override
   public void setMainApp(App mainApp) {
     this.mainApp = mainApp;
+  }
+
+  @Override
+  public void initialize(URL location, ResourceBundle resources) {
+    txtf_username.setStyle("-fx-text-inner-color: white");
+    pwf_password.setStyle("-fx-text-inner-color: white");
   }
 }
