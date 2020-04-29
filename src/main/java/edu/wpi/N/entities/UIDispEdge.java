@@ -6,7 +6,6 @@ import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -25,7 +24,7 @@ public class UIDispEdge {
   private final Color SELECTED_LINE_COLOR = Color.LAWNGREEN;
   private final Color PATH_LINE_COLOR = Color.DODGERBLUE;
   private final double DEFAULT_LINE_WIDTH = 4;
-  private final double LIGHT_OPACITY = 0.05;
+  private final double LIGHT_OPACITY = 0.00;
   private final double HEAVY_OPACITY = 0.8;
   private final ArrayList<Double> DASH_PATTERN =
       new ArrayList<>() {
@@ -70,10 +69,15 @@ public class UIDispEdge {
   }
 
   public void updateMarkerPos() {
-    marker.setStartX(nodeA.getX());
-    marker.setStartY(nodeA.getY());
-    marker.setEndX(nodeB.getX());
-    marker.setEndY(nodeB.getY());
+    if (nodeA != null && nodeB != null) {
+      setVisible(true);
+      marker.setStartX(nodeA.getX());
+      marker.setStartY(nodeA.getY());
+      marker.setEndX(nodeB.getX());
+      marker.setEndY(nodeB.getY());
+    } else {
+      setVisible(false);
+    }
   }
 
   // Needed to flip direction of animated line toward destination
@@ -111,6 +115,7 @@ public class UIDispEdge {
     this.mbc = mbc;
   }
 
+  /*
   public void onMarkerClicked(MouseEvent e) {
 
     toggleSelected();
@@ -118,6 +123,7 @@ public class UIDispEdge {
       mbc.onUIEdgeClicked(e, this);
     }
   }
+   */
 
   public void setVisible(boolean visible) {
     marker.setVisible(visible);
@@ -125,6 +131,7 @@ public class UIDispEdge {
 
   public void setHighlighted(boolean highlighted) {
     this.highlighted = highlighted;
+    setVisible(true);
     if (highlighted) {
       // Path appearance
       marker.setStroke(PATH_LINE_COLOR);
@@ -160,6 +167,7 @@ public class UIDispEdge {
       if (nodeA != nodeB && nodeA.edgeTo(nodeB) == null) {
         this.nodeA = nodeA;
         this.nodeB = nodeB;
+        updateMarkerPos();
       }
     }
   }
@@ -167,6 +175,11 @@ public class UIDispEdge {
   // Assuming bi-directionality
   public boolean leadsTo(UIDispNode node) {
     return (node == nodeA || node == nodeB);
+  }
+
+  public void breakSelf() {
+    setVisible(false);
+    this.nodeA.breakEdgeTo(nodeB);
   }
 
   // Edges are equal if they have the same end UINodes

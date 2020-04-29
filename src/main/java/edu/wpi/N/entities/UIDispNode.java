@@ -3,7 +3,6 @@ package edu.wpi.N.entities;
 import edu.wpi.N.views.MapBaseController;
 import java.util.LinkedList;
 import javafx.scene.Cursor;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -29,9 +28,9 @@ public class UIDispNode {
     ((Circle) marker).setRadius(DEFAULT_NODE_RADIUS);
     marker.setFill(DEFAULT_NODE_COLOR);
     marker.setOpacity(DEFAULT_NODE_OPACITY);
-    marker.setOnMouseClicked(mouseEvent -> this.onMarkerClicked(mouseEvent));
+    // marker.setOnMouseClicked(mouseEvent -> this.onMarkerClicked(mouseEvent));
     marker.setCursor(Cursor.HAND); // Cursor points when over nodes
-    setVisible(showing);
+    setVisible(false);
   }
 
   public boolean toggleSelected() {
@@ -63,6 +62,11 @@ public class UIDispNode {
   public void setEnd() {
     marker.setFill(END_NODE_COLOR);
     setVisible(true);
+  }
+
+  public void setNormalNode() {
+    marker.setFill(DEFAULT_NODE_COLOR);
+    setVisible(false);
   }
 
   // Place node marker on given plane
@@ -104,6 +108,7 @@ public class UIDispNode {
     this.mbc = mbc;
   }
 
+  /*
   // Handles mouse clicks on node marker
   public void onMarkerClicked(MouseEvent e) {
     toggleSelected();
@@ -111,16 +116,26 @@ public class UIDispNode {
       mbc.onUINodeClicked(e, this);
     }
   }
+   */
 
   // Return added edge
-  public UIDispEdge addEdgeTo(UIDispNode other) {
+  public UIDispEdge addEdgeTo(UIDispNode other, UIDispEdge edgeToRecycle) {
 
     if (edgeTo(other) == null) {
-      UIDispEdge newEdge = new UIDispEdge(true, this, other);
-      this.connectedEdges.add(newEdge);
-      other.connectedEdges.add(newEdge);
-      newEdge.updateMarkerPos();
-      return newEdge;
+      if (edgeToRecycle == null) {
+        UIDispEdge newEdge = new UIDispEdge(true, this, other);
+        this.connectedEdges.add(newEdge);
+        other.connectedEdges.add(newEdge);
+        newEdge.updateMarkerPos();
+        return newEdge;
+      } else {
+        edgeToRecycle.setVisible(true);
+        edgeToRecycle.setNodes(this, other);
+        this.connectedEdges.add(edgeToRecycle);
+        other.connectedEdges.add(edgeToRecycle);
+        edgeToRecycle.updateMarkerPos();
+        return edgeToRecycle;
+      }
     }
     return null; // Edge exists already
   }
@@ -131,6 +146,7 @@ public class UIDispNode {
     if (toBreak != null) {
       connectedEdges.remove(toBreak);
       other.connectedEdges.remove(toBreak);
+      toBreak.setNodes(null, null);
       return true;
     }
     return false; // Edge does not exist
@@ -144,5 +160,17 @@ public class UIDispNode {
       }
     }
     return null;
+  }
+
+  // Nodes are equal if they have the same position and edges
+  @Override
+  public boolean equals(Object other) {
+    if (other instanceof UIDispNode) {
+      UIDispNode otherNode = (UIDispNode) other;
+      return (this.getX() == otherNode.getX()
+          && this.getY() == otherNode.getY()
+          && this.connectedEdges.equals(otherNode.connectedEdges));
+    }
+    return false;
   }
 }

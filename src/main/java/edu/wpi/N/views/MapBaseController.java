@@ -11,8 +11,6 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
-import java.util.Set;
-import java.util.stream.Stream;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
@@ -42,8 +40,10 @@ public class MapBaseController {
 
   private HashBiMap<UIDispNode, DbNode>
       masterNodes; // Maps UINodes from pool to DbNodes from current floor
-  private LinkedList<UIDispEdge> masterEdges =
-      new LinkedList<>(); // Maps UINodes from pool to DbNodes from current floor
+  private LinkedList<UIDispEdge> edgesInUse = new LinkedList<>();
+  private LinkedList<UIDispEdge> freedEdges = new LinkedList<>();
+
+  private LinkedList<DbNode> pathNodes;
 
   // Screen constants
   private final float BAR_WIDTH = 300;
@@ -112,27 +112,43 @@ public class MapBaseController {
   public void changeBuilding(String newBuilding) {
     // Change building, and show its default floor
     currentBuilding = newBuilding;
-    changeFloor(DEFAULT_FLOOR, null);
+    mode = Mode.NO_STATE;
+    changeFloor(DEFAULT_FLOOR);
   }
 
-  public void changeFloor(int floorToDraw, LinkedList<DbNode> pathToDraw) {
+  public void changeFloor(int floorToDraw) {
     // Change floor in current building
     currentFloor = floorToDraw;
     App.mapData.refreshAllNodes();
     img_map.setImage(App.mapData.getMap(currentBuilding, floorToDraw));
 
-    clearPath(); // Erase lines
+    clearPath();
+    clearEdges(); // Erase lines
     populateMap(); // Set up/recycle UIDispNodes
 
     // If there's a path to draw, draw it - otherwise just show the default kiosk
-    if (mode == Mode.NO_STATE || pathToDraw == null || pathToDraw.isEmpty()) {
+    if (mode == Mode.NO_STATE) {
       defaultKioskNode();
     } else if (mode == Mode.PATH_STATE) {
-      drawPath(pathToDraw);
+      if (pathNodes != null && !pathNodes.isEmpty()) {
+        drawPath(pathNodes);
+      } else {
+        System.out.println("Tried to draw an empty path!");
+      }
     }
   }
 
+  public void setPathNodes(LinkedList<DbNode> nodesList) {
+    this.pathNodes = nodesList;
+  }
+
+  public LinkedList<DbNode> getPathNodes() {
+    return this.pathNodes;
+  }
+
   public LinkedList<String> defaultKioskNode() {
+
+    clearPath();
 
     LinkedList<String> kiosks = new LinkedList<>();
 
@@ -167,16 +183,25 @@ public class MapBaseController {
   }
 
   private void addEdge(UIDispNode nodeA, UIDispNode nodeB) {
-    UIDispEdge newEdge = nodeA.addEdgeTo(nodeB);
+    UIDispEdge newEdge;
+    if (freedEdges.isEmpty()) {
+      newEdge = nodeA.addEdgeTo(nodeB, null);
+    } else {
+      newEdge = nodeA.addEdgeTo(nodeB, freedEdges.pop());
+    }
     if (newEdge != null) {
-      masterEdges.add(newEdge);
+      edgesInUse.add(newEdge);
       newEdge.placeOnPane(pn_path);
       newEdge.setBaseMap(this);
     }
   }
 
-  private void breakEdge(UIDispNode nodeA, UIDispNode nodeB) {
-    nodeA.breakEdgeTo(nodeB);
+  public void clearEdges() {
+    for (UIDispEdge edge : edgesInUse) {
+      edge.breakSelf(); // Safely disassemble edge infrastructure
+      freedEdges.add(edge);
+    }
+    edgesInUse.clear();
   }
 
   public DbNode getDbFromUi(UIDispNode uiNode) {
@@ -185,10 +210,6 @@ public class MapBaseController {
 
   public UIDispNode getUiFromDb(DbNode dbNode) {
     return masterNodes.inverse().get(dbNode);
-  }
-
-  public UIDispNode getDefaultNode() {
-    return defaultNode;
   }
 
   // Replace (or create) link between a UIDispNode and a DbNode
@@ -246,7 +267,9 @@ public class MapBaseController {
 
   public void populateMap() {
     try {
-      Set<UIDispNode> keys = masterNodes.keySet();
+
+      LinkedList<UIDispNode> keys = new LinkedList<>();
+      keys.addAll(masterNodes.keySet());
 
       allFloorNodes = MapDB.floorNodes(currentFloor, currentBuilding); // Reference copy
 
@@ -266,6 +289,10 @@ public class MapBaseController {
         }
       }
 
+      while (keysIterator.hasNext()) {
+        UIDispNode key = keysIterator.next();
+        masterNodes.remove(key);
+      }
     } catch (DBException e) {
       System.out.print("Populating floor " + currentFloor + " in  " + currentBuilding + " failed.");
       e.printStackTrace();
@@ -273,43 +300,49 @@ public class MapBaseController {
   }
 
   // Draw lines between each pair of nodes in given path
-  public void drawPath(LinkedList<DbNode> pathNodes) {
+  public void drawPath(LinkedList<DbNode> nodes) {
     UIDispNode uiFirst, uiSecond;
     DbNode dbFirst, dbSecond;
     UIDispEdge edge;
 
-    for (int i = 0; i < pathNodes.size() - 1; i++) {
-      dbFirst = pathNodes.get(i);
-      dbSecond = pathNodes.get(i + 1);
+    for (int i = 0; i < nodes.size() - 1; i++) {
+      dbFirst = nodes.get(i);
+      dbSecond = nodes.get(i + 1);
 
-      uiFirst = getUiFromDb(dbFirst);
-      uiSecond = getUiFromDb(dbSecond);
+      if (dbFirst.getFloor() == currentFloor && dbSecond.getFloor() == currentFloor) {
 
-      if (i == 0) {
-        uiFirst.setStart();
-      } else if (i == pathNodes.size() - 2) {
-        uiSecond.setEnd();
-      }
+        uiFirst = getUiFromDb(dbFirst);
+        uiSecond = getUiFromDb(dbSecond);
 
-      edge = uiFirst.edgeTo(uiSecond);
-      if (edge != null) {
-        edge.pointEdgeToward(uiSecond); // Set correct direction of line!
-        edge.setHighlighted(true);
-      } else {
-        System.out.println(
-            "Edge between "
-                + dbFirst.getNodeID()
-                + " and "
-                + dbSecond.getNodeID()
-                + " doesn't exist.");
+        if (i == 0) {
+          uiFirst.setStart();
+        } else if (i == nodes.size() - 2) {
+          uiSecond.setEnd();
+        }
+
+        edge = uiFirst.edgeTo(uiSecond);
+        if (edge != null) {
+          edge.pointEdgeToward(uiSecond); // Set correct direction of line!
+          edge.setHighlighted(true);
+        } else {
+          System.out.println(
+              "Edge between "
+                  + dbFirst.getNodeID()
+                  + " and "
+                  + dbSecond.getNodeID()
+                  + " doesn't exist.");
+        }
       }
     }
   }
 
   // Resets highlighted edges to their default state
   public void clearPath() {
-    for (UIDispEdge edge : masterEdges) {
+    for (UIDispEdge edge : edgesInUse) {
       edge.setHighlighted(false);
+    }
+    for (UIDispNode node : masterNodes.keySet()) {
+      node.setNormalNode();
     }
   }
 
@@ -318,24 +351,10 @@ public class MapBaseController {
     pn_path.setVisible(false);
   }
 
-  /*
-  // Hide all nodes
-  public void hideNodes() {
-    pn_routeNodes.setVisible(false);
-  }
-   */
-
   // Show all edges
   public void showEdges() {
     pn_path.setVisible(true);
   }
-
-  // Show all nodes
-  /*
-  public void showNodes() {
-    pn_routeNodes.setVisible(true);
-  }
-   */
 
   // Deselect nodes and remove lines
   public void deselectAll() {
@@ -344,7 +363,7 @@ public class MapBaseController {
     }
     selectedNodes.clear();
 
-    for (UIDispEdge edge : masterEdges) {
+    for (UIDispEdge edge : edgesInUse) {
       edge.setSelected(false);
     }
   }

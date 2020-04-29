@@ -27,11 +27,6 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-/*
-import javafx.scene.shape.Line;
-import javafx.scene.shape.StrokeLineCap;
-import javafx.scene.shape.StrokeLineJoin;
- */
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -94,7 +89,7 @@ public class hamburgerTestController implements Controller, Initializable {
   private LinkedList<Doctor> searchedDoc = new LinkedList<>();
   private LinkedList<DbNode> doctorNodes = new LinkedList<>();
   JFXNodesList nodesList;
-  LinkedList<DbNode> pathNodes;
+  // LinkedList<DbNode> pathNodes;
   /*
   String[] imgPaths =
       new String[] {
@@ -214,7 +209,8 @@ public class hamburgerTestController implements Controller, Initializable {
     String firstSelection = (String) lst_firstLocation.getSelectionModel().getSelectedItem();
     String secondSelection = (String) lst_secondLocation.getSelectionModel().getSelectedItem();
     // jumpToFloor(imgPaths[stringNodeConversion.get(firstSelection).getFloor() - 1]);
-    mapBaseController.changeFloor(stringNodeConversion.get(firstSelection).getFloor(), null);
+    mapBaseController.setMode(MapBaseController.Mode.NO_STATE);
+    mapBaseController.changeFloor(stringNodeConversion.get(firstSelection).getFloor());
     // currentFloor = stringNodeConversion.get(firstSelection).getFloor();
     try {
       findPath(stringNodeConversion.get(firstSelection), stringNodeConversion.get(secondSelection));
@@ -235,7 +231,8 @@ public class hamburgerTestController implements Controller, Initializable {
     String firstSelection = (String) lst_firstLocation.getSelectionModel().getSelectedItem();
     String secondSelection = (String) lst_doctorlocations.getSelectionModel().getSelectedItem();
     // jumpToFloor(imgPaths[stringNodeConversion.get(firstSelection).getFloor() - 1]);
-    mapBaseController.changeFloor(stringNodeConversion.get(firstSelection).getFloor(), null);
+    mapBaseController.setMode(MapBaseController.Mode.NO_STATE);
+    mapBaseController.changeFloor(stringNodeConversion.get(firstSelection).getFloor());
     // currentFloor = stringNodeConversion.get(firstSelection).getFloor();
     try {
       findPath(stringNodeConversion.get(firstSelection), stringNodeConversion.get(secondSelection));
@@ -271,20 +268,20 @@ public class hamburgerTestController implements Controller, Initializable {
         displayErrorMessage("The path does not exist");
         return;
       }
-      pathNodes = path.getPath();
+      mapBaseController.setPathNodes(path.getPath());
     } else {
       Path path = singleton.savedAlgo.findPath(node2, node1, handicap);
-      pathNodes = path.getPath();
+      mapBaseController.setPathNodes(path.getPath());
       ArrayList<String> directions = path.getDirections();
       for (String s : directions) {
         System.out.println(s);
       }
       System.out.println("Start angle " + path.getStartAngle());
     }
-    disableNonPathFloors(pathNodes);
-    mapBaseController.drawPath(pathNodes);
+    disableNonPathFloors(mapBaseController.getPathNodes());
+    mapBaseController.drawPath(mapBaseController.getPathNodes());
     // set textual decriptions
-    setTextDecription(new Path(pathNodes));
+    setTextDecription(new Path(mapBaseController.getPathNodes()));
   }
 
   private void disableNonPathFloors(LinkedList<DbNode> pathNodes) {
@@ -364,86 +361,37 @@ public class hamburgerTestController implements Controller, Initializable {
         .getStylesheets()
         .addAll(getClass().getResource("/edu/wpi/N/views/MapDisplayFloors.css").toExternalForm());
     btn_floors.getStyleClass().addAll("animated-option-button");
+
     btn_floor1
         .getStylesheets()
         .addAll(getClass().getResource("/edu/wpi/N/views/MapDisplayFloors.css").toExternalForm());
     btn_floor1.getStyleClass().addAll("animated-option-button");
-    /*
-    btn_floor1.setOnMouseClicked(
-        e -> {
-          currentFloor = 1;
-          try {
-            setFloorImg("/edu/wpi/N/images/Floor1TeamN.png");
-          } catch (DBException ex) {
-            ex.printStackTrace();
-          }
-        });
-     */
-    btn_floor1.setOnMouseClicked(e -> mapBaseController.changeFloor(1, pathNodes));
+    btn_floor1.setOnMouseClicked(e -> drawPathOnFloor(1));
+
     btn_floor2
         .getStylesheets()
         .addAll(getClass().getResource("/edu/wpi/N/views/MapDisplayFloors.css").toExternalForm());
     btn_floor2.getStyleClass().addAll("animated-option-button");
-    /*
-    btn_floor2.setOnMouseClicked(
-        e -> {
-          currentFloor = 2;
-          try {
-            setFloorImg("/edu/wpi/N/images/Floor2TeamN.png");
-          } catch (DBException ex) {
-            ex.printStackTrace();
-          }
-        });
-     */
-    btn_floor2.setOnMouseClicked(e -> mapBaseController.changeFloor(2, pathNodes));
+    btn_floor2.setOnMouseClicked(e -> drawPathOnFloor(2));
+
     btn_floor3
         .getStylesheets()
         .addAll(getClass().getResource("/edu/wpi/N/views/MapDisplayFloors.css").toExternalForm());
     btn_floor3.getStyleClass().addAll("animated-option-button");
-    /*
-    btn_floor3.setOnMouseClicked(
-        e -> {
-          currentFloor = 3;
-          try {
-            setFloorImg("/edu/wpi/N/images/Floor3TeamN.png");
-          } catch (DBException ex) {
-            ex.printStackTrace();
-          }
-        });
-     */
-    btn_floor3.setOnMouseClicked(e -> mapBaseController.changeFloor(3, pathNodes));
+    btn_floor3.setOnMouseClicked(e -> drawPathOnFloor(3));
+
     btn_floor4
         .getStylesheets()
         .addAll(getClass().getResource("/edu/wpi/N/views/MapDisplayFloors.css").toExternalForm());
     btn_floor4.getStyleClass().addAll("animated-option-button");
-    /*
-    btn_floor4.setOnMouseClicked(
-        e -> {
-          currentFloor = 4;
-          try {
-            setFloorImg("/edu/wpi/N/images/Floor4TeamN.png");
-          } catch (DBException ex) {
-            ex.printStackTrace();
-          }
-        });
-     */
-    btn_floor4.setOnMouseClicked(e -> mapBaseController.changeFloor(4, pathNodes));
+    btn_floor4.setOnMouseClicked(e -> drawPathOnFloor(4));
+
     btn_floor5
         .getStylesheets()
         .addAll(getClass().getResource("/edu/wpi/N/views/MapDisplayFloors.css").toExternalForm());
     btn_floor5.getStyleClass().addAll("animated-option-button");
-    /*
-    btn_floor5.setOnMouseClicked(
-        e -> {
-          currentFloor = 5;
-          try {
-            setFloorImg("/edu/wpi/N/images/Floor5TeamN.png");
-          } catch (DBException ex) {
-            ex.printStackTrace();
-          }
-        });
-     */
-    btn_floor5.setOnMouseClicked(e -> mapBaseController.changeFloor(5, pathNodes));
+    btn_floor5.setOnMouseClicked(e -> drawPathOnFloor(5));
+
     nodesList = new JFXNodesList();
     nodesList.addAnimatedNode(btn_floors);
     nodesList.addAnimatedNode(btn_floor5);
@@ -470,12 +418,10 @@ public class hamburgerTestController implements Controller, Initializable {
   }
    */
 
-  /*
-  private void jumpToFloor(String path) throws DBException {
-    Image img = new Image(getClass().getResourceAsStream(path));
-    img_map.setImage(img);
+  private void drawPathOnFloor(int floor) {
+    mapBaseController.setMode(MapBaseController.Mode.PATH_STATE);
+    mapBaseController.changeFloor(floor);
   }
-   */
 
   /**
    * Finds and draws path to the nearest bathroom
@@ -669,13 +615,13 @@ public class hamburgerTestController implements Controller, Initializable {
     }
   }
 
-/*
-  private void styleLine(Line line) {
-    line.setStrokeWidth(5);
-    line.setStrokeLineCap(StrokeLineCap.ROUND);
-    line.setStrokeLineJoin(StrokeLineJoin.ROUND);
-  }
- */
+  /*
+   private void styleLine(Line line) {
+     line.setStrokeWidth(5);
+     line.setStrokeLineCap(StrokeLineCap.ROUND);
+     line.setStrokeLineJoin(StrokeLineJoin.ROUND);
+   }
+  */
 
   // Upon clicking find path to location button call this method
   /*    @FXML
