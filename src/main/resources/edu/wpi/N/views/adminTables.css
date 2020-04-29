@@ -41,3 +41,15 @@
     -fx-background-insets: 0;
     -fx-background-radius: 1;
 }
+
+.choice-box .context-menu {
+    -fx-background-color: white;
+    -fx-text-fill: black;
+}
+
+.choice-box {
+    -fx-background-color: #005797;
+    -fx-mark-color: white;
+}
+
+.choice-box > .label { -fx-text-fill: white; }
