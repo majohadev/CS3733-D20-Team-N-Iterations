@@ -4,8 +4,7 @@ import java.util.GregorianCalendar;
 
 public class MedicineRequest extends Request {
   private String medicineName;
-  private double dosage;
-  private String units;
+  private String dosage;
   private String patient;
 
   public MedicineRequest(
@@ -24,8 +23,7 @@ public class MedicineRequest extends Request {
     super(
         requestID, emp_assigned, reqNotes, compNotes, nodeID, timeRequested, timeCompleted, status);
     this.medicineName = medicineName;
-    this.dosage = dosage;
-    this.units = units;
+    this.dosage = dosage + units;
     this.patient = patient;
   }
 
@@ -38,32 +36,12 @@ public class MedicineRequest extends Request {
     return medicineName;
   }
 
-  public void setMedicineName(String medicineName) {
-    this.medicineName = medicineName;
-  }
-
-  public double getDosage() {
-    return dosage;
-  }
-
-  public void setDosage(double dosage) {
-    this.dosage = dosage;
-  }
-
   public String getAtr2() {
-    return units;
-  }
-
-  public void setUnits(String units) {
-    this.units = units;
+    return dosage;
   }
 
   public String getAtr3() {
     return patient;
-  }
-
-  public void setPatient(String patient) {
-    this.patient = patient;
   }
 
   @Override
@@ -74,10 +52,6 @@ public class MedicineRequest extends Request {
 
     MedicineRequest other = (MedicineRequest) o;
 
-    return super.equals(o)
-        && medicineName.equals(other.medicineName)
-        && dosage == other.dosage
-        && units.equals(other.units)
-        && patient.equals(other.patient);
+    return super.equals(other);
   }
 }
