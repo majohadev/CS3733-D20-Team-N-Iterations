@@ -75,28 +75,34 @@ public class Directions {
           break;
         case CONTINUING:
           distance += getDistance(currNode, nextNode);
-          if (!message.equals("")) {
-            directions.add(message); // + " and proceed down the hall");
-            message = "";
-          } else if (stateChange || atIntersection(currNode)) {
-            if (getLandmark(nextNode) == null) {
-              message = "Continue to next intersection " + getDistanceString(distance);
-            } else if (getLandmark(nextNode).equals(nextNode)) {
-              message =
-                  "Go towards " // "Proceed straight towards "
-                      + getLandmark(nextNode).getLongName()
-                      + " "
-                      + getDistanceString(distance);
-              // } else if (atEndOfHall(nextNode)) { //this should go before first if
-              // message = "Continue to the end of the hallway " + getDistanceString(distance);
-            } else {
-              message =
-                  "Continue past "
-                      + getLandmark(nextNode).getLongName()
-                      + " "
-                      + getDistanceString(distance);
+          if (getState(i - 1).equals(CHANGING_FLOOR)) {
+            message = "Exit " + currNode.getLongName();
+          } else {
+            if (!message.equals("")) {
+              directions.add(message); // + " and proceed down the hall");
+              message = "";
+            } else if (stateChange || atIntersection(currNode)) {
+              if (getLandmark(nextNode) == null) {
+                message = "Continue to next intersection " + getDistanceString(distance);
+              } else if (getLandmark(nextNode).equals(nextNode)) {
+                message =
+                    "Go towards " // "Proceed straight towards "
+                        + getLandmark(nextNode).getLongName()
+                        + " "
+                        + getDistanceString(distance);
+                // } else if (atEndOfHall(nextNode)) { //this should go before first if
+                // message = "Continue to the end of the hallway " + getDistanceString(distance);
+              } else if (getState(i - 1).equals(CHANGING_FLOOR)) {
+                message = "Exit " + currNode.getLongName();
+              } else {
+                message =
+                    "Continue past "
+                        + getLandmark(nextNode).getLongName()
+                        + " "
+                        + getDistanceString(distance);
+              }
+              distance = 0;
             }
-            distance = 0;
           }
           break;
         case TURNING:
@@ -239,7 +245,9 @@ public class Directions {
   private static DbNode getLandmark(DbNode node) throws DBException {
     if (node.getNodeType().equals("HALL")) {
       for (DbNode n : MapDB.getAdjacent(node.getNodeID())) {
-        if (!n.getNodeType().equals("HALL")) {
+        if (!n.getNodeType().equals("HALL")
+            && !n.getNodeType().equals("ELEV")
+            && !n.getNodeType().equals("STAI")) {
           return n;
         }
       }
@@ -281,7 +289,7 @@ public class Directions {
         Math.sqrt(
             Math.pow(nextNode.getX() - currNode.getX(), 2)
                 + Math.pow(nextNode.getY() - currNode.getY(), 2));
-    double conversion = 1;
+    double conversion = 0.338;
     return distance * conversion;
   }
 
