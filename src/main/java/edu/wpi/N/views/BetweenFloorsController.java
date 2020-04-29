@@ -11,8 +11,6 @@ import java.net.URL;
 import java.util.*;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -97,15 +95,15 @@ public class BetweenFloorsController implements Controller, Initializable {
     LinkedList<DbNode> nodesAvailable;
     try {
       nodesAvailable = MapDB.getInShaft(node.getNodeID());
+      Iterator<DbNode> nodeIt = nodesAvailable.iterator();
+      this.originalEdges = new LinkedList<DbNode>();
+      while (nodeIt.hasNext()) {
+        DbNode next = nodeIt.next();
+        LinkedList<DbNode> connectedNodes = AbsAlgo.searchAccessible(next);
+        if (connectedNodes != null) this.originalEdges.addAll(connectedNodes);
+      }
     } catch (DBException e) {
       nodesAvailable = null;
-    }
-    Iterator<DbNode> nodeIt = nodesAvailable.iterator();
-    this.originalEdges = new LinkedList<DbNode>();
-    while (nodeIt.hasNext()) {
-      DbNode next = nodeIt.next();
-      LinkedList<DbNode> connectedNodes = AbsAlgo.searchAccessible(next);
-      if (connectedNodes != null) this.originalEdges.addAll(connectedNodes);
     }
     nodes.get(node.getFloor()).setFill(INACTIVE_CIRCLE_COLOR);
     for (DbNode n : nodesAvailable) {
@@ -136,6 +134,7 @@ public class BetweenFloorsController implements Controller, Initializable {
   public Text setText(double x, double y, String text) {
     Text text1 = new Text(x + TEXT_OFFSETX, y + TEXT_OFFSETY, text);
     text1.setFill(DEFAULT_TEXT_COLOR);
+    text1.setMouseTransparent(true);
     text1.setFont(Font.font("Calibri", 20));
     text1.toFront();
     text1.setTextAlignment(TextAlignment.CENTER);
@@ -162,23 +161,10 @@ public class BetweenFloorsController implements Controller, Initializable {
     circle.setOnMouseClicked(
         (event -> {
           if (event.getButton() == MouseButton.PRIMARY) {
-          } else if (event.getButton() == MouseButton.SECONDARY) {
-            circle.setFill(DEFAULT_SELECTED_COLOR);
-            ContextMenu menu = new ContextMenu();
-            MenuItem activateEdge = new MenuItem("Connect");
-            MenuItem deactivateEdge = new MenuItem("Disconnect");
-            activateEdge.setOnAction(
-                e -> {
-                  nodeStatus.put(num, new Pair<>(nodeStatus.get(num).getKey(), true));
-                  circle.setFill(DEFAULT_CIRCLE_COLOR);
-                });
-            deactivateEdge.setOnAction(
-                e -> {
-                  nodeStatus.put(num, new Pair<>(nodeStatus.get(num).getKey(), false));
-                  circle.setFill(INACTIVE_CIRCLE_COLOR);
-                });
-            menu.getItems().addAll(activateEdge, deactivateEdge);
-            menu.show(this.mainApp.getStage(), event.getSceneX(), event.getSceneY());
+            nodeStatus.put(
+                num, new Pair<>(nodeStatus.get(num).getKey(), !nodeStatus.get(num).getValue()));
+            if (nodeStatus.get(num).getValue()) circle.setFill(DEFAULT_CIRCLE_COLOR);
+            else circle.setFill(INACTIVE_CIRCLE_COLOR);
           }
         }));
   }
