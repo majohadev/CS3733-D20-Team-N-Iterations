@@ -319,6 +319,7 @@ public class hamburgerTestController implements Controller, Initializable {
     txt_secondLocation.clear();
     lst_firstLocation.getItems().clear();
     lst_secondLocation.getItems().clear();
+    defaultKioskNode();
   }
 
   private double scaleX(double x) {
