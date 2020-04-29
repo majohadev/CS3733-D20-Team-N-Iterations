@@ -56,7 +56,10 @@ public class Directions {
       state = getState(i);
       switch (state) {
         case STARTING:
-          if (!path.get(0).getNodeType().equals("HALL")) {
+          if (currNode.getNodeID().equals("NSERV00301")
+              || currNode.getNodeID().equals("NSERV00103")) {
+            message = "Start in the direction of the kiosk arrow ";
+          } else if (!path.get(0).getNodeType().equals("HALL")) {
             message = "Exit " + path.get(0).getLongName(); // "Start by exiting "
           } else if (!(getLandmark(nextNode) == null)) {
             message =
