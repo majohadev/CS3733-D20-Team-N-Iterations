@@ -777,7 +777,12 @@ public class MapDB {
 
       if (!floor1.equals(floor2)) {
         if (!type1.equals(type2) || !(type1.equals("STAI") || type1.equals("ELEV"))) {
-          throw new DBException("Cannot add edge between " + nodeID1 + " and " + nodeID2);
+          throw new DBException(
+              "Cannot add edge between "
+                  + nodeID1
+                  + " and "
+                  + nodeID2
+                  + "since they are on different floors and not stairs or elevators");
         }
       }
 
@@ -803,7 +808,13 @@ public class MapDB {
       //noinspection JpaQueryApiInspection
       st.setString(3, nodeID2);
 
-      return st.executeUpdate() > 0;
+      boolean updated = st.executeUpdate() > 0;
+      if (type1.equals(type2)
+          && (type1.equals("STAI")
+              || type1.equals("ELEV"))) { // want to do this after the edge is added
+        addToShaft(nodeID1, nodeID2);
+      }
+      return updated;
     } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Unknown error: addEdge", e);
@@ -838,6 +849,126 @@ public class MapDB {
     } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Unknown error: removeEdge", e);
+    }
+  }
+
+  /**
+   * Adds two nodes to the same shaft. If neither of them are in a shaft, makes a new shaft with
+   * them. If one of them is in a shaft, then adds the other one to that shaft. If both of them are
+   * in different shafts, throws DBException.
+   *
+   * @param node1 the nodeID of the first node of the edge that should be added to the shaft
+   * @param node2 the nodeID of the second node of the edge that should be added to the shaft
+   * @throws DBException when both are in different shafts or on error
+   */
+  public static void addToShaft(String node1, String node2) throws DBException {
+    if (node1.equals(node2)) throw new DBException("Both of those nodes are the same!");
+    DbNode DbNode1 = getNode(node1);
+    DbNode DbNode2 = getNode(node2);
+    if (DbNode1 == null || DbNode2 == null)
+      throw new DBException("One of those nodes doesn't exist!");
+    String error = "";
+    if (DbNode1.getFloor() == DbNode2.getFloor())
+      error += "You can't add two nodes on the same floor to a shaft!\n";
+    if (!DbNode1.getNodeType().equals(DbNode2.getNodeType()))
+      error += "Nodes in a shaft must be the same node type!\n";
+    if (!DbNode1.getBuilding().equals(DbNode2.getBuilding()))
+      error += "Nodes in a shaft must be in the same building!\n";
+    if (!(DbNode1.getNodeType().equals("ELEV") || DbNode1.getNodeType().equals("STAI")))
+      error += "Nodes in a shaft must be either elevators or stairs!\n";
+    if (error.length() != 0) throw new DBException(error);
+    String query = "SELECT shaftID, nodeID FROM shaft WHERE nodeID = ? OR nodeID = ?";
+    try {
+      PreparedStatement stmt = con.prepareStatement(query);
+      stmt.setString(1, node1);
+      stmt.setString(2, node2);
+      ResultSet rs = stmt.executeQuery();
+      if (rs.next()) { // one or more in shaft
+        String nodeID1 = rs.getString("nodeID");
+        int shaftID1 = rs.getInt("shaftID");
+        if (rs.next()) { // both in shaft, check if both have same id
+          if (shaftID1 == rs.getInt("shaftID")) return; // both already in the same shaft
+          else
+            throw new DBException(
+                "Those nodes are already in different shafts! Nodes can only ever be in one shaft.");
+        } else { // only one in shaft
+          String nodeID2 = node2;
+          if (nodeID1.equals(node2)) nodeID2 = node1;
+          query = "INSERT INTO shaft (shaftID, nodeID) VALUES (?, ?)";
+          stmt = con.prepareStatement(query);
+          stmt.setInt(1, shaftID1);
+          stmt.setString(2, nodeID2);
+          stmt.executeUpdate();
+        }
+      } else { // neither in shaft, make a new one and insert both
+        query = "INSERT INTO shaft (nodeID) VALUES (?)";
+        stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+        stmt.setString(1, node1);
+        stmt.executeUpdate();
+        rs = stmt.getGeneratedKeys();
+        rs.next();
+        int shaftID1 = rs.getInt(1);
+        query = "INSERT INTO shaft (shaftID, nodeID) VALUES (?, ?)";
+        stmt = con.prepareStatement(query);
+        stmt.setInt(1, shaftID1);
+        stmt.setString(2, node2);
+        stmt.executeUpdate();
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown error: addToShaft", e);
+    }
+  }
+
+  /**
+   * Removes the given nodeID from any shaft it might be in
+   *
+   * @param nodeID the nodeID to remove from a shaft
+   * @throws DBException When that nodeID isn't in a shaft or on error
+   */
+  public static void removeFromShaft(String nodeID) throws DBException {
+    String query = "DELETE FROM shaft WHERE NODEID = ?";
+    try {
+      PreparedStatement stmt = con.prepareStatement(query);
+      stmt.setString(1, nodeID);
+      if (stmt.executeUpdate() <= 0) throw new DBException("That node isn't in a shaft!");
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown error: removeFromShaft " + nodeID, e);
+    }
+  }
+
+  /**
+   * gets all the DbNodes in the same shaft as the given nodeID
+   *
+   * @param nodeID The ID of the node you want all the nodes in the shaft for
+   * @return a linked list of DbNodes in the same shaft as the given nodeID
+   * @throws DBException when the given node isn't in a shaft or on error
+   */
+  public static LinkedList<DbNode> getInShaft(String nodeID) throws DBException {
+    String query = "SELECT shaftID FROM shaft WHERE nodeID = ?";
+    LinkedList<DbNode> nodes = new LinkedList<DbNode>();
+    try {
+      PreparedStatement stmt = con.prepareStatement(query);
+      stmt.setString(1, nodeID);
+      ResultSet rs = stmt.executeQuery();
+      rs.next();
+      int shaftID = rs.getInt("shaftID");
+      query = "SELECT nodeID FROM shaft WHERE shaftID = ?";
+      stmt = con.prepareStatement(query);
+      stmt.setInt(1, shaftID);
+      rs = stmt.executeQuery();
+      while (rs.next()) {
+        nodes.add(getNode(rs.getString("nodeID")));
+      }
+      return nodes;
+    } catch (SQLException e) {
+      if (e.getSQLState().equals("24000")) { // invalid cursor state, no current row
+        throw new DBException("That node isn't in any shafts!");
+      } else {
+        e.printStackTrace();
+        throw new DBException("Unknown error: getInShaft " + nodeID, e);
+      }
     }
   }
 
