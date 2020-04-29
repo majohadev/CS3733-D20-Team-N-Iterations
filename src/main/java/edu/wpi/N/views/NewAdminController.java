@@ -87,7 +87,7 @@ public class NewAdminController implements Controller, Initializable {
   @FXML JFXCheckBox ch_requestFilter;
   @FXML Label lbl_title;
   @FXML JFXTextField txtf_rmuser;
-
+  @FXML JFXButton btn_arduino;
   @FXML TableView<String> tb_languagesRemove;
   @FXML ChoiceBox<Employee> cb_EmployeeRemove;
 
@@ -913,6 +913,21 @@ public class NewAdminController implements Controller, Initializable {
     acceptReq.show();
 
     txtf_rmuser.clear();
+  }
+
+  @FXML
+  public void loadArduino() {
+    Stage stage = new Stage();
+    Parent root = null;
+    try {
+      root = FXMLLoader.load(getClass().getResource("arduinoInterface.fxml"));
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    Scene scene = new Scene(root);
+    stage.setScene(scene);
+    // stage.initModality(Modality.APPLICATION_MODAL);
+    stage.show();
   }
 
   public void removeLanguage() throws DBException {

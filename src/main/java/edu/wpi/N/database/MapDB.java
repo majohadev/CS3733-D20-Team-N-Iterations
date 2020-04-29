@@ -3,6 +3,7 @@ package edu.wpi.N.database;
 import edu.wpi.N.Main;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Node;
+import edu.wpi.N.views.ArduinoController;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
@@ -988,6 +989,7 @@ public class MapDB {
   public static void setKiosk(String nodeID, int angle) throws DBException {
     angle -= 360 * (angle / 360);
     if (angle < 0) angle += 360;
+    ArduinoController.setUpArrow(angle);
     String query =
         "INSERT INTO kiosk VALUES (?, ?)"; // The kiosk is kept as only one tuple using triggers
     try {
