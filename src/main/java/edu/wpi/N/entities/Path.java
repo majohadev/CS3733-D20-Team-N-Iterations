@@ -33,9 +33,6 @@ public class Path {
     double dy = path.get(1).getY() - path.get(0).getY();
     double dx = path.get(1).getX() - path.get(0).getX();
     double angle = Math.toDegrees(atan2(dy, dx));
-    /*double dy1 = path.get(2).getY() - path.get(1).getY();
-    double dx1 = path.get(2).getX() - path.get(1).getX();
-    double angle = Math.toDegrees(atan2(dy, dx));*/
     double angleChange = angle - kioskAngle;
     if (angleChange > 175) {
       angleChange -= 360;
