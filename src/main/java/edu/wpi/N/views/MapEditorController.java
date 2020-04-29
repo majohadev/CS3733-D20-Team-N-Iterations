@@ -406,7 +406,7 @@ public class MapEditorController implements Controller {
       onCircleEditNodeClicked(event, circle);
     }
     if (mode == Mode.EDIT_ELEV && editElevNodes.contains(circle)) {
-      onBtnSaveEditElevClicked();
+      //      onBtnSaveEditElevClicked();
       onBtnCancelEditElevClicked();
       if (elevCircle != null && elevCircle != circle) {
         elevCircle.setFill(EDIT_ELEV_COLOR);
@@ -869,7 +869,7 @@ public class MapEditorController implements Controller {
 
   private void resetAll() {
     pn_editor.setVisible(false);
-    //    pn_elev.setVisible(false);
+    pn_elev.setVisible(false);
     resetAddNode();
     resetDeleteNode();
     resetEditNode();
