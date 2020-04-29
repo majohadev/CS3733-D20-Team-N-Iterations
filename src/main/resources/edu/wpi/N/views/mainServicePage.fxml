@@ -18,7 +18,7 @@
             </ImageView>
          </children>
       </HBox>
-      <Label layoutX="36.0" layoutY="14.0" prefHeight="222.0" prefWidth="1192.0" style="-fx-background-color: #002186; -fx-background-radius: 10;" text="On The Left Sidebar Are All The Available Services Provided By Bringham Women's Hosptial" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+      <Label layoutX="36.0" layoutY="14.0" prefHeight="222.0" prefWidth="1192.0" style="-fx-background-color: #002186; -fx-background-radius: 10;" text="On The Left Sidebar Are All The Available Services Provided By Brigham and Women's Hospital" textAlignment="CENTER" textFill="WHITE" wrapText="true">
          <font>
             <Font name="Calibri" size="48.0" />
          </font>
