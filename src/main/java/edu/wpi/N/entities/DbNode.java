@@ -127,14 +127,6 @@ public class DbNode implements INode {
 
     DbNode other = (DbNode) o;
 
-    return nodeID.equals(other.nodeID)
-        && x == other.x
-        && y == other.y
-        && floor == other.floor
-        && building.equals(other.building)
-        && nodeType.equals(other.nodeType)
-        && longName.equals(other.longName)
-        && shortName.equals(other.shortName)
-        && teamAssigned == other.teamAssigned;
+    return nodeID.equals(other.nodeID);
   }
 }
