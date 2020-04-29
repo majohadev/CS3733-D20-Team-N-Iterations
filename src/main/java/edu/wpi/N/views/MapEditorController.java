@@ -82,7 +82,7 @@ public class MapEditorController implements Controller {
   final Color ADD_NODE_COLOR = Color.BLACK;
   final Color DELETE_NODE_COLOR = Color.RED;
   final Color EDIT_NODE_COLOR = Color.RED;
-  final double DEFAULT_CIRCLE_OPACITY = 1;
+  final double DEFAULT_CIRCLE_OPACITY = .6;
   final double DEFAULT_CIRCLE_RADIUS = 7;
   final Color DELETE_EDGE_COLOR = Color.RED;
   final Color EDIT_ELEV_COLOR = Color.RED;
@@ -176,6 +176,7 @@ public class MapEditorController implements Controller {
 
   private void displayNodes() {
     for (Circle circle : nodesMap.keySet()) {
+      circle.setOpacity(0.6);
       pn_display.getChildren().add(circle);
     }
   }
@@ -432,7 +433,8 @@ public class MapEditorController implements Controller {
     DbNode node = nodesMap.get(circle).getDBNode();
     controllerEditNode.setShortName(node.getShortName());
     controllerEditNode.setLongName(node.getLongName());
-    controllerEditNode.setPos(event.getX(), event.getY());
+    // controllerEditNode.setPos(event.getX(), event.getY());
+    controllerEditNode.setPos(circle.getCenterX(), circle.getCenterY());
   }
 
   private void onCircleEditNodeDragged(MouseEvent event, Circle circle) {
@@ -1016,6 +1018,7 @@ public class MapEditorController implements Controller {
           currentFloor = 1;
           setFloorImg("/edu/wpi/N/images/Floor1Reclor.png");
           btn_floor1.setStyle("fx-background-color: #ffc911");
+          mode = Mode.NO_STATE;
         });
     btn_floor2
         .getStylesheets()
@@ -1025,6 +1028,7 @@ public class MapEditorController implements Controller {
         e -> {
           currentFloor = 2;
           setFloorImg("/edu/wpi/N/images/Floor2TeamN.png");
+          mode = Mode.NO_STATE;
         });
     btn_floor3
         .getStylesheets()
@@ -1034,6 +1038,7 @@ public class MapEditorController implements Controller {
         e -> {
           currentFloor = 3;
           setFloorImg("/edu/wpi/N/images/Floor3TeamN.png");
+          mode = Mode.NO_STATE;
         });
     btn_floor4
         .getStylesheets()
@@ -1043,6 +1048,7 @@ public class MapEditorController implements Controller {
         e -> {
           currentFloor = 4;
           setFloorImg("/edu/wpi/N/images/Floor4TeamN.png");
+          mode = Mode.NO_STATE;
         });
     btn_floor5
         .getStylesheets()
@@ -1052,6 +1058,7 @@ public class MapEditorController implements Controller {
         e -> {
           currentFloor = 5;
           setFloorImg("/edu/wpi/N/images/Floor5TeamN.png");
+          mode = Mode.NO_STATE;
         });
     JFXNodesList nodesList = new JFXNodesList();
     nodesList.addAnimatedNode(btn_floors);
