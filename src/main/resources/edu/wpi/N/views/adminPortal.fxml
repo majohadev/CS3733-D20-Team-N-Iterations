@@ -52,34 +52,43 @@
                <children>
                   <VBox prefHeight="1005.0" prefWidth="192.0">
                      <children>
-                        <Pane prefHeight="242.5" prefWidth="192.0">
+                        <Pane prefHeight="153.0" prefWidth="192.0">
                            <children>
-                              <JFXButton fx:id="btn_EmployeeEdit" layoutX="16.0" layoutY="65.0" onMouseClicked="#changePanes" prefHeight="121.0" prefWidth="160.0" text="Add / Edit / Delete Employee" textAlignment="CENTER" wrapText="true">
+                              <JFXButton fx:id="btn_EmployeeEdit" layoutX="16.0" layoutY="17.0" onMouseClicked="#changePanes" prefHeight="121.0" prefWidth="160.0" text="Add / Edit / Delete Employee" textAlignment="CENTER" wrapText="true">
                                  <font>
                                     <Font name="Calibri" size="24.0" />
                                  </font></JFXButton>
                            </children></Pane>
-                        <Pane prefHeight="242.5" prefWidth="192.0">
+                        <Pane prefHeight="163.0" prefWidth="192.0">
                            <children>
-                              <JFXButton fx:id="btn_AccountEdit" layoutX="15.0" layoutY="48.0" onMouseClicked="#changePanes" prefHeight="155.0" prefWidth="162.0" text="Add / Edit / Delete Account" textAlignment="CENTER" wrapText="true">
+                              <JFXButton fx:id="btn_AccountEdit" layoutX="15.0" layoutY="4.0" onMouseClicked="#changePanes" prefHeight="155.0" prefWidth="162.0" text="Add / Edit / Delete Account" textAlignment="CENTER" wrapText="true">
                                  <font>
                                     <Font name="Calibri" size="24.0" />
                                  </font></JFXButton>
                            </children></Pane>
-                        <Pane prefHeight="242.5" prefWidth="192.0">
+                        <Pane prefHeight="137.0" prefWidth="192.0">
                            <children>
-                              <JFXButton fx:id="btn_ViewRequests" layoutX="16.0" layoutY="65.0" onMouseClicked="#changePanes" prefHeight="121.0" prefWidth="160.0" text="View Service Requests" textAlignment="CENTER" wrapText="true">
+                              <JFXButton fx:id="btn_ViewRequests" layoutX="16.0" onMouseClicked="#changePanes" prefHeight="121.0" prefWidth="160.0" text="View Service Requests" textAlignment="CENTER" wrapText="true">
                                  <font>
                                     <Font size="24.0" />
                                  </font></JFXButton>
                            </children></Pane>
-                        <Pane prefHeight="242.5" prefWidth="192.0">
+                        <Pane prefHeight="125.0" prefWidth="192.0">
                            <children>
-                              <JFXButton fx:id="btn_EditMap" layoutX="36.0" layoutY="104.0" onMouseClicked="#adminEditMap" text="Edit Map">
+                              <JFXButton fx:id="btn_EditMap" layoutX="36.0" layoutY="33.0" onMouseClicked="#adminEditMap" text="Edit Map">
                                  <font>
                                     <Font name="Calibri" size="24.0" />
                                  </font></JFXButton>
                            </children></Pane>
+                        <Pane prefHeight="393.0" prefWidth="192.0">
+                           <children>
+                              <JFXButton layoutX="14.0" layoutY="63.0" onMouseClicked="#popUpFileManager" text="Manage Files">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </JFXButton>
+                           </children>
+                        </Pane>
                      </children>
                   </VBox>
                </children>

@@ -19,13 +19,18 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 
 public class NewAdminController implements Controller, Initializable {
@@ -84,6 +89,7 @@ public class NewAdminController implements Controller, Initializable {
   @FXML JFXComboBox cb_changeAlgo;
   @FXML Label lbl_title;
   @FXML JFXTextField txtf_rmuser;
+  @FXML JFXButton btnSwitchToFileManagement;
 
   ObservableList<Request> tableData = FXCollections.observableArrayList();
   ObservableList<String> languageData = FXCollections.observableArrayList();
@@ -220,6 +226,31 @@ public class NewAdminController implements Controller, Initializable {
       pn_pane1.setVisible(false);
       pn_pane2.setVisible(false);
       populateTable();
+    }
+  }
+
+  /** Pops up a new window with File Manager */
+  @FXML
+  private void popUpFileManager() {
+    try {
+      Stage stage = new Stage();
+      Parent root;
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(getClass().getResource("fileManagementScreen.fxml"));
+      root = loader.load();
+      Scene scene = new Scene(root);
+      stage.setScene(scene);
+
+      // DataEditorController controller = (DataEditorController) loader.getController();
+
+      stage.initModality(Modality.APPLICATION_MODAL);
+      stage.show();
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setHeaderText("Oops... Something went Wong");
+      errorAlert.setContentText("Error when openning File Manager Window");
+      errorAlert.showAndWait();
     }
   }
 

@@ -266,7 +266,7 @@ public class DataEditorController implements Controller {
   // TODO: change name of the function or a button to match
   @FXML
   private void onDoneClicked() throws IOException {
-    mainApp.switchScene("views/home.fxml", singleton);
+    // mainApp.switchScene("views/home.fxml", singleton);
   }
 
   /**
