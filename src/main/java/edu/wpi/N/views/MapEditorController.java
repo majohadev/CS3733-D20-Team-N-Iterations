@@ -2,8 +2,12 @@ package edu.wpi.N.views;
 
 import com.google.common.collect.HashBiMap;
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXNodesList;
 import edu.wpi.N.App;
+import edu.wpi.N.algorithms.AStar;
+import edu.wpi.N.algorithms.BFS;
+import edu.wpi.N.algorithms.DFS;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
@@ -13,12 +17,11 @@ import edu.wpi.N.entities.UINode;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
@@ -64,6 +67,8 @@ public class MapEditorController implements Controller {
     this.singleton = singleton;
   }
 
+  @FXML JFXComboBox<String> cb_changeAlgo;
+  @FXML JFXButton btn_changeAlgo;
   @FXML Pane pn_display;
   @FXML Pane pn_editor;
   @FXML Pane pn_elev;
@@ -72,6 +77,7 @@ public class MapEditorController implements Controller {
   @FXML Pane pn_edges;
   @FXML Pane pn_changeFloor;
   @FXML ImageView img_map;
+  @FXML JFXButton btn_cancel_elev;
   private JFXButton btn_floors, btn_floor1, btn_floor2, btn_floor3, btn_floor4, btn_floor5;
 
   final int DEFAULT_FLOOR = 1;
@@ -138,6 +144,8 @@ public class MapEditorController implements Controller {
 
   public void initialize() throws DBException {
     editElevNodes = new LinkedList<>();
+    btn_cancel_elev.setDisable(true);
+    btn_cancel_elev.setVisible(false);
     currentFloor = DEFAULT_FLOOR;
     currentBuilding = DEFAULT_BUILDING;
     nodesMap = HashBiMap.create();
@@ -153,6 +161,7 @@ public class MapEditorController implements Controller {
     pn_edges.getChildren().add(addEdgeLine);
     deleteEdgeLines = new LinkedList<>();
     initializeChangeFloorButtons();
+    populateChangeAlgo();
   }
 
   private void loadFloor() throws DBException {
@@ -406,6 +415,10 @@ public class MapEditorController implements Controller {
       onCircleEditNodeClicked(event, circle);
     }
     if (mode == Mode.EDIT_ELEV && editElevNodes.contains(circle)) {
+
+      //      onBtnSaveEditElevClicked();
+
+      onBtnCancelEditElevClicked();
       if (elevCircle != null && elevCircle != circle) {
         elevCircle.setFill(EDIT_ELEV_COLOR);
         pn_elev.setVisible(false);
@@ -505,6 +518,7 @@ public class MapEditorController implements Controller {
 
   private void handleDeleteNodeRightClick() throws IOException, DBException {
     mode = Mode.DELETE_NODE;
+    hideEditElevButton();
     changeEditor();
     onBtnCancelDeleteNodeClicked();
     onBtnConfirmDeleteNodeClicked();
@@ -512,6 +526,7 @@ public class MapEditorController implements Controller {
 
   private void handleEditNodeRightClick() throws IOException {
     mode = Mode.EDIT_NODE;
+    hideEditElevButton();
     changeEditor();
     onBtnCancelEditNodeClicked();
     onBtnConfirmEditNodeClicked();
@@ -519,6 +534,7 @@ public class MapEditorController implements Controller {
 
   private void handleDeleteEdgeRightClick() throws IOException {
     mode = Mode.DELETE_EDGE;
+    hideEditElevButton();
     changeEditor();
     pn_stack.getChildren().remove(pn_edges);
     pn_stack.getChildren().add(pn_edges);
@@ -531,6 +547,7 @@ public class MapEditorController implements Controller {
   public void onPaneDisplayClicked(MouseEvent event) throws IOException {
     // Add Node
     if (event.getClickCount() == 2 && mode != Mode.ADD_NODE) {
+      hideEditElevButton();
       onPaneDisplayClickedAddNode(event);
     }
     if (event.getButton() == MouseButton.SECONDARY) {
@@ -573,12 +590,14 @@ public class MapEditorController implements Controller {
             }
           });
       menu.getItems().addAll(deleteNode, editNode, deleteEdge, editElev);
-      menu.show(mainApp.getStage(), event.getSceneX(), event.getSceneY());
+      menu.show(mainApp.getStage(), event.getScreenX(), event.getScreenY());
     }
   }
 
   private void handleEditElevRightClick() throws IOException {
     mode = Mode.EDIT_ELEV;
+    btn_cancel_elev.setDisable(false);
+    btn_cancel_elev.setVisible(true);
     changeEditor();
     for (Circle circle : editElevNodes) {
       circle.setFill(EDIT_ELEV_COLOR);
@@ -587,6 +606,7 @@ public class MapEditorController implements Controller {
 
   private void onPaneDisplayClickedAddNode(MouseEvent event) throws IOException {
     mode = Mode.ADD_NODE;
+    hideEditElevButton();
     changeEditor();
     addNodeCircle = createCircle(event.getX(), event.getY(), ADD_NODE_COLOR);
     pn_display.getChildren().add(addNodeCircle);
@@ -843,9 +863,31 @@ public class MapEditorController implements Controller {
             });
   }
 
+  private void onBtnCancelEditElevClicked() {
+    controllerEditElev
+        .getBtnCancel()
+        .setOnMouseClicked(
+            e -> {
+              elevCircle.setFill(EDIT_ELEV_COLOR);
+              elevCircle = null;
+              pn_elev.setVisible(false);
+            });
+  }
+
+  private void onBtnSaveEditElevClicked() {
+    controllerEditElev
+        .getBtnSave()
+        .setOnMouseClicked(
+            e -> {
+              elevCircle.setFill(EDIT_ELEV_COLOR);
+              elevCircle = null;
+              pn_elev.setVisible(false);
+            });
+  }
+
   private void resetAll() {
     pn_editor.setVisible(false);
-    //    pn_elev.setVisible(false);
+    pn_elev.setVisible(false);
     resetAddNode();
     resetDeleteNode();
     resetEditNode();
@@ -854,11 +896,15 @@ public class MapEditorController implements Controller {
   }
 
   private void resetEditElev() {
+    //    btn_cancel_elev.setDisable(true);
+    //    btn_cancel_elev.setVisible(false);
+
     for (Circle circle : editElevNodes) {
       circle.setFill(DEFAULT_CIRCLE_COLOR);
     }
     editNodeCircle = null;
     pn_elev.setVisible(false);
+    pn_elev.getChildren().clear();
   }
 
   private void resetAddNode() {
@@ -902,7 +948,7 @@ public class MapEditorController implements Controller {
   }
 
   public void onBtnHomeClicked() throws IOException {
-    mainApp.switchScene("views/home.fxml", singleton);
+    mainApp.switchScene("views/adminPortal.fxml", singleton);
   }
 
   private void handleCircleAddEdgeDragged(MouseEvent event, Circle circle) {
@@ -1022,7 +1068,7 @@ public class MapEditorController implements Controller {
     btn_floor4.setOnMouseClicked(
         e -> {
           currentFloor = 4;
-          setFloorImg("/edu/wpi/N/images/Floor4TeamN.png");
+          setFloorImg("/edu/wpi/N/images/Floor4SolidBackground.png");
           mode = Mode.NO_STATE;
         });
     btn_floor5
@@ -1049,6 +1095,7 @@ public class MapEditorController implements Controller {
 
   private void setFloorImg(String path) {
     resetAll();
+    hideEditElevButton();
     Image img = new Image(getClass().getResourceAsStream(path));
     img_map.setImage(img);
     try {
@@ -1056,5 +1103,42 @@ public class MapEditorController implements Controller {
     } catch (DBException e) {
       e.printStackTrace();
     }
+  }
+
+  public void populateChangeAlgo() {
+    LinkedList<String> algoTypes = new LinkedList<>();
+    algoTypes.add("BFS");
+    algoTypes.add("DFS");
+    algoTypes.add("AStar");
+    ObservableList<String> algos = FXCollections.observableArrayList();
+    algos.addAll(algoTypes);
+    cb_changeAlgo.setItems(algos);
+  }
+
+  public void onBtnCancelElevClicked() {
+    resetEditElev();
+    mode = Mode.NO_STATE;
+    btn_cancel_elev.setDisable(true);
+    btn_cancel_elev.setVisible(false);
+  }
+
+  public void hideEditElevButton() {
+    btn_cancel_elev.setDisable(true);
+    btn_cancel_elev.setVisible(false);
+  }
+
+  public void changeAlgorithm() {
+    cb_changeAlgo
+        .valueProperty()
+        .addListener(
+            (ob, old, newVal) -> {
+              if (newVal.equals("BFS")) {
+                singleton.savedAlgo.setPathFinder(new BFS());
+              } else if (newVal.equals("DFS")) {
+                singleton.savedAlgo.setPathFinder(new DFS());
+              } else if (newVal.equals("AStar")) {
+                singleton.savedAlgo.setPathFinder(new AStar());
+              }
+            });
   }
 }

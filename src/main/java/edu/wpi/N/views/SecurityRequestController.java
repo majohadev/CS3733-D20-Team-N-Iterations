@@ -6,16 +6,20 @@ import com.jfoenix.controls.JFXTextArea;
 import edu.wpi.N.App;
 import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.database.DBException;
+import edu.wpi.N.database.MapDB;
 import edu.wpi.N.database.ServiceDB;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.States.StateSingleton;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 
 public class SecurityRequestController implements Controller {
 
@@ -25,7 +29,7 @@ public class SecurityRequestController implements Controller {
   @FXML JFXComboBox<String> cmbo_text;
   @FXML JFXCheckBox cb_isEmergency;
   @FXML JFXTextArea txtf_description;
-  @FXML
+  @FXML AnchorPane securityPage;
   JFXCheckBox cb_susPerson, cb_susPackage, cb_harassment, cb_weapons, cb_shouting, cb_violence;
 
   private ArrayList<JFXCheckBox> checkBoxes = new ArrayList<>();
@@ -94,18 +98,29 @@ public class SecurityRequestController implements Controller {
 
   // Create Security Request
   @FXML
-  public void createNewSecRequest() throws DBException {
+  public void createNewSecRequest() throws DBException, IOException {
 
-    String nodeID;
+    String nodeID = null;
     int nodeIndex = 0;
 
     try {
-      String curr = cmbo_text.getEditor().getText();
-      for (String name : fuzzySearchTextList) {
-        if (name.equals(curr)) {
-          nodeIndex++;
+      String userLocationName = cmbo_text.getEditor().getText().toLowerCase().trim();
+      LinkedList<DbNode> checkNodes = MapDB.searchVisNode(-1, null, null, userLocationName);
+
+      // Find the exact match and get the nodeID
+      for (DbNode node : checkNodes) {
+        if (node.getLongName().toLowerCase().equals(userLocationName)) {
+          nodeID = node.getNodeID();
           break;
         }
+      }
+      // Check to see if such node was found
+      if (nodeID == null) {
+        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+        errorAlert.setContentText(
+            "Please select a location for your service request from suggestions menu!");
+        errorAlert.show();
+        return;
       }
       nodeID = fuzzySearchNodeList.get(nodeIndex).getNodeID();
       System.out.println(nodeID);
@@ -130,7 +145,7 @@ public class SecurityRequestController implements Controller {
       errorAlert.show();
       return;
     } else {
-      notes = notes + "\n" + txtf_description;
+      notes = notes + "\n" + txtf_description.getText();
     }
 
     String isEmergency = "";
@@ -153,5 +168,10 @@ public class SecurityRequestController implements Controller {
     Alert confAlert = new Alert(Alert.AlertType.CONFIRMATION);
     confAlert.setContentText("Request Recieved");
     confAlert.show();
+
+    securityPage.setVisible(false);
+    AnchorPane currentPane = FXMLLoader.load(getClass().getResource("mainServicePage.fxml"));
+    securityPage.getChildren().setAll(currentPane);
+    securityPage.setVisible(true);
   }
 }

@@ -1,11 +1,27 @@
-Id,Name,ServiceType,Languages
-,Ivan Eroshenko,Translator,Russian
-,Annie Fan,Translator,"Spanish, Cambodian"
-,Evan Llewellyn,Translator,Ancient-elf
-,Kaitlyn Fichtner,Laundry,
-,Matt Johannesen,Translator,Chinese
-,Mike Laks,Laundry,
-,Nick Wood,Laundry,
-,Noah Preston Capucilli-Shatan,Translator,"Ancient-greek, Italian"
-,Sam Goldman,Translator,"Spanish, Polish"
-,Nick Pelletier,Laundry,Russian
+Id,Name,ServiceType,Languages (translator only),Locations (doctor “medicine” only),Field (doctor “medicine” only),Username (doctor “medicine” only)
+,Ivan Eroshenko,Translator,Russian,,,
+,Annie Fan,Translator,"Spanish, Cambodian",,,
+,Evan Llewellyn,Translator,Ancient-elf,,,
+,Kaitlyn Fichtner,Laundry,,,,
+,Matt Johannesen,Translator,Chinese,,,
+,Mike Laks,Laundry,,,,
+,Nick Wood,Laundry,,,,
+,Noah Preston Capucilli-Shatan,Translator,"Ancient-greek, Italian",,,
+,Sam Goldman,Translator,"Spanish, Polish",,,
+,Nick Pelletier,Laundry,Russian,,,
+,Wilson Wong,Medicine,,,psychotherapist,wwong2
+,Elizabeth Blackwell,Medicine,,,vaccination doctor,eblackwell
+,Brad Pitt,Emotional Support,,,,
+,Tom Hanks,Emotional Support,,,,
+,Justin Bieber,Flower,,,,
+,Jennifer Lopez,Flower,,,,
+,Leonardo DiCaprio,Internal Transportation,,,,
+,Jay-Z,Internal Transportation,,,,
+,Tony Stark,IT,,,,
+,Will Smith,IT,,,,
+,Johnny Depp,Sanitation,,,,
+,Dwayne Johnson,Sanitation,,,,
+,Kim Kardashian,Security,,,,
+,Kanye West,Security,,,,
+,Stephen Hawking,Wheelchair,,,,
+,Tom Cruise,Wheelchair,,,,

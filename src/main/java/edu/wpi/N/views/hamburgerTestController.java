@@ -205,7 +205,6 @@ public class hamburgerTestController implements Controller, Initializable {
     mapBaseController.setMode(MapBaseController.Mode.PATH_STATE);
     // pn_display.getChildren().removeIf(node -> node instanceof Line);
     enableAllFloorButtons();
-    // TODO: Get UIDispNodes for pathfinding from list of strings
     String firstSelection = (String) lst_firstLocation.getSelectionModel().getSelectedItem();
     String secondSelection = (String) lst_secondLocation.getSelectionModel().getSelectedItem();
     // jumpToFloor(imgPaths[stringNodeConversion.get(firstSelection).getFloor() - 1]);
@@ -220,7 +219,6 @@ public class hamburgerTestController implements Controller, Initializable {
     }
   }
 
-  // TODO: make helper function to compact pathfind functions?
   @FXML
   private void onDoctorPathFindClicked(MouseEvent event) throws Exception {
     // this.mode = Mode.PATH_STATE;
@@ -263,7 +261,7 @@ public class hamburgerTestController implements Controller, Initializable {
         for (String s : directions) {
           System.out.println(s);
         }
-        System.out.println("Start angle " + path.getStartAngle());
+        System.out.println("Start angle " + path.getStartAngle(MapDB.getKioskAngle()));
       } catch (NullPointerException e) {
         displayErrorMessage("The path does not exist");
         return;
@@ -276,7 +274,7 @@ public class hamburgerTestController implements Controller, Initializable {
       for (String s : directions) {
         System.out.println(s);
       }
-      System.out.println("Start angle " + path.getStartAngle());
+      System.out.println("Start angle " + path.getStartAngle(MapDB.getKioskAngle()));
     }
     disableNonPathFloors(mapBaseController.getPathNodes());
     mapBaseController.drawPath(mapBaseController.getPathNodes());
@@ -344,7 +342,9 @@ public class hamburgerTestController implements Controller, Initializable {
   }
    */
 
-  public void initializeChangeFloorButtons() {
+  public void initializeChangeFloorButtons() throws DBException {
+    // MapDB.setKiosk("NSERV00301", 0);
+    // MapDB.setKiosk("NSERV00103", 0);
     btn_floors = new JFXButton("Floors");
     btn_floor1 = new JFXButton("1");
     btn_floor2 = new JFXButton("2");
@@ -450,12 +450,47 @@ public class hamburgerTestController implements Controller, Initializable {
     }
   }
 
+
+
   /**
    * Finds and draws path to the cafeteria
    *
    * @param e
    */
+  /*
   @FXML
+  private void findPathToCafetaria(MouseEvent e) {
+      try {
+          this.mode = Mode.PATH_STATE;
+          pn_display.getChildren().removeIf(node -> node instanceof Line);
+          enableAllFloorButtons();
+
+          boolean handicap = false;
+          if (handicapp1.isSelected() || handicapp2.isSelected()) {
+              handicap = true;
+          }
+
+          String startSelection = (String) lst_firstLocation.getSelectionModel().getSelectedItem();
+          DbNode startNode = stringNodeConversion.get(startSelection);
+
+          DbNode endNode = MapDB.getNode("MRETL00203");
+
+          if (endNode != null) {
+              Path pathToCafetaria = singleton.savedAlgo.findPath(startNode, endNode, handicap);
+              drawPath(pathToCafetaria.getPath());
+              // set textual descriptions
+              setTextDecription(pathToCafetaria);
+          }
+
+      } catch (Exception ex) {
+          ex.printStackTrace();
+          Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+          errorAlert.setHeaderText("Oops... Something went Wong");
+          errorAlert.setContentText("Path to cafeteria wasn't found");
+          errorAlert.showAndWait();
+      }
+  }
+  */
   private void findPathToCafeteria(MouseEvent e) throws DBException {
     // this.mode = Mode.PATH_STATE;
     mapBaseController.setMode(MapBaseController.Mode.PATH_STATE);
@@ -513,7 +548,7 @@ public class hamburgerTestController implements Controller, Initializable {
   }
 
   public void onBtnHomeClicked() throws IOException {
-    mainApp.switchScene("views/home.fxml", singleton);
+    mainApp.switchScene("views/newHomePage.fxml", singleton);
   }
 
   public void displayErrorMessage(String str) {

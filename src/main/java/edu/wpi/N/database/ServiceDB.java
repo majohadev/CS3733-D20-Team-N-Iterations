@@ -304,7 +304,7 @@ public class ServiceDB {
             rs.getTimestamp("scheduledTransportTime").toString().substring(11, 16),
             rs.getString("destinationLocation"));
       } else if (sType.equals("Security")) {
-        query = "SELECT device, problem FROM secrequest WHERE requestID = ?";
+        query = "SELECT isEmergency FROM secrequest WHERE requestID = ?";
         stmt = con.prepareStatement(query);
         stmt.setInt(1, id);
         rs = stmt.executeQuery();
@@ -814,12 +814,12 @@ public class ServiceDB {
   public static LinkedList<EmotionalSupporter> getEmotionalSupporters() throws DBException {
     try {
       String query =
-          "SELECT l_employeeID from employees, emotionalSupporter where employeeID = l_employeeID";
+          "SELECT e_employeeID from employees, emotionalSupporter where employeeID = e_employeeID";
       PreparedStatement stmt = con.prepareStatement(query);
       ResultSet rs = stmt.executeQuery();
       LinkedList<EmotionalSupporter> emotionalSupporters = new LinkedList<EmotionalSupporter>();
       while (rs.next()) {
-        emotionalSupporters.add((EmotionalSupporter) getEmployee(rs.getInt("l_employeeID")));
+        emotionalSupporters.add((EmotionalSupporter) getEmployee(rs.getInt("e_employeeID")));
       }
       return emotionalSupporters;
     } catch (SQLException e) {
