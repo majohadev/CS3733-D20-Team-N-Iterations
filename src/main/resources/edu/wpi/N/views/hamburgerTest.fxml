@@ -136,7 +136,7 @@
                                           </ImageView>
                                        </graphic>
                                     </JFXButton>
-                                    <JFXButton layoutX="117.0" layoutY="496.0" prefHeight="50.0" prefWidth="66.0" ripplerFill="#ffd965" style="-fx-background-color: #002186#002186; -fx-background-radius: 0;" text=" ">
+                                    <JFXButton layoutX="117.0" layoutY="496.0" onMouseClicked="#findPathToCafetaria" prefHeight="50.0" prefWidth="66.0" ripplerFill="#ffd965" style="-fx-background-color: #002186#002186; -fx-background-radius: 0;" text=" ">
                                        <graphic>
                                           <ImageView fitHeight="32.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true" translateX="4.0">
                                              <image>
