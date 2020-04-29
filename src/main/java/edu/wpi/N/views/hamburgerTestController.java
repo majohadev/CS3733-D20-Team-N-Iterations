@@ -328,8 +328,8 @@ public class hamburgerTestController implements Controller, Initializable {
   }
 
   public void initializeChangeFloorButtons() throws DBException {
-    MapDB.setKiosk("NSERV00301", 0);
-    MapDB.setKiosk("NSERV00103", 0);
+    // MapDB.setKiosk("NSERV00301", 0);
+    // MapDB.setKiosk("NSERV00103", 0);
     btn_floors = new JFXButton("Floors");
     btn_floor1 = new JFXButton("1");
     btn_floor2 = new JFXButton("2");
