@@ -19,8 +19,9 @@
 <AnchorPane prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: fff8e4;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.MedicineRequestController">
    <children>
       <Pane prefHeight="110.0" prefWidth="1920.0" style="-fx-background-color: #002186;" AnchorPane.topAnchor="0.0">
+         <fx:include fx:id="time" layoutX="1750.0" layoutY="20.0" source="timeTab.fxml" />
          <children>
-            <JFXButton buttonType="RAISED" layoutX="88.0" layoutY="37.0" onMouseClicked="#logout" text="Logout" textFill="WHITE">
+            <JFXButton buttonType="RAISED" layoutX="14.0" layoutY="35.0" onMouseClicked="#logout" text="Logout" textFill="WHITE">
                <font>
                   <Font name="Calibri" size="24.0" />
                </font>
@@ -35,11 +36,6 @@
                   <Image url="@../images/Brigham_and_Womens_Hospital_logo.svg.png" />
                </image>
             </ImageView>
-            <JFXButton buttonType="RAISED" layoutX="1.0" layoutY="36.0" onMouseClicked="#goBack" text="Back" textFill="WHITE">
-               <font>
-                  <Font name="Calibri" size="24.0" />
-               </font>
-            </JFXButton>
          </children>
       </Pane>
       <SplitPane dividerPositions="0.15641293013555788" prefHeight="970.0" prefWidth="200.0" style="-fx-background-color: fff8e4;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="110.0">

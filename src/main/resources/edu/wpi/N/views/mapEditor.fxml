@@ -18,7 +18,7 @@
                <children>
                   <Pane prefHeight="110.0" prefWidth="1918.0" style="-fx-background-color: #00339A;">
                      <children>
-                         <fx:include fx:id="time" layoutX="1.0" layoutY="36.0" source="timeTab.fxml" />
+                         <fx:include fx:id="time" layoutX="1750.0" layoutY="20.0" source="timeTab.fxml" />
                      </children></Pane>
                </children></AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" style="-fx-background-color: fff8e4;">

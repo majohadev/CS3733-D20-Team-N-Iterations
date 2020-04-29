@@ -40,6 +40,7 @@
          </children>
       </StackPane>
       <Pane prefHeight="75.0" prefWidth="1978.0" style="-fx-background-color: #002186;" />
+      <fx:include fx:id="time" layoutX="1750.0" layoutY="5.0" source="timeTab.fxml" />
       <JFXDrawer fx:id="dw_drawer" defaultDrawerSize="300.0" layoutY="75.0" maxHeight="-Infinity" minWidth="-Infinity" prefHeight="970.0" prefWidth="300.0">
          <children>
             <VBox layoutX="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="970.0" prefWidth="300.0">

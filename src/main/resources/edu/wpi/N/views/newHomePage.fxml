@@ -18,7 +18,8 @@
       <SplitPane dividerPositions="0.10575139146567718" layoutX="880.0" layoutY="462.0" orientation="VERTICAL" prefHeight="1080.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
           <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="75.0" minWidth="1920.0" prefHeight="110.0" prefWidth="1920.0" style="-fx-background-color: #002186;">
-               <children>
+             <fx:include fx:id="time" layoutX="1750.0" layoutY="20.0" source="timeTab.fxml" />
+             <children>
                   <HBox alignment="CENTER_LEFT" layoutX="902.0" layoutY="-15.74609375" prefHeight="75.0" prefWidth="1920.0" spacing="1660.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <ImageView fitHeight="131.0" fitWidth="88.0" pickOnBounds="true" preserveRatio="true">
@@ -26,11 +27,6 @@
                               <Image url="@../images/Brigham_and_Womens_Hospital_logo.svg.png" />
                            </image>
                         </ImageView>
-                        <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="9:12 AM" wrappingWidth="211.32942581176758">
-                           <font>
-                              <Font name="Calibri Bold" size="46.0" />
-                           </font>
-                        </Text>
                      </children>
                      <padding>
                         <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
