@@ -45,7 +45,7 @@ public class BetweenFloorsController implements Controller, Initializable {
   HashMap<Integer, Text> labels;
   // HashMap<Integer, Boolean> status;
   HashMap<Integer, Pair<DbNode, Boolean>> nodeStatus;
- // LinkedList<Integer> floors; // set on list of floors that have nodes
+  // LinkedList<Integer> floors; // set on list of floors that have nodes
   LinkedList<DbNode> originalEdges;
   int floor;
   boolean currNode;
@@ -55,7 +55,7 @@ public class BetweenFloorsController implements Controller, Initializable {
     this.nodes = new HashMap<Integer, Circle>();
     this.labels = new HashMap<Integer, Text>();
     this.nodeStatus = new HashMap<Integer, Pair<DbNode, Boolean>>();
-    //this.floors = new LinkedList<Integer>();
+    // this.floors = new LinkedList<Integer>();
     this.originalEdges = new LinkedList<DbNode>();
 
     Circle circle5 = createCircle(65, 100, "5", 5);
@@ -76,7 +76,7 @@ public class BetweenFloorsController implements Controller, Initializable {
   public void setFloor(int floor) {
     this.floor = floor;
     this.nodeStatus = new HashMap<Integer, Pair<DbNode, Boolean>>();
-    //this.floors = new LinkedList<Integer>();
+    // this.floors = new LinkedList<Integer>();
     this.originalEdges = new LinkedList<DbNode>();
     currNode = false;
     text.setVisible(false);
@@ -97,11 +97,11 @@ public class BetweenFloorsController implements Controller, Initializable {
     setFloor(node.getFloor());
     this.floor = node.getFloor();
     currNode = true;
-    //this.originalEdges = AbsAlgo.getEdgesBetweenFloors(node);
-    this.originalEdges = ;//getFloors(node);
+    // this.originalEdges = AbsAlgo.getEdgesBetweenFloors(node);
+    this.originalEdges = AbsAlgo.searchAccessible(node); // getFloors(node);
     nodes.get(node.getFloor()).setFill(INACTIVE_CIRCLE_COLOR);
     for (DbNode n : originalEdges) {
-      //this.floors.add(n.getFloor());
+      // this.floors.add(n.getFloor());
       nodes.get(n.getFloor()).setVisible(true);
       labels.get(n.getFloor()).setVisible(true);
       nodeStatus.put(n.getFloor(), new Pair<>(n, false));
@@ -178,8 +178,8 @@ public class BetweenFloorsController implements Controller, Initializable {
   public void onSaveButton() throws DBException {
     if (currNode) {
       ArrayList<DbNode> activeNodes = new ArrayList<DbNode>();
-      for (int i = 0; i< originalEdges.size()-1; i++) {
-        MapDB.removeEdge(originalEdges.get(i).getNodeID(), originalEdges.get(i+1).getNodeID());
+      for (int i = 0; i < originalEdges.size() - 1; i++) {
+        MapDB.removeEdge(originalEdges.get(i).getNodeID(), originalEdges.get(i + 1).getNodeID());
       }
       for (DbNode n : originalEdges) {
         if (nodeStatus.get(n.getFloor()).getValue()) {
@@ -216,5 +216,4 @@ public class BetweenFloorsController implements Controller, Initializable {
     btn_cancel.setVisible(false);
     // setFloor(this.floor);
   }
-
 }
