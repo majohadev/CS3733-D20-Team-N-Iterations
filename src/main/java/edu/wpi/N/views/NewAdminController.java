@@ -89,12 +89,10 @@ public class NewAdminController implements Controller, Initializable {
   @FXML JFXComboBox cb_changeAlgo;
   @FXML Label lbl_title;
   @FXML JFXTextField txtf_rmuser;
-<<<<<<< HEAD
-  @FXML JFXButton btnSwitchToFileManagement;
-=======
+
   @FXML TableView<String> tb_languagesRemove;
   @FXML ChoiceBox<Employee> cb_EmployeeRemove;
->>>>>>> b9ac4d272e802a9493e324739c0b40a1bfe52cb1
+
 
   ObservableList<Request> tableData = FXCollections.observableArrayList();
   ObservableList<String> languageData = FXCollections.observableArrayList();
