@@ -27,6 +27,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.StrokeLineCap;
 import javax.swing.*;
 
 public class MapEditorController implements Controller {
@@ -81,7 +82,7 @@ public class MapEditorController implements Controller {
   final Color ADD_NODE_COLOR = Color.BLACK;
   final Color DELETE_NODE_COLOR = Color.RED;
   final Color EDIT_NODE_COLOR = Color.RED;
-  final double DEFAULT_CIRCLE_OPACITY = 1;
+  final double DEFAULT_CIRCLE_OPACITY = .6;
   final double DEFAULT_CIRCLE_RADIUS = 7;
   final Color DELETE_EDGE_COLOR = Color.RED;
   final Color EDIT_ELEV_COLOR = Color.RED;
@@ -128,6 +129,7 @@ public class MapEditorController implements Controller {
   LinkedList<Line> deleteEdgeLines;
   // Edit Edit Elevator Variable
   LinkedList<Circle> editElevNodes;
+  Circle elevCircle;
 
   @Override
   public void setMainApp(App mainApp) {
@@ -143,9 +145,11 @@ public class MapEditorController implements Controller {
     mode = Mode.NO_STATE;
     loadFloor();
     addNodeCircle = null;
+    elevCircle = null;
     deleteNodeCircles = new LinkedList<>();
     editNodeCircle = null;
     addEdgeLine = new Line();
+    addEdgeLine.setStrokeLineCap(StrokeLineCap.ROUND);
     pn_edges.getChildren().add(addEdgeLine);
     deleteEdgeLines = new LinkedList<>();
     initializeChangeFloorButtons();
@@ -172,6 +176,7 @@ public class MapEditorController implements Controller {
 
   private void displayNodes() {
     for (Circle circle : nodesMap.keySet()) {
+      circle.setOpacity(0.6);
       pn_display.getChildren().add(circle);
     }
   }
@@ -212,6 +217,7 @@ public class MapEditorController implements Controller {
               scaleX(edge[1].getX()),
               scaleY(edge[1].getY()),
               c);
+      line.setStrokeLineCap(StrokeLineCap.ROUND);
       line.setOnMouseClicked(event -> this.handleLineClickedEvents(event, line));
       UIEdge UIedge = new UIEdge(line, edge);
       conversion.get(edge[0].getNodeID()).addEdge(UIedge);
@@ -251,6 +257,7 @@ public class MapEditorController implements Controller {
   private Line createLine(double x1, double y1, double x2, double y2, Color c) {
     Line line = new Line(x1, y1, x2, y2);
     line.setStroke(c);
+    line.setStrokeLineCap(StrokeLineCap.ROUND);
     line.setStrokeWidth(DEFAULT_LINE_WIDTH);
     pn_display.getChildren().add(line);
     return line;
@@ -307,8 +314,8 @@ public class MapEditorController implements Controller {
       onCircleAddNodeDragged(event, circle);
     }
     if (mode == Mode.EDIT_NODE) {
-      onBtnCancelEditNodeClicked();
-      onBtnConfirmEditNodeClicked();
+      //      onBtnCancelEditNodeClicked();
+      //      onBtnConfirmEditNodeClicked();
       onTxtPosEditNodeTextChanged(circle);
       onCircleEditNodeDragged(event, circle);
     }
@@ -399,12 +406,15 @@ public class MapEditorController implements Controller {
       onCircleEditNodeClicked(event, circle);
     }
     if (mode == Mode.EDIT_ELEV && editElevNodes.contains(circle)) {
-      pn_elev.setVisible(true);
-      circle.setFill(EDIT_ELEV_SELECTED_COLOR);
+      if (elevCircle != null && elevCircle != circle) {
+        elevCircle.setFill(EDIT_ELEV_COLOR);
+        pn_elev.setVisible(false);
+      }
+      elevCircle = circle;
+      elevCircle.setFill(EDIT_ELEV_SELECTED_COLOR);
       controllerEditElev.setFloor(nodesMap.get(circle).getDBNode().getFloor());
       controllerEditElev.setNode(nodesMap.get(circle).getDBNode());
-
-      // alskdfjal;ksfdjla;ksdjfl;skdfjslkdfjslkfjslkdfjlskdfjslkdfjlskdfjlksdjflskdfjlksdjflksdfjlksdjflksdjflksdfjlksdfjlksdjflksdfjlksdjflksdjflkdsjf
+      pn_elev.setVisible(true);
     }
   }
 
@@ -421,7 +431,8 @@ public class MapEditorController implements Controller {
     DbNode node = nodesMap.get(circle).getDBNode();
     controllerEditNode.setShortName(node.getShortName());
     controllerEditNode.setLongName(node.getLongName());
-    controllerEditNode.setPos(event.getX(), event.getY());
+    // controllerEditNode.setPos(event.getX(), event.getY());
+    controllerEditNode.setPos(circle.getCenterX(), circle.getCenterY());
   }
 
   private void onCircleEditNodeDragged(MouseEvent event, Circle circle) {
@@ -502,6 +513,8 @@ public class MapEditorController implements Controller {
   private void handleEditNodeRightClick() throws IOException {
     mode = Mode.EDIT_NODE;
     changeEditor();
+    onBtnCancelEditNodeClicked();
+    onBtnConfirmEditNodeClicked();
   }
 
   private void handleDeleteEdgeRightClick() throws IOException {
@@ -566,10 +579,10 @@ public class MapEditorController implements Controller {
 
   private void handleEditElevRightClick() throws IOException {
     mode = Mode.EDIT_ELEV;
+    changeEditor();
     for (Circle circle : editElevNodes) {
       circle.setFill(EDIT_ELEV_COLOR);
     }
-    changeEditor();
   }
 
   private void onPaneDisplayClickedAddNode(MouseEvent event) throws IOException {
@@ -766,8 +779,8 @@ public class MapEditorController implements Controller {
                 displayErrorMessage("Invalid input");
                 return;
               }
-              String longName = controllerEditNode.getShortName();
-              String shortName = controllerEditNode.getLongName();
+              String shortName = controllerEditNode.getShortName();
+              String longName = controllerEditNode.getLongName();
               if (longName == null || shortName == null) {
                 displayErrorMessage("Invalid input");
                 return;
@@ -775,6 +788,10 @@ public class MapEditorController implements Controller {
               String id = nodesMap.get(editNodeCircle).getDBNode().getNodeID();
               try {
                 MapDB.modifyNode(id, x, y, longName, shortName);
+                DbNode newNode = MapDB.getNode(id);
+                nodesMap.remove(editNodeCircle);
+                UINode UInode = new UINode(editNodeCircle, newNode);
+                nodesMap.put(editNodeCircle, UInode);
               } catch (DBException e) {
                 e.printStackTrace();
               }
@@ -815,12 +832,14 @@ public class MapEditorController implements Controller {
         .setOnMouseClicked(
             event -> {
               mode = Mode.NO_STATE;
-              editNodeCircle.setFill(DEFAULT_CIRCLE_COLOR);
-              editNodeCircle.setCenterX(scaleX(nodesMap.get(editNodeCircle).getDBNode().getX()));
-              editNodeCircle.setCenterY(scaleY(nodesMap.get(editNodeCircle).getDBNode().getY()));
-              cancelEditNode();
-              editNodeCircle = null;
               pn_editor.setVisible(false);
+              if (editNodeCircle != null) {
+                editNodeCircle.setFill(DEFAULT_CIRCLE_COLOR);
+                editNodeCircle.setCenterX(scaleX(nodesMap.get(editNodeCircle).getDBNode().getX()));
+                editNodeCircle.setCenterY(scaleY(nodesMap.get(editNodeCircle).getDBNode().getY()));
+                cancelEditNode();
+              }
+              editNodeCircle = null;
             });
   }
 
@@ -835,7 +854,11 @@ public class MapEditorController implements Controller {
   }
 
   private void resetEditElev() {
-    //    editElevNodes.clear();
+    for (Circle circle : editElevNodes) {
+      circle.setFill(DEFAULT_CIRCLE_COLOR);
+    }
+    editNodeCircle = null;
+    pn_elev.setVisible(false);
   }
 
   private void resetAddNode() {
@@ -919,6 +942,7 @@ public class MapEditorController implements Controller {
                 addEdgeLine.getStartY(),
                 addEdgeLine.getEndX(),
                 addEdgeLine.getEndY());
+        line.setStrokeLineCap(StrokeLineCap.ROUND);
         line.setStrokeWidth(DEFAULT_LINE_WIDTH);
         line.setOnMouseClicked(e -> this.handleLineClickedEvents(event, line));
 
@@ -937,6 +961,7 @@ public class MapEditorController implements Controller {
       nodes.clear();
       pn_edges.getChildren().remove(addEdgeLine);
       addEdgeLine = new Line();
+      addEdgeLine.setStrokeLineCap(StrokeLineCap.ROUND);
       pn_edges.getChildren().add(addEdgeLine);
       mode = Mode.NO_STATE;
     }
@@ -967,6 +992,8 @@ public class MapEditorController implements Controller {
         e -> {
           currentFloor = 1;
           setFloorImg("/edu/wpi/N/images/Floor1Reclor.png");
+          btn_floor1.setStyle("fx-background-color: #ffc911");
+          mode = Mode.NO_STATE;
         });
     btn_floor2
         .getStylesheets()
@@ -976,6 +1003,7 @@ public class MapEditorController implements Controller {
         e -> {
           currentFloor = 2;
           setFloorImg("/edu/wpi/N/images/Floor2TeamN.png");
+          mode = Mode.NO_STATE;
         });
     btn_floor3
         .getStylesheets()
@@ -985,6 +1013,7 @@ public class MapEditorController implements Controller {
         e -> {
           currentFloor = 3;
           setFloorImg("/edu/wpi/N/images/Floor3TeamN.png");
+          mode = Mode.NO_STATE;
         });
     btn_floor4
         .getStylesheets()
@@ -994,6 +1023,7 @@ public class MapEditorController implements Controller {
         e -> {
           currentFloor = 4;
           setFloorImg("/edu/wpi/N/images/Floor4TeamN.png");
+          mode = Mode.NO_STATE;
         });
     btn_floor5
         .getStylesheets()
@@ -1003,19 +1033,22 @@ public class MapEditorController implements Controller {
         e -> {
           currentFloor = 5;
           setFloorImg("/edu/wpi/N/images/Floor5TeamN.png");
+          mode = Mode.NO_STATE;
         });
     JFXNodesList nodesList = new JFXNodesList();
     nodesList.addAnimatedNode(btn_floors);
-    nodesList.addAnimatedNode(btn_floor1);
-    nodesList.addAnimatedNode(btn_floor2);
-    nodesList.addAnimatedNode(btn_floor3);
-    nodesList.addAnimatedNode(btn_floor4);
     nodesList.addAnimatedNode(btn_floor5);
+    nodesList.addAnimatedNode(btn_floor4);
+    nodesList.addAnimatedNode(btn_floor3);
+    nodesList.addAnimatedNode(btn_floor2);
+    nodesList.addAnimatedNode(btn_floor1);
+
     nodesList.setSpacing(10);
     pn_changeFloor.getChildren().add(nodesList);
   }
 
   private void setFloorImg(String path) {
+    resetAll();
     Image img = new Image(getClass().getResourceAsStream(path));
     img_map.setImage(img);
     try {
