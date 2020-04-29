@@ -45,8 +45,8 @@ public class BetweenFloorsController implements Controller, Initializable {
   HashMap<Integer, Text> labels;
   // HashMap<Integer, Boolean> status;
   HashMap<Integer, Pair<DbNode, Boolean>> nodeStatus;
-  LinkedList<Integer> floors; // set on list of floors that have nodes
-  LinkedList<DbNode[]> originalEdges;
+ // LinkedList<Integer> floors; // set on list of floors that have nodes
+  LinkedList<DbNode> originalEdges;
   int floor;
   boolean currNode;
 
@@ -55,8 +55,8 @@ public class BetweenFloorsController implements Controller, Initializable {
     this.nodes = new HashMap<Integer, Circle>();
     this.labels = new HashMap<Integer, Text>();
     this.nodeStatus = new HashMap<Integer, Pair<DbNode, Boolean>>();
-    this.floors = new LinkedList<Integer>();
-    this.originalEdges = new LinkedList<DbNode[]>();
+    //this.floors = new LinkedList<Integer>();
+    this.originalEdges = new LinkedList<DbNode>();
 
     Circle circle5 = createCircle(65, 100, "5", 5);
     Circle circle4 = createCircle(65, 150, "4", 4);
@@ -76,8 +76,8 @@ public class BetweenFloorsController implements Controller, Initializable {
   public void setFloor(int floor) {
     this.floor = floor;
     this.nodeStatus = new HashMap<Integer, Pair<DbNode, Boolean>>();
-    this.floors = new LinkedList<Integer>();
-    this.originalEdges = new LinkedList<DbNode[]>();
+    //this.floors = new LinkedList<Integer>();
+    this.originalEdges = new LinkedList<DbNode>();
     currNode = false;
     text.setVisible(false);
     for (int i = 1; i <= 5; i++) {
@@ -97,21 +97,19 @@ public class BetweenFloorsController implements Controller, Initializable {
     setFloor(node.getFloor());
     this.floor = node.getFloor();
     currNode = true;
-    this.originalEdges = AbsAlgo.getEdgesBetweenFloors(node);
-    LinkedList<DbNode> nodesAvaliable = getFloors(node);
+    //this.originalEdges = AbsAlgo.getEdgesBetweenFloors(node);
+    this.originalEdges = ;//getFloors(node);
     nodes.get(node.getFloor()).setFill(INACTIVE_CIRCLE_COLOR);
-    for (DbNode n : nodesAvaliable) {
-      this.floors.add(n.getFloor());
+    for (DbNode n : originalEdges) {
+      //this.floors.add(n.getFloor());
       nodes.get(n.getFloor()).setVisible(true);
       labels.get(n.getFloor()).setVisible(true);
       nodeStatus.put(n.getFloor(), new Pair<>(n, false));
     }
 
-    for (DbNode[] n : originalEdges) {
-      nodeStatus.put(n[0].getFloor(), new Pair<>(n[0], true));
-      nodeStatus.put(n[1].getFloor(), new Pair<>(n[1], true));
-      nodes.get(n[0].getFloor()).setFill(DEFAULT_CIRCLE_COLOR);
-      nodes.get(n[1].getFloor()).setFill(DEFAULT_CIRCLE_COLOR);
+    for (DbNode n : originalEdges) {
+      nodeStatus.put(n.getFloor(), new Pair<>(n, true));
+      nodes.get(n.getFloor()).setFill(DEFAULT_CIRCLE_COLOR);
     }
     text.setVisible(true);
     text.setText(node.getLongName());
@@ -180,12 +178,12 @@ public class BetweenFloorsController implements Controller, Initializable {
   public void onSaveButton() throws DBException {
     if (currNode) {
       ArrayList<DbNode> activeNodes = new ArrayList<DbNode>();
-      for (DbNode[] n : originalEdges) {
-        MapDB.removeEdge(n[0].getNodeID(), n[1].getNodeID());
+      for (int i = 0; i< originalEdges.size()-1; i++) {
+        MapDB.removeEdge(originalEdges.get(i).getNodeID(), originalEdges.get(i+1).getNodeID());
       }
-      for (Integer i : floors) {
-        if (nodeStatus.get(i).getValue()) {
-          activeNodes.add(nodeStatus.get(i).getKey());
+      for (DbNode n : originalEdges) {
+        if (nodeStatus.get(n.getFloor()).getValue()) {
+          activeNodes.add(nodeStatus.get(n.getFloor()).getKey());
         }
       }
       if (activeNodes.size() >= 1) {
@@ -219,17 +217,4 @@ public class BetweenFloorsController implements Controller, Initializable {
     // setFloor(this.floor);
   }
 
-  private LinkedList<DbNode> getFloors(DbNode node) throws DBException {
-    LinkedList<DbNode> floorChangeNodes = new LinkedList<DbNode>();
-    for (int i = 1; i <= 5; i++) {
-      floorChangeNodes.addAll(MapDB.searchNode(i, node.getBuilding(), node.getNodeType(), ""));
-    }
-    LinkedList<DbNode> thisFloorChangeNodes = new LinkedList<DbNode>();
-    for (DbNode n : floorChangeNodes) {
-      if (Math.abs(node.getX() - n.getX()) <= 10 && Math.abs(node.getY() - n.getY()) <= 10) {
-        thisFloorChangeNodes.add(n);
-      }
-    }
-    return thisFloorChangeNodes;
-  }
 }
