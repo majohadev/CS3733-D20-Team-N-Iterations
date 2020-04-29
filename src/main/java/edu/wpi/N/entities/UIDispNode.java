@@ -152,6 +152,12 @@ public class UIDispNode {
     return false; // Edge does not exist
   }
 
+  public void breakAllEdges() {
+    for (UIDispEdge edge : connectedEdges) {
+      edge.breakSelf();
+    }
+  }
+
   // Assuming bi-directionality
   public UIDispEdge edgeTo(UIDispNode other) {
     for (UIDispEdge edge : connectedEdges) {

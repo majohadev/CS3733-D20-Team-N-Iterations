@@ -292,6 +292,8 @@ public class MapBaseController {
       while (keysIterator.hasNext()) {
         UIDispNode key = keysIterator.next();
         masterNodes.remove(key);
+        key.setVisible(false);
+        key.breakAllEdges();
       }
     } catch (DBException e) {
       System.out.print("Populating floor " + currentFloor + " in  " + currentBuilding + " failed.");

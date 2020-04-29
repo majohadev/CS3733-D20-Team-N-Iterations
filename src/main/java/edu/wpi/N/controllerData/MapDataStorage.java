@@ -18,14 +18,13 @@ public class MapDataStorage {
   private HashMap<String, Image> floorMaps = new HashMap<>();
 
   public MapDataStorage() {
-    URL res;
-    String name, path;
-    for (int i = 1; i <= numOfFloors; i++) {
-      name = "Floor" + i;
-      path = "edu/wpi/N/images/" + name + "TeamN.png"; // Need to edit this to be more accommodating
-      res = getClass().getClassLoader().getResource(path);
-      floorMaps.put(name, new Image(res.toString()));
-    }
+
+    floorMaps.put("Floor1", new Image(getClass().getClassLoader().getResource("/wpi/N/images/Floor1Reclor.png").toString()));
+    floorMaps.put("Floor2", new Image(getClass().getClassLoader().getResource("/wpi/N/images/Floor2TeamN.png").toString()));
+    floorMaps.put("Floor3", new Image(getClass().getClassLoader().getResource("/wpi/N/images/Floor3TeamN.png").toString()));
+    floorMaps.put("Floor4", new Image(getClass().getClassLoader().getResource("/wpi/N/images/Floor4SolidBackground.png").toString()));
+    floorMaps.put("Floor5", new Image(getClass().getClassLoader().getResource("/wpi/N/images/Floor5TeamN.png").toString()));
+
   }
 
   public Image getMap(String building, int floorNum) {
