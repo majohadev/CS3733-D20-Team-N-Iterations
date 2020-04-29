@@ -244,7 +244,8 @@ public abstract class AbsAlgo implements IPathFinder {
       Iterator<Node> nextIt = next.iterator();
       while (nextIt.hasNext()) {
         try {
-          queue.add(MapDB.getNode(nextIt.next().ID));
+          DbNode n = MapDB.getNode(nextIt.next().ID);
+          if (!(queue.contains(n) || nodes.contains(n))) queue.add(n);
         } catch (DBException e) {
           System.out.println(e.getMessage());
           continue; // skip invalid nodes
