@@ -197,7 +197,7 @@
                               </JFXCheckBox>
                            </children>
                         </Pane>
-                        <Pane fx:id="pn_pane2" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="970.0" prefWidth="1720.0">
+                        <Pane fx:id="pn_pane2" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="970.0" prefWidth="1720.0" stylesheets="@adminTables.css">
                            <children>
                               <ChoiceBox fx:id="cb_EmployeeRemove" layoutX="892.0" layoutY="553.0" prefWidth="150.0" />
                               <TableView fx:id="tb_languagesRemove" layoutX="892.0" layoutY="599.0" prefHeight="202.0" prefWidth="150.0" />
