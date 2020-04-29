@@ -260,7 +260,21 @@ public class NewAdminController implements Controller, Initializable {
 
   public void deleteEmployee() throws DBException {
     try {
+
+      if (tbl_Employees.getSelectionModel().getSelectedIndex() <= -1) {
+        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+        errorAlert.setContentText("Select an Employee");
+        errorAlert.show();
+
+        return;
+      }
+
       ServiceDB.removeEmployee(tbl_Employees.getSelectionModel().getSelectedItem().getID());
+
+      Alert confAlert = new Alert(Alert.AlertType.CONFIRMATION);
+      confAlert.setContentText("Employee removed");
+      confAlert.show();
+
       int removeLine = tbl_Employees.getSelectionModel().getSelectedIndex();
       tbl_Employees.getItems().remove(removeLine);
     } catch (DBException e) {
@@ -356,6 +370,15 @@ public class NewAdminController implements Controller, Initializable {
 
   public void addAdmin() throws DBException {
     try {
+
+      if (txtf_adminuser.getText().equals("") | txtf_adminpass.getText().equals("")) {
+        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+        errorAlert.setContentText("Empty Username or Password");
+        errorAlert.show();
+
+        return;
+      }
+
       LoginDB.createAdminLogin(txtf_adminuser.getText(), txtf_adminpass.getText());
 
       Alert acceptReq = new Alert(Alert.AlertType.CONFIRMATION);
@@ -530,9 +553,28 @@ public class NewAdminController implements Controller, Initializable {
   }
 
   public void updateTranslator(MouseEvent event) throws DBException {
+
+    if (txtf_empid.getText().equals("")) {
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setContentText("Needs user ID");
+      errorAlert.show();
+
+      return;
+    }
+
     int empID = Integer.parseInt(txtf_empid.getText());
+
     try {
       if (event.getSource() == btn_addLanguage) {
+
+        if (txtf_newLang.getText().equals("")) {
+          Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+          errorAlert.setContentText("Needs Language");
+          errorAlert.show();
+
+          return;
+        }
+
         ServiceDB.addLanguage(empID, txtf_newLang.getText());
 
         tb_languagesRemove.getItems().add(txtf_newLang.getText());
@@ -820,6 +862,14 @@ public class NewAdminController implements Controller, Initializable {
 
   public void removeLogin() throws DBException {
     try {
+
+      if (txtf_rmuser.getText().equals("")) {
+        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+        errorAlert.setContentText("Invalid Username or Input");
+        errorAlert.show();
+
+        return;
+      }
       LoginDB.removeLogin(txtf_rmuser.getText());
     } catch (DBException e) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
@@ -835,6 +885,15 @@ public class NewAdminController implements Controller, Initializable {
   }
 
   public void removeLanguage() throws DBException {
+
+    if (cb_EmployeeRemove.getSelectionModel().getSelectedIndex() <= -1) {
+
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setContentText("Needs user ID");
+      errorAlert.show();
+
+      return;
+    }
 
     int empID = cb_EmployeeRemove.getSelectionModel().getSelectedItem().getID();
 
