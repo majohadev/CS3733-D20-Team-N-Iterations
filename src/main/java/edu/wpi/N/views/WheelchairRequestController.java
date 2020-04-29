@@ -8,12 +8,15 @@ import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.ServiceDB;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.States.StateSingleton;
+import java.io.IOException;
 import java.util.LinkedList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 
 public class WheelchairRequestController implements Controller {
 
@@ -23,6 +26,7 @@ public class WheelchairRequestController implements Controller {
   @FXML JFXComboBox<String> cmbo_text;
   @FXML JFXComboBox<String> cmbo_selectLang;
   @FXML JFXTextArea txtf_wheelchairNotes;
+  @FXML AnchorPane wheelchairRequest;
 
   private ObservableList<String> fuzzySearchTextList =
       // List that fills TextViews
@@ -86,7 +90,7 @@ public class WheelchairRequestController implements Controller {
 
   // Create Translator Request
   @FXML
-  public void createNewTranslator() throws DBException {
+  public void createNewTranslator() throws DBException, IOException {
 
     String assistanceOption = cmbo_selectLang.getSelectionModel().getSelectedItem();
     String nodeID;
@@ -128,5 +132,9 @@ public class WheelchairRequestController implements Controller {
     Alert confAlert = new Alert(Alert.AlertType.CONFIRMATION);
     confAlert.setContentText("Request Recieved");
     confAlert.show();
+    wheelchairRequest.setVisible(false);
+    AnchorPane currentPane = FXMLLoader.load(getClass().getResource("mainServicePage.fxml"));
+    wheelchairRequest.getChildren().setAll(currentPane);
+    wheelchairRequest.setVisible(true);
   }
 }

@@ -57,7 +57,7 @@
             </VBox>
             <VBox alignment="CENTER" maxHeight="500.0" maxWidth="500.0" minWidth="500.0" prefHeight="200.0" prefWidth="100.0" spacing="30.0">
                <children>
-                  <Label text="Please Enter Aditional Notes Below">
+                  <Label text="Please Enter Additional Notes Below">
                      <font>
                         <Font name="Calibri" size="24.0" />
                      </font>

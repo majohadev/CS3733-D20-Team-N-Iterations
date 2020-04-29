@@ -1022,7 +1022,7 @@ public class MapEditorController implements Controller {
     btn_floor4.setOnMouseClicked(
         e -> {
           currentFloor = 4;
-          setFloorImg("/edu/wpi/N/images/Floor4TeamN.png");
+          setFloorImg("/edu/wpi/N/images/Floor4SolidBackground.png");
           mode = Mode.NO_STATE;
         });
     btn_floor5

@@ -3,9 +3,9 @@
     -jfx-button-type: RAISED;
     -jfx-rippler-fill: #ffd965;
     -fx-background-color: #002186; 
-    -fx-background-radius: 150;
+    -fx-background-radius: 180;
     -fx-text-fill: white;
-    -fx-min-width: 290;
-    -fx-min-height: 290;
+    -fx-min-width: 230;
+    -fx-min-height: 230;
 
 }
