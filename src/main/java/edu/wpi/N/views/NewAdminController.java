@@ -376,6 +376,12 @@ public class NewAdminController implements Controller, Initializable {
         Alert acceptReq = new Alert(Alert.AlertType.CONFIRMATION);
         acceptReq.setContentText("Employee " + name + " was added.");
         acceptReq.show();
+      } else if (cb_employeeTypes.getValue().getServiceType().equals("Security")) {
+        ServiceDB.addSecurityOfficer(name);
+
+        Alert acceptReq = new Alert(Alert.AlertType.CONFIRMATION);
+        acceptReq.setContentText("Employee " + name + " was added.");
+        acceptReq.show();
       }
 
     } catch (DBException e) {
@@ -778,8 +784,6 @@ public class NewAdminController implements Controller, Initializable {
           tableData.setAll(reqs);
         }
       } else if (e.getSource() == btn_Deny) { // This case needs a status check
-        ServiceDB.denyRequest(
-            tb_RequestTable.getSelectionModel().getSelectedItems().get(0).getRequestID(), "");
         ServiceDB.denyRequest(
             tb_RequestTable.getSelectionModel().getSelectedItems().get(0).getRequestID(), "");
 
