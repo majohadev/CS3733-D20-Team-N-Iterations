@@ -84,9 +84,9 @@ CREATE TABLE wheelchairEmployee(
       CONSTRAINT wheel_id FOREIGN KEY (w_employeeID) REFERENCES employees(employeeID) ON DELETE CASCADE);
 
 CREATE TABLE emotionalSupporter(
-      l_employeeID INT NOT NULL,
-      PRIMARY KEY(l_employeeID),
-      CONSTRAINT emo_ID FOREIGN KEY (l_employeeID)REFERENCES employees(employeeID) ON DELETE CASCADE);
+      e_employeeID INT NOT NULL,
+      PRIMARY KEY(e_employeeID),
+      CONSTRAINT emo_ID FOREIGN KEY (e_employeeID)REFERENCES employees(employeeID) ON DELETE CASCADE);
 
 CREATE TABLE flowerDeliverer(
     f_employeeID INT NOT NULL REFERENCES employees(employeeID) on DELETE  CASCADE,

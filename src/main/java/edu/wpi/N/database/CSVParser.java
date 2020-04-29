@@ -1,9 +1,11 @@
 package edu.wpi.N.database;
 
 import com.opencsv.CSVReader;
+import edu.wpi.N.entities.DbNode;
 import java.io.*;
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.Random;
 
 public class CSVParser {
 
@@ -162,19 +164,94 @@ public class CSVParser {
     try {
       String name = row[1].trim();
       String serviceType = row[2];
+      serviceType = serviceType.toLowerCase();
 
-      if (serviceType.toLowerCase().equals("translator")) {
+      if (serviceType.equals("translator")) {
         String[] languages = row[3].replaceAll("\\s+", "").split(",");
 
         ServiceDB.addTranslator(name, new LinkedList<String>(Arrays.asList(languages)));
-      } else {
+      } else if (serviceType.equals("laundry")) {
         ServiceDB.addLaundry(name);
+      } else if (serviceType.equals("medicine")) {
+        String field = row[5];
+        String userName = row[6];
+        createDoctor(name, field, userName);
+      } else if (serviceType.equals("emotional support")) {
+        ServiceDB.addEmotionalSupporter(name);
+      } else if (serviceType.equals("flower")) {
+        ServiceDB.addFlowerDeliverer(name);
+      } else if (serviceType.equals("internal transportation")) {
+        ServiceDB.addInternalTransportationEmployee(name);
+      } else if (serviceType.equals("it")) {
+        ServiceDB.addIT(name);
+      } else if (serviceType.equals("sanitation")) {
+        ServiceDB.addSanitationEmp(name);
+      } else if (serviceType.equals("security")) {
+        ServiceDB.addSecurityOfficer(name);
+      } else if (serviceType.equals("wheelchair")) {
+        ServiceDB.addWheelchairEmployee(name);
       }
-
     } catch (Exception e) {
       // for debugging purposes
-      System.out.println(row[0]);
+      System.out.println(row[1]);
       throw (e);
     }
+  }
+
+  /**
+   * Function creates a doctor with the given name, field and userName. Default password is 12345
+   *
+   * @param name
+   * @param field
+   * @param userName
+   */
+  private static void createDoctor(String name, String field, String userName) throws DBException {
+    String password = "12345";
+
+    LinkedList<DbNode> locations = generateRandomLocations();
+
+    DoctorDB.addDoctor(name, field, userName, password, locations);
+  }
+
+  /**
+   * Function generates random DEPT locations
+   *
+   * @return
+   */
+  private static LinkedList<DbNode> generateRandomLocations() throws DBException {
+
+    LinkedList<DbNode> randomLocations = new LinkedList<DbNode>();
+
+    // generate random floor in a range between min (inclusive) and max (inclusive).
+    int min = 1;
+    int max = 4;
+    Random r = new Random();
+    int randFloor = r.nextInt((max - min) + 1) + min;
+
+    LinkedList<DbNode> locations = MapDB.searchVisNode(randFloor, null, "DEPT", "");
+    int numLocations = locations.size();
+
+    // generate 3 random indexes corresponding to locations
+    int randLocOne = r.nextInt(numLocations);
+    int randLocTwo = r.nextInt(numLocations);
+    int randLocThree = r.nextInt(numLocations);
+
+    // avoid duplicates
+    while (randLocOne == randLocTwo || randLocTwo == randLocThree || randLocOne == randLocThree) {
+      if (randLocOne == randLocTwo) {
+        randLocOne = r.nextInt(numLocations);
+      } else if (randLocTwo == randLocThree) {
+        randLocTwo = r.nextInt(numLocations);
+      } else if (randLocOne == randLocThree) {
+        randLocOne = r.nextInt(numLocations);
+      }
+    }
+
+    // add them to doctor's locations
+    randomLocations.add(locations.get(randLocOne));
+    randomLocations.add(locations.get(randLocTwo));
+    randomLocations.add(locations.get(randLocThree));
+
+    return randomLocations;
   }
 }
