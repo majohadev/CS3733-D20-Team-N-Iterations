@@ -9,6 +9,7 @@ import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.database.*;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.States.StateSingleton;
+import edu.wpi.N.entities.employees.Employee;
 import edu.wpi.N.entities.request.MedicineRequest;
 import edu.wpi.N.entities.request.Request;
 import java.io.IOException;
@@ -38,7 +39,7 @@ public class MedicineRequestController implements Controller, Initializable {
 
   private LinkedList<DbNode> fuzzySearchPatientLocation = new LinkedList<>();
   private ObservableList<String> fuzzySearchTextListPatientLocations =
-          FXCollections.observableArrayList();
+      FXCollections.observableArrayList();
   private LinkedList<DbNode> fuzzySearchNodeList = new LinkedList<>();
   LinkedList<String> longNamesList = new LinkedList<>(); // Stores Floor Node names
   LinkedList<DbNode> allFloorNodes; // stores all the nodes on the floor
@@ -112,11 +113,11 @@ public class MedicineRequestController implements Controller, Initializable {
     dosage.setMinWidth(75);
     dosage.setCellValueFactory(new PropertyValueFactory<MedicineRequest, Double>("atr2"));
 
-    TableColumn<MedicineRequest, String> assignedDoctor = new TableColumn<>("Assigned Doctor");
+    TableColumn<MedicineRequest, Employee> assignedDoctor = new TableColumn<>("Assigned Doctor");
     assignedDoctor.setMaxWidth(150);
     assignedDoctor.setMinWidth(150);
     assignedDoctor.setCellValueFactory(
-            new PropertyValueFactory<MedicineRequest, String>("emp_assigned"));
+        new PropertyValueFactory<MedicineRequest, Employee>("emp_assigned"));
 
     TableColumn<MedicineRequest, String> notes = new TableColumn<>("Notes");
     notes.setMaxWidth(150);
@@ -175,16 +176,16 @@ public class MedicineRequestController implements Controller, Initializable {
       for (DbNode node : allFloorNodes) {
         if (node.getNodeID().equals(medLocation.getNodeID())) {
           ServiceDB.addMedReq(
-                  txtf_notes.getText(),
-                  medLocation.getNodeID(),
-                  txtf_medicine.getText(),
-                  Double.parseDouble(txtf_dosage.getText()),
-                  dosage,
-                  txtf_patient.getText());
+              txtf_notes.getText(),
+              medLocation.getNodeID(),
+              txtf_medicine.getText(),
+              Double.parseDouble(txtf_dosage.getText()),
+              dosage,
+              txtf_patient.getText());
 
           Alert confAlert = new Alert(Alert.AlertType.CONFIRMATION);
           confAlert.setContentText(
-                  txtf_medicine.getText() + " prescription made for " + txtf_patient.getText());
+              txtf_medicine.getText() + " prescription made for " + txtf_patient.getText());
           confAlert.show();
 
           populateMedicineRequests();
