@@ -58,11 +58,19 @@ public class BetweenFloorsController implements Controller, Initializable {
     this.floors = new LinkedList<Integer>();
     this.originalEdges = new LinkedList<DbNode[]>();
 
-    Circle circle5 = createCircle(65, 10, "5", 5);
-    Circle circle4 = createCircle(65, 85, "4", 4);
-    Circle circle3 = createCircle(65, 160, "3", 3);
-    Circle circle2 = createCircle(65, 235, "2", 2);
-    Circle circle1 = createCircle(65, 310f, "1", 1);
+    Circle circle5 = createCircle(65, 100, "5", 5);
+    Circle circle4 = createCircle(65, 150, "4", 4);
+    Circle circle3 = createCircle(65, 200, "3", 3);
+    Circle circle2 = createCircle(65, 250, "2", 2);
+    Circle circle1 = createCircle(65, 300, "1", 1);
+  }
+
+  public JFXButton getBtnCancel() {
+    return btn_cancel;
+  }
+
+  public JFXButton getBtnSave() {
+    return btn_save;
   }
 
   public void setFloor(int floor) {

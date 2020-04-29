@@ -2,7 +2,6 @@ package edu.wpi.N.views;
 
 import com.jfoenix.controls.*;
 import edu.wpi.N.App;
-import edu.wpi.N.algorithms.Algorithm;
 import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
@@ -244,14 +243,13 @@ public class hamburgerTestController implements Controller, Initializable {
     }
     if (node1.getFloor() <= node2.getFloor()) {
       Path path;
-      Algorithm myAStar = new Algorithm();
       try {
-        path = myAStar.findPath(node1, node2, handicap);
+        path = singleton.savedAlgo.findPath(node1, node2, handicap);
         ArrayList<String> directions = path.getDirections();
-        for (String s : directions) {
-          System.out.println(s);
-        }
-        System.out.println("Start angle " + path.getStartAngle());
+        //        for (String s : directions) {
+        //          System.out.println(s);
+        //        }
+        System.out.println("Start angle " + path.getStartAngle(MapDB.getKioskAngle()));
       } catch (NullPointerException e) {
         displayErrorMessage("The path does not exist");
         return;
@@ -261,10 +259,10 @@ public class hamburgerTestController implements Controller, Initializable {
       Path path = singleton.savedAlgo.findPath(node2, node1, handicap);
       pathNodes = path.getPath();
       ArrayList<String> directions = path.getDirections();
-      for (String s : directions) {
-        System.out.println(s);
-      }
-      System.out.println("Start angle " + path.getStartAngle());
+      //      for (String s : directions) {
+      //        System.out.println(s);
+      //      }
+      System.out.println("Start angle " + path.getStartAngle(MapDB.getKioskAngle()));
     }
     disableNonPathFloors(pathNodes);
     drawPath(pathNodes);

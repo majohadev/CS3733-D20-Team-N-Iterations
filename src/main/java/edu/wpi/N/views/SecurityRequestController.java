@@ -9,13 +9,16 @@ import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.ServiceDB;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.States.StateSingleton;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 
 public class SecurityRequestController implements Controller {
 
@@ -25,7 +28,7 @@ public class SecurityRequestController implements Controller {
   @FXML JFXComboBox<String> cmbo_text;
   @FXML JFXCheckBox cb_isEmergency;
   @FXML JFXTextArea txtf_description;
-  @FXML
+  @FXML AnchorPane securityPage;
   JFXCheckBox cb_susPerson, cb_susPackage, cb_harassment, cb_weapons, cb_shouting, cb_violence;
 
   private ArrayList<JFXCheckBox> checkBoxes = new ArrayList<>();
@@ -94,7 +97,7 @@ public class SecurityRequestController implements Controller {
 
   // Create Security Request
   @FXML
-  public void createNewSecRequest() throws DBException {
+  public void createNewSecRequest() throws DBException, IOException {
 
     String nodeID;
     int nodeIndex = 0;
@@ -153,5 +156,10 @@ public class SecurityRequestController implements Controller {
     Alert confAlert = new Alert(Alert.AlertType.CONFIRMATION);
     confAlert.setContentText("Request Recieved");
     confAlert.show();
+
+    securityPage.setVisible(false);
+    AnchorPane currentPane = FXMLLoader.load(getClass().getResource("mainServicePage.fxml"));
+    securityPage.getChildren().setAll(currentPane);
+    securityPage.setVisible(true);
   }
 }

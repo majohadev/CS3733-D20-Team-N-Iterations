@@ -68,7 +68,7 @@
                   </Pane>
                   <Accordion fx:id="acc_search" prefHeight="915.0" prefWidth="300.0" style="-fx-background-color: #ffffff;" stylesheets="@MapDisplayDrop.css">
                      <panes>
-                        <TitledPane animated="false" prefHeight="350.0" prefWidth="92.0" style="-fx-background-color: #ffffff;" text="Search By Doctor">
+                        <TitledPane prefHeight="350.0" prefWidth="92.0" style="-fx-background-color: #ffffff;" text="Search By Doctor">
                            <content>
                               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="722.0" prefWidth="298.0" style="-fx-background-color: #ffffff;">
                                  <children>
@@ -99,7 +99,7 @@
                               <Font name="Calibri" size="16.0" />
                            </font>
                         </TitledPane>
-                        <TitledPane fx:id="pn_locationSearch" animated="false" prefHeight="680.0" prefWidth="300.0" text="Search By Location">
+                        <TitledPane fx:id="pn_locationSearch" prefHeight="680.0" prefWidth="300.0" text="Search By Location">
                            <content>
                               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="607.0" prefWidth="298.0" style="-fx-background-color: #ffffff;">
                                  <children>
@@ -163,7 +163,7 @@
                            <content>
                               <AnchorPane prefHeight="816.0" prefWidth="285.0">
                                  <children>
-                                    <Pane layoutX="24.0" layoutY="81.0" prefHeight="402.0" prefWidth="248.0" style="-fx-background-radius: 5; -fx-background-color: #dfe3ee;">
+                                    <Pane layoutX="24.0" layoutY="81.0" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" prefHeight="402.0" prefWidth="248.0" style="-fx-background-radius: 5; -fx-background-color: #dfe3ee;">
                                        <children>
                                           <Text fx:id="txt_description" layoutX="9.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Calibri;" text="Text" wrappingWidth="230.22900390625">
                                              <font>
