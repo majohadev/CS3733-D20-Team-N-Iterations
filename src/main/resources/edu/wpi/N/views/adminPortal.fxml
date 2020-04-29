@@ -9,14 +9,14 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.NewAdminController">
    <children>
       <Pane layoutX="32.0" layoutY="127.0" prefHeight="110.0" prefWidth="1920.0" style="-fx-background-color: #002186;" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -53,37 +53,37 @@
                <children>
                   <VBox prefHeight="1005.0" prefWidth="192.0">
                      <children>
-                        <Pane prefHeight="153.0" prefWidth="192.0">
+                        <Pane prefHeight="201.0" prefWidth="192.0">
                            <children>
                               <JFXButton fx:id="btn_EmployeeEdit" layoutX="16.0" layoutY="17.0" onMouseClicked="#changePanes" prefHeight="121.0" prefWidth="160.0" text="Add / Edit / Delete Employee" textAlignment="CENTER" wrapText="true">
                                  <font>
                                     <Font name="Calibri" size="24.0" />
                                  </font></JFXButton>
                            </children></Pane>
-                        <Pane prefHeight="163.0" prefWidth="192.0">
+                        <Pane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="201.0" prefWidth="192.0">
                            <children>
                               <JFXButton fx:id="btn_AccountEdit" layoutX="15.0" layoutY="4.0" onMouseClicked="#changePanes" prefHeight="155.0" prefWidth="162.0" text="Add / Edit / Delete Account" textAlignment="CENTER" wrapText="true">
                                  <font>
                                     <Font name="Calibri" size="24.0" />
                                  </font></JFXButton>
                            </children></Pane>
-                        <Pane prefHeight="137.0" prefWidth="192.0">
+                        <Pane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="201.0" prefWidth="192.0">
                            <children>
-                              <JFXButton fx:id="btn_ViewRequests" layoutX="16.0" onMouseClicked="#changePanes" prefHeight="121.0" prefWidth="160.0" text="View Service Requests" textAlignment="CENTER" wrapText="true">
+                              <JFXButton fx:id="btn_ViewRequests" layoutX="16.0" layoutY="40.0" onMouseClicked="#changePanes" prefHeight="121.0" prefWidth="160.0" text="View Service Requests" textAlignment="CENTER" wrapText="true">
                                  <font>
                                     <Font size="24.0" />
                                  </font></JFXButton>
                            </children></Pane>
-                        <Pane prefHeight="125.0" prefWidth="192.0">
+                        <Pane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="201.0" prefWidth="192.0">
                            <children>
-                              <JFXButton fx:id="btn_EditMap" layoutX="36.0" layoutY="33.0" onMouseClicked="#adminEditMap" text="Edit Map">
+                              <JFXButton fx:id="btn_EditMap" layoutX="36.0" layoutY="79.0" onMouseClicked="#adminEditMap" text="Edit Map">
                                  <font>
                                     <Font name="Calibri" size="24.0" />
                                  </font></JFXButton>
                            </children></Pane>
-                        <Pane prefHeight="393.0" prefWidth="192.0">
+                        <Pane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="201.0" prefWidth="192.0">
                            <children>
-                              <JFXButton layoutX="14.0" layoutY="63.0" onMouseClicked="#popUpFileManager" text="Manage Files">
+                              <JFXButton layoutX="11.0" layoutY="50.0" onMouseClicked="#popUpFileManager" text="Manage Files">
                                  <font>
                                     <Font size="24.0" />
                                  </font>
@@ -172,14 +172,14 @@
                                     <Font name="Calibri" size="32.0" />
                                  </font>
                               </Label>
-                              <TableView fx:id="tb_RequestTable" layoutX="481.0" layoutY="185.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="429.0" prefWidth="955.0" />
+                              <TableView fx:id="tb_RequestTable" layoutX="481.0" layoutY="185.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="429.0" prefWidth="955.0" stylesheets="@adminTables.css" />
                               <Button fx:id="btn_editMap" disable="true" mnemonicParsing="false" onMouseClicked="#editMap" prefHeight="50.0" prefWidth="190.0" text="Edit Map" visible="false">
                                  <font>
                                     <Font name="Calibri" size="24.0" />
                                  </font>
                               </Button>
                               <ChoiceBox fx:id="cb_Employee" layoutX="288.0" layoutY="375.0" prefWidth="150.0" />
-                              <TableView fx:id="tb_languages" layoutX="288.0" layoutY="412.0" prefHeight="202.0" prefWidth="150.0" />
+                              <TableView fx:id="tb_languages" layoutX="288.0" layoutY="412.0" prefHeight="202.0" prefWidth="150.0" stylesheets="@adminTables.css" />
                               <JFXButton layoutX="1227.0" layoutY="624.0" onMouseClicked="#assignPressed" text="Assign">
                                  <font>
                                     <Font name="Calibri" size="18.0" />
@@ -202,7 +202,7 @@
                               </JFXCheckBox>
                            </children>
                         </Pane>
-                        <Pane fx:id="pn_pane2" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="970.0" prefWidth="1720.0">
+                        <Pane fx:id="pn_pane2" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="970.0" prefWidth="1720.0" stylesheets="@adminTables.css" visible="false">
                            <children>
                               <ChoiceBox fx:id="cb_EmployeeRemove" layoutX="892.0" layoutY="553.0" prefWidth="150.0" />
                               <TableView fx:id="tb_languagesRemove" layoutX="892.0" layoutY="599.0" prefHeight="202.0" prefWidth="150.0" />

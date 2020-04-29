@@ -10,7 +10,6 @@ import edu.wpi.N.database.*;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.entities.employees.Employee;
-import edu.wpi.N.entities.request.MedicineRequest;
 import edu.wpi.N.entities.request.Request;
 import java.io.IOException;
 import java.net.URL;
@@ -45,7 +44,7 @@ public class MedicineRequestController implements Controller, Initializable {
   LinkedList<DbNode> allFloorNodes; // stores all the nodes on the floor
 
   @FXML ComboBox<String> cb_units;
-  @FXML TableView tb_patients;
+  @FXML TableView<Request> tb_patients;
   @FXML JFXTextField txtf_patient;
   @FXML JFXTextField txtf_medicine;
   @FXML JFXTextField txtf_dosage;
@@ -56,6 +55,8 @@ public class MedicineRequestController implements Controller, Initializable {
   @FXML AnchorPane ap_tableview;
   @FXML JFXButton btn_prescribe;
   @FXML JFXButton btn_viewreq;
+  @FXML JFXButton btn_Accept;
+  @FXML JFXButton btn_Deny;
 
   @Override
   public void setMainApp(App mainApp) {
@@ -98,33 +99,42 @@ public class MedicineRequestController implements Controller, Initializable {
   }
 
   public void initializeTableOfPatients() {
-    TableColumn<MedicineRequest, String> patient = new TableColumn<>("Patient Name");
+    TableColumn<Request, String> patient = new TableColumn<>("Patient Name");
     patient.setMaxWidth(150);
     patient.setMinWidth(150);
-    patient.setCellValueFactory(new PropertyValueFactory<MedicineRequest, String>("atr3"));
+    patient.setCellValueFactory(new PropertyValueFactory<Request, String>("atr3"));
 
-    TableColumn<MedicineRequest, String> meds = new TableColumn<>("Medicine");
+    TableColumn<Request, String> meds = new TableColumn<>("Medicine");
     meds.setMaxWidth(150);
     meds.setMinWidth(150);
-    meds.setCellValueFactory(new PropertyValueFactory<MedicineRequest, String>("atr1"));
+    meds.setCellValueFactory(new PropertyValueFactory<Request, String>("atr1"));
 
-    TableColumn<MedicineRequest, Double> dosage = new TableColumn<>("Dosage");
+    TableColumn<Request, Double> dosage = new TableColumn<>("Dosage");
     dosage.setMaxWidth(75);
     dosage.setMinWidth(75);
-    dosage.setCellValueFactory(new PropertyValueFactory<MedicineRequest, Double>("atr2"));
+    dosage.setCellValueFactory(new PropertyValueFactory<Request, Double>("atr2"));
 
-    TableColumn<MedicineRequest, Employee> assignedDoctor = new TableColumn<>("Assigned Doctor");
+    TableColumn<Request, Employee> assignedDoctor = new TableColumn<>("Assigned Doctor");
     assignedDoctor.setMaxWidth(150);
     assignedDoctor.setMinWidth(150);
-    assignedDoctor.setCellValueFactory(
-        new PropertyValueFactory<MedicineRequest, Employee>("emp_assigned"));
+    assignedDoctor.setCellValueFactory(new PropertyValueFactory<Request, Employee>("emp_assigned"));
 
-    TableColumn<MedicineRequest, String> notes = new TableColumn<>("Notes");
+    TableColumn<Request, String> notes = new TableColumn<>("Notes");
     notes.setMaxWidth(150);
     notes.setMinWidth(150);
-    notes.setCellValueFactory(new PropertyValueFactory<MedicineRequest, String>("reqNotes"));
+    notes.setCellValueFactory(new PropertyValueFactory<Request, String>("reqNotes"));
 
-    tb_patients.getColumns().addAll(patient, meds, dosage, assignedDoctor, notes);
+    TableColumn<Request, String> location = new TableColumn<>("Location");
+    location.setMaxWidth(150);
+    location.setMinWidth(150);
+    location.setCellValueFactory(new NewAdminController.nodeLongName());
+
+    TableColumn<Request, String> status = new TableColumn<>("Status");
+    status.setMaxWidth(150);
+    status.setMinWidth(150);
+    status.setCellValueFactory(new PropertyValueFactory<Request, String>("status"));
+
+    tb_patients.getColumns().addAll(patient, meds, dosage, assignedDoctor, notes, location, status);
   }
 
   public void populateChoiceBox() {
@@ -175,13 +185,17 @@ public class MedicineRequestController implements Controller, Initializable {
 
       for (DbNode node : allFloorNodes) {
         if (node.getNodeID().equals(medLocation.getNodeID())) {
-          ServiceDB.addMedReq(
-              txtf_notes.getText(),
-              medLocation.getNodeID(),
-              txtf_medicine.getText(),
-              Double.parseDouble(txtf_dosage.getText()),
-              dosage,
-              txtf_patient.getText());
+
+          int requestid =
+              ServiceDB.addMedReq(
+                  txtf_notes.getText(),
+                  medLocation.getNodeID(),
+                  txtf_medicine.getText(),
+                  Double.parseDouble(txtf_dosage.getText()),
+                  dosage,
+                  txtf_patient.getText());
+
+          ServiceDB.assignToRequest(DoctorDB.getDoctor(LoginDB.currentLogin()).getID(), requestid);
 
           Alert confAlert = new Alert(Alert.AlertType.CONFIRMATION);
           confAlert.setContentText(
@@ -255,5 +269,37 @@ public class MedicineRequestController implements Controller, Initializable {
   public void logout() throws IOException, DBException {
     mainApp.switchScene("views/newHomePage.fxml", singleton);
     LoginDB.logout();
+  }
+
+  public void acceptRequest(MouseEvent e) throws DBException {
+    try {
+      if (e.getSource() == btn_Accept) {
+
+        ServiceDB.completeRequest(
+            tb_patients.getSelectionModel().getSelectedItems().get(0).getRequestID(), "");
+
+        Alert confAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confAlert.setContentText("Request Completed");
+        confAlert.show();
+
+        populateMedicineRequests();
+        return;
+
+      } else if (e.getSource() == btn_Deny) {
+        ServiceDB.denyRequest(
+            tb_patients.getSelectionModel().getSelectedItems().get(0).getRequestID(), "");
+
+        Alert confAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confAlert.setContentText("Request Denied");
+        confAlert.show();
+
+        populateMedicineRequests();
+        return;
+      }
+    } catch (DBException ex) {
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setContentText(ex.getMessage());
+      errorAlert.show();
+    }
   }
 }

@@ -30,6 +30,7 @@ public class SecurityRequestController implements Controller {
   @FXML JFXCheckBox cb_isEmergency;
   @FXML JFXTextArea txtf_description;
   @FXML AnchorPane securityPage;
+  @FXML
   JFXCheckBox cb_susPerson, cb_susPackage, cb_harassment, cb_weapons, cb_shouting, cb_violence;
 
   private ArrayList<JFXCheckBox> checkBoxes = new ArrayList<>();
