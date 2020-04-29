@@ -118,6 +118,8 @@ public class DataEditorController implements Controller {
     } else {
       CSVParser.parseCSVfromPath(path_edges);
     }
+
+    MapDB.setKiosk("NSERV00301", 180);
   }
 
   /**

@@ -132,7 +132,7 @@ public class ArduinoController implements Controller {
         if (arrowAngle < 0) arrowAngle += 360;
       }
     } else {
-      int turnAngle = (int) (MapDB.getKioskAngle() + angle);
+      int turnAngle = (int) (MapDB.getKioskAngle() - angle);
       turnAngle -= 360 * (turnAngle / 360);
       if (turnAngle < 0) turnAngle += 360;
       setUpArrow(turnAngle);
@@ -142,8 +142,8 @@ public class ArduinoController implements Controller {
 
   @FXML
   public static void setUpArrow(double angle) {
+    if (arrowAngle == angle) return;
     String kioskAngs = String.valueOf((int) angle);
-    arrowAngle = angle;
     String output = "h" + kioskAngs;
     System.out.println(output);
     outPut = new PrintWriter(arduinoPort.getOutputStream());
