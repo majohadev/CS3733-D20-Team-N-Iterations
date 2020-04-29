@@ -83,7 +83,7 @@ public class BetweenFloorsController implements Controller, Initializable {
     setFloor(node.getFloor());
     currNode = true;
     this.originalEdges = AbsAlgo.getEdgesBetweenFloors(node);
-    LinkedList<DbNode> nodesAvaliable = getFloors(node);
+    LinkedList<DbNode> nodesAvaliable = MapDB.getInShaft(node.getNodeID());
     nodes.get(node.getFloor()).setFill(INACTIVE_CIRCLE_COLOR);
     for (DbNode n : nodesAvaliable) {
       this.floors.add(n.getFloor());
