@@ -19,15 +19,21 @@ import javafx.scene.control.Alert;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 
-public class TemplateController implements Controller {
+public class LaundryRequestController implements Controller {
+
+  private StateSingleton singleton;
+
+  @Override
+  public void setSingleton(StateSingleton singleton) {
+    this.singleton = singleton;
+  }
 
   private App mainApp;
-  private StateSingleton singleton;
+
   // Add FXML Tags Here
   @FXML JFXComboBox<String> cmbo_text;
-  @FXML JFXComboBox<String> cmbo_selectLang;
-  @FXML JFXTextArea txtf_langNotes;
-  @FXML AnchorPane translatorRequestPage;
+  @FXML JFXTextArea txtf_supportNotes;
+  @FXML AnchorPane laundryRequestPage;
 
   private ObservableList<String> fuzzySearchTextList =
       // List that fills TextViews
@@ -37,28 +43,19 @@ public class TemplateController implements Controller {
 
   private String countVal = "";
 
-  public TemplateController() throws DBException {}
+  public LaundryRequestController() throws DBException {}
 
   public void setMainApp(App mainApp) {
     this.mainApp = mainApp;
   }
 
-  @Override
-  public void setSingleton(StateSingleton singleton) {
-    this.singleton = singleton;
-  }
-
   public void initialize() throws DBException {
 
     cmbo_text.getEditor().setOnKeyTyped(this::locationTextChanged);
-    LinkedList<String> languages = ServiceDB.getLanguages();
-    ObservableList<String> langList = FXCollections.observableList(languages);
-    cmbo_selectLang.setItems(langList);
   }
 
   @FXML
   public void autofillLocation(String currentText) {
-    System.out.println(currentText);
     if (currentText.length() > 2) {
       try {
         fuzzySearchNodeList = FuzzySearchAlgorithm.suggestLocations(currentText);
@@ -87,13 +84,11 @@ public class TemplateController implements Controller {
     cmbo_text.show();
   }
 
-  // Create Translator Request
+  // Create Emotional Request
   @FXML
-  public void createNewTranslator() throws DBException, IOException {
+  public void createNewLaundryRequest() throws DBException, IOException {
 
-    String langSelection = cmbo_selectLang.getSelectionModel().getSelectedItem();
     String nodeID = null;
-    int nodeIndex = 0;
 
     String userLocationName = cmbo_text.getEditor().getText().toLowerCase().trim();
     LinkedList<DbNode> checkNodes = MapDB.searchVisNode(-1, null, null, userLocationName);
@@ -114,27 +109,20 @@ public class TemplateController implements Controller {
       return;
     }
 
-    String notes = txtf_langNotes.getText();
-    if (langSelection == null) {
-      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-      errorAlert.setContentText("Please select a language for your translation request!");
-      errorAlert.show();
-      return;
-    }
-    int transReq = ServiceDB.addTransReq(notes, nodeID, langSelection);
-    // App.adminDataStorage.addToList(transReq);
+    String notes = txtf_supportNotes.getText();
 
-    txtf_langNotes.clear();
-    cmbo_selectLang.getItems().clear();
+    int laundReq = ServiceDB.addLaundReq(notes, nodeID);
+
+    txtf_supportNotes.clear();
     cmbo_text.getItems().clear();
 
     Alert confAlert = new Alert(Alert.AlertType.CONFIRMATION);
     confAlert.setContentText("Request Recieved");
     confAlert.show();
-
-    translatorRequestPage.setVisible(false);
+    laundryRequestPage.setVisible(false);
     AnchorPane currentPane = FXMLLoader.load(getClass().getResource("mainServicePage.fxml"));
-    translatorRequestPage.getChildren().setAll(currentPane);
-    translatorRequestPage.setVisible(true);
+    laundryRequestPage.getChildren().setAll(currentPane);
+    laundryRequestPage.setVisible(true);
+    return;
   }
 }

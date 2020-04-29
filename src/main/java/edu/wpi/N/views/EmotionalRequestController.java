@@ -9,12 +9,15 @@ import edu.wpi.N.database.MapDB;
 import edu.wpi.N.database.ServiceDB;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.States.StateSingleton;
+import java.io.IOException;
 import java.util.LinkedList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 
 public class EmotionalRequestController implements Controller {
 
@@ -31,6 +34,7 @@ public class EmotionalRequestController implements Controller {
   @FXML JFXComboBox<String> cmbo_text;
   @FXML JFXComboBox<String> cmbo_selectSupport;
   @FXML JFXTextArea txtf_supportNotes;
+  @FXML AnchorPane emotionalSupport;
 
   private ObservableList<String> fuzzySearchTextList =
       // List that fills TextViews
@@ -93,7 +97,7 @@ public class EmotionalRequestController implements Controller {
 
   // Create Emotional Request
   @FXML
-  public void createNewEmotionalRequest() throws DBException {
+  public void createNewEmotionalRequest() throws DBException, IOException {
 
     String supportSelection = cmbo_selectSupport.getSelectionModel().getSelectedItem();
     String nodeID = null;
@@ -152,6 +156,10 @@ public class EmotionalRequestController implements Controller {
     Alert confAlert = new Alert(Alert.AlertType.CONFIRMATION);
     confAlert.setContentText("Request Recieved");
     confAlert.show();
+    emotionalSupport.setVisible(false);
+    AnchorPane currentPane = FXMLLoader.load(getClass().getResource("mainServicePage.fxml"));
+    emotionalSupport.getChildren().setAll(currentPane);
+    emotionalSupport.setVisible(true);
     return;
   }
 }

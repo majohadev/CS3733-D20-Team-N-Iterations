@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="servicePageTemplate" prefHeight="900.0" prefWidth="1264.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.SecurityRequestController">
+<AnchorPane fx:id="securityPage" prefHeight="900.0" prefWidth="1264.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.SecurityRequestController">
    <children>
       <HBox alignment="CENTER_LEFT" layoutX="318.0" layoutY="14.0" prefHeight="150.0" prefWidth="629.0" spacing="30.0" style="-fx-background-color: #002186; -fx-background-radius: 10;">
          <children>

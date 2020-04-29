@@ -9,12 +9,15 @@ import edu.wpi.N.database.MapDB;
 import edu.wpi.N.database.ServiceDB;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.States.StateSingleton;
+import java.io.IOException;
 import java.util.LinkedList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 
 public class WheelchairRequestController implements Controller {
 
@@ -23,7 +26,8 @@ public class WheelchairRequestController implements Controller {
   // Add FXML Tags Here
   @FXML JFXComboBox<String> cmbo_text;
   @FXML JFXComboBox<String> cmbo_selectLang;
-  @FXML JFXTextArea txtf_notes;
+  @FXML JFXTextArea txtf_wheelchairNotes;
+  @FXML AnchorPane wheelchairRequest;
 
   private ObservableList<String> fuzzySearchTextList =
       // List that fills TextViews
@@ -87,7 +91,7 @@ public class WheelchairRequestController implements Controller {
 
   // Create Translator Request
   @FXML
-  public void createNewTranslator() throws DBException {
+  public void createNewTranslator() throws DBException, IOException {
 
     String assistanceOption = cmbo_selectLang.getSelectionModel().getSelectedItem();
     String nodeID = null;
@@ -132,9 +136,7 @@ public class WheelchairRequestController implements Controller {
       return;
     }
 
-    System.out.println(txtf_notes.getText() + "here");
-
-    String notes = txtf_notes.getText();
+    String notes = txtf_wheelchairNotes.getText();
     if (assistanceOption == null) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
       errorAlert.setContentText("Please select a needs assistance option!");
@@ -146,12 +148,17 @@ public class WheelchairRequestController implements Controller {
 
     // App.adminDataStorage.addToList(wheelchairReq);
 
-    txtf_notes.clear();
+    txtf_wheelchairNotes.clear();
     cmbo_selectLang.getItems().clear();
     cmbo_text.getItems().clear();
 
     Alert confAlert = new Alert(Alert.AlertType.CONFIRMATION);
     confAlert.setContentText("Request Recieved");
     confAlert.show();
+
+    wheelchairRequest.setVisible(false);
+    AnchorPane currentPane = FXMLLoader.load(getClass().getResource("mainServicePage.fxml"));
+    wheelchairRequest.getChildren().setAll(currentPane);
+    wheelchairRequest.setVisible(true);
   }
 }

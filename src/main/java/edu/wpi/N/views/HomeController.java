@@ -24,6 +24,7 @@ public class HomeController implements Controller {
   }
 
   public void onBtnFileClicked() throws IOException {
+
     this.mainApp.switchScene("views/servicesPage.fxml", singleton);
   }
 
