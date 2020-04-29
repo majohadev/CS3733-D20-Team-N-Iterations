@@ -46,7 +46,7 @@ public class BetweenFloorsController implements Controller, Initializable {
   // HashMap<Integer, Boolean> status;
   HashMap<Integer, Pair<DbNode, Boolean>> nodeStatus;
   LinkedList<Integer> floors; // set on list of floors that have nodes
-  LinkedList<DbNode[]> originalEdges;
+  LinkedList<DbNode> originalEdges;
   int floor;
   boolean currNode;
 
@@ -56,7 +56,7 @@ public class BetweenFloorsController implements Controller, Initializable {
     this.labels = new HashMap<Integer, Text>();
     this.nodeStatus = new HashMap<Integer, Pair<DbNode, Boolean>>();
     this.floors = new LinkedList<Integer>();
-    this.originalEdges = new LinkedList<DbNode[]>();
+    this.originalEdges = new LinkedList<DbNode>();
 
     Circle circle5 = createCircle(65, 100, "5", 5);
     Circle circle4 = createCircle(65, 150, "4", 4);
@@ -77,7 +77,7 @@ public class BetweenFloorsController implements Controller, Initializable {
     this.floor = floor;
     this.nodeStatus = new HashMap<Integer, Pair<DbNode, Boolean>>();
     this.floors = new LinkedList<Integer>();
-    this.originalEdges = new LinkedList<DbNode[]>();
+    this.originalEdges = new LinkedList<DbNode>();
     currNode = false;
     text.setVisible(false);
     for (int i = 1; i <= 5; i++) {
@@ -97,7 +97,7 @@ public class BetweenFloorsController implements Controller, Initializable {
     setFloor(node.getFloor());
     this.floor = node.getFloor();
     currNode = true;
-    this.originalEdges = AbsAlgo.getEdgesBetweenFloors(node);
+    this.originalEdges = AbsAlgo.searchAccessible(node);
     LinkedList<DbNode> nodesAvaliable = getFloors(node);
     nodes.get(node.getFloor()).setFill(INACTIVE_CIRCLE_COLOR);
     for (DbNode n : nodesAvaliable) {
@@ -107,11 +107,9 @@ public class BetweenFloorsController implements Controller, Initializable {
       nodeStatus.put(n.getFloor(), new Pair<>(n, false));
     }
 
-    for (DbNode[] n : originalEdges) {
-      nodeStatus.put(n[0].getFloor(), new Pair<>(n[0], true));
-      nodeStatus.put(n[1].getFloor(), new Pair<>(n[1], true));
-      nodes.get(n[0].getFloor()).setFill(DEFAULT_CIRCLE_COLOR);
-      nodes.get(n[1].getFloor()).setFill(DEFAULT_CIRCLE_COLOR);
+    for (DbNode n : originalEdges) {
+      nodeStatus.put(n.getFloor(), new Pair<>(n, true));
+      nodes.get(n.getFloor()).setFill(DEFAULT_CIRCLE_COLOR);
     }
     text.setVisible(true);
     text.setText(node.getLongName());
@@ -180,8 +178,8 @@ public class BetweenFloorsController implements Controller, Initializable {
   public void onSaveButton() throws DBException {
     if (currNode) {
       ArrayList<DbNode> activeNodes = new ArrayList<DbNode>();
-      for (DbNode[] n : originalEdges) {
-        MapDB.removeEdge(n[0].getNodeID(), n[1].getNodeID());
+      for (int i = 0; i < originalEdges.size() - 1; i++) {
+        MapDB.removeEdge(originalEdges.get(i).getNodeID(), originalEdges.get(i + 1).getNodeID());
       }
       for (Integer i : floors) {
         if (nodeStatus.get(i).getValue()) {

@@ -49,6 +49,6 @@ public class HomeController implements Controller {
   }
 
   public void onBtnServicesClick() throws IOException {
-    this.mainApp.switchScene("views/servicesPage.fxml", singleton);
+    this.mainApp.switchScene("views/adminPortal.fxml", singleton);
   }
 }

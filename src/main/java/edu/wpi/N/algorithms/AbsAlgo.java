@@ -5,9 +5,7 @@ import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Node;
 import edu.wpi.N.entities.Path;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
 import org.bridj.util.Pair;
 
 public abstract class AbsAlgo implements IPathFinder {
@@ -207,5 +205,54 @@ public abstract class AbsAlgo implements IPathFinder {
       }
     }
     return edges;
+  }
+
+  private static class floorSortNodes implements Comparator<DbNode> {
+
+    @Override
+    public int compare(DbNode o1, DbNode o2) {
+      return o1.getFloor() - o2.getFloor();
+    }
+  }
+
+  /**
+   * Gets all of the elevator and stair nodes accessible to the given node. If the given node isn't
+   * an elevator or stair, returns null.
+   *
+   * @param node The node you want to search for accessible stairs/elevators from
+   * @return A linked list of DbNodes that are connected directly or indirectly to the node
+   */
+  public static LinkedList<DbNode> searchAccessible(DbNode node) {
+    if (!(node.getNodeType().equals("ELEV") || node.getNodeType().equals("STAI"))) return null;
+    Queue<DbNode> queue = new LinkedList<DbNode>(); // queue for breadth-first search
+    queue.add(node);
+    LinkedList<DbNode> nodes = new LinkedList<DbNode>();
+    while (queue.size() > 0) {
+      DbNode cur = queue.poll();
+      nodes.add(cur);
+      LinkedList<Node> next;
+      try {
+        next =
+            MapDB.getGAdjacent(
+                cur.getNodeID(),
+                -1,
+                -1); // only gets elevator and stair nodes; kinda a hack, but not actually that bad
+      } catch (DBException e) {
+        System.out.println(e.getMessage());
+        continue; // skip invalid nodes
+      }
+      Iterator<Node> nextIt = next.iterator();
+      while (nextIt.hasNext()) {
+        try {
+          DbNode n = MapDB.getNode(nextIt.next().ID);
+          if (!(queue.contains(n) || nodes.contains(n))) queue.add(n);
+        } catch (DBException e) {
+          System.out.println(e.getMessage());
+          continue; // skip invalid nodes
+        }
+      }
+    }
+    Collections.sort(nodes, new floorSortNodes());
+    return nodes;
   }
 }
