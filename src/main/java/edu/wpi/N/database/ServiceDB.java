@@ -304,7 +304,7 @@ public class ServiceDB {
             rs.getTimestamp("scheduledTransportTime").toString().substring(11, 16),
             rs.getString("destinationLocation"));
       } else if (sType.equals("Security")) {
-        query = "SELECT device, problem FROM secrequest WHERE requestID = ?";
+        query = "SELECT isEmergency FROM secrequest WHERE requestID = ?";
         stmt = con.prepareStatement(query);
         stmt.setInt(1, id);
         rs = stmt.executeQuery();

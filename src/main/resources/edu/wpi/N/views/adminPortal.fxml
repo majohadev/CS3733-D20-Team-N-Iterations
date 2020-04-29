@@ -41,6 +41,11 @@
                   <Font name="Calibri Bold" size="24.0" />
                </font>
             </Label>
+            <JFXButton fx:id="btn_arduino" buttonType="RAISED" layoutX="1327.0" layoutY="32.0" onMouseClicked="#loadArduino" ripplerFill="#0026ff" text="Access Arduino Control" textFill="WHITE">
+               <font>
+                  <Font name="Calibri" size="18.0" />
+               </font>
+            </JFXButton>
          </children></Pane>
       <SplitPane dividerPositions="0.1" layoutY="75.0" prefHeight="970.0" prefWidth="1920.0" style="-fx-background-color: #fff8e4;" AnchorPane.bottomAnchor="0.0">
         <items>
