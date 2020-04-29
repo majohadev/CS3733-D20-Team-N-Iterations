@@ -42,7 +42,7 @@
                         <Font name="Calibri" size="24.0" />
                      </font>
                   </Label>
-                  <JFXComboBox fx:id="cmbo_text" prefHeight="43.0" prefWidth="498.0" promptText="Enter Location" style="-fx-font-size: 18;" />
+                  <JFXComboBox fx:id="cmbo_text" editable="true" labelFloat="true" onKeyTyped="#locationTextChanged" prefHeight="43.0" prefWidth="498.0" promptText="Enter Location" style="-fx-font-size: 18;" />
                   <Label text="Patient Name">
                      <font>
                         <Font name="Calibri" size="24.0" />
