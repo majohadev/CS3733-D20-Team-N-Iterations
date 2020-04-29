@@ -66,9 +66,6 @@ public class SanitationRequest extends Request {
 
     SanitationRequest other = (SanitationRequest) o;
 
-    return super.equals(o)
-        && spillType.equals(other.spillType)
-        && size.equals(other.size)
-        && danger.equals(other.danger);
+    return super.equals(o);
   }
 }
