@@ -19,7 +19,7 @@
             <Font name="Calibri" size="14.0" />
          </font></Label>
       <Label fx:id="lbl_filePath" disable="true" layoutX="235.0" layoutY="103.0" prefHeight="25.0" prefWidth="437.0" style="-fx-border-color: BLACK;" text="File Path" />
-      <Button fx:id="btn_done" layoutX="607.0" layoutY="403.0" mnemonicParsing="false" onMouseClicked="#onDoneClicked" prefHeight="25.0" prefWidth="62.0" style="-fx-background-color: #002186#002186;" text="Close" textFill="WHITE">
+      <Button fx:id="btn_done" disable="true" layoutX="607.0" layoutY="403.0" mnemonicParsing="false" onMouseClicked="#onDoneClicked" opacity="0.0" prefHeight="25.0" prefWidth="62.0" style="-fx-background-color: #002186#002186;" text="Close" textFill="WHITE">
          <font>
             <Font size="14.0" />
          </font></Button>
