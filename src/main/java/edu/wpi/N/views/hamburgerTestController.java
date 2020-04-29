@@ -269,7 +269,7 @@ public class hamburgerTestController implements Controller, Initializable {
     disableNonPathFloors(pathNodes);
     drawPath(pathNodes);
     // set textual decriptions
-    setTextDecription(new Path(pathNodes));
+    setTextDescription(new Path(pathNodes));
   }
 
   private void disableNonPathFloors(LinkedList<DbNode> pathNodes) {
@@ -453,7 +453,7 @@ public class hamburgerTestController implements Controller, Initializable {
       Path pathToBathroom = singleton.savedAlgo.findQuickAccess(startNode, "REST");
       drawPath(pathToBathroom.getPath());
       // set textual decriptions
-      setTextDecription(pathToBathroom);
+      setTextDescription(pathToBathroom);
     } catch (Exception ex) {
       ex.printStackTrace();
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
@@ -505,7 +505,7 @@ public class hamburgerTestController implements Controller, Initializable {
         Path pathToStarBucks = singleton.savedAlgo.findPath(startNode, endNode, handicap);
         drawPath(pathToStarBucks.getPath());
         // set textual descriptions
-        setTextDecription(pathToStarBucks);
+        setTextDescription(pathToStarBucks);
       }
 
     } catch (Exception ex) {
@@ -537,7 +537,7 @@ public class hamburgerTestController implements Controller, Initializable {
    *
    * @param path
    */
-  private void setTextDecription(Path path) {
+  private void setTextDescription(Path path) {
     try {
       // Convert the array of textual descriptions to text
       String directionsAsText = "";
