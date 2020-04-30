@@ -457,7 +457,7 @@ public class NewAdminController implements Controller, Initializable {
   public void logoutUser() throws DBException {
     try {
       LoginDB.logout();
-      mainApp.switchScene("views/newLogin.fxml", singleton);
+      mainApp.switchScene("views/admin/newLogin.fxml", singleton);
     } catch (DBException | IOException e) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
       errorAlert.setContentText(e.getMessage());

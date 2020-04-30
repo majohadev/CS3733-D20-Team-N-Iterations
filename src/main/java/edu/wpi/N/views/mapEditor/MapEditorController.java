@@ -948,7 +948,7 @@ public class MapEditorController implements Controller {
   }
 
   public void onBtnHomeClicked() throws IOException {
-    mainApp.switchScene("views/adminPortal.fxml", singleton);
+    mainApp.switchScene("views/admin/adminPortal.fxml", singleton);
   }
 
   private void handleCircleAddEdgeDragged(MouseEvent event, Circle circle) {
