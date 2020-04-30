@@ -434,12 +434,13 @@ public class MapDBTest {
     MapDB.removeFromShaft(n6.getNodeID());
 
     MapDB.addToShaft(n4.getNodeID(), n6.getNodeID()); // works
-    assertThrows(
-        DBException.class,
-        () ->
-            MapDB.addToShaft(
-                n1.getNodeID(),
-                n6.getNodeID())); // doesn't work because both already in different shafts
+    MapDB.addToShaft(n1.getNodeID(), n6.getNodeID()); // merges the shafts
+
+    shafts = MapDB.getInShaft(n1.getNodeID());
+    assertTrue(shafts.contains(n1));
+    assertTrue(shafts.contains(n6));
+    assertTrue(shafts.contains(n4));
+    assertTrue(shafts.contains(n2));
 
     DbNode n7 = MapDB.addNode(1, 2, 2, "Faulkner", "ELEV", "el", "el");
     assertThrows(

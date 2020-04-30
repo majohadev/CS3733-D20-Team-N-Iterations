@@ -894,13 +894,22 @@ public class MapDB {
         String nodeID1 = rs.getString("nodeID");
         int shaftID1 = rs.getInt("shaftID");
         if (rs.next()) { // both in shaft, check if both have same id
-          if (shaftID1 == rs.getInt("shaftID")) return; // both already in the same shaft
-          else
-            throw new DBException(
-                "Those nodes are already in different shafts! Nodes can only ever be in one shaft.");
+          int shaftID2 = rs.getInt("shaftID");
+          if (shaftID1 == shaftID2) return; // both already in the same shaft, do nothing
+          else { // nodes are in different shafts and the shafts must be merged
+            query =
+                "UPDATE shaft SET shaftID = ? WHERE shaftID = ?"; // simply sets the shaftIDs for each shaft equal
+            // nodeID2 to the shaft of shaftID1
+            stmt = con.prepareStatement(query);
+            stmt.setInt(1, shaftID1);
+            stmt.setInt(2, shaftID2);
+            stmt.executeUpdate();
+          }
+
         } else { // only one in shaft
           String nodeID2 = node2;
-          if (nodeID1.equals(node2)) nodeID2 = node1;
+          if (nodeID1.equals(node2))
+            nodeID2 = node1; // nodeID2 is the one not found in the result set first
           query = "INSERT INTO shaft (shaftID, nodeID) VALUES (?, ?)";
           stmt = con.prepareStatement(query);
           stmt.setInt(1, shaftID1);
