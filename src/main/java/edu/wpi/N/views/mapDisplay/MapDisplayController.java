@@ -24,7 +24,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -85,21 +84,17 @@ public class MapDisplayController implements Controller, Initializable {
   private ArrayList<String> directions;
 
   HashMap<String, DbNode> stringNodeConversion = new HashMap<>();
-  LinkedList<String> allLongNames = new LinkedList<>();
-  // LinkedList<DbNode> allFloorNodes = new LinkedList<>();
-  private ObservableList<String> fuzzySearchDoctorList = FXCollections.observableArrayList();
   private LinkedList<Doctor> searchedDoc = new LinkedList<>();
   private LinkedList<DbNode> doctorNodes = new LinkedList<>();
-  JFXNodesList nodesList;
   // LinkedList<DbNode> pathNodes;
-//  String[] imgPaths =
-//      new String[] {
-//        "/edu/wpi/N/images/Floor1TeamN.png",
-//        "/edu/wpi/N/images/Floor2TeamN.png",
-//        "/edu/wpi/N/images/Floor3TeamN.png",
-//        "/edu/wpi/N/images/Floor4TeamN.png",
-//        "/edu/wpi/N/images/Floor5TeamN.png"
-//      };
+  //  String[] imgPaths =
+  //      new String[] {
+  //        "/edu/wpi/N/images/Floor1TeamN.png",
+  //        "/edu/wpi/N/images/Floor2TeamN.png",
+  //        "/edu/wpi/N/images/Floor3TeamN.png",
+  //        "/edu/wpi/N/images/Floor4TeamN.png",
+  //        "/edu/wpi/N/images/Floor5TeamN.png"
+  //      };
 
   // marks all the nodes in the program
   LinkedList<DbNode> allFloorNodes;
@@ -112,6 +107,9 @@ public class MapDisplayController implements Controller, Initializable {
     NO_STATE,
     PATH_STATE;
   }
+
+  // the list of floor buttons which allow users to switch between floors
+  JFXNodesList floorButtonList = new JFXNodesList();
 
   @SneakyThrows
   @Override
@@ -136,11 +134,9 @@ public class MapDisplayController implements Controller, Initializable {
     }
   }
 
-  /**
-   * creates the buttons which enables the user to view different floors
-   */
+  /** creates the buttons which enables the user to view different floors */
   public void createFloorButtons() {
-    LinkedList<JFXButton> floorButtons = new LinkedList<>();
+    LinkedList floorButtons = new LinkedList();
     initFloorButtons(floorButtons);
     styleFloorButtons(floorButtons);
     displayFloorButtonList(floorButtons);
@@ -148,6 +144,7 @@ public class MapDisplayController implements Controller, Initializable {
 
   /**
    * populates the list of buttons which enable the user to view different floors
+   *
    * @param floorButtons the empty list of buttons which enable the user to view different floors
    * @return the populated list of buttons which enable the user to view different floors
    */
@@ -166,6 +163,7 @@ public class MapDisplayController implements Controller, Initializable {
 
   /**
    * styles the buttons which enable the user to view different floors
+   *
    * @param floorButtons the list of buttons which enable the user to view different floors
    */
   public void styleFloorButtons(LinkedList<JFXButton> floorButtons) {
@@ -179,10 +177,11 @@ public class MapDisplayController implements Controller, Initializable {
 
   /**
    * displays the buttons which enable the user to view different floors
-   * @param floorButtons the populated and styled list of buttons which enable the user to view different floors
+   *
+   * @param floorButtons the populated and styled list of buttons which enable the user to view
+   *     different floors
    */
   public void displayFloorButtonList(LinkedList<JFXButton> floorButtons) {
-    JFXNodesList floorButtonList = new JFXNodesList();
     for (JFXButton btn : floorButtons) {
       floorButtonList.addAnimatedNode(btn);
     }
@@ -192,6 +191,7 @@ public class MapDisplayController implements Controller, Initializable {
 
   /**
    * retrieves all nodes in the application
+   *
    * @throws DBException
    */
   public void getAllNodes() throws DBException {
@@ -200,6 +200,7 @@ public class MapDisplayController implements Controller, Initializable {
 
   /**
    * detects when user enters a first location and applies fuzzy search
+   *
    * @param e the key event which triggers the search
    * @throws DBException
    */
@@ -209,6 +210,7 @@ public class MapDisplayController implements Controller, Initializable {
 
   /**
    * detects when user enters a second path location and applies fuzzy search
+   *
    * @param e the key event which triggers the search
    * @throws DBException
    */
@@ -218,6 +220,7 @@ public class MapDisplayController implements Controller, Initializable {
 
   /**
    * detects when user enters a doctor and applies fuzzy search
+   *
    * @param e the key event which triggers the search
    * @throws DBException
    */
@@ -227,6 +230,7 @@ public class MapDisplayController implements Controller, Initializable {
 
   /**
    * applies fuzzy search to the user input
+   *
    * @param txt the textfield with the user input
    * @param lst the fuzzy search results
    * @throws DBException
@@ -240,13 +244,6 @@ public class MapDisplayController implements Controller, Initializable {
     }
     lst.setItems(fuzzyList);
   }
-
-
-
-
-
-
-
 
   @FXML
   private void onFindDoctorClicked(MouseEvent event) throws Exception {
@@ -268,8 +265,8 @@ public class MapDisplayController implements Controller, Initializable {
     mapBaseController.setMode(MapBaseController.Mode.PATH_STATE);
     // pn_display.getChildren().removeIf(node -> node instanceof Line);
     enableAllFloorButtons();
-    String firstSelection = (String) lst_firstLocation.getSelectionModel().getSelectedItem();
-    String secondSelection = (String) lst_secondLocation.getSelectionModel().getSelectedItem();
+    DbNode firstSelection = lst_firstLocation.getSelectionModel().g;
+    DbNode secondSelection = (DbNode) lst_secondLocation.getSelectionModel().getSelectedItem();
     // jumpToFloor(imgPaths[stringNodeConversion.get(firstSelection).getFloor() - 1]);
     mapBaseController.setMode(MapBaseController.Mode.NO_STATE);
     mapBaseController.changeFloor(stringNodeConversion.get(firstSelection).getFloor());
@@ -304,8 +301,8 @@ public class MapDisplayController implements Controller, Initializable {
   }
 
   private void enableAllFloorButtons() {
-    for (int i = 1; i < nodesList.getChildren().size(); i++) {
-      JFXButton btn = (JFXButton) nodesList.getChildren().get(i);
+    for (int i = 1; i < floorButtonList.getChildren().size(); i++) {
+      JFXButton btn = (JFXButton) floorButtonList.getChildren().get(i);
       btn.setDisable(false);
     }
   }
@@ -353,8 +350,8 @@ public class MapDisplayController implements Controller, Initializable {
         }
       }
     }
-    for (int i = 1; i < nodesList.getChildren().size(); i++) {
-      JFXButton btn = (JFXButton) nodesList.getChildren().get(i);
+    for (int i = 1; i < floorButtonList.getChildren().size(); i++) {
+      JFXButton btn = (JFXButton) floorButtonList.getChildren().get(i);
       if (!activeFloors.contains(Integer.parseInt(btn.getText()))) {
         btn.setDisable(true);
       }
