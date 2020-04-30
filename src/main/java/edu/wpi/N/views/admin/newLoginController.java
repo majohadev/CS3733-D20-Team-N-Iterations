@@ -39,7 +39,7 @@ public class newLoginController implements Controller, Initializable {
       LoginDB.verifyLogin(user, pass);
 
       if (LoginDB.currentAccess().equals("ADMIN")) {
-        mainApp.switchScene("views/adminPortal.fxml", singleton);
+        mainApp.switchScene("views/admin/adminPortal.fxml", singleton);
       } else if (LoginDB.currentAccess().equals("DOCTOR")) {
         mainApp.switchScene(medReq, singleton);
       }
