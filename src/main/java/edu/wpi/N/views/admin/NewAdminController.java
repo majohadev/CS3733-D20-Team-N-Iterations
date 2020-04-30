@@ -399,7 +399,7 @@ public class NewAdminController implements Controller, Initializable {
   }
 
   public void adminEditMap() throws IOException {
-    mainApp.switchScene("views/mapEditor.fxml", singleton);
+    mainApp.switchScene("views/mapEditor/mapEditor.fxml", singleton);
   }
 
   public void returnToPrev() throws IOException {
