@@ -23,35 +23,35 @@ public class MapDataStorage {
         new Image(
             getClass()
                 .getClassLoader()
-                .getResource("edu/wpi/N/images/Floor1Reclor.png")
+                .getResource("edu/wpi/N/images/map/Floor1Reclor.png")
                 .toString()));
     floorMaps.put(
         "Floor2",
         new Image(
             getClass()
                 .getClassLoader()
-                .getResource("edu/wpi/N/images/Floor2TeamN.png")
+                .getResource("edu/wpi/N/images/map/Floor2TeamN.png")
                 .toString()));
     floorMaps.put(
         "Floor3",
         new Image(
             getClass()
                 .getClassLoader()
-                .getResource("edu/wpi/N/images/Floor3TeamN.png")
+                .getResource("edu/wpi/N/images/map/Floor3TeamN.png")
                 .toString()));
     floorMaps.put(
         "Floor4",
         new Image(
             getClass()
                 .getClassLoader()
-                .getResource("edu/wpi/N/images/Floor4SolidBackground.png")
+                .getResource("edu/wpi/N/images/map/Floor4SolidBackground.png")
                 .toString()));
     floorMaps.put(
         "Floor5",
         new Image(
             getClass()
                 .getClassLoader()
-                .getResource("edu/wpi/N/images/Floor5TeamN.png")
+                .getResource("edu/wpi/N/images/map/Floor5TeamN.png")
                 .toString()));
   }
 

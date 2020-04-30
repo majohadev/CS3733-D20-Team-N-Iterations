@@ -1,6 +1,6 @@
 package edu.wpi.N.entities;
 
-import edu.wpi.N.views.MapBaseController;
+import edu.wpi.N.views.mapDisplay.MapBaseController;
 import java.util.LinkedList;
 import javafx.scene.Cursor;
 import javafx.scene.layout.Pane;
