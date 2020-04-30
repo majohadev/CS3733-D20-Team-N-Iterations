@@ -30,7 +30,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import lombok.SneakyThrows;
 
 public class MapDisplayController implements Controller, Initializable {
 
@@ -110,7 +109,6 @@ public class MapDisplayController implements Controller, Initializable {
   Mode mode;
    */
 
-  @SneakyThrows
   @Override
   public void initialize(URL location, ResourceBundle resourceBundle) {
     try {
@@ -119,9 +117,10 @@ public class MapDisplayController implements Controller, Initializable {
       // this.currentBuilding = DEFAULT_BUILDING;
       // this.mode = Mode.NO_STATE;
       // this.allFloorNodes = MapDB.allNodes();
-      initializeConversions();
+      // initializeConversions();
       defaultKioskNode();
       acc_search.setExpandedPane(pn_locationSearch);
+
     } catch (Exception ex) {
       ex.printStackTrace();
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
@@ -133,10 +132,11 @@ public class MapDisplayController implements Controller, Initializable {
   }
 
   private void initializeConversions() {
-    for (DbNode node : singleton.mapData.getAllDbNodes()) {
-      stringNodeConversion.put(node.getLongName(), node);
-      allLongNames.add(node.getLongName());
-    }
+    // TODO: Delete later since we 1) got rid of long name - node conversion.
+    //    for (DbNode node : singleton.mapData.getAllDbNodes()) {
+    //      stringNodeConversion.put(node.getLongName(), node);
+    //      allLongNames.add(node.getLongName());
+    //    }
   }
 
   public void onSearchFirstLocation(KeyEvent inputMethodEvent) throws DBException {

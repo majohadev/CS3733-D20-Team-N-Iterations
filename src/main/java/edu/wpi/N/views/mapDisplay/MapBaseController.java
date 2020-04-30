@@ -8,6 +8,7 @@ import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.entities.UIDispEdge;
 import edu.wpi.N.entities.UIDispNode;
+import edu.wpi.N.views.Controller;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -81,7 +82,10 @@ public class MapBaseController implements Controller {
   private final double ZOOM_STEP_SCROLL = 0.01;
   private final double ZOOM_STEP_BUTTON = 0.1;
 
-  public MapBaseController() throws DBException {}
+  // Singleton gets injected since this controller in "Included"
+  public MapBaseController(StateSingleton singleton) {
+    this.singleton = singleton;
+  }
 
   @Override
   public void setMainApp(App mainApp) {
@@ -107,7 +111,9 @@ public class MapBaseController implements Controller {
 
     masterNodes = HashBiMap.create();
     setMode(Mode.NO_STATE);
-    changeBuilding(DEFAULT_BUILDING);
+
+    // TODO: check work. Commented out for now
+    // changeBuilding(DEFAULT_BUILDING);
 
     try {
       defaultNode = getUiFromDb(allFloorNodes.getFirst());
@@ -134,7 +140,7 @@ public class MapBaseController implements Controller {
     currentFloor = floorToDraw;
 
     // TODO: check later. I'm not sure if we need to refreshAllNodes when changing floors, right?
-    singleton.mapData.refreshAllNodes();
+    singleton.mapData.refreshMapData();
     img_map.setImage(singleton.mapData.getMap(currentBuilding, floorToDraw));
 
     clearPath();
