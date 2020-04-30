@@ -132,7 +132,7 @@ public class hamburgerTestController implements Controller, Initializable {
   }
 
   private void initializeConversions() {
-    for (DbNode node : App.mapData.getAllDbNodes()) {
+    for (DbNode node : singleton.mapData.getAllDbNodes()) {
       stringNodeConversion.put(node.getLongName(), node);
       allLongNames.add(node.getLongName());
     }

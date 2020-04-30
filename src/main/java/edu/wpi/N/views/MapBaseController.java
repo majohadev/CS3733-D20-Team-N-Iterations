@@ -5,6 +5,7 @@ import edu.wpi.N.App;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
+import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.entities.UIDispEdge;
 import edu.wpi.N.entities.UIDispNode;
 import java.io.IOException;
@@ -22,8 +23,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 
-public class MapBaseController {
+public class MapBaseController implements Controller {
 
+  private App mainApp;
+  private StateSingleton singleton;
   private final int DEFAULT_FLOOR = 1;
   private final String DEFAULT_BUILDING = "Faulkner";
   int currentFloor;
@@ -80,6 +83,16 @@ public class MapBaseController {
 
   public MapBaseController() throws DBException {}
 
+  @Override
+  public void setMainApp(App mainApp) {
+    this.mainApp = mainApp;
+  }
+
+  @Override
+  public void setSingleton(StateSingleton singleton) {
+    this.singleton = singleton;
+  }
+
   public enum Mode {
     NO_STATE,
     PATH_STATE;
@@ -119,8 +132,10 @@ public class MapBaseController {
   public void changeFloor(int floorToDraw) {
     // Change floor in current building
     currentFloor = floorToDraw;
-    App.mapData.refreshAllNodes();
-    img_map.setImage(App.mapData.getMap(currentBuilding, floorToDraw));
+
+    // TODO: check later. I'm not sure if we need to refreshAllNodes when changing floors, right?
+    singleton.mapData.refreshAllNodes();
+    img_map.setImage(singleton.mapData.getMap(currentBuilding, floorToDraw));
 
     clearPath();
     clearEdges(); // Erase lines

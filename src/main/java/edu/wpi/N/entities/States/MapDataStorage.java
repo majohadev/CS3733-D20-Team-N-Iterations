@@ -1,4 +1,4 @@
-package edu.wpi.N.controllerData;
+package edu.wpi.N.entities.States;
 
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
