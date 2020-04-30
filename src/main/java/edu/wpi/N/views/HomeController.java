@@ -25,7 +25,7 @@ public class HomeController implements Controller {
 
   public void onBtnFileClicked() throws IOException {
 
-    this.mainApp.switchScene("views/servicesPage.fxml", singleton);
+    this.mainApp.switchScene("/edu/wpi/N/views/services/servicesPage.fxml", singleton);
   }
 
   public void onBtnHamClicked() throws IOException {
@@ -45,10 +45,10 @@ public class HomeController implements Controller {
   }
 
   public void onBtnFloorEdgesClicked() throws IOException {
-    this.mainApp.switchScene("views/BetweenFloorsEditor.fxml", singleton);
+    this.mainApp.switchScene("/edu/wpi/N/views/mapDisplay/BetweenFloorsEditor.fxml", singleton);
   }
 
   public void onBtnServicesClick() throws IOException {
-    this.mainApp.switchScene("views/servicesPage.fxml", singleton);
+    this.mainApp.switchScene("/edu/wpi/N/views/services/servicesPage.fxml", singleton);
   }
 }
