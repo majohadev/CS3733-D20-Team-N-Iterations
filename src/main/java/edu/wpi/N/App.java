@@ -1,6 +1,7 @@
 package edu.wpi.N;
 
-import edu.wpi.N.controllerData.AdminDataStorage;
+import edu.wpi.N.controllerData.MapDataStorage;
+import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.views.Controller;
 import edu.wpi.N.views.HomeController;
 import java.io.IOException;
@@ -14,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class App extends Application {
   private Stage masterStage;
-  public static AdminDataStorage adminDataStorage = new AdminDataStorage();
+  public static MapDataStorage mapData = new MapDataStorage();
   public static HomeController homeController = new HomeController();
 
   @Override
@@ -27,7 +28,9 @@ public class App extends Application {
     // Configure the primary Stage
     this.masterStage = primaryStage;
     this.masterStage.setTitle("Brigham and Women's Hospital Kiosk Application");
-    switchScene("views/home.fxml");
+    StateSingleton newSingleton = StateSingleton.getInstance();
+    // TODO: update to home or what not
+    switchScene("views/newHomePage.fxml", newSingleton);
     masterStage.setMaximized(true);
   }
 
@@ -40,17 +43,18 @@ public class App extends Application {
     log.info("Shutting Down");
   }
 
-  public void switchScene(String path) throws IOException {
+  public void switchScene(String path, StateSingleton singleton) throws IOException {
     FXMLLoader loader = new FXMLLoader();
     loader.setLocation(getClass().getResource(path));
     Pane pane = loader.load();
 
     Scene scene = new Scene(pane);
     masterStage.setScene(scene);
-    masterStage.setMaximized(true);
+    // masterStage.setMaximized(true);
     masterStage.setFullScreenExitHint("");
     masterStage.show();
     Controller controller = loader.getController();
     controller.setMainApp(this);
+    controller.setSingleton(singleton);
   }
 }

@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.MapDisplayController">
+   <children>
+      <SplitPane dividerPositions="0.1617497456765005" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: WHITE;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <items>
+            <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="323.0" SplitPane.resizableWithParent="false">
+               <children>
+                  <VBox prefHeight="1080.0" prefWidth="300.0" style="-fx-background-color: #cccccc; -fx-border-color: #004a80;">
+                     <children>
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <ImageView fitHeight="119.0" fitWidth="95.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/Brigham_and_Womens_Hospital_logo.svg.png" />
+                                 </image>
+                                 <HBox.margin>
+                                    <Insets left="5.0" />
+                                 </HBox.margin>
+                              </ImageView>
+                              <Label alignment="CENTER" prefHeight="111.0" prefWidth="163.0" text="BWH Pathfinding" textAlignment="CENTER" wrapText="true">
+                                 <font>
+                                    <Font name="Calibri" size="32.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <Separator prefHeight="15.0" prefWidth="282.0" />
+                        <Pane prefHeight="78.0" prefWidth="282.0">
+                           <children>
+                              <Label layoutX="5.0" layoutY="-3.0" prefHeight="85.0" prefWidth="272.0" text="Please click a location on the map or use the search options below to specify where you would like to be directed within the hospital" textAlignment="CENTER" wrapText="true">
+                                 <font>
+                                    <Font name="Calibri" size="15.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </Pane>
+                        <Separator prefHeight="15.0" prefWidth="282.0" />
+                        <Accordion>
+                           <panes>
+                              <TitledPane animated="false" text="Search By Location">
+                                 <content>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="275.0" prefWidth="200.0">
+                                       <children>
+                                          <Label layoutX="4.0" layoutY="-6.0" prefHeight="67.0" prefWidth="272.0" text="Type the Location Name and Click It In the List Below To Select It As Your Destination " textAlignment="CENTER" wrapText="true" />
+                                          <ListView fx:id="lst_locationsorted" layoutX="17.0" layoutY="101.0" prefHeight="111.0" prefWidth="245.0" />
+                                          <TextField fx:id="txtf_searchlocation" layoutX="18.0" layoutY="61.0" onKeyTyped="#searchByLocationTextFill" prefHeight="30.0" prefWidth="245.0" promptText="Enter Destination Location" />
+                                          <Button fx:id="btn_findlocationpath" layoutX="40.0" layoutY="223.0" mnemonicParsing="false" onMouseClicked="#onLocationPathFindClicked" prefHeight="40.0" prefWidth="200.0" style="-fx-background-radius: 10;" text="       Find Path To Location" textAlignment="CENTER">
+                                             <font>
+                                                <Font name="Calibri Bold" size="14.0" />
+                                             </font>
+                                          </Button>
+                                          <ImageView fitHeight="24.0" fitWidth="26.0" layoutX="48.0" layoutY="231.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../images/Search%20Map.png" />
+                                             </image>
+                                          </ImageView>
+                                       </children></AnchorPane>
+                                 </content>
+                                 <font>
+                                    <Font name="Calibri" size="18.0" />
+                                 </font>
+                              </TitledPane>
+                              <TitledPane animated="false" text="Search By Doctor's Name">
+                                 <content>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="300.0" prefWidth="200.0">
+                                       <children>
+                                          <Label layoutX="4.0" prefHeight="59.0" prefWidth="272.0" text="Type in doctors name and press the search button to the right, then select the office or department you would like to visit related to that doctor" textAlignment="CENTER" wrapText="true" />
+                                          <Button fx:id="btn_searchdoc" layoutX="231.0" layoutY="57.0" maxHeight="40.0" maxWidth="40.0" mnemonicParsing="false" onMouseClicked="#onFindDoctorClicked" prefHeight="40.0" prefWidth="40.0" style="-fx-background-radius: 10;" />
+                                          <ImageView fitHeight="28.0" fitWidth="29.0" layoutX="237.0" layoutY="63.0" mouseTransparent="true" opacity="0.97" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../images/Find%20Profile.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Label layoutX="7.0" layoutY="150.0" prefHeight="18.0" prefWidth="266.0" text="Select destination from list below after searching" />
+                                          <ListView fx:id="lst_doctorlocations" layoutX="17.0" layoutY="172.0" prefHeight="67.0" prefWidth="246.0" />
+                                          <Button fx:id="btn_findpathdoc" layoutX="40.0" layoutY="246.0" mnemonicParsing="false" onMouseClicked="#onDoctorPathFindClicked" prefHeight="40.0" prefWidth="200.0" style="-fx-background-radius: 10;" text="   Find Path To Location" textAlignment="CENTER">
+                                             <font>
+                                                <Font name="Calibri Bold" size="14.0" />
+                                             </font>
+                                             <graphic>
+                                                <ImageView fitHeight="24.0" fitWidth="26.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@../images/Search%20Map.png" />
+                                                   </image>
+                                                </ImageView>
+                                             </graphic>
+                                          </Button>
+                                          <TextField fx:id="txtf_doctorname" layoutX="30.0" layoutY="60.0" onKeyTyped="#searchByDoctorTextFill" prefHeight="34.0" prefWidth="191.0" promptText="Enter Doctor's Name">
+                                             <font>
+                                                <Font name="Calibri" size="12.0" />
+                                             </font>
+                                          </TextField>
+                                          <ListView fx:id="lst_doctornames" layoutX="30.0" layoutY="94.0" prefHeight="50.0" prefWidth="191.0" />
+                                       </children></AnchorPane>
+                                 </content>
+                                 <font>
+                                    <Font name="Calibri" size="18.0" />
+                                 </font>
+                              </TitledPane>
+                           </panes>
+                        </Accordion>
+                        <Separator prefHeight="20.0" prefWidth="282.0" />
+                        <VBox prefHeight="236.0" prefWidth="281.0" spacing="20.0">
+                           <children>
+                              <Label alignment="CENTER" prefHeight="65.0" prefWidth="282.0" text="Click An Icon Below To Navigate To Popular Locations" textAlignment="CENTER" wrapText="true">
+                                 <font>
+                                    <Font name="Calibri" size="18.0" />
+                                 </font>
+                              </Label>
+                              <GridPane alignment="CENTER" prefHeight="138.0" prefWidth="281.0">
+                                 <columnConstraints>
+                                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="136.19998168945312" minWidth="10.0" prefWidth="87.39999389648438" />
+                                    <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="212.20001220703125" minWidth="10.0" prefWidth="194.60000610351562" />
+                                 </columnConstraints>
+                                 <rowConstraints>
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                                 <children>
+                                    <Button fx:id="btn_bathroom" mnemonicParsing="false" onMouseClicked="#onNearestBathroomClicked" prefHeight="55.0" prefWidth="55.0" style="-fx-background-radius: 10;">
+                                       <graphic>
+                                          <ImageView fitHeight="55.0" fitWidth="41.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../images/bathroom.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                    </Button>
+                                    <Label alignment="CENTER" text="Nearest Bathroom" GridPane.columnIndex="1">
+                                       <font>
+                                          <Font name="Calibri" size="18.0" />
+                                       </font>
+                                    </Label>
+                                    <Button fx:id="btn_cafeteria" mnemonicParsing="false" prefHeight="55.0" prefWidth="55.0" style="-fx-background-radius: 10;" GridPane.rowIndex="1">
+                                       <graphic>
+                                          <ImageView disable="true" fitHeight="31.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../images/food.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                    </Button>
+                                    <Label text="Cafeteria" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                       <font>
+                                          <Font name="Calibri" size="18.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </GridPane>
+                              <Separator prefHeight="15.0" prefWidth="282.0" />
+                           </children>
+                        </VBox>
+                        <Pane prefHeight="47.0" prefWidth="281.0">
+                           <children>
+                              <Label alignment="CENTER" layoutX="5.0" layoutY="-7.0" prefHeight="57.0" prefWidth="272.0" text="Service Requests" wrapText="true">
+                                 <font>
+                                    <Font name="Calibri" size="24.0" />
+                                 </font>
+                              </Label>
+                              <Separator layoutX="1.0" layoutY="41.0" prefHeight="15.0" prefWidth="282.0" />
+                           </children>
+                        </Pane>
+                        <Accordion>
+                           <panes>
+                              <TitledPane animated="false" text="Laundry Service">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                                 <content>
+                                    <AnchorPane>
+                                       <children>
+                                          <TextField fx:id="txtf_laundryLocation" layoutX="40.0" layoutY="14.0" onKeyTyped="#fuzzySearchLaundryRequest" prefHeight="22.0" prefWidth="200.0" promptText="Location" AnchorPane.topAnchor="14.0" />
+                                          <ListView fx:id="lst_laundryLocation" layoutX="40.0" layoutY="69.0" prefHeight="101.0" prefWidth="200.0" />
+                                          <TextArea fx:id="txtf_laundryNotes" layoutX="39.0" layoutY="170.0" prefHeight="96.0" prefWidth="200.0" promptText="Additional Notes" AnchorPane.topAnchor="170.0" />
+                                          <Button fx:id="btn_SubmitLaundry" layoutX="108.0" layoutY="288.0" mnemonicParsing="false" onMouseClicked="#createNewLaundry" style="-fx-background-radius: 10;" text="Submit">
+                                             <font>
+                                                <Font name="Calibri" size="14.0" />
+                                             </font></Button>
+                                       </children>
+                                    </AnchorPane>
+                                 </content></TitledPane>
+                              <TitledPane animated="false" text="Translator Request">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                                 <content>
+                                    <AnchorPane prefHeight="275.0">
+                                       <children>
+                                          <TextField fx:id="txtf_translatorLocation" layoutX="40.0" layoutY="33.0" onKeyTyped="#fuzzySearchTranslatorRequest" prefHeight="29.0" prefWidth="200.0" promptText="Location" />
+                                          <ListView fx:id="lst_translatorSearchBox" layoutX="40.0" layoutY="73.0" prefHeight="95.0" prefWidth="200.0" />
+                                          <TextArea fx:id="txtf_translatorNotes" layoutX="40.0" layoutY="211.0" prefHeight="62.0" prefWidth="200.0" promptText="Additional Notes" />
+                                          <Button fx:id="btn_SubmitTranslator" layoutX="109.0" layoutY="281.0" mnemonicParsing="false" onMouseClicked="#createNewTranslator" style="-fx-background-radius: 10;" text="Submit">
+                                             <font>
+                                                <Font name="Calibri" size="14.0" />
+                                             </font></Button>
+                                          <ComboBox fx:id="cb_languages" layoutX="65.0" layoutY="175.0" prefWidth="150.0" />
+                                       </children>
+                                    </AnchorPane>
+                                 </content></TitledPane>
+                           </panes>
+                        </Accordion>
+                        <AnchorPane>
+                           <children>
+                              <Button fx:id="btn_Login" alignment="CENTER" layoutX="115.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#popupWindow" style="-fx-background-radius: 10;" text="Login" AnchorPane.topAnchor="5.0">
+                                 <font>
+                                    <Font name="Calibri" size="14.0" />
+                                 </font></Button>
+                           </children>
+                        </AnchorPane>
+                     </children>
+                     <padding>
+                        <Insets top="10.0" />
+                     </padding></VBox>
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="pn_mapFrame" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" onScroll="#mapScrollHandler" prefHeight="600.0" prefWidth="600.0" style="-fx-background-color: #d0e6d1;" SplitPane.resizableWithParent="false">
+               <children>
+                  <StackPane fx:id="pn_movableMap" onMouseDragged="#mapDragHandler" onMousePressed="#mapClickHandler" onMouseReleased="#mapReleaseHandler" onScroll="#mapScrollHandler" translateX="-20.0">
+                     <children>
+                        <ImageView fx:id="img_map" fitHeight="982.0" fitWidth="1756.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/Floor4SolidBackground.png" />
+                           </image>
+                        </ImageView>
+                        <Pane fx:id="pn_path">
+                           <children>
+                              <Pane fx:id="pn_routeNodes" />
+                           </children></Pane>
+                     </children>
+                     <cursor>
+                        <Cursor fx:constant="OPEN_HAND" />
+                     </cursor>
+                  </StackPane>
+                  <Pane fx:id="pn_buttonPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <GridPane alignment="CENTER" hgap="40.0" layoutX="43.0" layoutY="382.0">
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <Button fx:id="btn_find" mnemonicParsing="false" onMouseClicked="#onBtnFindClicked" prefHeight="44.0" prefWidth="135.0" style="-fx-background-radius: 10;" text="Find Path">
+                                 <padding>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </padding>
+                                 <graphic>
+                                    <ImageView fitHeight="24.0" fitWidth="26.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../images/Search%20Map.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <font>
+                                    <Font name="Calibri" size="18.0" />
+                                 </font>
+                              </Button>
+                              <Button fx:id="btn_reset" mnemonicParsing="false" onMouseClicked="#onResetClicked" prefHeight="44.0" prefWidth="135.0" style="-fx-background-radius: 10;" text=" Reset Path" GridPane.columnIndex="1">
+                                 <padding>
+                                    <Insets bottom="10.0" left="5.0" right="10.0" top="10.0" />
+                                 </padding>
+                                 <graphic>
+                                    <ImageView fitHeight="24.0" fitWidth="26.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../images/Reset.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <font>
+                                    <Font name="Calibri" size="18.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                        </GridPane>
+                        <GridPane alignment="CENTER" layoutX="99.0" layoutY="488.0">
+                           <columnConstraints>
+                              <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <Button fx:id="btn_zoomOut" maxHeight="64.0" maxWidth="64.0" minHeight="70.0" minWidth="70.0" mnemonicParsing="false" onMouseClicked="#zoomToolHandler" prefHeight="64.0" prefWidth="64.0" style="-fx-background-radius: 10;">
+                                 <font>
+                                    <Font name="System Bold" size="24.0" />
+                                 </font>
+                                 <padding>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </padding>
+                              </Button>
+                              <Button fx:id="btn_zoomIn" maxHeight="64.0" maxWidth="64.0" minHeight="70.0" minWidth="70.0" mnemonicParsing="false" onMouseClicked="#zoomToolHandler" prefHeight="64.0" prefWidth="64.0" style="-fx-background-radius: 10;" text="+" textAlignment="CENTER" GridPane.columnIndex="1">
+                                 <font>
+                                    <Font name="System Bold" size="24.0" />
+                                 </font>
+                                 <padding>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </padding>
+                              </Button>
+                              <ImageView fitHeight="64.0" fitWidth="64.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
+                                 <image>
+                                    <Image url="@../images/Plus.png" />
+                                 </image>
+                              </ImageView>
+                              <ImageView fitHeight="64.0" fitWidth="64.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/remove.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </GridPane>
+                        <Button fx:id="btn_return" layoutX="122.0" layoutY="586.0" mnemonicParsing="false" onMouseClicked="#onReturnClicked" prefHeight="44.0" prefWidth="154.0" style="-fx-background-radius: 10;" text="Homepage">
+                           <font>
+                              <Font name="Calibri" size="18.0" />
+                           </font>
+                           <graphic>
+                              <ImageView fitHeight="24.0" fitWidth="26.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/Home.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                     </children>
+                  </Pane>
+                  <Pane fx:id="pn_directionsBox" style="-fx-background-color: cccccc; -fx-border-color: #004a80; -fx-border-width: 6;" visible="false" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="50.0">
+                     <children>
+                        <VBox alignment="CENTER" fillWidth="false" minHeight="-Infinity" minWidth="-Infinity" spacing="10.0">
+                           <children>
+                              <Label text="Scan for text directions" textAlignment="CENTER">
+                                 <font>
+                                    <Font name="System Bold" size="24.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets bottom="5.0" left="20.0" right="20.0" top="5.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <Pane minHeight="-Infinity" minWidth="-Infinity" style="-fx-border-color: BLACK;">
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" />
+                                 </VBox.margin>
+                                 <children>
+                                    <ImageView fx:id="img_qrDirections" fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" />
+                                 </children>
+                              </Pane>
+                           </children>
+                           <padding>
+                              <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
+                           </padding>
+                        </VBox>
+                     </children>
+                  </Pane>
+               </children>
+            </AnchorPane>
+         </items>
+      </SplitPane>
+   </children>
+</AnchorPane>

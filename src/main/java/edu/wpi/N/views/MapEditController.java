@@ -5,6 +5,7 @@ import edu.wpi.N.App;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
+import edu.wpi.N.entities.States.StateSingleton;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -19,9 +20,17 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.StrokeLineCap;
 
 public class MapEditController implements Controller {
   App mainApp = null;
+
+  private StateSingleton singleton;
+
+  @Override
+  public void setSingleton(StateSingleton singleton) {
+    this.singleton = singleton;
+  }
 
   @Override
   public void setMainApp(App mainApp) {
@@ -560,6 +569,7 @@ public class MapEditController implements Controller {
                 secondNode.getX() * HORIZONTAL_SCALE,
                 secondNode.getY() * VERTICAL_SCALE);
         line.setStroke(Color.RED);
+        line.setStrokeLineCap(StrokeLineCap.ROUND);
         pn_display.getChildren().add(line);
       }
     } else if (txt_EdgesAddSecondLocation.isFocused()) {
@@ -584,6 +594,7 @@ public class MapEditController implements Controller {
                 firstNode.getY() * VERTICAL_SCALE,
                 secondNode.getX() * HORIZONTAL_SCALE,
                 secondNode.getY() * VERTICAL_SCALE);
+        line.setStrokeLineCap(StrokeLineCap.ROUND);
         line.setStroke(Color.RED);
         pn_display.getChildren().add(line);
       }
@@ -626,6 +637,7 @@ public class MapEditController implements Controller {
               firstMapNode.getCenterY(),
               node.getX() * HORIZONTAL_SCALE,
               node.getY() * VERTICAL_SCALE);
+      line.setStrokeLineCap(StrokeLineCap.ROUND);
       if (index == 0) {
         pn_firstEdges.getChildren().add(line);
       } else {
@@ -685,6 +697,7 @@ public class MapEditController implements Controller {
       float x2 = adjacentNode.getX() * HORIZONTAL_SCALE;
       float y2 = adjacentNode.getY() * VERTICAL_SCALE;
       Line line = new Line(x1, y1, x2, y2);
+      line.setStrokeLineCap(StrokeLineCap.ROUND);
       line.setStrokeWidth(3);
       if (editMode == EditMode.EDGES_DELETE) {
         line.setOnMouseClicked(
@@ -764,6 +777,7 @@ public class MapEditController implements Controller {
       double y2 = mapNode.getCenterY();
       pn_firstEdges.getChildren().clear();
       Line line = new Line(x1, y1, x2, y2);
+      line.setStrokeLineCap(StrokeLineCap.ROUND);
       pn_display.getChildren().remove(line_EdgesEditSelected);
       line.setStroke(Color.MAGENTA);
       line.setStrokeWidth(2);
@@ -814,6 +828,6 @@ public class MapEditController implements Controller {
   }
 
   public void onReturnClicked() throws IOException {
-    mainApp.switchScene("views/home.fxml");
+    mainApp.switchScene("views/home.fxml", singleton);
   }
 }

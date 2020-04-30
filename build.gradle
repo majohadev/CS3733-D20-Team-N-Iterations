@@ -19,6 +19,7 @@ repositories {
 
 dependencies {
     implementation(
+            'com.fazecast:jSerialComm:[2.0.0,3.0.0)',
             'com.jfoenix:jfoenix:9.0.9',
 
             // You may comment out the database dependency you do not use
@@ -31,11 +32,11 @@ dependencies {
 
             'com.github.sarxos:webcam-capture:0.3.12',
             'com.google.zxing:core:3.4.0',
-            'com.google.zxing:javase:3.4.0'
+            'com.google.zxing:javase:3.4.0',
     )
 
 
-    compile group: 'com.google.guava', name: 'guava', version: '23.5-jre'
+    compile group: 'com.google.guava', name: 'guava', version: '23.5-jre', 'org.mybatis:mybatis:3.5.4'
 
     testImplementation(
             'org.junit.jupiter:junit-jupiter:5.6.0',
@@ -93,7 +94,8 @@ def codeCoverageExcludes = [
         'edu.wpi.N.views.*',
         'edu.wpi.N.qrcontrol.*',
         'edu.wpi.N.controllerData.*',
-        'edu.wpi.N.database.setupDB'
+        'edu.wpi.N.database.setupDB',
+        'edu.wpi.N.algorithms.AbsAlgo.FloorSortNodes'
 ]
 
 jacoco {
