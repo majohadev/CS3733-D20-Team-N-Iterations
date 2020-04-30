@@ -29,8 +29,16 @@ public class MapDB {
     if (con == null || statement == null) {
       Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
       String URL;
-      URL = "jdbc:derby:MapDB;create=true";
-      con = DriverManager.getConnection(URL);
+      URL = "jdbc:derby:MapDB";
+      try {
+        con = DriverManager.getConnection(URL);
+      } catch (SQLException e) {
+        if (e.getSQLState().equals("XJ004")) { // db doesn't exist, create it
+          URL = "jdbc:derby:MapDB;create=true";
+          con = DriverManager.getConnection(URL);
+          setupDB.main(new String[] {});
+        } else throw e;
+      }
       statement = con.createStatement();
     }
   }

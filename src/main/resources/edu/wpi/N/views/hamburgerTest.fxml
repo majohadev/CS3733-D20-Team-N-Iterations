@@ -20,14 +20,19 @@
 
 <AnchorPane prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #D3D3D3;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.hamburgerTestController">
    <children>
-      <StackPane layoutX="300.0" layoutY="75.0" prefHeight="1005.0" prefWidth="1425.0">
+      <StackPane layoutX="300.0" layoutY="75.0" pickOnBounds="false" prefHeight="1005.0" prefWidth="1425.0">
          <children>
+
+            <!-- content from mapBase.fxml included here -->
+            <fx:include fx:id="mapBase" source="mapBase.fxml" />
+            <!-->
             <ImageView fx:id="img_map" fitHeight="1010.0" fitWidth="1678.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../images/Floor1Reclor.png" />
                </image>
             </ImageView>
-            <Pane fx:id="pn_display" prefHeight="200.0" prefWidth="200.0">
+            <-->
+            <Pane fx:id="pn_display" pickOnBounds="false" prefHeight="200.0" prefWidth="200.0">
                <children>
                   <Pane fx:id="pn_changeFloor" layoutX="1458.0" layoutY="14.0" prefHeight="490.0" prefWidth="206.0" />
                   <JFXButton fx:id="btn_home" layoutX="151.0" layoutY="377.0" onMouseClicked="#onBtnHomeClicked" prefHeight="48.0" prefWidth="105.0" styleClass="animated-option-button" stylesheets="@MapDisplayFloors.css" text="Home">
@@ -61,9 +66,9 @@
                            <content>
                               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="722.0" prefWidth="298.0" style="-fx-background-color: #ffffff;">
                                  <children>
-                                    <JFXButton buttonType="RAISED" ellipsisString="" layoutX="213.0" layoutY="48.0" prefHeight="51.0" prefWidth="54.0" text="   " textAlignment="CENTER">
+                                    <JFXButton buttonType="RAISED" ellipsisString="" layoutX="213.0" layoutY="48.0" prefHeight="51.0" prefWidth="54.0" onMouseClicked="#onFindDoctorClicked" text="   " textAlignment="CENTER">
                                        <graphic>
-                                          <ImageView fx:id="btn_searchdoc" fitHeight="28.0" fitWidth="29.0" mouseTransparent="true" onMouseClicked="#onFindDoctorClicked" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fx:id="btn_searchdoc" fitHeight="28.0" fitWidth="29.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@../images/Find%20A%20Doctor.png" />
                                              </image>

@@ -1127,18 +1127,17 @@ public class MapEditorController implements Controller {
     btn_cancel_elev.setVisible(false);
   }
 
+  @FXML
   public void changeAlgorithm() {
-    cb_changeAlgo
-        .valueProperty()
-        .addListener(
-            (ob, old, newVal) -> {
-              if (newVal.equals("BFS")) {
-                singleton.savedAlgo.setPathFinder(new BFS());
-              } else if (newVal.equals("DFS")) {
-                singleton.savedAlgo.setPathFinder(new DFS());
-              } else if (newVal.equals("AStar")) {
-                singleton.savedAlgo.setPathFinder(new AStar());
-              }
-            });
+    if (cb_changeAlgo.getSelectionModel().getSelectedItem().equals("BFS")) {
+      singleton.savedAlgo.setPathFinder(new BFS());
+      System.out.println("1");
+    } else if (cb_changeAlgo.getSelectionModel().getSelectedItem().equals("DFS")) {
+      singleton.savedAlgo.setPathFinder(new DFS());
+      System.out.println("2");
+    } else if (cb_changeAlgo.getSelectionModel().getSelectedItem().equals("AStar")) {
+      singleton.savedAlgo.setPathFinder(new AStar());
+      System.out.println("3");
+    }
   }
 }

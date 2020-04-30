@@ -315,7 +315,7 @@
                                  <font>
                                     <Font name="Calibri" size="24.0" />
                                  </font></JFXButton>
-                              <JFXButton fx:id="btn_removeLanguage" buttonType="RAISED" layoutX="882.0" layoutY="807.0" onMouseClicked="#removeLanguage" text="Add Language">
+                              <JFXButton fx:id="btn_removeLanguage" buttonType="RAISED" layoutX="882.0" layoutY="807.0" onMouseClicked="#removeLanguage" text="Remove Language">
                                  <font>
                                     <Font name="Calibri" size="24.0" />
                                  </font></JFXButton>

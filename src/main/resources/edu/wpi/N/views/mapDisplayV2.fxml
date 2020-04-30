@@ -23,11 +23,9 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.MapDisplayController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.MapDisplayControllerV2">
    <children>
-      <Text fx:id="maps" />
       <SplitPane dividerPositions="0.1617497456765005" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: WHITE;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <items>
             <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="323.0" SplitPane.resizableWithParent="false">
@@ -243,8 +241,8 @@
             <AnchorPane fx:id="pn_mapFrame" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" style="-fx-background-color: #d0e6d1;" SplitPane.resizableWithParent="false">
                <children>
                   <!-- content from mapBase.fxml included here -->
-                  <fx:include fx:id="mapBase" source="mapBase.fxml" />
-                  <Pane fx:id="pn_buttonPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <fx:include fx:id="base" source="mapBase.fxml" />
+                  <Pane fx:id="pn_buttonPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" visible="false">
                      <children>
                         <GridPane alignment="CENTER" hgap="40.0" layoutX="43.0" layoutY="382.0">
                            <columnConstraints>
@@ -285,6 +283,27 @@
                                     <Font name="Calibri" size="18.0" />
                                  </font>
                               </Button>
+                           </children>
+                        </GridPane>
+                        <GridPane alignment="CENTER" layoutX="99.0" layoutY="488.0">
+                           <columnConstraints>
+                              <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <ImageView fitHeight="64.0" fitWidth="64.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1">
+                                 <image>
+                                    <Image url="@../images/Plus.png" />
+                                 </image>
+                              </ImageView>
+                              <ImageView fitHeight="64.0" fitWidth="64.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/remove.png" />
+                                 </image>
+                              </ImageView>
                            </children>
                         </GridPane>
                         <Button fx:id="btn_return" layoutX="122.0" layoutY="586.0" mnemonicParsing="false" onMouseClicked="#onReturnClicked" prefHeight="44.0" prefWidth="154.0" style="-fx-background-radius: 10;" text="Homepage">

@@ -92,7 +92,7 @@
                            <children>
                               <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../images/languageWhite.png" />
+                                    <Image url="@../images/MedicineIconWhite.png" />
                                  </image>
                               </ImageView>
                               <Label text="Medicine Request" textFill="WHITE">

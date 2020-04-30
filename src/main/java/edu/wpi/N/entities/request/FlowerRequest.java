@@ -54,13 +54,6 @@ public class FlowerRequest extends Request {
     if (!(o instanceof FlowerRequest)) {
       return false;
     }
-
-    FlowerRequest other = (FlowerRequest) o;
-
-    return super.equals(o)
-        && patientName.equals(other.patientName)
-        && visitorName.equals(other.visitorName)
-        && creditNum.equals(other.creditNum)
-        && flowerList.equals(other.flowerList);
+    return super.equals(o);
   }
 }
