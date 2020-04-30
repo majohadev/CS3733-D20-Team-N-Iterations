@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
+<?import com.jfoenix.controls.JFXDrawer?>
+<?import com.jfoenix.controls.JFXListView?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #D3D3D3;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.mapDisplay.MapDisplayController">
+   <children>
+      <StackPane layoutX="300.0" layoutY="75.0" pickOnBounds="false" prefHeight="1005.0" prefWidth="1425.0">
+         <children>
+
+            <!-- content from mapBase.fxml included here -->
+            <fx:include fx:id="mapBase" source="mapBase.fxml" />
+            <!-->
+            <ImageView fx:id="img_map" fitHeight="1010.0" fitWidth="1678.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/Floor1Reclor.png" />
+               </image>
+            </ImageView>
+            <-->
+            <Pane fx:id="pn_display" pickOnBounds="false" prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <Pane fx:id="pn_changeFloor" layoutX="1458.0" layoutY="14.0" prefHeight="490.0" prefWidth="206.0" />
+                  <JFXButton fx:id="btn_home" layoutX="151.0" layoutY="377.0" onMouseClicked="#onBtnHomeClicked" prefHeight="48.0" prefWidth="105.0" styleClass="animated-option-button" stylesheets="@../../css/MapDisplayFloors.css" text="Home">
+                     <font>
+                        <Font name="Calibri" size="24.0" />
+                     </font>
+                  </JFXButton>
+               </children>
+            </Pane>
+         </children>
+      </StackPane>
+      <Pane prefHeight="75.0" prefWidth="1978.0" style="-fx-background-color: #002186;" />
+      <fx:include fx:id="time" layoutX="1750.0" layoutY="5.0" source="../features/timeTab.fxml" />
+      <JFXDrawer fx:id="dw_drawer" defaultDrawerSize="300.0" layoutY="75.0" maxHeight="-Infinity" minWidth="-Infinity" prefHeight="970.0" prefWidth="300.0">
+         <children>
+            <VBox layoutX="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="970.0" prefWidth="300.0">
+               <children>
+                  <Pane prefHeight="95.0" prefWidth="300.0" style="-fx-background-color: #ffffff;">
+                     <children>
+                        <Separator layoutY="214.0" prefHeight="3.0" prefWidth="300.0" />
+                        <ImageView fitHeight="73.0" fitWidth="68.0" layoutX="119.0" layoutY="1.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../images/hospitalLogo/Brigham_and_Womens_Hospital_logo.svg.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </Pane>
+                  <Accordion fx:id="acc_search" prefHeight="915.0" prefWidth="300.0" style="-fx-background-color: #ffffff;" stylesheets="@../../css/MapDisplayDrop.css">
+                     <panes>
+                        <TitledPane prefHeight="350.0" prefWidth="92.0" style="-fx-background-color: #ffffff;" text="Search By Doctor">
+                           <content>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="722.0" prefWidth="298.0" style="-fx-background-color: #ffffff;">
+                                 <children>
+                                    <JFXButton buttonType="RAISED" ellipsisString="" layoutX="213.0" layoutY="48.0" prefHeight="51.0" prefWidth="54.0" onMouseClicked="#onFindDoctorClicked" text="   " textAlignment="CENTER">
+                                       <graphic>
+                                          <ImageView fx:id="btn_searchdoc" fitHeight="28.0" fitWidth="29.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../images/Find%20A%20Doctor.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic></JFXButton>
+                                    <JFXListView fx:id="lst_doctornames" layoutX="48.0" layoutY="103.0" prefHeight="75.0" prefWidth="200.0" />
+                                    <JFXTextField fx:id="txtf_doctorname" layoutX="49.0" layoutY="64.0" onKeyTyped="#searchByDoctorTextFill" prefHeight="29.0" prefWidth="151.0" promptText="Search by Doctor" />
+                                    <JFXButton fx:id="btn_findpathdoc" buttonType="RAISED" layoutX="45.0" layoutY="301.0" onMouseClicked="#onDoctorPathFindClicked" prefHeight="39.0" prefWidth="204.0" style="-fx-background-color: #002186;" text="   Find Path To Location" textAlignment="CENTER" textFill="WHITE">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                    </JFXButton>
+                                    <JFXListView fx:id="lst_doctorlocations" layoutX="47.0" layoutY="218.0" prefHeight="75.0" prefWidth="200.0" />
+                                    <Label layoutX="47.0" layoutY="196.0" text="Select a Location from the list below" />
+                                    <JFXCheckBox fx:id="handicapp1" checkedColor="LIMEGREEN" layoutX="49.0" layoutY="31.0" style="-fx-background-color: #ffffff; -fx-text-fill: #002186#002186 #002186;" text="Handicap accessible path" unCheckedColor="#002186">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                    </JFXCheckBox>
+                                    <JFXButton fx:id="btn_resetPath1" buttonType="RAISED" layoutX="61.0" layoutY="353.0" onMouseClicked="#onBtnResetPathClicked" prefHeight="27.0" prefWidth="171.0" text="Reset" textAlignment="CENTER">
+                                       <font>
+                                          <Font name="Calibri Bold" size="24.0" />
+                                       </font>
+                                       <graphic>
+                                          <ImageView fitHeight="92.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../../images/mapIcons/Reset.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                    </JFXButton>
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                           <font>
+                              <Font name="Calibri" size="16.0" />
+                           </font>
+                        </TitledPane>
+                        <TitledPane fx:id="pn_locationSearch" prefHeight="680.0" prefWidth="300.0" text="Search By Location">
+                           <content>
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="607.0" prefWidth="298.0" style="-fx-background-color: #ffffff;">
+                                 <children>
+                                    <JFXListView fx:id="lst_firstLocation" layoutX="49.0" layoutY="105.0" prefHeight="172.0" prefWidth="200.0" />
+                                    <JFXTextField fx:id="txt_firstLocation" layoutX="49.0" layoutY="66.0" onKeyTyped="#onSearchFirstLocation" prefWidth="200.0" promptText="Search by Location" />
+                                    <JFXButton fx:id="btn_findPath" buttonType="RAISED" layoutX="48.0" layoutY="556.0" onMouseClicked="#onBtnPathfindClicked" prefHeight="39.0" prefWidth="204.0" ripplerFill="#7bff66" style="-fx-background-color: #002186;" text="Find Path To Location" textAlignment="CENTER" textFill="WHITE">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                    </JFXButton>
+                                    <JFXTextField fx:id="txt_secondLocation" layoutX="49.0" layoutY="287.0" onKeyTyped="#onSearchSecondLocation" prefWidth="200.0" promptText="Search by Location" />
+                                    <JFXListView fx:id="lst_secondLocation" layoutX="50.0" layoutY="326.0" prefHeight="172.0" prefWidth="200.0" />
+                                    <JFXButton fx:id="btn_resetPath" buttonType="RAISED" layoutX="59.0" layoutY="606.0" onMouseClicked="#onBtnResetPathClicked" prefHeight="27.0" prefWidth="171.0" text="Reset" textAlignment="CENTER">
+                                       <font>
+                                          <Font name="Calibri Bold" size="24.0" />
+                                       </font>
+                                       <graphic>
+                                          <ImageView fitHeight="92.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../../images/mapIcons/Reset.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                    </JFXButton>
+                                    <JFXButton layoutX="51.0" layoutY="496.0" onMouseClicked="#findPathToBathroom" prefHeight="50.0" prefWidth="67.0" ripplerFill="#ffd965" style="-fx-background-color: #002186#002186; -fx-background-radius: 0;" text=" ">
+                                       <graphic>
+                                          <ImageView fitHeight="32.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../../images/mapIcons/bathroomWhite.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                    </JFXButton>
+                                    <JFXButton layoutX="117.0" layoutY="496.0" onMouseClicked="#findPathToCafetaria" prefHeight="50.0" prefWidth="66.0" ripplerFill="#ffd965" style="-fx-background-color: #002186#002186; -fx-background-radius: 0;" text=" ">
+                                       <graphic>
+                                          <ImageView fitHeight="32.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true" translateX="4.0">
+                                             <image>
+                                                <Image url="@../../images/mapIcons/CafeteriaWhite.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                    </JFXButton>
+                                    <JFXButton layoutX="182.0" layoutY="496.0" onMouseClicked="#findPathToStarBucks" prefHeight="50.0" prefWidth="67.0" ripplerFill="#ffd965" style="-fx-background-color: #002186#002186; -fx-background-radius: 0;" text=" ">
+                                       <graphic>
+                                          <ImageView fitHeight="38.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true" translateX="6.0">
+                                             <image>
+                                                <Image url="@../../images/mapIcons/starbuks.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                    </JFXButton>
+                                    <JFXCheckBox fx:id="handicapp2" checkedColor="LIMEGREEN" layoutX="49.0" layoutY="31.0" style="-fx-background-color: #ffffff; -fx-text-fill: #002186#002186 #002186;" text="Handicap accessible path" unCheckedColor="#002186">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                    </JFXCheckBox>
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                           <font>
+                              <Font name="Calibri" size="16.0" />
+                           </font>
+                        </TitledPane>
+                        <TitledPane prefHeight="200.0" prefWidth="200.0" text="Textual Directions">
+                           <font>
+                              <Font name="Calibri" size="16.0" />
+                           </font>
+                           <content>
+                              <AnchorPane prefHeight="780.0" prefWidth="298.0">
+                                 <children>
+                                    <Pane layoutX="24.0" layoutY="81.0" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" prefHeight="402.0" prefWidth="248.0" style="-fx-background-radius: 5; -fx-background-color: #dfe3ee;">
+                                       <children>
+                                          <Text fx:id="txt_description" layoutX="9.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Calibri;" text="Text" wrappingWidth="230.22900390625">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Text>
+                                       </children></Pane>
+                                    <JFXButton buttonType="RAISED" layoutX="22.0" layoutY="25.0" onMouseClicked="#displayQRCode" prefHeight="39.0" prefWidth="249.0" ripplerFill="#7bff66" style="-fx-background-color: #002186;" text="Generate QR Code" textAlignment="CENTER" textFill="WHITE">
+                                       <font>
+                                          <Font size="18.0" />
+                                       </font>
+                                    </JFXButton>
+                                 </children>
+                              </AnchorPane>
+                           </content>
+                        </TitledPane>
+                     </panes>
+                  </Accordion>
+               </children>
+            </VBox>
+         </children>
+      </JFXDrawer>
+   </children>
+</AnchorPane>

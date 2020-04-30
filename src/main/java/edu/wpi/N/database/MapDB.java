@@ -3,7 +3,7 @@ package edu.wpi.N.database;
 import edu.wpi.N.Main;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Node;
-import edu.wpi.N.views.ArduinoController;
+import edu.wpi.N.views.features.ArduinoController;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
