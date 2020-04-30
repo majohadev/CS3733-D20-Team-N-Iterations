@@ -135,4 +135,9 @@ public class DbNode implements INode {
     // XOR values/multiply by prime num to mix them up
     return nodeID.hashCode() ^ ((x ^ y) * 17) ^ building.hashCode();
   }
+
+  @Override
+  public String toString() {
+    return this.getLongName();
+  }
 }
