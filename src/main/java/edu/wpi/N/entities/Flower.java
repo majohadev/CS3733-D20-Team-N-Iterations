@@ -19,6 +19,11 @@ public class Flower {
   }
 
   @Override
+  public String toString() {
+    return flowerName + ", " + price;
+  }
+
+  @Override
   public boolean equals(Object obj) {
     if (!(obj instanceof Flower)) {
       return false;
@@ -26,6 +31,6 @@ public class Flower {
 
     Flower other = (Flower) obj;
 
-    return flowerName.equals(other.flowerName) && price.equals(other.price);
+    return flowerName.equals(other.flowerName);
   }
 }
