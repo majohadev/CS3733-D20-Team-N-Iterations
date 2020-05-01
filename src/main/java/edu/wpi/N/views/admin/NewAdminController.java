@@ -47,7 +47,6 @@ public class NewAdminController implements Controller, Initializable {
 
   @FXML JFXPasswordField pwf_newpass;
   @FXML JFXPasswordField pwf_confpass;
-  @FXML JFXTextField txtf_docoffices;
   @FXML JFXTextField txtf_newuser;
   @FXML JFXTextField txtf_docuser;
   @FXML JFXTextField txtf_docpass;
@@ -57,12 +56,7 @@ public class NewAdminController implements Controller, Initializable {
   @FXML JFXTextField txtf_empfn;
   @FXML JFXTextField txtf_empln;
   @FXML JFXTextField txtf_languages;
-  @FXML JFXTextField txtf_docid;
-  @FXML JFXTextField txtf_adminuser;
-  @FXML JFXTextField txtf_adminpass;
-  @FXML JFXTextField txtf_cpoldpass;
-  @FXML JFXTextField txtf_cpnewpass;
-  @FXML JFXTextField txtf_cpuser;
+
   @FXML JFXTextField txtf_empid;
   @FXML JFXTextField txtf_newLang;
   @FXML StackPane sp_getpanes;
@@ -78,18 +72,16 @@ public class NewAdminController implements Controller, Initializable {
   @FXML TableView<Employee> tbl_Employees;
   @FXML CheckBox cb_translator;
   @FXML Label lbl_languages;
-  @FXML JFXListView lst_docoffice;
+
   @FXML JFXButton btn_Accept;
   @FXML JFXButton btn_Deny;
-  @FXML ChoiceBox<Employee> cb_Employee;
   @FXML ChoiceBox<Service> cb_employeeTypes;
   @FXML TableView<Request> tb_RequestTable = new TableView<Request>();
   @FXML TableView<String> tb_languages = new TableView<String>();
   @FXML JFXCheckBox ch_requestFilter;
   @FXML Label lbl_title;
-  @FXML JFXTextField txtf_rmuser;
+
   @FXML JFXButton btn_arduino;
-  @FXML TableView<String> tb_languagesRemove;
   @FXML ChoiceBox<Employee> cb_EmployeeRemove;
 
   ObservableList<Request> tableData = FXCollections.observableArrayList();
@@ -702,31 +694,6 @@ public class NewAdminController implements Controller, Initializable {
             requestID, service, emp_assigned, notes, nodeID, status, attr1, attr2, attr3, attr4);
     tb_languages.getColumns().addAll(languages);
     tb_languagesRemove.getColumns().addAll(langRem);
-  }
-
-  public void populateRequestTable() throws DBException {
-    LinkedList<Request> reqs = ServiceDB.getRequests();
-    tableData.setAll(reqs);
-
-    ch_requestFilter
-        .selectedProperty()
-        .addListener(
-            (ov, old, val) -> {
-              try {
-                if (val) {
-                  LinkedList<Request> rqs = ServiceDB.getOpenRequests();
-                  tableData.setAll(rqs);
-                } else {
-                  LinkedList<Request> rqs = ServiceDB.getRequests();
-                  tableData.setAll(rqs);
-                }
-              } catch (DBException e) {
-                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-                errorAlert.setContentText(e.getMessage());
-                errorAlert.show();
-              }
-            });
-    tb_RequestTable.setItems(tableData);
   }
 
   public void populateLanguageTable() {
