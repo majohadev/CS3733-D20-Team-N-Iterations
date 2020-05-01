@@ -862,7 +862,7 @@ public class MapDB {
   /**
    * Adds two nodes to the same shaft. If neither of them are in a shaft, makes a new shaft with
    * them. If one of them is in a shaft, then adds the other one to that shaft. If both of them are
-   * in different shafts, throws DBException.
+   * in different shafts, then the shafts get merged
    *
    * @param node1 the nodeID of the first node of the edge that should be added to the shaft
    * @param node2 the nodeID of the second node of the edge that should be added to the shaft
@@ -883,7 +883,43 @@ public class MapDB {
       error += "Nodes in a shaft must be in the same building!\n";
     if (!(DbNode1.getNodeType().equals("ELEV") || DbNode1.getNodeType().equals("STAI")))
       error += "Nodes in a shaft must be either elevators or stairs!\n";
+    // makes sure that no nodes on the same floor are ever in the same shaft
+    try {
+      Iterator<DbNode> shaft1It = getInShaft(node1).iterator();
+      while (shaft1It.hasNext()) {
+        DbNode next = shaft1It.next();
+        if (next.getFloor() == DbNode2.getFloor()) {
+          if (next.getNodeID().equals(DbNode2.getNodeID()))
+            return; // already in the same shaft, just return.
+          error +=
+              DbNode2.getLongName()
+                  + " is on the same floor as another node in "
+                  + DbNode1.getLongName()
+                  + "'s shaft!\n";
+          break;
+        }
+      }
+    } catch (DBException e) {
+    } // do nothing, just means that node1 isn't in any shafts
+    try {
+      Iterator<DbNode> shaft2It = getInShaft(node2).iterator();
+      while (shaft2It.hasNext()) {
+        DbNode next = shaft2It.next();
+        if (next.getFloor() == DbNode1.getFloor()) {
+          if (next.getNodeID().equals(DbNode1.getNodeID()))
+            return; // already in the same shaft, just return.
+          error +=
+              DbNode1.getLongName()
+                  + " is on the same floor as another node in "
+                  + DbNode2.getLongName()
+                  + "'s shaft!\n";
+          break;
+        }
+      }
+    } catch (DBException e) {
+    }
     if (error.length() != 0) throw new DBException(error);
+    // done enforcing most constraints: The actual code follows
     String query = "SELECT shaftID, nodeID FROM shaft WHERE nodeID = ? OR nodeID = ?";
     try {
       PreparedStatement stmt = con.prepareStatement(query);
@@ -894,13 +930,23 @@ public class MapDB {
         String nodeID1 = rs.getString("nodeID");
         int shaftID1 = rs.getInt("shaftID");
         if (rs.next()) { // both in shaft, check if both have same id
-          if (shaftID1 == rs.getInt("shaftID")) return; // both already in the same shaft
-          else
-            throw new DBException(
-                "Those nodes are already in different shafts! Nodes can only ever be in one shaft.");
+          int shaftID2 = rs.getInt("shaftID");
+          if (shaftID1 == shaftID2) return; // both already in the same shaft, do nothing
+          else { // nodes are in different shafts and the shafts must be merged
+            query =
+                "UPDATE shaft SET shaftID = ? WHERE shaftID = ?"; // simply sets the shaftIDs for
+            // each shaft equal
+            // nodeID2 to the shaft of shaftID1
+            stmt = con.prepareStatement(query);
+            stmt.setInt(1, shaftID1);
+            stmt.setInt(2, shaftID2);
+            stmt.executeUpdate();
+          }
+
         } else { // only one in shaft
           String nodeID2 = node2;
-          if (nodeID1.equals(node2)) nodeID2 = node1;
+          if (nodeID1.equals(node2))
+            nodeID2 = node1; // nodeID2 is the one not found in the result set first
           query = "INSERT INTO shaft (shaftID, nodeID) VALUES (?, ?)";
           stmt = con.prepareStatement(query);
           stmt.setInt(1, shaftID1);
