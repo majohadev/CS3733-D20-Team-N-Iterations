@@ -6,8 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane prefHeight="970.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.admin.AccountHandleController">
+<AnchorPane prefHeight="970.0" prefWidth="1720.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.admin.AccountHandleController">
    <children>
       <Label layoutX="175.0" layoutY="116.0" text="Add Admin Account" textAlignment="CENTER">
          <font>
@@ -31,7 +30,7 @@
             <Font size="24.0" />
          </font>
       </JFXButton>
-      <Label layoutX="1303.0" layoutY="88.0" text="Change Account Password" textAlignment="CENTER">
+      <Label layoutX="1190.0" layoutY="144.0" text="Change Account Password" textAlignment="CENTER">
          <font>
             <Font size="36.0" />
          </font>
@@ -41,20 +40,20 @@
             <Font size="24.0" />
          </font>
       </Label>
-      <Label layoutX="1293.0" layoutY="232.0" prefHeight="35.0" prefWidth="168.0" text="New Password:" textAlignment="CENTER">
+      <Label layoutX="1180.0" layoutY="288.0" prefHeight="35.0" prefWidth="168.0" text="New Password:" textAlignment="CENTER">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <Label layoutX="1306.0" layoutY="189.0" text="Old Password:" textAlignment="CENTER">
+      <Label layoutX="1193.0" layoutY="245.0" text="Old Password:" textAlignment="CENTER">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <JFXTextField fx:id="txtf_cpoldpass" layoutX="1499.0" layoutY="197.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="250.0" />
-      <JFXTextField fx:id="txtf_cpuser" layoutX="1499.0" layoutY="154.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="250.0" />
-      <JFXTextField fx:id="txtf_cpnewpass" layoutX="1499.0" layoutY="232.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="250.0" />
-      <JFXButton buttonType="RAISED" layoutX="1464.0" layoutY="276.0" onMouseClicked="#changeAccountPass" text="Submit">
+      <JFXTextField fx:id="txtf_cpoldpass" layoutX="1386.0" layoutY="253.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="250.0" />
+      <JFXTextField fx:id="txtf_cpuser" layoutX="1386.0" layoutY="210.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="250.0" />
+      <JFXTextField fx:id="txtf_cpnewpass" layoutX="1386.0" layoutY="288.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="250.0" />
+      <JFXButton buttonType="RAISED" layoutX="1351.0" layoutY="332.0" onMouseClicked="#changeAccountPass" text="Submit">
          <font>
             <Font name="Calibri" size="24.0" />
          </font>
@@ -64,7 +63,7 @@
             <Font size="36.0" />
          </font>
       </Label>
-      <Label layoutX="1337.0" layoutY="149.0" text="Username:" textAlignment="CENTER">
+      <Label layoutX="1224.0" layoutY="205.0" text="Username:" textAlignment="CENTER">
          <font>
             <Font size="24.0" />
          </font>

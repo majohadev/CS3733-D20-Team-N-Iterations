@@ -10,8 +10,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane maxHeight="-Infinity" minWidth="-Infinity" prefHeight="970.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.admin.EmployeeHandleController">
+<AnchorPane maxHeight="-Infinity" minWidth="-Infinity" prefHeight="970.0" prefWidth="1720.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.admin.EmployeeHandleController">
    <children>
       <ChoiceBox fx:id="cb_EmployeeRemove" layoutX="831.0" layoutY="638.0" prefWidth="150.0" />
       <TableView fx:id="tb_languagesRemove" layoutX="831.0" layoutY="678.0" prefHeight="202.0" prefWidth="150.0" />
@@ -95,7 +94,7 @@
          </font>
       </Label>
       <JFXTextField fx:id="txtf_docid" layoutX="578.0" layoutY="142.0" prefHeight="25.0" prefWidth="150.0" />
-      <JFXTextField fx:id="txtf_docoffices" layoutX="466.0" layoutY="183.0" onKeyTyped="#searchByLocationTextFill" prefHeight="35.0" prefWidth="266.0" promptText="Search for Locations" />
+      <JFXTextField fx:id="txtf_docoffice" layoutX="466.0" layoutY="183.0" onKeyTyped="#searchByLocationTextFill" prefHeight="35.0" prefWidth="266.0" promptText="Search for Locations" />
       <JFXListView fx:id="lst_docoffice" layoutX="466.0" layoutY="226.0" prefHeight="134.0" prefWidth="266.0" />
       <JFXButton fx:id="btn_addoffice" buttonType="RAISED" layoutX="457.0" layoutY="360.0" onMouseClicked="#addOffice" text="Add Office">
          <font>
@@ -135,8 +134,8 @@
          </font>
       </JFXButton>
       <ChoiceBox fx:id="cb_employeeTypes" layoutX="232.0" layoutY="684.0" prefWidth="150.0" />
-      <TableView fx:id="tbl_Employees" layoutX="1374.0" layoutY="83.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="500.0" />
-      <JFXButton fx:id="btn_delemp" layoutX="1525.0" layoutY="501.0" onMouseClicked="#deleteEmployee" text="Delete Employee">
+      <TableView fx:id="tbl_Employees" layoutX="1110.0" layoutY="78.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="500.0" />
+      <JFXButton fx:id="btn_delemp" layoutX="1272.0" layoutY="497.0" onMouseClicked="#deleteEmployee" text="Delete Employee">
          <font>
             <Font size="24.0" />
          </font>

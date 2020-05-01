@@ -9,22 +9,21 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane prefHeight="970.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.admin.ViewRequestController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="970.0" prefWidth="1720.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.admin.ViewRequestController">
    <children>
-      <Label layoutX="867.0" layoutY="292.0" text="Service Requests">
+      <Label layoutX="901.0" layoutY="242.0" text="Service Requests">
          <font>
             <Font name="Calibri" size="32.0" />
          </font>
       </Label>
-      <TableView fx:id="tb_RequestTable" layoutX="438.0" layoutY="332.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="429.0" prefWidth="955.0" stylesheets="@../../css/adminTables.css" AnchorPane.leftAnchor="482.5" AnchorPane.rightAnchor="482.5" />
-      <Button fx:id="btn_editMap" disable="true" mnemonicParsing="false" onMouseClicked="#editMap" prefHeight="50.0" prefWidth="190.0" text="Edit Map" visible="false">
+      <TableView fx:id="tb_RequestTable" layoutX="611.0" layoutY="317.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="429.0" prefWidth="955.0" stylesheets="@../../css/adminTables.css" AnchorPane.leftAnchor="611.0" AnchorPane.rightAnchor="354.0" />
+      <Button fx:id="btn_editMap" disable="true" mnemonicParsing="false" prefHeight="50.0" prefWidth="190.0" text="Edit Map" visible="false">
          <font>
             <Font name="Calibri" size="24.0" />
          </font>
       </Button>
-      <ChoiceBox fx:id="cb_Employee" layoutX="275.0" layoutY="518.0" prefWidth="150.0" />
-      <TableView fx:id="tb_languages" layoutX="275.0" layoutY="560.0" prefHeight="202.0" prefWidth="150.0" stylesheets="@../../css/adminTables.css" />
+      <ChoiceBox fx:id="cb_Employee" layoutX="424.0" layoutY="424.0" prefWidth="150.0" />
+      <TableView fx:id="tb_languages" layoutX="424.0" layoutY="459.0" prefHeight="202.0" prefWidth="150.0" stylesheets="@../../css/adminTables.css" />
       <JFXButton layoutX="1190.0" layoutY="765.0" onMouseClicked="#assignPressed" text="Assign">
          <font>
             <Font name="Calibri" size="18.0" />

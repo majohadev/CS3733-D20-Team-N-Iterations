@@ -12,7 +12,7 @@ import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.entities.employees.Employee;
 import edu.wpi.N.entities.request.Request;
 import edu.wpi.N.views.Controller;
-import edu.wpi.N.views.admin.NewAdminController;
+import edu.wpi.N.views.admin.ViewRequestController;
 import java.io.IOException;
 import java.net.URL;
 import java.util.LinkedList;
@@ -129,7 +129,7 @@ public class MedicineRequestController implements Controller, Initializable {
     TableColumn<Request, String> location = new TableColumn<>("Location");
     location.setMaxWidth(150);
     location.setMinWidth(150);
-    location.setCellValueFactory(new NewAdminController.nodeLongName());
+    location.setCellValueFactory(new ViewRequestController.nodeLongName());
 
     TableColumn<Request, String> status = new TableColumn<>("Status");
     status.setMaxWidth(150);
