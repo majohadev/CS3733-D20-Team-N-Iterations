@@ -90,9 +90,6 @@ public class MapDisplayController implements Controller, Initializable {
   //        "/edu/wpi/N/images/Floor5TeamN.png"
   //      };
 
-  // marks all the nodes in the program
-  LinkedList<DbNode> allFloorNodes;
-
   // marks the present state of the map display
   Mode mode;
 
@@ -114,7 +111,6 @@ public class MapDisplayController implements Controller, Initializable {
   public void initialize(URL location, ResourceBundle resourceBundle) {
     try {
       createFloorButtons();
-      getAllNodes();
       // this.currentFloor = DEFAULT_FLOOR;
       // this.currentBuilding = DEFAULT_BUILDING;
       // this.mode = Mode.NO_STATE;
@@ -190,15 +186,6 @@ public class MapDisplayController implements Controller, Initializable {
   }
 
   /**
-   * retrieves all nodes in the application
-   *
-   * @throws DBException
-   */
-  public void getAllNodes() throws DBException {
-    allFloorNodes = MapDB.allNodes();
-  }
-
-  /**
    * detects when user enters a first location and applies fuzzy search
    *
    * @param e the key event which triggers the search
@@ -239,14 +226,12 @@ public class MapDisplayController implements Controller, Initializable {
     ObservableList<DbNode> fuzzyList;
     String str = txt.getText();
     fuzzyList = FXCollections.observableList(FuzzySearchAlgorithm.suggestLocations(str));
-    if (fuzzyList.size() == 0) {
-      fuzzyList = FXCollections.observableList(this.allFloorNodes);
-    }
     lst.setItems(fuzzyList);
   }
 
   /**
-   * applied fuzzy search to the user input for doctors
+   * applies fuzzy search to the user input for doctors
+   *
    * @param txt the textfield with the user input
    * @param lst the fuzzy search results
    * @throws DBException
@@ -259,7 +244,8 @@ public class MapDisplayController implements Controller, Initializable {
   }
 
   /**
-   * finds the doctor department
+   * finds the doctor's department and displays the result in a list view
+   *
    * @param e the key event which triggers the search
    * @throws Exception
    */
@@ -270,9 +256,13 @@ public class MapDisplayController implements Controller, Initializable {
     lst_doctorlocations.setItems(docNodes);
   }
 
-
+  /**
+   * triggers path finding
+   * @param event the mouse event which triggers path finding
+   * @throws Exception
+   */
   public void onBtnPathfindClicked(MouseEvent event) throws Exception {
-//    setMode(Mode.PATH_STATE);
+    //    setMode(Mode.PATH_STATE);
     // pn_display.getChildren().removeIf(node -> node instanceof Line);
     enableAllFloorButtons();
     DbNode firstSelection = lst_firstLocation.getSelectionModel().getSelectedItem();
