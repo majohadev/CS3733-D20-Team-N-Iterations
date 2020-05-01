@@ -303,29 +303,17 @@ public class MapDisplayController implements Controller, Initializable {
     if (handicapp1.isSelected() || handicapp2.isSelected()) {
       handicap = true;
     }
-    if (node1.getFloor() <= node2.getFloor()) {
-      Path path;
-      try {
-        path = singleton.savedAlgo.findPath(node1, node2, handicap);
-        ArrayList<String> directions = path.getDirections();
-        for (String s : directions) {
-          System.out.println(s);
-        }
-        System.out.println("Start angle " + path.getStartAngle(MapDB.getKioskAngle()));
-      } catch (NullPointerException e) {
-        displayErrorMessage("The path does not exist");
-        return;
-      }
-      mapBaseController.setPathNodes(path.getPath());
-    } else {
-      Path path = singleton.savedAlgo.findPath(node2, node1, handicap);
-      mapBaseController.setPathNodes(path.getPath());
-      ArrayList<String> directions = path.getDirections();
-      for (String s : directions) {
-        System.out.println(s);
-      }
+    Path path;
+    try {
+      path = singleton.savedAlgo.findPath(node1, node2, handicap);
       System.out.println("Start angle " + path.getStartAngle(MapDB.getKioskAngle()));
+    } catch (NullPointerException e) {
+      displayErrorMessage("The path does not exist");
+      return;
     }
+    mapBaseController.setPathNodes(path.getPath());
+    System.out.println("Start angle " + path.getStartAngle(MapDB.getKioskAngle()));
+
     disableNonPathFloors(mapBaseController.getPathNodes());
     mapBaseController.drawPath(mapBaseController.getPathNodes());
     // set textual decriptions
