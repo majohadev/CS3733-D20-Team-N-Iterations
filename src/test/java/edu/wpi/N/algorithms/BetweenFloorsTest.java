@@ -20,9 +20,9 @@ public class BetweenFloorsTest {
       throws SQLException, ClassNotFoundException, DBException, FileNotFoundException {
     MapDB.initTestDB();
     InputStream inputNodes =
-        BetweenFloorsTest.class.getResourceAsStream("../csv/ThreeFloorsTestNode.csv");
+        BetweenFloorsTest.class.getResourceAsStream("../csv/FourFloorsTestNode.csv");
     InputStream inputEdges =
-        BetweenFloorsTest.class.getResourceAsStream("../csv/ThreeFloorsTestEdges.csv");
+        BetweenFloorsTest.class.getResourceAsStream("../csv/FourFloorsTestEdges.csv");
     CSVParser.parseCSV(inputNodes);
     CSVParser.parseCSV(inputEdges);
   }
