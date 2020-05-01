@@ -256,10 +256,6 @@ public class MapDisplayController implements Controller, Initializable {
       Path path;
       try {
         path = singleton.savedAlgo.findPath(node1, node2, handicap);
-        ArrayList<String> directions = path.getDirections();
-        for (String s : directions) {
-          System.out.println(s);
-        }
         System.out.println("Start angle " + path.getStartAngle(MapDB.getKioskAngle()));
       } catch (NullPointerException e) {
         displayErrorMessage("The path does not exist");

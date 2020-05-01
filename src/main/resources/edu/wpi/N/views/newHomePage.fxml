@@ -59,57 +59,42 @@
                   </ImageView>
                   <HBox alignment="CENTER" layoutY="448.0" prefHeight="372.0" prefWidth="1920.0" spacing="130.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                      <children>
-                        <VBox alignment="CENTER">
-                           <children>
-                              <JFXButton contentDisplay="TOP" onMouseClicked="#onBtnLoginClicked" prefHeight="307.0" prefWidth="309.0" stylesheets="@../css/iconButton.css" text="Login" textFill="WHITE">
-                                 <graphic>
-                                    <ImageView fitHeight="186.0" fitWidth="190.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../images/homeScreenImages/UserIcon.png" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
-                                 <font>
-                                    <Font size="29.0" />
-                                 </font>
-                              </JFXButton>
-                           </children>
-                        </VBox>
-                        <VBox alignment="CENTER">
-                           <children>
-                              <JFXButton fx:id="btn_map" contentDisplay="TOP" onMouseClicked="#onBtnMapClicked" prefHeight="307.0" prefWidth="309.0" stylesheets="@../css/iconButton.css" text="Map" textFill="WHITE">
-                                 <graphic>
-                                    <ImageView fitHeight="284.0" fitWidth="190.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@../images/homeScreenImages/MapIcon.png" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
-                                 <font>
-                                    <Font name="Calibri" size="30.0" />
-                                 </font>
-                              </JFXButton>
-                           </children>
-                           <HBox.margin>
-                              <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
-                           </HBox.margin>
-                        </VBox>
-                        <VBox alignment="CENTER">
-                           <children>
-                              <JFXButton contentDisplay="TOP" graphicTextGap="10.0" onMouseClicked="#onBtnServicesClick" prefHeight="307.0" prefWidth="309.0" stylesheets="@../css/iconButton.css" text="Services" textAlignment="CENTER" textFill="WHITE">
-                                 <graphic>
-                                    <ImageView fitHeight="184.0" fitWidth="190.0" pickOnBounds="true" preserveRatio="true" translateX="24.0">
-                                       <image>
-                                          <Image url="@../images/homeScreenImages/ServiceBellIcon.png" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
-                                 <font>
-                                    <Font name="Calibri" size="21.0" />
-                                 </font>
-                              </JFXButton>
-                           </children>
-                        </VBox>
+                        <JFXButton contentDisplay="TOP" focusTraversable="false" onMouseClicked="#onBtnLoginClicked" prefHeight="307.0" prefWidth="309.0" stylesheets="@../css/iconButton.css" text="Login" textFill="WHITE">
+                           <graphic>
+                              <ImageView fitHeight="284.0" fitWidth="190.0" onMouseClicked="#onBtnLoginClicked" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/homeScreenImages/UserIcon.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <font>
+                              <Font name="Calibri" size="30.0" />
+                           </font>
+                        </JFXButton>
+                        <JFXButton contentDisplay="TOP" focusTraversable="false" onMouseClicked="#onBtnMapClicked" prefHeight="307.0" prefWidth="309.0" stylesheets="@../css/iconButton.css" text="Map" textFill="WHITE">
+                           <graphic>
+                              <ImageView fitHeight="284.0" fitWidth="190.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/homeScreenImages/MapIcon.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <font>
+                              <Font name="Calibri" size="30.0" />
+                           </font>
+                        </JFXButton>
+                        <JFXButton contentDisplay="TOP" focusTraversable="false" graphicTextGap="10.0" onMouseClicked="#onBtnServicesClick" prefHeight="307.0" prefWidth="309.0" stylesheets="@../css/iconButton.css" text="Services" textAlignment="CENTER" textFill="WHITE">
+                           <graphic>
+                              <ImageView fitHeight="184.0" fitWidth="190.0" pickOnBounds="true" preserveRatio="true" translateX="24.0">
+                                 <image>
+                                    <Image url="@../images/homeScreenImages/ServiceBellIcon.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <font>
+                              <Font name="Calibri" size="21.0" />
+                           </font>
+                        </JFXButton>
                      </children>
                      <padding>
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
