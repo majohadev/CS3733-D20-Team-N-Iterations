@@ -26,30 +26,11 @@ import javafx.scene.layout.StackPane;
 
 public class MapBaseController implements Controller {
 
+  // ApplicationStates
   private App mainApp;
   private StateSingleton singleton;
-  private final int DEFAULT_FLOOR = 1;
-  private final String DEFAULT_BUILDING = "Faulkner";
-  int currentFloor;
-  String currentBuilding;
 
-  LinkedList<DbNode> allFloorNodes = new LinkedList<DbNode>(); // stores all the nodes on the floor
-  LinkedList<UIDispNode> selectedNodes =
-      new LinkedList<UIDispNode>(); // stores all the selected nodes on the map
-  LinkedList<UIDispEdge> selectedEdges =
-      new LinkedList<UIDispEdge>(); // stores all the selected edges on the map
-  // LinkedList<String> longNamesList = new LinkedList<>(); // Stores Floor Node names
-
-  public UIDispNode defaultNode;
-
-  private HashBiMap<UIDispNode, DbNode>
-      masterNodes; // Maps UINodes from pool to DbNodes from current floor
-  private LinkedList<UIDispEdge> edgesInUse = new LinkedList<>();
-  private LinkedList<UIDispEdge> freedEdges = new LinkedList<>();
-
-  private LinkedList<DbNode> pathNodes;
-
-  // Screen constants
+  // Screen Constants
   private final float BAR_WIDTH = 300;
   private final float IMAGE_WIDTH = 2475;
   private final float IMAGE_HEIGHT = 1485;
@@ -62,73 +43,74 @@ public class MapBaseController implements Controller {
   private final float HORIZONTAL_SCALE = (MAP_WIDTH) / IMAGE_WIDTH;
   private final float VERTICAL_SCALE = (MAP_HEIGHT) / IMAGE_HEIGHT;
 
-  // Map UI structure elements
-  @FXML Pane pn_path, pn_routeNodes;
-  @FXML StackPane pn_movableMap;
-  @FXML AnchorPane pn_mapFrame;
-  @FXML ImageView img_map;
-
-  // Zoom/pan UI
-  @FXML Button btn_zoomIn, btn_zoomOut;
-
-  // Zoom/pan vars
-  private double mapScaleAlpha; // Zoom ratio (0 = min, 1 = max)
-  private double clickStartX, clickStartY; // Begin location of drag
-  private boolean isStatic = false; // Zoom/pan controls disabled if true
-
-  // Zoom/pan constants
+  // Zoom constants
   private final double MIN_MAP_SCALE = 1;
   private final double MAX_MAP_SCALE = 3;
   private final double ZOOM_STEP_SCROLL = 0.01;
   private final double ZOOM_STEP_BUTTON = 0.1;
+  private double mapScaleAlpha;
+  private double clickStartX, clickStartY;
 
-  // Inject singleton
+  //Program Constants
+  private final String FIRST_KIOSK = "NSERV00301";
+  private final String THIRD_KIOSK = "NSERV00103";
+  private final String DEFAULT_BUILDING = "Faulkner";
+  private final int DEFAULT_FLOOR = 1;
+
+  // Program Variables
+  private int currentFloor;
+  private String currentBuilding;
+  private LinkedList<DbNode> currentPath;
+
+  // FXML Item IDs
+  @FXML AnchorPane pn_movableMap;
+  @FXML Pane pn_path;
+  @FXML ImageView img_map;
+  @FXML Button btn_zoomIn, btn_zoomOut;
+
+  /**
+   * the constructor of MapBaseController
+   * @param singleton the algorithm singleton which determines the style of path finding
+   */
   public MapBaseController(StateSingleton singleton) {
     this.singleton = singleton;
   }
 
+  /**
+   * allows reference back the main application class of this program
+   * @param mainApp the main application class of this program
+   */
   @Override
   public void setMainApp(App mainApp) {
     this.mainApp = mainApp;
   }
 
-  public enum Mode {
-    NO_STATE,
-    PATH_STATE;
-  }
-
-  Mode mode;
-
+  /**
+   * initializes the MapBase Controller
+   * @throws DBException
+   */
   public void initialize() throws DBException {
-
-    // this.currentFloor = DEFAULT_FLOOR;
-    // this.currentBuilding = DEFAULT_BUILDING;
-
-    masterNodes = HashBiMap.create();
-    setMode(Mode.NO_STATE);
-
-    // TODO: check work. Commented out for now
-    // changeBuilding(DEFAULT_BUILDING);
-
-    try {
-      defaultNode = getUiFromDb(allFloorNodes.getFirst());
-    } catch (NoSuchElementException e) {
-      Alert emptyMap = new Alert(Alert.AlertType.WARNING);
-      emptyMap.setContentText("The map is empty!");
-      emptyMap.show();
-    }
+    this.currentFloor = DEFAULT_FLOOR;
+    this.currentBuilding = DEFAULT_BUILDING;
   }
 
-  public void setMode(Mode mode) {
-    this.mode = mode;
+  /**
+   * sets the current building of the map display
+   * @param building the name of the building to be displayed
+   */
+  public void setBuilding(String building) {
+    this.currentBuilding = building;
+    setFloor(DEFAULT_FLOOR);
   }
 
-  public void changeBuilding(String newBuilding) {
-    // Change building, and show its default floor
-    currentBuilding = newBuilding;
-    mode = Mode.NO_STATE;
-    changeFloor(DEFAULT_FLOOR);
+  /**
+   * sets the current floor of the map display
+   * @param floor the floor number to be displayed
+   */
+  public void setFloor(int floor) {
+    this.setFloor(floor);
   }
+
 
   public void changeFloor(int floorToDraw) {
     // Change floor in current building
@@ -364,27 +346,7 @@ public class MapBaseController implements Controller {
     }
   }
 
-  // Hide all edges
-  public void hideEdges() {
-    pn_path.setVisible(false);
-  }
 
-  // Show all edges
-  public void showEdges() {
-    pn_path.setVisible(true);
-  }
-
-  // Deselect nodes and remove lines
-  public void deselectAll() {
-    for (UIDispNode uiNode : masterNodes.keySet()) {
-      uiNode.setSelected(false);
-    }
-    selectedNodes.clear();
-
-    for (UIDispEdge edge : edgesInUse) {
-      edge.setSelected(false);
-    }
-  }
 
   public void forceSelect(UIDispNode uiNode, boolean selected) { // Don't really want
     uiNode.setSelected(selected);

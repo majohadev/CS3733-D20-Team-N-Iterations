@@ -1,81 +1,39 @@
 package edu.wpi.N.entities.States;
 
-import edu.wpi.N.database.DBException;
-import edu.wpi.N.database.MapDB;
-import edu.wpi.N.entities.DbNode;
 import java.util.HashMap;
-import java.util.LinkedList;
 import javafx.scene.image.Image;
 
 public class MapDataStorage {
 
-  private int numOfFloors = 5;
-
-  // private LinkedList<HashBiMap<UIDispNode, DbNode>> allFloors = new LinkedList<>();
-  private LinkedList<DbNode> allDbNodes = new LinkedList<DbNode>();
-
   private HashMap<String, Image> floorMaps = new HashMap<>();
 
+  /**
+   * Loads all map images of the application once
+   */
   public MapDataStorage() {
-
-    floorMaps.put(
-        "Floor1",
-        new Image(
-            getClass()
-                .getClassLoader()
-                .getResource("edu/wpi/N/images/map/Floor1Reclor.png")
-                .toString()));
-    floorMaps.put(
-        "Floor2",
-        new Image(
-            getClass()
-                .getClassLoader()
-                .getResource("edu/wpi/N/images/map/Floor2TeamN.png")
-                .toString()));
-    floorMaps.put(
-        "Floor3",
-        new Image(
-            getClass()
-                .getClassLoader()
-                .getResource("edu/wpi/N/images/map/Floor3TeamN.png")
-                .toString()));
-    floorMaps.put(
-        "Floor4",
-        new Image(
-            getClass()
-                .getClassLoader()
-                .getResource("edu/wpi/N/images/map/Floor4SolidBackground.png")
-                .toString()));
-    floorMaps.put(
-        "Floor5",
-        new Image(
-            getClass()
-                .getClassLoader()
-                .getResource("edu/wpi/N/images/map/Floor5TeamN.png")
-                .toString()));
+    storeImage("Faulkner1", "edu/wpi/N/images/map/Floor1Reclor.png");
+    storeImage("Faulkner2", "edu/wpi/N/images/map/Floor2TeamN.png");
+    storeImage("Faulkner3", "edu/wpi/N/images/map/Floor3TeamN.png");
+    storeImage("Faulkner4", "edu/wpi/N/images/map/Floor4SolidBackground.png");
+    storeImage("Faulkner5", "edu/wpi/N/images/map/Floor5TeamN.png");
   }
 
   /**
-   * Gets the image of necessary building and floor number
-   *
-   * @param building: building name
-   * @param floorNum: floor number
-   * @return: Image of specified building and floor number
+   * stores the short name and the specified image path into the application
+   * @param shortName the short
+   * @param pathName the path of the image
    */
-  public Image getMap(String building, int floorNum) {
-    return floorMaps.get("Floor" + floorNum);
+  private void storeImage(String shortName, String pathName) {
+    floorMaps.put(shortName, new Image(getClass().getClassLoader().getResource(pathName).toString()));
   }
 
-  /** Gets all the Nodes and Edges from database and sets the necessary attribute */
-  public void refreshMapData() {
-    try {
-      allDbNodes = MapDB.allNodes();
-    } catch (DBException e) {
-      e.printStackTrace();
-    }
-  }
-
-  public LinkedList<DbNode> getAllDbNodes() {
-    return allDbNodes;
+  /**
+   * return the image of a map depending on the building and floor
+   * @param building the building of the map
+   * @param floor the floor of the map
+   * @return the image of the map
+   */
+  public Image getMap(String building, int floor) {
+    return floorMaps.get(building + floor);
   }
 }

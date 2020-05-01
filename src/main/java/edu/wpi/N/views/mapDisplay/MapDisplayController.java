@@ -90,15 +90,6 @@ public class MapDisplayController implements Controller, Initializable {
   //        "/edu/wpi/N/images/Floor5TeamN.png"
   //      };
 
-  // marks the present state of the map display
-  Mode mode;
-
-  // marks possible states of the map display
-  private enum Mode {
-    NO_STATE,
-    PATH_STATE;
-  }
-
   // the list of floor buttons which allow users to switch between floors
   JFXNodesList floorButtonList = new JFXNodesList();
 
@@ -262,9 +253,9 @@ public class MapDisplayController implements Controller, Initializable {
    * @throws Exception
    */
   public void onBtnPathfindClicked(MouseEvent event) throws Exception {
-    //    setMode(Mode.PATH_STATE);
-    // pn_display.getChildren().removeIf(node -> node instanceof Line);
-    enableAllFloorButtons();
+    // TODO clear the floor
+    // TODO only enable buttons on the cer
+//    enableAllFloorButtons();
     DbNode firstSelection = lst_firstLocation.getSelectionModel().getSelectedItem();
     DbNode secondSelection = lst_secondLocation.getSelectionModel().getSelectedItem();
     // jumpToFloor(imgPaths[stringNodeConversion.get(firstSelection).getFloor() - 1]);
