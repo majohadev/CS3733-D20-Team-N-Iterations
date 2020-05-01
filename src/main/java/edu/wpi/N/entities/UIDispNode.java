@@ -16,8 +16,8 @@ public class UIDispNode {
   private MapBaseController mbc;
 
   final Color DEFAULT_NODE_COLOR = Color.PURPLE;
-  final Color START_NODE_COLOR = Color.RED;
-  final Color END_NODE_COLOR = Color.GREEN;
+  final Color START_NODE_COLOR = Color.GREEN;
+  final Color END_NODE_COLOR = Color.RED;
   final double DEFAULT_NODE_OPACITY = 0.7;
   final double DEFAULT_NODE_RADIUS = 7;
 
