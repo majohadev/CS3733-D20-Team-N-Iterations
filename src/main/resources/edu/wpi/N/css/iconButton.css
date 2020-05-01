@@ -7,5 +7,6 @@
     -fx-text-fill: white;
     -fx-min-width: 230;
     -fx-min-height: 230;
-
+    -fx-focus-color: transparent;
+    -fx-effect: none;
 }
