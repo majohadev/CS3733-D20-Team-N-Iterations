@@ -27,24 +27,28 @@ public class AStar extends AbsAlgo {
       throws DBException {
     try {
 
-      int startFloorNum = startNode.getFloor();
-      int endFloorNum = endNode.getFloor();
+      //int startFloorNum = startNode.getFloor();
+      //int endFloorNum = endNode.getFloor();
 
-      Node start = MapDB.getGNode(startNode.getNodeID());
-      Node end = MapDB.getGNode(endNode.getNodeID());
+      //Node start = MapDB.getGNode(startNode.getNodeID());
+      //Node end = MapDB.getGNode(endNode.getNodeID());
+
+      Node start = new Node(startNode.getX(), startNode.getY(), startNode.getNodeID());
+      Node end = new Node(endNode.getX(), endNode.getY(), endNode.getNodeID());
 
       // Initialize variables
-      PriorityQueue<Node> frontier = new PriorityQueue<Node>();
+      PriorityQueue<Node> frontier = new PriorityQueue<>();
       frontier.add(start);
       Map<String, String> cameFrom = new HashMap<String, String>();
       Map<String, Double> costSoFar = new HashMap<String, Double>();
-      cameFrom.put(start.ID, "");
-      costSoFar.put(start.ID, 0.0);
-      start.score = 0;
+      cameFrom.put(startNode.getNodeID(), "");
+      costSoFar.put(startNode.getNodeID(), 0.0);
+      //start.score = 0;
 
       // While priority queue is not empty, get the node with highest Score (priority)
       while (!frontier.isEmpty()) {
         Node current = frontier.poll();
+        //Node current = new Node(currentDB.getX(), currentDB.getY(), currentDB.getNodeID());
 
         // if the goal node was found, break out of the loop
         if (current.equals(end)) {
@@ -52,10 +56,10 @@ public class AStar extends AbsAlgo {
         }
 
         // for every node (next node), current node has edge to:
-        LinkedList<Node> adjacentToCurrent =
-            MapDB.getGAdjacent(current.ID, startFloorNum, endFloorNum, handicap);
+        LinkedList<DbNode> adjacentToCurrent = mapData.get(current.ID);
 
-        for (Node nextNode : adjacentToCurrent) {
+        for (DbNode nextNodeDB : adjacentToCurrent) {
+          Node nextNode = new Node(nextNodeDB.getX(), nextNodeDB.getY(), nextNodeDB.getNodeID());
           String nextNodeID = nextNode.ID;
 
           // calculate the cost of next node
