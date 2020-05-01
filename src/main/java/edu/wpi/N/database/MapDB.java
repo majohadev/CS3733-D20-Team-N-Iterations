@@ -862,7 +862,7 @@ public class MapDB {
   /**
    * Adds two nodes to the same shaft. If neither of them are in a shaft, makes a new shaft with
    * them. If one of them is in a shaft, then adds the other one to that shaft. If both of them are
-   * in different shafts, throws DBException.
+   * in different shafts, then the shafts get merged
    *
    * @param node1 the nodeID of the first node of the edge that should be added to the shaft
    * @param node2 the nodeID of the second node of the edge that should be added to the shaft
