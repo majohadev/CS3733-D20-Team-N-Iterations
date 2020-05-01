@@ -54,13 +54,13 @@ public class MapDisplayController implements Controller, Initializable {
   @FXML Pane pn_changeFloor;
   @FXML JFXTextField txt_firstLocation;
   @FXML JFXTextField txt_secondLocation;
-  @FXML JFXListView lst_firstLocation;
-  @FXML JFXListView lst_secondLocation;
+  @FXML JFXListView<DbNode> lst_firstLocation;
+  @FXML JFXListView<DbNode> lst_secondLocation;
   // @FXML JFXButton btn_searchdoc;
   @FXML JFXTextField txt_doctorname;
-  @FXML ListView lst_doctornames;
+  @FXML ListView<Doctor> lst_doctornames;
   // @FXML Button btn_searchdoc;
-  @FXML ListView lst_doctorlocations;
+  @FXML ListView<DbNode> lst_doctorlocations;
   @FXML Button btn_findpathdoc;
   @FXML JFXButton btn_findPath;
   @FXML JFXButton btn_home;
@@ -215,7 +215,7 @@ public class MapDisplayController implements Controller, Initializable {
    * @throws DBException
    */
   public void onSearchSecondLocation(KeyEvent e) throws DBException {
-    fuzzySearch(txt_secondLocation, lst_secondLocation);
+    fuzzyLocationSearch(txt_secondLocation, lst_secondLocation);
   }
 
   /**
@@ -225,17 +225,17 @@ public class MapDisplayController implements Controller, Initializable {
    * @throws DBException
    */
   public void onSearchDoctor(KeyEvent e) throws DBException {
-    fuzzySearch(txt_doctorname, lst_doctornames);
+    fuzzyDoctorSearch(txt_doctorname, lst_doctornames);
   }
 
   /**
-   * applies fuzzy search to the user input
+   * applies fuzzy search to the user input for locations
    *
    * @param txt the textfield with the user input
    * @param lst the fuzzy search results
    * @throws DBException
    */
-  public void fuzzySearch(JFXTextField txt, ListView lst) throws DBException {
+  public void fuzzyLocationSearch(JFXTextField txt, ListView lst) throws DBException {
     ObservableList<DbNode> fuzzyList;
     String str = txt.getText();
     fuzzyList = FXCollections.observableList(FuzzySearchAlgorithm.suggestLocations(str));
@@ -245,19 +245,29 @@ public class MapDisplayController implements Controller, Initializable {
     lst.setItems(fuzzyList);
   }
 
+  /**
+   * applied fuzzy search to the user input for doctors
+   * @param txt the textfield with the user input
+   * @param lst the fuzzy search results
+   * @throws DBException
+   */
+  public void fuzzyDoctorSearch(JFXTextField txt, ListView lst) throws DBException {
+    ObservableList<Doctor> fuzzyList;
+    String str = txt.getText();
+    fuzzyList = FXCollections.observableList(FuzzySearchAlgorithm.suggestDoctors(str));
+    lst.setItems(fuzzyList);
+  }
+
+  /**
+   * finds the doctor department
+   * @param e the key event which triggers the search
+   * @throws Exception
+   */
   @FXML
-  private void onFindDoctorClicked(MouseEvent event) throws Exception {
-    int currentSelection = lst_doctornames.getSelectionModel().getSelectedIndex();
-    System.out.println(currentSelection);
-    Doctor selectedDoc = searchedDoc.get(currentSelection);
-    System.out.println(selectedDoc);
-    doctorNodes = selectedDoc.getLoc();
-    LinkedList<String> docNames = new LinkedList<>();
-    for (DbNode nodes : doctorNodes) {
-      docNames.add(nodes.getLongName());
-    }
-    ObservableList<String> doctorsLocations = FXCollections.observableList(docNames);
-    lst_doctorlocations.setItems(doctorsLocations);
+  private void onFindDoctorClicked(MouseEvent e) throws Exception {
+    Doctor doc = lst_doctornames.getSelectionModel().getSelectedItem();
+    ObservableList<DbNode> docNodes = FXCollections.observableList(doc.getLoc());
+    lst_doctorlocations.setItems(docNodes);
   }
 
   public void onBtnPathfindClicked(MouseEvent event) throws Exception {
@@ -265,8 +275,8 @@ public class MapDisplayController implements Controller, Initializable {
     mapBaseController.setMode(MapBaseController.Mode.PATH_STATE);
     // pn_display.getChildren().removeIf(node -> node instanceof Line);
     enableAllFloorButtons();
-    DbNode firstSelection = lst_firstLocation.getSelectionModel().g;
-    DbNode secondSelection = (DbNode) lst_secondLocation.getSelectionModel().getSelectedItem();
+    DbNode firstSelection = lst_firstLocation.getSelectionModel().getSelectedItem();
+    DbNode secondSelection = lst_secondLocation.getSelectionModel().getSelectedItem();
     // jumpToFloor(imgPaths[stringNodeConversion.get(firstSelection).getFloor() - 1]);
     mapBaseController.setMode(MapBaseController.Mode.NO_STATE);
     mapBaseController.changeFloor(stringNodeConversion.get(firstSelection).getFloor());
