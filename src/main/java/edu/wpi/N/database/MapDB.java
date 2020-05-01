@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import org.apache.ibatis.jdbc.ScriptRunner;
@@ -1198,5 +1199,22 @@ public class MapDB {
         throw new DBException("Unknown error: setKiosk: " + nodeID + " " + angle, e);
       }
     }
+  }
+
+  /**
+   * Loads all Map edges and Nodes into a Hashmap
+   *
+   * @return Hashmap <NodeID, list of DbNodes has edges to>
+   */
+  public static HashMap<String, LinkedList<DbNode>> loadMapData() throws DBException {
+
+    // Implementation using existing methods
+    HashMap<String, LinkedList<DbNode>> result = new HashMap<String, LinkedList<DbNode>>();
+    for (DbNode node : allNodes()) {
+      String id = node.getNodeID();
+      LinkedList<DbNode> adjacent = getAdjacent(id);
+      result.put(id, adjacent);
+    }
+    return result;
   }
 }
