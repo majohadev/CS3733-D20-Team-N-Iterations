@@ -34,30 +34,7 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.StrokeLineCap;
 
 public class MapEditorController implements Controller {
-  // TODO MAP BETWEEN MULTIPLE FLOORS STUFF
-  // ALSDKFJLSKDJFLSKDFJLSKDFJSLKDFJSLKDFJSLKDFJSLKDFJSLKDFJKDFJKDFJDKFJKDJFKDJFKDJFKDJFKJFKDJFDKFJKDJFKDFJKDJFKDFJKDJFKDJFKDFJ
-  //  DbNode node;
-  //  HashMap<Integer, Circle> nodes; // key is floor number
-  //  HashMap<Integer, Line> lines; // key is sum
-  //  HashMap<Integer, Text> labels;
-  //  LinkedList<DbNode[]> originalEdges;
-  //  LinkedList<DbNode[]> finalEdges;
-  //  HashMap<Integer, DbNode[]> potentialEdges; // key is sum
-  //  HashMap<Line, Boolean> lineStatus;
-  //  final Color DEFAULT_CIRCLE_COLOR2 = Color.GRAY;
-  //  final Color DEFAULT_TEXT_COLOR = Color.WHITE;
-  //  final Color ACTIVE_LINE_COLOR = Color.BLACK;
-  //  final Color INACTIVE_LINE_COLOR = Color.GRAY;
-  //  final Color DEFAULT_SELECTED_COLOR = Color.RED;
-  //  final int DEFAULT_RADIUS = 20;
-  //  final int TEXT_OFFSETX = -6;
-  //  final int TEXT_OFFSETY = 6;
-  //  @FXML private AnchorPane parent;
-  //  @FXML private JFXButton btn_save;
-  //  @FXML private JFXButton btn_cancel;
-  ////  final double DEFAULT_LINE_WIDTH = 6;
-  // TODO MAP BETWEEN MULTIPLE FLOORS STUFF
-  // ALSDKFJLSKDJFLSKDFJLSKDFJSLKDFJSLKDFJSLKDFJSLKDFJSLKDFJKDFJKDFJDKFJKDJFKDJFKDJFKDJFKJFKDJFDKFJKDJFKDFJKDJFKDFJKDJFKDJFKDFJ
+
   App mainApp;
 
   private StateSingleton singleton;
@@ -111,7 +88,8 @@ public class MapEditorController implements Controller {
     EDIT_NODE,
     ADD_EDGE,
     DELETE_EDGE,
-    EDIT_ELEV
+    EDIT_ELEV,
+    ALIGN_NODE
   }
 
   HashBiMap<Circle, UINode> nodesMap;
@@ -121,6 +99,7 @@ public class MapEditorController implements Controller {
   MapEditorEditNodeController controllerEditNode;
   MapEditorDeleteEdgeController controllerDeleteEdge;
   BetweenFloorsController controllerEditElev;
+  MapEditorAlignNodeController controllerAlignNode;
   int currentFloor;
   String currentBuilding;
   // Add Node Variable
@@ -136,6 +115,7 @@ public class MapEditorController implements Controller {
   // Edit Edit Elevator Variable
   LinkedList<Circle> editElevNodes;
   Circle elevCircle;
+  LinkedList<Circle> alignNodeCircles;
 
   @Override
   public void setMainApp(App mainApp) {
@@ -155,6 +135,8 @@ public class MapEditorController implements Controller {
     addNodeCircle = null;
     elevCircle = null;
     deleteNodeCircles = new LinkedList<>();
+    alignNodeCircles = new LinkedList<>();
+
     editNodeCircle = null;
     addEdgeLine = new Line();
     addEdgeLine.setStrokeLineCap(StrokeLineCap.ROUND);
@@ -290,6 +272,8 @@ public class MapEditorController implements Controller {
       loadEditor("/edu/wpi/N/views/mapEditor/mapEditorEditNode.fxml");
     } else if (mode == Mode.DELETE_EDGE) {
       loadEditor("/edu/wpi/N/views/mapEditor/mapEditorDeleteEdge.fxml");
+    } else if (mode == Mode.ALIGN_NODE) {
+      loadEditor("/edu/wpi/N/views/mapEditor/mapEditorAlignNode.fxml");
     } else if (mode == Mode.EDIT_ELEV) {
       loadEditor("/edu/wpi/N/views/mapEditor/BetweenFloorsEditor.fxml");
     }
@@ -304,6 +288,8 @@ public class MapEditorController implements Controller {
       controllerDeleteNode = loader.getController();
     } else if (mode == Mode.EDIT_NODE) {
       controllerEditNode = loader.getController();
+    } else if (mode == Mode.ALIGN_NODE) {
+      controllerAlignNode = loader.getController();
     } else if (mode == Mode.DELETE_EDGE) {
       controllerDeleteEdge = loader.getController();
     } else if (mode == Mode.EDIT_ELEV) {
@@ -408,6 +394,9 @@ public class MapEditorController implements Controller {
     if (mode == Mode.DELETE_NODE) {
       onCircleDeleteNodeClicked(event, circle);
     }
+    if (mode == Mode.ALIGN_NODE) {
+      onCircleAlignNodeClicked(event, circle);
+    }
     if (mode == Mode.EDIT_NODE) {
       onBtnCancelEditNodeClicked();
       onBtnConfirmEditNodeClicked();
@@ -444,7 +433,6 @@ public class MapEditorController implements Controller {
     DbNode node = nodesMap.get(circle).getDBNode();
     controllerEditNode.setShortName(node.getShortName());
     controllerEditNode.setLongName(node.getLongName());
-    // controllerEditNode.setPos(event.getX(), event.getY());
     controllerEditNode.setPos(circle.getCenterX(), circle.getCenterY());
   }
 
@@ -516,12 +504,33 @@ public class MapEditorController implements Controller {
     }
   }
 
+  private void onCircleAlignNodeClicked(MouseEvent event, Circle circle) {
+    String alignNodeID = nodesMap.get(circle).getDBNode().getNodeID();
+    if (circle.getFill() == DEFAULT_CIRCLE_COLOR) {
+      circle.setFill(DELETE_NODE_COLOR);
+      alignNodeCircles.add(circle);
+      controllerAlignNode.addLstAlignNode(nodesMap.get(circle).getDBNode().getShortName());
+    } else if (circle.getFill() == DELETE_NODE_COLOR) {
+      circle.setFill(DEFAULT_CIRCLE_COLOR);
+      alignNodeCircles.remove(circle);
+      controllerAlignNode.removeLstAlignNode(nodesMap.get(circle).getDBNode().getShortName());
+    }
+  }
+
   private void handleDeleteNodeRightClick() throws IOException, DBException {
     mode = Mode.DELETE_NODE;
     hideEditElevButton();
     changeEditor();
     onBtnCancelDeleteNodeClicked();
     onBtnConfirmDeleteNodeClicked();
+  }
+
+  private void handleAlignNodeRightClick() throws IOException, DBException {
+    mode = Mode.ALIGN_NODE;
+    hideEditElevButton();
+    changeEditor();
+    onBtnCancelAlignNodeClicked();
+    onBtnConfirmAlignNodeClicked();
   }
 
   private void handleEditNodeRightClick() throws IOException {
@@ -554,6 +563,7 @@ public class MapEditorController implements Controller {
       ContextMenu menu = new ContextMenu();
       MenuItem deleteNode = new MenuItem("Delete Node");
       MenuItem editNode = new MenuItem("Edit Node");
+      MenuItem alignNode = new MenuItem("Align Nodes");
       MenuItem deleteEdge = new MenuItem("Delete Edge");
       MenuItem editElev = new MenuItem("Edit Elevator/Stair Edges");
 
@@ -581,6 +591,14 @@ public class MapEditorController implements Controller {
               ex.printStackTrace();
             }
           });
+      alignNode.setOnAction(
+          e -> {
+            try {
+              handleAlignNodeRightClick();
+            } catch (IOException | DBException ex) {
+              ex.printStackTrace();
+            }
+          });
       editElev.setOnAction(
           e -> {
             try {
@@ -589,7 +607,7 @@ public class MapEditorController implements Controller {
               ex.printStackTrace();
             }
           });
-      menu.getItems().addAll(deleteNode, editNode, deleteEdge, editElev);
+      menu.getItems().addAll(deleteNode, editNode, deleteEdge, editElev, alignNode);
       menu.show(mainApp.getStage(), event.getScreenX(), event.getScreenY());
     }
   }
@@ -708,6 +726,48 @@ public class MapEditorController implements Controller {
     }
   }
 
+  private void setCircleXPosAlignNode(Circle circle, double newValue) {
+    try {
+      if (editNodeCircle == circle || (mode != Mode.EDIT_NODE)) {
+        circle.setCenterX(newValue);
+        DbNode node = nodesMap.get(circle).getDBNode();
+        UINode uiNode = nodesMap.get(circle);
+        for (UIEdge edges : uiNode.getEdges()) {
+          DbNode firstNode = edges.getDBNodes()[0];
+          DbNode secondNode = edges.getDBNodes()[1];
+          if (firstNode.getNodeID().equals(newValue)) {
+            edges.getLine().setStartX(newValue);
+          } else if (secondNode.getNodeID().equals(node.getNodeID())) {
+            edges.getLine().setEndX(newValue);
+          }
+        }
+      }
+    } catch (NumberFormatException e) {
+      displayErrorMessage("Invalid Input");
+    }
+  }
+
+  private void setCircleYPosAlignNode(Circle circle, double newValue) {
+    try {
+      if (editNodeCircle == circle || (mode != Mode.EDIT_NODE)) {
+        circle.setCenterY(newValue);
+        DbNode node = nodesMap.get(circle).getDBNode();
+        UINode uiNode = nodesMap.get(circle);
+        for (UIEdge edges : uiNode.getEdges()) {
+          DbNode firstNode = edges.getDBNodes()[0];
+          DbNode secondNode = edges.getDBNodes()[1];
+          if (firstNode.getNodeID().equals(newValue)) {
+            edges.getLine().setStartY(newValue);
+          } else if (secondNode.getNodeID().equals(node.getNodeID())) {
+            edges.getLine().setEndY(newValue);
+          }
+        }
+      }
+    } catch (NumberFormatException e) {
+      displayErrorMessage("Invalid Input");
+    }
+  }
+
   private void onBtnConfirmAddNodeClicked(Circle circle) {
     controllerAddNode
         .getBtnConfirm()
@@ -821,6 +881,85 @@ public class MapEditorController implements Controller {
             });
   }
 
+  private void onBtnConfirmAlignNodeClicked() {  //!!!need to de-scale if you want to use text field input!!!
+    controllerAlignNode
+        .getBtnConfirm()
+        .setOnMouseClicked(
+            event -> {
+              if (alignNodeCircles.isEmpty()) {
+                displayErrorMessage("Must select nodes");
+                return;
+              }
+              double centerX = alignNodeCircles.getFirst().getCenterX();
+              double centerY = alignNodeCircles.getFirst().getCenterY();
+              mode = Mode.NO_STATE;
+              int x = 0;
+              int y = 0;
+              if (!(controllerAlignNode.getPos() == null)) {
+                String str = controllerAlignNode.getPos();
+
+                try {
+                  if (controllerAlignNode.getAlignXSelected()) {
+                    x = (int) scaleXDB(Double.parseDouble(str));
+                    // centerX =
+
+                  } else if (controllerAlignNode.getAlignYSelected()) {
+                    y = (int) scaleYDB(Double.parseDouble(str));
+                    // centerY =
+
+                  } else {
+                    displayErrorMessage("Invalid input");
+                  }
+                } catch (NumberFormatException e) {
+                  displayErrorMessage("Invalid input");
+                  return;
+                }
+              } else {
+                x = nodesMap.get(alignNodeCircles.getFirst()).getDBNode().getX();
+                y = nodesMap.get(alignNodeCircles.getFirst()).getDBNode().getY();
+              }
+              try {
+                if (controllerAlignNode.getAlignXSelected()) {
+                  for (Circle c : alignNodeCircles) {
+                    String id = nodesMap.get(c).getDBNode().getNodeID();
+                    MapDB.modifyNode(
+                        id,
+                        x,
+                        MapDB.getNode(id).getY(),
+                        MapDB.getNode(id).getLongName(),
+                        MapDB.getNode(id).getShortName());
+                    DbNode newNode = MapDB.getNode(id);
+                    nodesMap.remove(c);
+                    UINode UInode = new UINode(c, newNode);
+                    nodesMap.put(c, UInode);
+                    setCircleXPosAlignNode(c, centerX);
+                  }
+                } else if (controllerAlignNode.getAlignYSelected()) {
+                  for (Circle c : alignNodeCircles) {
+                    String id = nodesMap.get(c).getDBNode().getNodeID();
+                    MapDB.modifyNode(
+                        id,
+                        MapDB.getNode(id).getX(),
+                        y,
+                        MapDB.getNode(id).getLongName(),
+                        MapDB.getNode(id).getShortName());
+                    DbNode newNode = MapDB.getNode(id);
+                    nodesMap.remove(c);
+                    UINode UInode = new UINode(c, newNode);
+                    nodesMap.put(c, UInode);
+                    setCircleYPosAlignNode(c, centerY);
+                  }
+                }
+
+              } catch (DBException e) {
+                e.printStackTrace();
+              }
+              controllerAlignNode.clearAllFields();
+              pn_editor.setVisible(false);
+              resetAlignNode();
+            });
+  }
+
   private void onBtnCancelAddNodeClicked() {
     controllerAddNode
         .getBtnCancel()
@@ -842,6 +981,20 @@ public class MapEditorController implements Controller {
                 circle.setFill(DEFAULT_CIRCLE_COLOR);
               }
               deleteNodeCircles.clear();
+              pn_editor.setVisible(false);
+            });
+  }
+
+  private void onBtnCancelAlignNodeClicked() {
+    controllerAlignNode
+        .getBtnCancel()
+        .setOnMouseClicked(
+            event -> {
+              mode = Mode.NO_STATE;
+              for (Circle circle : alignNodeCircles) {
+                circle.setFill(DEFAULT_CIRCLE_COLOR);
+              }
+              alignNodeCircles.clear();
               pn_editor.setVisible(false);
             });
   }
@@ -893,6 +1046,7 @@ public class MapEditorController implements Controller {
     resetEditNode();
     resetDeleteEdge();
     resetEditElev();
+    resetAlignNode();
   }
 
   private void resetEditElev() {
@@ -918,6 +1072,13 @@ public class MapEditorController implements Controller {
       circle.setFill(DEFAULT_CIRCLE_COLOR);
     }
     deleteNodeCircles.clear();
+  }
+
+  private void resetAlignNode() {
+    for (Circle circle : alignNodeCircles) {
+      circle.setFill(DEFAULT_CIRCLE_COLOR);
+    }
+    alignNodeCircles.clear();
   }
 
   private void resetEditNode() {
@@ -1039,7 +1200,7 @@ public class MapEditorController implements Controller {
           currentFloor = 1;
           setFloorImg("/edu/wpi/N/images/map/Floor1Reclor.png");
           btn_floor1.setStyle("fx-background-color: #ffc911");
-          mode = Mode.NO_STATE;
+          // mode = Mode.NO_STATE;
         });
     btn_floor2
         .getStylesheets()
@@ -1049,7 +1210,7 @@ public class MapEditorController implements Controller {
         e -> {
           currentFloor = 2;
           setFloorImg("/edu/wpi/N/images/map/Floor2TeamN.png");
-          mode = Mode.NO_STATE;
+          // mode = Mode.NO_STATE;
         });
     btn_floor3
         .getStylesheets()
@@ -1059,7 +1220,7 @@ public class MapEditorController implements Controller {
         e -> {
           currentFloor = 3;
           setFloorImg("/edu/wpi/N/images/map/Floor3TeamN.png");
-          mode = Mode.NO_STATE;
+          // mode = Mode.NO_STATE;
         });
     btn_floor4
         .getStylesheets()
@@ -1069,7 +1230,7 @@ public class MapEditorController implements Controller {
         e -> {
           currentFloor = 4;
           setFloorImg("/edu/wpi/N/images/map/Floor4SolidBackground.png");
-          mode = Mode.NO_STATE;
+          // mode = Mode.NO_STATE;
         });
     btn_floor5
         .getStylesheets()
@@ -1079,7 +1240,7 @@ public class MapEditorController implements Controller {
         e -> {
           currentFloor = 5;
           setFloorImg("/edu/wpi/N/images/map/Floor5TeamN.png");
-          mode = Mode.NO_STATE;
+          // mode = Mode.NO_STATE;
         });
     JFXNodesList nodesList = new JFXNodesList();
     nodesList.addAnimatedNode(btn_floors);
@@ -1094,7 +1255,7 @@ public class MapEditorController implements Controller {
   }
 
   private void setFloorImg(String path) {
-    resetAll();
+    resetAll(); // findthis!!
     hideEditElevButton();
     Image img = new Image(getClass().getResourceAsStream(path));
     img_map.setImage(img);
