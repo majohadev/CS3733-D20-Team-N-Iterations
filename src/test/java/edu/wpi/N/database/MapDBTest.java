@@ -408,7 +408,6 @@ public class MapDBTest {
     MapDB.addEdge(n1.getNodeID(), n2.getNodeID());
     LinkedList<DbNode> shafts = MapDB.getInShaft(n1.getNodeID());
     assertTrue(shafts.contains(n1) && shafts.contains(n2));
-    MapDB.addToShaft(n1.getNodeID(), n2.getNodeID());
     MapDB.removeFromShaft(n1.getNodeID());
     shafts = MapDB.getInShaft(n2.getNodeID());
     assertTrue(!shafts.contains(n1) && shafts.contains(n2));
@@ -421,25 +420,27 @@ public class MapDBTest {
     assertThrows(
         DBException.class, () -> MapDB.addToShaft(n1.getNodeID(), n3.getNodeID())); // not elev
 
-    DbNode n4 = MapDB.addNode(1, 2, 3, "Faulkner", "ELEV", "el", "el");
+    DbNode n4 = MapDB.addNode(1, 2, 1, "Faulkner", "ELEV", "el", "el");
+    DbNode n10 = MapDB.addNode(1, 2, 3, "Faulkner", "ELEV", "el", "el");
     assertThrows(
-        DBException.class, () -> MapDB.addToShaft(n1.getNodeID(), n4.getNodeID())); // same floor
+        DBException.class, () -> MapDB.addToShaft(n1.getNodeID(), n10.getNodeID())); // same floor
 
     DbNode n5 = MapDB.addNode(1, 2, 4, "Not faulkner", "ELEV", "el", "el");
     assertThrows(
         DBException.class, () -> MapDB.addToShaft(n1.getNodeID(), n5.getNodeID())); // not faulkner
 
-    DbNode n6 = MapDB.addNode(1, 2, 4, "Faulkner", "ELEV", "el", "el");
+    DbNode n6 = MapDB.addNode(1, 2, 6, "Faulkner", "ELEV", "el", "el");
     MapDB.addToShaft(n1.getNodeID(), n6.getNodeID()); // works
     MapDB.removeFromShaft(n6.getNodeID());
 
     MapDB.addToShaft(n4.getNodeID(), n6.getNodeID()); // works
-    assertThrows(
-        DBException.class,
-        () ->
-            MapDB.addToShaft(
-                n1.getNodeID(),
-                n6.getNodeID())); // doesn't work because both already in different shafts
+    MapDB.addToShaft(n1.getNodeID(), n6.getNodeID()); // merges the shafts
+
+    shafts = MapDB.getInShaft(n1.getNodeID());
+    assertTrue(shafts.contains(n1));
+    assertTrue(shafts.contains(n6));
+    assertTrue(shafts.contains(n4));
+    assertTrue(shafts.contains(n2));
 
     DbNode n7 = MapDB.addNode(1, 2, 2, "Faulkner", "ELEV", "el", "el");
     assertThrows(
@@ -447,6 +448,13 @@ public class MapDBTest {
     MapDB.addToShaft(n4.getNodeID(), n7.getNodeID());
     MapDB.addToShaft(
         n7.getNodeID(), n6.getNodeID()); // does nothing since both already in the same shaft
+    assertThrows(
+        DBException.class,
+        () ->
+            MapDB.addToShaft(
+                n3.getNodeID(),
+                n1.getNodeID())); // different floors, but n3 has the same floor as n2, which is
+    // in the same shaft as n1.
 
     MapDB.deleteNode(n1.getNodeID());
     MapDB.deleteNode(n2.getNodeID());
@@ -454,6 +462,7 @@ public class MapDBTest {
     MapDB.deleteNode(n4.getNodeID());
     MapDB.deleteNode(n5.getNodeID());
     MapDB.deleteNode(n6.getNodeID());
+    MapDB.deleteNode(n10.getNodeID());
   }
 
   @AfterAll
