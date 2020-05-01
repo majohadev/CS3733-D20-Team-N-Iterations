@@ -163,9 +163,8 @@ public class CSVParserTest {
 
     MapDB.clearNodes();
 
-    InputStream inputNodes = AStarTests.class.getResourceAsStream("../csv/ThreeFloorsTestNode.csv");
-    InputStream inputEdges =
-        AStarTests.class.getResourceAsStream("../csv/ThreeFloorsTestEdges.csv");
+    InputStream inputNodes = AStarTests.class.getResourceAsStream("../csv/FourFloorsTestNode.csv");
+    InputStream inputEdges = AStarTests.class.getResourceAsStream("../csv/FourFloorsTestEdges.csv");
     CSVParser.parseCSV(inputNodes);
     CSVParser.parseCSV(inputEdges);
 
