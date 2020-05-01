@@ -23,9 +23,9 @@ public class GetPathWithStopDFSTest {
       throws SQLException, DBException, ClassNotFoundException, FileNotFoundException {
     MapDB.initTestDB();
     InputStream inputNodes =
-        GetPathWithStopDFSTest.class.getResourceAsStream("../csv/ThreeFloorsTestNode.csv");
+        GetPathWithStopDFSTest.class.getResourceAsStream("../csv/FourFloorsTestNode.csv");
     InputStream inputEdges =
-        GetPathWithStopDFSTest.class.getResourceAsStream("../csv/ThreeFloorsTestEdges.csv");
+        GetPathWithStopDFSTest.class.getResourceAsStream("../csv/FourFloorsTestEdges.csv");
     CSVParser.parseCSV(inputNodes);
     CSVParser.parseCSV(inputEdges);
   }
