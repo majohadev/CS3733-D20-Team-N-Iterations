@@ -883,7 +883,43 @@ public class MapDB {
       error += "Nodes in a shaft must be in the same building!\n";
     if (!(DbNode1.getNodeType().equals("ELEV") || DbNode1.getNodeType().equals("STAI")))
       error += "Nodes in a shaft must be either elevators or stairs!\n";
+    // makes sure that no nodes on the same floor are ever in the same shaft
+    try {
+      Iterator<DbNode> shaft1It = getInShaft(node1).iterator();
+      while (shaft1It.hasNext()) {
+        DbNode next = shaft1It.next();
+        if (next.getFloor() == DbNode2.getFloor()) {
+          if (next.getNodeID().equals(DbNode2.getNodeID()))
+            return; // already in the same shaft, just return.
+          error +=
+              DbNode2.getLongName()
+                  + " is on the same floor as another node in "
+                  + DbNode1.getLongName()
+                  + "'s shaft!\n";
+          break;
+        }
+      }
+    } catch (DBException e) {
+    } // do nothing, just means that node1 isn't in any shafts
+    try {
+      Iterator<DbNode> shaft2It = getInShaft(node2).iterator();
+      while (shaft2It.hasNext()) {
+        DbNode next = shaft2It.next();
+        if (next.getFloor() == DbNode1.getFloor()) {
+          if (next.getNodeID().equals(DbNode1.getNodeID()))
+            return; // already in the same shaft, just return.
+          error +=
+              DbNode1.getLongName()
+                  + " is on the same floor as another node in "
+                  + DbNode2.getLongName()
+                  + "'s shaft!\n";
+          break;
+        }
+      }
+    } catch (DBException e) {
+    }
     if (error.length() != 0) throw new DBException(error);
+    // done enforcing most constraints: The actual code follows
     String query = "SELECT shaftID, nodeID FROM shaft WHERE nodeID = ? OR nodeID = ?";
     try {
       PreparedStatement stmt = con.prepareStatement(query);
@@ -898,7 +934,8 @@ public class MapDB {
           if (shaftID1 == shaftID2) return; // both already in the same shaft, do nothing
           else { // nodes are in different shafts and the shafts must be merged
             query =
-                "UPDATE shaft SET shaftID = ? WHERE shaftID = ?"; // simply sets the shaftIDs for each shaft equal
+                "UPDATE shaft SET shaftID = ? WHERE shaftID = ?"; // simply sets the shaftIDs for
+            // each shaft equal
             // nodeID2 to the shaft of shaftID1
             stmt = con.prepareStatement(query);
             stmt.setInt(1, shaftID1);
