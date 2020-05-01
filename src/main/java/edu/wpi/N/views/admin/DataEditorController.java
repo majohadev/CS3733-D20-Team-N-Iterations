@@ -19,11 +19,6 @@ import javafx.stage.FileChooser;
 public class DataEditorController implements Controller {
   private StateSingleton singleton;
 
-  @Override
-  public void setSingleton(StateSingleton singleton) {
-    this.singleton = singleton;
-  }
-
   App mainApp = null;
 
   @Override
@@ -55,6 +50,11 @@ public class DataEditorController implements Controller {
   final InputStream INPUT_NODES_DEFAULT = Main.class.getResourceAsStream(DEFAULT_NODES);
   final InputStream INPUT_EDGES_DEFAULT = Main.class.getResourceAsStream(DEFAULT_PATHS);
   final InputStream INPUT_EMPLOYEES_DEFAULT = Main.class.getResourceAsStream(DEFAULT_EMPLOYEES);
+
+  // Inject singleton
+  public DataEditorController(StateSingleton singleton) {
+    this.singleton = singleton;
+  }
 
   public void initialize() {
     lbl_filePath.setText(DEFAULT_NODES);

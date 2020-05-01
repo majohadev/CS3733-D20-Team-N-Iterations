@@ -26,11 +26,6 @@ public class SanitationRequestController implements Controller {
   private App mainApp;
   private StateSingleton singleton;
 
-  @Override
-  public void setSingleton(StateSingleton singleton) {
-    this.singleton = singleton;
-  }
-
   // Add FXML Tags Here
   @FXML JFXComboBox<String> cmbo_text;
   @FXML JFXComboBox<String> cmbo_selectSpillSize;
@@ -44,6 +39,11 @@ public class SanitationRequestController implements Controller {
       FXCollections.observableArrayList();
   LinkedList<DbNode> fuzzySearchNodeList = new LinkedList<>();
   DbNode currentNode = null;
+
+  // Inject singleton
+  public SanitationRequestController(StateSingleton singleton) {
+    this.singleton = singleton;
+  }
 
   private String countVal = "";
 

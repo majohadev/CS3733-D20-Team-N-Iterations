@@ -1,4 +1,4 @@
-package edu.wpi.N.controllerData;
+package edu.wpi.N.entities.States;
 
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
@@ -55,11 +55,19 @@ public class MapDataStorage {
                 .toString()));
   }
 
+  /**
+   * Gets the image of necessary building and floor number
+   *
+   * @param building: building name
+   * @param floorNum: floor number
+   * @return: Image of specified building and floor number
+   */
   public Image getMap(String building, int floorNum) {
     return floorMaps.get("Floor" + floorNum);
   }
 
-  public void refreshAllNodes() {
+  /** Gets all the Nodes and Edges from database and sets the necessary attribute */
+  public void refreshMapData() {
     try {
       allDbNodes = MapDB.allNodes();
     } catch (DBException e) {

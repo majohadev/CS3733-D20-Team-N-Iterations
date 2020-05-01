@@ -8,7 +8,6 @@ import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.database.ServiceDB;
 import edu.wpi.N.entities.DbNode;
-import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.views.Controller;
 import java.io.IOException;
 import java.util.LinkedList;
@@ -44,9 +43,6 @@ public class ITServiceController implements Controller {
   public void setMainApp(App mainApp) {
     this.mainApp = mainApp;
   }
-
-  @Override
-  public void setSingleton(StateSingleton singleton) {}
 
   public void initialize() throws DBException {
     cmbo_text.getEditor().setOnKeyTyped(this::locationTextChanged);

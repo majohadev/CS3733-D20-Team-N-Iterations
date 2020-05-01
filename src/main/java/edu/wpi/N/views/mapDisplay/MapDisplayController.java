@@ -31,16 +31,10 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import lombok.SneakyThrows;
 
 public class MapDisplayController implements Controller, Initializable {
 
   private StateSingleton singleton;
-
-  @Override
-  public void setSingleton(StateSingleton singleton) {
-    this.singleton = singleton;
-  }
 
   private App mainApp = null;
   final float IMAGE_WIDTH = 2475;
@@ -111,7 +105,11 @@ public class MapDisplayController implements Controller, Initializable {
   // the list of floor buttons which allow users to switch between floors
   JFXNodesList floorButtonList = new JFXNodesList();
 
-  @SneakyThrows
+  // Inject singleton
+  public MapDisplayController(StateSingleton singleton) {
+    this.singleton = singleton;
+  }
+
   @Override
   public void initialize(URL location, ResourceBundle resourceBundle) {
     try {
@@ -122,8 +120,10 @@ public class MapDisplayController implements Controller, Initializable {
       // this.mode = Mode.NO_STATE;
       // this.allFloorNodes = MapDB.allNodes();
 
+      // initializeConversions();
       defaultKioskNode();
       acc_search.setExpandedPane(pn_locationSearch);
+
     } catch (Exception ex) {
       ex.printStackTrace();
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);

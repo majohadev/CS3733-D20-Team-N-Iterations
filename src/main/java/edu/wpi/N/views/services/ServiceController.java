@@ -3,7 +3,6 @@ package edu.wpi.N.views.services;
 import com.jfoenix.controls.JFXButton;
 import edu.wpi.N.App;
 import edu.wpi.N.database.DBException;
-import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.views.Controller;
 import java.io.IOException;
 import javafx.fxml.FXML;
@@ -14,7 +13,6 @@ public class ServiceController implements Controller {
 
   public AnchorPane service_anchor;
   private App mainApp;
-  private StateSingleton singleton;
 
   @FXML JFXButton btn_translator;
   @FXML JFXButton btn_laundry;
@@ -23,11 +21,6 @@ public class ServiceController implements Controller {
 
   public void setMainApp(App mainApp) {
     this.mainApp = mainApp;
-  }
-
-  @Override
-  public void setSingleton(StateSingleton singleton) {
-    this.singleton = singleton;
   }
 
   public void initialize() throws DBException, IOException {

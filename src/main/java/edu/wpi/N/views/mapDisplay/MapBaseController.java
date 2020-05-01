@@ -5,8 +5,10 @@ import edu.wpi.N.App;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
+import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.entities.UIDispEdge;
 import edu.wpi.N.entities.UIDispNode;
+import edu.wpi.N.views.Controller;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -22,8 +24,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 
-public class MapBaseController {
+public class MapBaseController implements Controller {
 
+  private App mainApp;
+  private StateSingleton singleton;
   private final int DEFAULT_FLOOR = 1;
   private final String DEFAULT_BUILDING = "Faulkner";
   int currentFloor;
@@ -78,7 +82,15 @@ public class MapBaseController {
   private final double ZOOM_STEP_SCROLL = 0.01;
   private final double ZOOM_STEP_BUTTON = 0.1;
 
-  public MapBaseController() throws DBException {}
+  // Inject singleton
+  public MapBaseController(StateSingleton singleton) {
+    this.singleton = singleton;
+  }
+
+  @Override
+  public void setMainApp(App mainApp) {
+    this.mainApp = mainApp;
+  }
 
   public enum Mode {
     NO_STATE,
@@ -94,7 +106,9 @@ public class MapBaseController {
 
     masterNodes = HashBiMap.create();
     setMode(Mode.NO_STATE);
-    changeBuilding(DEFAULT_BUILDING);
+
+    // TODO: check work. Commented out for now
+    // changeBuilding(DEFAULT_BUILDING);
 
     try {
       defaultNode = getUiFromDb(allFloorNodes.getFirst());
@@ -119,8 +133,10 @@ public class MapBaseController {
   public void changeFloor(int floorToDraw) {
     // Change floor in current building
     currentFloor = floorToDraw;
-    App.mapData.refreshAllNodes();
-    img_map.setImage(App.mapData.getMap(currentBuilding, floorToDraw));
+
+    // TODO: check later. I'm not sure if we need to refreshAllNodes when changing floors, right?
+    singleton.mapData.refreshMapData();
+    img_map.setImage(singleton.mapData.getMap(currentBuilding, floorToDraw));
 
     clearPath();
     clearEdges(); // Erase lines

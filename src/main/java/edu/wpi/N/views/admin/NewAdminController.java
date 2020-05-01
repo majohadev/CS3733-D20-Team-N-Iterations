@@ -40,11 +40,6 @@ public class NewAdminController implements Controller, Initializable {
 
   private StateSingleton singleton;
 
-  @Override
-  public void setSingleton(StateSingleton singleton) {
-    this.singleton = singleton;
-  }
-
   @FXML JFXPasswordField pwf_newpass;
   @FXML JFXPasswordField pwf_confpass;
   @FXML JFXTextField txtf_docoffices;
@@ -103,6 +98,11 @@ public class NewAdminController implements Controller, Initializable {
   LinkedList<String> longNamesList = new LinkedList<>(); // Stores Floor Node names
   LinkedList<DbNode> allFloorNodes; // stores all the nodes on the floor
   ObservableList<Employee> emps = FXCollections.observableArrayList();
+
+  // Inject singleton
+  public NewAdminController(StateSingleton singleton) {
+    this.singleton = singleton;
+  }
 
   private static class selfFactory<G>
       implements Callback<TableColumn.CellDataFeatures<G, G>, ObservableValue<G>> {

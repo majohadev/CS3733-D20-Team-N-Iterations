@@ -31,11 +31,6 @@ public class MedicineRequestController implements Controller, Initializable {
 
   private StateSingleton singleton;
 
-  @Override
-  public void setSingleton(StateSingleton singleton) {
-    this.singleton = singleton;
-  }
-
   private App mainApp;
 
   private LinkedList<DbNode> fuzzySearchPatientLocation = new LinkedList<>();
@@ -59,6 +54,11 @@ public class MedicineRequestController implements Controller, Initializable {
   @FXML JFXButton btn_viewreq;
   @FXML JFXButton btn_Accept;
   @FXML JFXButton btn_Deny;
+
+  // Inject singleton
+  public MedicineRequestController(StateSingleton singleton) {
+    this.singleton = singleton;
+  }
 
   @Override
   public void setMainApp(App mainApp) {
