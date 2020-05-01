@@ -6,11 +6,11 @@ public class StateSingleton {
 
   private static StateSingleton _instance = null;
   public Algorithm savedAlgo;
-  public MapDataStorage mapData;
+  public MapImageLoader mapImageLoader;
 
   private StateSingleton() {
     savedAlgo = new Algorithm();
-    mapData = new MapDataStorage();
+    mapImageLoader = new MapImageLoader();
   }
 
   public static StateSingleton getInstance() {

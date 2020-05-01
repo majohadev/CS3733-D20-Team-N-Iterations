@@ -13,7 +13,6 @@ import edu.wpi.N.views.Controller;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -24,7 +23,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -37,14 +35,8 @@ public class MapDisplayController implements Controller, Initializable {
   private StateSingleton singleton;
 
   private App mainApp = null;
-  final float IMAGE_WIDTH = 2475;
-  final float IMAGE_HEIGHT = 1485;
-  final float MAP_WIDTH = 1678;
-  final float MAP_HEIGHT = 1010;
-  final float HORIZONTAL_SCALE = (MAP_WIDTH) / IMAGE_WIDTH;
-  final float VERTICAL_SCALE = (MAP_HEIGHT) / IMAGE_HEIGHT;
-  @FXML ImageView img_map;
-  // @FXML Pane pn_display;
+
+  //  @FXML Pane pn_display;
   @FXML Pane pn_changeFloor;
   @FXML JFXTextField txt_firstLocation;
   @FXML JFXTextField txt_secondLocation;
@@ -58,7 +50,7 @@ public class MapDisplayController implements Controller, Initializable {
   @FXML Button btn_findpathdoc;
   @FXML JFXButton btn_findPath;
   @FXML JFXButton btn_home;
-  @FXML private JFXButton btn_floors, btn_floor1, btn_floor2, btn_floor3, btn_floor4, btn_floor5;
+  @FXML private JFXButton btn_floors;
   @FXML TitledPane pn_locationSearch;
   @FXML Accordion acc_search;
   @FXML Text txt_description;
@@ -67,31 +59,13 @@ public class MapDisplayController implements Controller, Initializable {
 
   @FXML MapBaseController mapBaseController; // Reference to the embedded map
 
-  /*
-  private final int DEFAULT_FLOOR = 1;
-  private final String DEFAULT_BUILDING = "FAULKNER";
-  private int currentFloor;
-  private String currentBuilding;
-   */
-
-  // sphagetting code I guesss
   private ArrayList<String> directions;
-
-  HashMap<String, DbNode> stringNodeConversion = new HashMap<>();
-  private LinkedList<Doctor> searchedDoc = new LinkedList<>();
-  private LinkedList<DbNode> doctorNodes = new LinkedList<>();
-  // LinkedList<DbNode> pathNodes;
-  //  String[] imgPaths =
-  //      new String[] {
-  //        "/edu/wpi/N/images/Floor1TeamN.png",
-  //        "/edu/wpi/N/images/Floor2TeamN.png",
-  //        "/edu/wpi/N/images/Floor3TeamN.png",
-  //        "/edu/wpi/N/images/Floor4TeamN.png",
-  //        "/edu/wpi/N/images/Floor5TeamN.png"
-  //      };
-
-  // the list of floor buttons which allow users to switch between floors
   JFXNodesList floorButtonList = new JFXNodesList();
+
+  // Program variables
+  Path path;
+  int currentFloor;
+  String currentBuilding;
 
   // Inject singleton
   public MapDisplayController(StateSingleton singleton) {
@@ -100,24 +74,15 @@ public class MapDisplayController implements Controller, Initializable {
 
   @Override
   public void initialize(URL location, ResourceBundle resourceBundle) {
+    path = new Path(new LinkedList<>());
+    currentFloor = 1;
+    currentBuilding = "Faulkner";
+    createFloorButtons();
+    acc_search.setExpandedPane(pn_locationSearch);
     try {
-      createFloorButtons();
-      // this.currentFloor = DEFAULT_FLOOR;
-      // this.currentBuilding = DEFAULT_BUILDING;
-      // this.mode = Mode.NO_STATE;
-      // this.allFloorNodes = MapDB.allNodes();
-
-      // initializeConversions();
-      defaultKioskNode();
-      acc_search.setExpandedPane(pn_locationSearch);
-
-    } catch (Exception ex) {
-      ex.printStackTrace();
-      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-      errorAlert.setHeaderText("Oops... Something went Wong");
-      errorAlert.setContentText(
-          "Map view couldn't be opened. Make sure to upload Nodes and Edges as CSVs");
-      errorAlert.showAndWait();
+      setDefaultKioskNode();
+    } catch (DBException e) {
+      e.printStackTrace();
     }
   }
 
@@ -135,17 +100,24 @@ public class MapDisplayController implements Controller, Initializable {
    * @param floorButtons the empty list of buttons which enable the user to view different floors
    * @return the populated list of buttons which enable the user to view different floors
    */
-  public LinkedList<JFXButton> initFloorButtons(LinkedList<JFXButton> floorButtons) {
+  public void initFloorButtons(LinkedList<JFXButton> floorButtons) {
     btn_floors = new JFXButton("Floors");
     floorButtons.add(btn_floors);
     for (int i = 1; i <= 5; i++) {
-      int floor = i;
       JFXButton btn = new JFXButton();
       btn.setText(String.valueOf(i));
-      btn.setOnMouseClicked(e -> drawPathOnFloor(floor));
       floorButtons.add(btn);
     }
-    return floorButtons;
+    onBtnFloorSetOnMouseClicked();
+  }
+
+  public void onBtnFloorSetOnMouseClicked() {
+    for (int i = 0; i < floorButtonList.getChildren().size(); i++) {
+      floorButtonList
+          .getChildren()
+          .get(i)
+          .setOnMouseClicked(e -> mapBaseController.drawPath(this.path, this.currentFloor));
+    }
   }
 
   /**
@@ -248,47 +220,46 @@ public class MapDisplayController implements Controller, Initializable {
   }
 
   /**
-   * triggers path finding
+   * triggers path finding for two chosen locations
+   *
    * @param event the mouse event which triggers path finding
    * @throws Exception
    */
   public void onBtnPathfindClicked(MouseEvent event) throws Exception {
-    // TODO clear the floor
-    // TODO only enable buttons on the cer
-//    enableAllFloorButtons();
-    DbNode firstSelection = lst_firstLocation.getSelectionModel().getSelectedItem();
-    DbNode secondSelection = lst_secondLocation.getSelectionModel().getSelectedItem();
-    // jumpToFloor(imgPaths[stringNodeConversion.get(firstSelection).getFloor() - 1]);
-    mapBaseController.setMode(MapBaseController.Mode.NO_STATE);
-    mapBaseController.changeFloor(stringNodeConversion.get(firstSelection).getFloor());
-    // currentFloor = stringNodeConversion.get(firstSelection).getFloor();
-    try {
-      findPath(stringNodeConversion.get(firstSelection), stringNodeConversion.get(secondSelection));
-    } catch (NullPointerException e) {
-      displayErrorMessage("Path does not exist");
-      return;
-    }
+    initPathfind(lst_firstLocation, lst_secondLocation.getSelectionModel().getSelectedItem());
   }
 
-  @FXML
-  private void onDoctorPathFindClicked(MouseEvent event) throws Exception {
-    // this.mode = Mode.PATH_STATE;
-    mapBaseController.setMode(MapBaseController.Mode.PATH_STATE);
-    // pn_display.getChildren().removeIf(node -> node instanceof Line);
-    mapBaseController.clearPath();
-    enableAllFloorButtons();
-    String firstSelection = (String) lst_firstLocation.getSelectionModel().getSelectedItem();
-    String secondSelection = (String) lst_doctorlocations.getSelectionModel().getSelectedItem();
-    // jumpToFloor(imgPaths[stringNodeConversion.get(firstSelection).getFloor() - 1]);
-    mapBaseController.setMode(MapBaseController.Mode.NO_STATE);
-    mapBaseController.changeFloor(stringNodeConversion.get(firstSelection).getFloor());
-    // currentFloor = stringNodeConversion.get(firstSelection).getFloor();
-    try {
-      findPath(stringNodeConversion.get(firstSelection), stringNodeConversion.get(secondSelection));
-    } catch (NullPointerException e) {
-      displayErrorMessage("Path does not exist");
-      return;
-    }
+  public void onDoctorPathFindClicked(MouseEvent event) throws Exception {
+    initPathfind(lst_firstLocation, lst_doctorlocations.getSelectionModel().getSelectedItem());
+  }
+
+  public void findPathToCafetaria(MouseEvent e) throws DBException {
+    initPathfind(lst_firstLocation, MapDB.getNode("MRETL00203"));
+  }
+
+  public void findPathToStarBucks(MouseEvent e) throws DBException {
+    initPathfind(lst_firstLocation, MapDB.getNode("NRETL00201"));
+  }
+
+  public void initPathfind(ListView<DbNode> firstLst, DbNode second) throws DBException {
+    DbNode first = firstLst.getSelectionModel().getSelectedItem();
+    Path path =
+        singleton.savedAlgo.findPath(
+            first, second, handicapp1.isSelected() || handicapp2.isSelected());
+    mapBaseController.setFloor(first.getBuilding(), first.getFloor(), path);
+    disableNonPathFloors(path);
+    setTextDecription(path);
+  }
+
+  public void findPathToBathroom(MouseEvent e) throws DBException {
+    initQuickAccess(lst_firstLocation, "REST");
+  }
+
+  public void initQuickAccess(ListView<DbNode> firstLst, String type) throws DBException {
+    DbNode first = lst_firstLocation.getSelectionModel().getSelectedItem();
+    Path path = singleton.savedAlgo.findQuickAccess(first, type);
+    mapBaseController.drawPath(path, first.getFloor());
+    setTextDecription(path);
   }
 
   private void enableAllFloorButtons() {
@@ -298,181 +269,24 @@ public class MapDisplayController implements Controller, Initializable {
     }
   }
 
-  private void findPath(DbNode node1, DbNode node2) throws DBException {
-    boolean handicap = false;
-    if (handicapp1.isSelected() || handicapp2.isSelected()) {
-      handicap = true;
-    }
-    Path path;
-    try {
-      path = singleton.savedAlgo.findPath(node1, node2, handicap);
-      System.out.println("Start angle " + path.getStartAngle(MapDB.getKioskAngle()));
-    } catch (NullPointerException e) {
-      displayErrorMessage("The path does not exist");
-      return;
-    }
-    mapBaseController.setPathNodes(path.getPath());
-    System.out.println("Start angle " + path.getStartAngle(MapDB.getKioskAngle()));
-
-    disableNonPathFloors(mapBaseController.getPathNodes());
-    mapBaseController.drawPath(mapBaseController.getPathNodes());
-    // set textual decriptions
-    setTextDecription(new Path(mapBaseController.getPathNodes()));
-  }
-
-  private void disableNonPathFloors(LinkedList<DbNode> pathNodes) {
-    LinkedList<Integer> activeFloors = new LinkedList();
-    for (DbNode node : pathNodes) {
+  private void disableNonPathFloors(Path pathNodes) {
+    for (int i = 0; i < pathNodes.size(); i++) {
+      DbNode node = pathNodes.get(i);
       if (!(node.getNodeType().equals("ELEV") || node.getNodeType().equals("STAI"))) {
-        if (!activeFloors.contains(node.getFloor())) {
-          activeFloors.add(node.getFloor());
-        }
-      }
-    }
-    for (int i = 1; i < floorButtonList.getChildren().size(); i++) {
-      JFXButton btn = (JFXButton) floorButtonList.getChildren().get(i);
-      if (!activeFloors.contains(Integer.parseInt(btn.getText()))) {
+        JFXButton btn = (JFXButton) floorButtonList.getChildren().get(node.getFloor() + 1);
         btn.setDisable(true);
       }
     }
   }
 
-  /*
-  private void drawPath(LinkedList<DbNode> pathNodes) {
-    DbNode firstNode;
-    DbNode secondNode;
-    for (int i = 0; i < pathNodes.size() - 1; i++) {
-      firstNode = pathNodes.get(i);
-      secondNode = pathNodes.get(i + 1);
-      if (firstNode.getFloor() == currentFloor && secondNode.getFloor() == currentFloor) {
-        Line line =
-            new Line(
-                scaleX(firstNode.getX()),
-                scaleY(firstNode.getY()),
-                scaleX(secondNode.getX()),
-                scaleY(secondNode.getY()));
-        styleLine(line);
-        pn_display.getChildren().add(line);
-      }
-    }
-  }
-   */
-
   public void onBtnResetPathClicked() throws DBException {
-    // mode = Mode.NO_STATE;
-    mapBaseController.setMode(MapBaseController.Mode.NO_STATE);
-    defaultKioskNode();
+    //    defaultKioskNode();
     enableAllFloorButtons();
-    // pn_display.getChildren().removeIf(node -> node instanceof Line);
     txt_firstLocation.clear();
     txt_secondLocation.clear();
     lst_firstLocation.getItems().clear();
     lst_secondLocation.getItems().clear();
-  }
-
-  /*
-  private double scaleX(double x) {
-    return x * HORIZONTAL_SCALE;
-  }
-
-  private double scaleY(double y) {
-    return y * VERTICAL_SCALE;
-  }
-   */
-
-  /*
-  private void setFloorImg(String path) throws DBException {
-    // pn_display.getChildren().removeIf(node -> node instanceof Line);
     mapBaseController.clearPath();
-    if (mode == Mode.PATH_STATE) {
-      mapBaseController.drawPath(pathNodes);
-    }
-    if (mode == Mode.NO_STATE) {
-      defaultKioskNode();
-    }
-    Image img = new Image(getClass().getResourceAsStream(path));
-    img_map.setImage(img);
-  }
-   */
-
-  private void drawPathOnFloor(int floor) {
-    mapBaseController.setMode(MapBaseController.Mode.PATH_STATE);
-    mapBaseController.changeFloor(floor);
-  }
-
-  /**
-   * Finds and draws path to the nearest bathroom
-   *
-   * @param e
-   */
-  @FXML
-  private void findPathToBathroom(MouseEvent e) throws DBException {
-    try {
-      // this.mode = Mode.PATH_STATE;
-      mapBaseController.setMode(MapBaseController.Mode.PATH_STATE);
-      // pn_display.getChildren().removeIf(node -> node instanceof Line);
-      enableAllFloorButtons();
-      String startSelection = (String) lst_firstLocation.getSelectionModel().getSelectedItem();
-      DbNode startNode = stringNodeConversion.get(startSelection);
-      Path pathToBathroom = singleton.savedAlgo.findQuickAccess(startNode, "REST");
-      mapBaseController.drawPath(pathToBathroom.getPath());
-      // set textual decriptions
-      setTextDecription(pathToBathroom);
-    } catch (Exception ex) {
-      ex.printStackTrace();
-      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-      errorAlert.setHeaderText("Oops... Something went Wong");
-      errorAlert.setContentText("Path to bathroom wasn't found");
-      errorAlert.showAndWait();
-    }
-  }
-
-  /**
-   * Finds and draws path to the cafeteria
-   *
-   * @param e
-   */
-  @FXML
-  private void findPathToCafetaria(MouseEvent e) {
-    // this.mode = Mode.PATH_STATE;
-    mapBaseController.setMode(MapBaseController.Mode.PATH_STATE);
-    // pn_display.getChildren().removeIf(node -> node instanceof Line);
-    enableAllFloorButtons();
-    String firstSelection = (String) lst_firstLocation.getSelectionModel().getSelectedItem();
-    // jumpToFloor(imgPaths[stringNodeConversion.get(firstSelection).getFloor() - 1]);
-    mapBaseController.setMode(MapBaseController.Mode.NO_STATE);
-    mapBaseController.changeFloor(stringNodeConversion.get(firstSelection).getFloor());
-    // currentFloor = stringNodeConversion.get(firstSelection).getFloor();
-    try {
-      findPath(stringNodeConversion.get(firstSelection), MapDB.getNode("MRETL00203"));
-    } catch (NullPointerException | DBException ex) {
-      displayErrorMessage("Path does not exist");
-      return;
-    }
-  }
-
-  /**
-   * Finds and draws path to the Starbucks
-   *
-   * @param e
-   */
-  @FXML
-  private void findPathToStarBucks(MouseEvent e) {
-    // this.mode = Mode.PATH_STATE;
-    mapBaseController.setMode(MapBaseController.Mode.PATH_STATE);
-    // pn_display.getChildren().removeIf(node -> node instanceof Line);
-    enableAllFloorButtons();
-    String firstSelection = (String) lst_firstLocation.getSelectionModel().getSelectedItem();
-    // jumpToFloor(imgPaths[stringNodeConversion.get(firstSelection).getFloor() - 1]);
-    mapBaseController.setMode(MapBaseController.Mode.NO_STATE);
-    mapBaseController.changeFloor(stringNodeConversion.get(firstSelection).getFloor());
-    // currentFloor = stringNodeConversion.get(firstSelection).getFloor();
-    try {
-      findPath(stringNodeConversion.get(firstSelection), MapDB.getNode("NRETL00201"));
-    } catch (NullPointerException | DBException ex) {
-      displayErrorMessage("Path does not exist");
-      return;
-    }
   }
 
   public void setMainApp(App mainApp) {
@@ -568,38 +382,27 @@ public class MapDisplayController implements Controller, Initializable {
   }
    */
 
-  private void defaultKioskNode() throws DBException {
-    LinkedList<String> kiosks =
-        mapBaseController.defaultKioskNode(); // Returns names of loaded kiosks
-    if (kiosks.isEmpty()) {
-      txt_firstLocation.clear();
-      lst_firstLocation.getItems().clear();
-    } else {
-      txt_firstLocation.setText(kiosks.getFirst());
-      ObservableList<String> textList = FXCollections.observableList(kiosks);
-      lst_firstLocation.setItems(textList);
-      lst_firstLocation.getSelectionModel().select(0);
+  private void setDefaultKioskNode() throws DBException {
+    boolean noFaulknerKiosk =
+        !(currentBuilding.equals("Faulkner") && (currentFloor == 1 || currentFloor == 3));
+    if (noFaulknerKiosk) {
+      clearKioskFields();
+      return;
     }
+    DbNode kiosk = null;
+    if (currentBuilding.equals("Faulkner") && currentFloor == 1) {
+      kiosk = MapDB.getNode("NSERV00301");
+    } else if (currentBuilding.equals("Faulkner") && currentFloor == 3) {
+      kiosk = MapDB.getNode("NSERV00103");
+    }
+    txt_firstLocation.clear();
+    lst_firstLocation.getItems().clear();
+    txt_firstLocation.setText(kiosk.toString());
+    lst_firstLocation.getItems().add(kiosk);
   }
 
-  /*
-   private void styleLine(Line line) {
-     line.setStrokeWidth(5);
-     line.setStrokeLineCap(StrokeLineCap.ROUND);
-     line.setStrokeLineJoin(StrokeLineJoin.ROUND);
-   }
-  */
-
-  // Upon clicking find path to location button call this method
-  /*    @FXML
-  private void onDoctorPathFindClicked(MouseEvent event) throws Exception {
-    pn_path.getChildren().removeIf(node -> node instanceof Line);
-    int currentSelection = lst_doctorlocations.getSelectionModel().getSelectedIndex();
-    DbNode destinationNode = doctorNodes.get(currentSelection);
-    if (selectedNodes.size() < 1) selectedNodes.add(defaultNode);
-    selectedNodes.add(destinationNode);
-    // if (selectedNodes.size() < 2) selectedNodes.add(defaultNode);
-    onBtnFindClicked(event);
-    selectedNodes.clear();
-  }*/
+  private void clearKioskFields() {
+    txt_firstLocation.clear();
+    lst_firstLocation.getItems().clear();
+  }
 }

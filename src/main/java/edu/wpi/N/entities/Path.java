@@ -41,4 +41,16 @@ public class Path {
     }
     return angleChange + 90;
   }
+
+  public boolean isEmpty() {
+    return path.size() == 0;
+  }
+
+  public int size() {
+    return path.size();
+  }
+
+  public DbNode get(int i) {
+    return path.get(i);
+  }
 }

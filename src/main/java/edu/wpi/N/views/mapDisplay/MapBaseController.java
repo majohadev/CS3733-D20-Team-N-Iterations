@@ -1,28 +1,23 @@
 package edu.wpi.N.views.mapDisplay;
 
-import com.google.common.collect.HashBiMap;
 import edu.wpi.N.App;
 import edu.wpi.N.database.DBException;
-import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
+import edu.wpi.N.entities.Path;
 import edu.wpi.N.entities.States.StateSingleton;
-import edu.wpi.N.entities.UIDispEdge;
-import edu.wpi.N.entities.UIDispNode;
 import edu.wpi.N.views.Controller;
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.NoSuchElementException;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 
 public class MapBaseController implements Controller {
 
@@ -51,25 +46,19 @@ public class MapBaseController implements Controller {
   private double mapScaleAlpha;
   private double clickStartX, clickStartY;
 
-  //Program Constants
   private final String FIRST_KIOSK = "NSERV00301";
   private final String THIRD_KIOSK = "NSERV00103";
-  private final String DEFAULT_BUILDING = "Faulkner";
-  private final int DEFAULT_FLOOR = 1;
-
-  // Program Variables
-  private int currentFloor;
-  private String currentBuilding;
-  private LinkedList<DbNode> currentPath;
-
+  private final Color START_NODE_COLOR = Color.GREEN;
+  private final Color END_NODE_COLOR = Color.RED;
   // FXML Item IDs
-  @FXML AnchorPane pn_movableMap;
+  @FXML StackPane pn_movableMap;
   @FXML Pane pn_path;
   @FXML ImageView img_map;
   @FXML Button btn_zoomIn, btn_zoomOut;
 
   /**
    * the constructor of MapBaseController
+   *
    * @param singleton the algorithm singleton which determines the style of path finding
    */
   public MapBaseController(StateSingleton singleton) {
@@ -78,6 +67,7 @@ public class MapBaseController implements Controller {
 
   /**
    * allows reference back the main application class of this program
+   *
    * @param mainApp the main application class of this program
    */
   @Override
@@ -87,269 +77,86 @@ public class MapBaseController implements Controller {
 
   /**
    * initializes the MapBase Controller
+   *
    * @throws DBException
    */
-  public void initialize() throws DBException {
-    this.currentFloor = DEFAULT_FLOOR;
-    this.currentBuilding = DEFAULT_BUILDING;
-  }
+  public void initialize() throws DBException {}
 
   /**
    * sets the current building of the map display
+   *
    * @param building the name of the building to be displayed
    */
-  public void setBuilding(String building) {
-    this.currentBuilding = building;
-    setFloor(DEFAULT_FLOOR);
+  public void setBuilding(String building, int floor, Path currentPath) throws DBException {
+    setFloor(building, floor, currentPath);
   }
 
   /**
-   * sets the current floor of the map display
-   * @param floor the floor number to be displayed
+   * loads the new floor image loads the floor image and the draws the path if necessary
+   *
+   * @param building the current building of the map display
+   * @param floor the new floor of the map display
+   * @param currentPath the current path finding nodes
+   * @throws DBException
    */
-  public void setFloor(int floor) {
-    this.setFloor(floor);
-  }
-
-
-  public void changeFloor(int floorToDraw) {
-    // Change floor in current building
-    currentFloor = floorToDraw;
-
-    // TODO: check later. I'm not sure if we need to refreshAllNodes when changing floors, right?
-    singleton.mapData.refreshMapData();
-    img_map.setImage(singleton.mapData.getMap(currentBuilding, floorToDraw));
-
+  public void setFloor(String building, int floor, Path currentPath) throws DBException {
     clearPath();
-    clearEdges(); // Erase lines
-    populateMap(); // Set up/recycle UIDispNodes
-
-    // If there's a path to draw, draw it - otherwise just show the default kiosk
-    if (mode == Mode.NO_STATE) {
-      defaultKioskNode();
-    } else if (mode == Mode.PATH_STATE) {
-      if (pathNodes != null && !pathNodes.isEmpty()) {
-        drawPath(pathNodes);
-      } else {
-        System.out.println("Tried to draw an empty path!");
-      }
+    img_map.setImage(singleton.mapImageLoader.getMap(building, floor));
+    if (!(currentPath == null || currentPath.isEmpty())) {
+      drawPath(currentPath, floor);
     }
   }
 
-  public void setPathNodes(LinkedList<DbNode> nodesList) {
-    this.pathNodes = nodesList;
-  }
-
-  public LinkedList<DbNode> getPathNodes() {
-    return this.pathNodes;
-  }
-
-  public LinkedList<String> defaultKioskNode() {
-
-    clearPath();
-
-    LinkedList<String> kiosks = new LinkedList<>();
-
-    if (currentFloor == 1) {
-      try {
-        DbNode floor1Kiosk = MapDB.getNode("NSERV00301"); // Should be specified elsewhere
-        defaultNode = getUiFromDb(floor1Kiosk);
-        kiosks.add(floor1Kiosk.getLongName());
-      } catch (DBException e) {
-        System.out.println("Couldn't find node NSERV00301 as 1st floor kiosk");
-        e.printStackTrace();
-      }
-
-    } else if (currentFloor == 3) {
-      try {
-        DbNode floor3Kiosk = MapDB.getNode("NSERV00103"); // Should be specified elsewhere
-        defaultNode = getUiFromDb(floor3Kiosk);
-        kiosks.add(floor3Kiosk.getLongName());
-      } catch (DBException e) {
-        System.out.println("Couldn't find node NSERV00103 as 3rd floor kiosk");
-        e.printStackTrace();
-      }
-    }
-    return kiosks;
-  }
-
-  private UIDispNode makeUINode() {
-    UIDispNode newNode = new UIDispNode(true);
-    newNode.placeOnPane(pn_routeNodes);
-    newNode.setBaseMap(this);
-    return newNode;
-  }
-
-  private void addEdge(UIDispNode nodeA, UIDispNode nodeB) {
-    UIDispEdge newEdge;
-    if (freedEdges.isEmpty()) {
-      newEdge = nodeA.addEdgeTo(nodeB, null);
-    } else {
-      newEdge = nodeA.addEdgeTo(nodeB, freedEdges.pop());
-    }
-    if (newEdge != null) {
-      edgesInUse.add(newEdge);
-      newEdge.placeOnPane(pn_path);
-      newEdge.setBaseMap(this);
-    }
-  }
-
-  public void clearEdges() {
-    for (UIDispEdge edge : edgesInUse) {
-      edge.breakSelf(); // Safely disassemble edge infrastructure
-      freedEdges.add(edge);
-    }
-    edgesInUse.clear();
-  }
-
-  public DbNode getDbFromUi(UIDispNode uiNode) {
-    return masterNodes.get(uiNode);
-  }
-
-  public UIDispNode getUiFromDb(DbNode dbNode) {
-    return masterNodes.inverse().get(dbNode);
-  }
-
-  // Replace (or create) link between a UIDispNode and a DbNode
-  private void setLink(UIDispNode uiNode, DbNode dbNode, boolean showKey) {
-    if (uiNode != null && dbNode != null) {
-
-      // if (dbNode.getNodeType().equals("HALL")) uiNode.setVisible(false);
-      // else uiNode.setVisible(showKey);
-
-      uiNode.setPos(
-          dbNode.getX() * HORIZONTAL_SCALE + HORIZONTAL_OFFSET,
-          dbNode.getY() * VERTICAL_SCALE + VERTICAL_OFFSET);
-      if (masterNodes.replace(uiNode, dbNode) == null) { // If uiNode is a new map key
-        masterNodes.put(uiNode, dbNode); // Add the new key
-      }
-      try { // Add any attached edges
-        UIDispNode otherAsUI;
-        for (DbNode other : MapDB.getAdjacent(dbNode.getNodeID())) {
-          otherAsUI = getUiFromDb(other);
-          if (otherAsUI != null) {
-            addEdge(uiNode, otherAsUI);
-          } else {
-            // System.out.println("Couldn't find UI element for node " + other.getNodeID());
-          }
-        }
-      } catch (DBException e) {
-        System.out.println("No adjacent nodes to " + dbNode.getShortName());
-      }
-    }
-  }
-
-  // Called by the UIDispNode that was clicked
-  public void onUINodeClicked(MouseEvent e, UIDispNode clickedNode) {
-
-    if (clickedNode.getSelected()) {
-      selectedNodes.add(clickedNode);
-      // System.out.println("Selected node " + masterNodes.get(clickedNode).getLongName() + ".");
-    } else {
-      selectedNodes.remove(clickedNode);
-      // System.out.println("Deselected node " + masterNodes.get(clickedNode).getLongName() + ".");
-    }
-  }
-
-  // Called by the UIDispEdge that was clicked
-  public void onUIEdgeClicked(MouseEvent e, UIDispEdge clickedEdge) {
-
-    if (clickedEdge.getSelected()) {
-      selectedEdges.add(clickedEdge);
-      // System.out.println("Selected node " + masterNodes.get(clickedNode).getLongName() + ".");
-    } else {
-      selectedEdges.remove(clickedEdge);
-      // System.out.println("Deselected node " + masterNodes.get(clickedNode).getLongName() + ".");
-    }
-  }
-
-  public void populateMap() {
-    try {
-
-      LinkedList<UIDispNode> keys = new LinkedList<>();
-      keys.addAll(masterNodes.keySet());
-
-      allFloorNodes = MapDB.floorNodes(currentFloor, currentBuilding); // Reference copy
-
-      LinkedList<DbNode> thisFloor = new LinkedList<>();
-      thisFloor.addAll(allFloorNodes); // Make a copy of allFloorNodes to use pop or pull on
-
-      Iterator<UIDispNode> keysIterator = keys.iterator();
-      Iterator<DbNode> dbIterator = thisFloor.iterator();
-      while (dbIterator.hasNext()) {
-        DbNode value = dbIterator.next();
-        if (keysIterator.hasNext()) {
-          UIDispNode key = keysIterator.next();
-          setLink(key, value, true);
-        } else {
-          // If there are DbNodes without keys, add keys
-          setLink(makeUINode(), value, true);
-        }
-      }
-
-      while (keysIterator.hasNext()) {
-        UIDispNode key = keysIterator.next();
-        masterNodes.remove(key);
-        key.setVisible(false);
-        key.breakAllEdges();
-      }
-    } catch (DBException e) {
-      System.out.print("Populating floor " + currentFloor + " in  " + currentBuilding + " failed.");
-      e.printStackTrace();
-    }
-  }
-
-  // Draw lines between each pair of nodes in given path
-  public void drawPath(LinkedList<DbNode> nodes) {
-    UIDispNode uiFirst, uiSecond;
-    DbNode dbFirst, dbSecond;
-    UIDispEdge edge;
-
-    for (int i = 0; i < nodes.size() - 1; i++) {
-      dbFirst = nodes.get(i);
-      dbSecond = nodes.get(i + 1);
-
-      if (dbFirst.getFloor() == currentFloor && dbSecond.getFloor() == currentFloor) {
-
-        uiFirst = getUiFromDb(dbFirst);
-        uiSecond = getUiFromDb(dbSecond);
-
+  /**
+   * @param currentPath
+   * @param floor the current floor
+   */
+  public void drawPath(Path currentPath, int floor) {
+    DbNode firstNode, secondNode;
+    for (int i = 0; i < currentPath.size() - 1; i++) {
+      firstNode = currentPath.get(i);
+      secondNode = currentPath.get(i + 1);
+      if (firstNode.getFloor() == floor && secondNode.getFloor() == floor) {
         if (i == 0) {
-          uiFirst.setStart();
-        } else if (i == nodes.size() - 2) {
-          uiSecond.setEnd();
-        }
-
-        edge = uiFirst.edgeTo(uiSecond);
-        if (edge != null) {
-          edge.pointEdgeToward(uiSecond); // Set correct direction of line!
-          edge.setHighlighted(true);
-        } else {
-          System.out.println(
-              "Edge between "
-                  + dbFirst.getNodeID()
-                  + " and "
-                  + dbSecond.getNodeID()
-                  + " doesn't exist.");
+          drawCircle(firstNode, START_NODE_COLOR);
+        } else if (i == currentPath.size() - 2) {
+          drawCircle(secondNode, END_NODE_COLOR);
         }
       }
+      Line line =
+          new Line(
+              scaleX(firstNode.getX()),
+              scaleY(firstNode.getY()),
+              scaleX(secondNode.getX()),
+              scaleY(secondNode.getY()));
+      pn_path.getChildren().add(line);
     }
   }
 
-  // Resets highlighted edges to their default state
+  /**
+   * draws either the start of end circle on the map
+   *
+   * @param node the DbNode to be displayed on the map
+   * @param c the color of the circle
+   */
+  public void drawCircle(DbNode node, Color c) {
+    Circle circle = new Circle();
+    circle.setCenterX(scaleX(node.getX()));
+    circle.setCenterY(scaleY(node.getY()));
+    circle.setFill(c);
+  }
+
+  public double scaleX(double x) {
+    return x * HORIZONTAL_SCALE;
+  }
+
+  public double scaleY(double y) {
+    return y * VERTICAL_SCALE;
+  }
+  /** Clears all the edges on the map display */
   public void clearPath() {
-    for (UIDispEdge edge : edgesInUse) {
-      edge.setHighlighted(false);
-    }
-    for (UIDispNode node : masterNodes.keySet()) {
-      node.setNormalNode();
-    }
-  }
-
-
-
-  public void forceSelect(UIDispNode uiNode, boolean selected) { // Don't really want
-    uiNode.setSelected(selected);
+    // TODO: Insert any other memory cleanup methods here
+    pn_path.getChildren().clear();
   }
 
   //   == MAP ZOOM CONTROLS ==

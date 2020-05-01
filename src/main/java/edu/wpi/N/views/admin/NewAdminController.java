@@ -236,9 +236,7 @@ public class NewAdminController implements Controller, Initializable {
     try {
       Stage stage = new Stage();
       Parent root;
-      FXMLLoader loader = new FXMLLoader();
-      loader.setLocation(getClass().getResource("fileManagementScreen.fxml"));
-      root = loader.load();
+      root = FXMLLoader.load(getClass().getResource("fileManagementScreen.fxml"));
       Scene scene = new Scene(root);
       stage.setScene(scene);
 
