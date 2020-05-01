@@ -14,14 +14,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 
-public class newLoginController implements Controller, Initializable {
+public class NewLoginController implements Controller, Initializable {
 
   private StateSingleton singleton;
-
-  @Override
-  public void setSingleton(StateSingleton singleton) {
-    this.singleton = singleton;
-  }
 
   private App mainApp = null;
 
@@ -29,6 +24,11 @@ public class newLoginController implements Controller, Initializable {
   @FXML JFXTextField txtf_username;
 
   String medReq = "views/newMedRequest.fxml";
+
+  // Inject singleton
+  public NewLoginController(StateSingleton singleton) {
+    this.singleton = singleton;
+  }
 
   @FXML
   public void checkUser() throws DBException {

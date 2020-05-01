@@ -29,11 +29,6 @@ public class MapEditControllerOUTDATED implements Controller {
   private StateSingleton singleton;
 
   @Override
-  public void setSingleton(StateSingleton singleton) {
-    this.singleton = singleton;
-  }
-
-  @Override
   public void setMainApp(App mainApp) {
     this.mainApp = mainApp;
   }
@@ -123,6 +118,11 @@ public class MapEditControllerOUTDATED implements Controller {
   @FXML ChoiceBox cb_ChangeFloor;
   @FXML Button btn_ChangeFloorConfirm;
   @FXML ImageView img_master;
+
+  // Inject singleton
+  public MapEditControllerOUTDATED(StateSingleton singleton) {
+    this.singleton = singleton;
+  }
 
   public enum EditMode {
     NOSTATE,

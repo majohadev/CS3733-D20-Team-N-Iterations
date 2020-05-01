@@ -46,6 +46,11 @@ public class BetweenFloorsController implements Controller, Initializable {
   int floor;
   boolean currNode;
 
+  // Inject singleton
+  public BetweenFloorsController(StateSingleton singleton) {
+    this.singleton = singleton;
+  }
+
   @FXML
   public void initialize(URL url, ResourceBundle rb) {
     this.nodes = new HashMap<Integer, Circle>();
@@ -125,11 +130,6 @@ public class BetweenFloorsController implements Controller, Initializable {
   @Override
   public void setMainApp(App mainApp) {
     this.mainApp = mainApp;
-  }
-
-  @Override
-  public void setSingleton(StateSingleton singleton) {
-    this.singleton = singleton;
   }
 
   public Text setText(double x, double y, String text) {

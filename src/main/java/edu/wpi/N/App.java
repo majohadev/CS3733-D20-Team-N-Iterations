@@ -2,8 +2,8 @@ package edu.wpi.N;
 
 import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.views.Controller;
-import edu.wpi.N.views.mapDisplay.MapBaseController;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -44,30 +44,33 @@ public class App extends Application {
     FXMLLoader loader = new FXMLLoader();
     loader.setLocation(getClass().getResource(path));
 
-    // Inject Singleton object into specified "fx included" controller classes
+    // Inject Singleton object into classes with Constructors that take StateSingleton
     loader.setControllerFactory(
-        param -> {
-          if (param.equals(MapBaseController.class)) {
-            return new MapBaseController(singleton);
-          } else {
-            try {
-              return param.getConstructor().newInstance();
-            } catch (Exception e) {
-              e.printStackTrace();
-              return null;
+        type -> {
+          try {
+            // look for constructor taking StateSingleton as a parameter
+            for (Constructor<?> c : type.getConstructors()) {
+              if (c.getParameterCount() == 1) {
+                if (c.getParameterTypes()[0] == StateSingleton.class) {
+                  return c.newInstance(singleton);
+                }
+              }
             }
+            // didn't find appropriate constructor, just use default constructor:
+            return type.getConstructor().newInstance();
+          } catch (Exception exc) {
+            throw new RuntimeException(exc);
           }
         });
 
     Pane pane = loader.load();
+    Controller controller = loader.getController();
+    controller.setMainApp(this);
 
     Scene scene = new Scene(pane);
     masterStage.setScene(scene);
     // masterStage.setMaximized(true);
     masterStage.setFullScreenExitHint("");
     masterStage.show();
-    Controller controller = loader.getController();
-    controller.setMainApp(this);
-    controller.setSingleton(singleton);
   }
 }

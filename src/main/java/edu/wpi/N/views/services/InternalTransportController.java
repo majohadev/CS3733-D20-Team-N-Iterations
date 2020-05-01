@@ -25,11 +25,6 @@ public class InternalTransportController implements Controller {
 
   private StateSingleton singleton;
 
-  @Override
-  public void setSingleton(StateSingleton singleton) {
-    this.singleton = singleton;
-  }
-
   private App mainApp;
 
   // Add FXML Tags Here
@@ -51,6 +46,11 @@ public class InternalTransportController implements Controller {
   LinkedList<DbNode> fuzzySearchNodeList1 = new LinkedList<>();
 
   private String countVal = "";
+
+  // Inject singleton
+  public InternalTransportController(StateSingleton singleton) {
+    this.singleton = singleton;
+  }
 
   public InternalTransportController() throws DBException {}
 

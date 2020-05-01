@@ -35,11 +35,6 @@ public class MapDisplayController implements Controller, Initializable {
 
   private StateSingleton singleton;
 
-  @Override
-  public void setSingleton(StateSingleton singleton) {
-    this.singleton = singleton;
-  }
-
   private App mainApp = null;
   final float IMAGE_WIDTH = 2475;
   final float IMAGE_HEIGHT = 1485;
@@ -108,6 +103,11 @@ public class MapDisplayController implements Controller, Initializable {
 
   Mode mode;
    */
+
+  // Inject singleton
+  public MapDisplayController(StateSingleton singleton) {
+    this.singleton = singleton;
+  }
 
   @Override
   public void initialize(URL location, ResourceBundle resourceBundle) {

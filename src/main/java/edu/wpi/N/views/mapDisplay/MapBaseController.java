@@ -82,7 +82,7 @@ public class MapBaseController implements Controller {
   private final double ZOOM_STEP_SCROLL = 0.01;
   private final double ZOOM_STEP_BUTTON = 0.1;
 
-  // Singleton gets injected since this controller in "Included"
+  // Inject singleton
   public MapBaseController(StateSingleton singleton) {
     this.singleton = singleton;
   }
@@ -90,11 +90,6 @@ public class MapBaseController implements Controller {
   @Override
   public void setMainApp(App mainApp) {
     this.mainApp = mainApp;
-  }
-
-  @Override
-  public void setSingleton(StateSingleton singleton) {
-    this.singleton = singleton;
   }
 
   public enum Mode {

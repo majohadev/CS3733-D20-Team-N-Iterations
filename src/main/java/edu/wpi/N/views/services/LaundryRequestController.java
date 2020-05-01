@@ -24,11 +24,6 @@ public class LaundryRequestController implements Controller {
 
   private StateSingleton singleton;
 
-  @Override
-  public void setSingleton(StateSingleton singleton) {
-    this.singleton = singleton;
-  }
-
   private App mainApp;
 
   // Add FXML Tags Here
@@ -43,6 +38,11 @@ public class LaundryRequestController implements Controller {
   DbNode currentNode = null;
 
   private String countVal = "";
+
+  // Inject singleton
+  public LaundryRequestController(StateSingleton singleton) {
+    this.singleton = singleton;
+  }
 
   public LaundryRequestController() throws DBException {}
 

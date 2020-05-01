@@ -24,11 +24,6 @@ public class EmotionalRequestController implements Controller {
 
   private StateSingleton singleton;
 
-  @Override
-  public void setSingleton(StateSingleton singleton) {
-    this.singleton = singleton;
-  }
-
   private App mainApp;
 
   // Add FXML Tags Here
@@ -44,6 +39,11 @@ public class EmotionalRequestController implements Controller {
   DbNode currentNode = null;
 
   private String countVal = "";
+
+  // Inject singleton
+  public EmotionalRequestController(StateSingleton singleton) {
+    this.singleton = singleton;
+  }
 
   public EmotionalRequestController() throws DBException {}
 
