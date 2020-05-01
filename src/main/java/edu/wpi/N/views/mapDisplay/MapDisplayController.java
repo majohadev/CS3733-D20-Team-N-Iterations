@@ -205,7 +205,7 @@ public class MapDisplayController implements Controller, Initializable {
    * @throws DBException
    */
   public void onSearchFirstLocation(KeyEvent e) throws DBException {
-    fuzzySearch(txt_firstLocation, lst_firstLocation);
+    fuzzyLocationSearch(txt_firstLocation, lst_firstLocation);
   }
 
   /**
@@ -270,9 +270,9 @@ public class MapDisplayController implements Controller, Initializable {
     lst_doctorlocations.setItems(docNodes);
   }
 
+
   public void onBtnPathfindClicked(MouseEvent event) throws Exception {
-    // this.mode = Mode.PATH_STATE;
-    mapBaseController.setMode(MapBaseController.Mode.PATH_STATE);
+//    setMode(Mode.PATH_STATE);
     // pn_display.getChildren().removeIf(node -> node instanceof Line);
     enableAllFloorButtons();
     DbNode firstSelection = lst_firstLocation.getSelectionModel().getSelectedItem();
