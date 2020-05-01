@@ -234,7 +234,7 @@ public class MapDBLoadMapData {
 
     long timeElapsed = endTime - startTime;
     System.out.println(
-        "Elapsed time for getAllNodes on 39 Nodes in milliseconds:" + timeElapsed / 1000000);
+        "Elapsed time for loadMapData on 39 Nodes in milliseconds:" + timeElapsed / 1000000);
   }
 
   @AfterEach
