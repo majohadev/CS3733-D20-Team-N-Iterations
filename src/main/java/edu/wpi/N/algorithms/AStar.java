@@ -19,7 +19,12 @@ public class AStar extends AbsAlgo {
    * @throws DBException
    */
   @Override
-  public Path findPath(DbNode startNode, DbNode endNode, boolean handicap) throws DBException {
+  public Path findPath(
+      HashMap<String, LinkedList<DbNode>> mapData,
+      DbNode startNode,
+      DbNode endNode,
+      boolean handicap)
+      throws DBException {
     try {
 
       int startFloorNum = startNode.getFloor();

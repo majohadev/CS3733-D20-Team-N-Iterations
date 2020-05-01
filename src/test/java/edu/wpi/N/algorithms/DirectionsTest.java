@@ -20,6 +20,8 @@ import org.junit.jupiter.api.Test;
 public class DirectionsTest {
   Algorithm myAStar = new Algorithm();
 
+  public DirectionsTest() throws DBException {}
+
   @BeforeAll
   public static void setup()
       throws SQLException, ClassNotFoundException, DBException, FileNotFoundException {

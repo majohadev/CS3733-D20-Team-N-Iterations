@@ -71,7 +71,9 @@ public abstract class AbsAlgo implements IPathFinder {
    * @return Path, path from start node to closest (eucledian) end node of requested type
    * @throws DBException
    */
-  public Path findQuickAccess(DbNode start, String nodeType) throws DBException {
+  public Path findQuickAccess(
+      HashMap<String, LinkedList<DbNode>> mapData, DbNode start, String nodeType)
+      throws DBException {
     try {
       LinkedList<DbNode> nodes =
           MapDB.searchNode(start.getFloor(), start.getBuilding(), nodeType, "");
@@ -88,7 +90,7 @@ public abstract class AbsAlgo implements IPathFinder {
         }
         //        Algorithm thePathFinder = new Algorithm();
 
-        return findPath(start, end, false);
+        return findPath(mapData, start, end, false);
       } else {
         return null;
       }
@@ -141,10 +143,15 @@ public abstract class AbsAlgo implements IPathFinder {
    * @return: A pair of paths (start to stop, stop to end)
    * @throws DBException
    */
-  public Pair<Path, Path> getPathWithStop(DbNode start, DbNode end, DbNode stop, boolean handicap)
+  public Pair<Path, Path> getPathWithStop(
+      HashMap<String, LinkedList<DbNode>> mapData,
+      DbNode start,
+      DbNode end,
+      DbNode stop,
+      boolean handicap)
       throws DBException {
-    Path pathOne = findPath(start, stop, handicap);
-    Path pathTwo = findPath(stop, end, handicap);
+    Path pathOne = findPath(mapData, start, stop, handicap);
+    Path pathTwo = findPath(mapData, stop, end, handicap);
     return new Pair<>(pathOne, pathTwo);
   }
 
@@ -160,10 +167,15 @@ public abstract class AbsAlgo implements IPathFinder {
    * @throws DBException
    */
   public Pair<Path, Path> getPathWithStop(
-      DbNode start, DbNode end, String nodeType, boolean handicap) throws DBException {
+      HashMap<String, LinkedList<DbNode>> mapData,
+      DbNode start,
+      DbNode end,
+      String nodeType,
+      boolean handicap)
+      throws DBException {
     DbNode stop = getBestStopQuickAccess(start, end, nodeType);
-    Path pathOne = findPath(start, stop, handicap);
-    Path pathTwo = findPath(stop, end, handicap);
+    Path pathOne = findPath(mapData, start, stop, handicap);
+    Path pathTwo = findPath(mapData, stop, end, handicap);
     return new Pair<>(pathOne, pathTwo);
   }
 

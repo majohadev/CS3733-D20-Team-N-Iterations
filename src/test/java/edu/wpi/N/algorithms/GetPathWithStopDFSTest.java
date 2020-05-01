@@ -18,6 +18,8 @@ import org.junit.jupiter.api.Test;
 public class GetPathWithStopDFSTest {
   Algorithm myDFS = new Algorithm();
 
+  public GetPathWithStopDFSTest() throws DBException {}
+
   @BeforeAll
   public static void initialize()
       throws SQLException, DBException, ClassNotFoundException, FileNotFoundException {

@@ -17,6 +17,8 @@ import org.junit.jupiter.api.Test;
 public class AStarTests {
   Algorithm myAStar = new Algorithm();
 
+  public AStarTests() throws DBException {}
+
   @BeforeAll
   public static void initializeTest()
       throws SQLException, ClassNotFoundException, DBException, FileNotFoundException {
