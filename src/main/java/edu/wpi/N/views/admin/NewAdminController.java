@@ -37,6 +37,11 @@ public class NewAdminController implements Controller, Initializable {
   @FXML AnchorPane anchorSwap;
   @FXML JFXButton btn_arduino;
 
+  // inject singleton
+  public NewAdminController(StateSingleton singleton) {
+    this.singleton = singleton;
+  }
+
   @Override
   public void initialize(URL location, ResourceBundle resources) {
     try {
@@ -64,7 +69,7 @@ public class NewAdminController implements Controller, Initializable {
           type -> {
             try {
               // Inject singleton into DataEditorController
-              return type.getConstructor().newInstance(singleton);
+              return new DataEditorController(singleton);
             } catch (Exception exc) {
               exc.printStackTrace();
               throw new RuntimeException(exc);
