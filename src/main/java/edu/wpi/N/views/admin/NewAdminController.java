@@ -56,11 +56,28 @@ public class NewAdminController implements Controller, Initializable {
     try {
       Stage stage = new Stage();
       Parent root;
-      root = FXMLLoader.load(getClass().getResource("fileManagementScreen.fxml"));
+
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(getClass().getResource("fileManagementScreen.fxml"));
+
+      loader.setControllerFactory(
+          type -> {
+            try {
+              // Inject singleton into DataEditorController
+              return type.getConstructor().newInstance(singleton);
+            } catch (Exception exc) {
+              exc.printStackTrace();
+              throw new RuntimeException(exc);
+            }
+          });
+
+      root = loader.load();
+
+      Controller controller = loader.getController();
+      controller.setMainApp(mainApp);
+
       Scene scene = new Scene(root);
       stage.setScene(scene);
-
-      // DataEditorController controller = (DataEditorController) loader.getController();
 
       stage.initModality(Modality.APPLICATION_MODAL);
       stage.show();
