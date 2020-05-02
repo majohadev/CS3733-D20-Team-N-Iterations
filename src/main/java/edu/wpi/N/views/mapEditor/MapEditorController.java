@@ -881,7 +881,8 @@ public class MapEditorController implements Controller {
             });
   }
 
-  private void onBtnConfirmAlignNodeClicked() {  //!!!need to de-scale if you want to use text field input!!!
+  private void
+      onBtnConfirmAlignNodeClicked() { // !!!need to de-scale if you want to use text field input!!!
     controllerAlignNode
         .getBtnConfirm()
         .setOnMouseClicked(
@@ -917,6 +918,8 @@ public class MapEditorController implements Controller {
               } else {
                 x = nodesMap.get(alignNodeCircles.getFirst()).getDBNode().getX();
                 y = nodesMap.get(alignNodeCircles.getFirst()).getDBNode().getY();
+                centerX = unscaleXDB(x);
+                centerY = unscaleYDB(y);
               }
               try {
                 if (controllerAlignNode.getAlignXSelected()) {
@@ -1099,6 +1102,14 @@ public class MapEditorController implements Controller {
 
   private double scaleYDB(double y) {
     return y / VERTICAL_SCALE;
+  }
+
+  private double unscaleXDB(double x) {
+    return x * HORIZONTAL_SCALE;
+  }
+
+  private double unscaleYDB(double y) {
+    return y * VERTICAL_SCALE;
   }
 
   public void displayErrorMessage(String str) {
