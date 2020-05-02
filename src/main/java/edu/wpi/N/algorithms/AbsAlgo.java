@@ -3,7 +3,6 @@ package edu.wpi.N.algorithms;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
-import edu.wpi.N.entities.Node;
 import edu.wpi.N.entities.Path;
 import java.util.*;
 import org.bridj.util.Pair;
@@ -18,10 +17,11 @@ public abstract class AbsAlgo implements IPathFinder {
    * @param nextNode: next Node
    * @return Euclidean distance from the start
    */
-  public static double cost(Node currNode, Node nextNode) {
+  public static double cost(DbNode currNode, DbNode nextNode) {
     return Math.sqrt(
         Math.pow(nextNode.getX() - currNode.getX(), 2)
-            + Math.pow(nextNode.getY() - currNode.getY(), 2));
+            + Math.pow(nextNode.getY() - currNode.getY(), 2)
+            + Math.pow(nextNode.getFloor() - currNode.getFloor(), 4));
   }
 
   /**
@@ -30,8 +30,10 @@ public abstract class AbsAlgo implements IPathFinder {
    * @param currNode: current Node
    * @return Manhattan distance to the goal Node
    */
-  public static double heuristic(Node currNode, Node end) {
-    return Math.abs(end.getX() - currNode.getX()) + Math.abs(end.getY() - currNode.getY());
+  public static double heuristic(DbNode currNode, DbNode end) {
+    return Math.abs(end.getX() - currNode.getX())
+        + Math.abs(end.getY() - currNode.getY())
+        + Math.pow(Math.abs(end.getFloor() - currNode.getFloor()), 4);
   }
 
   /**
@@ -40,14 +42,14 @@ public abstract class AbsAlgo implements IPathFinder {
    * @param cameFrom: Map, where key: NodeID, value: came-from-NodeID
    * @return Path object containing generated path
    */
-  static Path generatePath(Node start, Node end, Map<String, String> cameFrom) {
+  static Path generatePath(DbNode start, DbNode end, Map<String, String> cameFrom) {
     try {
-      String currentID = end.ID;
+      String currentID = end.getNodeID();
       LinkedList<DbNode> path = new LinkedList<DbNode>();
       path.add(MapDB.getNode(currentID));
 
       try {
-        while (!currentID.equals(start.ID)) {
+        while (!currentID.equals(start.getNodeID())) {
           currentID = cameFrom.get(currentID);
           path.addFirst(MapDB.getNode(currentID));
         }
@@ -78,11 +80,10 @@ public abstract class AbsAlgo implements IPathFinder {
       LinkedList<DbNode> nodes =
           MapDB.searchNode(start.getFloor(), start.getBuilding(), nodeType, "");
       if (!nodes.isEmpty()) {
-        double closest =
-            cost(MapDB.getGNode(start.getNodeID()), MapDB.getGNode(nodes.getFirst().getNodeID()));
+        double closest = cost(start, nodes.getFirst());
         DbNode end = nodes.getFirst();
         for (DbNode n : nodes) {
-          double cost = cost(MapDB.getGNode(start.getNodeID()), MapDB.getGNode(n.getNodeID()));
+          double cost = cost(start, n);
           if (cost <= closest) {
             closest = cost;
             end = n;
@@ -121,9 +122,9 @@ public abstract class AbsAlgo implements IPathFinder {
     DbNode lowestSoFar = null;
     double score = 1000000;
     for (DbNode currentNode : startFloorNodes) {
-      Node GNode = MapDB.getGNode(currentNode.getNodeID());
-      double currentCost = cost(MapDB.getGNode(startNode.getNodeID()), GNode);
-      double currentScore = currentCost + heuristic(GNode, MapDB.getGNode(endNode.getNodeID()));
+
+      double currentCost = cost(startNode, currentNode);
+      double currentScore = currentCost + heuristic(currentNode, endNode);
       if (currentScore < score) {
         lowestSoFar = currentNode;
         score = currentScore;
@@ -234,7 +235,8 @@ public abstract class AbsAlgo implements IPathFinder {
    * @param node The node you want to search for accessible stairs/elevators from
    * @return A linked list of DbNodes that are connected directly or indirectly to the node
    */
-  public static LinkedList<DbNode> searchAccessible(DbNode node) {
+  public static LinkedList<DbNode> searchAccessible(
+      HashMap<String, LinkedList<DbNode>> mapData, DbNode node) {
     if (!(node.getNodeType().equals("ELEV") || node.getNodeType().equals("STAI"))) return null;
     Queue<DbNode> queue = new LinkedList<DbNode>(); // queue for breadth-first search
     queue.add(node);
@@ -242,28 +244,17 @@ public abstract class AbsAlgo implements IPathFinder {
     while (queue.size() > 0) {
       DbNode cur = queue.poll();
       nodes.add(cur);
-      LinkedList<Node> next;
-      try {
-        next =
-            MapDB.getGAdjacent(
-                cur.getNodeID(),
-                -1,
-                -1); // only gets elevator and stair nodes; kinda a hack, but not actually that bad
-      } catch (DBException e) {
-        System.out.println(e.getMessage());
-        continue; // skip invalid nodes
-      }
-      Iterator<Node> nextIt = next.iterator();
+      LinkedList<DbNode> next;
+
+      next = mapData.get(cur.getNodeID());
+
+      Iterator<DbNode> nextIt = next.iterator();
       while (nextIt.hasNext()) {
-        try {
-          DbNode n = MapDB.getNode(nextIt.next().ID);
-          if (!(queue.contains(n) || nodes.contains(n))) queue.add(n);
-        } catch (DBException e) {
-          System.out.println(e.getMessage());
-          continue; // skip invalid nodes
-        }
+        DbNode n = nextIt.next();
+        if (!(queue.contains(n) || nodes.contains(n))) queue.add(n);
       }
     }
+
     if (nodes.size() == 1) return null;
     Collections.sort(nodes, new FloorSortNodes());
     return nodes;

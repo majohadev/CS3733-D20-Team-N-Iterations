@@ -1,9 +1,7 @@
 package edu.wpi.N.algorithms;
 
 import edu.wpi.N.database.DBException;
-import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
-import edu.wpi.N.entities.Node;
 import edu.wpi.N.entities.Path;
 import java.util.*;
 
@@ -15,8 +13,8 @@ public class AStar extends AbsAlgo {
    * @param startNode: The start node
    * @param endNode: The destination node
    * @param handicap: Boolean saying whether path should be handicap accessible
-   * @return: Path object indicating the shortest path to the Goal Node from Start Node
    * @throws DBException
+   * @return: Path object indicating the shortest path to the Goal Node from Start Node
    */
   @Override
   public Path findPath(
@@ -27,62 +25,55 @@ public class AStar extends AbsAlgo {
       throws DBException {
     try {
 
-      //int startFloorNum = startNode.getFloor();
-      //int endFloorNum = endNode.getFloor();
-
-      //Node start = MapDB.getGNode(startNode.getNodeID());
-      //Node end = MapDB.getGNode(endNode.getNodeID());
-
-      Node start = new Node(startNode.getX(), startNode.getY(), startNode.getNodeID());
-      Node end = new Node(endNode.getX(), endNode.getY(), endNode.getNodeID());
-
       // Initialize variables
-      PriorityQueue<Node> frontier = new PriorityQueue<>();
-      frontier.add(start);
+      PriorityQueue<DbNode> frontier = new PriorityQueue<DbNode>();
+      frontier.add(startNode);
       Map<String, String> cameFrom = new HashMap<String, String>();
       Map<String, Double> costSoFar = new HashMap<String, Double>();
       cameFrom.put(startNode.getNodeID(), "");
       costSoFar.put(startNode.getNodeID(), 0.0);
-      //start.score = 0;
+      startNode.setScore(0);
 
       // While priority queue is not empty, get the node with highest Score (priority)
       while (!frontier.isEmpty()) {
-        Node current = frontier.poll();
-        //Node current = new Node(currentDB.getX(), currentDB.getY(), currentDB.getNodeID());
+        DbNode current = frontier.poll();
 
         // if the goal node was found, break out of the loop
-        if (current.equals(end)) {
+        if (current.equals(endNode)) {
           break;
         }
 
         // for every node (next node), current node has edge to:
-        LinkedList<DbNode> adjacentToCurrent = mapData.get(current.ID);
+        for (DbNode nextNode : mapData.get(current.getNodeID())) {
+          // if handicap is selected and it's a stair, skip
+          if (handicap && nextNode.getNodeType().equals("STAI")) {
+            continue;
+          } else {
 
-        for (DbNode nextNodeDB : adjacentToCurrent) {
-          Node nextNode = new Node(nextNodeDB.getX(), nextNodeDB.getY(), nextNodeDB.getNodeID());
-          String nextNodeID = nextNode.ID;
+            String nextNodeID = nextNode.getNodeID();
 
-          // calculate the cost of next node
-          double newCost = costSoFar.get(current.ID) + cost(nextNode, current);
+            // calculate the cost of next node
+            double newCost = costSoFar.get(current.getNodeID()) + cost(nextNode, current);
 
-          if (!costSoFar.containsKey(nextNodeID) || newCost < costSoFar.get(nextNodeID)) {
-            // update the cost of nextNode
-            costSoFar.put(nextNodeID, newCost);
-            // calculate and update the Score of nextNode
-            double priority = newCost + heuristic(nextNode, end);
+            if (!costSoFar.containsKey(nextNodeID) || newCost < costSoFar.get(nextNodeID)) {
+              // update the cost of nextNode
+              costSoFar.put(nextNodeID, newCost);
+              // calculate and update the Score of nextNode
+              double priority = newCost + heuristic(nextNode, endNode);
 
-            nextNode.score = priority;
-            // add to the priority queue
-            frontier.add(nextNode);
-            // keep track of where nodes come from
-            // to generate the path to goal node
-            cameFrom.put(nextNodeID, current.ID);
+              nextNode.setScore(priority);
+              // add to the priority queue
+              frontier.add(nextNode);
+              // keep track of where nodes come from
+              // to generate the path to goal node
+              cameFrom.put(nextNodeID, current.getNodeID());
+            }
           }
         }
       }
 
       // Generate and return the path in proper order
-      return generatePath(start, end, cameFrom);
+      return generatePath(startNode, endNode, cameFrom);
     } catch (Exception e) {
       e.printStackTrace();
       return null;

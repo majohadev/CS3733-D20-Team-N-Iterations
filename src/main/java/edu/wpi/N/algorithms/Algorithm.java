@@ -14,7 +14,11 @@ public class Algorithm {
 
   public Algorithm() throws DBException {
     this.pathFinder = new AStar();
-    this.mapData = MapDB.loadMapData();
+    uploadMapData();
+  }
+
+  public HashMap<String, LinkedList<DbNode>> getMapData() {
+    return this.mapData;
   }
 
   // Getter
@@ -25,6 +29,11 @@ public class Algorithm {
   // Setter
   public void setPathFinder(IPathFinder pathFinder) {
     this.pathFinder = pathFinder;
+  }
+
+  /** Uploads Nodes and Edges from Database into Hashmap */
+  public void uploadMapData() throws DBException {
+    this.mapData = MapDB.loadMapData();
   }
 
   /**

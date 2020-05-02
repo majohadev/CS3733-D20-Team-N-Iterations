@@ -87,9 +87,13 @@ public class DbNode implements Comparable<DbNode>, INode {
     return y;
   }
 
-  public double getScore() { return score; }
+  public double getScore() {
+    return score;
+  }
 
-  public void setScore(double newScore) { this.score = newScore; }
+  public void setScore(double newScore) {
+    this.score = newScore;
+  }
 
   public DbNode(
       String nodeID,

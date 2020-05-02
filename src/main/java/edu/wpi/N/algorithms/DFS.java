@@ -1,11 +1,8 @@
 package edu.wpi.N.algorithms;
 
 import edu.wpi.N.database.DBException;
-import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
-import edu.wpi.N.entities.Node;
 import edu.wpi.N.entities.Path;
-import java.awt.*;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -32,41 +29,40 @@ public class DFS extends AbsAlgo {
     try {
 
       // Initialize variables
-      Stack<Node> stack = new Stack<>();
+      Stack<DbNode> stack = new Stack<>();
       Map<String, String> cameFrom = new HashMap<>();
-      LinkedList<Node> visited = new LinkedList<>();
-      Node start = MapDB.getGNode(startNode.getNodeID());
-      Node end = MapDB.getGNode(endNode.getNodeID());
-      int startFloorNum = startNode.getFloor();
-      int endFloorNum = endNode.getFloor();
+      LinkedList<DbNode> visited = new LinkedList<>();
 
       // Add starting node to stack and cameFrom
-      stack.push(start);
-      cameFrom.put(start.ID, "");
+      stack.push(startNode);
+      cameFrom.put(startNode.getNodeID(), "");
 
       while (!stack.isEmpty()) {
-        Node currNode = stack.pop();
+        DbNode currNode = stack.pop();
         visited.add(currNode);
 
         // Get the current nodes neighbors and check if it connects to the end node
-        LinkedList<Node> neighbors =
-            MapDB.getGAdjacent(currNode.ID, startFloorNum, endFloorNum, handicap);
+        LinkedList<DbNode> neighbors = mapData.get(currNode.getNodeID());
         if (neighbors.contains(endNode)) {
-          cameFrom.put(endNode.getNodeID(), currNode.ID);
+          cameFrom.put(endNode.getNodeID(), currNode.getNodeID());
           break;
         }
 
-        for (Node nextNode : neighbors) {
+        for (DbNode nextNode : neighbors) {
           if (!visited.contains(nextNode) && !stack.contains(nextNode)) {
-            visited.add(nextNode);
-            cameFrom.put(nextNode.ID, currNode.ID);
-            stack.push(nextNode);
+            if (handicap && nextNode.getNodeType().equals("STAI")) {
+              continue;
+            } else {
+              visited.add(nextNode);
+              cameFrom.put(nextNode.getNodeID(), currNode.getNodeID());
+              stack.push(nextNode);
+            }
           }
         }
       }
 
       // Return path found
-      return generatePath(start, end, cameFrom);
+      return generatePath(startNode, endNode, cameFrom);
     } catch (Exception e) {
       e.printStackTrace();
       return null;
