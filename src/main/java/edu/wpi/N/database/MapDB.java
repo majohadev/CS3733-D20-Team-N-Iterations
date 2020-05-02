@@ -100,11 +100,25 @@ public class MapDB {
     PreparedStatement st =
         con.prepareStatement("INSERT INTO credential VALUES ('Gaben', ?, 'ADMIN')");
     st.setBytes(1, hasher.hash("MoolyFTW"));
-    st.executeUpdate();
+    try {
+      st.executeUpdate();
+    } catch (SQLException e) {
+      if (!e.getSQLState()
+          .equals("23505")) { // primary key/unique constraint violation - login already exists
+        throw e;
+      }
+    }
 
     st = con.prepareStatement("INSERT INTO credential VALUES ('admin', ?, 'ADMIN')");
     st.setBytes(1, hasher.hash("admin"));
-    st.executeUpdate();
+    try {
+      st.executeUpdate();
+    } catch (SQLException e) {
+      if (!e.getSQLState()
+          .equals("23505")) { // primary key/unique constraint violation - login already exists
+        throw e;
+      }
+    }
   }
 
   /**
