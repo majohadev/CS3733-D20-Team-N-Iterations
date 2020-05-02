@@ -237,26 +237,40 @@ public abstract class AbsAlgo implements IPathFinder {
    */
   public static LinkedList<DbNode> searchAccessible(
       HashMap<String, LinkedList<DbNode>> mapData, DbNode node) {
-    if (!(node.getNodeType().equals("ELEV") || node.getNodeType().equals("STAI"))) return null;
-    Queue<DbNode> queue = new LinkedList<DbNode>(); // queue for breadth-first search
-    queue.add(node);
-    LinkedList<DbNode> nodes = new LinkedList<DbNode>();
-    while (queue.size() > 0) {
-      DbNode cur = queue.poll();
-      nodes.add(cur);
-      LinkedList<DbNode> next;
-
-      next = mapData.get(cur.getNodeID());
-
-      Iterator<DbNode> nextIt = next.iterator();
-      while (nextIt.hasNext()) {
-        DbNode n = nextIt.next();
-        if (!(queue.contains(n) || nodes.contains(n))) queue.add(n);
-      }
-    }
-
-    if (nodes.size() == 1) return null;
-    Collections.sort(nodes, new FloorSortNodes());
-    return nodes;
+//    if (!(node.getNodeType().equals("ELEV") || node.getNodeType().equals("STAI"))) return null;
+//    Queue<DbNode> queue = new LinkedList<DbNode>(); // queue for breadth-first search
+//    queue.add(node);
+//    LinkedList<DbNode> nodes = new LinkedList<DbNode>();
+//    while (queue.size() > 0) {
+//      DbNode cur = queue.poll();
+//      nodes.add(cur);
+//      LinkedList<Node> next;
+//      try {
+//        next =
+//                MapDB.getGAdjacent(
+//                        cur.getNodeID(),
+//                        -1,
+//                        -1); // only gets elevator and stair nodes; kinda a hack, but not actually that bad
+//      } catch (DBException e) {
+//        System.out.println(e.getMessage());
+//        continue; // skip invalid nodes
+//      }
+//      Iterator<Node> nextIt = next.iterator();
+//      while (nextIt.hasNext()) {
+//        try {
+//          DbNode n = MapDB.getNode(nextIt.next().ID);
+//          if (!(queue.contains(n) || nodes.contains(n))) queue.add(n);
+//        } catch (DBException e) {
+//          System.out.println(e.getMessage());
+//          continue; // skip invalid nodes
+//        }
+//      }
+//    }
+//    if (nodes.size() == 1) return null;
+//    Collections.sort(nodes, new FloorSortNodes());
+//    return nodes;
+//  }
+//  }
+    return null;
   }
 }
