@@ -1285,14 +1285,31 @@ public class MapDB {
    * @return Hashmap <NodeID, list of DbNodes has edges to>
    */
   public static HashMap<String, LinkedList<DbNode>> loadMapData() throws DBException {
-
-    // Implementation using existing methods
-    HashMap<String, LinkedList<DbNode>> result = new HashMap<String, LinkedList<DbNode>>();
-    for (DbNode node : allNodes()) {
-      String id = node.getNodeID();
-      LinkedList<DbNode> adjacent = getAdjacent(id);
-      result.put(id, adjacent);
+    String query = "SELECT node1, node2 FROM edges";
+    HashMap<String, LinkedList<DbNode>> map = new HashMap<>();
+    try {
+      PreparedStatement stmt = con.prepareStatement(query);
+      ResultSet rs = stmt.executeQuery();
+      while (rs.next()) {
+        String node1 = rs.getString("node1");
+        String node2 = rs.getString("node2");
+        if (map.get(node1) == null) map.put(node1, new LinkedList<DbNode>());
+        if (map.get(node2) == null) map.put(node2, new LinkedList<DbNode>());
+        map.get(node1).add(getNode(node2));
+        map.get(node2).add(getNode(node1));
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown error: loadMapData", e);
     }
-    return result;
+    //    // Implementation using existing methods
+    //    HashMap<String, LinkedList<DbNode>> result = new HashMap<String, LinkedList<DbNode>>();
+    //    for (DbNode node : allNodes()) {
+    //      String id = node.getNodeID();
+    //      LinkedList<DbNode> adjacent = getAdjacent(id);
+    //      result.put(id, adjacent);
+    //    }
+    //    return result;
+    return map;
   }
 }
