@@ -62,7 +62,7 @@ public class ServiceDB {
           return new SecurityOfficer(id, name);
         default:
           throw new DBException(
-                  "Invalid employee in table employees! ID: " + id + "Name: " + rs.getString("name"));
+              "Invalid employee in table employees! ID: " + id + "Name: " + rs.getString("name"));
       }
     } catch (SQLException e) {
       e.printStackTrace();
@@ -141,6 +141,7 @@ public class ServiceDB {
 
   /**
    * Gets the request from the database with the given id
+   *
    * @param id the id of the request to retrieve
    * @return a Request containing information about the request requested
    * @throws DBException If an error occurs
@@ -2165,8 +2166,10 @@ public class ServiceDB {
    * @param reqNotes The notes of the request
    * @param nodeID The node id of the location the request needs to be sent to
    * @param spillType The type of spill
-   * @param size The size of the spill (one of "small", "medium", "large", "unknown"; case-insensitive)
-   * @param danger The danger level of the spill (one of "low", "medium", "high", "unknown"; case-insensitive)
+   * @param size The size of the spill (one of "small", "medium", "large", "unknown";
+   *     case-insensitive)
+   * @param danger The danger level of the spill (one of "low", "medium", "high", "unknown";
+   *     case-insensitive)
    * @return The id of the newly created request
    * @throws DBException If the size or danger level is invalid, or if an error occurs
    */

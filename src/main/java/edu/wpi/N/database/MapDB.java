@@ -90,6 +90,11 @@ public class MapDB {
     addHardCodedLogins();
   }
 
+  /**
+   * Adds two hard-coded logins to the database
+   *
+   * @throws SQLException If there is an error (Note: if the SQLException is due to a login already existing, the exception is ignored)
+   */
   private static void addHardCodedLogins() throws SQLException {
     BCryptSingleton hasher = BCryptSingleton.getInstance();
     PreparedStatement st =
@@ -616,9 +621,9 @@ public class MapDB {
    */
   public static LinkedList<DbNode> getAdjacent(
       String nodeID, int startFloor, int endFloor, boolean wheelAccess) throws DBException {
-    LinkedList<DbNode> ret = new LinkedList<DbNode>();
+    LinkedList<DbNode> ret = new LinkedList<>();
     try {
-      ResultSet rs = null;
+      ResultSet rs;
       String query;
       if (wheelAccess) {
         query =
@@ -1284,8 +1289,8 @@ public class MapDB {
       while (rs.next()) {
         String node1 = rs.getString("node1");
         String node2 = rs.getString("node2");
-        if (map.get(node1) == null) map.put(node1, new LinkedList<DbNode>());
-        if (map.get(node2) == null) map.put(node2, new LinkedList<DbNode>());
+        if (map.get(node1) == null) map.put(node1, new LinkedList<>());
+        if (map.get(node2) == null) map.put(node2, new LinkedList<>());
         map.get(node1).add(getNode(node2));
         map.get(node2).add(getNode(node1));
       }
