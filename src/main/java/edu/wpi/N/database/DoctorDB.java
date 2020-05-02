@@ -2,8 +2,8 @@ package edu.wpi.N.database;
 
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.employees.Doctor;
+
 import java.sql.*;
-import java.util.Iterator;
 import java.util.LinkedList;
 
 public class DoctorDB {
@@ -22,7 +22,7 @@ public class DoctorDB {
       PreparedStatement state = con.prepareStatement(query);
       state.setInt(1, doctorID);
       ResultSet rs = state.executeQuery();
-      LinkedList<DbNode> offices = new LinkedList<DbNode>();
+      LinkedList<DbNode> offices = new LinkedList<>();
       while (rs.next()) {
         offices.add(MapDB.getNode(rs.getString("nodeID")));
       }
@@ -31,7 +31,7 @@ public class DoctorDB {
       state = con.prepareStatement(query);
       state.setInt(1, doctorID);
       rs = state.executeQuery();
-      String name = "";
+      String name;
 
       if (rs.next()) {
         name = rs.getString("name");
@@ -87,7 +87,7 @@ public class DoctorDB {
    * @param field The field in which they work
    * @param offices A linked list of all of their office in order of priority
    * @return the id of the doctor created
-   * @throws DBException
+   * @throws DBException If there is an error in adding a doctor
    */
   public static int addDoctor(
       String name, String field, String username, String password, LinkedList<DbNode> offices)
@@ -118,12 +118,11 @@ public class DoctorDB {
         return id;
       }
 
-      Iterator<DbNode> it = offices.iterator();
-      while (it.hasNext()) {
+      for (DbNode office : offices) {
         query = "INSERT INTO location (doctor, nodeID) VALUES (?, ?)";
         state = con.prepareStatement(query);
         state.setInt(1, id);
-        state.setString(2, it.next().getNodeID());
+        state.setString(2, office.getNodeID());
         state.executeUpdate();
       }
 
@@ -184,7 +183,7 @@ public class DoctorDB {
    */
   public static boolean removeOffice(int doctorID, DbNode office) throws DBException {
     try {
-      String query = ("DELETE FROM location WHERE doctor = ? AND nodeID = ?");
+      String query = "DELETE FROM location WHERE doctor = ? AND nodeID = ?";
       PreparedStatement stmt = con.prepareStatement(query);
       stmt.setInt(1, doctorID);
       stmt.setString(2, office.getNodeID());
@@ -203,7 +202,7 @@ public class DoctorDB {
    */
   public static LinkedList<Doctor> getDoctors() throws DBException {
     try {
-      LinkedList<Doctor> docs = new LinkedList<Doctor>();
+      LinkedList<Doctor> docs = new LinkedList<>();
       String query = "SELECT doctorID FROM doctors";
       PreparedStatement stmt = con.prepareStatement(query);
       ResultSet rs = stmt.executeQuery();
@@ -218,16 +217,15 @@ public class DoctorDB {
   }
 
   /**
-   * Returns all doctors where the name contains the passed-in value as a substring.
+   * Returns all doctors where the name contains the passed-in value as a substring (case insensitive).
    *
    * @param name A substring of the doctor that you're looking for
-   * @return A linked list of all doctors with a name with the passed in value as a substring (case
-   *     insensitive)
+   * @return A linked list of all doctors with a name with the passed in value as a substring
    * @throws DBException on error
    */
   public static LinkedList<Doctor> searchDoctors(String name) throws DBException {
     try {
-      LinkedList<Doctor> docs = new LinkedList<Doctor>();
+      LinkedList<Doctor> docs = new LinkedList<>();
       String query =
           "SELECT doctorID FROM doctors, (SELECT employeeID, name FROM employees) as employees WHERE doctorID = employeeID AND UPPER(name) LIKE ?";
       PreparedStatement stmt = con.prepareStatement(query);
