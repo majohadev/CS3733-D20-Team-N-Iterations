@@ -36,7 +36,7 @@
          <font>
             <Font name="Calibri" size="14.0" />
          </font></Button>
-      <Button layoutX="515.0" layoutY="204.0" mnemonicParsing="false" onMouseClicked="#onUploadEdgesClicked" prefHeight="28.0" prefWidth="156.0" style="-fx-background-color: #32CD32;" text="Upload Both CSV Files" textFill="WHITE">
+      <Button layoutX="515.0" layoutY="204.0" mnemonicParsing="false" onMouseClicked="#onUploadNodesEdgesClicked" prefHeight="28.0" prefWidth="156.0" style="-fx-background-color: #32CD32;" text="Upload Both CSV Files" textFill="WHITE">
          <font>
             <Font name="Calibri" size="14.0" />
          </font>

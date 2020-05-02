@@ -46,7 +46,6 @@ public class BetweenFloorsController implements Controller, Initializable {
   int floor;
   boolean currNode;
 
-
   // Inject singleton
 
   public BetweenFloorsController(StateSingleton singleton) {
