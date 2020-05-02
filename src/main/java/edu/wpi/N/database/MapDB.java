@@ -42,6 +42,8 @@ public class MapDB {
       }
       statement = con.createStatement();
     }
+
+    addHardCodedLogins();
   }
 
   //  /** Initializes a database in memory for tests */
@@ -89,6 +91,20 @@ public class MapDB {
     Reader reader =
         new BufferedReader(new InputStreamReader(Main.class.getResourceAsStream("sql/setup.sql")));
     sr.runScript(reader);
+
+    addHardCodedLogins();
+  }
+
+  private static void addHardCodedLogins() throws SQLException {
+    BCryptSingleton hasher = BCryptSingleton.getInstance();
+    PreparedStatement st =
+        con.prepareStatement("INSERT INTO credential VALUES ('Gaben', ?, 'ADMIN')");
+    st.setBytes(1, hasher.hash("MoolyFTW"));
+    st.executeUpdate();
+
+    st = con.prepareStatement("INSERT INTO credential VALUES ('admin', ?, 'ADMIN')");
+    st.setBytes(1, hasher.hash("admin"));
+    st.executeUpdate();
   }
 
   /**
