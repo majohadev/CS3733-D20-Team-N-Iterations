@@ -1,11 +1,13 @@
 package edu.wpi.N.database;
 
+import at.favre.lib.crypto.bcrypt.IllegalBCryptFormatException;
 import java.sql.*;
 
 public class LoginDB {
   private static Connection con = MapDB.getCon();
   private static String currentUser;
   private static String currentAccess;
+  private static BCryptSingleton hasher = BCryptSingleton.getInstance();
 
   /**
    * Creates a new login for the specified username and password
@@ -20,7 +22,7 @@ public class LoginDB {
     try {
       PreparedStatement stmt = con.prepareStatement(query);
       stmt.setString(1, username);
-      stmt.setString(2, password);
+      stmt.setBytes(2, hasher.hash(password));
       stmt.setString(3, access);
       stmt.executeUpdate();
     } catch (SQLException e) {
@@ -92,12 +94,11 @@ public class LoginDB {
   public static void changePass(String username, String oldpass, String newpass)
       throws DBException {
     verify(username, oldpass);
-    String query = "UPDATE credential SET password = ? WHERE username = ? AND password = ?";
+    String query = "UPDATE credential SET password = ? WHERE username = ?";
     try {
       PreparedStatement stmt = con.prepareStatement(query);
-      stmt.setString(1, newpass);
+      stmt.setBytes(1, hasher.hash(newpass));
       stmt.setString(2, username);
-      stmt.setString(3, oldpass);
       if (stmt.executeUpdate() <= 0) throw new DBException("That user doesn't exist!");
     } catch (SQLException e) {
       e.printStackTrace();
@@ -144,7 +145,8 @@ public class LoginDB {
       stmt.setString(1, username);
       ResultSet rs = stmt.executeQuery();
       rs.next();
-      if (!rs.getString("password").equals(password)) {
+      byte[] pwhash = rs.getBytes("password");
+      if (!hasher.verifyPW(password, pwhash)) {
         throw new DBException("Invalid password!");
       }
     } catch (SQLException e) {
@@ -154,6 +156,8 @@ public class LoginDB {
         e.printStackTrace();
         throw new DBException("Unknown error: verify", e);
       }
+    } catch (IllegalBCryptFormatException e) {
+      e.printStackTrace();
     }
   }
 

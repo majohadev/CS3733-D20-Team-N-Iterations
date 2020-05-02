@@ -1,51 +1,38 @@
 package edu.wpi.N.views.mapDisplay;
 
-import com.google.common.collect.HashBiMap;
 import edu.wpi.N.App;
 import edu.wpi.N.database.DBException;
-import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
-import edu.wpi.N.entities.UIDispEdge;
-import edu.wpi.N.entities.UIDispNode;
+import edu.wpi.N.entities.Path;
+import edu.wpi.N.entities.States.StateSingleton;
+import edu.wpi.N.views.Controller;
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.NoSuchElementException;
+import java.util.ArrayList;
+import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.util.Duration;
 
-public class MapBaseController {
+public class MapBaseController implements Controller {
 
-  private final int DEFAULT_FLOOR = 1;
-  private final String DEFAULT_BUILDING = "Faulkner";
-  int currentFloor;
-  String currentBuilding;
+  // ApplicationStates
+  private App mainApp;
+  private StateSingleton singleton;
 
-  LinkedList<DbNode> allFloorNodes = new LinkedList<DbNode>(); // stores all the nodes on the floor
-  LinkedList<UIDispNode> selectedNodes =
-      new LinkedList<UIDispNode>(); // stores all the selected nodes on the map
-  LinkedList<UIDispEdge> selectedEdges =
-      new LinkedList<UIDispEdge>(); // stores all the selected edges on the map
-  // LinkedList<String> longNamesList = new LinkedList<>(); // Stores Floor Node names
-
-  public UIDispNode defaultNode;
-
-  private HashBiMap<UIDispNode, DbNode>
-      masterNodes; // Maps UINodes from pool to DbNodes from current floor
-  private LinkedList<UIDispEdge> edgesInUse = new LinkedList<>();
-  private LinkedList<UIDispEdge> freedEdges = new LinkedList<>();
-
-  private LinkedList<DbNode> pathNodes;
-
-  // Screen constants
+  // Screen Constants
   private final float BAR_WIDTH = 300;
   private final float IMAGE_WIDTH = 2475;
   private final float IMAGE_HEIGHT = 1485;
@@ -58,320 +45,214 @@ public class MapBaseController {
   private final float HORIZONTAL_SCALE = (MAP_WIDTH) / IMAGE_WIDTH;
   private final float VERTICAL_SCALE = (MAP_HEIGHT) / IMAGE_HEIGHT;
 
-  // Map UI structure elements
-  @FXML Pane pn_path, pn_routeNodes;
-  @FXML StackPane pn_movableMap;
-  @FXML AnchorPane pn_mapFrame;
-  @FXML ImageView img_map;
-
-  // Zoom/pan UI
-  @FXML Button btn_zoomIn, btn_zoomOut;
-
-  // Zoom/pan vars
-  private double mapScaleAlpha; // Zoom ratio (0 = min, 1 = max)
-  private double clickStartX, clickStartY; // Begin location of drag
-  private boolean isStatic = false; // Zoom/pan controls disabled if true
-
-  // Zoom/pan constants
+  // Zoom constants
   private final double MIN_MAP_SCALE = 1;
   private final double MAX_MAP_SCALE = 3;
   private final double ZOOM_STEP_SCROLL = 0.01;
   private final double ZOOM_STEP_BUTTON = 0.1;
+  private double mapScaleAlpha;
+  private double clickStartX, clickStartY;
 
-  public MapBaseController() throws DBException {}
+  private final String FIRST_KIOSK = "NSERV00301";
+  private final String THIRD_KIOSK = "NSERV00103";
+  private final Color START_NODE_COLOR = Color.GREEN;
+  private final Color END_NODE_COLOR = Color.RED;
 
-  public enum Mode {
-    NO_STATE,
-    PATH_STATE;
+  // Path GUI constants
+  private final Color DEFAULT_PATH_COLOR = Color.DODGERBLUE; // Default color of path
+  private final double DEFAULT_PATH_WIDTH = 4; // Default stroke width of path
+  private final double LIGHT_OPACITY = 0.05; // Faded line
+  private final double HEAVY_OPACITY = 0.8; // Bold line (default)
+  private final ArrayList<Double> DASH_PATTERN =
+      new ArrayList<>() {
+        {
+          add(20d);
+          add(10d);
+        }
+      }; // Line-gap pattern
+  private final double MAX_DASH_OFFSET =
+      DASH_PATTERN.stream().reduce(0d, (a, b) -> (a + b)); // Pattern length
+  private final int PATH_ANIM_LENGTH =
+      2000; // How many milliseconds it takes for dashes to move up a spot
+  private Timeline pathAnimTimeline = new Timeline(); // Timeline object to set line animation
+  private KeyFrame keyStart, keyEnd; // Keyframes in path animation
+  private ArrayList<KeyValue> keyStartVals, keyEndVals;
+
+  // FXML Item IDs
+  @FXML StackPane pn_movableMap;
+  @FXML Pane pn_path;
+  @FXML ImageView img_map;
+  @FXML Button btn_zoomIn, btn_zoomOut;
+
+  /**
+   * the constructor of MapBaseController
+   *
+   * @param singleton the algorithm singleton which determines the style of path finding
+   */
+  public MapBaseController(StateSingleton singleton) {
+    this.singleton = singleton;
   }
 
-  Mode mode;
+  /**
+   * allows reference back the main application class of this program
+   *
+   * @param mainApp the main application class of this program
+   */
+  @Override
+  public void setMainApp(App mainApp) {
+    this.mainApp = mainApp;
+  }
 
+  /**
+   * initializes the MapBase Controller
+   *
+   * @throws DBException
+   */
   public void initialize() throws DBException {
-
-    // this.currentFloor = DEFAULT_FLOOR;
-    // this.currentBuilding = DEFAULT_BUILDING;
-
-    masterNodes = HashBiMap.create();
-    setMode(Mode.NO_STATE);
-    changeBuilding(DEFAULT_BUILDING);
-
-    try {
-      defaultNode = getUiFromDb(allFloorNodes.getFirst());
-    } catch (NoSuchElementException e) {
-      Alert emptyMap = new Alert(Alert.AlertType.WARNING);
-      emptyMap.setContentText("The map is empty!");
-      emptyMap.show();
-    }
+    initPathAnim();
   }
 
-  public void setMode(Mode mode) {
-    this.mode = mode;
+  /**
+   * sets the current building of the map display
+   *
+   * @param building the name of the building to be displayed
+   */
+  public void setBuilding(String building, int floor, Path currentPath) throws DBException {
+    setFloor(building, floor, currentPath);
   }
 
-  public void changeBuilding(String newBuilding) {
-    // Change building, and show its default floor
-    currentBuilding = newBuilding;
-    mode = Mode.NO_STATE;
-    changeFloor(DEFAULT_FLOOR);
-  }
-
-  public void changeFloor(int floorToDraw) {
-    // Change floor in current building
-    currentFloor = floorToDraw;
-    App.mapData.refreshAllNodes();
-    img_map.setImage(App.mapData.getMap(currentBuilding, floorToDraw));
-
+  /**
+   * loads the new floor image loads the floor image and the draws the path if necessary
+   *
+   * @param building the current building of the map display
+   * @param floor the new floor of the map display
+   * @param currentPath the current path finding nodes
+   * @throws DBException
+   */
+  public void setFloor(String building, int floor, Path currentPath) throws DBException {
     clearPath();
-    clearEdges(); // Erase lines
-    populateMap(); // Set up/recycle UIDispNodes
-
-    // If there's a path to draw, draw it - otherwise just show the default kiosk
-    if (mode == Mode.NO_STATE) {
-      defaultKioskNode();
-    } else if (mode == Mode.PATH_STATE) {
-      if (pathNodes != null && !pathNodes.isEmpty()) {
-        drawPath(pathNodes);
-      } else {
-        System.out.println("Tried to draw an empty path!");
-      }
+    img_map.setImage(singleton.mapImageLoader.getMap(building, floor));
+    if (!(currentPath == null || currentPath.isEmpty())) {
+      drawPath(currentPath, floor);
     }
   }
 
-  public void setPathNodes(LinkedList<DbNode> nodesList) {
-    this.pathNodes = nodesList;
+  private void initPathAnim() {
+    // Set timeline to repeat
+    pathAnimTimeline.setCycleCount(Timeline.INDEFINITE);
+
+    // Init keyval lists
+    keyStartVals = new ArrayList<>();
+    keyEndVals = new ArrayList<>();
+
+    // Setup initial (empty) frames
+    setAnimFrames();
   }
 
-  public LinkedList<DbNode> getPathNodes() {
-    return this.pathNodes;
-  }
-
-  public LinkedList<String> defaultKioskNode() {
-
-    clearPath();
-
-    LinkedList<String> kiosks = new LinkedList<>();
-
-    if (currentFloor == 1) {
-      try {
-        DbNode floor1Kiosk = MapDB.getNode("NSERV00301"); // Should be specified elsewhere
-        defaultNode = getUiFromDb(floor1Kiosk);
-        kiosks.add(floor1Kiosk.getLongName());
-      } catch (DBException e) {
-        System.out.println("Couldn't find node NSERV00301 as 1st floor kiosk");
-        e.printStackTrace();
-      }
-
-    } else if (currentFloor == 3) {
-      try {
-        DbNode floor3Kiosk = MapDB.getNode("NSERV00103"); // Should be specified elsewhere
-        defaultNode = getUiFromDb(floor3Kiosk);
-        kiosks.add(floor3Kiosk.getLongName());
-      } catch (DBException e) {
-        System.out.println("Couldn't find node NSERV00103 as 3rd floor kiosk");
-        e.printStackTrace();
-      }
-    }
-    return kiosks;
-  }
-
-  private UIDispNode makeUINode() {
-    UIDispNode newNode = new UIDispNode(true);
-    newNode.placeOnPane(pn_routeNodes);
-    newNode.setBaseMap(this);
-    return newNode;
-  }
-
-  private void addEdge(UIDispNode nodeA, UIDispNode nodeB) {
-    UIDispEdge newEdge;
-    if (freedEdges.isEmpty()) {
-      newEdge = nodeA.addEdgeTo(nodeB, null);
-    } else {
-      newEdge = nodeA.addEdgeTo(nodeB, freedEdges.pop());
-    }
-    if (newEdge != null) {
-      edgesInUse.add(newEdge);
-      newEdge.placeOnPane(pn_path);
-      newEdge.setBaseMap(this);
-    }
-  }
-
-  public void clearEdges() {
-    for (UIDispEdge edge : edgesInUse) {
-      edge.breakSelf(); // Safely disassemble edge infrastructure
-      freedEdges.add(edge);
-    }
-    edgesInUse.clear();
-  }
-
-  public DbNode getDbFromUi(UIDispNode uiNode) {
-    return masterNodes.get(uiNode);
-  }
-
-  public UIDispNode getUiFromDb(DbNode dbNode) {
-    return masterNodes.inverse().get(dbNode);
-  }
-
-  // Replace (or create) link between a UIDispNode and a DbNode
-  private void setLink(UIDispNode uiNode, DbNode dbNode, boolean showKey) {
-    if (uiNode != null && dbNode != null) {
-
-      // if (dbNode.getNodeType().equals("HALL")) uiNode.setVisible(false);
-      // else uiNode.setVisible(showKey);
-
-      uiNode.setPos(
-          dbNode.getX() * HORIZONTAL_SCALE + HORIZONTAL_OFFSET,
-          dbNode.getY() * VERTICAL_SCALE + VERTICAL_OFFSET);
-      if (masterNodes.replace(uiNode, dbNode) == null) { // If uiNode is a new map key
-        masterNodes.put(uiNode, dbNode); // Add the new key
-      }
-      try { // Add any attached edges
-        UIDispNode otherAsUI;
-        for (DbNode other : MapDB.getAdjacent(dbNode.getNodeID())) {
-          otherAsUI = getUiFromDb(other);
-          if (otherAsUI != null) {
-            addEdge(uiNode, otherAsUI);
-          } else {
-            // System.out.println("Couldn't find UI element for node " + other.getNodeID());
-          }
-        }
-      } catch (DBException e) {
-        System.out.println("No adjacent nodes to " + dbNode.getShortName());
-      }
-    }
-  }
-
-  // Called by the UIDispNode that was clicked
-  public void onUINodeClicked(MouseEvent e, UIDispNode clickedNode) {
-
-    if (clickedNode.getSelected()) {
-      selectedNodes.add(clickedNode);
-      // System.out.println("Selected node " + masterNodes.get(clickedNode).getLongName() + ".");
-    } else {
-      selectedNodes.remove(clickedNode);
-      // System.out.println("Deselected node " + masterNodes.get(clickedNode).getLongName() + ".");
-    }
-  }
-
-  // Called by the UIDispEdge that was clicked
-  public void onUIEdgeClicked(MouseEvent e, UIDispEdge clickedEdge) {
-
-    if (clickedEdge.getSelected()) {
-      selectedEdges.add(clickedEdge);
-      // System.out.println("Selected node " + masterNodes.get(clickedNode).getLongName() + ".");
-    } else {
-      selectedEdges.remove(clickedEdge);
-      // System.out.println("Deselected node " + masterNodes.get(clickedNode).getLongName() + ".");
-    }
-  }
-
-  public void populateMap() {
-    try {
-
-      LinkedList<UIDispNode> keys = new LinkedList<>();
-      keys.addAll(masterNodes.keySet());
-
-      allFloorNodes = MapDB.floorNodes(currentFloor, currentBuilding); // Reference copy
-
-      LinkedList<DbNode> thisFloor = new LinkedList<>();
-      thisFloor.addAll(allFloorNodes); // Make a copy of allFloorNodes to use pop or pull on
-
-      Iterator<UIDispNode> keysIterator = keys.iterator();
-      Iterator<DbNode> dbIterator = thisFloor.iterator();
-      while (dbIterator.hasNext()) {
-        DbNode value = dbIterator.next();
-        if (keysIterator.hasNext()) {
-          UIDispNode key = keysIterator.next();
-          setLink(key, value, true);
-        } else {
-          // If there are DbNodes without keys, add keys
-          setLink(makeUINode(), value, true);
-        }
-      }
-
-      while (keysIterator.hasNext()) {
-        UIDispNode key = keysIterator.next();
-        masterNodes.remove(key);
-        key.setVisible(false);
-        key.breakAllEdges();
-      }
-    } catch (DBException e) {
-      System.out.print("Populating floor " + currentFloor + " in  " + currentBuilding + " failed.");
-      e.printStackTrace();
-    }
-  }
-
-  // Draw lines between each pair of nodes in given path
-  public void drawPath(LinkedList<DbNode> nodes) {
-    UIDispNode uiFirst, uiSecond;
-    DbNode dbFirst, dbSecond;
-    UIDispEdge edge;
-
-    for (int i = 0; i < nodes.size() - 1; i++) {
-      dbFirst = nodes.get(i);
-      dbSecond = nodes.get(i + 1);
-
-      if (dbFirst.getFloor() == currentFloor && dbSecond.getFloor() == currentFloor) {
-
-        uiFirst = getUiFromDb(dbFirst);
-        uiSecond = getUiFromDb(dbSecond);
-
+  /**
+   * Draws lines between each location specified by currentPath
+   *
+   * @param currentPath Path object containing the DbNodes picked by pathfinder algorithm
+   * @param floor The current floor
+   */
+  public void drawPath(Path currentPath, int floor) {
+    DbNode firstNode, secondNode;
+    for (int i = 0; i < currentPath.size() - 1; i++) {
+      firstNode = currentPath.get(i);
+      secondNode = currentPath.get(i + 1);
+      if (firstNode.getFloor() == floor && secondNode.getFloor() == floor) {
         if (i == 0) {
-          uiFirst.setStart();
-        } else if (i == nodes.size() - 2) {
-          uiSecond.setEnd();
+          drawCircle(firstNode, START_NODE_COLOR);
+        } else if (i == currentPath.size() - 2) {
+          drawCircle(secondNode, END_NODE_COLOR);
         }
-
-        edge = uiFirst.edgeTo(uiSecond);
-        if (edge != null) {
-          edge.pointEdgeToward(uiSecond); // Set correct direction of line!
-          edge.setHighlighted(true);
-        } else {
-          System.out.println(
-              "Edge between "
-                  + dbFirst.getNodeID()
-                  + " and "
-                  + dbSecond.getNodeID()
-                  + " doesn't exist.");
-        }
+        Line line =
+            new Line(
+                scaleX(secondNode.getX()),
+                scaleY(secondNode.getY()),
+                scaleX(firstNode.getX()),
+                scaleY(firstNode.getY()));
+        styleLine(line);
+        pn_path.getChildren().add(line);
       }
     }
+    setAnimFrames();
   }
 
-  // Resets highlighted edges to their default state
+  /**
+   * Applies animation, color and other style elements to given path line
+   *
+   * @param line The JavaFX Line object to modify
+   */
+  public void styleLine(Line line) {
+
+    // Apply basic line stroke effects
+    line.setStroke(DEFAULT_PATH_COLOR);
+    line.setOpacity(HEAVY_OPACITY);
+    line.setStrokeWidth(DEFAULT_PATH_WIDTH);
+    line.setStrokeLineCap(StrokeLineCap.ROUND);
+    line.getStrokeDashArray().setAll(DASH_PATTERN);
+
+    // Add keyvalues for this line to keyvalue lists
+    // Frame 0: no offset
+    keyStartVals.add(new KeyValue(line.strokeDashOffsetProperty(), 0, Interpolator.LINEAR));
+    // Frame 1: Offset by length of line-gap pattern (so it's continuous)
+    keyEndVals.add(
+        new KeyValue(line.strokeDashOffsetProperty(), MAX_DASH_OFFSET, Interpolator.LINEAR));
+  }
+
+  /**
+   * Generate the new keyframes, apply them to the timeline, and play the timeline if there's
+   * anything to animate
+   */
+  private void setAnimFrames() {
+
+    // Set up keyframes
+    keyStart = new KeyFrame(Duration.ZERO, "keyStart", null, keyStartVals);
+    keyEnd = new KeyFrame(Duration.millis(PATH_ANIM_LENGTH), "keyEnd", null, keyEndVals);
+
+    // Apply new frames
+    pathAnimTimeline.getKeyFrames().addAll(keyStart, keyEnd);
+
+    if (!(keyStartVals.isEmpty() || keyEndVals.isEmpty())) {
+      // Play anim
+      pathAnimTimeline.play();
+    } else {
+      pathAnimTimeline.stop();
+    }
+  }
+
+  /**
+   * draws either the start of end circle on the map
+   *
+   * @param node the DbNode to be displayed on the map
+   * @param c the color of the circle
+   */
+  public void drawCircle(DbNode node, Color c) {
+    Circle circle = new Circle();
+    circle.setRadius(5);
+    circle.setCenterX(scaleX(node.getX()));
+    circle.setCenterY(scaleY(node.getY()));
+    circle.setFill(c);
+    pn_path.getChildren().add(circle);
+  }
+
+  public double scaleX(double x) {
+    return x * HORIZONTAL_SCALE;
+  }
+
+  public double scaleY(double y) {
+    return y * VERTICAL_SCALE;
+  }
+
   public void clearPath() {
-    for (UIDispEdge edge : edgesInUse) {
-      edge.setHighlighted(false);
-    }
-    for (UIDispNode node : masterNodes.keySet()) {
-      node.setNormalNode();
-    }
-  }
-
-  // Hide all edges
-  public void hideEdges() {
-    pn_path.setVisible(false);
-  }
-
-  // Show all edges
-  public void showEdges() {
-    pn_path.setVisible(true);
-  }
-
-  // Deselect nodes and remove lines
-  public void deselectAll() {
-    for (UIDispNode uiNode : masterNodes.keySet()) {
-      uiNode.setSelected(false);
-    }
-    selectedNodes.clear();
-
-    for (UIDispEdge edge : edgesInUse) {
-      edge.setSelected(false);
-    }
-  }
-
-  public void forceSelect(UIDispNode uiNode, boolean selected) { // Don't really want
-    uiNode.setSelected(selected);
+    pathAnimTimeline.stop();
+    pathAnimTimeline.getKeyFrames().clear();
+    keyStart = null;
+    keyEnd = null;
+    keyStartVals.clear();
+    keyEndVals.clear();
+    pn_path.getChildren().clear();
   }
 
   //   == MAP ZOOM CONTROLS ==

@@ -26,6 +26,7 @@ public class LoginControllerOUTDATED extends QRReader implements Controller {
   private App mainApp;
   private static LoginControllerOUTDATED controller;
   public AdminControllerOUTDATED adminController;
+  private StateSingleton singleton;
 
   Boolean loggedin = false;
   //  MapDisplayControllerOUTDATED mdc;
@@ -39,14 +40,16 @@ public class LoginControllerOUTDATED extends QRReader implements Controller {
     this.mainApp = mainApp;
   }
 
-  @Override
-  public void setSingleton(StateSingleton singleton) {}
-
   @FXML TextField txtf_username;
   @FXML PasswordField pwf_password;
   @FXML Button btn_loginSubmit;
   @FXML Button btn_cancel;
   @FXML Pane pn_swingSpot;
+
+  // Inject singleton
+  public LoginControllerOUTDATED(StateSingleton singleton) {
+    this.singleton = singleton;
+  }
 
   @FXML
   public void initialize() {

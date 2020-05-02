@@ -17,6 +17,8 @@ import org.junit.jupiter.api.Test;
 public class AStarMultipleFloorsTest {
   Algorithm myAStar = new Algorithm();
 
+  public AStarMultipleFloorsTest() throws DBException {}
+
   @BeforeAll
   public static void initialize()
       throws SQLException, DBException, ClassNotFoundException, FileNotFoundException {

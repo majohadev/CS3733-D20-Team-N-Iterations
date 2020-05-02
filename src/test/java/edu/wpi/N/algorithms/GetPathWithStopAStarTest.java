@@ -18,6 +18,8 @@ import org.junit.jupiter.api.Test;
 public class GetPathWithStopAStarTest {
   Algorithm myAStar = new Algorithm();
 
+  public GetPathWithStopAStarTest() throws DBException {}
+
   @BeforeAll
   public static void initialize()
       throws SQLException, DBException, ClassNotFoundException, FileNotFoundException {

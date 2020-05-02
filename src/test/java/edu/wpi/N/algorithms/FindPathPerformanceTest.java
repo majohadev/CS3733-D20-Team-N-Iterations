@@ -15,6 +15,8 @@ import org.junit.jupiter.api.Test;
 public class FindPathPerformanceTest {
   Algorithm myAStar = new Algorithm();
 
+  public FindPathPerformanceTest() throws DBException {}
+
   @BeforeAll
   public static void initialize()
       throws DBException, FileNotFoundException, SQLException, ClassNotFoundException {

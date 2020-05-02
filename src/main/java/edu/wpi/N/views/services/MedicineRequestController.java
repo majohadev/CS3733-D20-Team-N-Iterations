@@ -12,7 +12,7 @@ import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.entities.employees.Employee;
 import edu.wpi.N.entities.request.Request;
 import edu.wpi.N.views.Controller;
-import edu.wpi.N.views.admin.NewAdminController;
+import edu.wpi.N.views.admin.ViewRequestController;
 import java.io.IOException;
 import java.net.URL;
 import java.util.LinkedList;
@@ -30,11 +30,6 @@ import javafx.scene.layout.AnchorPane;
 public class MedicineRequestController implements Controller, Initializable {
 
   private StateSingleton singleton;
-
-  @Override
-  public void setSingleton(StateSingleton singleton) {
-    this.singleton = singleton;
-  }
 
   private App mainApp;
 
@@ -59,6 +54,11 @@ public class MedicineRequestController implements Controller, Initializable {
   @FXML JFXButton btn_viewreq;
   @FXML JFXButton btn_Accept;
   @FXML JFXButton btn_Deny;
+
+  // Inject singleton
+  public MedicineRequestController(StateSingleton singleton) {
+    this.singleton = singleton;
+  }
 
   @Override
   public void setMainApp(App mainApp) {
@@ -129,7 +129,7 @@ public class MedicineRequestController implements Controller, Initializable {
     TableColumn<Request, String> location = new TableColumn<>("Location");
     location.setMaxWidth(150);
     location.setMinWidth(150);
-    location.setCellValueFactory(new NewAdminController.nodeLongName());
+    location.setCellValueFactory(new ViewRequestController.nodeLongName());
 
     TableColumn<Request, String> status = new TableColumn<>("Status");
     status.setMaxWidth(150);

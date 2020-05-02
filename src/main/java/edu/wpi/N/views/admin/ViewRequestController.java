@@ -1,10 +1,13 @@
-package edu.wpi.N.views.outdated;
+package edu.wpi.N.views.admin;
 
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXCheckBox;
 import edu.wpi.N.App;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.database.ServiceDB;
 import edu.wpi.N.entities.DbNode;
+import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.entities.employees.Employee;
 import edu.wpi.N.entities.employees.Translator;
 import edu.wpi.N.entities.request.Request;
@@ -18,25 +21,69 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 
-public class AdminControllerOUTDATED implements Initializable, Controller {
+public class ViewRequestController implements Controller, Initializable {
 
-  private App mainApp;
+  private App mainApp = null;
+  private StateSingleton singleton;
 
-  @FXML Button btn_logout;
-  @FXML Button btn_Accept;
-  @FXML Button btn_Deny;
-  @FXML ChoiceBox<Employee> cb_Employee;
   @FXML TableView<Request> tb_RequestTable = new TableView<Request>();
   @FXML TableView<String> tb_languages = new TableView<String>();
-  @FXML CheckBox ch_requestFilter;
+  @FXML JFXButton btn_Accept;
+  @FXML JFXButton btn_Deny;
+  @FXML JFXCheckBox ch_requestFilter;
+  @FXML ChoiceBox<Employee> cb_Employee;
 
   ObservableList<Request> tableData = FXCollections.observableArrayList();
   ObservableList<String> languageData = FXCollections.observableArrayList();
+
+  @Override
+  public void setMainApp(App mainApp) {}
+
+  public void setSingleton(StateSingleton singleton) {
+    this.singleton = singleton;
+  }
+
+  @Override
+  public void initialize(URL location, ResourceBundle resources) {
+
+    try {
+      populateChoiceBox();
+      populateRequestTable();
+      populateLanguageTable();
+    } catch (DBException e) {
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setContentText(e.getMessage());
+      errorAlert.show();
+    }
+    initializeTable();
+  }
+
+  public static class nodeLongName
+      implements Callback<TableColumn.CellDataFeatures<Request, String>, ObservableValue<String>> {
+
+    public nodeLongName() {}
+
+    @Override
+    public ObservableValue<String> call(TableColumn.CellDataFeatures<Request, String> param) {
+      try {
+        DbNode node = MapDB.getNode(param.getValue().getNodeID());
+        if (node == null) {
+          return new ReadOnlyObjectWrapper<>("Invalid Location");
+        }
+        return new ReadOnlyObjectWrapper<>(node.getLongName());
+      } catch (DBException e) {
+        return new ReadOnlyObjectWrapper<>("Invalid Location");
+      }
+    }
+  }
 
   private static class selfFactory<G>
       implements Callback<TableColumn.CellDataFeatures<G, G>, ObservableValue<G>> {
@@ -48,37 +95,7 @@ public class AdminControllerOUTDATED implements Initializable, Controller {
     }
   }
 
-  private static class nodeLongName
-      implements Callback<TableColumn.CellDataFeatures<Request, String>, ObservableValue<String>> {
-
-    public nodeLongName() {}
-
-    @Override
-    public ObservableValue<String> call(TableColumn.CellDataFeatures<Request, String> param) {
-      try {
-        DbNode node = MapDB.getNode(param.getValue().getNodeID());
-        return new ReadOnlyObjectWrapper<>(node.getLongName());
-      } catch (DBException e) {
-        return new ReadOnlyObjectWrapper<>("Invalid Location");
-      }
-    }
-  }
-
-  @Override
-  public void initialize(URL location, ResourceBundle resourceBundle) {
-
-    try {
-      populateRequestTable();
-      populateChoiceBox();
-      populateLanguageTable();
-    } catch (DBException e) {
-      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-      errorAlert.setContentText(e.getMessage());
-      errorAlert.show();
-    }
-    initializeTable();
-  }
-
+  /** Initializes a table with all given parameters for service requests */
   private void initializeTable() {
 
     // Request Table
@@ -95,83 +112,57 @@ public class AdminControllerOUTDATED implements Initializable, Controller {
     TableColumn<Request, String> notes = new TableColumn<>("Notes");
     notes.setMaxWidth(150);
     notes.setMinWidth(150);
-    notes.setCellValueFactory(new PropertyValueFactory<Request, String>("notes"));
+    notes.setCellValueFactory(new PropertyValueFactory<Request, String>("reqNotes"));
 
     TableColumn<Request, String> nodeID = new TableColumn<>("Location");
     nodeID.setMaxWidth(100);
     nodeID.setMinWidth(100);
-    nodeID.setCellValueFactory(new nodeLongName());
+    nodeID.setCellValueFactory(new ViewRequestController.nodeLongName());
 
     TableColumn<Request, String> status = new TableColumn<>("Status");
     status.setMaxWidth(100);
     status.setMinWidth(100);
     status.setCellValueFactory(new PropertyValueFactory<Request, String>("status"));
 
-    TableColumn<Request, String> language = new TableColumn<>("Language");
-    language.setMaxWidth(100);
-    language.setMinWidth(100);
-    language.setCellValueFactory(new PropertyValueFactory<Request, String>("language"));
+    TableColumn<Request, String> attr1 = new TableColumn<>("Attribute 1");
+    attr1.setMaxWidth(100);
+    attr1.setMinWidth(100);
+    attr1.setCellValueFactory(new PropertyValueFactory<Request, String>("Atr1"));
 
     TableColumn<Request, String> service = new TableColumn<>("Service");
     service.setMaxWidth(75);
     service.setMinWidth(75);
     service.setCellValueFactory(new PropertyValueFactory<Request, String>("serviceType"));
 
+    TableColumn<Request, String> attr2 = new TableColumn<>("Attribute 2");
+    attr2.setMaxWidth(100);
+    attr2.setMinWidth(100);
+    attr2.setCellValueFactory(new PropertyValueFactory<Request, String>("Atr2"));
+
+    TableColumn<Request, String> attr3 = new TableColumn<>("Attribute 3");
+    attr3.setMaxWidth(100);
+    attr3.setMinWidth(100);
+    attr3.setCellValueFactory(new PropertyValueFactory<Request, String>("Atr3"));
+
+    TableColumn<Request, String> attr4 = new TableColumn<>("Attribute 4");
+    attr4.setMaxWidth(100);
+    attr4.setMinWidth(100);
+    attr4.setCellValueFactory(new PropertyValueFactory<Request, String>("Atr4"));
+
     // Language Table for Translators
     TableColumn<String, String> languages = new TableColumn<>("Languages");
     languages.setMaxWidth(150);
     languages.setMinWidth(150);
-    languages.setCellValueFactory(new selfFactory<String>());
+    languages.setCellValueFactory(new ViewRequestController.selfFactory<String>());
 
-    // Initializes Columns
+    // Initializes Columns for Language Table (Filling Requests) and Request Table (Viewing,
+    // Accepting, Denying)
     tb_RequestTable
         .getColumns()
-        .addAll(requestID, service, emp_assigned, notes, nodeID, status, language);
+        .addAll(
+            requestID, service, emp_assigned, notes, nodeID, status, attr1, attr2, attr3, attr4);
+
     tb_languages.getColumns().addAll(languages);
-  }
-
-  public void populateRequestTable() throws DBException {
-    LinkedList<Request> reqs = ServiceDB.getRequests();
-    tableData.setAll(reqs);
-
-    ch_requestFilter
-        .selectedProperty()
-        .addListener(
-            (ov, old, val) -> {
-              try {
-                if (val) {
-                  LinkedList<Request> rqs = ServiceDB.getOpenRequests();
-                  tableData.setAll(rqs);
-                } else {
-                  LinkedList<Request> rqs = ServiceDB.getRequests();
-                  tableData.setAll(rqs);
-                }
-              } catch (DBException e) {
-                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-                errorAlert.setContentText(e.getMessage());
-                errorAlert.show();
-              }
-            });
-    tb_RequestTable.setItems(tableData);
-  }
-
-  public void populateLanguageTable() {
-    cb_Employee
-        .valueProperty()
-        .addListener(
-            (ov, old, emp) -> {
-              if (emp instanceof Translator) {
-                languageData.setAll(((Translator) emp).getLanguages());
-              } else {
-                languageData.setAll(new LinkedList<String>());
-              }
-            });
-    tb_languages.setItems(languageData);
-  }
-
-  @Override
-  public void setMainApp(App mainApp) {
-    this.mainApp = mainApp;
   }
 
   @FXML
@@ -197,9 +188,7 @@ public class AdminControllerOUTDATED implements Initializable, Controller {
           LinkedList<Request> reqs = ServiceDB.getRequests();
           tableData.setAll(reqs);
         }
-      } else if (e.getSource() == btn_Deny) { // This case needs a status check
-        ServiceDB.denyRequest(
-            tb_RequestTable.getSelectionModel().getSelectedItems().get(0).getRequestID(), "");
+      } else if (e.getSource() == btn_Deny) {
         ServiceDB.denyRequest(
             tb_RequestTable.getSelectionModel().getSelectedItems().get(0).getRequestID(), "");
 
@@ -231,7 +220,7 @@ public class AdminControllerOUTDATED implements Initializable, Controller {
     }
   }
 
-  private void assignEmployeeToRequest(int employee, int ID) {
+  private void assignEmployeeToRequest(int employee, int ID) throws DBException {
     Alert confAlert = new Alert(Alert.AlertType.CONFIRMATION);
     try {
       ServiceDB.assignToRequest(employee, ID);
@@ -244,10 +233,11 @@ public class AdminControllerOUTDATED implements Initializable, Controller {
       errorAlert.setContentText(e.getMessage());
       errorAlert.show();
     }
+    populateRequestTable();
   }
 
   @FXML
-  private void assignPressed(MouseEvent e) {
+  private void assignPressed(MouseEvent e) throws DBException {
     int eID;
     int rID;
     try {
@@ -262,15 +252,55 @@ public class AdminControllerOUTDATED implements Initializable, Controller {
     assignEmployeeToRequest(eID, rID);
   }
 
+  public void populateRequestTable() throws DBException {
+    LinkedList<Request> reqs = ServiceDB.getRequests();
+    tableData.setAll(reqs);
+
+    ch_requestFilter
+        .selectedProperty()
+        .addListener(
+            (ov, old, val) -> {
+              try {
+                if (val) {
+                  LinkedList<Request> rqs = ServiceDB.getOpenRequests();
+                  tableData.setAll(rqs);
+                } else {
+                  LinkedList<Request> rqs = ServiceDB.getRequests();
+                  tableData.setAll(rqs);
+                }
+              } catch (DBException e) {
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setContentText(e.getMessage());
+                errorAlert.show();
+              }
+            });
+    tb_RequestTable.setItems(tableData);
+  }
+
   public void populateChoiceBox() throws DBException {
     try {
       LinkedList<Employee> empList = ServiceDB.getEmployees();
-      ObservableList<Employee> empObv = FXCollections.observableArrayList(empList);
+      ObservableList<Employee> empObv = FXCollections.observableArrayList();
+      empObv.addAll(empList);
       cb_Employee.setItems(empObv);
     } catch (DBException e) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
       errorAlert.setContentText(e.getMessage());
       errorAlert.show();
     }
+  }
+
+  public void populateLanguageTable() {
+    cb_Employee
+        .valueProperty()
+        .addListener(
+            (ov, old, emp) -> {
+              if (emp instanceof Translator) {
+                languageData.setAll(((Translator) emp).getLanguages());
+              } else {
+                languageData.setAll(new LinkedList<String>());
+              }
+            });
+    tb_languages.setItems(languageData);
   }
 }

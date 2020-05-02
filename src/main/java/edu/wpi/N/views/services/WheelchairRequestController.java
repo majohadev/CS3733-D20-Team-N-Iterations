@@ -8,7 +8,6 @@ import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.database.ServiceDB;
 import edu.wpi.N.entities.DbNode;
-import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.views.Controller;
 import java.io.IOException;
 import java.util.LinkedList;
@@ -23,10 +22,9 @@ import javafx.scene.layout.AnchorPane;
 public class WheelchairRequestController implements Controller {
 
   private App mainApp;
-  private StateSingleton singleton;
   // Add FXML Tags Here
   @FXML JFXComboBox<String> cmbo_text;
-  @FXML JFXComboBox<String> cmbo_selectLang;
+  @FXML JFXComboBox<String> cmbo_selectAssistance;
   @FXML JFXTextArea txtf_notes;
   @FXML AnchorPane wheelchairRequest;
 
@@ -44,11 +42,6 @@ public class WheelchairRequestController implements Controller {
     this.mainApp = mainApp;
   }
 
-  @Override
-  public void setSingleton(StateSingleton singleton) {
-    this.singleton = singleton;
-  }
-
   public void initialize() throws DBException {
 
     cmbo_text.getEditor().setOnKeyTyped(this::locationTextChanged);
@@ -56,7 +49,7 @@ public class WheelchairRequestController implements Controller {
     options.add("Yes");
     options.add("No");
     ObservableList<String> yesOrNo = FXCollections.observableList(options);
-    cmbo_selectLang.setItems(yesOrNo);
+    cmbo_selectAssistance.setItems(yesOrNo);
   }
 
   @FXML
@@ -90,24 +83,15 @@ public class WheelchairRequestController implements Controller {
     cmbo_text.show();
   }
 
-  // Create Translator Request
+  // Create Wheelchair Request
   @FXML
   public void createNewWheelchairRequest() throws DBException, IOException {
 
-    String assistanceOption = cmbo_selectLang.getSelectionModel().getSelectedItem();
+    String assistanceOption = cmbo_selectAssistance.getSelectionModel().getSelectedItem();
     String nodeID = null;
     int nodeIndex = 0;
 
     try {
-      /*
-      String curr = cmbo_text.getEditor().getText();
-      for (String name : fuzzySearchTextList) {
-        if (name.equals(curr)) {
-          nodeIndex++;
-          break;
-        }
-      }
-       */
 
       String userLocationName = cmbo_text.getEditor().getText().toLowerCase().trim();
       LinkedList<DbNode> checkNodes = MapDB.searchVisNode(-1, null, null, userLocationName);
@@ -150,7 +134,7 @@ public class WheelchairRequestController implements Controller {
     // App.adminDataStorage.addToList(wheelchairReq);
 
     txtf_notes.clear();
-    cmbo_selectLang.getItems().clear();
+    cmbo_selectAssistance.getItems().clear();
     cmbo_text.getItems().clear();
 
     Alert confAlert = new Alert(Alert.AlertType.CONFIRMATION);
