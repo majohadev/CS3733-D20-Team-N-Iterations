@@ -7,6 +7,11 @@ import edu.wpi.N.entities.Path;
 import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.views.Controller;
 import java.io.IOException;
+import java.util.ArrayList;
+import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
@@ -18,6 +23,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.util.Duration;
 
 public class MapBaseController implements Controller {
 
@@ -50,6 +57,27 @@ public class MapBaseController implements Controller {
   private final String THIRD_KIOSK = "NSERV00103";
   private final Color START_NODE_COLOR = Color.GREEN;
   private final Color END_NODE_COLOR = Color.RED;
+
+  // Path GUI constants
+  private final Color DEFAULT_PATH_COLOR = Color.DODGERBLUE; // Default color of path
+  private final double DEFAULT_PATH_WIDTH = 4; // Default stroke width of path
+  private final double LIGHT_OPACITY = 0.05; // Faded line
+  private final double HEAVY_OPACITY = 0.8; // Bold line (default)
+  private final ArrayList<Double> DASH_PATTERN =
+      new ArrayList<>() {
+        {
+          add(20d);
+          add(10d);
+        }
+      }; // Line-gap pattern
+  private final double MAX_DASH_OFFSET =
+      DASH_PATTERN.stream().reduce(0d, (a, b) -> (a + b)); // Pattern length
+  private final int PATH_ANIM_LENGTH =
+      2000; // How many milliseconds it takes for dashes to move up a spot
+  private Timeline pathAnimTimeline = new Timeline(); // Timeline object to set line animation
+  private KeyFrame keyStart, keyEnd; // Keyframes in path animation
+  private ArrayList<KeyValue> keyStartVals, keyEndVals;
+
   // FXML Item IDs
   @FXML StackPane pn_movableMap;
   @FXML Pane pn_path;
@@ -80,7 +108,9 @@ public class MapBaseController implements Controller {
    *
    * @throws DBException
    */
-  public void initialize() throws DBException {}
+  public void initialize() throws DBException {
+    initPathAnim();
+  }
 
   /**
    * sets the current building of the map display
@@ -107,9 +137,23 @@ public class MapBaseController implements Controller {
     }
   }
 
+  private void initPathAnim() {
+    // Set timeline to repeat
+    pathAnimTimeline.setCycleCount(Timeline.INDEFINITE);
+
+    // Init keyval lists
+    keyStartVals = new ArrayList<>();
+    keyEndVals = new ArrayList<>();
+
+    // Setup initial (empty) frames
+    setAnimFrames();
+  }
+
   /**
-   * @param currentPath
-   * @param floor the current floor
+   * Draws lines between each location specified by currentPath
+   *
+   * @param currentPath Path object containing the DbNodes picked by pathfinder algorithm
+   * @param floor The current floor
    */
   public void drawPath(Path currentPath, int floor) {
     DbNode firstNode, secondNode;
@@ -124,18 +168,58 @@ public class MapBaseController implements Controller {
         }
         Line line =
             new Line(
-                scaleX(firstNode.getX()),
-                scaleY(firstNode.getY()),
                 scaleX(secondNode.getX()),
-                scaleY(secondNode.getY()));
+                scaleY(secondNode.getY()),
+                scaleX(firstNode.getX()),
+                scaleY(firstNode.getY()));
         styleLine(line);
         pn_path.getChildren().add(line);
       }
     }
+    setAnimFrames();
   }
 
+  /**
+   * Applies animation, color and other style elements to given path line
+   *
+   * @param line The JavaFX Line object to modify
+   */
   public void styleLine(Line line) {
-    line.setStrokeWidth(5);
+
+    // Apply basic line stroke effects
+    line.setStroke(DEFAULT_PATH_COLOR);
+    line.setOpacity(HEAVY_OPACITY);
+    line.setStrokeWidth(DEFAULT_PATH_WIDTH);
+    line.setStrokeLineCap(StrokeLineCap.ROUND);
+    line.getStrokeDashArray().setAll(DASH_PATTERN);
+
+    // Add keyvalues for this line to keyvalue lists
+    // Frame 0: no offset
+    keyStartVals.add(new KeyValue(line.strokeDashOffsetProperty(), 0, Interpolator.LINEAR));
+    // Frame 1: Offset by length of line-gap pattern (so it's continuous)
+    keyEndVals.add(
+        new KeyValue(line.strokeDashOffsetProperty(), MAX_DASH_OFFSET, Interpolator.LINEAR));
+  }
+
+  /**
+   * Generate the new keyframes, apply them to the timeline, and play the timeline if there's
+   * anything to animate
+   */
+  private void setAnimFrames() {
+
+    // Set up keyframes
+    keyStart = new KeyFrame(Duration.ZERO, "keyStart", null, keyStartVals);
+    keyEnd = new KeyFrame(Duration.millis(PATH_ANIM_LENGTH), "keyEnd", null, keyEndVals);
+
+    // Apply new frames
+    pathAnimTimeline.getKeyFrames().addAll(keyStart, keyEnd);
+
+    if (!(keyStartVals.isEmpty() || keyEndVals.isEmpty())) {
+      // Play anim
+      pathAnimTimeline.play();
+    } else {
+      pathAnimTimeline.stop();
+    }
   }
 
   /**
@@ -146,9 +230,11 @@ public class MapBaseController implements Controller {
    */
   public void drawCircle(DbNode node, Color c) {
     Circle circle = new Circle();
+    circle.setRadius(5);
     circle.setCenterX(scaleX(node.getX()));
     circle.setCenterY(scaleY(node.getY()));
     circle.setFill(c);
+    pn_path.getChildren().add(circle);
   }
 
   public double scaleX(double x) {
@@ -160,6 +246,12 @@ public class MapBaseController implements Controller {
   }
 
   public void clearPath() {
+    pathAnimTimeline.stop();
+    pathAnimTimeline.getKeyFrames().clear();
+    keyStart = null;
+    keyEnd = null;
+    keyStartVals.clear();
+    keyEndVals.clear();
     pn_path.getChildren().clear();
   }
 
