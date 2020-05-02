@@ -26,8 +26,7 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
@@ -123,11 +122,13 @@ public class MapEditorController implements Controller {
   }
 
   public void initialize() throws DBException {
+    currentFloor = DEFAULT_FLOOR;
+    currentBuilding = DEFAULT_BUILDING;
+    initializeChangeFloorButtons();
+    setFloorButtonColors();
     editElevNodes = new LinkedList<>();
     btn_cancel_elev.setDisable(true);
     btn_cancel_elev.setVisible(false);
-    currentFloor = DEFAULT_FLOOR;
-    currentBuilding = DEFAULT_BUILDING;
     nodesMap = HashBiMap.create();
     edgesMap = HashBiMap.create();
     mode = Mode.NO_STATE;
@@ -142,7 +143,7 @@ public class MapEditorController implements Controller {
     addEdgeLine.setStrokeLineCap(StrokeLineCap.ROUND);
     pn_edges.getChildren().add(addEdgeLine);
     deleteEdgeLines = new LinkedList<>();
-    initializeChangeFloorButtons();
+
     populateChangeAlgo();
   }
 
@@ -1198,6 +1199,8 @@ public class MapEditorController implements Controller {
     btn_floor3.setButtonType(JFXButton.ButtonType.RAISED);
     btn_floor4.setButtonType(JFXButton.ButtonType.RAISED);
     btn_floor5.setButtonType(JFXButton.ButtonType.RAISED);
+    // btn_floor5.setBackground(new Background(new BackgroundFill(Color.GREEN, CornerRadii.EMPTY,
+    // Insets.EMPTY)));
     btn_floors
         .getStylesheets()
         .addAll(getClass().getResource("/edu/wpi/N/css/MapDisplayFloors.css").toExternalForm());
@@ -1210,7 +1213,7 @@ public class MapEditorController implements Controller {
         e -> {
           currentFloor = 1;
           setFloorImg("/edu/wpi/N/images/map/Floor1Reclor.png");
-          btn_floor1.setStyle("fx-background-color: #ffc911");
+          setFloorButtonColors();
           // mode = Mode.NO_STATE;
         });
     btn_floor2
@@ -1221,6 +1224,7 @@ public class MapEditorController implements Controller {
         e -> {
           currentFloor = 2;
           setFloorImg("/edu/wpi/N/images/map/Floor2TeamN.png");
+          setFloorButtonColors();
           // mode = Mode.NO_STATE;
         });
     btn_floor3
@@ -1231,6 +1235,7 @@ public class MapEditorController implements Controller {
         e -> {
           currentFloor = 3;
           setFloorImg("/edu/wpi/N/images/map/Floor3TeamN.png");
+          setFloorButtonColors();
           // mode = Mode.NO_STATE;
         });
     btn_floor4
@@ -1241,6 +1246,7 @@ public class MapEditorController implements Controller {
         e -> {
           currentFloor = 4;
           setFloorImg("/edu/wpi/N/images/map/Floor4SolidBackground.png");
+          setFloorButtonColors();
           // mode = Mode.NO_STATE;
         });
     btn_floor5
@@ -1251,6 +1257,7 @@ public class MapEditorController implements Controller {
         e -> {
           currentFloor = 5;
           setFloorImg("/edu/wpi/N/images/map/Floor5TeamN.png");
+          setFloorButtonColors();
           // mode = Mode.NO_STATE;
         });
     JFXNodesList nodesList = new JFXNodesList();
@@ -1263,6 +1270,40 @@ public class MapEditorController implements Controller {
 
     nodesList.setSpacing(10);
     pn_changeFloor.getChildren().add(nodesList);
+  }
+
+  private void setFloorButtonColors() {
+    if (currentFloor == 1) {
+      btn_floor1.setStyle("-fx-background-color: #F7B80F");
+      btn_floor2.setStyle("-fx-background-color: #002186");
+      btn_floor3.setStyle("-fx-background-color: #002186");
+      btn_floor4.setStyle("-fx-background-color: #002186");
+      btn_floor5.setStyle("-fx-background-color: #002186");
+    } else if (currentFloor == 2) {
+      btn_floor1.setStyle("-fx-background-color: #002186");
+      btn_floor2.setStyle("-fx-background-color: #F7B80F");
+      btn_floor3.setStyle("-fx-background-color: #002186");
+      btn_floor4.setStyle("-fx-background-color: #002186");
+      btn_floor5.setStyle("-fx-background-color: #002186");
+    } else if (currentFloor == 3) {
+      btn_floor1.setStyle("-fx-background-color: #002186");
+      btn_floor2.setStyle("-fx-background-color: #002186");
+      btn_floor3.setStyle("-fx-background-color: #F7B80F");
+      btn_floor4.setStyle("-fx-background-color: #002186");
+      btn_floor5.setStyle("-fx-background-color: #002186");
+    } else if (currentFloor == 4) {
+      btn_floor1.setStyle("-fx-background-color: #002186");
+      btn_floor2.setStyle("-fx-background-color: #002186");
+      btn_floor3.setStyle("-fx-background-color: #002186");
+      btn_floor4.setStyle("-fx-background-color: #F7B80F");
+      btn_floor5.setStyle("-fx-background-color: #002186");
+    } else if (currentFloor == 5) {
+      btn_floor1.setStyle("-fx-background-color: #002186");
+      btn_floor2.setStyle("-fx-background-color: #002186");
+      btn_floor3.setStyle("-fx-background-color: #002186");
+      btn_floor4.setStyle("-fx-background-color: #002186");
+      btn_floor5.setStyle("-fx-background-color: #F7B80F");
+    }
   }
 
   private void setFloorImg(String path) {
