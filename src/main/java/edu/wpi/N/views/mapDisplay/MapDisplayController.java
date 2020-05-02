@@ -29,7 +29,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import lombok.SneakyThrows;
 
 public class MapDisplayController implements Controller, Initializable {
 
@@ -73,18 +72,21 @@ public class MapDisplayController implements Controller, Initializable {
     this.singleton = singleton;
   }
 
-  @SneakyThrows
   @Override
   public void initialize(URL location, ResourceBundle resourceBundle) {
     path = new Path(new LinkedList<>());
     currentFloor = 1;
     currentBuilding = "Faulkner";
     createFloorButtons();
-    mapBaseController.setFloor(this.currentBuilding, this.currentFloor, this.path);
+    try {
+      mapBaseController.setFloor(this.currentBuilding, this.currentFloor, this.path);
+    } catch (DBException e) {
+      e.printStackTrace();
+    }
     acc_search.setExpandedPane(pn_locationSearch);
     try {
       setDefaultKioskNode();
-    } catch (DBException e) {
+    } catch (NullPointerException | DBException | IOException e) {
       e.printStackTrace();
     }
   }
@@ -114,7 +116,7 @@ public class MapDisplayController implements Controller, Initializable {
             try {
               changeFloor(btn);
               setDefaultKioskNode();
-            } catch (DBException ex) {
+            } catch (DBException | IOException ex) {
               ex.printStackTrace();
             }
           });
@@ -249,12 +251,16 @@ public class MapDisplayController implements Controller, Initializable {
 
   public void initPathfind(ListView<DbNode> firstLst, DbNode second) throws DBException {
     DbNode first = firstLst.getSelectionModel().getSelectedItem();
+    if (first == null || second == null) {
+      displayErrorMessage("Please select a location");
+      return;
+    }
     this.path =
         singleton.savedAlgo.findPath(
             first, second, handicapp1.isSelected() || handicapp2.isSelected());
     mapBaseController.setFloor(first.getBuilding(), first.getFloor(), path);
-    disableNonPathFloors(path);
-    setTextDecription(path);
+    disableNonPathFloors();
+    setTextDecription();
   }
 
   public void findPathToBathroom(MouseEvent e) throws DBException {
@@ -265,7 +271,7 @@ public class MapDisplayController implements Controller, Initializable {
     DbNode first = lst_firstLocation.getSelectionModel().getSelectedItem();
     this.path = singleton.savedAlgo.findQuickAccess(first, type);
     mapBaseController.drawPath(path, first.getFloor());
-    setTextDecription(path);
+    setTextDecription();
   }
 
   private void enableAllFloorButtons() {
@@ -275,17 +281,29 @@ public class MapDisplayController implements Controller, Initializable {
     }
   }
 
-  private void disableNonPathFloors(Path pathNodes) {
-    for (int i = 0; i < pathNodes.size(); i++) {
-      DbNode node = pathNodes.get(i);
+  private void disableNonPathFloors() {
+    floorButtonList.getChildren().forEach(e -> e.setDisable(true));
+    JFXButton startButton = (JFXButton) floorButtonList.getChildren().get(0);
+    startButton.setDisable(false);
+    for (int i = 0; i < path.size() - 1; i++) {
+      DbNode node = path.get(i);
       if (!(node.getNodeType().equals("ELEV") || node.getNodeType().equals("STAI"))) {
-        JFXButton btn = (JFXButton) floorButtonList.getChildren().get(node.getFloor() + 1);
-        btn.setDisable(true);
+        JFXButton btn = (JFXButton) floorButtonList.getChildren().get(node.getFloor());
+        btn.setDisable(false);
       }
     }
   }
+  //    for (int i = 0; i < path.size(); i++) {
+  //      DbNode node = path.get(i);
+  //      JFXButton btn = (JFXButton) floorButtonList.getChildren().get(node.getFloor() + 1);
+  //      btn.setDisable(true);
+  //      if (!(node.getNodeType().equals("ELEV") || node.getNodeType().equals("STAI"))) {
+  //        btn.setDisable(false);
+  //      }
+  //    }
+  //  }
 
-  public void onBtnResetPathClicked() throws DBException {
+  public void onBtnResetPathClicked() throws DBException, IOException {
     path.clear();
     enableAllFloorButtons();
     txt_firstLocation.clear();
@@ -316,7 +334,7 @@ public class MapDisplayController implements Controller, Initializable {
    *
    * @param path
    */
-  private void setTextDecription(Path path) {
+  private void setTextDecription() {
     try {
       // Convert the array of textual descriptions to text
       String directionsAsText = "";
@@ -365,7 +383,8 @@ public class MapDisplayController implements Controller, Initializable {
     }
   }
 
-  private void setDefaultKioskNode() throws DBException {
+  private void setDefaultKioskNode() throws DBException, IOException {
+
     boolean noFaulknerKiosk =
         !(currentBuilding.equals("Faulkner") && (currentFloor == 1 || currentFloor == 3));
     if (noFaulknerKiosk) {
@@ -378,9 +397,15 @@ public class MapDisplayController implements Controller, Initializable {
     } else if (currentBuilding.equals("Faulkner") && currentFloor == 3) {
       kiosk = MapDB.getNode("NSERV00103");
     }
+
     txt_firstLocation.clear();
     lst_firstLocation.getItems().clear();
-    txt_firstLocation.setText(kiosk.toString());
+    try {
+      txt_firstLocation.setText(kiosk.toString());
+    } catch (NullPointerException e) {
+      displayErrorMessage("There are no items in the database!");
+      return;
+    }
     lst_firstLocation.getItems().add(kiosk);
     lst_firstLocation.getSelectionModel().select(0);
   }
