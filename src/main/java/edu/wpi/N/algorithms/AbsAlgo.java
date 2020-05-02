@@ -236,42 +236,33 @@ public abstract class AbsAlgo implements IPathFinder {
    * @return A linked list of DbNodes that are connected directly or indirectly to the node
    */
   public static LinkedList<DbNode> searchAccessible(DbNode node) {
-    //    if (!(node.getNodeType().equals("ELEV") || node.getNodeType().equals("STAI"))) return
-    // null;
-    //    Queue<DbNode> queue = new LinkedList<DbNode>(); // queue for breadth-first search
-    //    queue.add(node);
-    //    LinkedList<DbNode> nodes = new LinkedList<DbNode>();
-    //    while (queue.size() > 0) {
-    //      DbNode cur = queue.poll();
-    //      nodes.add(cur);
-    //      LinkedList<Node> next;
-    //      try {
-    //        next =
-    //                MapDB.getGAdjacent(
-    //                        cur.getNodeID(),
-    //                        -1,
-    //                        -1); // only gets elevator and stair nodes; kinda a hack, but not
-    // actually that bad
-    //      } catch (DBException e) {
-    //        System.out.println(e.getMessage());
-    //        continue; // skip invalid nodes
-    //      }
-    //      Iterator<Node> nextIt = next.iterator();
-    //      while (nextIt.hasNext()) {
-    //        try {
-    //          DbNode n = MapDB.getNode(nextIt.next().ID);
-    //          if (!(queue.contains(n) || nodes.contains(n))) queue.add(n);
-    //        } catch (DBException e) {
-    //          System.out.println(e.getMessage());
-    //          continue; // skip invalid nodes
-    //        }
-    //      }
-    //    }
-    //    if (nodes.size() == 1) return null;
-    //    Collections.sort(nodes, new FloorSortNodes());
-    //    return nodes;
-    //  }
-    //  }
-    return null;
+    if (!(node.getNodeType().equals("ELEV") || node.getNodeType().equals("STAI"))) return null;
+    Queue<DbNode> queue = new LinkedList<DbNode>(); // queue for breadth-first search
+    queue.add(node);
+    LinkedList<DbNode> nodes = new LinkedList<DbNode>();
+    while (queue.size() > 0) {
+      DbNode cur = queue.poll();
+      nodes.add(cur);
+      LinkedList<DbNode> next;
+      try {
+        next =
+            MapDB.getAdjacent(
+                cur.getNodeID(),
+                -1,
+                -1); // only gets elevator and stair nodes; kinda a hack, but not actually that bad
+        // due to the sql construction
+      } catch (DBException e) {
+        System.out.println(e.getMessage());
+        continue; // skip invalid nodes
+      }
+      Iterator<DbNode> nextIt = next.iterator();
+      while (nextIt.hasNext()) {
+        DbNode n = nextIt.next();
+        if (!(queue.contains(n) || nodes.contains(n))) queue.add(n);
+      }
+    }
+    if (nodes.size() == 1) return null;
+    Collections.sort(nodes, new FloorSortNodes());
+    return nodes;
   }
 }

@@ -115,4 +115,3 @@ public abstract class Request extends RecursiveTreeObject<Request> {
     return requestID == other.requestID;
   }
 }
-/*TODO: Make your request entity */
