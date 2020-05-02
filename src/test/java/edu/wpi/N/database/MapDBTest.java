@@ -93,7 +93,6 @@ public class MapDBTest {
 
   // Chris
   @Test
-  // TODO: just see if it contains
   public void testAddNodeNoID() throws DBException {
     /*MapDB.addNode(1300, 1200, 4, "Faulkner", "DEPT", "Database", "Dept 7");
     assertTrue(MapDB.floorNodes(4, "Faulkner").contains());*/
