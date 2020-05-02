@@ -66,7 +66,7 @@ CREATE TABLE sanitation(
 
 CREATE TABLE credential(
     username VARCHAR(255) NOT NULL PRIMARY KEY,
-    password VARCHAR(255) NOT NULL,
+    password CHAR(60) FOR BIT DATA NOT NULL,
     access VARCHAR(6) NOT NULL CONSTRAINT ACC_CK CHECK (access IN ('ADMIN', 'DOCTOR'))
 );
 
@@ -214,8 +214,8 @@ INSERT INTO flower VALUES ('Rose', 100);
 INSERT INTO flower VALUES ('Tulips', 100);
 INSERT INTO flower VALUES ('SAM', 1000);
 
-INSERT INTO credential VALUES ('Gaben', 'MoolyFTW', 'ADMIN');
-INSERT INTO credential VALUES ('admin', 'admin', 'ADMIN');
+-- INSERT INTO credential VALUES ('Gaben', 'MoolyFTW', 'ADMIN');
+-- INSERT INTO credential VALUES ('admin', 'admin', 'ADMIN');
 
 
 CREATE TRIGGER doc_delete AFTER DELETE ON doctors

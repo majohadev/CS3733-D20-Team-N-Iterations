@@ -41,6 +41,8 @@ public class MapDB {
       }
       statement = con.createStatement();
     }
+
+    addHardCodedLogins();
   }
 
   //  /** Initializes a database in memory for tests */
@@ -88,6 +90,34 @@ public class MapDB {
     Reader reader =
         new BufferedReader(new InputStreamReader(Main.class.getResourceAsStream("sql/setup.sql")));
     sr.runScript(reader);
+
+    addHardCodedLogins();
+  }
+
+  private static void addHardCodedLogins() throws SQLException {
+    BCryptSingleton hasher = BCryptSingleton.getInstance();
+    PreparedStatement st =
+        con.prepareStatement("INSERT INTO credential VALUES ('Gaben', ?, 'ADMIN')");
+    st.setBytes(1, hasher.hash("MoolyFTW"));
+    try {
+      st.executeUpdate();
+    } catch (SQLException e) {
+      if (!e.getSQLState()
+          .equals("23505")) { // primary key/unique constraint violation - login already exists
+        throw e;
+      }
+    }
+
+    st = con.prepareStatement("INSERT INTO credential VALUES ('admin', ?, 'ADMIN')");
+    st.setBytes(1, hasher.hash("admin"));
+    try {
+      st.executeUpdate();
+    } catch (SQLException e) {
+      if (!e.getSQLState()
+          .equals("23505")) { // primary key/unique constraint violation - login already exists
+        throw e;
+      }
+    }
   }
 
   /**
