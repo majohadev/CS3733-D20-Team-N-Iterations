@@ -17,6 +17,8 @@ import org.junit.jupiter.api.Test;
 public class BFSTests {
   Algorithm myBFS = new Algorithm();
 
+  public BFSTests() throws DBException {}
+
   @BeforeAll
   public static void initializeTest()
       throws SQLException, ClassNotFoundException, DBException, FileNotFoundException {

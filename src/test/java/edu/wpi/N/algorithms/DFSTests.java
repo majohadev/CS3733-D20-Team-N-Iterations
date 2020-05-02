@@ -17,6 +17,8 @@ import org.junit.jupiter.api.Test;
 public class DFSTests {
   Algorithm myDFS = new Algorithm();
 
+  public DFSTests() throws DBException {}
+
   @BeforeAll
   public static void initializeTest()
       throws SQLException, ClassNotFoundException, DBException, FileNotFoundException {

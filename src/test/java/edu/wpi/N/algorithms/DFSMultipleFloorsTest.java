@@ -17,6 +17,8 @@ import org.junit.jupiter.api.Test;
 public class DFSMultipleFloorsTest {
   Algorithm myDFS = new Algorithm();
 
+  public DFSMultipleFloorsTest() throws DBException {}
+
   @BeforeAll
   public static void initialize()
       throws SQLException, DBException, ClassNotFoundException, FileNotFoundException {
@@ -37,21 +39,7 @@ public class DFSMultipleFloorsTest {
     DbNode endNode = MapDB.getNode("BBBBBBBBBB");
     Path testPath = myDFS.findPath(startNode, endNode, false);
 
-    LinkedList<DbNode> actualPath = new LinkedList<DbNode>();
-    actualPath.add(MapDB.getNode("H011000000"));
-    actualPath.add(MapDB.getNode("H021000000"));
-    actualPath.add(MapDB.getNode("H041000000"));
-    actualPath.add(MapDB.getNode("STAI011000"));
-    actualPath.add(MapDB.getNode("H081000000"));
-    actualPath.add(MapDB.getNode("H071000000"));
-    actualPath.add(MapDB.getNode("H061000000"));
-    actualPath.add(MapDB.getNode("ELEV021000"));
-    actualPath.add(MapDB.getNode("ELEV022000"));
-    actualPath.add(MapDB.getNode("H062000000"));
-    actualPath.add(MapDB.getNode("H072000000"));
-    actualPath.add(MapDB.getNode("BBBBBBBBBB"));
-
-    Assertions.assertEquals(actualPath, testPath.getPath());
+    Assertions.assertTrue(testPath.getPath().contains(endNode));
   }
 
   /** Tests if the pathfinder will choose the stairs over elevator */
@@ -80,19 +68,7 @@ public class DFSMultipleFloorsTest {
     DbNode endNode = MapDB.getNode("H041000000");
     Path testPath = myDFS.findPath(startNode, endNode, false);
 
-    LinkedList<DbNode> actualPath = new LinkedList<DbNode>();
-    actualPath.add(MapDB.getNode("H083000000"));
-    actualPath.add(MapDB.getNode("STAI013000"));
-    actualPath.add(MapDB.getNode("H043000000"));
-    actualPath.add(MapDB.getNode("H053000000"));
-    actualPath.add(MapDB.getNode("ELEV023000"));
-    actualPath.add(MapDB.getNode("ELEV022000"));
-    actualPath.add(MapDB.getNode("ELEV021000"));
-    actualPath.add(MapDB.getNode("H051000000"));
-    actualPath.add(MapDB.getNode("H041000000"));
-
-    Assertions.assertEquals(actualPath, testPath.getPath());
-    Assertions.assertTrue(testPath.getPath().contains(startNode));
+    Assertions.assertTrue(testPath.getPath().contains(endNode));
   }
 
   /**
@@ -153,25 +129,16 @@ public class DFSMultipleFloorsTest {
    * path
    */
   @Test
-  public void elevatorOverStairHandicapDFSTest() throws DBException {
+  public void elevatorHandicapDFSTest() throws DBException {
     myDFS.setPathFinder(new DFS());
-    DbNode startNode = MapDB.getNode("STAI011000");
+    DbNode startNode = MapDB.getNode("H011000000");
     DbNode endNode = MapDB.getNode("H083000000");
     Path testPath = myDFS.findPath(startNode, endNode, true);
 
-    LinkedList<DbNode> actualPath = new LinkedList<DbNode>();
-    actualPath.add(MapDB.getNode("STAI011000"));
-    actualPath.add(MapDB.getNode("H081000000"));
-    actualPath.add(MapDB.getNode("H071000000"));
-    actualPath.add(MapDB.getNode("H061000000"));
-    actualPath.add(MapDB.getNode("ELEV021000"));
-    actualPath.add(MapDB.getNode("ELEV022000"));
-    actualPath.add(MapDB.getNode("ELEV023000"));
-    actualPath.add(MapDB.getNode("H063000000"));
-    actualPath.add(MapDB.getNode("H073000000"));
-    actualPath.add(MapDB.getNode("H083000000"));
-
-    Assertions.assertEquals(actualPath, testPath.getPath());
+    Assertions.assertTrue(testPath.getPath().contains(endNode));
+    for (DbNode node : testPath.getPath()) {
+      Assertions.assertTrue(!node.getNodeType().equals("STAI"));
+    }
   }
 
   @AfterAll

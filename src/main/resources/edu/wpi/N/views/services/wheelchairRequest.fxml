@@ -52,7 +52,7 @@
                         <Insets top="50.0" />
                      </VBox.margin>
                   </Label>
-                  <JFXComboBox fx:id="cmbo_selectLang" labelFloat="true" layoutX="63.0" layoutY="279.0" prefHeight="46.0" prefWidth="394.0" promptText="Select Yes or No" style="-fx-font-size: 18;" />
+                  <JFXComboBox fx:id="cmbo_selectAssistance" labelFloat="true" layoutX="63.0" layoutY="279.0" prefHeight="46.0" prefWidth="394.0" promptText="Select Yes or No" style="-fx-font-size: 18;" />
                </children>
             </VBox>
             <VBox alignment="CENTER" maxHeight="500.0" maxWidth="500.0" minWidth="500.0" prefHeight="200.0" prefWidth="100.0" spacing="30.0">
