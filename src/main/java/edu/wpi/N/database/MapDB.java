@@ -993,7 +993,8 @@ public class MapDB {
   }
 
   /**
-   * gets all the DbNodes in the same shaft as the given nodeID
+   * gets all the DbNodes in the same shaft as the given nodeID, including the node represented by
+   * the given ID
    *
    * @param nodeID The ID of the node you want all the nodes in the shaft for
    * @return a linked list of DbNodes in the same shaft as the given nodeID
@@ -1024,6 +1025,43 @@ public class MapDB {
         throw new DBException("Unknown error: getInShaft " + nodeID, e);
       }
     }
+  }
+
+  /**
+   * Returns a linked list of Linked Lists of DBNodes. Each linked list returned is all of the nodes
+   * in a shaft.
+   *
+   * @param building The building that you want to get all of the shafts for
+   * @return All of the shafts in a building
+   * @throws DBException On error
+   */
+  public static LinkedList<LinkedList<DbNode>> getShafts(String building) throws DBException {
+    String query =
+        "SELECT shaftID, shaft.nodeID from shaft, "
+            + "(SELECT nodeID FROM nodes WHERE (nodeType = 'ELEV' OR nodeTYPE = 'STAI') AND building = ?) as nodes"
+            + " WHERE shaft.nodeID = nodes.nodeID order by shaftID"; // filter out nodes not in the
+    // right building in this
+    // statement rather than later
+    LinkedList<LinkedList<DbNode>> shafts = new LinkedList<>();
+    try {
+      PreparedStatement stmt = con.prepareStatement(query);
+      stmt.setString(1, building);
+      ResultSet rs = stmt.executeQuery();
+      boolean left = rs.next();
+      while (left) {
+        int shaft = rs.getInt("shaftID");
+        LinkedList<DbNode> nodesInShaft = new LinkedList<>();
+        do { // key to this is the order by statement, I know that all the nodes in a shaft will be
+          // consecutive
+          nodesInShaft.add(getNode(rs.getString("nodeID")));
+        } while (((left = rs.next()) && rs.getInt("shaftID") == shaft));
+        shafts.add(nodesInShaft);
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown errors: getShafts ", e);
+    }
+    return shafts;
   }
 
   public static LinkedList<DbNode[]> getFloorEdges(int floor, String building) throws DBException {
