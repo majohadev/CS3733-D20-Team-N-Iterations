@@ -10,8 +10,8 @@ public class HomeController implements Controller {
 
   private StateSingleton singleton;
 
-  @Override
-  public void setSingleton(StateSingleton singleton) {
+  // Inject singleton
+  public HomeController(StateSingleton singleton) {
     this.singleton = singleton;
   }
 

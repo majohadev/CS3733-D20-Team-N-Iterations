@@ -131,7 +131,6 @@ public class BetweenFloorsController implements Controller, Initializable {
     this.mainApp = mainApp;
   }
 
-  @Override
   public void setSingleton(StateSingleton singleton) {
     this.singleton = singleton;
   }

@@ -47,7 +47,6 @@ public class ViewRequestController implements Controller, Initializable {
   @Override
   public void setMainApp(App mainApp) {}
 
-  @Override
   public void setSingleton(StateSingleton singleton) {
     this.singleton = singleton;
   }

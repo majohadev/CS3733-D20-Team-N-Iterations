@@ -127,7 +127,6 @@ public class MapEditorBetweenFloorsController implements Controller, Initializab
     this.mainApp = mainApp;
   }
 
-  @Override
   public void setSingleton(StateSingleton singleton) {
     this.singleton = singleton;
   }

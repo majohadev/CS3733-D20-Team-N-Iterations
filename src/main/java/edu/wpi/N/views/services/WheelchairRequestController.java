@@ -8,7 +8,6 @@ import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.database.ServiceDB;
 import edu.wpi.N.entities.DbNode;
-import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.views.Controller;
 import java.io.IOException;
 import java.util.LinkedList;
@@ -23,7 +22,6 @@ import javafx.scene.layout.AnchorPane;
 public class WheelchairRequestController implements Controller {
 
   private App mainApp;
-  private StateSingleton singleton;
   // Add FXML Tags Here
   @FXML JFXComboBox<String> cmbo_text;
   @FXML JFXComboBox<String> cmbo_selectAssistance;
@@ -42,11 +40,6 @@ public class WheelchairRequestController implements Controller {
 
   public void setMainApp(App mainApp) {
     this.mainApp = mainApp;
-  }
-
-  @Override
-  public void setSingleton(StateSingleton singleton) {
-    this.singleton = singleton;
   }
 
   public void initialize() throws DBException {

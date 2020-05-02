@@ -25,7 +25,6 @@ public class NewAdminController implements Controller, Initializable {
 
   private StateSingleton singleton;
 
-  @Override
   public void setSingleton(StateSingleton singleton) {
     this.singleton = singleton;
   }
@@ -37,6 +36,11 @@ public class NewAdminController implements Controller, Initializable {
   @FXML Label lbl_title;
   @FXML AnchorPane anchorSwap;
   @FXML JFXButton btn_arduino;
+
+  // inject singleton
+  public NewAdminController(StateSingleton singleton) {
+    this.singleton = singleton;
+  }
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
@@ -57,13 +61,28 @@ public class NewAdminController implements Controller, Initializable {
     try {
       Stage stage = new Stage();
       Parent root;
+
       FXMLLoader loader = new FXMLLoader();
       loader.setLocation(getClass().getResource("fileManagementScreen.fxml"));
+
+      loader.setControllerFactory(
+          type -> {
+            try {
+              // Inject singleton into DataEditorController
+              return new DataEditorController(singleton);
+            } catch (Exception exc) {
+              exc.printStackTrace();
+              throw new RuntimeException(exc);
+            }
+          });
+
       root = loader.load();
+
+      Controller controller = loader.getController();
+      controller.setMainApp(mainApp);
+
       Scene scene = new Scene(root);
       stage.setScene(scene);
-
-      // DataEditorController controller = (DataEditorController) loader.getController();
 
       stage.initModality(Modality.APPLICATION_MODAL);
       stage.show();

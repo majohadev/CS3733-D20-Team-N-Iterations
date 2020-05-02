@@ -19,11 +19,6 @@ import javafx.stage.FileChooser;
 public class DataEditorController implements Controller {
   private StateSingleton singleton;
 
-  @Override
-  public void setSingleton(StateSingleton singleton) {
-    this.singleton = singleton;
-  }
-
   App mainApp = null;
 
   @Override
@@ -31,23 +26,11 @@ public class DataEditorController implements Controller {
     this.mainApp = mainApp;
   }
 
-  @FXML Button btn_select;
   @FXML Button btn_done;
 
   @FXML Label lbl_filePath;
   @FXML Label lbl_filePath_edges;
   @FXML Label lbl_filePath_employees;
-
-  @FXML Button btn_select_edges;
-  @FXML Button btn_select_employees;
-
-  @FXML Button btn_default;
-  @FXML Button btn_uploadedge;
-  @FXML Button reset_employees;
-
-  // download buttons
-  @FXML Button btn_downloadnode;
-  @FXML Button btn_downloadedge;
 
   final String DEFAULT_NODES = "csv/newNodes.csv";
   final String DEFAULT_PATHS = "csv/newEdges.csv";
@@ -55,6 +38,11 @@ public class DataEditorController implements Controller {
   final InputStream INPUT_NODES_DEFAULT = Main.class.getResourceAsStream(DEFAULT_NODES);
   final InputStream INPUT_EDGES_DEFAULT = Main.class.getResourceAsStream(DEFAULT_PATHS);
   final InputStream INPUT_EMPLOYEES_DEFAULT = Main.class.getResourceAsStream(DEFAULT_EMPLOYEES);
+
+  // Inject singleton
+  public DataEditorController(StateSingleton singleton) {
+    this.singleton = singleton;
+  }
 
   public void initialize() {
     lbl_filePath.setText(DEFAULT_NODES);
@@ -102,7 +90,7 @@ public class DataEditorController implements Controller {
   }
 
   @FXML
-  public void onUploadEdgesClicked() throws IOException, DBException {
+  public void onUploadNodesEdgesClicked() throws IOException, DBException {
     MapDB.clearNodes();
 
     String path = lbl_filePath.getText();
@@ -119,6 +107,9 @@ public class DataEditorController implements Controller {
     } else {
       CSVParser.parseCSVfromPath(path_edges);
     }
+
+    // reload map data into singleton
+    singleton.savedAlgo.uploadMapData();
 
     MapDB.setKiosk("NSERV00301", 180);
   }

@@ -38,11 +38,6 @@ public class MapEditorController implements Controller {
 
   private StateSingleton singleton;
 
-  @Override
-  public void setSingleton(StateSingleton singleton) {
-    this.singleton = singleton;
-  }
-
   @FXML JFXComboBox<String> cb_changeAlgo;
   @FXML JFXButton btn_changeAlgo;
   @FXML Pane pn_display;
@@ -115,6 +110,11 @@ public class MapEditorController implements Controller {
   LinkedList<Circle> editElevNodes;
   Circle elevCircle;
   LinkedList<Circle> alignNodeCircles;
+
+  // Inject singleton
+  public MapEditorController(StateSingleton singleton) {
+    this.singleton = singleton;
+  }
 
   @Override
   public void setMainApp(App mainApp) {

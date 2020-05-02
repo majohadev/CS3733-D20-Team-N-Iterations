@@ -13,7 +13,6 @@ import edu.wpi.N.views.Controller;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -30,40 +29,28 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import lombok.SneakyThrows;
 
 public class MapDisplayController implements Controller, Initializable {
 
   private StateSingleton singleton;
 
-  @Override
-  public void setSingleton(StateSingleton singleton) {
-    this.singleton = singleton;
-  }
-
   private App mainApp = null;
-  final float IMAGE_WIDTH = 2475;
-  final float IMAGE_HEIGHT = 1485;
-  final float MAP_WIDTH = 1678;
-  final float MAP_HEIGHT = 1010;
-  final float HORIZONTAL_SCALE = (MAP_WIDTH) / IMAGE_WIDTH;
-  final float VERTICAL_SCALE = (MAP_HEIGHT) / IMAGE_HEIGHT;
-  // @FXML ImageView img_map;
-  // @FXML Pane pn_display;
+
+  //  @FXML Pane pn_display;
   @FXML Pane pn_changeFloor;
   @FXML JFXTextField txt_firstLocation;
   @FXML JFXTextField txt_secondLocation;
-  @FXML JFXListView lst_firstLocation;
-  @FXML JFXListView lst_secondLocation;
+  @FXML JFXListView<DbNode> lst_firstLocation;
+  @FXML JFXListView<DbNode> lst_secondLocation;
   // @FXML JFXButton btn_searchdoc;
-  @FXML TextField txtf_doctorname;
-  @FXML ListView lst_doctornames;
+  @FXML JFXTextField txt_doctorname;
+  @FXML ListView<Doctor> lst_doctornames;
   // @FXML Button btn_searchdoc;
-  @FXML ListView lst_doctorlocations;
+  @FXML ListView<DbNode> lst_doctorlocations;
   @FXML Button btn_findpathdoc;
   @FXML JFXButton btn_findPath;
   @FXML JFXButton btn_home;
-  @FXML private JFXButton btn_floors, btn_floor1, btn_floor2, btn_floor3, btn_floor4, btn_floor5;
+  @FXML private JFXButton btn_floors;
   @FXML TitledPane pn_locationSearch;
   @FXML Accordion acc_search;
   @FXML Text txt_description;
@@ -72,417 +59,259 @@ public class MapDisplayController implements Controller, Initializable {
 
   @FXML MapBaseController mapBaseController; // Reference to the embedded map
 
-  /*
-  private final int DEFAULT_FLOOR = 1;
-  private final String DEFAULT_BUILDING = "FAULKNER";
-  private int currentFloor;
-  private String currentBuilding;
-   */
-
-  // sphagetting code I guesss
   private ArrayList<String> directions;
+  JFXNodesList floorButtonList = new JFXNodesList();
 
-  HashMap<String, DbNode> stringNodeConversion = new HashMap<>();
-  LinkedList<String> allLongNames = new LinkedList<>();
-  // LinkedList<DbNode> allFloorNodes = new LinkedList<>();
-  private ObservableList<String> fuzzySearchDoctorList = FXCollections.observableArrayList();
-  private LinkedList<Doctor> searchedDoc = new LinkedList<>();
-  private LinkedList<DbNode> doctorNodes = new LinkedList<>();
-  JFXNodesList nodesList;
-  // LinkedList<DbNode> pathNodes;
-  /*
-  String[] imgPaths =
-      new String[] {
-        "/edu/wpi/N/images/Floor1TeamN.png",
-        "/edu/wpi/N/images/Floor2TeamN.png",
-        "/edu/wpi/N/images/Floor3TeamN.png",
-        "/edu/wpi/N/images/Floor4TeamN.png",
-        "/edu/wpi/N/images/Floor5TeamN.png"
-      };
-   */
+  // Program variables
+  Path path;
+  int currentFloor;
+  String currentBuilding;
 
-  /*
-  private enum Mode {
-    NO_STATE,
-    PATH_STATE;
+  // Inject singleton
+  public MapDisplayController(StateSingleton singleton) {
+    this.singleton = singleton;
   }
 
-  Mode mode;
-   */
-
-  @SneakyThrows
   @Override
   public void initialize(URL location, ResourceBundle resourceBundle) {
+    path = new Path(new LinkedList<>());
+    currentFloor = 1;
+    currentBuilding = "Faulkner";
+    createFloorButtons();
     try {
-      initializeChangeFloorButtons();
-      // this.currentFloor = DEFAULT_FLOOR;
-      // this.currentBuilding = DEFAULT_BUILDING;
-      // this.mode = Mode.NO_STATE;
-      // this.allFloorNodes = MapDB.allNodes();
-      initializeConversions();
-      defaultKioskNode();
-      acc_search.setExpandedPane(pn_locationSearch);
-    } catch (Exception ex) {
-      ex.printStackTrace();
-      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-      errorAlert.setHeaderText("Oops... Something went Wong");
-      errorAlert.setContentText(
-          "Map view couldn't be opened. Make sure to upload Nodes and Edges as CSVs");
-      errorAlert.showAndWait();
+      mapBaseController.setFloor(this.currentBuilding, this.currentFloor, this.path);
+    } catch (DBException e) {
+      e.printStackTrace();
+    }
+    acc_search.setExpandedPane(pn_locationSearch);
+    try {
+      setDefaultKioskNode();
+    } catch (NullPointerException | DBException | IOException e) {
+      e.printStackTrace();
     }
   }
 
-  private void initializeConversions() {
-    for (DbNode node : App.mapData.getAllDbNodes()) {
-      stringNodeConversion.put(node.getLongName(), node);
-      allLongNames.add(node.getLongName());
+  /** creates the buttons which enables the user to view different floors */
+  public void createFloorButtons() {
+    LinkedList floorButtons = new LinkedList();
+    initFloorButtons(floorButtons);
+    styleFloorButtons(floorButtons);
+    displayFloorButtonList(floorButtons);
+  }
+
+  /**
+   * populates the list of buttons which enable the user to view different floors
+   *
+   * @param floorButtons the empty list of buttons which enable the user to view different floors
+   * @return the populated list of buttons which enable the user to view different floors
+   */
+  public void initFloorButtons(LinkedList<JFXButton> floorButtons) {
+    btn_floors = new JFXButton("Floors");
+    floorButtons.add(btn_floors);
+    for (int i = 1; i <= 5; i++) {
+      JFXButton btn = new JFXButton();
+      btn.setText(String.valueOf(i));
+      btn.setOnMouseClicked(
+          e -> {
+            try {
+              changeFloor(btn);
+              setDefaultKioskNode();
+            } catch (DBException | IOException ex) {
+              ex.printStackTrace();
+            }
+          });
+      floorButtons.add(btn);
     }
   }
 
-  public void onSearchFirstLocation(KeyEvent inputMethodEvent) throws DBException {
-    LinkedList<DbNode> fuzzySearchNodeList;
-    ObservableList<String> fuzzySearchTextList;
-    LinkedList<String> fuzzySearchStringList = new LinkedList<>();
-
-    String currentText = txt_firstLocation.getText();
-    fuzzySearchNodeList = FuzzySearchAlgorithm.suggestLocations(currentText);
-    if (fuzzySearchNodeList != null) {
-      for (DbNode node : fuzzySearchNodeList) {
-        fuzzySearchStringList.add(node.getLongName());
-      }
-      fuzzySearchTextList = FXCollections.observableList(fuzzySearchStringList);
-    } else fuzzySearchTextList = FXCollections.observableList(this.allLongNames);
-    lst_firstLocation.setItems(fuzzySearchTextList);
+  public void changeFloor(JFXButton btn) throws DBException {
+    this.currentFloor = Integer.parseInt(btn.getText());
+    mapBaseController.setFloor(this.currentBuilding, this.currentFloor, this.path);
+  }
+  /**
+   * styles the buttons which enable the user to view different floors
+   *
+   * @param floorButtons the list of buttons which enable the user to view different floors
+   */
+  public void styleFloorButtons(LinkedList<JFXButton> floorButtons) {
+    for (JFXButton btn : floorButtons) {
+      btn.setButtonType(JFXButton.ButtonType.RAISED);
+      btn.getStylesheets()
+          .addAll(getClass().getResource("/edu/wpi/N/css/MapDisplayFloors.css").toExternalForm());
+      btn.getStyleClass().addAll("animated-option-button");
+    }
   }
 
-  public void onSearchSecondLocation(KeyEvent inputMethodEvent) throws DBException {
-    LinkedList<DbNode> fuzzySearchNodeList;
-    ObservableList<String> fuzzySearchTextList;
-    LinkedList<String> fuzzySearchStringList = new LinkedList<>();
-
-    String currentText = txt_secondLocation.getText();
-    fuzzySearchNodeList = FuzzySearchAlgorithm.suggestLocations(currentText);
-    if (fuzzySearchNodeList != null) {
-      for (DbNode node : fuzzySearchNodeList) {
-        fuzzySearchStringList.add(node.getLongName());
-      }
-      fuzzySearchTextList = FXCollections.observableList(fuzzySearchStringList);
-    } else fuzzySearchTextList = FXCollections.observableList(this.allLongNames);
-    lst_secondLocation.setItems(fuzzySearchTextList);
+  /**
+   * displays the buttons which enable the user to view different floors
+   *
+   * @param floorButtons the populated and styled list of buttons which enable the user to view
+   *     different floors
+   */
+  public void displayFloorButtonList(LinkedList<JFXButton> floorButtons) {
+    for (JFXButton btn : floorButtons) {
+      floorButtonList.addAnimatedNode(btn);
+    }
+    floorButtonList.setSpacing(20);
+    pn_changeFloor.getChildren().add(floorButtonList);
   }
 
+  /**
+   * detects when user enters a first location and applies fuzzy search
+   *
+   * @param e the key event which triggers the search
+   * @throws DBException
+   */
+  public void onSearchFirstLocation(KeyEvent e) throws DBException {
+    fuzzyLocationSearch(txt_firstLocation, lst_firstLocation);
+  }
+
+  /**
+   * detects when user enters a second path location and applies fuzzy search
+   *
+   * @param e the key event which triggers the search
+   * @throws DBException
+   */
+  public void onSearchSecondLocation(KeyEvent e) throws DBException {
+    fuzzyLocationSearch(txt_secondLocation, lst_secondLocation);
+  }
+
+  /**
+   * detects when user enters a doctor and applies fuzzy search
+   *
+   * @param e the key event which triggers the search
+   * @throws DBException
+   */
+  public void onSearchDoctor(KeyEvent e) throws DBException {
+    fuzzyDoctorSearch(txt_doctorname, lst_doctornames);
+  }
+
+  /**
+   * applies fuzzy search to the user input for locations
+   *
+   * @param txt the textfield with the user input
+   * @param lst the fuzzy search results
+   * @throws DBException
+   */
+  public void fuzzyLocationSearch(JFXTextField txt, ListView lst) throws DBException {
+    ObservableList<DbNode> fuzzyList;
+    String str = txt.getText();
+    fuzzyList = FXCollections.observableList(FuzzySearchAlgorithm.suggestLocations(str));
+    lst.setItems(fuzzyList);
+  }
+
+  /**
+   * applies fuzzy search to the user input for doctors
+   *
+   * @param txt the textfield with the user input
+   * @param lst the fuzzy search results
+   * @throws DBException
+   */
+  public void fuzzyDoctorSearch(JFXTextField txt, ListView lst) throws DBException {
+    ObservableList<Doctor> fuzzyList;
+    String str = txt.getText();
+    fuzzyList = FXCollections.observableList(FuzzySearchAlgorithm.suggestDoctors(str));
+    lst.setItems(fuzzyList);
+  }
+
+  /**
+   * finds the doctor's department and displays the result in a list view
+   *
+   * @param e the key event which triggers the search
+   * @throws Exception
+   */
   @FXML
-  private void searchByDoctorTextFill(KeyEvent keyEvent) throws DBException {
-    String currentText = txtf_doctorname.getText();
-    if (currentText.length() > 1) {
-      searchedDoc = FuzzySearchAlgorithm.suggestDoctors(currentText);
-      LinkedList<String> fuzzySearchStringList = new LinkedList<>();
-      for (Doctor doctors : searchedDoc) {
-        fuzzySearchStringList.add(doctors.getName());
-      }
-      fuzzySearchDoctorList = FXCollections.observableList(fuzzySearchStringList);
-      lst_doctornames.setItems(fuzzySearchDoctorList);
-    }
+  private void onFindDoctorClicked(MouseEvent e) throws Exception {
+    Doctor doc = lst_doctornames.getSelectionModel().getSelectedItem();
+    ObservableList<DbNode> docNodes = FXCollections.observableList(doc.getLoc());
+    lst_doctorlocations.setItems(docNodes);
   }
 
-  @FXML
-  private void onFindDoctorClicked(MouseEvent event) throws Exception {
-    int currentSelection = lst_doctornames.getSelectionModel().getSelectedIndex();
-    System.out.println(currentSelection);
-    Doctor selectedDoc = searchedDoc.get(currentSelection);
-    System.out.println(selectedDoc);
-    doctorNodes = selectedDoc.getLoc();
-    LinkedList<String> docNames = new LinkedList<>();
-    for (DbNode nodes : doctorNodes) {
-      docNames.add(nodes.getLongName());
-    }
-    ObservableList<String> doctorsLocations = FXCollections.observableList(docNames);
-    lst_doctorlocations.setItems(doctorsLocations);
-  }
-
+  /**
+   * triggers path finding for two chosen locations
+   *
+   * @param event the mouse event which triggers path finding
+   * @throws Exception
+   */
   public void onBtnPathfindClicked(MouseEvent event) throws Exception {
-    // this.mode = Mode.PATH_STATE;
-    mapBaseController.setMode(MapBaseController.Mode.PATH_STATE);
-    // pn_display.getChildren().removeIf(node -> node instanceof Line);
-    enableAllFloorButtons();
-    String firstSelection = (String) lst_firstLocation.getSelectionModel().getSelectedItem();
-    String secondSelection = (String) lst_secondLocation.getSelectionModel().getSelectedItem();
-    // jumpToFloor(imgPaths[stringNodeConversion.get(firstSelection).getFloor() - 1]);
-    mapBaseController.setMode(MapBaseController.Mode.NO_STATE);
-    mapBaseController.changeFloor(stringNodeConversion.get(firstSelection).getFloor());
-    // currentFloor = stringNodeConversion.get(firstSelection).getFloor();
-    try {
-      findPath(stringNodeConversion.get(firstSelection), stringNodeConversion.get(secondSelection));
-    } catch (NullPointerException e) {
-      displayErrorMessage("Path does not exist");
-      return;
-    }
+    initPathfind(lst_firstLocation, lst_secondLocation.getSelectionModel().getSelectedItem());
   }
 
-  @FXML
-  private void onDoctorPathFindClicked(MouseEvent event) throws Exception {
-    // this.mode = Mode.PATH_STATE;
-    mapBaseController.setMode(MapBaseController.Mode.PATH_STATE);
-    // pn_display.getChildren().removeIf(node -> node instanceof Line);
-    mapBaseController.clearPath();
-    enableAllFloorButtons();
-    String firstSelection = (String) lst_firstLocation.getSelectionModel().getSelectedItem();
-    String secondSelection = (String) lst_doctorlocations.getSelectionModel().getSelectedItem();
-    // jumpToFloor(imgPaths[stringNodeConversion.get(firstSelection).getFloor() - 1]);
-    mapBaseController.setMode(MapBaseController.Mode.NO_STATE);
-    mapBaseController.changeFloor(stringNodeConversion.get(firstSelection).getFloor());
-    // currentFloor = stringNodeConversion.get(firstSelection).getFloor();
-    try {
-      findPath(stringNodeConversion.get(firstSelection), stringNodeConversion.get(secondSelection));
-    } catch (NullPointerException e) {
-      displayErrorMessage("Path does not exist");
+  public void onDoctorPathFindClicked(MouseEvent event) throws Exception {
+    initPathfind(lst_firstLocation, lst_doctorlocations.getSelectionModel().getSelectedItem());
+  }
+
+  public void findPathToCafetaria(MouseEvent e) throws DBException {
+    initPathfind(lst_firstLocation, MapDB.getNode("MRETL00203"));
+  }
+
+  public void findPathToStarBucks(MouseEvent e) throws DBException {
+    initPathfind(lst_firstLocation, MapDB.getNode("NRETL00201"));
+  }
+
+  public void initPathfind(ListView<DbNode> firstLst, DbNode second) throws DBException {
+    DbNode first = firstLst.getSelectionModel().getSelectedItem();
+    if (first == null || second == null) {
+      displayErrorMessage("Please select a location");
       return;
     }
+    this.path =
+        singleton.savedAlgo.findPath(
+            first, second, handicapp1.isSelected() || handicapp2.isSelected());
+    mapBaseController.setFloor(first.getBuilding(), first.getFloor(), path);
+    disableNonPathFloors();
+    setTextDecription();
+  }
+
+  public void findPathToBathroom(MouseEvent e) throws DBException {
+    initQuickAccess(lst_firstLocation, "REST");
+  }
+
+  public void initQuickAccess(ListView<DbNode> firstLst, String type) throws DBException {
+    DbNode first = lst_firstLocation.getSelectionModel().getSelectedItem();
+    this.path = singleton.savedAlgo.findQuickAccess(first, type);
+    mapBaseController.drawPath(path, first.getFloor());
+    setTextDecription();
   }
 
   private void enableAllFloorButtons() {
-    for (int i = 1; i < nodesList.getChildren().size(); i++) {
-      JFXButton btn = (JFXButton) nodesList.getChildren().get(i);
+    for (int i = 1; i < floorButtonList.getChildren().size(); i++) {
+      JFXButton btn = (JFXButton) floorButtonList.getChildren().get(i);
       btn.setDisable(false);
     }
   }
 
-  private void findPath(DbNode node1, DbNode node2) throws DBException {
-    boolean handicap = false;
-    if (handicapp1.isSelected() || handicapp2.isSelected()) {
-      handicap = true;
-    }
-    Path path;
-    try {
-      path = singleton.savedAlgo.findPath(node1, node2, handicap);
-      System.out.println("Start angle " + path.getStartAngle(MapDB.getKioskAngle()));
-    } catch (NullPointerException e) {
-      displayErrorMessage("The path does not exist");
-      return;
-    }
-    mapBaseController.setPathNodes(path.getPath());
-    System.out.println("Start angle " + path.getStartAngle(MapDB.getKioskAngle()));
-
-    disableNonPathFloors(mapBaseController.getPathNodes());
-    mapBaseController.drawPath(mapBaseController.getPathNodes());
-    // set textual decriptions
-    setTextDecription(new Path(mapBaseController.getPathNodes()));
-  }
-
-  private void disableNonPathFloors(LinkedList<DbNode> pathNodes) {
-    LinkedList<Integer> activeFloors = new LinkedList();
-    for (DbNode node : pathNodes) {
+  private void disableNonPathFloors() {
+    floorButtonList.getChildren().forEach(e -> e.setDisable(true));
+    JFXButton startButton = (JFXButton) floorButtonList.getChildren().get(0);
+    startButton.setDisable(false);
+    for (int i = 0; i < path.size() - 1; i++) {
+      DbNode node = path.get(i);
       if (!(node.getNodeType().equals("ELEV") || node.getNodeType().equals("STAI"))) {
-        if (!activeFloors.contains(node.getFloor())) {
-          activeFloors.add(node.getFloor());
-        }
-      }
-    }
-    for (int i = 1; i < nodesList.getChildren().size(); i++) {
-      JFXButton btn = (JFXButton) nodesList.getChildren().get(i);
-      if (!activeFloors.contains(Integer.parseInt(btn.getText()))) {
-        btn.setDisable(true);
+        JFXButton btn = (JFXButton) floorButtonList.getChildren().get(node.getFloor());
+        btn.setDisable(false);
       }
     }
   }
+  //    for (int i = 0; i < path.size(); i++) {
+  //      DbNode node = path.get(i);
+  //      JFXButton btn = (JFXButton) floorButtonList.getChildren().get(node.getFloor() + 1);
+  //      btn.setDisable(true);
+  //      if (!(node.getNodeType().equals("ELEV") || node.getNodeType().equals("STAI"))) {
+  //        btn.setDisable(false);
+  //      }
+  //    }
+  //  }
 
-  /*
-  private void drawPath(LinkedList<DbNode> pathNodes) {
-    DbNode firstNode;
-    DbNode secondNode;
-    for (int i = 0; i < pathNodes.size() - 1; i++) {
-      firstNode = pathNodes.get(i);
-      secondNode = pathNodes.get(i + 1);
-      if (firstNode.getFloor() == currentFloor && secondNode.getFloor() == currentFloor) {
-        Line line =
-            new Line(
-                scaleX(firstNode.getX()),
-                scaleY(firstNode.getY()),
-                scaleX(secondNode.getX()),
-                scaleY(secondNode.getY()));
-        styleLine(line);
-        pn_display.getChildren().add(line);
-      }
-    }
-  }
-   */
-
-  public void onBtnResetPathClicked() throws DBException {
-    // mode = Mode.NO_STATE;
-    mapBaseController.setMode(MapBaseController.Mode.NO_STATE);
-    defaultKioskNode();
+  public void onBtnResetPathClicked() throws DBException, IOException {
+    path.clear();
     enableAllFloorButtons();
-    // pn_display.getChildren().removeIf(node -> node instanceof Line);
     txt_firstLocation.clear();
     txt_secondLocation.clear();
     lst_firstLocation.getItems().clear();
     lst_secondLocation.getItems().clear();
-  }
-
-  /*
-  private double scaleX(double x) {
-    return x * HORIZONTAL_SCALE;
-  }
-
-  private double scaleY(double y) {
-    return y * VERTICAL_SCALE;
-  }
-   */
-
-  public void initializeChangeFloorButtons() throws DBException {
-    // MapDB.setKiosk("NSERV00301", 0);
-    // MapDB.setKiosk("NSERV00103", 0);
-    btn_floors = new JFXButton("Floors");
-    btn_floor1 = new JFXButton("1");
-    btn_floor2 = new JFXButton("2");
-    btn_floor3 = new JFXButton("3");
-    btn_floor4 = new JFXButton("4");
-    btn_floor5 = new JFXButton("5");
-    btn_floors.setButtonType(JFXButton.ButtonType.RAISED);
-    btn_floor1.setButtonType(JFXButton.ButtonType.RAISED);
-    btn_floor2.setButtonType(JFXButton.ButtonType.RAISED);
-    btn_floor3.setButtonType(JFXButton.ButtonType.RAISED);
-    btn_floor4.setButtonType(JFXButton.ButtonType.RAISED);
-    btn_floor5.setButtonType(JFXButton.ButtonType.RAISED);
-    btn_floors
-        .getStylesheets()
-        .addAll(getClass().getResource("/edu/wpi/N/css/MapDisplayFloors.css").toExternalForm());
-    btn_floors.getStyleClass().addAll("animated-option-button");
-
-    btn_floor1
-        .getStylesheets()
-        .addAll(getClass().getResource("/edu/wpi/N/css/MapDisplayFloors.css").toExternalForm());
-    btn_floor1.getStyleClass().addAll("animated-option-button");
-    btn_floor1.setOnMouseClicked(e -> drawPathOnFloor(1));
-
-    btn_floor2
-        .getStylesheets()
-        .addAll(getClass().getResource("/edu/wpi/N/css/MapDisplayFloors.css").toExternalForm());
-    btn_floor2.getStyleClass().addAll("animated-option-button");
-    btn_floor2.setOnMouseClicked(e -> drawPathOnFloor(2));
-
-    btn_floor3
-        .getStylesheets()
-        .addAll(getClass().getResource("/edu/wpi/N/css/MapDisplayFloors.css").toExternalForm());
-    btn_floor3.getStyleClass().addAll("animated-option-button");
-    btn_floor3.setOnMouseClicked(e -> drawPathOnFloor(3));
-
-    btn_floor4
-        .getStylesheets()
-        .addAll(getClass().getResource("/edu/wpi/N/css/MapDisplayFloors.css").toExternalForm());
-    btn_floor4.getStyleClass().addAll("animated-option-button");
-    btn_floor4.setOnMouseClicked(e -> drawPathOnFloor(4));
-
-    btn_floor5
-        .getStylesheets()
-        .addAll(getClass().getResource("/edu/wpi/N/css/MapDisplayFloors.css").toExternalForm());
-    btn_floor5.getStyleClass().addAll("animated-option-button");
-    btn_floor5.setOnMouseClicked(e -> drawPathOnFloor(5));
-
-    nodesList = new JFXNodesList();
-    nodesList.addAnimatedNode(btn_floors);
-    nodesList.addAnimatedNode(btn_floor5);
-    nodesList.addAnimatedNode(btn_floor4);
-    nodesList.addAnimatedNode(btn_floor3);
-    nodesList.addAnimatedNode(btn_floor2);
-    nodesList.addAnimatedNode(btn_floor1);
-    nodesList.setSpacing(20);
-    pn_changeFloor.getChildren().add(nodesList);
-  }
-
-  /*
-  private void setFloorImg(String path) throws DBException {
-    // pn_display.getChildren().removeIf(node -> node instanceof Line);
     mapBaseController.clearPath();
-    if (mode == Mode.PATH_STATE) {
-      mapBaseController.drawPath(pathNodes);
-    }
-    if (mode == Mode.NO_STATE) {
-      defaultKioskNode();
-    }
-    Image img = new Image(getClass().getResourceAsStream(path));
-    img_map.setImage(img);
-  }
-   */
-
-  private void drawPathOnFloor(int floor) {
-    mapBaseController.setMode(MapBaseController.Mode.PATH_STATE);
-    mapBaseController.changeFloor(floor);
-  }
-
-  /**
-   * Finds and draws path to the nearest bathroom
-   *
-   * @param e
-   */
-  @FXML
-  private void findPathToBathroom(MouseEvent e) throws DBException {
-    try {
-      // this.mode = Mode.PATH_STATE;
-      mapBaseController.setMode(MapBaseController.Mode.PATH_STATE);
-      // pn_display.getChildren().removeIf(node -> node instanceof Line);
-      enableAllFloorButtons();
-      String startSelection = (String) lst_firstLocation.getSelectionModel().getSelectedItem();
-      DbNode startNode = stringNodeConversion.get(startSelection);
-      Path pathToBathroom = singleton.savedAlgo.findQuickAccess(startNode, "REST");
-      mapBaseController.drawPath(pathToBathroom.getPath());
-      // set textual decriptions
-      setTextDecription(pathToBathroom);
-    } catch (Exception ex) {
-      ex.printStackTrace();
-      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-      errorAlert.setHeaderText("Oops... Something went Wong");
-      errorAlert.setContentText("Path to bathroom wasn't found");
-      errorAlert.showAndWait();
-    }
-  }
-
-  /**
-   * Finds and draws path to the cafeteria
-   *
-   * @param e
-   */
-  @FXML
-  private void findPathToCafetaria(MouseEvent e) {
-    // this.mode = Mode.PATH_STATE;
-    mapBaseController.setMode(MapBaseController.Mode.PATH_STATE);
-    // pn_display.getChildren().removeIf(node -> node instanceof Line);
-    enableAllFloorButtons();
-    String firstSelection = (String) lst_firstLocation.getSelectionModel().getSelectedItem();
-    // jumpToFloor(imgPaths[stringNodeConversion.get(firstSelection).getFloor() - 1]);
-    mapBaseController.setMode(MapBaseController.Mode.NO_STATE);
-    mapBaseController.changeFloor(stringNodeConversion.get(firstSelection).getFloor());
-    // currentFloor = stringNodeConversion.get(firstSelection).getFloor();
-    try {
-      findPath(stringNodeConversion.get(firstSelection), MapDB.getNode("MRETL00203"));
-    } catch (NullPointerException | DBException ex) {
-      displayErrorMessage("Path does not exist");
-      return;
-    }
-  }
-
-  /**
-   * Finds and draws path to the Starbucks
-   *
-   * @param e
-   */
-  @FXML
-  private void findPathToStarBucks(MouseEvent e) {
-    // this.mode = Mode.PATH_STATE;
-    mapBaseController.setMode(MapBaseController.Mode.PATH_STATE);
-    // pn_display.getChildren().removeIf(node -> node instanceof Line);
-    enableAllFloorButtons();
-    String firstSelection = (String) lst_firstLocation.getSelectionModel().getSelectedItem();
-    // jumpToFloor(imgPaths[stringNodeConversion.get(firstSelection).getFloor() - 1]);
-    mapBaseController.setMode(MapBaseController.Mode.NO_STATE);
-    mapBaseController.changeFloor(stringNodeConversion.get(firstSelection).getFloor());
-    // currentFloor = stringNodeConversion.get(firstSelection).getFloor();
-    try {
-      findPath(stringNodeConversion.get(firstSelection), MapDB.getNode("NRETL00201"));
-    } catch (NullPointerException | DBException ex) {
-      displayErrorMessage("Path does not exist");
-      return;
-    }
+    setDefaultKioskNode();
   }
 
   public void setMainApp(App mainApp) {
@@ -505,7 +334,7 @@ public class MapDisplayController implements Controller, Initializable {
    *
    * @param path
    */
-  private void setTextDecription(Path path) {
+  private void setTextDecription() {
     try {
       // Convert the array of textual descriptions to text
       String directionsAsText = "";
@@ -554,62 +383,35 @@ public class MapDisplayController implements Controller, Initializable {
     }
   }
 
-  // Copied to mapBaseController
-  /*
-  private void defaultKioskNode() throws DBException {
-    LinkedList<String> kiosks = new LinkedList<>();
-    if (currentFloor == 1) {
-      txt_firstLocation.setText(MapDB.getNode("NSERV00301").getLongName());
-      kiosks.add(MapDB.getNode("NSERV00301").getLongName());
-      ObservableList<String> textList = FXCollections.observableList(kiosks);
-      lst_firstLocation.setItems(textList);
-      lst_firstLocation.getSelectionModel().select(0);
+  private void setDefaultKioskNode() throws DBException, IOException {
 
-    } else if (currentFloor == 3) {
-      txt_firstLocation.setText(MapDB.getNode("NSERV00103").getLongName());
-      kiosks.add(MapDB.getNode("NSERV00103").getLongName());
-      ObservableList<String> textList = FXCollections.observableList(kiosks);
-      lst_firstLocation.setItems(textList);
-      lst_firstLocation.getSelectionModel().select(0);
-    } else {
-      txt_firstLocation.clear();
-      lst_firstLocation.getItems().clear();
+    boolean noFaulknerKiosk =
+        !(currentBuilding.equals("Faulkner") && (currentFloor == 1 || currentFloor == 3));
+    if (noFaulknerKiosk) {
+      clearKioskFields();
+      return;
     }
-  }
-   */
+    DbNode kiosk = null;
+    if (currentBuilding.equals("Faulkner") && currentFloor == 1) {
+      kiosk = MapDB.getNode("NSERV00301");
+    } else if (currentBuilding.equals("Faulkner") && currentFloor == 3) {
+      kiosk = MapDB.getNode("NSERV00103");
+    }
 
-  private void defaultKioskNode() throws DBException {
-    LinkedList<String> kiosks =
-        mapBaseController.defaultKioskNode(); // Returns names of loaded kiosks
-    if (kiosks.isEmpty()) {
-      txt_firstLocation.clear();
-      lst_firstLocation.getItems().clear();
-    } else {
-      txt_firstLocation.setText(kiosks.getFirst());
-      ObservableList<String> textList = FXCollections.observableList(kiosks);
-      lst_firstLocation.setItems(textList);
-      lst_firstLocation.getSelectionModel().select(0);
+    txt_firstLocation.clear();
+    lst_firstLocation.getItems().clear();
+    try {
+      txt_firstLocation.setText(kiosk.toString());
+    } catch (NullPointerException e) {
+      displayErrorMessage("There are no items in the database!");
+      return;
     }
+    lst_firstLocation.getItems().add(kiosk);
+    lst_firstLocation.getSelectionModel().select(0);
   }
 
-  /*
-   private void styleLine(Line line) {
-     line.setStrokeWidth(5);
-     line.setStrokeLineCap(StrokeLineCap.ROUND);
-     line.setStrokeLineJoin(StrokeLineJoin.ROUND);
-   }
-  */
-
-  // Upon clicking find path to location button call this method
-  /*    @FXML
-  private void onDoctorPathFindClicked(MouseEvent event) throws Exception {
-    pn_path.getChildren().removeIf(node -> node instanceof Line);
-    int currentSelection = lst_doctorlocations.getSelectionModel().getSelectedIndex();
-    DbNode destinationNode = doctorNodes.get(currentSelection);
-    if (selectedNodes.size() < 1) selectedNodes.add(defaultNode);
-    selectedNodes.add(destinationNode);
-    // if (selectedNodes.size() < 2) selectedNodes.add(defaultNode);
-    onBtnFindClicked(event);
-    selectedNodes.clear();
-  }*/
+  private void clearKioskFields() {
+    txt_firstLocation.clear();
+    lst_firstLocation.getItems().clear();
+  }
 }

@@ -21,11 +21,6 @@ public class ArduinoController implements Controller {
   private static double arrowAngle = 0;
   private StateSingleton singleton;
 
-  @Override
-  public void setSingleton(StateSingleton singleton) {
-    this.singleton = singleton;
-  }
-
   private App mainApp;
 
   @FXML JFXButton btn_com;

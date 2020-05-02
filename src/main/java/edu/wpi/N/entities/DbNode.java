@@ -146,6 +146,10 @@ public class DbNode implements Comparable<DbNode>, INode {
   }
 
   @Override
+  public String toString() {
+    return this.getLongName();
+  }
+
   public int compareTo(DbNode o) {
     if (this.score > o.score) {
       return 1;

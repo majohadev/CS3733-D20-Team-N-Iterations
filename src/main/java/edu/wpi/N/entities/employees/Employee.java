@@ -35,4 +35,3 @@ public abstract class Employee {
     return id == other.id && name.equals(other.name);
   }
 }
-
