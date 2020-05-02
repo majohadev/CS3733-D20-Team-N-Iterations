@@ -5,7 +5,6 @@ import java.nio.charset.StandardCharsets;
 
 public class BCryptSingleton {
   private int cost;
-
   private static BCryptSingleton instance = null;
 
   /** Constructs a new BCryptSingleton with a cost of 10. */
@@ -21,7 +20,6 @@ public class BCryptSingleton {
    */
   public static BCryptSingleton getInstance() {
     if (instance == null) instance = new BCryptSingleton();
-
     return instance;
   }
 
@@ -54,7 +52,11 @@ public class BCryptSingleton {
    * @throws IllegalBCryptFormatException If the given hash is not of a valid format
    */
   public boolean verifyPW(String pw, byte[] hash) throws IllegalBCryptFormatException {
-    BCrypt.Result res = BCrypt.verifyer().verify(pw.getBytes(StandardCharsets.UTF_8), hash);
+    BCrypt.Result res =
+        BCrypt.verifyer(
+                BCrypt.Version.VERSION_2Y,
+                LongPasswordStrategies.hashSha512(BCrypt.Version.VERSION_2Y))
+            .verify(pw.getBytes(StandardCharsets.UTF_8), hash);
     if (!res.validFormat) throw new IllegalBCryptFormatException(res.formatErrorMessage);
     return res.verified;
   }
