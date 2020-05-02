@@ -56,6 +56,8 @@ public class DataEditorController implements Controller {
     this.singleton = singleton;
   }
 
+  public DataEditorController() {}
+
   public void initialize() {
     lbl_filePath.setText(DEFAULT_NODES);
     lbl_filePath_edges.setText(DEFAULT_PATHS);

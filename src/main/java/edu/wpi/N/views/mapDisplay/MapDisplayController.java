@@ -29,6 +29,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import lombok.SneakyThrows;
 
 public class MapDisplayController implements Controller, Initializable {
 
@@ -72,12 +73,14 @@ public class MapDisplayController implements Controller, Initializable {
     this.singleton = singleton;
   }
 
+  @SneakyThrows
   @Override
   public void initialize(URL location, ResourceBundle resourceBundle) {
     path = new Path(new LinkedList<>());
     currentFloor = 1;
     currentBuilding = "Faulkner";
     createFloorButtons();
+    mapBaseController.setFloor(this.currentBuilding, this.currentFloor, this.path);
     acc_search.setExpandedPane(pn_locationSearch);
     try {
       setDefaultKioskNode();
@@ -106,20 +109,23 @@ public class MapDisplayController implements Controller, Initializable {
     for (int i = 1; i <= 5; i++) {
       JFXButton btn = new JFXButton();
       btn.setText(String.valueOf(i));
+      btn.setOnMouseClicked(
+          e -> {
+            try {
+              changeFloor(btn);
+              setDefaultKioskNode();
+            } catch (DBException ex) {
+              ex.printStackTrace();
+            }
+          });
       floorButtons.add(btn);
     }
-    onBtnFloorSetOnMouseClicked();
   }
 
-  public void onBtnFloorSetOnMouseClicked() {
-    for (int i = 0; i < floorButtonList.getChildren().size(); i++) {
-      floorButtonList
-          .getChildren()
-          .get(i)
-          .setOnMouseClicked(e -> mapBaseController.drawPath(this.path, this.currentFloor));
-    }
+  public void changeFloor(JFXButton btn) throws DBException {
+    this.currentFloor = Integer.parseInt(btn.getText());
+    mapBaseController.setFloor(this.currentBuilding, this.currentFloor, this.path);
   }
-
   /**
    * styles the buttons which enable the user to view different floors
    *
@@ -243,7 +249,7 @@ public class MapDisplayController implements Controller, Initializable {
 
   public void initPathfind(ListView<DbNode> firstLst, DbNode second) throws DBException {
     DbNode first = firstLst.getSelectionModel().getSelectedItem();
-    Path path =
+    this.path =
         singleton.savedAlgo.findPath(
             first, second, handicapp1.isSelected() || handicapp2.isSelected());
     mapBaseController.setFloor(first.getBuilding(), first.getFloor(), path);
@@ -257,7 +263,7 @@ public class MapDisplayController implements Controller, Initializable {
 
   public void initQuickAccess(ListView<DbNode> firstLst, String type) throws DBException {
     DbNode first = lst_firstLocation.getSelectionModel().getSelectedItem();
-    Path path = singleton.savedAlgo.findQuickAccess(first, type);
+    this.path = singleton.savedAlgo.findQuickAccess(first, type);
     mapBaseController.drawPath(path, first.getFloor());
     setTextDecription(path);
   }
@@ -280,13 +286,14 @@ public class MapDisplayController implements Controller, Initializable {
   }
 
   public void onBtnResetPathClicked() throws DBException {
-    //    defaultKioskNode();
+    path.clear();
     enableAllFloorButtons();
     txt_firstLocation.clear();
     txt_secondLocation.clear();
     lst_firstLocation.getItems().clear();
     lst_secondLocation.getItems().clear();
     mapBaseController.clearPath();
+    setDefaultKioskNode();
   }
 
   public void setMainApp(App mainApp) {
@@ -358,30 +365,6 @@ public class MapDisplayController implements Controller, Initializable {
     }
   }
 
-  // Copied to mapBaseController
-  /*
-  private void defaultKioskNode() throws DBException {
-    LinkedList<String> kiosks = new LinkedList<>();
-    if (currentFloor == 1) {
-      txt_firstLocation.setText(MapDB.getNode("NSERV00301").getLongName());
-      kiosks.add(MapDB.getNode("NSERV00301").getLongName());
-      ObservableList<String> textList = FXCollections.observableList(kiosks);
-      lst_firstLocation.setItems(textList);
-      lst_firstLocation.getSelectionModel().select(0);
-
-    } else if (currentFloor == 3) {
-      txt_firstLocation.setText(MapDB.getNode("NSERV00103").getLongName());
-      kiosks.add(MapDB.getNode("NSERV00103").getLongName());
-      ObservableList<String> textList = FXCollections.observableList(kiosks);
-      lst_firstLocation.setItems(textList);
-      lst_firstLocation.getSelectionModel().select(0);
-    } else {
-      txt_firstLocation.clear();
-      lst_firstLocation.getItems().clear();
-    }
-  }
-   */
-
   private void setDefaultKioskNode() throws DBException {
     boolean noFaulknerKiosk =
         !(currentBuilding.equals("Faulkner") && (currentFloor == 1 || currentFloor == 3));
@@ -399,6 +382,7 @@ public class MapDisplayController implements Controller, Initializable {
     lst_firstLocation.getItems().clear();
     txt_firstLocation.setText(kiosk.toString());
     lst_firstLocation.getItems().add(kiosk);
+    lst_firstLocation.getSelectionModel().select(0);
   }
 
   private void clearKioskFields() {

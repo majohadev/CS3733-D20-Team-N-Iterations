@@ -53,4 +53,8 @@ public class Path {
   public DbNode get(int i) {
     return path.get(i);
   }
+
+  public void clear() {
+    path.clear();
+  }
 }

@@ -122,15 +122,20 @@ public class MapBaseController implements Controller {
         } else if (i == currentPath.size() - 2) {
           drawCircle(secondNode, END_NODE_COLOR);
         }
+        Line line =
+            new Line(
+                scaleX(firstNode.getX()),
+                scaleY(firstNode.getY()),
+                scaleX(secondNode.getX()),
+                scaleY(secondNode.getY()));
+        styleLine(line);
+        pn_path.getChildren().add(line);
       }
-      Line line =
-          new Line(
-              scaleX(firstNode.getX()),
-              scaleY(firstNode.getY()),
-              scaleX(secondNode.getX()),
-              scaleY(secondNode.getY()));
-      pn_path.getChildren().add(line);
     }
+  }
+
+  public void styleLine(Line line) {
+    line.setStrokeWidth(5);
   }
 
   /**
@@ -153,9 +158,8 @@ public class MapBaseController implements Controller {
   public double scaleY(double y) {
     return y * VERTICAL_SCALE;
   }
-  /** Clears all the edges on the map display */
+
   public void clearPath() {
-    // TODO: Insert any other memory cleanup methods here
     pn_path.getChildren().clear();
   }
 
