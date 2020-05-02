@@ -146,7 +146,6 @@ public class DbNode implements Comparable<DbNode>, INode {
   }
 
   @Override
-
   public String toString() {
     return this.getLongName();
   }
