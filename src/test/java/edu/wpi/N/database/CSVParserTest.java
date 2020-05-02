@@ -2,7 +2,6 @@ package edu.wpi.N.database;
 
 import edu.wpi.N.algorithms.AStarTests;
 import edu.wpi.N.entities.DbNode;
-import edu.wpi.N.entities.Node;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -168,12 +167,12 @@ public class CSVParserTest {
     CSVParser.parseCSV(inputNodes);
     CSVParser.parseCSV(inputEdges);
 
-    LinkedList<Node> actualEdges = MapDB.getGAdjacent("ELEV022000");
+    LinkedList<DbNode> actualEdges = MapDB.getAdjacent("ELEV022000");
 
-    Node actualOne = MapDB.getGNode("ELEV021000");
-    Node actualTwo = MapDB.getGNode("ELEV023000");
-    Node actualThree = MapDB.getGNode("H052000000");
-    Node actualFour = MapDB.getGNode("H062000000");
+    DbNode actualOne = MapDB.getNode("ELEV021000");
+    DbNode actualTwo = MapDB.getNode("ELEV023000");
+    DbNode actualThree = MapDB.getNode("H052000000");
+    DbNode actualFour = MapDB.getNode("H062000000");
 
     Assertions.assertTrue(actualEdges.size() == 4);
     Assertions.assertTrue(actualEdges.contains(actualOne));

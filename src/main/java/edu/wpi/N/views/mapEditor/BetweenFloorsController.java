@@ -46,6 +46,10 @@ public class BetweenFloorsController implements Controller, Initializable {
   int floor;
   boolean currNode;
 
+  public BetweenFloorsController(StateSingleton singleton) {
+    this.singleton = singleton;
+  }
+
   @FXML
   public void initialize(URL url, ResourceBundle rb) {
     this.nodes = new HashMap<Integer, Circle>();
@@ -100,7 +104,10 @@ public class BetweenFloorsController implements Controller, Initializable {
       this.originalEdges = new LinkedList<DbNode>();
       while (nodeIt.hasNext()) {
         DbNode next = nodeIt.next();
-        LinkedList<DbNode> connectedNodes = AbsAlgo.searchAccessible(next);
+
+        //TODO: change it later. Noah!
+        LinkedList<DbNode> connectedNodes =
+            AbsAlgo.searchAccessible(node);
         if (connectedNodes != null) this.originalEdges.addAll(connectedNodes);
       }
     } catch (DBException e) {

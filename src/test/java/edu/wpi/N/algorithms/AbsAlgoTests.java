@@ -16,6 +16,8 @@ public class AbsAlgoTests {
 
   Algorithm algorithm = new Algorithm();
 
+  public AbsAlgoTests() throws DBException {}
+
   @BeforeAll
   public static void initializeTest()
       throws SQLException, ClassNotFoundException, DBException, FileNotFoundException {
