@@ -20,7 +20,6 @@ public class ServiceDB {
    * @param id The employee's ID
    * @return an employee entity representing that employee
    */
-  // TODO: Add your employee to getEmployee
   public static Employee getEmployee(int id) throws DBException {
     try {
       if (id <= 0) return null; // handle case of unassigned employee without printing anything
@@ -76,7 +75,6 @@ public class ServiceDB {
    *
    * @return a linked list of all employees in the database
    */
-  // TODO add your employee type to this function, must first create a function to get all employees
   // of your type
   public static LinkedList<Employee> getEmployees() throws DBException {
     LinkedList<Employee> allEmployee = new LinkedList<Employee>();
@@ -138,7 +136,6 @@ public class ServiceDB {
     return flowers;
   }
 
-  // TODO: Add your service request here
   public static Request getRequest(int id) throws DBException {
     try {
       String query = "SELECT * FROM request WHERE requestID = ?";
@@ -333,7 +330,6 @@ public class ServiceDB {
    *
    * @return a linked list of all service requests in the database
    */
-  // TODO: add your request type to getRequests
   public static LinkedList<Request> getRequests() throws DBException {
     try {
       LinkedList<Request> requests = new LinkedList<Request>();
@@ -532,7 +528,6 @@ public class ServiceDB {
    *
    * @return a linked list of all open service requests in the database
    */
-  // TODO: Add your service request here
   public static LinkedList<Request> getOpenRequests() throws DBException {
     LinkedList<Request> openList = new LinkedList<>();
     try {
@@ -757,7 +752,6 @@ public class ServiceDB {
       throw new DBException("Unknown error: getLaundrys", e);
     }
   }
-  // TODO: GetEmployeeTypes (something which gets all the employees of your particular type)
 
   /**
    * Gets a list of all internal transportation requests
@@ -1010,7 +1004,6 @@ public class ServiceDB {
     }
   }
 
-  // TODO: Add a function to add your employee type to the database
 
   /**
    * Adds an internal transportation employee to the database
@@ -1289,7 +1282,6 @@ public class ServiceDB {
     }
   }
 
-  // TODO: Create your addRequest call here
 
   public static int addInternalTransportationReq(
       String reqNotes,
@@ -1743,7 +1735,6 @@ public class ServiceDB {
     }
   }
 
-  // TODO: make functions for changing the attributes of your employees
 
   // Nick
   /**
