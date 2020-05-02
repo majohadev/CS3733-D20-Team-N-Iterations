@@ -3,8 +3,6 @@ package edu.wpi.N.database;
 import edu.wpi.N.Main;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.views.features.ArduinoController;
-import org.apache.ibatis.jdbc.ScriptRunner;
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -13,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+import org.apache.ibatis.jdbc.ScriptRunner;
 
 public class MapDB {
 
@@ -69,8 +68,7 @@ public class MapDB {
    * @throws SQLException on error
    * @throws ClassNotFoundException on error
    */
-  public static void initTestDB()
-      throws SQLException, ClassNotFoundException {
+  public static void initTestDB() throws SQLException, ClassNotFoundException {
     if (con != null) {
       ScriptRunner sr = new ScriptRunner(con);
       Reader reader =
@@ -928,10 +926,10 @@ public class MapDB {
           if (next.getNodeID().equals(DbNode2.getNodeID()))
             return; // already in the same shaft, just return.
           error +=
-                  DbNode2.getLongName()
-                          + " is on the same floor as another node in "
-                          + DbNode1.getLongName()
-                          + "'s shaft!\n";
+              DbNode2.getLongName()
+                  + " is on the same floor as another node in "
+                  + DbNode1.getLongName()
+                  + "'s shaft!\n";
           break;
         }
       }
@@ -943,10 +941,10 @@ public class MapDB {
           if (next.getNodeID().equals(DbNode1.getNodeID()))
             return; // already in the same shaft, just return.
           error +=
-                  DbNode1.getLongName()
-                          + " is on the same floor as another node in "
-                          + DbNode2.getLongName()
-                          + "'s shaft!\n";
+              DbNode1.getLongName()
+                  + " is on the same floor as another node in "
+                  + DbNode2.getLongName()
+                  + "'s shaft!\n";
           break;
         }
       }

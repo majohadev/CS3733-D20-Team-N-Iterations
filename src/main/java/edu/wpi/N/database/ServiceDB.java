@@ -19,6 +19,7 @@ public class ServiceDB {
    *
    * @param id The employee's ID
    * @return an employee entity representing that employee
+   * @throws DBException If an error occurs
    */
   public static Employee getEmployee(int id) throws DBException {
     try {
@@ -30,39 +31,39 @@ public class ServiceDB {
       rs.next();
       String sType = rs.getString("serviceType");
       String name = rs.getString("name");
-      if (sType.equals("Translator")) {
-        query = "SELECT language FROM language WHERE t_EmployeeID = ?";
-        stmt = con.prepareStatement(query);
-        stmt.setInt(1, id);
-        rs = stmt.executeQuery();
-        LinkedList<String> languages = new LinkedList<String>();
-        while (rs.next()) {
-          languages.add(rs.getString("language"));
-        }
-        return new Translator(id, name, languages);
-
-      } else if (sType.equals("Laundry")) {
-        return new Laundry(id, name);
-      } else if (sType.equals("Emotional Support")) {
-        return new EmotionalSupporter(id, name);
-      } else if (sType.equals("Medicine")) {
-        return DoctorDB.getDoctor(id);
-      } else if (sType.equals("Sanitation")) {
-        return new Sanitation(id, name);
-      } else if (sType.equals("Wheelchair")) {
-        return new WheelchairEmployee(id, name);
-      } else if (sType.equals("IT")) {
-        return new IT(id, name);
-      } else if (sType.equals("Flower")) {
-        return new FlowerDeliverer(id, name);
-      } else if (sType.equals("Internal Transportation")) {
-        return new InternalTransportationEmployee(id, name);
-      } else if (sType.equals("Security")) {
-        return new SecurityOfficer(id, name);
-      } else
-        throw new DBException(
-            "Invalid employee in table employees! ID: " + id + "Name: " + rs.getString("name"));
-
+      switch (sType) {
+        case "Translator":
+          query = "SELECT language FROM language WHERE t_EmployeeID = ?";
+          stmt = con.prepareStatement(query);
+          stmt.setInt(1, id);
+          rs = stmt.executeQuery();
+          LinkedList<String> languages = new LinkedList<>();
+          while (rs.next()) {
+            languages.add(rs.getString("language"));
+          }
+          return new Translator(id, name, languages);
+        case "Laundry":
+          return new Laundry(id, name);
+        case "Emotional Support":
+          return new EmotionalSupporter(id, name);
+        case "Medicine":
+          return DoctorDB.getDoctor(id);
+        case "Sanitation":
+          return new Sanitation(id, name);
+        case "Wheelchair":
+          return new WheelchairEmployee(id, name);
+        case "IT":
+          return new IT(id, name);
+        case "Flower":
+          return new FlowerDeliverer(id, name);
+        case "Internal Transportation":
+          return new InternalTransportationEmployee(id, name);
+        case "Security":
+          return new SecurityOfficer(id, name);
+        default:
+          throw new DBException(
+                  "Invalid employee in table employees! ID: " + id + "Name: " + rs.getString("name"));
+      }
     } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Unknown error: getEmployee. ID: " + id, e);
@@ -74,10 +75,11 @@ public class ServiceDB {
    * Returns a list of all employees in the database
    *
    * @return a linked list of all employees in the database
+   * @throws DBException If an error occurs
    */
   // of your type
   public static LinkedList<Employee> getEmployees() throws DBException {
-    LinkedList<Employee> allEmployee = new LinkedList<Employee>();
+    LinkedList<Employee> allEmployee = new LinkedList<>();
     allEmployee.addAll(getTranslators());
     allEmployee.addAll(getLaundrys());
     allEmployee.addAll(getEmotionalSupporters());
@@ -96,6 +98,7 @@ public class ServiceDB {
    * Gets all services in the database
    *
    * @return a linked list of all services in the database
+   * @throws DBException If an error occurs
    */
   public static LinkedList<Service> getServices() throws DBException {
     LinkedList<Service> ret = new LinkedList<>();
@@ -136,6 +139,12 @@ public class ServiceDB {
     return flowers;
   }
 
+  /**
+   * Gets the request from the database with the given id
+   * @param id the id of the request to retrieve
+   * @return a Request containing information about the request requested
+   * @throws DBException If an error occurs
+   */
   public static Request getRequest(int id) throws DBException {
     try {
       String query = "SELECT * FROM request WHERE requestID = ?";
@@ -329,10 +338,11 @@ public class ServiceDB {
    * Gets all the requests in the database
    *
    * @return a linked list of all service requests in the database
+   * @throws DBException If an error occurs
    */
   public static LinkedList<Request> getRequests() throws DBException {
     try {
-      LinkedList<Request> requests = new LinkedList<Request>();
+      LinkedList<Request> requests = new LinkedList<>();
       String query = "SELECT * FROM request WHERE serviceType = 'Laundry'";
       PreparedStatement stmt = con.prepareStatement(query);
       ResultSet rs = stmt.executeQuery();
@@ -527,6 +537,7 @@ public class ServiceDB {
    * Gets all the open requests (not completed requests) in the database
    *
    * @return a linked list of all open service requests in the database
+   * @throws DBException If an error occurs
    */
   public static LinkedList<Request> getOpenRequests() throws DBException {
     LinkedList<Request> openList = new LinkedList<>();
@@ -713,6 +724,7 @@ public class ServiceDB {
    * Gets all the translators in the database
    *
    * @return a linked list of all translators in the database
+   * @throws DBException If an error occurs
    */
   public static LinkedList<Translator> getTranslators() throws DBException {
     try {
@@ -720,7 +732,7 @@ public class ServiceDB {
           "SELECT t_employeeID from employees, translator where employeeID = t_employeeID";
       PreparedStatement stmt = con.prepareStatement(query);
       ResultSet rs = stmt.executeQuery();
-      LinkedList<Translator> translators = new LinkedList<Translator>();
+      LinkedList<Translator> translators = new LinkedList<>();
       while (rs.next()) {
         translators.add((Translator) getEmployee(rs.getInt("t_employeeID")));
       }
@@ -736,13 +748,14 @@ public class ServiceDB {
    * Gets all the laundrys in the database
    *
    * @return a linked list of all people who can do laundry in the database
+   * @throws DBException If an error occurs
    */
   public static LinkedList<Laundry> getLaundrys() throws DBException {
     try {
       String query = "SELECT l_employeeID from employees, laundry where employeeID = l_employeeID";
       PreparedStatement stmt = con.prepareStatement(query);
       ResultSet rs = stmt.executeQuery();
-      LinkedList<Laundry> laundrys = new LinkedList<Laundry>();
+      LinkedList<Laundry> laundrys = new LinkedList<>();
       while (rs.next()) {
         laundrys.add((Laundry) getEmployee(rs.getInt("l_employeeID")));
       }
@@ -757,7 +770,7 @@ public class ServiceDB {
    * Gets a list of all internal transportation requests
    *
    * @return a LinkedList of InternalTransportationRequest
-   * @throws DBException
+   * @throws DBException If an error occurs
    */
   public static LinkedList<InternalTransportationEmployee> getInternalTransportationEmployees()
       throws DBException {
@@ -781,7 +794,7 @@ public class ServiceDB {
    * gets a list of all flower deliverers
    *
    * @return list of all flower deliverers
-   * @throws DBException
+   * @throws DBException If an error occurs
    */
   public static LinkedList<FlowerDeliverer> getFlowerDeliverers() throws DBException {
     try {
@@ -789,7 +802,7 @@ public class ServiceDB {
           "SELECT f_employeeID from employees, flowerDeliverer where employeeID = f_employeeID";
       PreparedStatement stmt = con.prepareStatement(query);
       ResultSet rs = stmt.executeQuery();
-      LinkedList<FlowerDeliverer> list = new LinkedList<FlowerDeliverer>();
+      LinkedList<FlowerDeliverer> list = new LinkedList<>();
       while (rs.next()) {
         list.add((FlowerDeliverer) getEmployee(rs.getInt("f_employeeID")));
       }
@@ -804,6 +817,7 @@ public class ServiceDB {
    * Gets all the emotional supporters in the database
    *
    * @return a linked list of all people who can do emotional support in the database
+   * @throws DBException If an error occurs
    */
   public static LinkedList<EmotionalSupporter> getEmotionalSupporters() throws DBException {
     try {
@@ -811,7 +825,7 @@ public class ServiceDB {
           "SELECT e_employeeID from employees, emotionalSupporter where employeeID = e_employeeID";
       PreparedStatement stmt = con.prepareStatement(query);
       ResultSet rs = stmt.executeQuery();
-      LinkedList<EmotionalSupporter> emotionalSupporters = new LinkedList<EmotionalSupporter>();
+      LinkedList<EmotionalSupporter> emotionalSupporters = new LinkedList<>();
       while (rs.next()) {
         emotionalSupporters.add((EmotionalSupporter) getEmployee(rs.getInt("e_employeeID")));
       }
@@ -826,7 +840,7 @@ public class ServiceDB {
    * Gets all the wheelchair employees in the database
    *
    * @return LinkedList<WheelchairEmployee>, all wheelchair employees
-   * @throws DBException
+   * @throws DBException If an error occurs
    */
   public static LinkedList<WheelchairEmployee> getWheelchairEmployees() throws DBException {
     try {
@@ -834,7 +848,7 @@ public class ServiceDB {
           "SELECT w_employeeID from employees, wheelchairEmployee where employeeID = w_employeeID";
       PreparedStatement stmt = con.prepareStatement(query);
       ResultSet rs = stmt.executeQuery();
-      LinkedList<WheelchairEmployee> wheelchairEmployees = new LinkedList<WheelchairEmployee>();
+      LinkedList<WheelchairEmployee> wheelchairEmployees = new LinkedList<>();
       while (rs.next()) {
         wheelchairEmployees.add((WheelchairEmployee) getEmployee(rs.getInt("w_employeeID")));
       }
@@ -848,6 +862,7 @@ public class ServiceDB {
    * Gets all the IT employees in the database
    *
    * @return a linked list of all people who can do IT in the database
+   * @throws DBException If an error occurs
    */
   public static LinkedList<IT> getITs() throws DBException {
     try {
@@ -869,6 +884,7 @@ public class ServiceDB {
    * Gets all the security officers in the database
    *
    * @return a linked list of all security officers in the database
+   * @throws DBException If an error occurs
    */
   public static LinkedList<SecurityOfficer> getSecurityOfficers() throws DBException {
     try {
@@ -893,6 +909,7 @@ public class ServiceDB {
    *
    * @param lang the language that you want the translators to speak
    * @return a linked list of all the translators who speak a specified language
+   * @throws DBException If an error occurs
    */
   public static LinkedList<Translator> getTransLang(String lang) throws DBException {
     try {
@@ -902,7 +919,7 @@ public class ServiceDB {
       PreparedStatement stmt = con.prepareStatement(query);
       stmt.setString(1, lang);
       ResultSet rs = stmt.executeQuery();
-      LinkedList<Translator> translators = new LinkedList<Translator>();
+      LinkedList<Translator> translators = new LinkedList<>();
       while (rs.next()) {
         translators.add((Translator) getEmployee(rs.getInt("t_employeeID")));
       }
@@ -920,6 +937,7 @@ public class ServiceDB {
    * @param name the translator's name
    * @param languages the languages that this translator is capable of speaking
    * @return id of created translator
+   * @throws DBException If an error occurs
    */
   public static int addTranslator(String name, LinkedList<String> languages) throws DBException {
     try {
@@ -935,12 +953,11 @@ public class ServiceDB {
       st.setInt(1, id);
       st.executeUpdate();
       if (languages == null) return id;
-      Iterator<String> langIt = languages.iterator();
-      while (langIt.hasNext()) {
+      for (String language : languages) {
         query = "INSERT INTO language VALUES (?, ?)";
         st = con.prepareStatement(query);
         st.setInt(1, id);
-        st.setString(2, langIt.next());
+        st.setString(2, language);
         st.executeUpdate();
       }
       return id;
@@ -956,6 +973,7 @@ public class ServiceDB {
    *
    * @param name the laundry employee's name
    * @return id of created request
+   * @throws DBException If an error occurs
    */
   public static int addLaundry(String name) throws DBException {
     try {
@@ -981,8 +999,9 @@ public class ServiceDB {
   /**
    * adds a sanitation employee with the specified name
    *
-   * @param name
+   * @param name The name of the employee
    * @return the generated id
+   * @throws DBException If an error occurs
    */
   public static int addSanitationEmp(String name) throws DBException {
     try {
@@ -1034,9 +1053,9 @@ public class ServiceDB {
   /**
    * Adds a Flower Deliverer to the database
    *
-   * @param name
+   * @param name The name of the flower deliverer
    * @return the employeeID of the generated Employee
-   * @throws DBException
+   * @throws DBException If an error occurs
    */
   public static int addFlowerDeliverer(String name) throws DBException {
     try {
@@ -1063,6 +1082,7 @@ public class ServiceDB {
    *
    * @param name the Emotional supporter employee's name
    * @return id of created request
+   * @throws DBException If an error occurs
    */
   public static int addEmotionalSupporter(String name) throws DBException {
     try {
@@ -1087,9 +1107,9 @@ public class ServiceDB {
   /**
    * adds a wheelchair employee to the database
    *
-   * @param name, the wheelchair employee's name
-   * @return int, employeeID of the newly added employee
-   * @throws DBException
+   * @param name the wheelchair employee's name
+   * @return the employeeID of the newly added employee
+   * @throws DBException If an error occurs
    */
   public static int addWheelchairEmployee(String name) throws DBException {
     try {
@@ -1115,6 +1135,7 @@ public class ServiceDB {
    *
    * @param name the IT employee's name
    * @return id of created request
+   * @throws DBException If an error occurs
    */
   public static int addIT(String name) throws DBException {
     try {
@@ -1142,6 +1163,7 @@ public class ServiceDB {
    *
    * @param name the security officer's name
    * @return id of created request
+   * @throws DBException If an error occurs
    */
   public static int addSecurityOfficer(String name) throws DBException {
     try {
@@ -1171,6 +1193,7 @@ public class ServiceDB {
    * @param nodeID The ID of the node in which these services are requested
    * @param language the language that the translator is requested for
    * @return the id of the created request
+   * @throws DBException If an error occurs
    */
   public static int addTransReq(String reqNotes, String nodeID, String language)
       throws DBException {
@@ -1255,6 +1278,7 @@ public class ServiceDB {
    * @param reqNotes some notes for the laundry request
    * @param nodeID The ID of the node in which these services are requested
    * @return the id of the created request
+   * @throws DBException If an error occurs
    */
   public static int addLaundReq(String reqNotes, String nodeID) throws DBException {
     try {
@@ -1281,6 +1305,17 @@ public class ServiceDB {
     }
   }
 
+  /**
+   * Adds a request for internal transportation to the database
+   *
+   * @param reqNotes The notes of the request
+   * @param nodeID The id of the node the request should be sent to
+   * @param transportationType The type of transportation requested
+   * @param scheduledTransportTime The time of the transportation (24-hour, in hh:mm format)
+   * @param destinationLocation The node id of the destination
+   * @return The id of the newly created request
+   * @throws DBException If an error occurs
+   */
   public static int addInternalTransportationReq(
       String reqNotes,
       String nodeID,
@@ -1319,6 +1354,18 @@ public class ServiceDB {
     }
   }
 
+  /**
+   * Adds a floral request to the database
+   *
+   * @param reqNotes The notes for the request
+   * @param nodeID The node id of where the request needs to be sent to
+   * @param patientName The name of the patient recieving the flowers
+   * @param visitorName The name of the visitor requesting the flowers
+   * @param creditNum The credit card number, needed to pay for the flowers
+   * @param flowerList The list of flowers to be delivered
+   * @return The id of the newly created request
+   * @throws DBException If an error occurs
+   */
   public static int addFlowerReq(
       String reqNotes,
       String nodeID,
@@ -1456,6 +1503,7 @@ public class ServiceDB {
    * @param nodeID The ID of the node in which these services are requested
    * @param supportType the type of support the emotional supporter is requested for
    * @return the id of the created request
+   * @throws DBException If an error occurs
    */
   public static int addEmotSuppReq(String reqNotes, String nodeID, String supportType)
       throws DBException {
@@ -1485,14 +1533,14 @@ public class ServiceDB {
   }
 
   /**
-   * creates a new wheelchair request
+   * Creates a new wheelchair request
    *
    * @param reqNotes, notes for the wheelchair request
    * @param nodeID, String, location of wheelchair request
    * @param needsAssistance, String, whether the wheelchair requester requires assistance ("yes" or
    *     "no")
    * @return int, the requestID of the new request
-   * @throws DBException
+   * @throws DBException If an error occurs
    */
   public static int addWheelchairRequest(String reqNotes, String nodeID, String needsAssistance)
       throws DBException {
@@ -1526,6 +1574,7 @@ public class ServiceDB {
    * @param reqNotes some notes for the IT request
    * @param nodeID The ID of the node in which these services are requested
    * @return the id of the created request
+   * @throws DBException If an error occurs
    */
   public static int addITReq(String reqNotes, String nodeID, String device, String problem)
       throws DBException {
@@ -1562,6 +1611,7 @@ public class ServiceDB {
    * @param reqNotes Description of the incident being reported
    * @param nodeID The ID of the node in which these services are requested
    * @return the id of the created request
+   * @throws DBException If an error occurs
    */
   public static int addSecurityReq(String reqNotes, String nodeID, String isEmergency)
       throws DBException {
@@ -1595,7 +1645,8 @@ public class ServiceDB {
    * Assigns an employee to a request; the employee must be able to fulfil that request
    *
    * @param employeeID the ID of the employee to be assigned
-   * @param requestID The ID of the request to which they will be assigned.
+   * @param requestID The ID of the request to which they will be assigned
+   * @throws DBException If an error occurs or if the employee is unable to fulfill the request
    */
   public static void assignToRequest(int employeeID, int requestID) throws DBException {
     try {
@@ -1606,7 +1657,7 @@ public class ServiceDB {
             "Invalid kind of employee! That employee isn't authorized for that kind of job!");
       }
       if (req instanceof TranslatorRequest) {
-        String language = ((TranslatorRequest) req).getAtr1();
+        String language = req.getAtr1();
         if (!((Translator) emp).getLanguages().contains(language)) {
           throw new DBException(
               "Invalid selection: That translator can't speak the requested langauge");
@@ -1629,6 +1680,7 @@ public class ServiceDB {
    *
    * @param requestID the ID of the request to be marked as completed
    * @param compNotes notes regarding the completion of the request
+   * @throws DBException If an error occurs, or of the request isn't open
    */
   public static void completeRequest(int requestID, String compNotes) throws DBException {
     Request req = getRequest(requestID);
@@ -1673,6 +1725,7 @@ public class ServiceDB {
    * Removes an employee from the database
    *
    * @param employeeID the id of the employee to be excised
+   * @throws DBException If an error occurs, or if the id is invalid
    */
   public static void removeEmployee(int employeeID) throws DBException {
     try {
@@ -1692,7 +1745,7 @@ public class ServiceDB {
    *
    * @param employeeID The ID of the employee who will speak this new language
    * @param language The language to be added
-   * @throws DBException if the employee isn't a translator
+   * @throws DBException if the employee isn't a translator, or if an error occurs
    */
   public static void addLanguage(int employeeID, String language) throws DBException {
     try {
@@ -1717,7 +1770,7 @@ public class ServiceDB {
    *
    * @param employeeID The ID of the employee who no longer speaks the given language
    * @param language The language to be removed
-   * @throws DBException if the employee isn't a translator
+   * @throws DBException if the employee isn't a translator, or if an error occurs
    */
   public static void removeLanguage(int employeeID, String language) throws DBException {
     try {
@@ -1739,7 +1792,7 @@ public class ServiceDB {
    *
    * @param requestID The request id of an open request to deny
    * @param compNotes Notes on the denial of this request
-   * @throws DBException on unsuccess
+   * @throws DBException if the request isn't open, or if there was an error
    */
   public static void denyRequest(int requestID, String compNotes) throws DBException {
     try {
@@ -1769,13 +1822,14 @@ public class ServiceDB {
    * Returns all the languages that are currently available
    *
    * @return a linked list of strings representing all the languages available
+   * @throws DBException If an error occurs
    */
   public static LinkedList<String> getLanguages() throws DBException {
     try {
       String query = "SELECT DISTINCT language FROM language";
       PreparedStatement stmt = con.prepareStatement(query);
       ResultSet rs = stmt.executeQuery();
-      LinkedList<String> langs = new LinkedList<String>();
+      LinkedList<String> langs = new LinkedList<>();
       while (rs.next()) {
         langs.add(rs.getString("language"));
       }
@@ -1794,7 +1848,7 @@ public class ServiceDB {
    * @param serviceType The service type which you want to change
    * @param startTime The new start time for the service
    * @param endTime The new end time for the service
-   * @throws DBException On error or when input is invalid.
+   * @throws DBException On error or when input is invalid
    */
   public static void setServiceTime(String serviceType, String startTime, String endTime)
       throws DBException {
@@ -1820,6 +1874,12 @@ public class ServiceDB {
           "The times you entered, " + startTime + ", " + endTime + ", are invalid!");
   }
 
+  /**
+   * Converts a Timestamp object to a GregorianCalendar object representing the same time
+   *
+   * @param time The Timestamp object to be converted
+   * @return a GregorianCalendar representing the same time as the Timestamp passed in
+   */
   public static GregorianCalendar getJavatime(Timestamp time) {
     if (time == null) {
       return null;
@@ -1829,18 +1889,24 @@ public class ServiceDB {
     return (GregorianCalendar) cal;
   }
 
+  /**
+   * Converts a GregorianCalendar object to a Timestamp object representing the same time
+   *
+   * @param cal The GregorianCalendar object to be converted
+   * @return A Timestamp representing the same time as the GregorianCalendar passed in
+   */
   public static Timestamp getSqltime(GregorianCalendar cal) {
-    Timestamp time = new Timestamp(cal.getTime().getTime());
-    return time;
+    return new Timestamp(cal.getTime().getTime());
   }
 
   // Chris
 
   /**
-   * gets a list of patients taking the specified medicine
+   * Gets a list of patients taking the specified medicine
    *
-   * @param type
-   * @return list of patients
+   * @param type The type of medicine
+   * @return a LinkedList of patients
+   * @throws DBException If an error occurs
    */
   public static LinkedList<String> getPatientByMedType(String type) throws DBException {
     try {
@@ -1866,6 +1932,7 @@ public class ServiceDB {
    *
    * @param patient The specified patient
    * @return a LinkedList of MedicineRequest
+   * @throws DBException If an error occurs
    */
   public static LinkedList<MedicineRequest> getMedRequestByPatient(String patient)
       throws DBException {
@@ -1905,19 +1972,20 @@ public class ServiceDB {
 
   // Chris
   /**
-   * gets a list of sanitationRequest where the amount matches the given val
+   * gets a list of sanitationRequest where the size matches the given val (case-insensitive)
    *
-   * @param amount
-   * @return a list of sanitationRequest where amount matches the given amount
+   * @param size The size of the spill
+   * @return a list of sanitationRequest where size matches the given size
+   * @throws DBException If an error occurs
    */
-  public static LinkedList<SanitationRequest> getsanitationbyAmount(String amount)
+  public static LinkedList<SanitationRequest> getsanitationbyAmount(String size)
       throws DBException {
-    LinkedList<SanitationRequest> list = new LinkedList<SanitationRequest>();
+    LinkedList<SanitationRequest> list = new LinkedList<>();
     try {
       String query =
           "SELECT * FROM sanitationRequests, request WHERE sanitationRequests.requestID = request.requestID AND Upper(size) = ?";
       PreparedStatement st = con.prepareStatement(query);
-      st.setString(1, amount.toUpperCase());
+      st.setString(1, size.toUpperCase());
       ResultSet rs = st.executeQuery();
       while (rs.next()) {
         list.add(
@@ -1994,12 +2062,6 @@ public class ServiceDB {
   //  }
 
   // Nick
-  /**
-   * Gets the patient specified by the given ID
-   *
-   * @param patientID the ID of the patient
-   * @return The Patient object containing information about the patient
-   */
   //  public static Patient getPatient(int patientID) throws DBException {
   //    try {
   //      String query = "SELECT * FROM patients WHERE patientID = ?";
@@ -2049,10 +2111,11 @@ public class ServiceDB {
   // Nick
 
   /**
-   * Searches for a medicine name
+   * Searches for a medicine name (case-insensitive)
    *
    * @param searchQuery The search query
    * @return LinkedList of medicine name (String) that matches query
+   * @throws DBException If an error occurs
    */
   public static LinkedList<String> searchByMedType(String searchQuery) throws DBException {
     try {
@@ -2072,14 +2135,15 @@ public class ServiceDB {
 
   // Chris
   /**
-   * searches through the database where the spillType contains the given type
+   * Searches through the database where the spillType contains the given type (case-insensitive)
    *
-   * @param type
+   * @param type The type of spill
    * @return a list of sanitationRequest where spillType contains the given type
+   * @throws DBException If an error occurs
    */
   public static LinkedList<SanitationRequest> searchbyspillType(String type) throws DBException {
     try {
-      LinkedList<SanitationRequest> list = new LinkedList<SanitationRequest>();
+      LinkedList<SanitationRequest> list = new LinkedList<>();
       String query = "SELECT * FROM sanitationRequests WHERE UPPER(sanitationType) LIKE ?";
       PreparedStatement stmt = con.prepareStatement(query);
       stmt.setString(1, "%" + type.toUpperCase() + "%");
@@ -2096,14 +2160,15 @@ public class ServiceDB {
 
   // Nick
   /**
-   * adds a sanitation request with the specified fields
+   * Adds a sanitation request with the specified fields
    *
-   * @param reqNotes
-   * @param nodeID
-   * @param spillType
-   * @param size
-   * @param danger
-   * @return the generated requestID
+   * @param reqNotes The notes of the request
+   * @param nodeID The node id of the location the request needs to be sent to
+   * @param spillType The type of spill
+   * @param size The size of the spill (one of "small", "medium", "large", "unknown"; case-insensitive)
+   * @param danger The danger level of the spill (one of "low", "medium", "high", "unknown"; case-insensitive)
+   * @return The id of the newly created request
+   * @throws DBException If the size or danger level is invalid, or if an error occurs
    */
   public static int addSanitationReq(
       String reqNotes, String nodeID, String spillType, String size, String danger)
@@ -2163,10 +2228,11 @@ public class ServiceDB {
   }
   // Nick
   /**
-   * gets a list of sanitationRequest where the danger matches the given value (case insensitive)
+   * Gets a list of SanitationRequest where the danger matches the given value (case-insensitive)
    *
-   * @param danger
-   * @return a list of sanitationRequest where danger matches the given danger level
+   * @param danger The danger level of the sanitation request
+   * @return A list of SanitationRequest where danger matches the given danger level
+   * @throws DBException If an error occurs
    */
   public static LinkedList<SanitationRequest> getSanitationByDanger(String danger)
       throws DBException {
@@ -2207,9 +2273,10 @@ public class ServiceDB {
 
   // Nick
   /**
-   * gets a list of all sanitation Employee in the database
+   * Gets a list of all sanitation Employees in the database
    *
    * @return a LinkedList of Sanitation
+   * @throws DBException If an error occurs
    */
   public static LinkedList<Sanitation> getSanitationEmp() throws DBException {
     try {

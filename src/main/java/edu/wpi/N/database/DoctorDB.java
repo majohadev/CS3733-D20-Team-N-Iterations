@@ -2,7 +2,6 @@ package edu.wpi.N.database;
 
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.employees.Doctor;
-
 import java.sql.*;
 import java.util.LinkedList;
 
@@ -217,7 +216,8 @@ public class DoctorDB {
   }
 
   /**
-   * Returns all doctors where the name contains the passed-in value as a substring (case insensitive).
+   * Returns all doctors where the name contains the passed-in value as a substring (case
+   * insensitive).
    *
    * @param name A substring of the doctor that you're looking for
    * @return A linked list of all doctors with a name with the passed in value as a substring
