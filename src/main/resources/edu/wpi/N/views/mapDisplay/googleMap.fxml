@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.web.WebView?>
+
+<AnchorPane id="AnchorPane" prefHeight="1994.0" prefWidth="2000.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.mapDisplay.GoogleMapController">
+    <children>
+      <WebView fx:id="webView" layoutX="-74.0" layoutY="-116.0" prefHeight="2110.0" prefWidth="2000.0" />
+    </children>
+</AnchorPane>
