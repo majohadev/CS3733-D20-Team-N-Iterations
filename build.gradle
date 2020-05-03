@@ -7,7 +7,7 @@ plugins {
     id "io.freefair.lombok" version "5.0.0-rc6"
 }
 
-mainClassName = 'edu.wpi.N.Main'
+mainClassName = 'edu.wpi.N.views.mapDisplay.WebViewController'
 
 repositories {
     mavenCentral()
@@ -53,7 +53,7 @@ dependencies {
 
 javafx {
     version = "11"
-     modules = ['javafx.controls', 'javafx.fxml', 'javafx.swing']
+     modules = ['javafx.controls', 'javafx.fxml', 'javafx.swing', 'javafx.media', 'javafx.web']
 }
 
 run {
