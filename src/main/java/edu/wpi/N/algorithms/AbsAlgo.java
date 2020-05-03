@@ -10,7 +10,7 @@ import org.bridj.util.Pair;
 public abstract class AbsAlgo implements IPathFinder {
 
   /**
-   * Abstract method that is overridden by all pathfinders
+   * Abstract method that is overridden by all pathfinders (template)
    *
    * @param mapData: HashMap of the nodes and edges
    * @param startNode: The start node
@@ -35,8 +35,7 @@ public abstract class AbsAlgo implements IPathFinder {
   public static double cost(DbNode currNode, DbNode nextNode) {
     return Math.sqrt(
         Math.pow(nextNode.getX() - currNode.getX(), 2)
-            + Math.pow(nextNode.getY() - currNode.getY(), 2)
-            + Math.pow(nextNode.getFloor() - currNode.getFloor(), 4));
+            + Math.pow(nextNode.getY() - currNode.getY(), 2));
   }
 
   /**
@@ -46,9 +45,7 @@ public abstract class AbsAlgo implements IPathFinder {
    * @return Manhattan distance to the goal Node
    */
   public static double heuristic(DbNode currNode, DbNode end) {
-    return Math.abs(end.getX() - currNode.getX())
-        + Math.abs(end.getY() - currNode.getY())
-        + Math.pow(Math.abs(end.getFloor() - currNode.getFloor()), 4);
+    return Math.abs(end.getX() - currNode.getX()) + Math.abs(end.getY() - currNode.getY());
   }
 
   /**
