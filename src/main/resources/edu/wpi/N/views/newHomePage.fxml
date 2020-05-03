@@ -18,7 +18,7 @@
       <SplitPane dividerPositions="0.10575139146567718" layoutX="880.0" layoutY="462.0" orientation="VERTICAL" prefHeight="1080.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
           <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="75.0" minWidth="1920.0" prefHeight="110.0" prefWidth="1920.0" style="-fx-background-color: #002186;">
-             <fx:include fx:id="time" source="features/timeTab.fxml" layoutX="1750.0" layoutY="20.0"/>
+             <fx:include fx:id="time" layoutX="1750.0" layoutY="20.0" source="features/timeTab.fxml" />
              <children>
                   <HBox alignment="CENTER_LEFT" layoutX="902.0" layoutY="-15.74609375" prefHeight="75.0" prefWidth="1920.0" spacing="1660.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
@@ -116,6 +116,15 @@
                      <padding>
                         <Insets top="12.0" />
                      </padding>
+                  </VBox>
+                  <VBox alignment="CENTER" layoutX="322.0" layoutY="820.0" prefHeight="143.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                     <children>
+                        <JFXButton buttonType="RAISED" layoutX="145.0" layoutY="438.0" onMouseClicked="#onBtnAboutClicked" prefHeight="52.0" prefWidth="104.0" ripplerFill="#002186" style="-fx-background-color: #002186;" styleClass="animated-option-button" stylesheets="@../css/MapDisplayFloors.css" text="About" textFill="WHITE">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </JFXButton>
+                     </children>
                   </VBox>
                </children>
             </AnchorPane>

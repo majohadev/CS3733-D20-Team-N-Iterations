@@ -51,4 +51,8 @@ public class HomeController implements Controller {
   public void onBtnServicesClick() throws IOException {
     this.mainApp.switchScene("/edu/wpi/N/views/services/servicesPage.fxml", singleton);
   }
+
+  public void onBtnAboutClicked() throws IOException {
+    this.mainApp.switchScene("/edu/wpi/N/views/aboutPage.fxml", singleton);
+  }
 }
