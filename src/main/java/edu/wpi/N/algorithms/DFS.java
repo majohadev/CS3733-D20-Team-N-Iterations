@@ -50,8 +50,10 @@ public class DFS extends AbsAlgo {
         // Get the current nodes neighbors
         LinkedList<DbNode> neighbors = mapData.get(currNode.getNodeID());
 
+        // Iterate through the neighbors
         for (DbNode nextNode : neighbors) {
           if (!visited.contains(nextNode) && !stack.contains(nextNode)) {
+            // if handicap is selected and it's a stair, skip
             if (handicap && nextNode.getNodeType().equals("STAI")) {
               continue;
             } else {

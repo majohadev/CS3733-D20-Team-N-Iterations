@@ -41,7 +41,7 @@ public class Dijkstra extends AbsAlgo {
           break;
         }
 
-        // for every node (next node), current node has edge to:
+        // Look at each neighboring node
         for (DbNode nextNode : mapData.get(current.getNodeID())) {
           // if handicap is selected and it's a stair, skip
           if (handicap && nextNode.getNodeType().equals("STAI")) {

@@ -38,19 +38,21 @@ public class BFS extends AbsAlgo {
         DbNode currNode = queue.poll();
         checked.add(currNode);
 
-        // Get the current nodes neighbors and check if it connects to the end node
-        LinkedList<DbNode> neighbors = mapData.get(currNode.getNodeID());
-        if (neighbors.contains(endNode)) {
-          cameFrom.put(endNode.getNodeID(), currNode.getNodeID());
+        // if the goal node was found, break out of the loop
+        if (currNode.equals(endNode)) {
           break;
         }
 
-        // If it doesn't connect with the end node, get all of its neighbors that aren't checked or
-        // in the queue
+        // Get the current nodes neighbors and check if it connects to the end node
+        LinkedList<DbNode> neighbors = mapData.get(currNode.getNodeID());
+
+        // Look at each neighboring node
         for (DbNode nextNode : neighbors) {
+          // if handicap is selected and it's a stair, skip
           if (handicap && nextNode.getNodeType().equals("STAI")) {
             continue;
           }
+          // If the neighbor hasn't been checked or isn't in the queue
           if (!checked.contains(nextNode) && !queue.contains(nextNode)) {
             queue.add(nextNode);
             cameFrom.put(nextNode.getNodeID(), currNode.getNodeID());
