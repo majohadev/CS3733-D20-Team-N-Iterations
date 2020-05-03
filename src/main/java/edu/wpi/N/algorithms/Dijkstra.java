@@ -24,7 +24,7 @@ public class Dijkstra extends AbsAlgo {
     try {
 
       // Initialize variables
-      Queue<DbNode> frontier = new PriorityQueue<DbNode>();
+      PriorityQueue<DbNode> frontier = new PriorityQueue<DbNode>();
       frontier.add(startNode);
       Map<String, String> cameFrom = new HashMap<String, String>();
       Map<String, Double> costSoFar = new HashMap<String, Double>();
