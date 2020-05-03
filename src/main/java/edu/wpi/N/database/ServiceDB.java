@@ -345,191 +345,251 @@ public class ServiceDB {
     try {
       LinkedList<Request> requests = new LinkedList<>();
       String query = "SELECT * FROM request WHERE serviceType = 'Laundry'";
-      PreparedStatement stmt = con.prepareStatement(query);
-      ResultSet rs = stmt.executeQuery();
-      while (rs.next()) {
-        requests.add(
-            new LaundryRequest(
-                rs.getInt("requestID"),
-                rs.getInt("assigned_eID"),
-                rs.getString("reqNotes"),
-                rs.getString("compNotes"),
-                rs.getString("nodeID"),
-                getJavatime(rs.getTimestamp("timeRequested")),
-                getJavatime(rs.getTimestamp("timeCompleted")),
-                rs.getString("status")));
-      }
+      addLaundryRequestsToList(requests, query);
+
       query = "SELECT * from request, trequest WHERE request.requestID = trequest.requestID";
-      stmt = con.prepareStatement(query);
-      rs = stmt.executeQuery();
-      while (rs.next()) {
-        requests.add(
-            new TranslatorRequest(
-                rs.getInt("requestID"),
-                rs.getInt("assigned_eID"),
-                rs.getString("reqNotes"),
-                rs.getString("compNotes"),
-                rs.getString("nodeID"),
-                getJavatime(rs.getTimestamp("timeRequested")),
-                getJavatime(rs.getTimestamp("timeCompleted")),
-                rs.getString("status"),
-                rs.getString("language")));
-      }
+      addTranslatorRequestsToList(requests, query);
+
       query = "SELECT * from request, erequest WHERE request.requestID = erequest.requestID";
-      stmt = con.prepareStatement(query);
-      rs = stmt.executeQuery();
-      while (rs.next()) {
-        requests.add(
-            new EmotionalRequest(
-                rs.getInt("requestID"),
-                rs.getInt("assigned_eID"),
-                rs.getString("reqNotes"),
-                rs.getString("compNotes"),
-                rs.getString("nodeID"),
-                getJavatime(rs.getTimestamp("timeRequested")),
-                getJavatime(rs.getTimestamp("timeCompleted")),
-                rs.getString("status"),
-                rs.getString("supportType")));
-      }
+      addEmotionalRequestsToList(requests, query);
+
       query =
           "SELECT * from request, medicineRequests WHERE request.requestID = medicineRequests.requestID";
-      stmt = con.prepareStatement(query);
-      rs = stmt.executeQuery();
-      while (rs.next()) {
-        requests.add(
-            new MedicineRequest(
-                rs.getInt("requestID"),
-                rs.getInt("assigned_eID"),
-                rs.getString("reqNotes"),
-                rs.getString("compNotes"),
-                rs.getString("nodeID"),
-                getJavatime(rs.getTimestamp("timeRequested")),
-                getJavatime(rs.getTimestamp("timeCompleted")),
-                rs.getString("status"),
-                rs.getString("medicineName"),
-                rs.getDouble("dosage"),
-                rs.getString("units"),
-                rs.getString("patient")));
-      }
+      addMedicineRequestsToList(requests, query);
+
       query =
           "SELECT * FROM request, sanitationRequests WHERE request.requestID = sanitationRequests.requestID";
-      stmt = con.prepareStatement(query);
-      rs = stmt.executeQuery();
-      while (rs.next()) {
-        requests.add(
-            new SanitationRequest(
-                rs.getInt("requestID"),
-                rs.getInt("assigned_eID"),
-                rs.getString("reqNotes"),
-                rs.getString("compNotes"),
-                rs.getString("nodeID"),
-                getJavatime(rs.getTimestamp("timeRequested")),
-                getJavatime(rs.getTimestamp("timeCompleted")),
-                rs.getString("status"),
-                rs.getString("sanitationType"),
-                rs.getString("size"),
-                rs.getString("danger")));
-      }
+      addSanitationRequestsToList(requests, query);
+
       query = "SELECT * from request, wrequest WHERE request.requestID = wrequest.requestID";
-      stmt = con.prepareStatement(query);
-      rs = stmt.executeQuery();
-      while (rs.next()) {
-        requests.add(
-            new WheelchairRequest(
-                rs.getInt("requestID"),
-                rs.getInt("assigned_eID"),
-                rs.getString("reqNotes"),
-                rs.getString("compNotes"),
-                rs.getString("nodeID"),
-                getJavatime(rs.getTimestamp("timeRequested")),
-                getJavatime(rs.getTimestamp("timeCompleted")),
-                rs.getString("status"),
-                rs.getString("needsAssistance")));
-      }
+      addWheelchairRequestsToList(requests, query);
+
       query = "SELECT * from request, ITrequest WHERE request.requestID = ITrequest.requestID";
-      stmt = con.prepareStatement(query);
-      rs = stmt.executeQuery();
-      while (rs.next()) {
-        requests.add(
-            new ITRequest(
-                rs.getInt("requestID"),
-                rs.getInt("assigned_eID"),
-                rs.getString("reqNotes"),
-                rs.getString("compNotes"),
-                rs.getString("nodeID"),
-                getJavatime(rs.getTimestamp("timeRequested")),
-                getJavatime(rs.getTimestamp("timeCompleted")),
-                rs.getString("status"),
-                rs.getString("device"),
-                rs.getString("problem")));
-      }
+      addITRequestsToList(requests, query);
+
       query =
           "SELECT * FROM request, flowerRequest WHERE request.requestID = flowerRequest.requestID";
-      stmt = con.prepareStatement(query);
-      rs = stmt.executeQuery();
-      while (rs.next()) {
-        query =
-            "SELECT flower.flowerName, count(flower.flowerName) AS flowerCount FROM flower, flowertoflower "
-                + "WHERE flower.flowerName = flowertoflower.flowerName AND flowertoflower.requestID = ? "
-                + "GROUP BY flower.flowerName";
-        stmt = con.prepareStatement(query);
-        stmt.setInt(1, rs.getInt("requestID"));
-        ResultSet rx = stmt.executeQuery();
-        String flowers = createFlowerString(rx);
-        requests.add(
-            new FlowerRequest(
-                rs.getInt("requestID"),
-                rs.getInt("assigned_eID"),
-                rs.getString("reqNotes"),
-                rs.getString("compNotes"),
-                rs.getString("nodeID"),
-                getJavatime(rs.getTimestamp("timeRequested")),
-                getJavatime(rs.getTimestamp("timeCompleted")),
-                rs.getString("status"),
-                rs.getString("patientName"),
-                rs.getString("visitorName"),
-                rs.getString("creditNum"),
-                flowers));
-      }
+      addFlowerRequestsToList(requests, query);
+
       query =
           "SELECT * from request, internalTransportationRequest WHERE request.requestID = internalTransportationRequest.requestID";
-      stmt = con.prepareStatement(query);
-      rs = stmt.executeQuery();
-      while (rs.next()) {
-        requests.add(
-            new InternalTransportationRequest(
-                rs.getInt("requestID"),
-                rs.getInt("assigned_eID"),
-                rs.getString("reqNotes"),
-                rs.getString("compNotes"),
-                rs.getString("nodeID"),
-                getJavatime(rs.getTimestamp("timeRequested")),
-                getJavatime(rs.getTimestamp("timeCompleted")),
-                rs.getString("status"),
-                rs.getString("transportationType"),
-                rs.getTimestamp("scheduledTransportTime").toString().substring(11, 16),
-                rs.getString("destinationLocation")));
-      }
+      addInternalTransportationRequestsToList(requests, query);
+
       query = "SELECT * from request, secrequest WHERE request.requestID = secrequest.requestID";
-      stmt = con.prepareStatement(query);
-      rs = stmt.executeQuery();
-      while (rs.next()) {
-        requests.add(
-            new SecurityRequest(
-                rs.getInt("requestID"),
-                rs.getInt("assigned_eID"),
-                rs.getString("reqNotes"),
-                rs.getString("compNotes"),
-                rs.getString("nodeID"),
-                getJavatime(rs.getTimestamp("timeRequested")),
-                getJavatime(rs.getTimestamp("timeCompleted")),
-                rs.getString("status"),
-                rs.getString("isEmergency")));
-      }
+      addSecurityRequestsToList(requests, query);
+
       return requests;
     } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Unknown error: getRequests", e);
+    }
+  }
+
+  private static void addLaundryRequestsToList(LinkedList<Request> requests, String query)
+      throws SQLException {
+    PreparedStatement stmt = con.prepareStatement(query);
+    ResultSet rs = stmt.executeQuery();
+    while (rs.next()) {
+      requests.add(
+          new LaundryRequest(
+              rs.getInt("requestID"),
+              rs.getInt("assigned_eID"),
+              rs.getString("reqNotes"),
+              rs.getString("compNotes"),
+              rs.getString("nodeID"),
+              getJavatime(rs.getTimestamp("timeRequested")),
+              getJavatime(rs.getTimestamp("timeCompleted")),
+              rs.getString("status")));
+    }
+  }
+
+  private static void addTranslatorRequestsToList(LinkedList<Request> requests, String query)
+      throws SQLException {
+    PreparedStatement stmt = con.prepareStatement(query);
+    ResultSet rs = stmt.executeQuery();
+    while (rs.next()) {
+      requests.add(
+          new TranslatorRequest(
+              rs.getInt("requestID"),
+              rs.getInt("assigned_eID"),
+              rs.getString("reqNotes"),
+              rs.getString("compNotes"),
+              rs.getString("nodeID"),
+              getJavatime(rs.getTimestamp("timeRequested")),
+              getJavatime(rs.getTimestamp("timeCompleted")),
+              rs.getString("status"),
+              rs.getString("language")));
+    }
+  }
+
+  private static void addMedicineRequestsToList(LinkedList<Request> requests, String query)
+      throws SQLException {
+    PreparedStatement stmt = con.prepareStatement(query);
+    ResultSet rs = stmt.executeQuery();
+    while (rs.next()) {
+      requests.add(
+          new MedicineRequest(
+              rs.getInt("requestID"),
+              rs.getInt("assigned_eID"),
+              rs.getString("reqNotes"),
+              rs.getString("compNotes"),
+              rs.getString("nodeID"),
+              getJavatime(rs.getTimestamp("timeRequested")),
+              getJavatime(rs.getTimestamp("timeCompleted")),
+              rs.getString("status"),
+              rs.getString("medicineName"),
+              rs.getDouble("dosage"),
+              rs.getString("units"),
+              rs.getString("patient")));
+    }
+  }
+
+  private static void addSecurityRequestsToList(LinkedList<Request> requests, String query)
+      throws SQLException {
+    PreparedStatement stmt = con.prepareStatement(query);
+    ResultSet rs = stmt.executeQuery();
+    while (rs.next()) {
+      requests.add(
+          new SecurityRequest(
+              rs.getInt("requestID"),
+              rs.getInt("assigned_eID"),
+              rs.getString("reqNotes"),
+              rs.getString("compNotes"),
+              rs.getString("nodeID"),
+              getJavatime(rs.getTimestamp("timeRequested")),
+              getJavatime(rs.getTimestamp("timeCompleted")),
+              rs.getString("status"),
+              rs.getString("isEmergency")));
+    }
+  }
+
+  private static void addInternalTransportationRequestsToList(
+      LinkedList<Request> requests, String query) throws SQLException {
+    PreparedStatement stmt = con.prepareStatement(query);
+    ResultSet rs = stmt.executeQuery();
+    while (rs.next()) {
+      requests.add(
+          new InternalTransportationRequest(
+              rs.getInt("requestID"),
+              rs.getInt("assigned_eID"),
+              rs.getString("reqNotes"),
+              rs.getString("compNotes"),
+              rs.getString("nodeID"),
+              getJavatime(rs.getTimestamp("timeRequested")),
+              getJavatime(rs.getTimestamp("timeCompleted")),
+              rs.getString("status"),
+              rs.getString("transportationType"),
+              rs.getTimestamp("scheduledTransportTime").toString().substring(11, 16),
+              rs.getString("destinationLocation")));
+    }
+  }
+
+  private static void addFlowerRequestsToList(LinkedList<Request> requests, String query)
+      throws SQLException {
+    PreparedStatement stmt = con.prepareStatement(query);
+    ResultSet rs = stmt.executeQuery();
+    while (rs.next()) {
+      query =
+          "SELECT flower.flowerName, count(flower.flowerName) AS flowerCount FROM flower, flowertoflower "
+              + "WHERE flower.flowerName = flowertoflower.flowerName AND flowertoflower.requestID = ? "
+              + "GROUP BY flower.flowerName";
+      stmt = con.prepareStatement(query);
+      stmt.setInt(1, rs.getInt("requestID"));
+      ResultSet rx = stmt.executeQuery();
+      String flowers = createFlowerString(rx);
+      requests.add(
+          new FlowerRequest(
+              rs.getInt("requestID"),
+              rs.getInt("assigned_eID"),
+              rs.getString("reqNotes"),
+              rs.getString("compNotes"),
+              rs.getString("nodeID"),
+              getJavatime(rs.getTimestamp("timeRequested")),
+              getJavatime(rs.getTimestamp("timeCompleted")),
+              rs.getString("status"),
+              rs.getString("patientName"),
+              rs.getString("visitorName"),
+              rs.getString("creditNum"),
+              flowers));
+    }
+  }
+
+  private static void addITRequestsToList(LinkedList<Request> requests, String query)
+      throws SQLException {
+    PreparedStatement stmt = con.prepareStatement(query);
+    ResultSet rs = stmt.executeQuery();
+    while (rs.next()) {
+      requests.add(
+          new ITRequest(
+              rs.getInt("requestID"),
+              rs.getInt("assigned_eID"),
+              rs.getString("reqNotes"),
+              rs.getString("compNotes"),
+              rs.getString("nodeID"),
+              getJavatime(rs.getTimestamp("timeRequested")),
+              getJavatime(rs.getTimestamp("timeCompleted")),
+              rs.getString("status"),
+              rs.getString("device"),
+              rs.getString("problem")));
+    }
+  }
+
+  private static void addWheelchairRequestsToList(LinkedList<Request> requests, String query)
+      throws SQLException {
+    PreparedStatement stmt = con.prepareStatement(query);
+    ResultSet rs = stmt.executeQuery();
+    while (rs.next()) {
+      requests.add(
+          new WheelchairRequest(
+              rs.getInt("requestID"),
+              rs.getInt("assigned_eID"),
+              rs.getString("reqNotes"),
+              rs.getString("compNotes"),
+              rs.getString("nodeID"),
+              getJavatime(rs.getTimestamp("timeRequested")),
+              getJavatime(rs.getTimestamp("timeCompleted")),
+              rs.getString("status"),
+              rs.getString("needsAssistance")));
+    }
+  }
+
+  private static void addSanitationRequestsToList(LinkedList<Request> requests, String query)
+      throws SQLException {
+    PreparedStatement stmt = con.prepareStatement(query);
+    ResultSet rs = stmt.executeQuery();
+    while (rs.next()) {
+      requests.add(
+          new SanitationRequest(
+              rs.getInt("requestID"),
+              rs.getInt("assigned_eID"),
+              rs.getString("reqNotes"),
+              rs.getString("compNotes"),
+              rs.getString("nodeID"),
+              getJavatime(rs.getTimestamp("timeRequested")),
+              getJavatime(rs.getTimestamp("timeCompleted")),
+              rs.getString("status"),
+              rs.getString("sanitationType"),
+              rs.getString("size"),
+              rs.getString("danger")));
+    }
+  }
+
+  private static void addEmotionalRequestsToList(LinkedList<Request> requests, String query)
+      throws SQLException {
+    PreparedStatement stmt = con.prepareStatement(query);
+    ResultSet rs = stmt.executeQuery();
+    while (rs.next()) {
+      requests.add(
+          new EmotionalRequest(
+              rs.getInt("requestID"),
+              rs.getInt("assigned_eID"),
+              rs.getString("reqNotes"),
+              rs.getString("compNotes"),
+              rs.getString("nodeID"),
+              getJavatime(rs.getTimestamp("timeRequested")),
+              getJavatime(rs.getTimestamp("timeCompleted")),
+              rs.getString("status"),
+              rs.getString("supportType")));
     }
   }
 
@@ -545,22 +605,9 @@ public class ServiceDB {
     try {
       String query =
           "SELECT * FROM request, trequest WHERE request.requestID = trequest.requestID AND status='OPEN'";
-      PreparedStatement stmt = con.prepareStatement(query);
-
-      ResultSet rs = stmt.executeQuery();
-      while (rs.next()) {
-        openList.add(
-            new TranslatorRequest(
-                rs.getInt("requestID"),
-                rs.getInt("assigned_eID"),
-                rs.getString("reqNotes"),
-                rs.getString("compNotes"),
-                rs.getString("nodeID"),
-                getJavatime(rs.getTimestamp("timeRequested")),
-                getJavatime(rs.getTimestamp("timeCompleted")),
-                rs.getString("status"),
-                rs.getString("language")));
-      }
+      addTranslatorRequestsToList(openList, query);
+      PreparedStatement stmt;
+      ResultSet rs;
       query =
           "SELECT * FROM request, lrequest WHERE request.requestID = lrequest.requestID AND status = 'OPEN'";
       stmt = con.prepareStatement(query);
@@ -579,140 +626,26 @@ public class ServiceDB {
       }
       query =
           "SELECT * FROM request, wrequest WHERE request.requestID = wrequest.requestID AND status = 'OPEN'";
-      stmt = con.prepareStatement(query);
-      rs = stmt.executeQuery();
-      while (rs.next()) {
-        openList.add(
-            new WheelchairRequest(
-                rs.getInt("requestID"),
-                rs.getInt("assigned_eID"),
-                rs.getString("reqNotes"),
-                rs.getString("compNotes"),
-                rs.getString("nodeID"),
-                getJavatime(rs.getTimestamp("timeRequested")),
-                getJavatime(rs.getTimestamp("timeCompleted")),
-                rs.getString("status"),
-                rs.getString("needsAssistance")));
-      }
+      addWheelchairRequestsToList(openList, query);
       query =
           "SELECT * FROM request, erequest WHERE request.requestID = erequest.requestID AND status = 'OPEN'";
-      stmt = con.prepareStatement(query);
-      rs = stmt.executeQuery();
-      while (rs.next()) {
-        openList.add(
-            new EmotionalRequest(
-                rs.getInt("requestID"),
-                rs.getInt("assigned_eID"),
-                rs.getString("reqNotes"),
-                rs.getString("compNotes"),
-                rs.getString("nodeID"),
-                getJavatime(rs.getTimestamp("timeRequested")),
-                getJavatime(rs.getTimestamp("timeCompleted")),
-                rs.getString("status"),
-                rs.getString("supportType")));
-      }
+      addEmotionalRequestsToList(openList, query);
       query =
           "SELECT * from request, ITrequest WHERE request.requestID = ITrequest.requestID AND status = 'OPEN'";
-      stmt = con.prepareStatement(query);
-      rs = stmt.executeQuery();
-      while (rs.next()) {
-        openList.add(
-            new ITRequest(
-                rs.getInt("requestID"),
-                rs.getInt("assigned_eID"),
-                rs.getString("reqNotes"),
-                rs.getString("compNotes"),
-                rs.getString("nodeID"),
-                getJavatime(rs.getTimestamp("timeRequested")),
-                getJavatime(rs.getTimestamp("timeCompleted")),
-                rs.getString("status"),
-                rs.getString("device"),
-                rs.getString("problem")));
-      }
+      addITRequestsToList(openList, query);
       query =
           "SELECT * from request, sanitationRequests WHERE request.requestID = sanitationRequests.requestID AND status = 'OPEN'";
-      stmt = con.prepareStatement(query);
-      rs = stmt.executeQuery();
-      while (rs.next()) {
-        openList.add(
-            new SanitationRequest(
-                rs.getInt("requestID"),
-                rs.getInt("assigned_eID"),
-                rs.getString("reqNotes"),
-                rs.getString("compNotes"),
-                rs.getString("nodeID"),
-                getJavatime(rs.getTimestamp("timeRequested")),
-                getJavatime(rs.getTimestamp("timeCompleted")),
-                rs.getString("status"),
-                rs.getString("sanitationType"),
-                rs.getString("size"),
-                rs.getString("danger")));
-      }
+      addSanitationRequestsToList(openList, query);
       query =
           "SELECT * FROM request, flowerRequest WHERE request.requestID = flowerRequest.requestID AND status = 'OPEN'";
-      stmt = con.prepareStatement(query);
-      rs = stmt.executeQuery();
-      while (rs.next()) {
-        query =
-            "SELECT flower.flowerName, count(flower.flowerName) AS flowerCount FROM flower, flowertoflower "
-                + "WHERE flower.flowerName = flowertoflower.flowerName AND flowertoflower.requestID = ? "
-                + "GROUP BY flower.flowerName";
-        stmt = con.prepareStatement(query);
-        stmt.setInt(1, rs.getInt("requestID"));
-        ResultSet rx = stmt.executeQuery();
-        String flowers = createFlowerString(rx);
-        openList.add(
-            new FlowerRequest(
-                rs.getInt("requestID"),
-                rs.getInt("assigned_eID"),
-                rs.getString("reqNotes"),
-                rs.getString("compNotes"),
-                rs.getString("nodeID"),
-                getJavatime(rs.getTimestamp("timeRequested")),
-                getJavatime(rs.getTimestamp("timeCompleted")),
-                rs.getString("status"),
-                rs.getString("patientName"),
-                rs.getString("visitorName"),
-                rs.getString("creditNum"),
-                flowers));
-      }
+      addFlowerRequestsToList(openList, query);
       query =
           "SELECT * from request, internalTransportationRequest "
               + "WHERE request.requestID = internalTransportationRequest.requestID AND status = 'OPEN'";
-      stmt = con.prepareStatement(query);
-      rs = stmt.executeQuery();
-      while (rs.next()) {
-        openList.add(
-            new InternalTransportationRequest(
-                rs.getInt("requestID"),
-                rs.getInt("assigned_eID"),
-                rs.getString("reqNotes"),
-                rs.getString("compNotes"),
-                rs.getString("nodeID"),
-                getJavatime(rs.getTimestamp("timeRequested")),
-                getJavatime(rs.getTimestamp("timeCompleted")),
-                rs.getString("status"),
-                rs.getString("transportationType"),
-                rs.getTimestamp("scheduledTransportTime").toString().substring(11, 16),
-                rs.getString("destinationLocation")));
-      }
+      addInternalTransportationRequestsToList(openList, query);
       query =
           "SELECT * from request, secrequest WHERE request.requestID = secrequest.requestID AND status = 'OPEN'";
-      stmt = con.prepareStatement(query);
-      rs = stmt.executeQuery();
-      while (rs.next()) {
-        openList.add(
-            new SecurityRequest(
-                rs.getInt("requestID"),
-                rs.getInt("assigned_eID"),
-                rs.getString("reqNotes"),
-                rs.getString("compNotes"),
-                rs.getString("nodeID"),
-                getJavatime(rs.getTimestamp("timeRequested")),
-                getJavatime(rs.getTimestamp("timeCompleted")),
-                rs.getString("status"),
-                rs.getString("isEmergency")));
-      }
+      addSecurityRequestsToList(openList, query);
       return openList;
     } catch (SQLException ex) {
       ex.printStackTrace();
@@ -943,17 +876,19 @@ public class ServiceDB {
   public static int addTranslator(String name, LinkedList<String> languages) throws DBException {
     try {
       String query = "INSERT INTO employees (name, serviceType) VALUES (?, 'Translator')";
-      PreparedStatement st = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-      st.setString(1, name);
-      st.executeUpdate();
-      ResultSet rs = st.getGeneratedKeys();
-      rs.next();
-      query = "INSERT INTO translator VALUES(?)";
-      st = con.prepareStatement(query);
-      int id = rs.getInt("1");
-      st.setInt(1, id);
-      st.executeUpdate();
+      int id = insertIntoEmployeeAndOther(name, query, "INSERT INTO translator VALUES (?)");
+      //      PreparedStatement st = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+      //      st.setString(1, name);
+      //      st.executeUpdate();
+      //      ResultSet rs = st.getGeneratedKeys();
+      //      rs.next();
+      //      query = "INSERT INTO translator VALUES(?)";
+      //      st = con.prepareStatement(query);
+      //      int id = rs.getInt("1");
+      //      st.setInt(1, id);
+      //      st.executeUpdate();
       if (languages == null) return id;
+      PreparedStatement st;
       for (String language : languages) {
         query = "INSERT INTO language VALUES (?, ?)";
         st = con.prepareStatement(query);
@@ -979,17 +914,7 @@ public class ServiceDB {
   public static int addLaundry(String name) throws DBException {
     try {
       String query = "INSERT INTO employees (name, serviceType) VALUES (?, 'Laundry')";
-      PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-      stmt.setString(1, name);
-      stmt.executeUpdate();
-      ResultSet rs = stmt.getGeneratedKeys();
-      rs.next();
-      query = "INSERT INTO Laundry VALUES (?)";
-      stmt = con.prepareStatement(query);
-      int id = rs.getInt("1");
-      stmt.setInt(1, id);
-      stmt.executeUpdate();
-      return id;
+      return insertIntoEmployeeAndOther(name, query, "INSERT INTO Laundry VALUES (?)");
     } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Unknown error: addLaundry , name = " + name, e);
@@ -1035,17 +960,8 @@ public class ServiceDB {
     try {
       String query =
           "INSERT INTO employees (name, serviceType) VALUES (?, 'Internal Transportation')";
-      PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-      stmt.setString(1, name);
-      stmt.executeUpdate();
-      ResultSet rs = stmt.getGeneratedKeys();
-      rs.next();
-      query = "INSERT INTO INTERNALTRANSPORTATIONEMPLOYEE VALUES (?)";
-      stmt = con.prepareStatement(query);
-      int id = rs.getInt("1");
-      stmt.setInt(1, id);
-      stmt.executeUpdate();
-      return id;
+      return insertIntoEmployeeAndOther(
+          name, query, "INSERT INTO INTERNALTRANSPORTATIONEMPLOYEE VALUES (?)");
     } catch (SQLException e) {
       throw new DBException("Unknown Error: addInternalTransportationEmployee", e);
     }
@@ -1061,17 +977,7 @@ public class ServiceDB {
   public static int addFlowerDeliverer(String name) throws DBException {
     try {
       String query = "INSERT INTO employees (name, serviceType) VALUES (?, 'Flower')";
-      PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-      stmt.setString(1, name);
-      stmt.executeUpdate();
-      ResultSet rs = stmt.getGeneratedKeys();
-      rs.next();
-      query = "INSERT INTO flowerDeliverer VALUES (?)";
-      stmt = con.prepareStatement(query);
-      int id = rs.getInt("1");
-      stmt.setInt(1, id);
-      stmt.executeUpdate();
-      return id;
+      return insertIntoEmployeeAndOther(name, query, "INSERT INTO flowerDeliverer VALUES (?)");
     } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Unknown Error: addflowerDeliverer", e);
@@ -1088,21 +994,25 @@ public class ServiceDB {
   public static int addEmotionalSupporter(String name) throws DBException {
     try {
       String query = "INSERT INTO employees (name, serviceType) VALUES (?, 'Emotional Support')";
-      PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-      stmt.setString(1, name);
-      stmt.executeUpdate();
-      ResultSet rs = stmt.getGeneratedKeys();
-      rs.next(); // NullPointerException
-      query = "INSERT INTO emotionalSupporter VALUES (?)";
-      stmt = con.prepareStatement(query);
-      int id = rs.getInt("1");
-      stmt.setInt(1, id);
-      stmt.executeUpdate();
-      return id;
+      return insertIntoEmployeeAndOther(name, query, "INSERT INTO emotionalSupporter VALUES (?)");
     } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Unknown error: addEmotionalSupporter , name = " + name, e);
     }
+  }
+
+  private static int insertIntoEmployeeAndOther(
+      String employeeName, String employeeQuery, String otherTableQuery) throws SQLException {
+    PreparedStatement stmt = con.prepareStatement(employeeQuery, Statement.RETURN_GENERATED_KEYS);
+    stmt.setString(1, employeeName);
+    stmt.executeUpdate();
+    ResultSet rs = stmt.getGeneratedKeys();
+    rs.next();
+    stmt = con.prepareStatement(otherTableQuery);
+    int id = rs.getInt("1");
+    stmt.setInt(1, id);
+    stmt.executeUpdate();
+    return id;
   }
 
   /**
@@ -1115,17 +1025,7 @@ public class ServiceDB {
   public static int addWheelchairEmployee(String name) throws DBException {
     try {
       String query = "INSERT INTO employees (name, serviceType) VALUES (?, 'Wheelchair')";
-      PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-      stmt.setString(1, name);
-      stmt.executeUpdate();
-      ResultSet rs = stmt.getGeneratedKeys();
-      rs.next(); // NullPointerException
-      query = "INSERT INTO WheelchairEmployee VALUES (?)";
-      stmt = con.prepareStatement(query);
-      int id = rs.getInt("1");
-      stmt.setInt(1, id);
-      stmt.executeUpdate();
-      return id;
+      return insertIntoEmployeeAndOther(name, query, "INSERT INTO WheelchairEmployee VALUES (?)");
     } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Unknown error: addWheelchairEmployee , name = " + name, e);
@@ -1141,17 +1041,7 @@ public class ServiceDB {
   public static int addIT(String name) throws DBException {
     try {
       String query = "INSERT INTO employees (name, serviceType) VALUES (?, 'IT')";
-      PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-      stmt.setString(1, name);
-      stmt.executeUpdate();
-      ResultSet rs = stmt.getGeneratedKeys();
-      rs.next(); // NullPointerException
-      query = "INSERT INTO IT VALUES (?)";
-      stmt = con.prepareStatement(query);
-      int id = rs.getInt("1");
-      stmt.setInt(1, id);
-      stmt.executeUpdate();
-      return id;
+      return insertIntoEmployeeAndOther(name, query, "INSERT INTO IT VALUES (?)");
     } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Unknown error: addIT , name = " + name, e);
@@ -1169,17 +1059,7 @@ public class ServiceDB {
   public static int addSecurityOfficer(String name) throws DBException {
     try {
       String query = "INSERT INTO employees (name, serviceType) VALUES (?, 'Security')";
-      PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-      stmt.setString(1, name);
-      stmt.executeUpdate();
-      ResultSet rs = stmt.getGeneratedKeys();
-      rs.next(); // NullPointerException
-      query = "INSERT INTO security VALUES (?)";
-      stmt = con.prepareStatement(query);
-      int id = rs.getInt("1");
-      stmt.setInt(1, id);
-      stmt.executeUpdate();
-      return id;
+      return insertIntoEmployeeAndOther(name, query, "INSERT INTO security VALUES (?)");
     } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Unknown error: addSecurityOfficer , name = " + name, e);
@@ -1981,13 +1861,13 @@ public class ServiceDB {
    */
   public static LinkedList<SanitationRequest> getsanitationbyAmount(String size)
       throws DBException {
-    LinkedList<SanitationRequest> list = new LinkedList<>();
     try {
       String query =
           "SELECT * FROM sanitationRequests, request WHERE sanitationRequests.requestID = request.requestID AND Upper(size) = ?";
       PreparedStatement st = con.prepareStatement(query);
       st.setString(1, size.toUpperCase());
       ResultSet rs = st.executeQuery();
+      LinkedList<SanitationRequest> list = new LinkedList<>();
       while (rs.next()) {
         list.add(
             new SanitationRequest(
@@ -2240,8 +2120,6 @@ public class ServiceDB {
   public static LinkedList<SanitationRequest> getSanitationByDanger(String danger)
       throws DBException {
     try {
-      LinkedList<SanitationRequest> result = new LinkedList<>();
-
       danger = danger.toLowerCase();
 
       String query =
@@ -2253,6 +2131,7 @@ public class ServiceDB {
       st.setString(1, danger);
       ResultSet rs = st.executeQuery();
 
+      LinkedList<SanitationRequest> result = new LinkedList<>();
       while (rs.next()) {
         result.add(
             new SanitationRequest(

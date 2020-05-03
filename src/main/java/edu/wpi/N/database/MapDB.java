@@ -93,7 +93,8 @@ public class MapDB {
   /**
    * Adds two hard-coded logins to the database
    *
-   * @throws SQLException If there is an error (Note: if the SQLException is due to a login already existing, the exception is ignored)
+   * @throws SQLException If there is an error (Note: if the SQLException is due to a login already
+   *     existing, the exception is ignored)
    */
   private static void addHardCodedLogins() throws SQLException {
     BCryptSingleton hasher = BCryptSingleton.getInstance();
@@ -156,8 +157,6 @@ public class MapDB {
       stmt.setInt(4, floor);
       stmt.setString(5, building);
       stmt.setString(6, nodeType);
-      // stmt.setString(7, longName.replace("\'", "\\'"));
-      // stmt.setString(8, shortName.replace("\'", "\\'"));
       stmt.setString(7, longName);
       stmt.setString(8, shortName);
       stmt.setString(9, String.valueOf(teamAssigned));
@@ -228,8 +227,8 @@ public class MapDB {
       stmt.setInt(4, floor);
       stmt.setString(5, building);
       stmt.setString(6, nodeType);
-      stmt.setString(7, longName.replace("'", "\\'"));
-      stmt.setString(8, shortName.replace("'", "\\'"));
+      stmt.setString(7, longName);
+      stmt.setString(8, shortName);
       stmt.setString(9, String.valueOf(teamAssigned));
       stmt.setString(10, nodeID);
       stmt.executeUpdate();
@@ -436,8 +435,6 @@ public class MapDB {
       stmt.setInt(4, floor);
       stmt.setString(5, building);
       stmt.setString(6, nodeType);
-      // stmt.setString(7, longName.replace("\'", "\\'"));
-      // stmt.setString(8, shortName.replace("\'", "\\'"));
       stmt.setString(7, longName);
       stmt.setString(8, shortName);
       stmt.setString(9, "I");
@@ -623,7 +620,6 @@ public class MapDB {
       String nodeID, int startFloor, int endFloor, boolean wheelAccess) throws DBException {
     LinkedList<DbNode> ret = new LinkedList<>();
     try {
-      ResultSet rs;
       String query;
       if (wheelAccess) {
         query =
@@ -644,26 +640,31 @@ public class MapDB {
       stmt.setInt(1, startFloor);
       stmt.setInt(2, endFloor);
       // System.out.println(query);
-      rs = stmt.executeQuery();
-      while (rs.next()) {
-        ret.add(
-            new DbNode(
-                rs.getString("nodeID"),
-                rs.getInt("xcoord"),
-                rs.getInt("ycoord"),
-                rs.getInt("floor"),
-                rs.getString("building"),
-                rs.getString("nodeType"),
-                rs.getString("longName"),
-                rs.getString("shortName"),
-                rs.getString("teamAssigned").charAt(0)));
-      }
+      buildDbNodeList(ret, stmt);
     } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Unknown error: getGAdjacent", e);
     }
 
     return ret;
+  }
+
+  private static void buildDbNodeList(LinkedList<DbNode> ret, PreparedStatement stmt)
+      throws SQLException {
+    ResultSet rs = stmt.executeQuery();
+    while (rs.next()) {
+      ret.add(
+          new DbNode(
+              rs.getString("nodeID"),
+              rs.getInt("xcoord"),
+              rs.getInt("ycoord"),
+              rs.getInt("floor"),
+              rs.getString("building"),
+              rs.getString("nodeType"),
+              rs.getString("longName"),
+              rs.getString("shortName"),
+              rs.getString("teamAssigned").charAt(0)));
+    }
   }
 
   /**
@@ -742,20 +743,7 @@ public class MapDB {
   private static LinkedList<DbNode> getAllNodesSQL(PreparedStatement st) throws SQLException {
     LinkedList<DbNode> nodes = new LinkedList<>();
 
-    ResultSet rs = st.executeQuery();
-    while (rs.next()) {
-      nodes.add(
-          new DbNode(
-              rs.getString("nodeID"),
-              rs.getInt("xcoord"),
-              rs.getInt("ycoord"),
-              rs.getInt("floor"),
-              rs.getString("building"),
-              rs.getString("nodeType"),
-              rs.getString("longName"),
-              rs.getString("shortName"),
-              rs.getString("teamAssigned").charAt(0)));
-    }
+    buildDbNodeList(nodes, st);
     return nodes;
   }
 
@@ -769,29 +757,13 @@ public class MapDB {
   public static LinkedList<DbNode> getAdjacent(String nodeID) throws DBException {
     LinkedList<DbNode> ret = new LinkedList<>();
     try {
-
-      ResultSet rs;
       String query =
           "SELECT nodes.* FROM nodes, edges WHERE (edges.node1 = ? AND nodes.nodeID = edges.node2) OR (edges.node2 = ? AND nodes.nodeID = edges.node1)";
 
       PreparedStatement st = con.prepareStatement(query);
       st.setString(1, nodeID);
       st.setString(2, nodeID);
-      rs = st.executeQuery();
-
-      while (rs.next()) {
-        ret.add(
-            new DbNode(
-                rs.getString("nodeID"),
-                rs.getInt("xcoord"),
-                rs.getInt("ycoord"),
-                rs.getInt("floor"),
-                rs.getString("building"),
-                rs.getString("nodeType"),
-                rs.getString("longName"),
-                rs.getString("shortName"),
-                rs.getString("teamAssigned").charAt(0)));
-      }
+      buildDbNodeList(ret, st);
       //      query = "DROP VIEW connected_edges";
       //      statement.executeUpdate(query);
     } catch (SQLException e) {
