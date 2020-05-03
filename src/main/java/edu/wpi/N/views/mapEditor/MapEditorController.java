@@ -119,6 +119,7 @@ public class MapEditorController implements Controller {
   Circle elevCircle;
   LinkedList<Circle> alignNodeCircles;
   LinkedList<DbNode> addShaftNodeCircles;
+  HashMap<DbNode, Circle> nodesMap2;
 
   @Override
   public void setMainApp(App mainApp) {
@@ -126,17 +127,18 @@ public class MapEditorController implements Controller {
   }
 
   public void initialize() throws DBException, IOException {
+    nodesMap2 = new HashMap<>();
     currentFloor = DEFAULT_FLOOR;
     currentBuilding = DEFAULT_BUILDING;
     initializeChangeFloorButtons();
     setFloorButtonColors();
     editElevNodes = new LinkedList<>();
-    btn_cancel_elev.setDisable(true);
+    // btn_cancel_elev.setDisable(true);
     btn_cancel_elev.setVisible(false);
     nodesMap = HashBiMap.create();
     edgesMap = HashBiMap.create();
     mode = Mode.NO_STATE;
-    loadFloor();
+    loadFloor(); // null pointer
     addNodeCircle = null;
     elevCircle = null;
     deleteNodeCircles = new LinkedList<>();
@@ -167,6 +169,13 @@ public class MapEditorController implements Controller {
     }
     displayEdges();
     displayNodes();
+    if (mode.equals(Mode.ADD_SHAFT)) {
+      try {
+        reloadAddShaft();
+      } catch (DBException ex) {
+        ex.printStackTrace();
+      }
+    }
   }
 
   private void displayEdges() {
@@ -201,6 +210,7 @@ public class MapEditorController implements Controller {
       Circle circle = createCircle(scaleX(DBnode.getX()), scaleY(DBnode.getY()), c);
       UINode UInode = new UINode(circle, DBnode);
       nodesMap.put(circle, UInode);
+      nodesMap2.put(DBnode, circle);
       if (DBnode.getNodeType().equals("STAI") || DBnode.getNodeType().equals("ELEV")) {
         editElevNodes.add(circle);
       }
@@ -311,9 +321,11 @@ public class MapEditorController implements Controller {
       controllerEditElev = loader.getController();
       controllerEditElev.setMainApp(mainApp);
     }
-    // TODO: add addshaft pane to pn_editor, set visible false**might be wrong**
     if (mode == Mode.EDIT_ELEV) {
       pn_elev.getChildren().add(pane);
+      pn_elev.setVisible(true);
+      controllerEditElev.setFloor(currentFloor); // TODO: new change
+      onBtnAddShaftClicked();
       pn_editor.setVisible(false);
 
     } else {
@@ -535,17 +547,15 @@ public class MapEditorController implements Controller {
   }
 
   private void onCircleAddShaftNodeClicked(MouseEvent event, Circle circle) {
-    if (circle.getFill()
-        == DEFAULT_CIRCLE_COLOR) { // TODO: add automatically removes nodes of same floor, diff
-      // buildings, etc
-      circle.setFill(DELETE_NODE_COLOR);
+    if (circle.getFill() == Color.CADETBLUE) { // TODO: set colors at top
+      circle.setFill(Color.BLACK);
       addShaftNodeCircles.add(nodesMap.get(circle).getDBNode());
-      controllerAddShaft.addLstAddShaftNode(nodesMap.get(circle).getDBNode().getShortName());
+      controllerAddShaft.addLstAddShaftNode(nodesMap.get(circle).getDBNode().getLongName());
 
-    } else if (circle.getFill() == DELETE_NODE_COLOR) {
-      circle.setFill(DEFAULT_CIRCLE_COLOR);
+    } else if (circle.getFill() == Color.BLACK) {
+      circle.setFill(Color.CADETBLUE);
       addShaftNodeCircles.remove(nodesMap.get(circle).getDBNode());
-      controllerAddShaft.removeLstAddShaftNode(nodesMap.get(circle).getDBNode().getShortName());
+      controllerAddShaft.removeLstAddShaftNode(nodesMap.get(circle).getDBNode().getLongName());
     }
   }
 
@@ -919,38 +929,103 @@ public class MapEditorController implements Controller {
   }
 
   private void onBtnAddShaftClicked() throws IOException {
-    for (JFXButton b : controllerEditElev.getBtnAddShaft()) {
-      b.setOnMouseClicked(
-          event -> {
-            mode = Mode.ADD_SHAFT;
-            try {
-              changeEditor();
-            } catch (IOException e) {
-              e.printStackTrace();
-            }
-
-            pn_editor.setVisible(true);
-            // pn_elev.setDisable(true);//TODO:
-            onBtnCancelAddShaftClicked();
-            onBtnConfirmAddShaftClicked();
-            for (Circle c : editElevNodes) { // TODO: temp
-              c.setFill(DEFAULT_CIRCLE_COLOR);
-            }
-          });
-    }
+    controllerEditElev
+        .getBtnAddShaft()
+        .setOnMouseClicked(
+            event -> {
+              mode = Mode.ADD_SHAFT;
+              try {
+                reloadAddShaft(); // YAYYY
+                if (!controllerEditElev.getNodesInShaft().isEmpty()) {
+                  for (DbNode c : controllerEditElev.getNodesInShaft()) {
+                    if (!addShaftNodeCircles.contains(c))
+                      controllerAddShaft.addLstAddShaftNode(c.getLongName());
+                    addShaftNodeCircles.add(c);
+                    if (c.getFloor() == currentFloor) {
+                      nodesMap2.get(c).setFill(Color.BLACK);
+                    }
+                  }
+                }
+              } catch (DBException e) {
+                e.printStackTrace();
+              }
+            });
   }
 
-  private void onBtnConfirmAddShaftClicked() {
+  private void onBtnConfirmAddShaftClicked() throws DBException {
     controllerAddShaft
         .getBtnConfirm()
         .setOnMouseClicked(
             event -> {
-              mode = Mode.EDIT_ELEV;
+              mode = Mode.NO_STATE;
+              // Check valid input
               if (addShaftNodeCircles.isEmpty()) {
-                displayErrorMessage("Must select at least 2 nodes");
+                displayErrorMessage("Must select nodes");
                 return;
               }
+              String nodeType = addShaftNodeCircles.getFirst().getNodeType();
+              String building = addShaftNodeCircles.getFirst().getBuilding();
+              for (DbNode n : addShaftNodeCircles) {
+                if (!n.getNodeType().equals(nodeType)) {
+                  displayErrorMessage("Nodes must be the same type");
+                  return;
+                } else if (!n.getBuilding().equals(building)) {
+                  displayErrorMessage("Nodes must be in the same building");
+                  return;
+                }
+              }
               for (int i = 0; i < addShaftNodeCircles.size() - 1; i++) {
+                for (int j = i + 1; j < addShaftNodeCircles.size(); j++) {
+                  if (addShaftNodeCircles.get(i).getFloor()
+                      == addShaftNodeCircles.get(j).getFloor()) {
+                    displayErrorMessage("Nodes must be on different floors");
+                    return;
+                  }
+                }
+              }
+              // remove nodes from shaft
+              for (DbNode n : addShaftNodeCircles) {
+                try {
+                  MapDB.removeFromShaft(n.getNodeID());
+                } catch (DBException e) {
+                  e.printStackTrace();
+                }
+              }
+              // remove edges with other nodes in shafts
+              for (DbNode n : addShaftNodeCircles) {
+                try {
+                  for (DbNode a : MapDB.getAdjacent(n.getNodeID())) {
+                    if (a.getNodeType().equals("ELEV") || a.getNodeType().equals("STAI")) {
+                      MapDB.removeEdge(n.getNodeID(), a.getNodeID());
+                    }
+                  }
+                } catch (DBException e) {
+                  e.printStackTrace();
+                }
+              }
+              // sort nodes list by floor
+              LinkedList<DbNode> sortedNodes = new LinkedList<>();
+              for (int i = 1; i <= 5; i++) {
+                for (DbNode n : addShaftNodeCircles) {
+                  if (n.getFloor() == i) {
+                    sortedNodes.add(n);
+                  }
+                }
+              }
+
+              // add edges between each sorted node
+              if (sortedNodes.size() >= 1) {
+                for (int i = 0; i < sortedNodes.size() - 1; i++) {
+                  try {
+                    MapDB.addEdge(
+                        sortedNodes.get(i).getNodeID(), sortedNodes.get(i + 1).getNodeID());
+                  } catch (DBException e) {
+                    e.printStackTrace();
+                  }
+                }
+              }
+
+              /*for (int i = 0; i < addShaftNodeCircles.size() - 1; i++) {
                 try {
                   MapDB.addToShaft(
                       addShaftNodeCircles.get(i).getNodeID(),
@@ -959,14 +1034,17 @@ public class MapEditorController implements Controller {
                   displayErrorMessage(e.getMessage());
                   return;
                 }
-              }
-              controllerEditElev.setFloor(
-                  currentFloor); // TODO: change to set currnode if applicable (remember OG node or
+              }*/
+
               // get from BF controller)
               resetAddShaft();
               pn_editor.setVisible(false);
 
-              // pn_elev.setDisable(false);
+              pn_elev.setDisable(false);
+              controllerEditElev.setFloor(currentFloor);
+              for (Circle c : editElevNodes) {
+                c.setFill(DEFAULT_CIRCLE_COLOR);
+              }
             });
   }
 
@@ -1086,6 +1164,9 @@ public class MapEditorController implements Controller {
               pn_editor.setVisible(false);
               pn_elev.setDisable(false);
               resetAddShaft();
+              for (Circle c : editElevNodes) {
+                c.setFill(DEFAULT_CIRCLE_COLOR);
+              }
             });
   }
 
@@ -1127,7 +1208,7 @@ public class MapEditorController implements Controller {
             e -> {
               elevCircle.setFill(EDIT_ELEV_COLOR);
               elevCircle = null;
-              pn_elev.setVisible(false);
+              pn_elev.setVisible(true); // TODO: make buttons visible elev
             });
   }
 
@@ -1149,6 +1230,7 @@ public class MapEditorController implements Controller {
     resetEditNode();
     resetDeleteEdge();
     resetAlignNode();
+    resetEditElev();
   }
 
   private void resetAll() {
@@ -1189,9 +1271,6 @@ public class MapEditorController implements Controller {
   }
 
   private void resetAddShaft() {
-    // for (Circle circle : addShaftNodeCircles) {//TODO: problem for deselecting
-    //   circle.setFill(DEFAULT_CIRCLE_COLOR);
-    // }
     addShaftNodeCircles.clear();
   }
 
@@ -1329,10 +1408,6 @@ public class MapEditorController implements Controller {
           currentFloor = 1;
           setFloorImg("/edu/wpi/N/images/map/Floor1Reclor.png");
           setFloorButtonColors();
-          if (mode.equals(Mode.ADD_SHAFT)) {
-            reloadAddShaft();
-          }
-          // mode = Mode.NO_STATE;
         });
     btn_floor2
         .getStylesheets()
@@ -1343,10 +1418,6 @@ public class MapEditorController implements Controller {
           currentFloor = 2;
           setFloorImg("/edu/wpi/N/images/map/Floor2TeamN.png");
           setFloorButtonColors();
-          if (mode.equals(Mode.ADD_SHAFT)) {
-            reloadAddShaft();
-          }
-          // mode = Mode.NO_STATE;
         });
     btn_floor3
         .getStylesheets()
@@ -1357,10 +1428,6 @@ public class MapEditorController implements Controller {
           currentFloor = 3;
           setFloorImg("/edu/wpi/N/images/map/Floor3TeamN.png");
           setFloorButtonColors();
-          if (mode.equals(Mode.ADD_SHAFT)) {
-            reloadAddShaft();
-          }
-          // mode = Mode.NO_STATE;
         });
     btn_floor4
         .getStylesheets()
@@ -1371,10 +1438,6 @@ public class MapEditorController implements Controller {
           currentFloor = 4;
           setFloorImg("/edu/wpi/N/images/map/Floor4SolidBackground.png");
           setFloorButtonColors();
-          if (mode.equals(Mode.ADD_SHAFT)) {
-            reloadAddShaft();
-          }
-          // mode = Mode.NO_STATE;
         });
     btn_floor5
         .getStylesheets()
@@ -1385,10 +1448,6 @@ public class MapEditorController implements Controller {
           currentFloor = 5;
           setFloorImg("/edu/wpi/N/images/map/Floor5TeamN.png");
           setFloorButtonColors();
-          if (mode.equals(Mode.ADD_SHAFT)) {
-            reloadAddShaft();
-          }
-          // mode = Mode.NO_STATE;
         });
     JFXNodesList nodesList = new JFXNodesList();
     nodesList.addAnimatedNode(btn_floors);
@@ -1461,32 +1520,37 @@ public class MapEditorController implements Controller {
   public void onBtnCancelElevClicked() {
     resetEditElev();
     mode = Mode.NO_STATE;
-    btn_cancel_elev.setDisable(true);
+    // btn_cancel_elev.setDisable(true);
     btn_cancel_elev.setVisible(false);
   }
 
   public void hideEditElevButton() {
-    btn_cancel_elev.setDisable(true);
+    // btn_cancel_elev.setDisable(true);
     btn_cancel_elev.setVisible(false);
   }
 
-  public void reloadAddShaft() { // spagetti
+  public void reloadAddShaft() throws DBException {
     mode = Mode.ADD_SHAFT;
     try {
       changeEditor();
     } catch (IOException e) {
       e.printStackTrace();
     }
-
+    for (DbNode c : addShaftNodeCircles) { // TODO: Null pointer when remove
+      controllerAddShaft.addLstAddShaftNode(c.getLongName());
+      if (c.getFloor() == currentFloor) {
+        nodesMap
+            .get(c.getNodeID())
+            .getCircle()
+            .setFill(Color.BLACK); // null pointer here, nodesmap not set??
+      }
+    }
     pn_editor.setVisible(true);
-    // pn_elev.setDisable(true);//TODO:
+    // pn_elev.setDisable(true);
     onBtnCancelAddShaftClicked();
     onBtnConfirmAddShaftClicked();
-    for (Circle c : editElevNodes) { // TODO: temp
-      c.setFill(DEFAULT_CIRCLE_COLOR);
-    }
-    for (DbNode c : addShaftNodeCircles) {
-      controllerAddShaft.addLstAddShaftNode(c.getShortName());
+    for (Circle c : editElevNodes) {
+      if (!(c.getFill() == Color.BLACK)) c.setFill(Color.CADETBLUE);
     }
   }
 
@@ -1494,13 +1558,10 @@ public class MapEditorController implements Controller {
   public void changeAlgorithm() {
     if (cb_changeAlgo.getSelectionModel().getSelectedItem().equals("BFS")) {
       singleton.savedAlgo.setPathFinder(new BFS());
-      System.out.println("1");
     } else if (cb_changeAlgo.getSelectionModel().getSelectedItem().equals("DFS")) {
       singleton.savedAlgo.setPathFinder(new DFS());
-      System.out.println("2");
     } else if (cb_changeAlgo.getSelectionModel().getSelectedItem().equals("AStar")) {
       singleton.savedAlgo.setPathFinder(new AStar());
-      System.out.println("3");
     }
   }
 }

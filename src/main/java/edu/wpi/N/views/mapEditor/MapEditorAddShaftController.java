@@ -9,7 +9,6 @@ public class MapEditorAddShaftController {
   @FXML JFXButton btn_cancel;
   @FXML JFXButton btn_confirm;
   @FXML JFXListView lst_add_shaft_node;
-  // LinkedList<DbNode> nodesInShaft;
 
   public void addLstAddShaftNode(String shortName) {
     Label label = new Label(shortName);
