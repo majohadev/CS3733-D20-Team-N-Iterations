@@ -24,9 +24,7 @@ public class GoogleMapController implements Controller, Initializable {
   }
 
   // Empty constructor
-  public GoogleMapController(){
-
-  }
+  public GoogleMapController() {}
 
   @Override
   public void initialize(URL url, ResourceBundle rb) {
