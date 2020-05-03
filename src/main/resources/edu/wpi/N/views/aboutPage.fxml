@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.effect.Lighting?>
+<?import javafx.scene.effect.Shadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.HomeController">
+   <children>
+      <SplitPane dividerPositions="0.10575139146567718" layoutX="880.0" layoutY="462.0" orientation="VERTICAL" prefHeight="1080.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <items>
+           <AnchorPane maxHeight="110.0" maxWidth="1920.0" minHeight="110.0" minWidth="0.0" prefHeight="190.0" prefWidth="1918.0" style="-fx-background-color: #002186;" SplitPane.resizableWithParent="false">
+              <fx:include fx:id="time" layoutX="1750.0" layoutY="20.0" source="features/timeTab.fxml" />
+               <Label alignment="CENTER" prefHeight="109.0" prefWidth="1920.0" text="About" textAlignment="CENTER" textFill="WHITE">
+                  <font>
+                     <Font name="Calibri Bold" size="96.0" />
+                  </font>
+               </Label>
+              </AnchorPane>
+          <AnchorPane maxWidth="-Infinity" minHeight="0.0" minWidth="1920.0" prefHeight="100.0" prefWidth="1920.0">
+               <children>
+                  <ImageView fitHeight="1331.0" fitWidth="1961.0" opacity="0.31" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/homeScreenImages/BostonSkyline.jpg" />
+                     </image>
+                     <effect>
+                        <Lighting>
+                           <bumpInput>
+                              <Shadow />
+                           </bumpInput>
+                        </Lighting>
+                     </effect>
+                  </ImageView>
+                  <HBox alignment="CENTER" layoutY="448.0" prefHeight="372.0" prefWidth="1920.0" spacing="130.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </HBox>
+                  <VBox alignment="CENTER" layoutY="24.0" mouseTransparent="true" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                     <children>
+                        <ImageView fitHeight="146.0" fitWidth="247.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/hospitalLogo/Brigham_and_Womens_Hospital_logo.svg.png" />
+                           </image>
+                        </ImageView>
+                        <VBox alignment="CENTER" prefHeight="622.0" prefWidth="1820.0" style="-fx-background-color: #002186; -fx-background-radius: 15;">
+                           <VBox.margin>
+                              <Insets bottom="50.0" left="50.0" right="50.0" top="20.0" />
+                           </VBox.margin>
+                           <children>
+                              <Label prefHeight="602.0" prefWidth="1800.0" text="This application was made by a team of students as part of the CS3733-D20 Software Engineering course provided by the Worcester Polytechnic Institute Computer Science Department. The following is a list of the people who contributed to this application:&#10;&#10;Professor Wilson Wong: Vice President of Software Engineering&#10;Sam Goldman: Team Coach&#10;Michael Laks: Project Manager (User Interface)&#10;Tian Yu Fan: Lead Software Engineer (User Interface)&#10;Noah Preston Capucilli-Shatan: Assistant Lead Software Engineer (Database)&#10;Ivan Eroshenko: Assistant Lead Software Engineer (Algorithms)&#10;Chris Lee: Scrum Master (Database)&#10;Kaitlyn Fichtner: Documentation Analyst (Algorithms)&#10;Nick Wood: Software Engineer (User Interface)&#10;Matt Johannesen: Software Engineer (User Interface)&#10;Evan Llewellyn: Software Engineer (Algorithms)&#10;Nick Pelletier: Software Engineer (Database)&#10;&#10;We would also like to thank Brigham and Women's Hospital, along with their representative Andrew Shinn, for the time and input they gave during the development of this application." textAlignment="CENTER" textFill="WHITE" wrapText="true">
+                                 <font>
+                                    <Font name="Calibri" size="24.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                 </VBox.margin>
+                              </Label>
+                           </children>
+                        </VBox>
+                        <JFXButton buttonType="RAISED" layoutX="145.0" layoutY="438.0" prefHeight="52.0" prefWidth="104.0" ripplerFill="#002186" style="-fx-background-color: #00339A;" styleClass="animated-option-button" stylesheets="@../css/MapDisplayFloors.css" text="Back" textFill="WHITE">
+                        <font>
+                           <Font size="24.0" />
+                        </font>
+                        </JFXButton>
+                     </children>
+                     <padding>
+                        <Insets top="12.0" />
+                     </padding>
+                  </VBox>
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </children>
+</AnchorPane>
