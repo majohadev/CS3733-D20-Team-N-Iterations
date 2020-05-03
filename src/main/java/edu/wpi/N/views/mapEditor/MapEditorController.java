@@ -22,6 +22,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -45,6 +46,7 @@ public class MapEditorController implements Controller {
   @FXML Pane pn_elev;
   @FXML Button btn_home;
   @FXML StackPane pn_stack;
+  @FXML StackPane pn_movableMap;
   @FXML Pane pn_edges;
   @FXML Pane pn_changeFloor;
   @FXML ImageView img_map;
@@ -73,6 +75,15 @@ public class MapEditorController implements Controller {
   final double MAP_HEIGHT = 997;
   final double HORIZONTAL_SCALE = MAP_WIDTH / IMAGE_WIDTH;
   final double VERTICAL_SCALE = MAP_HEIGHT / IMAGE_HEIGHT;
+
+  // Zoom constants
+  private final double MIN_MAP_SCALE = 1;
+  private final double MAX_MAP_SCALE = 3;
+  private final double ZOOM_STEP_SCROLL = 0.01;
+  private final double ZOOM_STEP_BUTTON = 0.1;
+  private double mapScaleAlpha;
+  private double clickStartX, clickStartY;
+
   Mode mode;
 
   private enum Mode {
@@ -1598,4 +1609,98 @@ public class MapEditorController implements Controller {
     }
     return false;
   }
+
+  //   == MAP ZOOM CONTROLS ==
+
+  // Get zoom button input
+  @FXML
+  private void zoomToolHandler(MouseEvent event) throws IOException {
+
+    if (event.getSource() == btn_zoomIn) {
+      zoom(ZOOM_STEP_BUTTON);
+    } else if (event.getSource() == btn_zoomOut) {
+      zoom(-ZOOM_STEP_BUTTON);
+    }
+  }
+
+  // When user scrolls mouse over map
+  @FXML
+  private void mapScrollHandler(ScrollEvent event) throws IOException {
+    if (event.getSource() == pn_movableMap) {
+      double deltaY = event.getDeltaY();
+      zoom(deltaY * ZOOM_STEP_SCROLL);
+    }
+  }
+
+  /**
+   * zoom - Scale map pane up or down, clamping value between MIN_MAP_SCALE and MAX_MAP_SCALE
+   *
+   * @param percentDelta - Signed double representing how much to zoom in/out
+   */
+  private void zoom(double percentDelta) {
+
+    // Scaling parameter (alpha) is clamped between 0 (min. scale) and 1 (max. scale)
+    mapScaleAlpha = Math.max(0, Math.min(1, mapScaleAlpha + percentDelta));
+
+    // Linearly interpolate (lerp) alpha to actual scale value
+    double lerpedScale = MIN_MAP_SCALE + mapScaleAlpha * (MAX_MAP_SCALE - MIN_MAP_SCALE);
+
+    // Apply new scale and correct panning
+    pn_movableMap.setScaleX(lerpedScale);
+    pn_movableMap.setScaleY(lerpedScale);
+    clampPanning(0, 0);
+  }
+
+  // == MAP PANNING CONTROLS ==
+
+  // User begins drag
+  @FXML
+  private void mapPressHandler(MouseEvent event) throws IOException {
+    if (event.getSource() == pn_movableMap) {
+      pn_movableMap.setCursor(Cursor.CLOSED_HAND);
+      clickStartX = event.getSceneX();
+      clickStartY = event.getSceneY();
+    }
+  }
+
+  // User is currently dragging
+  @FXML
+  private void mapDragHandler(MouseEvent event) throws IOException {
+    if (event.getSource() == pn_movableMap) {
+
+      double dragDeltaX = event.getSceneX() - clickStartX;
+      double dragDeltaY = event.getSceneY() - clickStartY;
+
+      clampPanning(dragDeltaX, dragDeltaY);
+
+      clickStartX = event.getSceneX();
+      clickStartY = event.getSceneY();
+    }
+  }
+
+  // User ends drag
+  @FXML
+  private void mapReleaseHandler(MouseEvent event) throws IOException {
+    pn_movableMap.setCursor(Cursor.OPEN_HAND);
+  }
+
+  /**
+   * clampPanning - Attempts to move map by deltaX and deltaY, clamping movement to stay in-bounds
+   *
+   * @param deltaX - How many screen pixels to move the map horizontally
+   * @param deltaY - How many screen pixels to move the map vertically
+   */
+  private void clampPanning(double deltaX, double deltaY) {
+    double xLimit = (pn_movableMap.getScaleX() - MIN_MAP_SCALE) * MAP_WIDTH / 2;
+    double yLimit = (pn_movableMap.getScaleY() - MIN_MAP_SCALE) * MAP_HEIGHT / 2;
+
+    double newTranslateX =
+            Math.min(Math.max(pn_movableMap.getTranslateX() + deltaX, -xLimit), xLimit);
+    double newTranslateY =
+            Math.min(Math.max(pn_movableMap.getTranslateY() + deltaY, -yLimit), yLimit);
+
+    pn_movableMap.setTranslateX(newTranslateX);
+    pn_movableMap.setTranslateY(newTranslateY);
+  }
+
 }
