@@ -1,14 +1,14 @@
 package edu.wpi.N;
 
-        import edu.wpi.N.database.*;
-        import java.awt.*;
-        import java.io.IOException;
-        import java.sql.SQLException;
+import edu.wpi.N.database.*;
+import java.awt.*;
+import java.io.IOException;
+import java.sql.SQLException;
 
 public class Main {
 
   public static void main(String[] args)
-          throws SQLException, DBException, ClassNotFoundException, IOException {
+      throws SQLException, DBException, ClassNotFoundException, IOException {
     MapDB.initDB();
     // ArduinoController periperal = new ArduinoController();
     // periperal.initialize();
@@ -24,4 +24,3 @@ public class Main {
     App.launch(App.class, args);
   }
 }
-

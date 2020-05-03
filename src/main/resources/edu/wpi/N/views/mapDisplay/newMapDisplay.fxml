@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="1080.0" maxWidth="1920.0" minHeight="1080.0" minWidth="1920.0" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.mapDisplay.NewMapDisplayController">
+   <children>
+      <ImageView fitHeight="930.0" fitWidth="1520.0" layoutX="450.0" layoutY="99.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="400.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="99.0">
+         <image>
+            <Image url="@../../images/map/Floor1Reclor.png" />
+         </image>
+      </ImageView>
+      <AnchorPane maxHeight="1080.0" maxWidth="400.0" minHeight="1080.0" minWidth="400.0" prefHeight="1080.0" prefWidth="400.0" style="-fx-background-color: #263051;" AnchorPane.topAnchor="0.0">
+         <children>
+            <AnchorPane maxHeight="1080.0" maxWidth="55.0" minHeight="1080.0" minWidth="55.0" prefHeight="1080.0" prefWidth="55.0">
+               <children>
+                  <AnchorPane prefHeight="55.0" prefWidth="55.0" styleClass="pane" stylesheets="@../../css/newMapDisplay.css">
+                     <children>
+                        <ImageView fitHeight="35.0" fitWidth="29.0" layoutX="13.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="13.0">
+                           <image>
+                              <Image url="@../../images/mapDisplayIcons/locationButton.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane layoutY="55.0" prefHeight="55.0" prefWidth="55.0" styleClass="pane" stylesheets="@../../css/newMapDisplay.css">
+                     <children>
+                        <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
+                           <image>
+                              <Image url="@../../images/mapDisplayIcons/doctorButton.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane layoutY="110.0" prefHeight="55.0" prefWidth="55.0" styleClass="pane" stylesheets="@../../css/newMapDisplay.css">
+                     <children>
+                        <ImageView fitHeight="29.0" fitWidth="35.0" layoutX="13.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="13.0">
+                           <image>
+                              <Image url="@../../images/mapDisplayIcons/qrButton.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane layoutY="1025.0" prefHeight="55.0" prefWidth="55.0" styleClass="pane" stylesheets="@../../css/newMapDisplay.css">
+                     <children>
+                        <ImageView fitHeight="29.0" fitWidth="35.0" layoutX="13.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../images/mapDisplayIcons/adminButton.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane layoutY="970.0" prefHeight="55.0" prefWidth="55.0" styleClass="pane" stylesheets="@../../css/newMapDisplay.css">
+                     <children>
+                        <ImageView fitHeight="29.0" fitWidth="35.0" layoutX="13.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../images/mapDisplayIcons/helpButton.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane layoutY="915.0" prefHeight="55.0" prefWidth="55.0" styleClass="pane" stylesheets="@../../css/newMapDisplay.css">
+                     <children>
+                        <ImageView fitHeight="29.0" fitWidth="35.0" layoutX="13.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="13.0">
+                           <image>
+                              <Image url="@../../images/mapDisplayIcons/serviceButton.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </AnchorPane>
+               </children></AnchorPane>
+         </children></AnchorPane>
+   </children>
+</AnchorPane>
