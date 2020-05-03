@@ -332,7 +332,7 @@ public class MapDisplayController implements Controller, Initializable {
   /**
    * Function generates and sets textual description label to Textual Descriptions
    *
-   * @param path
+   * @param
    */
   private void setTextDecription() {
     try {
