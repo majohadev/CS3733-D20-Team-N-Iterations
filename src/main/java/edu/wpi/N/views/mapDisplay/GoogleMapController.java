@@ -23,6 +23,11 @@ public class GoogleMapController implements Controller, Initializable {
     this.singleton = singleton;
   }
 
+  // Empty constructor
+  public GoogleMapController(){
+
+  }
+
   @Override
   public void initialize(URL url, ResourceBundle rb) {
     webView.getEngine().load(Main.class.getResource("views/googleMapDisplay.html").toString());

@@ -20,7 +20,7 @@
 
 <AnchorPane prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #D3D3D3;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.mapDisplay.MapDisplayController">
    <children>
-      <StackPane layoutX="300.0" layoutY="75.0" pickOnBounds="false" prefHeight="1005.0" prefWidth="1425.0">
+      <StackPane fx:id="mapContainer" layoutX="300.0" layoutY="75.0" pickOnBounds="false" prefHeight="1005.0" prefWidth="1425.0">
          <children>
 
             <!-- content from mapBase.fxml included here -->
