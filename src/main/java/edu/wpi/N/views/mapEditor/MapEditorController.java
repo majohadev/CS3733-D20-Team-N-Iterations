@@ -8,6 +8,7 @@ import edu.wpi.N.App;
 import edu.wpi.N.algorithms.AStar;
 import edu.wpi.N.algorithms.BFS;
 import edu.wpi.N.algorithms.DFS;
+import edu.wpi.N.algorithms.Dijkstra;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
@@ -1323,6 +1324,7 @@ public class MapEditorController implements Controller {
     algoTypes.add("BFS");
     algoTypes.add("DFS");
     algoTypes.add("AStar");
+    algoTypes.add("Dijkstra");
     ObservableList<String> algos = FXCollections.observableArrayList();
     algos.addAll(algoTypes);
     cb_changeAlgo.setItems(algos);
@@ -1351,6 +1353,9 @@ public class MapEditorController implements Controller {
     } else if (cb_changeAlgo.getSelectionModel().getSelectedItem().equals("AStar")) {
       singleton.savedAlgo.setPathFinder(new AStar());
       System.out.println("3");
+    } else if (cb_changeAlgo.getSelectionModel().getSelectedItem().equals("Dijkstra")) {
+      singleton.savedAlgo.setPathFinder(new Dijkstra());
+      System.out.println("4");
     }
   }
 }

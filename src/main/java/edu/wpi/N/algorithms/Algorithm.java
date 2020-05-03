@@ -45,13 +45,8 @@ public class Algorithm {
    * @throws DBException
    * @return: Path object indicating the shortest path to the goal Node from Start Node
    */
-  public Path findPath(DbNode startNode, DbNode endNode, boolean handicap) throws DBException {
-    try {
-      return pathFinder.findPath(mapData, startNode, endNode, handicap);
-    } catch (DBException e) {
-      e.printStackTrace();
-      throw e;
-    }
+  public Path findPath(DbNode startNode, DbNode endNode, boolean handicap) {
+    return pathFinder.findPath(mapData, startNode, endNode, handicap);
   }
 
   /**

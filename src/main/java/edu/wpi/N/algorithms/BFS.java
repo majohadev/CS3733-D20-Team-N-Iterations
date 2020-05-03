@@ -1,6 +1,5 @@
 package edu.wpi.N.algorithms;
 
-import edu.wpi.N.database.DBException;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Path;
 import java.util.*;
@@ -10,19 +9,18 @@ public class BFS extends AbsAlgo {
   /**
    * Finds the shortest path from Start to Goal node using the BFS algorithm
    *
+   * @param mapData: HashMap of the nodes and edges
    * @param startNode: The start node
    * @param endNode: The destination node
    * @param handicap: Boolean saying whether path should be handicap accessible
-   * @return: Path object indicating the shortest path to the Goal Node from Start Node
-   * @throws DBException
+   * @return: Path object indicating a short path to the Goal Node from Start Node
    */
   @Override
   public Path findPath(
       HashMap<String, LinkedList<DbNode>> mapData,
       DbNode startNode,
       DbNode endNode,
-      boolean handicap)
-      throws DBException {
+      boolean handicap) {
     try {
 
       // Initialize variables

@@ -13,10 +13,11 @@ public class DFS extends AbsAlgo {
   /**
    * Finds a path from Start to Goal node using the DFS algorithm
    *
+   * @param mapData: HashMap of the nodes and edges
    * @param startNode: The start node
    * @param endNode: The destination node
    * @param handicap: Boolean saying whether path should be handicap accessible
-   * @return: Path object indicating the shortest path to the Goal Node from Start Node
+   * @return: Path object indicating a path to the Goal Node from Start Node
    * @throws DBException
    */
   @Override
@@ -24,8 +25,7 @@ public class DFS extends AbsAlgo {
       HashMap<String, LinkedList<DbNode>> mapData,
       DbNode startNode,
       DbNode endNode,
-      boolean handicap)
-      throws DBException {
+      boolean handicap) {
     try {
 
       // Initialize variables
@@ -39,14 +39,16 @@ public class DFS extends AbsAlgo {
 
       while (!stack.isEmpty()) {
         DbNode currNode = stack.pop();
-        visited.add(currNode);
 
-        // Get the current nodes neighbors and check if it connects to the end node
-        LinkedList<DbNode> neighbors = mapData.get(currNode.getNodeID());
-        if (neighbors.contains(endNode)) {
-          cameFrom.put(endNode.getNodeID(), currNode.getNodeID());
+        // if the goal node was found, break out of the loop
+        if (currNode.equals(endNode)) {
           break;
         }
+
+        visited.add(currNode);
+
+        // Get the current nodes neighbors
+        LinkedList<DbNode> neighbors = mapData.get(currNode.getNodeID());
 
         for (DbNode nextNode : neighbors) {
           if (!visited.contains(nextNode) && !stack.contains(nextNode)) {
