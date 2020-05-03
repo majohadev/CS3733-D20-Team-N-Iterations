@@ -81,9 +81,12 @@ public class CSVParser {
       String nodeType = row[5];
       String longName = row[6];
       String shortName = row[7];
-      char teamAssigned = 'Z';
-      if (row.length == 9) {
+      char teamAssigned;
+
+      try {
         teamAssigned = row[8].charAt(0);
+      } catch (Exception ex){
+        teamAssigned = 'Z';
       }
 
       MapDB.addNode(
