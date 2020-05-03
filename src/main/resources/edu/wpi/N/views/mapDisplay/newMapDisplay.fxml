@@ -13,9 +13,10 @@
       </ImageView>
       <AnchorPane maxHeight="1080.0" maxWidth="400.0" minHeight="1080.0" minWidth="400.0" prefHeight="1080.0" prefWidth="400.0" style="-fx-background-color: #263051;" AnchorPane.topAnchor="0.0">
          <children>
-            <AnchorPane maxHeight="1080.0" maxWidth="55.0" minHeight="1080.0" minWidth="55.0" prefHeight="1080.0" prefWidth="55.0">
+            <AnchorPane fx:id="pn_change" layoutX="55.0" maxHeight="1080.0" maxWidth="345.0" minHeight="1080.0" minWidth="345.0" prefHeight="1080.0" prefWidth="345.0" />
+            <AnchorPane fx:id="pn_iconBar" maxHeight="1080.0" maxWidth="55.0" minHeight="1080.0" minWidth="55.0" prefHeight="1080.0" prefWidth="55.0">
                <children>
-                  <AnchorPane prefHeight="55.0" prefWidth="55.0" styleClass="pane" stylesheets="@../../css/newMapDisplay.css">
+                  <AnchorPane fx:id="pn_locationIcon" onMouseClicked="#onLocationIconClicked" prefHeight="55.0" prefWidth="55.0" styleClass="pane" stylesheets="@../../css/newMapDisplay.css">
                      <children>
                         <ImageView fitHeight="35.0" fitWidth="29.0" layoutX="13.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="13.0">
                            <image>
@@ -24,7 +25,7 @@
                         </ImageView>
                      </children>
                   </AnchorPane>
-                  <AnchorPane layoutY="55.0" prefHeight="55.0" prefWidth="55.0" styleClass="pane" stylesheets="@../../css/newMapDisplay.css">
+                  <AnchorPane fx:id="pn_doctorIcon" layoutY="55.0" onMouseClicked="#onLocationIconClicked" prefHeight="55.0" prefWidth="55.0" styleClass="pane" stylesheets="@../../css/newMapDisplay.css">
                      <children>
                         <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
                            <image>
@@ -33,7 +34,7 @@
                         </ImageView>
                      </children>
                   </AnchorPane>
-                  <AnchorPane layoutY="110.0" prefHeight="55.0" prefWidth="55.0" styleClass="pane" stylesheets="@../../css/newMapDisplay.css">
+                  <AnchorPane fx:id="pn_qrIcon" layoutY="110.0" onMouseClicked="#onLocationIconClicked" prefHeight="55.0" prefWidth="55.0" styleClass="pane" stylesheets="@../../css/newMapDisplay.css">
                      <children>
                         <ImageView fitHeight="29.0" fitWidth="35.0" layoutX="13.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="13.0">
                            <image>
@@ -42,7 +43,7 @@
                         </ImageView>
                      </children>
                   </AnchorPane>
-                  <AnchorPane layoutY="1025.0" prefHeight="55.0" prefWidth="55.0" styleClass="pane" stylesheets="@../../css/newMapDisplay.css">
+                  <AnchorPane fx:id="pn_adminIcon" layoutY="1025.0" onMouseClicked="#onLocationIconClicked" prefHeight="55.0" prefWidth="55.0" styleClass="pane" stylesheets="@../../css/newMapDisplay.css">
                      <children>
                         <ImageView fitHeight="29.0" fitWidth="35.0" layoutX="13.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -51,7 +52,7 @@
                         </ImageView>
                      </children>
                   </AnchorPane>
-                  <AnchorPane layoutY="970.0" prefHeight="55.0" prefWidth="55.0" styleClass="pane" stylesheets="@../../css/newMapDisplay.css">
+                  <AnchorPane fx:id="pn_infoIcon" layoutY="970.0" onMouseClicked="#onLocationIconClicked" prefHeight="55.0" prefWidth="55.0" styleClass="pane" stylesheets="@../../css/newMapDisplay.css">
                      <children>
                         <ImageView fitHeight="29.0" fitWidth="35.0" layoutX="13.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -60,7 +61,7 @@
                         </ImageView>
                      </children>
                   </AnchorPane>
-                  <AnchorPane layoutY="915.0" prefHeight="55.0" prefWidth="55.0" styleClass="pane" stylesheets="@../../css/newMapDisplay.css">
+                  <AnchorPane fx:id="pn_serviceIcon" layoutY="915.0" onMouseClicked="#onLocationIconClicked" prefHeight="55.0" prefWidth="55.0" styleClass="pane" stylesheets="@../../css/newMapDisplay.css">
                      <children>
                         <ImageView fitHeight="29.0" fitWidth="35.0" layoutX="13.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="13.0">
                            <image>

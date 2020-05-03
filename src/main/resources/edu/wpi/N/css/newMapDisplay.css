@@ -1,3 +1,4 @@
 .pane:hover {
-    -fx-background-color: #4A69C6;
+    -fx-border-color: #4A69C6;
+    -fx-border-width: 2px;
 }
