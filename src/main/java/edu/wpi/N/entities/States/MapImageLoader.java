@@ -9,7 +9,8 @@ public class MapImageLoader {
 
   /** Loads all map images of the application once */
   public MapImageLoader() {
-    storeImage("Faulkner1", "edu/wpi/N/images/map/Floor1Reclor.png");
+    //    storeImage("Faulkner1", "edu/wpi/N/images/map/Floor1Reclor.png");
+    storeImage("Faulkner1", "edu/wpi/N/images/map/F1.png");
     storeImage("Faulkner2", "edu/wpi/N/images/map/Floor2TeamN.png");
     storeImage("Faulkner3", "edu/wpi/N/images/map/Floor3TeamN.png");
     storeImage("Faulkner4", "edu/wpi/N/images/map/Floor4SolidBackground.png");
