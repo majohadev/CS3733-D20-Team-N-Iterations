@@ -46,7 +46,6 @@ public class MapEditorController implements Controller {
   @FXML Pane pn_elev;
   @FXML Button btn_home;
   @FXML StackPane pn_stack;
-  @FXML StackPane pn_movableMap;
   @FXML Pane pn_edges;
   @FXML Pane pn_changeFloor;
   @FXML ImageView img_map;
@@ -77,12 +76,14 @@ public class MapEditorController implements Controller {
   final double VERTICAL_SCALE = MAP_HEIGHT / IMAGE_HEIGHT;
 
   // Zoom constants
-  private final double MIN_MAP_SCALE = 1;
-  private final double MAX_MAP_SCALE = 3;
+  private final double MIN_MAP_SCALE = 0.8;
+  private final double MAX_MAP_SCALE = 4;
   private final double ZOOM_STEP_SCROLL = 0.01;
   private final double ZOOM_STEP_BUTTON = 0.1;
   private double mapScaleAlpha;
   private double clickStartX, clickStartY;
+
+  private boolean isDraggingNode = false;
 
   Mode mode;
 
@@ -347,6 +348,7 @@ public class MapEditorController implements Controller {
   }
 
   private void handleCircleDragEvents(MouseEvent event, Circle circle) {
+    isDraggingNode = true;
     if (mode == Mode.ADD_NODE && circle == addNodeCircle) {
       onCircleAddNodeDragged(event, circle);
     }
@@ -1375,6 +1377,7 @@ public class MapEditorController implements Controller {
     LinkedList<DbNode> nodes = new LinkedList();
     LinkedList<UINode> UInode = new LinkedList();
     LinkedList<Circle> circles = new LinkedList();
+    isDraggingNode = false;
     if (mode == mode.ADD_EDGE) {
       for (Circle aCircle : nodesMap.keySet()) {
         if (aCircle.contains(addEdgeLine.getStartX(), addEdgeLine.getStartY())
@@ -1612,21 +1615,10 @@ public class MapEditorController implements Controller {
 
   //   == MAP ZOOM CONTROLS ==
 
-  // Get zoom button input
-  @FXML
-  private void zoomToolHandler(MouseEvent event) throws IOException {
-
-    if (event.getSource() == btn_zoomIn) {
-      zoom(ZOOM_STEP_BUTTON);
-    } else if (event.getSource() == btn_zoomOut) {
-      zoom(-ZOOM_STEP_BUTTON);
-    }
-  }
-
   // When user scrolls mouse over map
   @FXML
   private void mapScrollHandler(ScrollEvent event) throws IOException {
-    if (event.getSource() == pn_movableMap) {
+    if (event.getSource() == pn_stack) {
       double deltaY = event.getDeltaY();
       zoom(deltaY * ZOOM_STEP_SCROLL);
     }
@@ -1646,8 +1638,8 @@ public class MapEditorController implements Controller {
     double lerpedScale = MIN_MAP_SCALE + mapScaleAlpha * (MAX_MAP_SCALE - MIN_MAP_SCALE);
 
     // Apply new scale and correct panning
-    pn_movableMap.setScaleX(lerpedScale);
-    pn_movableMap.setScaleY(lerpedScale);
+    pn_stack.setScaleX(lerpedScale);
+    pn_stack.setScaleY(lerpedScale);
     clampPanning(0, 0);
   }
 
@@ -1656,8 +1648,8 @@ public class MapEditorController implements Controller {
   // User begins drag
   @FXML
   private void mapPressHandler(MouseEvent event) throws IOException {
-    if (event.getSource() == pn_movableMap) {
-      pn_movableMap.setCursor(Cursor.CLOSED_HAND);
+    if (!isDraggingNode && event.getSource() == pn_stack) {
+      pn_stack.setCursor(Cursor.CLOSED_HAND);
       clickStartX = event.getSceneX();
       clickStartY = event.getSceneY();
     }
@@ -1666,7 +1658,7 @@ public class MapEditorController implements Controller {
   // User is currently dragging
   @FXML
   private void mapDragHandler(MouseEvent event) throws IOException {
-    if (event.getSource() == pn_movableMap) {
+    if (!isDraggingNode && event.getSource() == pn_stack) {
 
       double dragDeltaX = event.getSceneX() - clickStartX;
       double dragDeltaY = event.getSceneY() - clickStartY;
@@ -1681,7 +1673,7 @@ public class MapEditorController implements Controller {
   // User ends drag
   @FXML
   private void mapReleaseHandler(MouseEvent event) throws IOException {
-    pn_movableMap.setCursor(Cursor.OPEN_HAND);
+    pn_stack.setCursor(Cursor.OPEN_HAND);
   }
 
   /**
@@ -1691,16 +1683,13 @@ public class MapEditorController implements Controller {
    * @param deltaY - How many screen pixels to move the map vertically
    */
   private void clampPanning(double deltaX, double deltaY) {
-    double xLimit = (pn_movableMap.getScaleX() - MIN_MAP_SCALE) * MAP_WIDTH / 2;
-    double yLimit = (pn_movableMap.getScaleY() - MIN_MAP_SCALE) * MAP_HEIGHT / 2;
+    double xLimit = (pn_stack.getScaleX() - MIN_MAP_SCALE) * MAP_WIDTH / 2;
+    double yLimit = (pn_stack.getScaleY() - MIN_MAP_SCALE) * MAP_HEIGHT / 2;
 
-    double newTranslateX =
-            Math.min(Math.max(pn_movableMap.getTranslateX() + deltaX, -xLimit), xLimit);
-    double newTranslateY =
-            Math.min(Math.max(pn_movableMap.getTranslateY() + deltaY, -yLimit), yLimit);
+    double newTranslateX = Math.min(Math.max(pn_stack.getTranslateX() + deltaX, -xLimit), xLimit);
+    double newTranslateY = Math.min(Math.max(pn_stack.getTranslateY() + deltaY, -yLimit), yLimit);
 
-    pn_movableMap.setTranslateX(newTranslateX);
-    pn_movableMap.setTranslateY(newTranslateY);
+    pn_stack.setTranslateX(newTranslateX);
+    pn_stack.setTranslateY(newTranslateY);
   }
-
 }
