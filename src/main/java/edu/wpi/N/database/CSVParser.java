@@ -254,4 +254,35 @@ public class CSVParser {
 
     return randomLocations;
   }
+
+  /**
+   * maps a floor string (L2, L1, G, 1, 2, 3) to a number
+   * @param floor the floor in the CSV parser
+   * @return integer representing that floor (0 for invalid floors)
+   */
+  public static int convertFloor(String floor){
+    try{
+      int convert = Integer.parseInt(floor);
+      return convert + 3;
+    }catch(NumberFormatException e){
+      if(floor.equals("L2")) return 1;
+      if(floor.equals("L1")) return 2;
+      if(floor.equals("G")) return 3;
+      return 0;
+    }
+  }
+
+  /**
+   * Maps a floor number to a string
+   * @param floor The floor number, must be 1-6 inclusive
+   * @return A string representing that floor number ("Invalid" if invalid)
+   */
+  public static String convertBack(int floor){
+    String[] floors = {"L2", "L1", "G", "1", "2", "3"};
+    try{
+      return floors[floor-1];
+    }catch(ArrayIndexOutOfBoundsException e){
+      return "Invalid";
+    }
+  }
 }
