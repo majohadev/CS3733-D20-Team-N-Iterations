@@ -10,6 +10,21 @@ import org.bridj.util.Pair;
 public abstract class AbsAlgo implements IPathFinder {
 
   /**
+   * Abstract method that is overridden by all pathfinders
+   *
+   * @param mapData: HashMap of the nodes and edges
+   * @param startNode: The start node
+   * @param endNode: The destination node
+   * @param handicap: Boolean saying whether path should be handicap accessible
+   * @return: A path of nodes from the start to the end node
+   */
+  public abstract Path findPath(
+      HashMap<String, LinkedList<DbNode>> mapData,
+      DbNode startNode,
+      DbNode endNode,
+      boolean handicap);
+
+  /**
    * Function calculates Euclidean distance between the next Node and current Node (cost of given
    * node)
    *
@@ -25,7 +40,7 @@ public abstract class AbsAlgo implements IPathFinder {
   }
 
   /**
-   * Function calculates Manhatten distance between goal and current Node
+   * Function calculates Manhattan distance between goal and current Node
    *
    * @param currNode: current Node
    * @return Manhattan distance to the goal Node
@@ -71,11 +86,9 @@ public abstract class AbsAlgo implements IPathFinder {
    * @param start, DbNode of starting node
    * @param nodeType, String the type of node you want (must be length 4)
    * @return Path, path from start node to closest (eucledian) end node of requested type
-   * @throws DBException
    */
   public Path findQuickAccess(
-      HashMap<String, LinkedList<DbNode>> mapData, DbNode start, String nodeType)
-      throws DBException {
+      HashMap<String, LinkedList<DbNode>> mapData, DbNode start, String nodeType) {
     try {
       LinkedList<DbNode> nodes =
           MapDB.searchNode(start.getFloor(), start.getBuilding(), nodeType, "");
@@ -89,7 +102,6 @@ public abstract class AbsAlgo implements IPathFinder {
             end = n;
           }
         }
-        //        Algorithm thePathFinder = new Algorithm();
 
         return findPath(mapData, start, end, false);
       } else {
@@ -142,15 +154,13 @@ public abstract class AbsAlgo implements IPathFinder {
    * @param stop: Stop node
    * @param handicap: Boolean saying whether path should be handicap accessible only
    * @return: A pair of paths (start to stop, stop to end)
-   * @throws DBException
    */
   public Pair<Path, Path> getPathWithStop(
       HashMap<String, LinkedList<DbNode>> mapData,
       DbNode start,
       DbNode end,
       DbNode stop,
-      boolean handicap)
-      throws DBException {
+      boolean handicap) {
     Path pathOne = findPath(mapData, start, stop, handicap);
     Path pathTwo = findPath(mapData, stop, end, handicap);
     return new Pair<>(pathOne, pathTwo);

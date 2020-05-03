@@ -54,7 +54,7 @@ public class Algorithm {
    *
    * @param startNode, DbNode of starting node
    * @param nodeType, String the type of node you want (must be length 4)
-   * @return Path, path from start node to closest (eucledian) end node of requested type
+   * @return Path, path from start node to closest (euclidean) end node of requested type
    * @throws DBException
    */
   public Path findQuickAccess(DbNode startNode, String nodeType) throws DBException {
