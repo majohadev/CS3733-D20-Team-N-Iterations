@@ -197,6 +197,9 @@
                         </TitledPane>
                      </panes>
                   </Accordion>
+                  <JFXButton fx:id="btn_faulkner" alignment="CENTER" text="Faulkner" visible="false" />
+                  <JFXButton fx:id="btn_main" text="Main Building" visible="false" />
+                  <JFXButton fx:id="btn_google" onAction="#switchToGoogleView" text="Google Map View" visible="false" />
                </children>
             </VBox>
          </children>
