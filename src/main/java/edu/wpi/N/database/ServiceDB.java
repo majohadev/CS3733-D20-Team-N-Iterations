@@ -1004,7 +1004,6 @@ public class ServiceDB {
     }
   }
 
-
   /**
    * Adds an internal transportation employee to the database
    *
@@ -1281,7 +1280,6 @@ public class ServiceDB {
       throw new DBException("Error: addLaundReq", e);
     }
   }
-
 
   public static int addInternalTransportationReq(
       String reqNotes,
@@ -1734,7 +1732,6 @@ public class ServiceDB {
           "Unknown Error: removeLanguaguage, ID: " + employeeID + " Lang: " + language, e);
     }
   }
-
 
   // Nick
   /**
