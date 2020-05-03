@@ -9,10 +9,6 @@ import org.bridj.util.Pair;
 
 public abstract class AbsAlgo implements IPathFinder {
 
-  public static Path findPath() {
-    return null;
-  }
-
   /**
    * Function calculates Euclidean distance between the next Node and current Node (cost of given
    * node)
