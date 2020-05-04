@@ -199,7 +199,7 @@ public class MapEditorController implements Controller {
 
   private void setMainCampusDefaults() {
     DEFAULT_CIRCLE_OPACITY = .85;
-    DEFAULT_LINE_WIDTH = 2.5;
+    DEFAULT_LINE_WIDTH = 2;
     DEFAULT_CIRCLE_RADIUS = 3;
     IMAGE_WIDTH = 5000;
     IMAGE_HEIGHT = 3400;
@@ -221,6 +221,7 @@ public class MapEditorController implements Controller {
       floorEdges = MapDB.getFloorEdges(currentFloor, currentBuilding);
     } else {
       floorNodes = MapDB.NobuildingfloorNodes(currentFloor);
+      // floorEdges = new LinkedList<>();
       floorEdges = MapDB.nobuildingFloorEdges(currentFloor);
     }
     try {

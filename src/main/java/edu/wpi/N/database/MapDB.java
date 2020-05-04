@@ -722,7 +722,7 @@ public class MapDB {
     try {
       LinkedList<DbNode[]> ret = new LinkedList<>();
       String query =
-          "edges.node1, n1.xcoord AS x1, n1.ycoord AS y1, n1.floor AS floor1, n1.building AS build1, n1.nodeType AS type1, "
+          "SELECT edges.node1, n1.xcoord AS x1, n1.ycoord AS y1, n1.floor AS floor1, n1.building AS build1, n1.nodeType AS type1, "
               + "n1.longName AS long1, n1.shortName AS short1, n1.teamAssigned AS team1, "
               + "edges.node2, n2.xcoord AS x2, n2.ycoord AS y2, n2.floor AS floor2, n2.building AS build2, n2.nodeType AS type2, "
               + "n2.longName AS long2, n2.shortName AS short2, n2.teamAssigned AS team2 "
