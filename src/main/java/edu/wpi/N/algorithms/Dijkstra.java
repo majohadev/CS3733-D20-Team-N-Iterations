@@ -4,10 +4,10 @@ import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Path;
 import java.util.*;
 
-public class AStar extends AlgoTemplate {
+public class Dijkstra extends AlgoTemplate {
 
   /**
-   * Finds the shortest path from Start to Goal node using the A* algorithm
+   * Finds the shortest path from Start to Goal node using Dijkstra's algorithm
    *
    * @param mapData: HashMap of the nodes and edges
    * @param startNode: The start node
@@ -41,7 +41,7 @@ public class AStar extends AlgoTemplate {
           break;
         }
 
-        // for every node (next node), current node has edge to:
+        // Look at each neighboring node
         for (DbNode nextNode : mapData.get(current.getNodeID())) {
           // if handicap is selected and it's a stair, skip
           if (handicap && nextNode.getNodeType().equals("STAI")) {
@@ -56,10 +56,7 @@ public class AStar extends AlgoTemplate {
             if (!costSoFar.containsKey(nextNodeID) || newCost < costSoFar.get(nextNodeID)) {
               // update the cost of nextNode
               costSoFar.put(nextNodeID, newCost);
-
-              // calculate and update the Score of nextNode
-              double priority = newCost + heuristic(nextNode, endNode);
-              nextNode.setScore(priority);
+              nextNode.setScore(newCost);
 
               // add to the priority queue
               frontier.add(nextNode);

@@ -45,13 +45,8 @@ public class Algorithm {
    * @throws DBException
    * @return: Path object indicating the shortest path to the goal Node from Start Node
    */
-  public Path findPath(DbNode startNode, DbNode endNode, boolean handicap) throws DBException {
-    try {
-      return pathFinder.findPath(mapData, startNode, endNode, handicap);
-    } catch (DBException e) {
-      e.printStackTrace();
-      throw e;
-    }
+  public Path findPath(DbNode startNode, DbNode endNode, boolean handicap) {
+    return pathFinder.findPath(mapData, startNode, endNode, handicap);
   }
 
   /**
@@ -59,7 +54,7 @@ public class Algorithm {
    *
    * @param startNode, DbNode of starting node
    * @param nodeType, String the type of node you want (must be length 4)
-   * @return Path, path from start node to closest (eucledian) end node of requested type
+   * @return Path, path from start node to closest (euclidean) end node of requested type
    * @throws DBException
    */
   public Path findQuickAccess(DbNode startNode, String nodeType) throws DBException {

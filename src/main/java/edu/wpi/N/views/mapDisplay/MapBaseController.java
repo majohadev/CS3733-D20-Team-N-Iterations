@@ -33,17 +33,17 @@ public class MapBaseController implements Controller {
   private StateSingleton singleton;
 
   // Screen Constants
-  private final float BAR_WIDTH = 300;
+  private final double BAR_WIDTH = 300;
   private final float IMAGE_WIDTH = 2475;
-  private final float IMAGE_HEIGHT = 1485;
-  private final float SCREEN_WIDTH = 1920;
-  private final float SCREEN_HEIGHT = 1080;
-  private final float MAP_WIDTH = SCREEN_WIDTH - BAR_WIDTH;
-  private final float MAP_HEIGHT = (MAP_WIDTH / IMAGE_WIDTH) * IMAGE_HEIGHT;
-  private final float HORIZONTAL_OFFSET = 10;
-  private final float VERTICAL_OFFSET = 3;
-  private final float HORIZONTAL_SCALE = (MAP_WIDTH) / IMAGE_WIDTH;
-  private final float VERTICAL_SCALE = (MAP_HEIGHT) / IMAGE_HEIGHT;
+  private final double IMAGE_HEIGHT = 1485;
+  private final double SCREEN_WIDTH = 1920;
+  private final double SCREEN_HEIGHT = 1080;
+  private final double MAP_WIDTH = SCREEN_WIDTH - BAR_WIDTH;
+  private final double MAP_HEIGHT = (MAP_WIDTH / IMAGE_WIDTH) * IMAGE_HEIGHT;
+  private final double HORIZONTAL_OFFSET = 10;
+  private final double VERTICAL_OFFSET = 5;
+  private final double HORIZONTAL_SCALE = (MAP_WIDTH) / IMAGE_WIDTH;
+  private final double VERTICAL_SCALE = (MAP_HEIGHT) / IMAGE_HEIGHT;
 
   // Zoom constants
   private final double MIN_MAP_SCALE = 1;

@@ -101,7 +101,6 @@ public class BetweenFloorsController implements Controller, Initializable {
       this.originalEdges = new LinkedList<DbNode>();
       while (nodeIt.hasNext()) {
         DbNode next = nodeIt.next();
-
         LinkedList<DbNode> connectedNodes = AbsAlgo.searchAccessible(node);
         if (connectedNodes != null) this.originalEdges.addAll(connectedNodes);
       }

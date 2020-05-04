@@ -482,9 +482,9 @@ GSTAI00903,1685,2052,3,Shapiro,STAI,Staircase Node 9 Floor 3,Floor 3 Stairs
 GSTAI01301,1750,2014,1,Shapiro,STAI,Staircase MapNode 13 Floor 1,Southbound Stairs Floor 1
 GSTAI02602,1686,1931,2,Shapiro,STAI,Stairs Node 26 Floor 2,Floor 2 Stairs Upper
 GSTAI02802,1685,2041,2,Shapiro,STAI,Stairs Node 28 Floor 2,Floor 2 Stairs Lower
-HBATH00102,1605,1008,2,Tower,BATH,Restroom,Bathroom 0102
-HBATH00103,1785,830,3,Tower,BATH,Restroom,Bathroom 0103
-HBATH00203,1750,985,3,Tower,BATH,Restroom,Bathroom 0203
+HBATH00102,1605,1008,2,Tower,REST,Restroom,Bathroom 0102
+HBATH00103,1785,830,3,Tower,REST,Restroom,Bathroom 0103
+HBATH00203,1750,985,3,Tower,REST,Restroom,Bathroom 0203
 HDEPT00102,2055,1330,2,Tower,DEPT,Endoscopy,Endoscopy
 HDEPT00103,1725,900,3,Tower,DEPT,Dialysis Waiting Room,Dialysis WR
 HDEPT00203,1690,830,3,Tower,DEPT,MICU 3BC Waiting Room,MICU 3BC WR
@@ -646,20 +646,3 @@ XHALL 1104,3302,1871,4,FLEX,HALL,Flex Hall,Flex Hall
 XHALL 1204,2787,2106,4,FLEX,HALL,Flex Hall,Flex Hall
 XCONF 1304,2785,2164,4,FLEX,CONF,Flexible Workzone 4,Workzone 4
 XCONF 1404,3273,1836,4,FLEX,CONF,Flexible Workzone 2,Workzone 2
-speak,1197,974,FL,Fuller Lower,AR,Lower Perreault Speaker,LPerreault Speak
-sidespeak,1351,978,FL,Fuller Lower,AR,Side hall speaker,Side speaker
-cf,1341,858,FL,Fuller Lower,AR,center floor lower,center floor lower
-im1,1275,802,FL,Fuller Lower,AR,top hall enter,top hall enter
-wo,1321,730,FL,Fuller Lower,AR,dr wong office,Dr Wong
-ex,1435,806,FL,Fuller Lower,AR,exit lower floor,exit lower
-im2,1103,802,FL,Fuller Lower,AR,mid hall IMGD,mid hall IMGD
-imc,915,804,FL,Fuller Lower,AR,corner IMGD,coner IMGD hall
-imex,915,1022,FL,Fuller Lower,AR,IMGD Exit,IMGD Exit
-hbot,1461,910,FL,Fuller Lower,AR,hall bot,hall bot
-dlwr,1363,1048,FL,Fuller Lower,AR,door lwr,door lwr
-bstr,1403,1080,FL,Fuller Lower,AR,bottom stairs,bstair
-1str,1407,1218,FL,Fuller Lower,AR,lower stairs 1,stair1
-2str,1411,1378,FL,Fuller Lower,AR,lower stairs 2,low star2
-3str,1411,1514,FL,Fuller Lower,AR,lower stairs 3,lower stairs 3
-tstr,1415,1644,FL,Fuller Lower,AR,top stairs,top stairs
-tfront,1571,1798,FL,Fuller Lower,AR,top front enter,Top Front Enter
