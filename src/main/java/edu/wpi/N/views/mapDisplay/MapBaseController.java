@@ -116,9 +116,15 @@ public class MapBaseController implements Controller {
    * sets the current building of the map display
    *
    * @param building the name of the building to be displayed
+   * @param floor the new floor of the map display
+   * @param currentPath the current path finding nodes
    */
   public void setBuilding(String building, int floor, Path currentPath) throws DBException {
-    setFloor(building, floor, currentPath);
+    clearPath();
+    img_map.setImage(singleton.mapImageLoader.getMap(building, floor));
+    if (!(currentPath == null || currentPath.isEmpty())) {
+      drawPath(currentPath, 1);
+    }
   }
 
   /**
