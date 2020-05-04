@@ -129,7 +129,8 @@ public class MapDisplayController implements Controller, Initializable {
     int numFloor = CSVParser.convertFloor("F1");
     try {
       mapBaseController.setFloor("45 Francis", numFloor, this.path);
-    } catch (DBException e) {
+      mainApp.switchScene("views/newHomePage.fxml", singleton);
+    } catch (DBException | IOException e) {
       e.printStackTrace();
       displayErrorMessage("Error: Switching to Main Hospital - 45 Francis");
     }
