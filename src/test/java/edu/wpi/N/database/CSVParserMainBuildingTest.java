@@ -6,9 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.LinkedList;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 public class CSVParserMainBuildingTest {
   @BeforeAll
@@ -29,6 +27,11 @@ public class CSVParserMainBuildingTest {
   @Test
   public void testCSVParserMainBuilding() throws DBException {
     LinkedList<DbNode> allNodes = MapDB.allNodes();
-    Assertions.assertTrue(allNodes.size() == 648);
+    Assertions.assertTrue(allNodes.size() == 647);
+  }
+
+  @AfterAll
+  public static void clearDB() throws DBException {
+    MapDB.clearNodes();
   }
 }
