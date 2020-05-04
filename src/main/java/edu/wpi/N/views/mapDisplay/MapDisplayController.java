@@ -3,6 +3,7 @@ package edu.wpi.N.views.mapDisplay;
 import com.jfoenix.controls.*;
 import edu.wpi.N.App;
 import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
+import edu.wpi.N.database.CSVParser;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
@@ -25,7 +26,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -57,7 +60,16 @@ public class MapDisplayController implements Controller, Initializable {
   @FXML JFXCheckBox handicapp1;
   @FXML JFXCheckBox handicapp2;
 
+  @FXML StackPane mapContainer; // Reference to the StackPane containing embded map
+  @FXML AnchorPane googleMapView;
+  @FXML AnchorPane hospitalView;
+
+  @FXML JFXButton btn_faulkner;
+  @FXML JFXButton btn_main;
+  @FXML JFXButton btn_google;
+
   @FXML MapBaseController mapBaseController; // Reference to the embedded map
+  @FXML GoogleMapController googleMapController;
 
   private ArrayList<String> directions;
   JFXNodesList floorButtonList = new JFXNodesList();
@@ -78,6 +90,7 @@ public class MapDisplayController implements Controller, Initializable {
     currentFloor = 1;
     currentBuilding = "Faulkner";
     createFloorButtons();
+    hospitalView = mapBaseController.getAnchorPane();
     try {
       mapBaseController.setFloor(this.currentBuilding, this.currentFloor, this.path);
     } catch (DBException e) {
@@ -88,6 +101,42 @@ public class MapDisplayController implements Controller, Initializable {
       setDefaultKioskNode();
     } catch (NullPointerException | DBException | IOException e) {
       e.printStackTrace();
+    }
+  }
+
+  /** Switches the Map Base view to Loaded previously Google Map View */
+  @FXML
+  public void switchToGoogleView() {
+    mapContainer.getChildren().setAll(googleMapView);
+  }
+
+  /** Switches the Map Base view to Faulkner Map */
+  @FXML
+  public void switchToFaulkner() {
+    try {
+      mapContainer.getChildren().setAll(hospitalView);
+      mapBaseController.setBuilding("Faulkner", 1, this.path);
+    } catch (DBException e) {
+      e.printStackTrace();
+      displayErrorMessage("Error: Switching to Faulkner");
+    }
+  }
+
+  /**
+   * Switches the Map Base view to Main Hospital Map
+   *
+   * @throws DBException
+   */
+  @FXML
+  public void switchToMain() {
+    int numFloor = CSVParser.convertFloor("L2"); // Number for main Entrance on 45 Francis street
+    try {
+      mapContainer.getChildren().setAll(hospitalView);
+      // TODO: make it point to Main
+      mapBaseController.setBuilding("Main", numFloor, this.path);
+    } catch (DBException e) {
+      e.printStackTrace();
+      displayErrorMessage("Error: Switching to Main Hospital - 45 Francis");
     }
   }
 
@@ -128,6 +177,7 @@ public class MapDisplayController implements Controller, Initializable {
     this.currentFloor = Integer.parseInt(btn.getText());
     mapBaseController.setFloor(this.currentBuilding, this.currentFloor, this.path);
   }
+
   /**
    * styles the buttons which enable the user to view different floors
    *
@@ -255,6 +305,51 @@ public class MapDisplayController implements Controller, Initializable {
       displayErrorMessage("Please select a location");
       return;
     }
+
+    // Reset the view to start with Start Node building and floor
+    resetViewToStart(first);
+
+    // Check if the start building is diff than end building
+    if (!first.getBuilding().equals(second.getBuilding())
+        && (first.getBuilding().equals("Faulkner") || second.getBuilding().equals("Faulkner"))) {
+      try {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(App.class.getResource("views/mapDisplay/googleMap.fxml"));
+
+        String pathToHTML = null;
+
+        if (first.getBuilding().equals("Faulkner")) {
+          // go from Falkner to Main
+          pathToHTML = "views/googleMapFaulknerToMain.html";
+        } else {
+          // going from Main to Falkner
+          pathToHTML = "views/googleMapMainToFaulkner.html";
+        }
+
+        // inject the path to html file to the GoogleMapController
+        String finalPathToHTML = pathToHTML;
+        loader.setControllerFactory(
+            type -> {
+              try {
+                return new GoogleMapController(finalPathToHTML);
+              } catch (Exception exc) {
+                throw new RuntimeException(exc);
+              }
+            });
+
+        googleMapView = loader.load();
+
+        // Enable buttons for switching between maps
+        btn_faulkner.setVisible(true);
+        btn_main.setVisible(true);
+        btn_google.setVisible(true);
+      } catch (IOException ex) {
+        ex.printStackTrace();
+        displayErrorMessage("Error when loading Google Map");
+        return;
+      }
+    }
+
     this.path =
         singleton.savedAlgo.findPath(
             first, second, handicapp1.isSelected() || handicapp2.isSelected());
@@ -303,6 +398,26 @@ public class MapDisplayController implements Controller, Initializable {
   //      }
   //    }
   //  }
+
+  /** Function resets the view to be of Start Node's floor and building */
+  public void resetViewToStart(DbNode start) {
+    try {
+      btn_google.setVisible(false);
+      mapContainer.getChildren().setAll(hospitalView);
+
+      // Check which building this is
+      if (start.getBuilding().equals("Faulkner")) {
+        mapBaseController.setBuilding(start.getBuilding(), start.getFloor(), null);
+      } else {
+        // TODO: change it to work so the view gets selected as Start Node building and floor
+        // A.K. Generic
+        int numFloor = CSVParser.convertFloor("L2");
+        mapBaseController.setBuilding("Main", numFloor, this.path);
+      }
+    } catch (DBException ex) {
+      displayErrorMessage("Error when resetting view to Start Node");
+    }
+  }
 
   public void onBtnResetPathClicked() throws DBException, IOException {
     path.clear();

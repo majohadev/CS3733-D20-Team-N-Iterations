@@ -62,7 +62,7 @@ public class CSVParser {
     } catch (Exception e) {
       // for debugging purposes
       System.out.println(row[0]);
-      throw (e);
+      e.printStackTrace();
     }
   }
 
@@ -76,6 +76,7 @@ public class CSVParser {
       String nodeID = row[0];
       int xcoord = Integer.parseInt(row[1]);
       int ycoord = Integer.parseInt(row[2]);
+
       String building = row[4];
 
       int floor;
@@ -109,7 +110,8 @@ public class CSVParser {
     } catch (Exception e) {
       // for debugging purposes
       System.out.println(row[0]);
-      throw (e);
+      e.printStackTrace();
+      // throw (e);
     }
   }
 
