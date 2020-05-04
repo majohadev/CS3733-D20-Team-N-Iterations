@@ -79,5 +79,6 @@
                   </AnchorPane>
                </children></AnchorPane>
          </children></AnchorPane>
+      <AnchorPane fx:id="pn_floors" layoutX="431.0" layoutY="14.0" prefHeight="55.0" prefWidth="90.0" />
    </children>
 </AnchorPane>
