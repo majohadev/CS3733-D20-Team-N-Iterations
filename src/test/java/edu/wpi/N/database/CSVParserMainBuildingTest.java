@@ -27,7 +27,7 @@ public class CSVParserMainBuildingTest {
   @Test
   public void testCSVParserMainBuilding() throws DBException {
     LinkedList<DbNode> allNodes = MapDB.allNodes();
-    Assertions.assertTrue(allNodes.size() == 647);
+    Assertions.assertTrue(allNodes.size() == 963);
   }
 
   @AfterAll

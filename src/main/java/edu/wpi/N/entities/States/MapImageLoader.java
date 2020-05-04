@@ -9,11 +9,19 @@ public class MapImageLoader {
 
   /** Loads all map images of the application once */
   public MapImageLoader() {
-    storeImage("Faulkner1", "edu/wpi/N/images/map/Floor1Reclor.png");
+    //    storeImage("Faulkner1", "edu/wpi/N/images/map/Floor1Reclor.png");
+    storeImage("Faulkner1", "edu/wpi/N/images/map/F1.png");
     storeImage("Faulkner2", "edu/wpi/N/images/map/Floor2TeamN.png");
     storeImage("Faulkner3", "edu/wpi/N/images/map/Floor3TeamN.png");
     storeImage("Faulkner4", "edu/wpi/N/images/map/Floor4SolidBackground.png");
     storeImage("Faulkner5", "edu/wpi/N/images/map/Floor5TeamN.png");
+    // TODO: change F1 and shit to respective numbers
+    storeImage("Main F1", "edu/wpi/N/images/map/F1.png");
+    storeImage("Main F2", "edu/wpi/N/images/map/F2.png");
+    storeImage("Main F3", "edu/wpi/N/images/map/F3.png");
+    storeImage("Main Ground", "edu/wpi/N/images/map/ground.png");
+    storeImage("Main L1", "edu/wpi/N/images/map/L1.png");
+    storeImage("Main1", "edu/wpi/N/images/map/L2.png");
   }
 
   /**

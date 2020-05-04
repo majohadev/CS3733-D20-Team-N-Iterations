@@ -14,9 +14,11 @@ import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
+import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -81,6 +83,8 @@ public class MapBaseController implements Controller {
   @FXML StackPane pn_movableMap;
   @FXML Pane pn_path;
   @FXML ImageView img_map;
+  @FXML Button btn_zoomIn, btn_zoomOut;
+  @FXML AnchorPane controllerAnchorPane;
 
   /**
    * the constructor of MapBaseController
@@ -114,9 +118,15 @@ public class MapBaseController implements Controller {
    * sets the current building of the map display
    *
    * @param building the name of the building to be displayed
+   * @param floor the new floor of the map display
+   * @param currentPath the current path finding nodes
    */
   public void setBuilding(String building, int floor, Path currentPath) throws DBException {
-    setFloor(building, floor, currentPath);
+    clearPath();
+    img_map.setImage(singleton.mapImageLoader.getMap(building, floor));
+    if (!(currentPath == null || currentPath.isEmpty())) {
+      drawPath(currentPath, 1);
+    }
   }
 
   /**
@@ -133,6 +143,15 @@ public class MapBaseController implements Controller {
     if (!(currentPath == null || currentPath.isEmpty())) {
       drawPath(currentPath, floor);
     }
+  }
+
+  /**
+   * Returns AnchorPane of this controller
+   *
+   * @return
+   */
+  public AnchorPane getAnchorPane() {
+    return this.controllerAnchorPane;
   }
 
   private void initPathAnim() {
@@ -254,6 +273,17 @@ public class MapBaseController implements Controller {
   }
 
   //   == MAP ZOOM CONTROLS ==
+
+  // Get zoom button input
+  @FXML
+  private void zoomToolHandler(MouseEvent event) throws IOException {
+
+    if (event.getSource() == btn_zoomIn) {
+      zoom(ZOOM_STEP_BUTTON);
+    } else if (event.getSource() == btn_zoomOut) {
+      zoom(-ZOOM_STEP_BUTTON);
+    }
+  }
 
   // When user scrolls mouse over map
   @FXML
