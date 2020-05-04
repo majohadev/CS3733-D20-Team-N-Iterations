@@ -245,6 +245,7 @@ public class MapEditorController implements Controller {
               c);
       line.setStrokeLineCap(StrokeLineCap.ROUND);
       line.setOnMouseClicked(event -> this.handleLineClickedEvents(event, line));
+      line.setCursor(Cursor.HAND);
       UIEdge UIedge = new UIEdge(line, edge);
       conversion.get(edge[0].getNodeID()).addEdge(UIedge);
       conversion.get(edge[1].getNodeID()).addEdge(UIedge);
@@ -259,6 +260,7 @@ public class MapEditorController implements Controller {
     circle.setCenterY(y);
     circle.setFill(c);
     circle.setOpacity(DEFAULT_CIRCLE_OPACITY);
+    circle.setCursor(Cursor.HAND);
     circle.setOnMouseDragged(event -> this.handleCircleDragEvents(event, circle));
     circle.setOnMouseClicked(
         event -> {
@@ -350,6 +352,7 @@ public class MapEditorController implements Controller {
 
   private void handleCircleDragEvents(MouseEvent event, Circle circle) {
     isDraggingNode = true;
+    circle.setCursor(Cursor.CLOSED_HAND);
     if (mode == Mode.ADD_NODE && circle == addNodeCircle) {
       onCircleAddNodeDragged(event, circle);
     }
@@ -426,9 +429,12 @@ public class MapEditorController implements Controller {
     pn_editor.setVisible(false);
     pn_stack.getChildren().remove(pn_display);
     pn_stack.getChildren().add(pn_display);
+    /*
     if (!pn_display.getChildren().contains(pn_editor)) {
       pn_display.getChildren().add(pn_editor);
     }
+
+     */
     for (Line line : deleteEdgeLines) {
       line.setStroke(DEFAULT_LINE_COLOR);
     }
@@ -487,7 +493,7 @@ public class MapEditorController implements Controller {
   }
 
   private void onCircleEditNodeDragged(MouseEvent event, Circle circle) {
-    if (editNodeCircle != circle && editNodeCircle != null) {
+    if (editNodeCircle != null && editNodeCircle != circle) {
       DbNode node = nodesMap.get(editNodeCircle).getDBNode();
       editNodeCircle.setCenterX(scaleX(node.getX()));
       editNodeCircle.setCenterY(scaleY(node.getY()));
@@ -610,7 +616,7 @@ public class MapEditorController implements Controller {
     changeEditor();
     pn_stack.getChildren().remove(pn_edges);
     pn_stack.getChildren().add(pn_edges);
-    pn_edges.getChildren().add(pn_editor);
+    // pn_edges.getChildren().add(pn_editor);
     cancelDeleteEdge();
     confirmDeleteEdge();
   }
@@ -695,6 +701,7 @@ public class MapEditorController implements Controller {
     hideEditElevButton();
     changeEditor();
     addNodeCircle = createCircle(event.getX(), event.getY(), ADD_NODE_COLOR);
+    addNodeCircle.setCursor(Cursor.HAND);
     pn_display.getChildren().add(addNodeCircle);
     controllerAddNode.setPos(event.getX(), event.getY());
     onTxtPosAddNodeTextChanged(addNodeCircle);
@@ -1385,6 +1392,7 @@ public class MapEditorController implements Controller {
     LinkedList<UINode> UInode = new LinkedList();
     LinkedList<Circle> circles = new LinkedList();
     isDraggingNode = false;
+    circle.setCursor(Cursor.HAND);
     if (mode == mode.ADD_EDGE) {
       for (Circle aCircle : nodesMap.keySet()) {
         if (aCircle.contains(addEdgeLine.getStartX(), addEdgeLine.getStartY())
