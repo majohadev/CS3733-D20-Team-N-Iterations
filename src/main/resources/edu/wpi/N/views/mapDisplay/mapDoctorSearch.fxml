@@ -18,7 +18,7 @@
             <Font size="34.0" />
          </font>
       </Label>
-      <TextField alignment="CENTER" layoutX="67.0" layoutY="106.0" onKeyPressed="#onSearchFirstLocation" prefHeight="35.0" prefWidth="255.0" promptText="Please enter a location" styleClass="list-cell" stylesheets="@../../css/newMapDisplay.css" AnchorPane.leftAnchor="65.0" AnchorPane.topAnchor="110.0" />
+      <TextField alignment="CENTER" layoutX="67.0" layoutY="106.0" prefHeight="35.0" prefWidth="255.0" promptText="Please enter a location" styleClass="list-cell" stylesheets="@../../css/newMapDisplay.css" AnchorPane.leftAnchor="65.0" AnchorPane.topAnchor="110.0" />
       <TextField alignment="CENTER" layoutX="66.0" layoutY="170.0" prefHeight="35.0" prefWidth="255.0" promptText="Please enter a location" styleClass="list-cell" stylesheets="@../../css/newMapDisplay.css" AnchorPane.leftAnchor="65.0" AnchorPane.topAnchor="170.0" />
       <ImageView fitHeight="28.0" fitWidth="33.0" layoutX="26.0" layoutY="174.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="170.0">
          <image>

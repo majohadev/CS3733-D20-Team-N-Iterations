@@ -12,7 +12,7 @@
 
 <AnchorPane maxHeight="1080.0" maxWidth="345.0" minHeight="1080.0" minWidth="345.0" prefHeight="1080.0" prefWidth="345.0" style="-fx-background-color: #263051;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.mapDisplay.MapLocationSearchController">
    <children>
-      <ListView fx:id="lst_fuzzySearch" layoutX="67.0" layoutY="229.0" prefHeight="481.0" prefWidth="255.0" styleClass="list-cell" stylesheets="@../../css/newMapDisplay.css" AnchorPane.leftAnchor="65.0" AnchorPane.topAnchor="235.0" />
+      <ListView fx:id="lst_fuzzySearch" layoutX="67.0" layoutY="229.0" onMouseClicked="#onItemSelected" prefHeight="481.0" prefWidth="255.0" styleClass="list-cell" stylesheets="@../../css/newMapDisplay.css" AnchorPane.leftAnchor="65.0" AnchorPane.topAnchor="235.0" />
       <Label layoutX="29.0" layoutY="14.0" prefHeight="50.0" prefWidth="255.0" text="Location Search" textFill="#e6ebf2" AnchorPane.leftAnchor="40.0" AnchorPane.topAnchor="25.0">
          <font>
             <Font size="34.0" />

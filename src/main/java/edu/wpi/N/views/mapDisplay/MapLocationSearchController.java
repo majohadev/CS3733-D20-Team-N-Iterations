@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 
 public class MapLocationSearchController implements Controller {
   App mainApp;
@@ -15,12 +16,28 @@ public class MapLocationSearchController implements Controller {
   @FXML TextField txt_secondLocation;
   @FXML ListView lst_fuzzySearch;
 
+  TextField activeText;
+
   @Override
   public void setMainApp(App mainApp) {
     this.mainApp = mainApp;
   }
 
   public void onSearchLocation(KeyEvent e) throws DBException {
-    NewMapDisplayController.fuzzyLocationSearch((TextField) e.getSource(), lst_fuzzySearch);
+    activeText = (TextField) e.getSource();
+    NewMapDisplayController.fuzzyLocationSearch(activeText, lst_fuzzySearch);
+  }
+
+  public void onItemSelected(MouseEvent e) {
+    try {
+      ListView lst = (ListView) e.getSource();
+      activeText.setText(lst.getSelectionModel().getSelectedItem().toString());
+    } catch (NullPointerException ex) {
+      return;
+    }
+  }
+
+  public void onSearchButtonClicked(MouseEvent e) {
+
   }
 }
