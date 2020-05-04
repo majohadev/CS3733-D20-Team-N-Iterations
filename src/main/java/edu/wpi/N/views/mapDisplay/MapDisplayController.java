@@ -270,7 +270,8 @@ public class MapDisplayController implements Controller, Initializable {
   public void initQuickAccess(ListView<DbNode> firstLst, String type) throws DBException {
     DbNode first = lst_firstLocation.getSelectionModel().getSelectedItem();
     this.path = singleton.savedAlgo.findQuickAccess(first, type);
-    mapBaseController.drawPath(path, first.getFloor());
+    mapBaseController.setFloor(first.getBuilding(), first.getFloor(), path);
+    disableNonPathFloors();
     setTextDecription();
   }
 

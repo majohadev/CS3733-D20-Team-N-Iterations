@@ -4,7 +4,7 @@ import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Path;
 import java.util.*;
 
-public class AStar extends AbsAlgo {
+public class AStar extends AlgoTemplate {
 
   /**
    * Finds the shortest path from Start to Goal node using the A* algorithm
