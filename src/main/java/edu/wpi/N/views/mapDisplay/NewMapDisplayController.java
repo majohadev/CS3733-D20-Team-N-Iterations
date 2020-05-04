@@ -52,7 +52,13 @@ public class NewMapDisplayController implements Controller {
     this.currentBuilding = "FAULKNER";
     this.directions = new ArrayList<>();
     this.floorButtonList = new JFXNodesList();
+  }
 
+  public void getOnMouseMoved(MouseEvent event) throws IOException {
+    //TODO: Reset a 30 second timer when mouse is moved
+    //TODO: Need a some sort of timer to start when map display is opened
+    //TODO: When timer reaches 0, switch to a screensaver, which when clicked on switches back to map display
+    System.out.println("You moved!");
   }
 
   public void initLocationSearchButton() {
