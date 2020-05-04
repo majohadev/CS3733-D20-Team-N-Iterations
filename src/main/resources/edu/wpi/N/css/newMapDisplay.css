@@ -31,3 +31,9 @@
     -fx-pref-height: 25px;
     -fx-font-size: 18;
 }
+
+.toggle {
+    -fx-text-fill: #e6ebf2;
+    -fx-background-color: #263051;
+    -fx-font-size: 18;
+}

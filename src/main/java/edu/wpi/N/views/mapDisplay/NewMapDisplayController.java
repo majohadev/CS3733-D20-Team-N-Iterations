@@ -4,13 +4,16 @@ import edu.wpi.N.App;
 import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.entities.DbNode;
+import edu.wpi.N.entities.Path;
 import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.views.Controller;
 import java.io.IOException;
+import java.util.LinkedList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
@@ -31,13 +34,50 @@ public class NewMapDisplayController implements Controller {
 
   MapLocationSearchController locationSearchController;
   MapDoctorSearchController doctorSearchController;
+  MapBaseController mapBaseController;
   MapQRController mapQRController;
 
-  public void initialize() {}
+  Path path;
+
+  public void initialize() {
+    this.path = new Path(new LinkedList<>());
+    mapBaseController = new MapBaseController(singleton);
+  }
+
+  public void initLocationSearchButton() {
+    locationSearchController
+        .getSearchButton()
+        .setOnMouseClicked(
+            e -> {
+              try {
+                initPathfind(
+                    (locationSearchController.getDBNodes())[0],
+                    (locationSearchController.getDBNodes())[1],
+                    locationSearchController.getHandicap());
+              } catch (DBException ex) {
+                ex.printStackTrace();
+              }
+            });
+  }
 
   @Override
   public void setMainApp(App mainApp) {
     this.mainApp = mainApp;
+  }
+
+  public NewMapDisplayController(StateSingleton singleton) {
+    this.singleton = singleton;
+  }
+
+  public void initPathfind(DbNode first, DbNode second, boolean isSelected) throws DBException {
+    if (first == null || second == null) {
+      displayErrorMessage("Please select a location");
+      return;
+    }
+    this.path = singleton.savedAlgo.findPath(first, second, isSelected);
+    mapBaseController.setFloor(first.getBuilding(), first.getFloor(), path);
+    //    disableNonPathFloors();
+    //    setTextDecription();
   }
 
   /**
@@ -69,6 +109,7 @@ public class NewMapDisplayController implements Controller {
       loader = new FXMLLoader(getClass().getResource("mapLocationSearch.fxml"));
       Pane pane = loader.load();
       locationSearchController = loader.getController();
+      initLocationSearchButton();
       pn_change.getChildren().add(pane);
     } else if (src == pn_doctorIcon) {
       loader = new FXMLLoader(getClass().getResource("mapDoctorSearch.fxml"));
@@ -87,5 +128,12 @@ public class NewMapDisplayController implements Controller {
     } else if (src == pn_adminIcon) {
       // TODO load admin page here
     }
+  }
+
+  public void displayErrorMessage(String str) {
+    Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+    errorAlert.setHeaderText("Invalid input");
+    errorAlert.setContentText(str);
+    errorAlert.showAndWait();
   }
 }
