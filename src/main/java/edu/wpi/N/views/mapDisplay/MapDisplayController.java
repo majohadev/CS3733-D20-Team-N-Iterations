@@ -2,7 +2,6 @@ package edu.wpi.N.views.mapDisplay;
 
 import com.jfoenix.controls.*;
 import edu.wpi.N.App;
-import edu.wpi.N.Main;
 import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
@@ -62,6 +61,7 @@ public class MapDisplayController implements Controller, Initializable {
 
   @FXML StackPane mapContainer; // Reference to the StackPane containing embded map
   @FXML AnchorPane googleMapView;
+  @FXML AnchorPane hospitalView;
 
   @FXML JFXButton btn_faulkner;
   @FXML JFXButton btn_main;
@@ -89,6 +89,7 @@ public class MapDisplayController implements Controller, Initializable {
     currentFloor = 1;
     currentBuilding = "Faulkner";
     createFloorButtons();
+    hospitalView = mapBaseController.getAnchorPane();
     try {
       mapBaseController.setFloor(this.currentBuilding, this.currentFloor, this.path);
     } catch (DBException e) {
@@ -105,7 +106,6 @@ public class MapDisplayController implements Controller, Initializable {
   /** Switches the Map Base view to Loaded previously Google Map View */
   @FXML
   public void switchToGoogleView() {
-    // googleMapController.loadRoadFaulknerToMain();
     mapContainer.getChildren().setAll(googleMapView);
   }
 
@@ -113,6 +113,7 @@ public class MapDisplayController implements Controller, Initializable {
   @FXML
   public void switchToFaulkner() {
     try {
+      mapContainer.getChildren().setAll(hospitalView);
       mapBaseController.setFloor("Faulkner", 1, this.path);
     } catch (DBException e) {
       e.printStackTrace();
@@ -129,6 +130,7 @@ public class MapDisplayController implements Controller, Initializable {
   public void switchToMain() {
     int numFloor = 2; // Number for main Entrance on 45 Francis street
     try {
+      mapContainer.getChildren().setAll(hospitalView);
       mapBaseController.setFloor("45 Francis", numFloor, this.path);
     } catch (DBException e) {
       e.printStackTrace();
@@ -302,12 +304,40 @@ public class MapDisplayController implements Controller, Initializable {
       return;
     }
 
-    // Check if the start building is diff than end building
-    if (!first.getBuilding().equals(second.getBuilding())) {
-      try {
-        googleMapView = FXMLLoader.load(Main.class.getResource("views/mapDisplay/googleMap.fxml"));
+    // Reset the view to start with Start Node building and floor
+    resetViewToStart(first);
 
-        // TODO: enable buttons for switching between maps
+    // Check if the start building is diff than end building
+    if (!first.getBuilding().equals(second.getBuilding())
+        && (first.getBuilding().equals("Faulkner") || second.getBuilding().equals("Faulkner"))) {
+      try {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(App.class.getResource("views/mapDisplay/googleMap.fxml"));
+
+        String pathToHTML = null;
+
+        if (first.getBuilding().equals("Faulkner")) {
+          // go from Falkner to Main
+          pathToHTML = "views/googleMapFaulknerToMain.html";
+        } else {
+          // going from Main to Falkner
+          pathToHTML = "views/googleMapMainToFaulkner.html";
+        }
+
+        // inject the path to the GoogleMapController
+        String finalPathToHTML = pathToHTML;
+        loader.setControllerFactory(
+            type -> {
+              try {
+                return new GoogleMapController(finalPathToHTML);
+              } catch (Exception exc) {
+                throw new RuntimeException(exc);
+              }
+            });
+
+        googleMapView = loader.load();
+
+        // Enable buttons for switching between maps
         btn_faulkner.setVisible(true);
         btn_main.setVisible(true);
         btn_google.setVisible(true);
@@ -365,6 +395,17 @@ public class MapDisplayController implements Controller, Initializable {
   //      }
   //    }
   //  }
+
+  /** Function resets the view to be of Start Node's floor and building */
+  public void resetViewToStart(DbNode start) {
+    try {
+      btn_google.setVisible(false);
+      mapContainer.getChildren().setAll(hospitalView);
+      mapBaseController.setBuilding(start.getBuilding(), start.getFloor(), null);
+    } catch (DBException ex) {
+      displayErrorMessage("Error when resetting view to Start Node");
+    }
+  }
 
   public void onBtnResetPathClicked() throws DBException, IOException {
     path.clear();

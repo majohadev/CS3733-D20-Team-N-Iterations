@@ -16,24 +16,18 @@ public class GoogleMapController implements Controller, Initializable {
 
   private StateSingleton singleton;
   private App mainApp;
+  private String pathToHTML;
 
   @FXML protected WebView webView;
 
-  public GoogleMapController(StateSingleton singleton) {
-    this.singleton = singleton;
+  // String pathToHTML
+  public GoogleMapController(String pathToHTML) {
+    this.pathToHTML = pathToHTML;
   }
-
-  // Empty constructor
-  public GoogleMapController() {}
 
   @Override
   public void initialize(URL url, ResourceBundle rb) {
-    webView.getEngine().load(Main.class.getResource("views/googleMapDisplay.html").toString());
-    System.out.println("Test");
-  }
-
-  public void loadRoadFaulknerToMain() {
-    webView.getEngine().load(Main.class.getResource("views/googleMapDisplay.html").toString());
+    webView.getEngine().load(Main.class.getResource(pathToHTML).toString());
   }
 
   public void setSingleton(StateSingleton singleton) {

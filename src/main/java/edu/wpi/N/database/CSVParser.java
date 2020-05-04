@@ -62,7 +62,7 @@ public class CSVParser {
     } catch (Exception e) {
       // for debugging purposes
       System.out.println(row[0]);
-      throw (e);
+      e.printStackTrace();
     }
   }
 
@@ -110,7 +110,8 @@ public class CSVParser {
     } catch (Exception e) {
       // for debugging purposes
       System.out.println(row[0]);
-      throw (e);
+      e.printStackTrace();
+      // throw (e);
     }
   }
 
