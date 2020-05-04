@@ -80,7 +80,7 @@ public class CSVParser {
 
       int floor;
 
-      if (building.equals("Faulkner") || building.equals("15 Francis") || building.equals("FLEX")) {
+      if (building.equals("Faulkner")) {
         floor = Integer.parseInt(row[3]);
       } else if (building.equals("Fuller Lower")) {
         return;
