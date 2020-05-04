@@ -52,7 +52,6 @@ public class NewMapDisplayController implements Controller {
     this.currentBuilding = "FAULKNER";
     this.directions = new ArrayList<>();
     this.floorButtonList = new JFXNodesList();
-
   }
 
   public void initLocationSearchButton() {
