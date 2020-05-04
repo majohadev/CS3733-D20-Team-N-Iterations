@@ -16,7 +16,6 @@
       <SplitPane dividerPositions="0.0027829313543599257" orientation="VERTICAL" prefHeight="1080.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
             <AnchorPane maxHeight="110.0" maxWidth="1920.0" minHeight="110.0" minWidth="0.0" prefHeight="190.0" prefWidth="1918.0" style="-fx-background-color: #002186;" SplitPane.resizableWithParent="false">
-                <fx:include fx:id="time" layoutX="1750.0" layoutY="20.0" source="../features/timeTab.fxml" />
                 <children>
                     <ImageView fitHeight="110.0" fitWidth="167.0" layoutX="696.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="true">
                         <image>
@@ -28,27 +27,19 @@
                             <Font name="Calibri Bold" size="96.0" />
                         </font>
                     </Label>
+                    <fx:include fx:id="time" layoutX="1750.0" layoutY="20.0" source="../features/timeTab.fxml" />
                 </children></AnchorPane>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" style="-fx-background-color: fff8e4;">
+          <AnchorPane minHeight="0.0" minWidth="0.0" pickOnBounds="false" prefHeight="100.0" prefWidth="160.0" style="-fx-background-color: fff8e4;">
                <children>
-                  <StackPane fx:id="pn_stack" layoutX="128.0" prefHeight="829.0" prefWidth="1028.0">
+                  <StackPane fx:id="pn_stack" layoutX="128.0" onMouseDragged="#mapDragHandler" onMousePressed="#mapPressHandler" onMouseReleased="#mapReleaseHandler" onScroll="#mapScrollHandler" prefHeight="829.0" prefWidth="1028.0">
                      <children>
                         <ImageView fx:id="img_map" fitHeight="997.0" fitWidth="1818.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../images/map/Floor1Reclor.png" />
                            </image>
                         </ImageView>
-                        <Pane fx:id="pn_edges" prefHeight="997.0" prefWidth="1696.0" />
-                        <Pane fx:id="pn_display" onMouseClicked="#onPaneDisplayClicked" prefHeight="773.0" prefWidth="1664.0">
-                           <children>
-                              <JFXComboBox fx:id="cb_changeAlgo" layoutX="-85.0" layoutY="220.0" prefHeight="25.0" prefWidth="170.0" promptText="Change Algorithm" />
-                              <JFXButton fx:id="btn_cancel_elev" buttonType="RAISED" disable="true" layoutX="145.0" layoutY="438.0" onMouseClicked="#onBtnCancelElevClicked" prefHeight="52.0" prefWidth="104.0" ripplerFill="#002186" style="-fx-background-color: #00339A;" styleClass="animated-option-button" stylesheets="@../../css/MapDisplayFloors.css" text="Exit" textFill="WHITE">
-                                 <font>
-                                    <Font size="24.0" />
-                                 </font>
-                              </JFXButton>
-                           </children>
-                        </Pane>
+                        <Pane fx:id="pn_edges" />
+                        <Pane fx:id="pn_display" onMouseClicked="#onPaneDisplayClicked" />
                      </children>
                   </StackPane>
                   <JFXButton fx:id="btn_home" buttonType="RAISED" layoutX="275.0" layoutY="378.0" onMouseClicked="#onBtnHomeClicked" prefHeight="52.0" prefWidth="104.0" ripplerFill="#002186" style="-fx-background-color: #00339A;" styleClass="animated-option-button" stylesheets="@../../css/MapDisplayFloors.css" text="Home" textFill="WHITE">
@@ -57,9 +48,15 @@
                      </font>
                   </JFXButton>
                   <Pane fx:id="pn_changeFloor" layoutX="1790.0" layoutY="9.0" prefHeight="490.0" prefWidth="131.0" />
-                  <Pane fx:id="pn_editor" layoutX="1100.0" layoutY="15.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="280.0" prefWidth="470.0" />
+                  <Pane fx:id="pn_editor" layoutX="1300.0" layoutY="20.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="280.0" prefWidth="470.0" />
                   <Pane fx:id="pn_elev" layoutX="1790.0" layoutY="452.0" prefHeight="510.0" prefWidth="131.0" visible="false" />
                   <JFXButton fx:id="btn_changeAlgo" layoutX="70.0" layoutY="260.0" onMouseClicked="#changeAlgorithm" text="Change Algorithm" />
+                  <JFXComboBox fx:id="cb_changeAlgo" layoutX="46.0" layoutY="299.0" prefHeight="25.0" prefWidth="170.0" promptText="Change Algorithm" />
+                  <JFXButton fx:id="btn_cancel_elev" buttonType="RAISED" disable="true" layoutX="275.0" layoutY="440.0" onMouseClicked="#onBtnCancelElevClicked" prefHeight="52.0" prefWidth="104.0" ripplerFill="#002186" style="-fx-background-color: #00339A;" styleClass="animated-option-button" stylesheets="@../../css/MapDisplayFloors.css" text="Exit" textFill="WHITE">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </JFXButton>
                </children>
             </AnchorPane>
         </items>
