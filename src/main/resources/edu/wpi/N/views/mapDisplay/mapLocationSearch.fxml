@@ -12,14 +12,14 @@
 
 <AnchorPane maxHeight="1080.0" maxWidth="345.0" minHeight="1080.0" minWidth="345.0" prefHeight="1080.0" prefWidth="345.0" style="-fx-background-color: #263051;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.mapDisplay.MapLocationSearchController">
    <children>
-      <ListView layoutX="67.0" layoutY="229.0" prefHeight="481.0" prefWidth="255.0" styleClass="list-cell" stylesheets="@../../css/newMapDisplay.css" AnchorPane.leftAnchor="65.0" AnchorPane.topAnchor="235.0" />
+      <ListView fx:id="lst_fuzzySearch" layoutX="67.0" layoutY="229.0" prefHeight="481.0" prefWidth="255.0" styleClass="list-cell" stylesheets="@../../css/newMapDisplay.css" AnchorPane.leftAnchor="65.0" AnchorPane.topAnchor="235.0" />
       <Label layoutX="29.0" layoutY="14.0" prefHeight="50.0" prefWidth="255.0" text="Location Search" textFill="#e6ebf2" AnchorPane.leftAnchor="40.0" AnchorPane.topAnchor="25.0">
          <font>
             <Font size="34.0" />
          </font>
       </Label>
-      <TextField alignment="CENTER" layoutX="67.0" layoutY="95.0" prefHeight="35.0" prefWidth="255.0" promptText="Please enter a location" styleClass="list-cell" stylesheets="@../../css/newMapDisplay.css" AnchorPane.leftAnchor="65.0" AnchorPane.topAnchor="110.0" />
-      <TextField alignment="CENTER" layoutX="67.0" layoutY="160.0" prefHeight="35.0" prefWidth="255.0" promptText="Please enter a location" styleClass="list-cell" stylesheets="@../../css/newMapDisplay.css" AnchorPane.leftAnchor="65.0" AnchorPane.topAnchor="170.0" />
+      <TextField fx:id="txt_firstLocation" alignment="CENTER" layoutX="67.0" layoutY="95.0" onKeyPressed="#onSearchLocation" prefHeight="35.0" prefWidth="255.0" promptText="Please enter a location" styleClass="list-cell" stylesheets="@../../css/newMapDisplay.css" AnchorPane.leftAnchor="65.0" AnchorPane.topAnchor="110.0" />
+      <TextField fx:id="txt_secondLocation" alignment="CENTER" layoutX="67.0" layoutY="160.0" onKeyPressed="#onSearchLocation" prefHeight="35.0" prefWidth="255.0" promptText="Please enter a location" styleClass="list-cell" stylesheets="@../../css/newMapDisplay.css" AnchorPane.leftAnchor="65.0" AnchorPane.topAnchor="170.0" />
       <ImageView fitHeight="28.0" fitWidth="33.0" layoutX="29.0" layoutY="164.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="170.0">
          <image>
             <Image url="@../../images/mapDisplayIcons/pinIcon.png" />
