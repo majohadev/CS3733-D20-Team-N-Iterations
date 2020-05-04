@@ -340,8 +340,6 @@ public class MapDisplayController implements Controller, Initializable {
         googleMapView = loader.load();
 
         // Enable buttons for switching between maps
-        btn_faulkner.setVisible(true);
-        btn_main.setVisible(true);
         btn_google.setVisible(true);
       } catch (IOException ex) {
         ex.printStackTrace();
@@ -411,7 +409,7 @@ public class MapDisplayController implements Controller, Initializable {
         // TODO: change it to work so the view gets selected as Start Node building and floor
         // A.K. Generic
         int numFloor = CSVParser.convertFloor("L2");
-        mapBaseController.setBuilding("Main", numFloor, this.path);
+        mapBaseController.setBuilding("Main", numFloor, null);
       }
     } catch (DBException ex) {
       displayErrorMessage("Error when resetting view to Start Node");
