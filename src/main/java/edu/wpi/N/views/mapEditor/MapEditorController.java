@@ -221,7 +221,7 @@ public class MapEditorController implements Controller {
       floorEdges = MapDB.getFloorEdges(currentFloor, currentBuilding);
     } else {
       floorNodes = MapDB.NobuildingfloorNodes(currentFloor);
-      floorEdges = new LinkedList<DbNode[]>();
+      floorEdges = MapDB.nobuildingFloorEdges(currentFloor);
     }
     try {
       HashMap<String, UINode> conversion = createUINodes(floorNodes, DEFAULT_CIRCLE_COLOR);
