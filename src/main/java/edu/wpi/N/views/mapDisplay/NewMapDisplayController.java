@@ -1,5 +1,6 @@
 package edu.wpi.N.views.mapDisplay;
 
+import com.jfoenix.controls.JFXNodesList;
 import edu.wpi.N.App;
 import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.database.DBException;
@@ -9,6 +10,7 @@ import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.entities.employees.Doctor;
 import edu.wpi.N.views.Controller;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -39,9 +41,18 @@ public class NewMapDisplayController implements Controller {
   MapQRController mapQRController;
 
   Path path;
+  int currentFloor;
+  String currentBuilding;
+  ArrayList<String> directions;
+  JFXNodesList floorButtonList;
 
   public void initialize() {
     this.path = new Path(new LinkedList<>());
+    this.currentFloor = 1;
+    this.currentBuilding = "FAULKNER";
+    this.directions = new ArrayList<>();
+    this.floorButtonList = new JFXNodesList();
+
   }
 
   public void initLocationSearchButton() {

@@ -64,8 +64,6 @@ public class MapDisplayController implements Controller, Initializable {
 
   // Program variables
   Path path;
-  int currentFloor;
-  String currentBuilding;
 
   // Inject singleton
   public MapDisplayController(StateSingleton singleton) {
