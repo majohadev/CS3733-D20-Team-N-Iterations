@@ -259,7 +259,7 @@ public class NewMapDisplayController implements Controller {
                     (locationSearchController.getDBNodes())[0],
                     (locationSearchController.getDBNodes())[1],
                     locationSearchController.getHandicap());
-              } catch (DBException ex) {
+              } catch (DBException | IOException ex) {
                 ex.printStackTrace();
               }
             });
@@ -275,7 +275,7 @@ public class NewMapDisplayController implements Controller {
                     (doctorSearchController.getDBNodes())[0],
                     (doctorSearchController.getDBNodes())[1],
                     doctorSearchController.getHandicap());
-              } catch (DBException ex) {
+              } catch (DBException | IOException ex) {
                 ex.printStackTrace();
               }
             });
@@ -323,7 +323,8 @@ public class NewMapDisplayController implements Controller {
             });
   }
 
-  public void initPathfind(DbNode first, DbNode second, boolean isSelected) throws DBException {
+  public void initPathfind(DbNode first, DbNode second, boolean isSelected)
+      throws DBException, IOException {
     if (first == null || second == null) {
       displayErrorMessage("Please select a location");
       return;
@@ -331,7 +332,37 @@ public class NewMapDisplayController implements Controller {
     this.path = singleton.savedAlgo.findPath(first, second, isSelected);
     mapBaseController.setFloor(first.getBuilding(), first.getFloor(), path);
     disableNonPathFloors();
+    displayGoogleMaps(first, second);
     //    setTextDecription();
+  }
+
+  public void displayGoogleMaps(DbNode first, DbNode second) throws IOException {
+    boolean isFirstFaulkner = first.getBuilding().equals("Faulkner");
+    boolean isSecondFaulkner = second.getBuilding().equals("Faulkner");
+    if (isFirstFaulkner ^ isSecondFaulkner) {
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(App.class.getResource("views/mapDisplay/googleMap.fxml"));
+
+      String pathToHTML = null;
+
+      if (isFirstFaulkner) {
+        pathToHTML = "views/googleMapFaulknerToMain.html";
+      } else {
+        pathToHTML = "views/googleMapMainToFaulkner.html";
+      }
+
+      String finalPathToHTML = pathToHTML;
+
+      loader.setControllerFactory(
+          type -> {
+            try {
+              return new GoogleMapController(finalPathToHTML);
+            } catch (Exception exc) {
+              throw new RuntimeException(exc);
+            }
+          });
+      pn_googleMapView = loader.load();
+    }
   }
 
   public static void fuzzyLocationSearch(TextField txt, ListView lst) throws DBException {

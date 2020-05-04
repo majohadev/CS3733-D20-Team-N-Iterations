@@ -298,64 +298,65 @@
 //    initPathfind(lst_firstLocation, MapDB.getNode("NRETL00201"));
 //  }
 //
-//  public void initPathfind(ListView<DbNode> firstLst, DbNode second) throws DBException {
-//    DbNode first = firstLst.getSelectionModel().getSelectedItem();
-//    if (first == null || second == null) {
-//      displayErrorMessage("Please select a location");
-//      return;
-//    }
+////  public void initPathfind(ListView<DbNode> firstLst, DbNode second) throws DBException {
+////    DbNode first = firstLst.getSelectionModel().getSelectedItem();
+////    if (first == null || second == null) {
+////      displayErrorMessage("Please select a location");
+////      return;
+////    }
+////
+////    // Reset the view to start with Start Node building and floor
+//////    resetViewToStart(first);
+////
+////    // Check if the start building is diff than end building
+////    if (!first.getBuilding().equals(second.getBuilding())
+////        && (first.getBuilding().equals("Faulkner") || second.getBuilding().equals("Faulkner")))
+// {
+////      try {
+////        FXMLLoader loader = new FXMLLoader();
+////        loader.setLocation(App.class.getResource("views/mapDisplay/googleMap.fxml"));
+////
+////        String pathToHTML = null;
+////
+////        if (first.getBuilding().equals("Faulkner")) {
+////          // go from Falkner to Main
+////          pathToHTML = "views/googleMapFaulknerToMain.html";
+////        } else {
+////          // going from Main to Falkner
+////          pathToHTML = "views/googleMapMainToFaulkner.html";
+////        }
+////
+////        // inject the path to html file to the GoogleMapController
+////        String finalPathToHTML = pathToHTML;
+////        loader.setControllerFactory(
+////            type -> {
+////              try {
+////                return new GoogleMapController(finalPathToHTML);
+////              } catch (Exception exc) {
+////                throw new RuntimeException(exc);
+////              }
+////            });
+////
+////        googleMapView = loader.load();
+////
+////        // Enable buttons for switching between maps
+////        btn_faulkner.setVisible(true);
+////        btn_main.setVisible(true);
+////        btn_google.setVisible(true);
+////      } catch (IOException ex) {
+////        ex.printStackTrace();
+////        displayErrorMessage("Error when loading Google Map");
+////        return;
+////      }
+////    }
 //
-//    // Reset the view to start with Start Node building and floor
-//    resetViewToStart(first);
-//
-//    // Check if the start building is diff than end building
-//    if (!first.getBuilding().equals(second.getBuilding())
-//        && (first.getBuilding().equals("Faulkner") || second.getBuilding().equals("Faulkner"))) {
-//      try {
-//        FXMLLoader loader = new FXMLLoader();
-//        loader.setLocation(App.class.getResource("views/mapDisplay/googleMap.fxml"));
-//
-//        String pathToHTML = null;
-//
-//        if (first.getBuilding().equals("Faulkner")) {
-//          // go from Falkner to Main
-//          pathToHTML = "views/googleMapFaulknerToMain.html";
-//        } else {
-//          // going from Main to Falkner
-//          pathToHTML = "views/googleMapMainToFaulkner.html";
-//        }
-//
-//        // inject the path to html file to the GoogleMapController
-//        String finalPathToHTML = pathToHTML;
-//        loader.setControllerFactory(
-//            type -> {
-//              try {
-//                return new GoogleMapController(finalPathToHTML);
-//              } catch (Exception exc) {
-//                throw new RuntimeException(exc);
-//              }
-//            });
-//
-//        googleMapView = loader.load();
-//
-//        // Enable buttons for switching between maps
-//        btn_faulkner.setVisible(true);
-//        btn_main.setVisible(true);
-//        btn_google.setVisible(true);
-//      } catch (IOException ex) {
-//        ex.printStackTrace();
-//        displayErrorMessage("Error when loading Google Map");
-//        return;
-//      }
-//    }
-//
-//    this.path =
-//        singleton.savedAlgo.findPath(
-//            first, second, handicapp1.isSelected() || handicapp2.isSelected());
-//    mapBaseController.setFloor(first.getBuilding(), first.getFloor(), path);
-//    disableNonPathFloors();
-//    setTextDecription();
-//  }
+////    this.path =
+////        singleton.savedAlgo.findPath(
+////            first, second, handicapp1.isSelected() || handicapp2.isSelected());
+////    mapBaseController.setFloor(first.getBuilding(), first.getFloor(), path);
+////    disableNonPathFloors();
+////    setTextDecription();
+////  }
 //
 //  public void findPathToBathroom(MouseEvent e) throws DBException {
 //    initQuickAccess(lst_firstLocation, "REST");
@@ -398,25 +399,25 @@
 //  //    }
 //  //  }
 //
-//  /** Function resets the view to be of Start Node's floor and building */
-//  public void resetViewToStart(DbNode start) {
-//    try {
-//      btn_google.setVisible(false);
-//      mapContainer.getChildren().setAll(hospitalView);
-//
-//      // Check which building this is
-//      if (start.getBuilding().equals("Faulkner")) {
-//        mapBaseController.setBuilding(start.getBuilding(), start.getFloor(), null);
-//      } else {
-//        // TODO: change it to work so the view gets selected as Start Node building and floor
-//        // A.K. Generic
-//        int numFloor = CSVParser.convertFloor("L2");
-//        mapBaseController.setBuilding("Main", numFloor, this.path);
-//      }
-//    } catch (DBException ex) {
-//      displayErrorMessage("Error when resetting view to Start Node");
-//    }
-//  }
+////  /** Function resets the view to be of Start Node's floor and building */
+////  public void resetViewToStart(DbNode start) {
+////    try {
+////      btn_google.setVisible(false);
+////      mapContainer.getChildren().setAll(hospitalView);
+////
+////      // Check which building this is
+////      if (start.getBuilding().equals("Faulkner")) {
+////        mapBaseController.setBuilding(start.getBuilding(), start.getFloor(), null);
+////      } else {
+////        // TODO: change it to work so the view gets selected as Start Node building and floor
+////        // A.K. Generic
+////        int numFloor = CSVParser.convertFloor("L2");
+////        mapBaseController.setBuilding("Main", numFloor, this.path);
+////      }
+////    } catch (DBException ex) {
+////      displayErrorMessage("Error when resetting view to Start Node");
+////    }
+////  }
 //
 //  //  public void onBtnResetPathClicked() throws DBException, IOException {
 //  //    //    path.clear();

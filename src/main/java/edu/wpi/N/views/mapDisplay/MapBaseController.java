@@ -139,6 +139,9 @@ public class MapBaseController implements Controller {
    */
   public void setFloor(String building, int floor, Path currentPath) throws DBException {
     clearPath();
+    if (!building.equals("Faulkner")) {
+      building = "Main";
+    }
     img_map.setImage(singleton.mapImageLoader.getMap(building, floor));
     if (!(currentPath == null || currentPath.isEmpty())) {
       drawPath(currentPath, floor);
