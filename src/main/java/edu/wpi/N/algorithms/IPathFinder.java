@@ -12,8 +12,7 @@ public interface IPathFinder {
       HashMap<String, LinkedList<DbNode>> mapData,
       DbNode startNode,
       DbNode endNode,
-      boolean handicap)
-      throws DBException;
+      boolean handicap);
 
   Path findQuickAccess(HashMap<String, LinkedList<DbNode>> mapData, DbNode start, String nodeType)
       throws DBException;

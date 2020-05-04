@@ -30,21 +30,16 @@ public class DFSTests {
   }
 
   /** Tests that findPath returns a Path object with the best route from H9 to EEE */
-  //  @Test
-  //  public void findPathNormalCaseDFSTest() throws DBException {
-  //    myDFS.setPathFinder(new DFS());
-  //    LinkedList<DbNode> actualPath = new LinkedList<DbNode>();
-  //    actualPath.add(MapDB.getNode("H100000001"));
-  //    actualPath.add(MapDB.getNode("H900000000"));
-  //    actualPath.add(MapDB.getNode("H120000000"));
-  //    actualPath.add(MapDB.getNode("H130000000"));
-  //    actualPath.add(MapDB.getNode("EEEEEEEEEE"));
-  //
-  //    Path testingPath =
-  //        myDFS.findPath(MapDB.getNode("H100000001"), MapDB.getNode("EEEEEEEEEE"), false);
-  //
-  //    Assertions.assertEquals(actualPath, testingPath.getPath());
-  //  }
+  @Test
+  public void findPathNormalCaseDFSTest() throws DBException {
+    myDFS.setPathFinder(new DFS());
+    DbNode startNode = MapDB.getNode("H100000001");
+    DbNode endNode = MapDB.getNode("EEEEEEEEEE");
+
+    Path testingPath = myDFS.findPath(startNode, endNode, false);
+
+    Assertions.assertTrue(testingPath.getPath().contains(endNode));
+  }
 
   /**
    * Tests that findPath method return a Path object with route consisting of 2 Nodes, since start
@@ -53,15 +48,12 @@ public class DFSTests {
   @Test
   public void findPathStartIsNeighborWithEndNodeDFSTest() throws DBException {
     myDFS.setPathFinder(new DFS());
-    LinkedList<DbNode> actualPath = new LinkedList<DbNode>();
+    DbNode startNode = MapDB.getNode("H120000000");
+    DbNode endNode = MapDB.getNode("H130000000");
 
-    actualPath.add(MapDB.getNode("H120000000"));
-    actualPath.add(MapDB.getNode("H130000000"));
+    Path testingPath = myDFS.findPath(startNode, endNode, false);
 
-    Path testingPath =
-        myDFS.findPath(MapDB.getNode("H120000000"), MapDB.getNode("H130000000"), false);
-
-    Assertions.assertEquals(actualPath, testingPath.getPath());
+    Assertions.assertTrue(testingPath.getPath().contains(endNode));
   }
 
   /**
