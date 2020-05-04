@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -11,14 +12,14 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.admin.NewAdminController">
    <children>
-      <Pane layoutX="32.0" layoutY="127.0" prefHeight="110.0" prefWidth="1920.0" style="-fx-background-color: #002186;" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <Pane layoutX="400.0" layoutY="127.0" prefHeight="110.0" prefWidth="1520.0" AnchorPane.leftAnchor="400.0" AnchorPane.topAnchor="0.0">
          <children>
-            <JFXButton layoutX="14.0" layoutY="27.0" onMouseClicked="#logoutUser" text="Logout" textFill="WHITE">
+            <JFXButton layoutX="14.0" layoutY="27.0" onMouseClicked="#logoutUser" style="-fx-background-color: #26 3051;" text="Logout" textFill="#263051">
                <font>
                   <Font name="Calibri Bold" size="24.0" />
                </font>
             </JFXButton>
-            <Label layoutX="728.0" layoutY="-5.0" text="Admin Portal" textFill="WHITE">
+            <Label layoutX="728.0" layoutY="-5.0" style="-fx-background-color: #26 3051;" text="Admin Portal" textFill="#263051">
                <font>
                   <Font name="Calibri Bold" size="96.0" />
                </font></Label>
@@ -27,70 +28,49 @@
                   <Image url="@../../images/hospitalLogo/Brigham_and_Womens_Hospital_logo.svg.png" />
                </image>
             </ImageView>
-            <Label fx:id="lbl_title" layoutX="344.0" layoutY="36.0" text="Label" textFill="WHITE">
+            <Label fx:id="lbl_title" layoutX="344.0" layoutY="36.0" style="-fx-background-color: #26 3051;" text="Label" textFill="#263051">
                <font>
                   <Font name="Calibri Bold" size="24.0" />
                </font>
             </Label>
-            <JFXButton fx:id="btn_arduino" buttonType="RAISED" layoutX="1327.0" layoutY="32.0" onMouseClicked="#loadArduino" ripplerFill="#0026ff" text="Access Arduino Control" textFill="WHITE">
+            <JFXButton fx:id="btn_arduino" buttonType="RAISED" layoutX="1327.0" layoutY="32.0" onMouseClicked="#loadArduino" ripplerFill="#0026ff" style="-fx-background-color: #26 3051;" text="Access Arduino Control" textFill="#263051">
                <font>
                   <Font name="Calibri" size="18.0" />
                </font>
             </JFXButton>
          </children></Pane>
-    <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="970.0" prefWidth="200.0" AnchorPane.topAnchor="110.0">
+    <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="1080.0" prefWidth="400.0" style="-fx-background-color: #263051;" AnchorPane.topAnchor="0.0">
          <children>
-            <VBox prefHeight="1005.0" prefWidth="192.0" style="-fx-background-color: black;">
+            <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="100.0" style="-fx-background-color: #263051;">
                <children>
-                  <Pane prefHeight="201.0" prefWidth="192.0" style="-fx-background-color: black;">
-                     <children>
-                        <JFXButton fx:id="btn_EmployeeEdit" layoutX="16.0" layoutY="17.0" onMouseClicked="#swapToEmployee" prefHeight="121.0" prefWidth="160.0" style="-fx-background-color: black;" text="Add / Edit / Delete Employee" textAlignment="CENTER" textFill="WHITE" wrapText="true">
-                           <font>
-                              <Font name="Calibri" size="24.0" />
-                           </font>
-                        </JFXButton>
-                     </children>
-                  </Pane>
-                  <Pane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="201.0" prefWidth="192.0" style="-fx-background-color: black;">
-                     <children>
-                        <JFXButton fx:id="btn_AccountEdit" layoutX="15.0" layoutY="4.0" onMouseClicked="#swapToAccount" prefHeight="155.0" prefWidth="162.0" style="-fx-background-color: black;" text="Add / Edit / Delete Account" textAlignment="CENTER" textFill="WHITE" wrapText="true">
-                           <font>
-                              <Font name="Calibri" size="24.0" />
-                           </font>
-                        </JFXButton>
-                     </children>
-                  </Pane>
-                  <Pane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="201.0" prefWidth="192.0" style="-fx-background-color: black;">
-                     <children>
-                        <JFXButton fx:id="btn_ViewRequests" layoutX="16.0" layoutY="40.0" onMouseClicked="#swapToRequests" prefHeight="121.0" prefWidth="160.0" text="View Service Requests" textAlignment="CENTER" textFill="WHITE" wrapText="true">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </JFXButton>
-                     </children>
-                  </Pane>
-                  <Pane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="201.0" prefWidth="192.0" style="-fx-background-color: black;">
-                     <children>
-                        <JFXButton fx:id="btn_EditMap" layoutX="36.0" layoutY="79.0" onMouseClicked="#adminEditMap" text="Edit Map" textFill="WHITE">
-                           <font>
-                              <Font name="Calibri" size="24.0" />
-                           </font>
-                        </JFXButton>
-                     </children>
-                  </Pane>
-                  <Pane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="163.0" prefWidth="192.0" style="-fx-background-color: black;">
-                     <children>
-                        <JFXButton layoutX="11.0" layoutY="50.0" onMouseClicked="#popUpFileManager" text="Manage Files" textFill="WHITE">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
-                        </JFXButton>
-                     </children>
-                  </Pane>
+                  <ImageView fitHeight="98.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../images/adminIcons/add-user-2-64.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="128.0" fitWidth="62.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../images/adminIcons/edit-user-64.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="70.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../images/adminIcons/remove-user-64.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="116.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../images/adminIcons/doctor-suitecase-64(2).png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
                </children>
             </VBox>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="anchorSwap" layoutX="45.0" prefHeight="970.0" prefWidth="1720.0" AnchorPane.leftAnchor="45.0" AnchorPane.topAnchor="0.0" />
+      <AnchorPane fx:id="anchorSwap" layoutX="186.0" layoutY="96.0" prefHeight="970.0" prefWidth="1520.0" AnchorPane.leftAnchor="400.0" AnchorPane.topAnchor="110.0">
+         <children>
+            <TableView fx:id="tb_RequestTable" layoutX="404.0" layoutY="94.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="429.0" prefWidth="960.0" stylesheets="@../../css/adminTables.css" AnchorPane.bottomAnchor="270.5" AnchorPane.leftAnchor="280.0" AnchorPane.rightAnchor="280.0" AnchorPane.topAnchor="270.5" />
+         </children></AnchorPane>
    </children>
 </AnchorPane>
