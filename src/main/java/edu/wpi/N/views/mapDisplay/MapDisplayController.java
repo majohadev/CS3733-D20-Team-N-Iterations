@@ -3,6 +3,7 @@ package edu.wpi.N.views.mapDisplay;
 import com.jfoenix.controls.*;
 import edu.wpi.N.App;
 import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
+import edu.wpi.N.database.CSVParser;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
@@ -114,7 +115,7 @@ public class MapDisplayController implements Controller, Initializable {
   public void switchToFaulkner() {
     try {
       mapContainer.getChildren().setAll(hospitalView);
-      mapBaseController.setFloor("Faulkner", 1, this.path);
+      mapBaseController.setBuilding("Faulkner", 1, this.path);
     } catch (DBException e) {
       e.printStackTrace();
       displayErrorMessage("Error: Switching to Faulkner");
@@ -128,10 +129,11 @@ public class MapDisplayController implements Controller, Initializable {
    */
   @FXML
   public void switchToMain() {
-    int numFloor = 2; // Number for main Entrance on 45 Francis street
+    int numFloor = CSVParser.convertFloor("L2"); // Number for main Entrance on 45 Francis street
     try {
       mapContainer.getChildren().setAll(hospitalView);
-      mapBaseController.setFloor("45 Francis", numFloor, this.path);
+      // TODO: make it point to Main
+      mapBaseController.setBuilding("Main", numFloor, this.path);
     } catch (DBException e) {
       e.printStackTrace();
       displayErrorMessage("Error: Switching to Main Hospital - 45 Francis");
@@ -324,7 +326,7 @@ public class MapDisplayController implements Controller, Initializable {
           pathToHTML = "views/googleMapMainToFaulkner.html";
         }
 
-        // inject the path to the GoogleMapController
+        // inject the path to html file to the GoogleMapController
         String finalPathToHTML = pathToHTML;
         loader.setControllerFactory(
             type -> {
@@ -401,7 +403,16 @@ public class MapDisplayController implements Controller, Initializable {
     try {
       btn_google.setVisible(false);
       mapContainer.getChildren().setAll(hospitalView);
-      mapBaseController.setBuilding(start.getBuilding(), start.getFloor(), null);
+
+      // Check which building this is
+      if (start.getBuilding().equals("Faulkner")) {
+        mapBaseController.setBuilding(start.getBuilding(), start.getFloor(), null);
+      } else {
+        // TODO: change it to work so the view gets selected as Start Node building and floor
+        // A.K. Generic
+        int numFloor = CSVParser.convertFloor("L2");
+        mapBaseController.setBuilding("Main", numFloor, this.path);
+      }
     } catch (DBException ex) {
       displayErrorMessage("Error when resetting view to Start Node");
     }
