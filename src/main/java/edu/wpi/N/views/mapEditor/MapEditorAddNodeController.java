@@ -38,8 +38,8 @@ public class MapEditorAddNodeController {
   }
 
   public void setPos(double xPos, double yPos) {
-    txt_xPos.setText(String.valueOf(xPos));
-    txt_yPos.setText(String.valueOf(yPos));
+    txt_xPos.setText(String.valueOf(Math.round(xPos)));
+    txt_yPos.setText(String.valueOf(Math.round(yPos)));
   }
 
   public String getXPos() {

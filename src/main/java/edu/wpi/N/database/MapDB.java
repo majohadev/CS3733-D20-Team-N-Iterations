@@ -691,6 +691,27 @@ public class MapDB {
   }
 
   /**
+   * Gets a lits of all the nodes on the specified floor and different buildings
+   *
+   * @param floor the floor from which you want to get all the Nodes.
+   * @return a LinkedList of all the nodes with the specified floor.
+   * @throws DBException
+   */
+  public static LinkedList<DbNode> NobuildingfloorNodes(int floor) throws DBException {
+    String query = "SELECT * FROM nodes WHERE floor =? AND building <> ?";
+    try {
+      PreparedStatement st = con.prepareStatement(query);
+
+      st.setInt(1, floor);
+      st.setString(2, "Faulkner");
+      return getAllNodesSQL(st);
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown error: NobuildingfloorNodes", e);
+    }
+  }
+
+  /**
    * Gets a list of all the nodes on a floor except for invisible (HALL) nodes
    *
    * @param floor The floor from which to get the nodes

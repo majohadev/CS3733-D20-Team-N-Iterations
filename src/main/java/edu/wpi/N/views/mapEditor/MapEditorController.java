@@ -69,27 +69,27 @@ public class MapEditorController implements Controller {
   private JFXNodesList nodesListF, nodesListM;
 
   final int DEFAULT_FLOOR = 1;
-  final String DEFAULT_BUILDING = "Faulkner"; // TODO: fix for multiple buildings
-  final Color DEFAULT_CIRCLE_COLOR = Color.MEDIUMPURPLE;
+  final String DEFAULT_BUILDING = "Faulkner";
+  final Color DEFAULT_CIRCLE_COLOR = Color.DARKORCHID;
   final Color DEFAULT_LINE_COLOR = Color.BLACK;
-  final double DEFAULT_LINE_WIDTH = 4;
+  double DEFAULT_LINE_WIDTH = 4;
   final Color ADD_NODE_COLOR = Color.BLACK;
   final Color DELETE_NODE_COLOR = Color.RED;
   final Color EDIT_NODE_COLOR = Color.RED;
-  final double DEFAULT_CIRCLE_OPACITY = .6;
-  final double DEFAULT_CIRCLE_RADIUS = 7;
+  double DEFAULT_CIRCLE_OPACITY = .75;
+  double DEFAULT_CIRCLE_RADIUS = 7;
   final Color DELETE_EDGE_COLOR = Color.RED;
   final Color EDIT_ELEV_COLOR = Color.RED;
   final Color EDIT_ELEV_SELECTED_COLOR = Color.GREEN;
 
   final double SCREEN_WIDTH = 1920;
   final double SCREEN_HEIGHT = 1080;
-  final double IMAGE_WIDTH = 2475;
-  final double IMAGE_HEIGHT = 1485;
-  final double MAP_WIDTH = 1661;
-  final double MAP_HEIGHT = 997;
-  final double HORIZONTAL_SCALE = MAP_WIDTH / IMAGE_WIDTH;
-  final double VERTICAL_SCALE = MAP_HEIGHT / IMAGE_HEIGHT;
+  double IMAGE_WIDTH = 2475;
+  double IMAGE_HEIGHT = 1485;
+  double MAP_WIDTH = 1661;
+  double MAP_HEIGHT = 997;
+  double HORIZONTAL_SCALE = MAP_WIDTH / IMAGE_WIDTH;
+  double VERTICAL_SCALE = MAP_HEIGHT / IMAGE_HEIGHT;
 
   // Zoom constants
   private final double MIN_MAP_SCALE = 0.8;
@@ -169,6 +169,7 @@ public class MapEditorController implements Controller {
     edgesMap = HashBiMap.create();
     mode = Mode.NO_STATE;
     loadFloor();
+    setFaulknerDefaults();
     addNodeCircle = null;
     elevCircle = null;
     deleteNodeCircles = new LinkedList<>();
@@ -184,13 +185,44 @@ public class MapEditorController implements Controller {
     populateChangeAlgo();
   }
 
+  private void setFaulknerDefaults() {
+    DEFAULT_CIRCLE_OPACITY = .75;
+    DEFAULT_LINE_WIDTH = 4;
+    DEFAULT_CIRCLE_RADIUS = 7;
+    IMAGE_WIDTH = 2475;
+    IMAGE_HEIGHT = 1485;
+    MAP_WIDTH = 1661;
+    MAP_HEIGHT = 997;
+    HORIZONTAL_SCALE = MAP_WIDTH / IMAGE_WIDTH;
+    VERTICAL_SCALE = MAP_HEIGHT / IMAGE_HEIGHT;
+  }
+
+  private void setMainCampusDefaults() {
+    DEFAULT_CIRCLE_OPACITY = .85;
+    DEFAULT_LINE_WIDTH = 2.5;
+    DEFAULT_CIRCLE_RADIUS = 3;
+    IMAGE_WIDTH = 5000;
+    IMAGE_HEIGHT = 3400;
+    MAP_WIDTH = 1465;
+    MAP_HEIGHT = 994;
+    HORIZONTAL_SCALE = MAP_WIDTH / IMAGE_WIDTH;
+    VERTICAL_SCALE = MAP_HEIGHT / IMAGE_HEIGHT;
+  }
+
   private void loadFloor() throws DBException, IOException {
     clearNodes();
     clearEdges();
     nodesMap = HashBiMap.create();
     edgesMap = HashBiMap.create();
-    LinkedList<DbNode> floorNodes = MapDB.floorNodes(currentFloor, currentBuilding);
-    LinkedList<DbNode[]> floorEdges = MapDB.getFloorEdges(currentFloor, currentBuilding);
+    LinkedList<DbNode> floorNodes;
+    LinkedList<DbNode[]> floorEdges;
+    if (currentBuilding.equals("Faulkner")) {
+      floorNodes = MapDB.floorNodes(currentFloor, currentBuilding);
+      floorEdges = MapDB.getFloorEdges(currentFloor, currentBuilding);
+    } else {
+      floorNodes = MapDB.NobuildingfloorNodes(currentFloor);
+      floorEdges = new LinkedList<DbNode[]>();
+    }
     try {
       HashMap<String, UINode> conversion = createUINodes(floorNodes, DEFAULT_CIRCLE_COLOR);
       createUIEdges(conversion, floorEdges, DEFAULT_LINE_COLOR);
@@ -199,7 +231,7 @@ public class MapEditorController implements Controller {
     }
     displayEdges();
     displayNodes();
-    if (mode.equals(Mode.ADD_SHAFT)) { // TODO: uncomment
+    if (mode.equals(Mode.ADD_SHAFT)) {
       try {
         reloadAddShaft();
       } catch (DBException ex) {
@@ -216,7 +248,7 @@ public class MapEditorController implements Controller {
 
   private void displayNodes() {
     for (Circle circle : nodesMap.keySet()) {
-      circle.setOpacity(0.6);
+      circle.setOpacity(DEFAULT_CIRCLE_OPACITY);
       pn_display.getChildren().add(circle);
     }
   }
@@ -356,7 +388,7 @@ public class MapEditorController implements Controller {
     if (mode == Mode.EDIT_ELEV) {
       pn_elev.getChildren().add(pane);
       pn_elev.setVisible(true);
-      controllerEditElev.setFloor(currentFloor); // TODO: new change
+      controllerEditElev.setFloor(currentFloor);
       onBtnAddShaftClicked();
       pn_editor.setVisible(false);
 
@@ -993,7 +1025,7 @@ public class MapEditorController implements Controller {
                 }
                 originalShaftNodes = addShaftNodeCircles;
               } catch (DBException e) {
-                e.printStackTrace(); // TODO: uncomment
+                e.printStackTrace();
               }
             });
   }
@@ -1047,7 +1079,7 @@ public class MapEditorController implements Controller {
                 try {
                   if (isInShaft(n)) {
                     MapDB.removeFromShaft(n.getNodeID());
-                  } // TODO: guard DB errors
+                  }
                 } catch (DBException e) {
                   e.printStackTrace();
                 }
@@ -1279,7 +1311,7 @@ public class MapEditorController implements Controller {
             e -> {
               elevCircle.setFill(EDIT_ELEV_COLOR);
               elevCircle = null;
-              pn_elev.setVisible(true); // TODO: make buttons visible elev
+              pn_elev.setVisible(true);
             });
   }
 
@@ -1524,7 +1556,6 @@ public class MapEditorController implements Controller {
           currentFloor = 4;
           setFloorImg("/edu/wpi/N/images/map/Floor4SolidBackground.png");
           setFloorButtonColors();
-          // mode = Mode.NO_STATE;
         });
     btn_floor5
         .getStylesheets()
@@ -1535,7 +1566,6 @@ public class MapEditorController implements Controller {
           currentFloor = 5;
           setFloorImg("/edu/wpi/N/images/map/Floor5TeamN.png");
           setFloorButtonColors();
-          // mode = Mode.NO_STATE;
         });
     btn_floor6
         .getStylesheets()
@@ -1545,11 +1575,11 @@ public class MapEditorController implements Controller {
         e -> {
           currentFloor = 1;
           currentBuilding = "main";
-          setFloorImg("/edu/wpi/N/images/map/MainL1.png");
-          setFloorButtonColorsM(); // TODO: change, default set new maps to floor 1 main campus
+          setMainCampusDefaults();
+          setFloorImg("/edu/wpi/N/images/map/MainL2.png");
+          setFloorButtonColorsM();
           nodesListF.setVisible(false);
           nodesListM.setVisible(true);
-          // mode = Mode.NO_STATE;
         });
   }
 
@@ -1595,7 +1625,7 @@ public class MapEditorController implements Controller {
     btn_floor1M.setOnMouseClicked(
         e -> {
           currentFloor = 1;
-          setFloorImg("/edu/wpi/N/images/map/MainL1.png");
+          setFloorImg("/edu/wpi/N/images/map/MainL2.png");
           setFloorButtonColorsM();
         });
     btn_floor2M
@@ -1605,7 +1635,7 @@ public class MapEditorController implements Controller {
     btn_floor2M.setOnMouseClicked(
         e -> {
           currentFloor = 2;
-          setFloorImg("/edu/wpi/N/images/map/MainL2.png");
+          setFloorImg("/edu/wpi/N/images/map/MainL1.png");
           setFloorButtonColorsM();
         });
     btn_floor3M
@@ -1625,9 +1655,8 @@ public class MapEditorController implements Controller {
     btn_floor4M.setOnMouseClicked(
         e -> {
           currentFloor = 4;
-          setFloorImg("/edu/wpi/N/images/map/MainFloor1.png");
+          setFloorImg("/edu/wpi/N/images/map/MainResizedF1.png");
           setFloorButtonColorsM();
-          // mode = Mode.NO_STATE;
         });
     btn_floor5M
         .getStylesheets()
@@ -1638,18 +1667,16 @@ public class MapEditorController implements Controller {
           currentFloor = 5;
           setFloorImg("/edu/wpi/N/images/map/MainFloor2.png");
           setFloorButtonColorsM();
-          // mode = Mode.NO_STATE;
         });
     btn_floor6M
-            .getStylesheets()
-            .addAll(getClass().getResource("/edu/wpi/N/css/MapDisplayFloors.css").toExternalForm());
+        .getStylesheets()
+        .addAll(getClass().getResource("/edu/wpi/N/css/MapDisplayFloors.css").toExternalForm());
     btn_floor6M.getStyleClass().addAll("animated-option-button", "animated-option-sub-button");
     btn_floor6M.setOnMouseClicked(
         e -> {
           currentFloor = 6;
           setFloorImg("/edu/wpi/N/images/map/MainFloor3.png");
           setFloorButtonColorsM();
-          // mode = Mode.NO_STATE;
         });
     btn_floor7M
         .getStylesheets()
@@ -1658,12 +1685,12 @@ public class MapEditorController implements Controller {
     btn_floor7M.setOnMouseClicked(
         e -> {
           currentFloor = 1;
+          currentBuilding = "Faulkner";
+          setFaulknerDefaults();
           nodesListM.setVisible(false);
           nodesListF.setVisible(true);
           setFloorImg("/edu/wpi/N/images/map/Floor1Reclor.png");
-          setFloorButtonColors(); // TODO: change, default set new maps to floor 1 main campus
-
-          // mode = Mode.NO_STATE;
+          setFloorButtonColors();
         });
   }
 
@@ -1846,7 +1873,10 @@ public class MapEditorController implements Controller {
   private void zoom(double percentDelta) {
 
     // Scaling parameter (alpha) is clamped between 0 (min. scale) and 1 (max. scale)
-    mapScaleAlpha = Math.max(0, Math.min(1, mapScaleAlpha + percentDelta));
+    mapScaleAlpha =
+        Math.max(
+            0,
+            Math.min(1, mapScaleAlpha + percentDelta)); // TODO: use zoom to scale line & node size
 
     // Linearly interpolate (lerp) alpha to actual scale value
     double lerpedScale = MIN_MAP_SCALE + mapScaleAlpha * (MAX_MAP_SCALE - MIN_MAP_SCALE);
