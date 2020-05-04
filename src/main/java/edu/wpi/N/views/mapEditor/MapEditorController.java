@@ -52,7 +52,7 @@ public class MapEditorController implements Controller {
   private JFXButton btn_floors, btn_floor1, btn_floor2, btn_floor3, btn_floor4, btn_floor5;
 
   final int DEFAULT_FLOOR = 1;
-  final String DEFAULT_BUILDING = "Faulkner";
+  final String DEFAULT_BUILDING = "Faulkner";//TODO: fix for multiple buildings
   final Color DEFAULT_CIRCLE_COLOR = Color.MEDIUMPURPLE;
   final Color DEFAULT_LINE_COLOR = Color.BLACK;
   final double DEFAULT_LINE_WIDTH = 4;
@@ -123,7 +123,7 @@ public class MapEditorController implements Controller {
 
   public void initialize() throws DBException {
     currentFloor = DEFAULT_FLOOR;
-    currentBuilding = DEFAULT_BUILDING;
+    currentBuilding = DEFAULT_BUILDING;//set to actual building
     initializeChangeFloorButtons();
     setFloorButtonColors();
     editElevNodes = new LinkedList<>();
@@ -790,12 +790,13 @@ public class MapEditorController implements Controller {
                 String type = controllerAddNode.getType();
                 String longName = controllerAddNode.getShortName();
                 String shortName = controllerAddNode.getLongName();
-                if (type == null || longName == null || shortName == null) {
+                String building = controllerAddNode.getBuilding();
+                if (type == null || longName == null || shortName == null || building == null) {
                   displayErrorMessage("Invalid input");
                   return;
                 }
                 DbNode newNode =
-                    MapDB.addNode(x, y, currentFloor, currentBuilding, type, longName, shortName);
+                    MapDB.addNode(x, y, currentFloor, building, type, longName, shortName);
                 //                LinkedList list = new LinkedList();
                 //                list.add(newNode);
                 //                createUINodes(list, DEFAULT_CIRCLE_COLOR);

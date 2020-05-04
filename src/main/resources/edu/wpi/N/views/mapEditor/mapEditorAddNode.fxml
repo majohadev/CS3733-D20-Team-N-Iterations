@@ -7,13 +7,13 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="280.0" prefWidth="470.0" style="-fx-background-color: #002186; -fx-background-radius: 10; -fx-border-radius: 10;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.mapEditor.MapEditorAddNodeController">
+<AnchorPane prefHeight="320.0" prefWidth="470.0" style="-fx-background-color: #002186; -fx-background-radius: 10; -fx-border-radius: 10;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.mapEditor.MapEditorAddNodeController">
    <children>
-      <JFXTextField fx:id="txt_shortName" focusColor="WHITE" layoutX="44.0" layoutY="53.0" prefHeight="25.0" prefWidth="377.0" promptText="Short Name" style="-fx-text-inner-color: WHITE; -fx-prompt-text-fill: WHITE;" unFocusColor="WHITE">
+      <JFXTextField fx:id="txt_shortName" layoutX="44.0" layoutY="98.0" prefHeight="25.0" prefWidth="377.0" promptText="Long Name" style="-fx-text-inner-color: WHITE; -fx-prompt-text-fill: WHITE;" text="Short Name" unFocusColor="WHITE">
          <font>
             <Font name="Calibri" size="18.0" />
          </font></JFXTextField>
-      <JFXTextField fx:id="txt_longName" layoutX="44.0" layoutY="98.0" prefHeight="25.0" prefWidth="377.0" promptText="Long Name" style="-fx-text-inner-color: WHITE; -fx-prompt-text-fill: WHITE;" unFocusColor="WHITE">
+      <JFXTextField fx:id="txt_longName" focusColor="WHITE" layoutX="44.0" layoutY="53.0" prefHeight="25.0" prefWidth="377.0" promptText="Short Name" style="-fx-text-inner-color: WHITE; -fx-prompt-text-fill: WHITE;" text="Long Name" unFocusColor="WHITE">
          <font>
             <Font name="Calibri" size="18.0" />
          </font></JFXTextField>
@@ -31,15 +31,16 @@
          <font>
             <Font size="18.0" />
          </font></JFXTextField>
-      <JFXButton fx:id="btn_confirm" layoutX="329.0" layoutY="229.0" prefHeight="37.0" prefWidth="92.0" text="Confirm" textFill="WHITE">
+      <JFXButton fx:id="btn_confirm" layoutX="329.0" layoutY="266.0" prefHeight="37.0" prefWidth="92.0" text="Confirm" textFill="WHITE">
          <font>
             <Font name="Calibri" size="16.0" />
          </font>
       </JFXButton>
-      <JFXButton fx:id="btn_cancel" layoutX="44.0" layoutY="229.0" prefHeight="37.0" prefWidth="92.0" text="Cancel" textFill="WHITE">
+      <JFXButton fx:id="btn_cancel" layoutX="44.0" layoutY="266.0" prefHeight="37.0" prefWidth="92.0" text="Cancel" textFill="WHITE">
          <font>
             <Font name="Calibri" size="16.0" />
          </font>
       </JFXButton>
+      <JFXComboBox fx:id="cb_type1" focusColor="WHITE" layoutX="44.0" layoutY="227.0" prefHeight="25.0" prefWidth="377.0" promptText="Building" style="-fx-text-inner-color: WHITE; -fx-prompt-text-fill: WHITE; -fx-font-size: 18; -fx-text-fill: WHITE;" unFocusColor="WHITE" />
    </children>
 </AnchorPane>
