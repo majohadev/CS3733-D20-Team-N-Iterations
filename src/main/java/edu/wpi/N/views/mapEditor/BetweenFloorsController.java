@@ -55,25 +55,30 @@ public class BetweenFloorsController implements Controller, Initializable {
   boolean currNode;
   LinkedList<Integer> addShaftButtons;
   DbNode currentNode;
+  String currentBuilding;
+
+  int numFloors;
 
   @FXML
   public void initialize(URL url, ResourceBundle rb) {
+    numFloors = 6;
     this.nodes = new HashMap<Integer, JFXNodesList>();
     this.nodeStatus = new HashMap<Integer, Pair<DbNode, String>>();
     DbNode node =
         new DbNode("NHALL00104", 1250, 850, 1, "MainBuil", "ELEV", "Hall 1", "Hall 1", 'N');
 
-    for (int i = 1; i <= 5; i++) {
+    for (int i = 1; i <= numFloors; i++) {
       nodeStatus.put(i, new Pair<>(node, EMPTY));
     }
     this.floors = new LinkedList<Integer>();
     this.originalEdges = new LinkedList<DbNode>();
     this.addShaftButtons = new LinkedList<Integer>();
-    JFXNodesList n5 = createButton(60, 100, 5);
-    JFXNodesList n4 = createButton(60, 150, 4);
-    JFXNodesList n3 = createButton(60, 200, 3);
-    JFXNodesList n2 = createButton(60, 250, 2);
-    JFXNodesList n1 = createButton(60, 300, 1);
+    JFXNodesList n6 = createButton(60, 100, 6);
+    JFXNodesList n5 = createButton(60, 150, 5);
+    JFXNodesList n4 = createButton(60, 200, 4);
+    JFXNodesList n3 = createButton(60, 250, 3);
+    JFXNodesList n2 = createButton(60, 300, 2);
+    JFXNodesList n1 = createButton(60, 350, 1);
   }
 
   public JFXButton getBtnCancel() {
@@ -89,7 +94,13 @@ public class BetweenFloorsController implements Controller, Initializable {
     return btn_manage;
   }
 
-  public void setFloor(int floor) {
+  public void setFloor(int floor, String building) {
+    if (building.equals("Faulkner")) {
+      numFloors = 5;
+    } else {
+      numFloors = 6;
+    }
+    currentBuilding = building;
     btn_save.setVisible(false);
     btn_cancel.setVisible(false);
     this.floor = floor;
@@ -101,7 +112,7 @@ public class BetweenFloorsController implements Controller, Initializable {
     DbNode node =
         new DbNode("NHALL00104", 1250, 850, 1, "MainBuil", "ELEV", "Hall 1", "Hall 1", 'N');
 
-    for (int i = 1; i <= 5; i++) {
+    for (int i = 1; i <= numFloors; i++) {
       // JFXButton circle = (JFXButton) nodes.get(i).getChildren().get(0);
       setEmpty(nodes.get(i), i);
       nodeStatus.put(i, new Pair<DbNode, String>(node, EMPTY));
@@ -126,7 +137,7 @@ public class BetweenFloorsController implements Controller, Initializable {
   }
 
   public void setNode(DbNode node) throws DBException {
-    setFloor(node.getFloor());
+    setFloor(node.getFloor(), node.getBuilding());
     btn_cancel.setVisible(true);
     btn_save.setVisible(true);
     this.floor = node.getFloor();
@@ -211,7 +222,7 @@ public class BetweenFloorsController implements Controller, Initializable {
       }
     }
     text.setVisible(false);
-    for (int i = 1; i <= 5; i++) {
+    for (int i = 1; i <= numFloors; i++) {
       JFXButton circle = (JFXButton) nodes.get(i).getChildren().get(0);
       JFXButton circle2 = (JFXButton) nodes.get(i).getChildren().get(0);
       // circle.setStyle(INACTIVE_BUTTON_COLOR);
@@ -220,12 +231,12 @@ public class BetweenFloorsController implements Controller, Initializable {
     }
     btn_save.setVisible(false);
     btn_cancel.setVisible(false);
-    setFloor(this.floor);
+    setFloor(this.floor, this.currentBuilding);
   }
 
   public void onCancelButton() {
     text.setVisible(false);
-    for (int i = 1; i <= 5; i++) {
+    for (int i = 1; i <= numFloors; i++) {
       JFXButton circle = (JFXButton) nodes.get(i).getChildren().get(0);
       JFXButton circle2 = (JFXButton) nodes.get(i).getChildren().get(1);
       // circle.setStyle(INACTIVE_BUTTON_COLOR);
