@@ -32,7 +32,7 @@ public class GoogleMapController implements Controller, Initializable {
     System.out.println("Test");
   }
 
-  public void loadRoadFaulknerToMain(){
+  public void loadRoadFaulknerToMain() {
     webView.getEngine().load(Main.class.getResource("views/googleMapDisplay.html").toString());
   }
 

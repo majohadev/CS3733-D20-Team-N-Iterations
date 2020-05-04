@@ -73,20 +73,36 @@ public class CSVParser {
    */
   private static void parseNodeRow(String[] row) throws Exception {
     try {
-      int floor;
       String nodeID = row[0];
       int xcoord = Integer.parseInt(row[1]);
       int ycoord = Integer.parseInt(row[2]);
-      if (!(row[4].equals("Faulkner"))) {
-        floor = convertFloor(row[3]);
-      } else floor = Integer.parseInt(row[3]);
+
       String building = row[4];
+
+      int floor;
+
+      if (building.equals("Faulkner")) {
+        floor = Integer.parseInt(row[3]);
+      } else if (building.equals("Fuller Lower")) {
+        return;
+      } else {
+        floor = convertFloor(row[3]);
+      }
+
+      //      (building.equals("BTM")
+      //              || building.equals("45 Francis")
+      //              || building.equals("Tower")
+      //              || building.equals("Shapiro"))
+
       String nodeType = row[5];
       String longName = row[6];
       String shortName = row[7];
-      char teamAssigned = 'Z';
-      if (row.length == 9) {
+      char teamAssigned;
+
+      try {
         teamAssigned = row[8].charAt(0);
+      } catch (Exception ex) {
+        teamAssigned = 'Z';
       }
 
       MapDB.addNode(

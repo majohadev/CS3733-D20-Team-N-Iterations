@@ -4,7 +4,6 @@ import com.jfoenix.controls.*;
 import edu.wpi.N.App;
 import edu.wpi.N.Main;
 import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
-import edu.wpi.N.database.CSVParser;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
@@ -106,13 +105,13 @@ public class MapDisplayController implements Controller, Initializable {
   /** Switches the Map Base view to Loaded previously Google Map View */
   @FXML
   public void switchToGoogleView() {
-    //googleMapController.loadRoadFaulknerToMain();
+    // googleMapController.loadRoadFaulknerToMain();
     mapContainer.getChildren().setAll(googleMapView);
   }
 
   /** Switches the Map Base view to Faulkner Map */
   @FXML
-  public void switchToFaulkner(){
+  public void switchToFaulkner() {
     try {
       mapBaseController.setFloor("Faulkner", 1, this.path);
     } catch (DBException e) {
@@ -127,7 +126,7 @@ public class MapDisplayController implements Controller, Initializable {
    * @throws DBException
    */
   @FXML
-  public void switchToMain(){
+  public void switchToMain() {
     int numFloor = 2; // Number for main Entrance on 45 Francis street
     try {
       mapBaseController.setFloor("45 Francis", numFloor, this.path);
