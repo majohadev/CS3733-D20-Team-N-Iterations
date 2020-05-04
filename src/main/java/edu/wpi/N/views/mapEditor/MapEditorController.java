@@ -51,10 +51,25 @@ public class MapEditorController implements Controller {
   @FXML Pane pn_changeFloor;
   @FXML ImageView img_map;
   @FXML JFXButton btn_cancel_elev;
-  private JFXButton btn_floors, btn_floor1, btn_floor2, btn_floor3, btn_floor4, btn_floor5;
+  private JFXButton btn_floors,
+      btn_floor1,
+      btn_floor2,
+      btn_floor3,
+      btn_floor4,
+      btn_floor5,
+      btn_floor6;
+  private JFXButton btn_floorsM,
+      btn_floor1M,
+      btn_floor2M,
+      btn_floor3M,
+      btn_floor4M,
+      btn_floor5M,
+      btn_floor6M,
+      btn_floor7M;
+  private JFXNodesList nodesListF, nodesListM;
 
   final int DEFAULT_FLOOR = 1;
-  final String DEFAULT_BUILDING = "Faulkner";//TODO: fix for multiple buildings
+  final String DEFAULT_BUILDING = "Faulkner"; // TODO: fix for multiple buildings
   final Color DEFAULT_CIRCLE_COLOR = Color.MEDIUMPURPLE;
   final Color DEFAULT_LINE_COLOR = Color.BLACK;
   final double DEFAULT_LINE_WIDTH = 4;
@@ -143,8 +158,9 @@ public class MapEditorController implements Controller {
   public void initialize() throws DBException, IOException {
     nodesMap2 = new HashMap<>();
     currentFloor = DEFAULT_FLOOR;
-    currentBuilding = DEFAULT_BUILDING;//set to actual building
+    currentBuilding = DEFAULT_BUILDING; // set to actual building
     initializeChangeFloorButtons();
+    initializeMainCampusFloorButtons();
     setFloorButtonColors();
     editElevNodes = new LinkedList<>();
     // btn_cancel_elev.setDisable(true);
@@ -152,7 +168,7 @@ public class MapEditorController implements Controller {
     nodesMap = HashBiMap.create();
     edgesMap = HashBiMap.create();
     mode = Mode.NO_STATE;
-    loadFloor(); // null pointer
+    loadFloor();
     addNodeCircle = null;
     elevCircle = null;
     deleteNodeCircles = new LinkedList<>();
@@ -1446,12 +1462,25 @@ public class MapEditorController implements Controller {
     btn_floor3 = new JFXButton("3");
     btn_floor4 = new JFXButton("4");
     btn_floor5 = new JFXButton("5");
+    btn_floor6 = new JFXButton("Switch");
     btn_floors.setButtonType(JFXButton.ButtonType.RAISED);
     btn_floor1.setButtonType(JFXButton.ButtonType.RAISED);
     btn_floor2.setButtonType(JFXButton.ButtonType.RAISED);
     btn_floor3.setButtonType(JFXButton.ButtonType.RAISED);
     btn_floor4.setButtonType(JFXButton.ButtonType.RAISED);
     btn_floor5.setButtonType(JFXButton.ButtonType.RAISED);
+    btn_floor6.setButtonType(JFXButton.ButtonType.RAISED);
+    nodesListF = new JFXNodesList();
+    nodesListF.addAnimatedNode(btn_floors);
+    nodesListF.addAnimatedNode(btn_floor5);
+    nodesListF.addAnimatedNode(btn_floor4);
+    nodesListF.addAnimatedNode(btn_floor3);
+    nodesListF.addAnimatedNode(btn_floor2);
+    nodesListF.addAnimatedNode(btn_floor1);
+    nodesListF.addAnimatedNode(btn_floor6);
+
+    nodesListF.setSpacing(10);
+    pn_changeFloor.getChildren().add(nodesListF);
     btn_floors
         .getStylesheets()
         .addAll(getClass().getResource("/edu/wpi/N/css/MapDisplayFloors.css").toExternalForm());
@@ -1508,16 +1537,180 @@ public class MapEditorController implements Controller {
           setFloorButtonColors();
           // mode = Mode.NO_STATE;
         });
-    JFXNodesList nodesList = new JFXNodesList();
-    nodesList.addAnimatedNode(btn_floors);
-    nodesList.addAnimatedNode(btn_floor5);
-    nodesList.addAnimatedNode(btn_floor4);
-    nodesList.addAnimatedNode(btn_floor3);
-    nodesList.addAnimatedNode(btn_floor2);
-    nodesList.addAnimatedNode(btn_floor1);
+    btn_floor6
+        .getStylesheets()
+        .addAll(getClass().getResource("/edu/wpi/N/css/MapDisplayFloors.css").toExternalForm());
+    btn_floor6.getStyleClass().addAll("animated-option-button", "animated-option-sub-button");
+    btn_floor6.setOnMouseClicked(
+        e -> {
+          currentFloor = 1;
+          currentBuilding = "main";
+          setFloorImg("/edu/wpi/N/images/map/MainL1.png");
+          setFloorButtonColorsM(); // TODO: change, default set new maps to floor 1 main campus
+          nodesListF.setVisible(false);
+          nodesListM.setVisible(true);
+          // mode = Mode.NO_STATE;
+        });
+  }
 
-    nodesList.setSpacing(10);
-    pn_changeFloor.getChildren().add(nodesList);
+  public void initializeMainCampusFloorButtons() {
+    btn_floorsM = new JFXButton("Floors");
+    btn_floor1M = new JFXButton("L2");
+    btn_floor2M = new JFXButton("L1");
+    btn_floor3M = new JFXButton("G");
+    btn_floor4M = new JFXButton("1");
+    btn_floor5M = new JFXButton("2");
+    btn_floor6M = new JFXButton("3");
+
+    btn_floor7M = new JFXButton("Switch");
+    btn_floorsM.setButtonType(JFXButton.ButtonType.RAISED);
+    btn_floor1M.setButtonType(JFXButton.ButtonType.RAISED);
+    btn_floor2M.setButtonType(JFXButton.ButtonType.RAISED);
+    btn_floor3M.setButtonType(JFXButton.ButtonType.RAISED);
+    btn_floor4M.setButtonType(JFXButton.ButtonType.RAISED);
+    btn_floor5M.setButtonType(JFXButton.ButtonType.RAISED);
+    btn_floor6M.setButtonType(JFXButton.ButtonType.RAISED);
+    btn_floor7M.setButtonType(JFXButton.ButtonType.RAISED);
+    nodesListM = new JFXNodesList();
+    nodesListM.addAnimatedNode(btn_floorsM);
+    nodesListM.addAnimatedNode(btn_floor6M);
+    nodesListM.addAnimatedNode(btn_floor5M);
+    nodesListM.addAnimatedNode(btn_floor4M);
+    nodesListM.addAnimatedNode(btn_floor3M);
+    nodesListM.addAnimatedNode(btn_floor2M);
+    nodesListM.addAnimatedNode(btn_floor1M);
+    nodesListM.addAnimatedNode(btn_floor7M);
+
+    nodesListM.setSpacing(10);
+    pn_changeFloor.getChildren().add(nodesListM);
+    nodesListM.setVisible(false);
+    btn_floorsM
+        .getStylesheets()
+        .addAll(getClass().getResource("/edu/wpi/N/css/MapDisplayFloors.css").toExternalForm());
+    btn_floorsM.getStyleClass().addAll("animated-option-button", "animated-option-sub-button");
+    btn_floor1M
+        .getStylesheets()
+        .addAll(getClass().getResource("/edu/wpi/N/css/MapDisplayFloors.css").toExternalForm());
+    btn_floor1M.getStyleClass().addAll("animated-option-button", "animated-option-sub-button");
+    btn_floor1M.setOnMouseClicked(
+        e -> {
+          currentFloor = 1;
+          setFloorImg("/edu/wpi/N/images/map/MainL1.png");
+          setFloorButtonColorsM();
+        });
+    btn_floor2M
+        .getStylesheets()
+        .addAll(getClass().getResource("/edu/wpi/N/css/MapDisplayFloors.css").toExternalForm());
+    btn_floor2M.getStyleClass().addAll("animated-option-button", "animated-option-sub-button");
+    btn_floor2M.setOnMouseClicked(
+        e -> {
+          currentFloor = 2;
+          setFloorImg("/edu/wpi/N/images/map/MainL2.png");
+          setFloorButtonColorsM();
+        });
+    btn_floor3M
+        .getStylesheets()
+        .addAll(getClass().getResource("/edu/wpi/N/css/MapDisplayFloors.css").toExternalForm());
+    btn_floor3M.getStyleClass().addAll("animated-option-button", "animated-option-sub-button");
+    btn_floor3M.setOnMouseClicked(
+        e -> {
+          currentFloor = 3;
+          setFloorImg("/edu/wpi/N/images/map/MainGround.png");
+          setFloorButtonColorsM();
+        });
+    btn_floor4M
+        .getStylesheets()
+        .addAll(getClass().getResource("/edu/wpi/N/css/MapDisplayFloors.css").toExternalForm());
+    btn_floor4M.getStyleClass().addAll("animated-option-button", "animated-option-sub-button");
+    btn_floor4M.setOnMouseClicked(
+        e -> {
+          currentFloor = 4;
+          setFloorImg("/edu/wpi/N/images/map/MainFloor1.png");
+          setFloorButtonColorsM();
+          // mode = Mode.NO_STATE;
+        });
+    btn_floor5M
+        .getStylesheets()
+        .addAll(getClass().getResource("/edu/wpi/N/css/MapDisplayFloors.css").toExternalForm());
+    btn_floor5M.getStyleClass().addAll("animated-option-button", "animated-option-sub-button");
+    btn_floor5M.setOnMouseClicked(
+        e -> {
+          currentFloor = 5;
+          setFloorImg("/edu/wpi/N/images/map/MainFloor2.png");
+          setFloorButtonColorsM();
+          // mode = Mode.NO_STATE;
+        });
+    btn_floor6M
+            .getStylesheets()
+            .addAll(getClass().getResource("/edu/wpi/N/css/MapDisplayFloors.css").toExternalForm());
+    btn_floor6M.getStyleClass().addAll("animated-option-button", "animated-option-sub-button");
+    btn_floor6M.setOnMouseClicked(
+        e -> {
+          currentFloor = 6;
+          setFloorImg("/edu/wpi/N/images/map/MainFloor3.png");
+          setFloorButtonColorsM();
+          // mode = Mode.NO_STATE;
+        });
+    btn_floor7M
+        .getStylesheets()
+        .addAll(getClass().getResource("/edu/wpi/N/css/MapDisplayFloors.css").toExternalForm());
+    btn_floor7M.getStyleClass().addAll("animated-option-button", "animated-option-sub-button");
+    btn_floor7M.setOnMouseClicked(
+        e -> {
+          currentFloor = 1;
+          nodesListM.setVisible(false);
+          nodesListF.setVisible(true);
+          setFloorImg("/edu/wpi/N/images/map/Floor1Reclor.png");
+          setFloorButtonColors(); // TODO: change, default set new maps to floor 1 main campus
+
+          // mode = Mode.NO_STATE;
+        });
+  }
+
+  private void setFloorButtonColorsM() {
+    if (currentFloor == 1) {
+      btn_floor1M.setStyle("-fx-background-color: #F7B80F");
+      btn_floor2M.setStyle("-fx-background-color: #002186");
+      btn_floor3M.setStyle("-fx-background-color: #002186");
+      btn_floor4M.setStyle("-fx-background-color: #002186");
+      btn_floor5M.setStyle("-fx-background-color: #002186");
+      btn_floor6M.setStyle("-fx-background-color: #002186");
+    } else if (currentFloor == 2) {
+      btn_floor1M.setStyle("-fx-background-color: #002186");
+      btn_floor2M.setStyle("-fx-background-color: #F7B80F");
+      btn_floor3M.setStyle("-fx-background-color: #002186");
+      btn_floor4M.setStyle("-fx-background-color: #002186");
+      btn_floor5M.setStyle("-fx-background-color: #002186");
+      btn_floor6M.setStyle("-fx-background-color: #002186");
+    } else if (currentFloor == 3) {
+      btn_floor1M.setStyle("-fx-background-color: #002186");
+      btn_floor2M.setStyle("-fx-background-color: #002186");
+      btn_floor3M.setStyle("-fx-background-color: #F7B80F");
+      btn_floor4M.setStyle("-fx-background-color: #002186");
+      btn_floor5M.setStyle("-fx-background-color: #002186");
+      btn_floor6M.setStyle("-fx-background-color: #002186");
+    } else if (currentFloor == 4) {
+      btn_floor1M.setStyle("-fx-background-color: #002186");
+      btn_floor2M.setStyle("-fx-background-color: #002186");
+      btn_floor3M.setStyle("-fx-background-color: #002186");
+      btn_floor4M.setStyle("-fx-background-color: #F7B80F");
+      btn_floor5M.setStyle("-fx-background-color: #002186");
+      btn_floor6M.setStyle("-fx-background-color: #002186");
+    } else if (currentFloor == 5) {
+      btn_floor1M.setStyle("-fx-background-color: #002186");
+      btn_floor2M.setStyle("-fx-background-color: #002186");
+      btn_floor3M.setStyle("-fx-background-color: #002186");
+      btn_floor4M.setStyle("-fx-background-color: #002186");
+      btn_floor5M.setStyle("-fx-background-color: #F7B80F");
+      btn_floor6M.setStyle("-fx-background-color: #002186");
+    } else if (currentFloor == 6) {
+      btn_floor1M.setStyle("-fx-background-color: #002186");
+      btn_floor2M.setStyle("-fx-background-color: #002186");
+      btn_floor3M.setStyle("-fx-background-color: #002186");
+      btn_floor4M.setStyle("-fx-background-color: #002186");
+      btn_floor5M.setStyle("-fx-background-color: #002186");
+      btn_floor6M.setStyle("-fx-background-color: #F7B80F");
+    }
   }
 
   private void setFloorButtonColors() {

@@ -29,8 +29,8 @@ public class MapEditorAddNodeController {
       FXCollections.observableArrayList(
           "HALL", "ELEV", "REST", "STAI", "DEPT", "LABS", "INFO", "CONF", "EXIT", "RETL", "SERV");
   ObservableList<String> buildings =
-          FXCollections.observableArrayList(
-                  "Faulkner", "BTM", "45 Francis", "Tower", "15 Francis", "Shapiro", "FLEX");
+      FXCollections.observableArrayList(
+          "Faulkner", "BTM", "45 Francis", "Tower", "15 Francis", "Shapiro", "FLEX");
 
   public void initialize() {
     cb_type.setItems(types);

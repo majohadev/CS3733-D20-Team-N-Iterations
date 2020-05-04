@@ -26,7 +26,7 @@ public class Directions {
   }
 
   public Directions(LinkedList<DbNode> path) {
-   // this.entranceNodes.add();
+    // this.entranceNodes.add();
     this.directions = new ArrayList<>();
     ArrayList<DbNode> pathNodes = new ArrayList<DbNode>();
     for (DbNode node : path) {
