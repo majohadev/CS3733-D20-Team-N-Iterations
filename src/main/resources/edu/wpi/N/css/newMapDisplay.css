@@ -2,3 +2,25 @@
     -fx-border-color: #4A69C6;
     -fx-border-width: 2px;
 }
+
+.textField {
+    -fx-text-fill: BLACK;
+    -fx-background-color: #E6EBF2;
+    -fx-pref-height: 35px;
+    -fx-background-radius: 25px;
+    -fx-prompt-text-fill: GREY;
+}
+
+.list-cell {
+    -fx-background-radius: 25px;
+    -fx-background-color: #E6EBF2;
+}
+
+.button {
+    -fx-background-color: #4A69C6;
+    -fx-background-radius: 25px;
+    -fx-text-fill: #E6EBF2;
+    -fx-pref-width: 125px;
+    -fx-pref-height: 25px;
+    -fx-font-size: 18;
+}

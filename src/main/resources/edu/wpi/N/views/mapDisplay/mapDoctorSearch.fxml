@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane maxHeight="1080.0" maxWidth="345.0" minHeight="1080.0" minWidth="345.0" prefHeight="1080.0" prefWidth="345.0" style="-fx-background-color: #263051;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label layoutX="39.0" layoutY="24.0" prefHeight="50.0" prefWidth="255.0" text="Doctor Search" textFill="#e6ebf2" AnchorPane.leftAnchor="40.0" AnchorPane.topAnchor="25.0">
+         <font>
+            <Font size="34.0" />
+         </font>
+      </Label>
+      <TextField alignment="CENTER" layoutX="67.0" layoutY="106.0" prefHeight="35.0" prefWidth="255.0" promptText="Please enter a location" styleClass="list-cell" stylesheets="@../../css/newMapDisplay.css" AnchorPane.leftAnchor="65.0" AnchorPane.topAnchor="110.0" />
+      <TextField alignment="CENTER" layoutX="66.0" layoutY="170.0" prefHeight="35.0" prefWidth="255.0" promptText="Please enter a location" styleClass="list-cell" stylesheets="@../../css/newMapDisplay.css" AnchorPane.leftAnchor="65.0" AnchorPane.topAnchor="170.0" />
+      <ImageView fitHeight="28.0" fitWidth="33.0" layoutX="26.0" layoutY="174.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="170.0">
+         <image>
+            <Image url="@../../images/mapDisplayIcons/pinIcon.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="35.0" fitWidth="28.0" layoutX="25.0" layoutY="110.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="110.0">
+         <image>
+            <Image url="@../../images/mapDisplayIcons/doctorButton.png" />
+         </image>
+      </ImageView>
+      <Line endX="-100.00001525878906" endY="40.19999694824219" layoutX="139.0" layoutY="126.0" startX="-100.00001525878906" startY="16.600006103515625" stroke="#e6ebf2" strokeMiterLimit="2.0" strokeWidth="2.0" style="-fx-stroke-dash-array: 8;" AnchorPane.topAnchor="140.0" />
+      <ListView layoutX="66.0" layoutY="238.0" prefHeight="481.0" prefWidth="255.0" styleClass="list-cell" stylesheets="@../../css/newMapDisplay.css" AnchorPane.leftAnchor="65.0" AnchorPane.topAnchor="235.0" />
+      <JFXButton layoutX="205.0" layoutY="753.0" stylesheets="@../../css/newMapDisplay.css" text="Search" textFill="#e6ebf2" AnchorPane.leftAnchor="195.0" AnchorPane.topAnchor="750.0" />
+   </children>
+</AnchorPane>
