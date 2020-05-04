@@ -17,7 +17,9 @@ public class WebViewController extends Application {
 
     WebView webView = new WebView();
 
-    webView.getEngine().load(Main.class.getResource("views/googleMapDisplay.html").toString());
+    webView
+        .getEngine()
+        .load(Main.class.getResource("views/googleMapFaulknerToMain.html").toString());
 
     VBox vBox = new VBox(webView);
     Scene scene = new Scene(vBox, 960, 600);
