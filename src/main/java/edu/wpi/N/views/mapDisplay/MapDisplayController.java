@@ -69,6 +69,7 @@ public class MapDisplayController implements Controller, Initializable {
   @FXML JFXButton btn_google;
 
   @FXML MapBaseController mapBaseController; // Reference to the embedded map
+  @FXML GoogleMapController googleMapController;
 
   private ArrayList<String> directions;
   JFXNodesList floorButtonList = new JFXNodesList();
@@ -105,12 +106,13 @@ public class MapDisplayController implements Controller, Initializable {
   /** Switches the Map Base view to Loaded previously Google Map View */
   @FXML
   public void switchToGoogleView() {
+    //googleMapController.loadRoadFaulknerToMain();
     mapContainer.getChildren().setAll(googleMapView);
   }
 
-  /** Switches the Map Base view to Loaded previously Faulkner Map */
+  /** Switches the Map Base view to Faulkner Map */
   @FXML
-  public void switchToFaulkner() throws DBException {
+  public void switchToFaulkner(){
     try {
       mapBaseController.setFloor("Faulkner", 1, this.path);
     } catch (DBException e) {
@@ -120,13 +122,13 @@ public class MapDisplayController implements Controller, Initializable {
   }
 
   /**
-   * Switches the Map Base view to loaded previously Main Hospital Map
+   * Switches the Map Base view to Main Hospital Map
    *
    * @throws DBException
    */
   @FXML
-  public void switchToMain() throws DBException {
-    int numFloor = CSVParser.convertFloor("F1");
+  public void switchToMain(){
+    int numFloor = 2; // Number for main Entrance on 45 Francis street
     try {
       mapBaseController.setFloor("45 Francis", numFloor, this.path);
     } catch (DBException e) {

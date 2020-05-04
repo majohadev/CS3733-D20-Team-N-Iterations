@@ -29,7 +29,11 @@ public class GoogleMapController implements Controller, Initializable {
   @Override
   public void initialize(URL url, ResourceBundle rb) {
     webView.getEngine().load(Main.class.getResource("views/googleMapDisplay.html").toString());
-    System.out.println("test");
+    System.out.println("Test");
+  }
+
+  public void loadRoadFaulknerToMain(){
+    webView.getEngine().load(Main.class.getResource("views/googleMapDisplay.html").toString());
   }
 
   public void setSingleton(StateSingleton singleton) {
