@@ -98,41 +98,42 @@
 //    //    }
 //  }
 //
-//  /** Switches the Map Base view to Loaded previously Google Map View */
-//  @FXML
-//  public void switchToGoogleView() {
-//    mapContainer.getChildren().setAll(googleMapView);
-//  }
+////  /** Switches the Map Base view to Loaded previously Google Map View */
+////  @FXML
+////  public void switchToGoogleView() {
+////    mapContainer.getChildren().setAll(googleMapView);
+////  }
 //
-//  /** Switches the Map Base view to Faulkner Map */
-//  @FXML
-//  public void switchToFaulkner() {
-//    try {
-//      mapContainer.getChildren().setAll(hospitalView);
-//      mapBaseController.setBuilding("Faulkner", 1, this.path);
-//    } catch (DBException e) {
-//      e.printStackTrace();
-//      displayErrorMessage("Error: Switching to Faulkner");
-//    }
-//  }
-//
-//  /**
-//   * Switches the Map Base view to Main Hospital Map
-//   *
-//   * @throws DBException
-//   */
-//  @FXML
-//  public void switchToMain() {
-//    int numFloor = CSVParser.convertFloor("L2"); // Number for main Entrance on 45 Francis street
-//    try {
-//      mapContainer.getChildren().setAll(hospitalView);
-//      // TODO: make it point to Main
-//      mapBaseController.setBuilding("Main", numFloor, this.path);
-//    } catch (DBException e) {
-//      e.printStackTrace();
-//      displayErrorMessage("Error: Switching to Main Hospital - 45 Francis");
-//    }
-//  }
+////  /** Switches the Map Base view to Faulkner Map */
+////  @FXML
+////  public void switchToFaulkner() {
+////    try {
+////      mapContainer.getChildren().setAll(hospitalView);
+////      mapBaseController.setBuilding("Faulkner", 1, this.path);
+////    } catch (DBException e) {
+////      e.printStackTrace();
+////      displayErrorMessage("Error: Switching to Faulkner");
+////    }
+////  }
+////
+////  /**
+////   * Switches the Map Base view to Main Hospital Map
+////   *
+////   * @throws DBException
+////   */
+////  @FXML
+////  public void switchToMain() {
+////    int numFloor = CSVParser.convertFloor("L2"); // Number for main Entrance on 45 Francis
+// street
+////    try {
+////      mapContainer.getChildren().setAll(hospitalView);
+////      // TODO: make it point to Main
+////      mapBaseController.setBuilding("Main", numFloor, this.path);
+////    } catch (DBException e) {
+////      e.printStackTrace();
+////      displayErrorMessage("Error: Switching to Main Hospital - 45 Francis");
+////    }
+////  }
 //
 //  //  /** creates the buttons which enables the user to view different floors */
 //  //  public void createFloorButtons() {
@@ -368,24 +369,24 @@
 //    setTextDecription();
 //  }
 //
-//  private void enableAllFloorButtons() {
-//    for (int i = 1; i < floorButtonList.getChildren().size(); i++) {
-//      JFXButton btn = (JFXButton) floorButtonList.getChildren().get(i);
-//      btn.setDisable(false);
-//    }
-//  }
+////  private void enableAllFloorButtons() {
+////    for (int i = 1; i < floorButtonList.getChildren().size(); i++) {
+////      JFXButton btn = (JFXButton) floorButtonList.getChildren().get(i);
+////      btn.setDisable(false);
+////    }
+////  }
 //
-//  private void disableNonPathFloors() {
-//    floorButtonList.getChildren().forEach(e -> e.setDisable(true));
-//    JFXButton startButton = (JFXButton) floorButtonList.getChildren().get(0);
-//    startButton.setDisable(false);
-//    for (int i = 0; i < path.size() - 1; i++) {
-//      DbNode node = path.get(i);
-//      if (!(node.getNodeType().equals("ELEV") || node.getNodeType().equals("STAI"))) {
-//        JFXButton btn = (JFXButton) floorButtonList.getChildren().get(node.getFloor());
-//        btn.setDisable(false);
-//      }
-//    }
+////  private void disableNonPathFloors() {
+////    floorButtonList.getChildren().forEach(e -> e.setDisable(true));
+////    JFXButton startButton = (JFXButton) floorButtonList.getChildren().get(0);
+////    startButton.setDisable(false);
+////    for (int i = 0; i < path.size() - 1; i++) {
+////      DbNode node = path.get(i);
+////      if (!(node.getNodeType().equals("ELEV") || node.getNodeType().equals("STAI"))) {
+////        JFXButton btn = (JFXButton) floorButtonList.getChildren().get(node.getFloor());
+////        btn.setDisable(false);
+////      }
+////    }
 //  }
 //  //    for (int i = 0; i < path.size(); i++) {
 //  //      DbNode node = path.get(i);

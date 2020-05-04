@@ -8,7 +8,7 @@
 
 <AnchorPane maxHeight="1080.0" maxWidth="1920.0" minHeight="1080.0" minWidth="1920.0" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.mapDisplay.NewMapDisplayController">
    <children>
-      <StackPane layoutX="400.0" layoutY="75.0" pickOnBounds="false" prefHeight="1005.0" prefWidth="1425.0">
+      <StackPane fx:id="pn_mapContainer" layoutX="400.0" layoutY="75.0" pickOnBounds="false" prefHeight="1005.0" prefWidth="1425.0">
          <children>
             <fx:include fx:id="mapBase" source="mapBase.fxml" />
             <Pane fx:id="pn_display" pickOnBounds="false" prefHeight="200.0" prefWidth="200.0">

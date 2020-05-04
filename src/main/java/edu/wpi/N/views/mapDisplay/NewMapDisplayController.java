@@ -37,6 +37,8 @@ public class NewMapDisplayController implements Controller {
   @FXML Pane pn_infoIcon;
   @FXML Pane pn_adminIcon;
   @FXML Pane pn_floors;
+  @FXML Pane pn_mapContainer;
+  @FXML Pane pn_googleMapView;
   @FXML Pane pn_hospitalView;
 
   @FXML MapBaseController mapBaseController;
@@ -71,11 +73,11 @@ public class NewMapDisplayController implements Controller {
     this.mainButtonList = new JFXNodesList();
     this.pn_hospitalView = mapBaseController.getAnchorPane();
     mapBaseController.setFloor(this.currentBuilding, this.currentFloor, this.path);
+    pn_mapContainer.getChildren().setAll(pn_hospitalView);
     pn_iconBar.getChildren().get(0).setStyle("-fx-background-color: #4A69C6;");
     initFloorButtons();
     initFunctionPane();
     setDefaultKioskNode();
-    disableNonPathFloors();
   }
 
   public void initFunctionPane() throws IOException, DBException {
@@ -158,6 +160,7 @@ public class NewMapDisplayController implements Controller {
     onFloorButtonClicked(btn_main3);
     onFloorButtonClicked(btn_main4);
     onFloorButtonClicked(btn_main5);
+    onFloorButtonClicked(btn_google);
 
     mainButtonList
         .getChildren()
@@ -190,37 +193,51 @@ public class NewMapDisplayController implements Controller {
   public void handleFloorButtonClicked(String txt) throws DBException {
     if (txt.equals("F1")) {
       changeFloor(1, "Faulkner");
+      switchHospitalView();
       setDefaultKioskNode();
     } else if (txt.equals("F2")) {
       changeFloor(2, "Faulkner");
+      switchHospitalView();
       setDefaultKioskNode();
     } else if (txt.equals("F3")) {
       changeFloor(3, "Faulkner");
+      switchHospitalView();
       setDefaultKioskNode();
     } else if (txt.equals("F4")) {
       changeFloor(4, "Faulkner");
+      switchHospitalView();
       setDefaultKioskNode();
     } else if (txt.equals("F5")) {
       changeFloor(5, "Faulkner");
+      switchHospitalView();
       setDefaultKioskNode();
     } else if (txt.equals("L2")) {
       changeFloor(1, "Main");
+      switchHospitalView();
       setDefaultKioskNode();
     } else if (txt.equals("L1")) {
       changeFloor(2, "Main");
+      switchHospitalView();
       setDefaultKioskNode();
     } else if (txt.equals("G")) {
       changeFloor(3, "Main");
+      switchHospitalView();
       setDefaultKioskNode();
     } else if (txt.equals("1")) {
       changeFloor(4, "Main");
+      switchHospitalView();
       setDefaultKioskNode();
     } else if (txt.equals("2")) {
       changeFloor(5, "Main");
+      switchHospitalView();
       setDefaultKioskNode();
     } else if (txt.equals("3")) {
       changeFloor(6, "Main");
+      switchHospitalView();
       setDefaultKioskNode();
+    } else if (txt.equals("Google")) {
+      // TODO DEFAULT GOOGLE MAP VIEW
+      switchGoogleView();
     }
   }
 
@@ -276,6 +293,7 @@ public class NewMapDisplayController implements Controller {
               locationSearchController.getFuzzyList().getItems().clear();
               locationSearchController.getTgHandicap().setSelected(false);
               mapBaseController.clearPath();
+              enableAllFloorButtons();
               try {
                 setDefaultKioskNode();
               } catch (DBException ex) {
@@ -296,6 +314,7 @@ public class NewMapDisplayController implements Controller {
               doctorSearchController.getFuzzyList().getItems().clear();
               doctorSearchController.getTgHandicap().setSelected(false);
               mapBaseController.clearPath();
+              enableAllFloorButtons();
               try {
                 setDefaultKioskNode();
               } catch (DBException ex) {
@@ -311,7 +330,7 @@ public class NewMapDisplayController implements Controller {
     }
     this.path = singleton.savedAlgo.findPath(first, second, isSelected);
     mapBaseController.setFloor(first.getBuilding(), first.getFloor(), path);
-    //    disableNonPathFloors();
+    disableNonPathFloors();
     //    setTextDecription();
   }
 
@@ -330,6 +349,8 @@ public class NewMapDisplayController implements Controller {
   }
 
   public void onIconClicked(MouseEvent e) throws IOException, DBException {
+    mapBaseController.clearPath();
+    enableAllFloorButtons();
     Pane src = (Pane) e.getSource();
     pn_iconBar.getChildren().forEach(n -> n.setStyle("-fx-background-color: #263051"));
     src.setStyle("-fx-background-color: #4A69C6;");
@@ -423,5 +444,28 @@ public class NewMapDisplayController implements Controller {
     faulknerButtonList.getChildren().get(0).setDisable(false);
     mainButtonList.getChildren().forEach(e -> e.setDisable(true));
     mainButtonList.getChildren().get(0).setDisable(false);
+    for (int i = 0; i < path.size() - 1; i++) {
+      DbNode node = path.get(i);
+      if (!(node.getNodeType().equals("ELEV") || node.getNodeType().equals("STAI"))) {
+        if (node.getBuilding().equals("Faulkner")) {
+          faulknerButtonList.getChildren().get(node.getFloor()).setDisable(false);
+        } else {
+          mainButtonList.getChildren().get(node.getFloor()).setDisable(false);
+        }
+      }
+    }
+  }
+
+  public void enableAllFloorButtons() {
+    faulknerButtonList.getChildren().forEach(e -> e.setDisable(false));
+    mainButtonList.getChildren().forEach(e -> e.setDisable(false));
+  }
+
+  public void switchGoogleView() {
+    pn_mapContainer.getChildren().setAll(pn_googleMapView);
+  }
+
+  public void switchHospitalView() {
+    pn_mapContainer.getChildren().setAll(pn_hospitalView);
   }
 }
