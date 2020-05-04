@@ -6,8 +6,13 @@ import static java.lang.Math.atan2;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Scanner;
 
 public class Directions {
   private ArrayList<String> directions;
@@ -340,6 +345,66 @@ public class Directions {
       this.generateDirections();
       return this.getNumberedDirection();
     } else {
+      return null;
+    }
+  }
+
+  /**
+   * gets the google directions with the specified mode and direction
+   *
+   * @param mode walking, driving,, bycycling, transit; gets directions in one of those formats
+   * @param dir the direction. True = from 45 francis street to 1153 centre street, false = opposite
+   *     direction
+   * @return The google directions as a string
+   */
+  public static String getGoogleDirections(String mode, boolean dir) {
+    String urls;
+    if (dir) {
+      urls =
+          "https://maps.googleapis.com/maps/api/directions/json?mode="
+              + mode
+              + "&origin=45|Francis|Street,|Boston,|MA,"
+              + "&destination=1153|Centre|St,|Boston,|MA"
+              + "&key=AIzaSyDx7BSweq5dRzXavs1vxuMWeR2ETMR6b3Q";
+    } else {
+      urls =
+          "https://maps.googleapis.com/maps/api/directions/json?mode="
+              + mode
+              + "&origin=1153|Centre|St,|Boston,|MA"
+              + "&destination=45|Francis|Street,|Boston,|MA,"
+              + "&key=AIzaSyDx7BSweq5dRzXavs1vxuMWeR2ETMR6b3Q";
+    }
+    try {
+      URL url = new URL(urls);
+      HttpURLConnection httpcon = (HttpURLConnection) (url.openConnection());
+      httpcon.setDoOutput(true);
+      httpcon.setRequestProperty("Content-Type", "application/json");
+      httpcon.setRequestProperty("Accept", "application/json");
+      httpcon.setRequestMethod("GET");
+      httpcon.connect();
+      Scanner sc = new Scanner(url.openStream());
+      String dirs = "";
+      while (sc.hasNext()) {
+        String next = sc.nextLine();
+        // if (next.contains("\"html_instructions\"")) System.out.println(next);
+        if (next.contains("\"html_instructions\""))
+          dirs +=
+              next.substring(44)
+                      .replace("\\u003cb\\u003e", "")
+                      .replace("\\u003c/b\\u003e", "")
+                      .replace("\\u003cwbr/\\u003e", "\n")
+                      .replace("&nbsp;", " ")
+                      .replaceAll("(\\\\u003c)(.*?)(\\\\u003e)", "\n")
+                      .replace("\",", "")
+                  + "\n";
+        // System.out.println(sc.nextLine() + "K");
+      }
+      return dirs;
+    } catch (MalformedURLException e) {
+      e.printStackTrace();
+      return null;
+    } catch (IOException e) {
+      e.printStackTrace();
       return null;
     }
   }
