@@ -10,21 +10,6 @@ import org.bridj.util.Pair;
 public abstract class AbsAlgo implements IPathFinder {
 
   /**
-   * Abstract method that is overridden by all pathfinders (template)
-   *
-   * @param mapData: HashMap of the nodes and edges
-   * @param startNode: The start node
-   * @param endNode: The destination node
-   * @param handicap: Boolean saying whether path should be handicap accessible
-   * @return: A path of nodes from the start to the end node
-   */
-  public abstract Path findPath(
-      HashMap<String, LinkedList<DbNode>> mapData,
-      DbNode startNode,
-      DbNode endNode,
-      boolean handicap);
-
-  /**
    * Function calculates Euclidean distance between the next Node and current Node (cost of given
    * node)
    *
