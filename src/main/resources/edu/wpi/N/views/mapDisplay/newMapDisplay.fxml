@@ -3,14 +3,21 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
 
 <AnchorPane maxHeight="1080.0" maxWidth="1920.0" minHeight="1080.0" minWidth="1920.0" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.mapDisplay.NewMapDisplayController">
    <children>
-      <ImageView fitHeight="930.0" fitWidth="1520.0" layoutX="450.0" layoutY="99.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="400.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="99.0">
-         <image>
-            <Image url="@../../images/map/Floor1Reclor.png" />
-         </image>
-      </ImageView>
+      <StackPane layoutX="400.0" layoutY="75.0" pickOnBounds="false" prefHeight="1005.0" prefWidth="1425.0">
+         <children>
+            <fx:include fx:id="mapBase" source="mapBase.fxml" />
+            <Pane fx:id="pn_display" pickOnBounds="false" prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <Pane fx:id="pn_changeFloor" layoutX="1458.0" layoutY="14.0" prefHeight="490.0" prefWidth="206.0" />
+               </children>
+            </Pane>
+         </children>
+      </StackPane>
       <AnchorPane maxHeight="1080.0" maxWidth="400.0" minHeight="1080.0" minWidth="400.0" prefHeight="1080.0" prefWidth="400.0" style="-fx-background-color: #263051;" AnchorPane.topAnchor="0.0">
          <children>
             <AnchorPane fx:id="pn_change" layoutX="55.0" maxHeight="1080.0" maxWidth="345.0" minHeight="1080.0" minWidth="345.0" prefHeight="1080.0" prefWidth="345.0" />

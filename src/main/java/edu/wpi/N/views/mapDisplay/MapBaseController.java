@@ -41,7 +41,7 @@ public class MapBaseController implements Controller {
   private final float MAP_WIDTH = SCREEN_WIDTH - BAR_WIDTH;
   private final float MAP_HEIGHT = (MAP_WIDTH / IMAGE_WIDTH) * IMAGE_HEIGHT;
   private final float HORIZONTAL_OFFSET = 10;
-  private final float VERTICAL_OFFSET = 8;
+  private final float VERTICAL_OFFSET = 3;
   private final float HORIZONTAL_SCALE = (MAP_WIDTH) / IMAGE_WIDTH;
   private final float VERTICAL_SCALE = (MAP_HEIGHT) / IMAGE_HEIGHT;
 
@@ -168,10 +168,10 @@ public class MapBaseController implements Controller {
         }
         Line line =
             new Line(
-                scaleX(secondNode.getX()),
-                scaleY(secondNode.getY()),
-                scaleX(firstNode.getX()),
-                scaleY(firstNode.getY()));
+                scaleX(secondNode.getX()) + HORIZONTAL_OFFSET,
+                scaleY(secondNode.getY()) + VERTICAL_OFFSET,
+                scaleX(firstNode.getX()) + HORIZONTAL_OFFSET,
+                scaleY(firstNode.getY()) + VERTICAL_OFFSET);
         styleLine(line);
         pn_path.getChildren().add(line);
       }
@@ -231,8 +231,8 @@ public class MapBaseController implements Controller {
   public void drawCircle(DbNode node, Color c) {
     Circle circle = new Circle();
     circle.setRadius(5);
-    circle.setCenterX(scaleX(node.getX()));
-    circle.setCenterY(scaleY(node.getY()));
+    circle.setCenterX(scaleX(node.getX()) + HORIZONTAL_OFFSET);
+    circle.setCenterY(scaleY(node.getY()) + VERTICAL_OFFSET);
     circle.setFill(c);
     pn_path.getChildren().add(circle);
   }

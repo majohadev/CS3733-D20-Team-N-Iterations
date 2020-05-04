@@ -6,6 +6,7 @@ import edu.wpi.N.database.DBException;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Path;
 import edu.wpi.N.entities.States.StateSingleton;
+import edu.wpi.N.entities.employees.Doctor;
 import edu.wpi.N.views.Controller;
 import java.io.IOException;
 import java.util.LinkedList;
@@ -31,17 +32,16 @@ public class NewMapDisplayController implements Controller {
   @FXML Pane pn_serviceIcon;
   @FXML Pane pn_infoIcon;
   @FXML Pane pn_adminIcon;
+  @FXML MapBaseController mapBaseController;
 
   MapLocationSearchController locationSearchController;
   MapDoctorSearchController doctorSearchController;
-  MapBaseController mapBaseController;
   MapQRController mapQRController;
 
   Path path;
 
   public void initialize() {
     this.path = new Path(new LinkedList<>());
-    mapBaseController = new MapBaseController(singleton);
   }
 
   public void initLocationSearchButton() {
@@ -54,6 +54,22 @@ public class NewMapDisplayController implements Controller {
                     (locationSearchController.getDBNodes())[0],
                     (locationSearchController.getDBNodes())[1],
                     locationSearchController.getHandicap());
+              } catch (DBException ex) {
+                ex.printStackTrace();
+              }
+            });
+  }
+
+  public void initDoctorSearchButton() {
+    doctorSearchController
+        .getSearchButton()
+        .setOnMouseClicked(
+            e -> {
+              try {
+                initPathfind(
+                    (doctorSearchController.getDBNodes())[0],
+                    (doctorSearchController.getDBNodes())[1],
+                    doctorSearchController.getHandicap());
               } catch (DBException ex) {
                 ex.printStackTrace();
               }
@@ -95,6 +111,20 @@ public class NewMapDisplayController implements Controller {
   }
 
   /**
+   * applies fuzzy search to the user input for doctors
+   *
+   * @param txt the textfield with the user input
+   * @param lst the fuzzy search results
+   * @throws DBException
+   */
+  public static void fuzzyDoctorSearch(TextField txt, ListView lst) throws DBException {
+    ObservableList<Doctor> fuzzyList;
+    String str = txt.getText();
+    fuzzyList = FXCollections.observableList(FuzzySearchAlgorithm.suggestDoctors(str));
+    lst.setItems(fuzzyList);
+  }
+
+  /**
    * manages the panes displayed on the sidebar
    *
    * @param e the event which triggers switching between panes
@@ -115,6 +145,7 @@ public class NewMapDisplayController implements Controller {
       loader = new FXMLLoader(getClass().getResource("mapDoctorSearch.fxml"));
       Pane pane = loader.load();
       doctorSearchController = loader.getController();
+      initDoctorSearchButton();
       pn_change.getChildren().add(pane);
     } else if (src == pn_qrIcon) {
       loader = new FXMLLoader(getClass().getResource("mapQR.fxml"));
