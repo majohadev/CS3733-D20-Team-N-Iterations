@@ -69,7 +69,6 @@ public class MapDisplayController implements Controller, Initializable {
   @FXML JFXButton btn_google;
 
   @FXML MapBaseController mapBaseController; // Reference to the embedded map
-  @FXML GoogleMapController googleMapController;
 
   private ArrayList<String> directions;
   JFXNodesList floorButtonList = new JFXNodesList();
