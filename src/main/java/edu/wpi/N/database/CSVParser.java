@@ -80,14 +80,14 @@ public class CSVParser {
       String building = row[4];
 
       int floor;
-
-      if (building.equals("Faulkner")) {
+      floor = Integer.parseInt(row[3]);
+      /*  if (building.equals("Faulkner")) {
         floor = Integer.parseInt(row[3]);
       } else if (building.equals("Fuller Lower")) {
         return;
       } else {
         floor = convertFloor(row[3]);
-      }
+      }*/
 
       //      (building.equals("BTM")
       //              || building.equals("45 Francis")

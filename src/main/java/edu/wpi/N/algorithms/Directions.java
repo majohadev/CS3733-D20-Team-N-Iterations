@@ -14,6 +14,7 @@ public class Directions {
   private static ArrayList<DbNode> path;
   private static State state;
   private static final double TURN_THRESHOLD = 30;
+  private static LinkedList<DbNode> entranceNodes;
 
   enum State {
     STARTING,
@@ -25,6 +26,7 @@ public class Directions {
   }
 
   public Directions(LinkedList<DbNode> path) {
+    // this.entranceNodes.add();
     this.directions = new ArrayList<>();
     ArrayList<DbNode> pathNodes = new ArrayList<DbNode>();
     for (DbNode node : path) {

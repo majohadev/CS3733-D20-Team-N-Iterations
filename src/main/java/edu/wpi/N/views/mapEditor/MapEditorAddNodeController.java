@@ -21,20 +21,25 @@ public class MapEditorAddNodeController {
   @FXML JFXTextField txt_xPos;
   @FXML JFXTextField txt_yPos;
   @FXML JFXComboBox cb_type;
+  @FXML JFXComboBox cb_type1;
   @FXML JFXButton btn_confirm;
   @FXML JFXButton btn_cancel;
 
   ObservableList<String> types =
       FXCollections.observableArrayList(
           "HALL", "ELEV", "REST", "STAI", "DEPT", "LABS", "INFO", "CONF", "EXIT", "RETL", "SERV");
+  ObservableList<String> buildings =
+      FXCollections.observableArrayList(
+          "Faulkner", "BTM", "45 Francis", "Tower", "15 Francis", "Shapiro", "FLEX");
 
   public void initialize() {
     cb_type.setItems(types);
+    cb_type1.setItems(buildings);
   }
 
   public void setPos(double xPos, double yPos) {
-    txt_xPos.setText(String.valueOf(xPos));
-    txt_yPos.setText(String.valueOf(yPos));
+    txt_xPos.setText(String.valueOf(Math.round(xPos)));
+    txt_yPos.setText(String.valueOf(Math.round(yPos)));
   }
 
   public String getXPos() {
@@ -55,6 +60,10 @@ public class MapEditorAddNodeController {
 
   public String getType() {
     return (String) cb_type.getValue();
+  }
+
+  public String getBuilding() {
+    return (String) cb_type1.getValue();
   }
 
   public JFXTextField getTxtXPos() {
