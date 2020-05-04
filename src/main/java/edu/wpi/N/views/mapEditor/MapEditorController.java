@@ -8,6 +8,7 @@ import edu.wpi.N.App;
 import edu.wpi.N.algorithms.AStar;
 import edu.wpi.N.algorithms.BFS;
 import edu.wpi.N.algorithms.DFS;
+import edu.wpi.N.algorithms.Dijkstra;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
@@ -353,6 +354,8 @@ public class MapEditorController implements Controller {
       onCircleAddNodeDragged(event, circle);
     }
     if (mode == Mode.EDIT_NODE) {
+      //      onBtnCancelEditNodeClicked();
+      //      onBtnConfirmEditNodeClicked();
       onTxtPosEditNodeTextChanged(circle);
       onCircleEditNodeDragged(event, circle);
     }
@@ -450,6 +453,9 @@ public class MapEditorController implements Controller {
       onCircleAddShaftNodeClicked(event, circle);
     }
     if (mode == Mode.EDIT_ELEV && editElevNodes.contains(circle)) {
+
+      //      onBtnSaveEditElevClicked();
+
       onBtnCancelEditElevClicked();
       onBtnAddShaftClicked();
       if (elevCircle != null && elevCircle != circle) {
@@ -549,6 +555,7 @@ public class MapEditorController implements Controller {
   }
 
   private void onCircleAlignNodeClicked(MouseEvent event, Circle circle) {
+    String alignNodeID = nodesMap.get(circle).getDBNode().getNodeID();
     if (circle.getFill() == DEFAULT_CIRCLE_COLOR) {
       circle.setFill(DELETE_NODE_COLOR);
       alignNodeCircles.add(circle);
@@ -1479,6 +1486,7 @@ public class MapEditorController implements Controller {
           currentFloor = 4;
           setFloorImg("/edu/wpi/N/images/map/Floor4SolidBackground.png");
           setFloorButtonColors();
+          // mode = Mode.NO_STATE;
         });
     btn_floor5
         .getStylesheets()
@@ -1489,6 +1497,7 @@ public class MapEditorController implements Controller {
           currentFloor = 5;
           setFloorImg("/edu/wpi/N/images/map/Floor5TeamN.png");
           setFloorButtonColors();
+          // mode = Mode.NO_STATE;
         });
     JFXNodesList nodesList = new JFXNodesList();
     nodesList.addAnimatedNode(btn_floors);
@@ -1553,6 +1562,7 @@ public class MapEditorController implements Controller {
     algoTypes.add("BFS");
     algoTypes.add("DFS");
     algoTypes.add("AStar");
+    algoTypes.add("Dijkstra");
     ObservableList<String> algos = FXCollections.observableArrayList();
     algos.addAll(algoTypes);
     cb_changeAlgo.setItems(algos);
@@ -1600,6 +1610,8 @@ public class MapEditorController implements Controller {
       singleton.savedAlgo.setPathFinder(new DFS());
     } else if (cb_changeAlgo.getSelectionModel().getSelectedItem().equals("AStar")) {
       singleton.savedAlgo.setPathFinder(new AStar());
+    } else if (cb_changeAlgo.getSelectionModel().getSelectedItem().equals("Dijkstra")) {
+      singleton.savedAlgo.setPathFinder(new Dijkstra());
     }
   }
 
