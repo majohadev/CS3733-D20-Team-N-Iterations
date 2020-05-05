@@ -144,8 +144,8 @@ public class MapBaseController implements Controller {
   public void setMainDefaults() {
     IMAGE_WIDTH = 5000;
     IMAGE_HEIGHT = 3400;
-    MAP_WIDTH = 1444;
-    MAP_HEIGHT = 982;
+    MAP_WIDTH = 1520;
+    MAP_HEIGHT = 1034;
     HORIZONTAL_SCALE = MAP_WIDTH / IMAGE_WIDTH;
     VERTICAL_SCALE = MAP_HEIGHT / IMAGE_HEIGHT;
   }

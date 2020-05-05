@@ -91,6 +91,7 @@ public class NewMapDisplayController implements Controller {
     locationSearchController = loader.getController();
     initLocationSearchButton();
     initResetLocationSearch();
+    initRestroomSearchButton();
     pn_change.getChildren().add(pane);
   }
 
@@ -333,6 +334,27 @@ public class NewMapDisplayController implements Controller {
             });
   }
 
+  public void initRestroomSearchButton() throws DBException {
+    locationSearchController
+        .getBtnRestRoom()
+        .setOnMouseClicked(
+            e -> {
+              DbNode first = locationSearchController.getDBNodes()[0];
+              try {
+                this.path = singleton.savedAlgo.findQuickAccess(first, "REST");
+                mapBaseController.setFloor(first.getBuilding(), first.getFloor(), path);
+                if (path.size() == 0) {
+                  displayErrorMessage("Please select the first node");
+                }
+              } catch (DBException | NullPointerException ex) {
+                displayErrorMessage("Please select the first node");
+                return;
+              }
+              disableNonPathFloors();
+              //        setTextDescriptions();
+            });
+  }
+
   public void initPathfind(DbNode first, DbNode second, boolean isSelected)
       throws DBException, IOException {
     if (first == null || second == null) {
@@ -340,6 +362,9 @@ public class NewMapDisplayController implements Controller {
       return;
     }
     this.path = singleton.savedAlgo.findPath(first, second, isSelected);
+    if (path == null) {
+      displayErrorMessage("No path can be found");
+    }
     switchHospitalView();
     mapBaseController.setFloor(first.getBuilding(), first.getFloor(), path);
     disableNonPathFloors();
@@ -407,6 +432,7 @@ public class NewMapDisplayController implements Controller {
       locationSearchController = loader.getController();
       initLocationSearchButton();
       initResetLocationSearch();
+      initRestroomSearchButton();
       setDefaultKioskNode();
       pn_change.getChildren().add(pane);
     } else if (src == pn_doctorIcon) {
@@ -440,7 +466,13 @@ public class NewMapDisplayController implements Controller {
   }
 
   public void setDefaultKioskNode() throws DBException {
-    if (path.size() > 0) {
+    boolean noFaulknerKiosk =
+        !(currentBuilding.equals("Faulkner") && (currentFloor == 1 || currentFloor == 3));
+    if (noFaulknerKiosk) {
+      return;
+    }
+
+    if (path == null && path.size() > 0) {
       return;
     }
     if (locationSearchController != null) {
@@ -452,12 +484,6 @@ public class NewMapDisplayController implements Controller {
       doctorSearchController.getTextLocation().clear();
       doctorSearchController.getTxtDoctor().clear();
       doctorSearchController.getFuzzyList().getItems().clear();
-    }
-
-    boolean noFaulknerKiosk =
-        !(currentBuilding.equals("Faulkner") && (currentFloor == 1 || currentFloor == 3));
-    if (noFaulknerKiosk) {
-      return;
     }
 
     DbNode kiosk = null;
@@ -494,7 +520,7 @@ public class NewMapDisplayController implements Controller {
     faulknerButtonList.getChildren().get(0).setDisable(false);
     mainButtonList.getChildren().forEach(e -> e.setDisable(true));
     mainButtonList.getChildren().get(0).setDisable(false);
-    for (int i = 0; i < path.size() - 1; i++) {
+    for (int i = 0; i < path.size(); i++) {
       DbNode node = path.get(i);
       if (!(node.getNodeType().equals("ELEV") || node.getNodeType().equals("STAI"))) {
         if (node.getBuilding().equals("Faulkner")) {

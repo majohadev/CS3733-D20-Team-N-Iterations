@@ -30,11 +30,23 @@ public class MapDoctorSearchController implements Controller {
 
   public void onSearchLocation(KeyEvent e) throws DBException {
     activeText = (TextField) e.getSource();
+    if (activeText == txt_location) {
+      nodes[0] = null;
+    } else {
+      nodes[1] = null;
+    }
+    lst_fuzzySearch.getSelectionModel().clearSelection();
     NewMapDisplayController.fuzzyLocationSearch(activeText, lst_fuzzySearch);
   }
 
   public void onSearchDoctor(KeyEvent e) throws DBException {
     activeText = (TextField) e.getSource();
+    if (activeText == txt_location) {
+      nodes[0] = null;
+    } else {
+      nodes[1] = null;
+    }
+    lst_fuzzySearch.getSelectionModel().clearSelection();
     NewMapDisplayController.fuzzyDoctorSearch(activeText, lst_fuzzySearch);
   }
 
@@ -68,6 +80,11 @@ public class MapDoctorSearchController implements Controller {
     }
   }
 
+  public void clearDbNodes() {
+    this.nodes[0] = null;
+    this.nodes[1] = null;
+  }
+
   public JFXButton getSearchButton() {
     return this.btn_search;
   }
@@ -94,6 +111,7 @@ public class MapDoctorSearchController implements Controller {
 
   public void setKioskLocation(DbNode node) {
     this.nodes[0] = node;
+    this.lst_fuzzySearch.getSelectionModel().select(0);
   }
 
   public JFXButton getResetButton() {

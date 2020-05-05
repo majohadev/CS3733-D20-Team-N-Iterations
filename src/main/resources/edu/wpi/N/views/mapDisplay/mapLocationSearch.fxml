@@ -34,6 +34,7 @@
       <Line endX="-100.00001525878906" endY="40.19999694824219" layoutX="139.0" layoutY="130.0" startX="-100.00001525878906" startY="16.600006103515625" stroke="#e6ebf2" strokeMiterLimit="2.0" strokeWidth="2.0" style="-fx-stroke-dash-array: 8;" AnchorPane.leftAnchor="37.99998474121094" AnchorPane.topAnchor="145.60000610351562" />
       <JFXButton fx:id="btn_search" layoutX="197.0" layoutY="742.0" stylesheets="@../../css/newMapDisplay.css" text="Search" textFill="#e6ebf2" AnchorPane.leftAnchor="195.0" AnchorPane.topAnchor="750.0" />
       <JFXToggleButton fx:id="tg_handicap" layoutX="14.0" layoutY="739.0" prefHeight="62.0" prefWidth="160.0" styleClass="toggle" stylesheets="@../../css/newMapDisplay.css" text="Handicap" textFill="#e6ebf2" toggleColor="#4a69c6" toggleLineColor="#6c5c7f" unToggleColor="#4a69c6" unToggleLineColor="#e6ebf2" />
-      <JFXButton fx:id="btn_reset" layoutX="193.0" layoutY="801.0" stylesheets="@../../css/newMapDisplay.css" text="Reset" textFill="#e6ebf2" AnchorPane.topAnchor="800.0" />
+      <JFXButton fx:id="btn_reset" layoutX="195.0" layoutY="801.0" stylesheets="@../../css/newMapDisplay.css" text="Reset" textFill="#e6ebf2" AnchorPane.topAnchor="801.0" />
+      <JFXButton fx:id="btn_restRoom" layoutX="38.0" layoutY="801.0" prefHeight="39.0" prefWidth="160.0" styleClass="quick-access" stylesheets="@../../css/newMapDisplay.css" text="Restroom" />
    </children>
 </AnchorPane>
