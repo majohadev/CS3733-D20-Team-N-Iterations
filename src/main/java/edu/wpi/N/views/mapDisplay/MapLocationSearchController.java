@@ -24,6 +24,7 @@ public class MapLocationSearchController implements Controller {
   @FXML JFXButton btn_search;
   @FXML JFXToggleButton tg_handicap;
   @FXML JFXButton btn_reset;
+  @FXML JFXButton btn_restRoom;
   DbNode[] nodes = new DbNode[2];
 
   @Override
@@ -33,6 +34,12 @@ public class MapLocationSearchController implements Controller {
 
   public void onSearchLocation(KeyEvent e) throws DBException {
     activeText = (TextField) e.getSource();
+    if (activeText == txt_firstLocation) {
+      nodes[0] = null;
+    } else {
+      nodes[1] = null;
+    }
+    lst_fuzzySearch.getSelectionModel().clearSelection();
     NewMapDisplayController.fuzzyLocationSearch(activeText, lst_fuzzySearch);
   }
 
@@ -61,6 +68,11 @@ public class MapLocationSearchController implements Controller {
     return this.nodes;
   }
 
+  public void clearDbNodes() {
+    this.nodes[0] = null;
+    this.nodes[1] = null;
+  }
+
   public boolean getHandicap() {
     return this.tg_handicap.isSelected();
   }
@@ -87,5 +99,9 @@ public class MapLocationSearchController implements Controller {
 
   public JFXToggleButton getTgHandicap() {
     return this.tg_handicap;
+  }
+
+  public JFXButton getBtnRestRoom() {
+    return this.btn_restRoom;
   }
 }

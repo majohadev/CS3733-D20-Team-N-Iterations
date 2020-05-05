@@ -290,13 +290,13 @@
 //  // lst_doctorlocations.getSelectionModel().getSelectedItem());
 //  //  }
 //
-//  public void findPathToCafetaria(MouseEvent e) throws DBException {
-//    initPathfind(lst_firstLocation, MapDB.getNode("MRETL00203"));
-//  }
-//
-//  public void findPathToStarBucks(MouseEvent e) throws DBException {
-//    initPathfind(lst_firstLocation, MapDB.getNode("NRETL00201"));
-//  }
+////  public void findPathToCafetaria(MouseEvent e) throws DBException {
+////    initPathfind(lst_firstLocation, MapDB.getNode("MRETL00203"));
+////  }
+////
+////  public void findPathToStarBucks(MouseEvent e) throws DBException {
+////    initPathfind(lst_firstLocation, MapDB.getNode("NRETL00201"));
+////  }
 //
 ////  public void initPathfind(ListView<DbNode> firstLst, DbNode second) throws DBException {
 ////    DbNode first = firstLst.getSelectionModel().getSelectedItem();
