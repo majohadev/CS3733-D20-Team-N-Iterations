@@ -335,6 +335,10 @@ public class NewMapDisplayController implements Controller {
     mapBaseController.setFloor(first.getBuilding(), first.getFloor(), path);
     disableNonPathFloors();
     displayGoogleMaps(first, second);
+    ArrayList<String> directions = path.getDirections();
+    for (String s : directions) {
+      System.out.println(s);
+    }
     //    setTextDecription();
   }
 
