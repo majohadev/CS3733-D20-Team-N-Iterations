@@ -1,9 +1,6 @@
 package edu.wpi.N.views.mapEditor;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXCheckBox;
-import com.jfoenix.controls.JFXListView;
-import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.*;
 import edu.wpi.N.database.DBException;
 import java.io.IOException;
 import javafx.fxml.FXML;
@@ -16,8 +13,7 @@ public class MapEditorAlignNodeController {
   @FXML JFXButton btn_cancel;
   @FXML JFXButton btn_confirm;
   @FXML JFXListView lst_align_node;
-  @FXML JFXCheckBox alignX;
-  @FXML JFXCheckBox alignY;
+  @FXML JFXRadioButton alignX, alignY;
   @FXML JFXTextField txt_Pos;
   @FXML Pane pn_listClipper;
 

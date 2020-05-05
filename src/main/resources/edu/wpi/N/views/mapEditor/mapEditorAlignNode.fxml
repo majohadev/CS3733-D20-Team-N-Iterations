@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
-<?import com.jfoenix.controls.JFXCheckBox?>
 <?import com.jfoenix.controls.JFXListView?>
+<?import com.jfoenix.controls.JFXRadioButton?>
 <?import com.jfoenix.controls.JFXTextField?>
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
@@ -19,7 +21,7 @@
                 <Font name="Calibri" size="25.0" />
             </font>
         </Label>
-      <HBox layoutX="14.0" layoutY="61.0">
+      <HBox layoutX="15.0" layoutY="61.0" spacing="5.0">
          <children>
             <Pane fx:id="pn_listClipper" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-radius: 10;">
                <children>
@@ -28,8 +30,11 @@
             </Pane>
             <VBox alignment="BOTTOM_CENTER" spacing="20.0">
                <children>
-                  <JFXCheckBox fx:id="alignX" text="Align X" textFill="WHITE" unCheckedColor="WHITE" />
-                  <JFXCheckBox fx:id="alignY" text="Align Y" textFill="WHITE" unCheckedColor="WHITE" />
+                  <JFXRadioButton fx:id="alignX" selected="true" style="-jfx-selected-color: WHITE; -jfx-unselected-color: WHITE;" text="Align X" textFill="WHITE">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="alignmentRadio" />
+                     </toggleGroup></JFXRadioButton>
+                  <JFXRadioButton fx:id="alignY" style="-jfx-selected-color: WHITE; -jfx-unselected-color: WHITe;" text="Align Y" textFill="WHITE" toggleGroup="$alignmentRadio" />
                </children>
                <padding>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -47,6 +52,10 @@
                 <Font name="Calibri" size="16.0" />
             </font>
         </JFXButton>
-      <JFXTextField fx:id="txt_Pos" focusColor="#fdfdff" layoutX="163.0" layoutY="235.0" promptText="Position" unFocusColor="WHITE" />
+      <JFXTextField fx:id="txt_Pos" focusColor="#fdfdff" layoutX="163.0" layoutY="235.0" promptText="Position" stylesheets="@../../css/whiteTextComboBox.css" unFocusColor="WHITE">
+         <styleClass>
+            <String fx:value="jfx-combo-box" />
+            <String fx:value="cell" />
+         </styleClass></JFXTextField>
     </children>
 </AnchorPane>
