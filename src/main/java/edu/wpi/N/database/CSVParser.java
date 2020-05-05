@@ -62,7 +62,7 @@ public class CSVParser {
     } catch (Exception e) {
       // for debugging purposes
       System.out.println(row[0]);
-      throw (e);
+      e.printStackTrace();
     }
   }
 
@@ -76,17 +76,18 @@ public class CSVParser {
       String nodeID = row[0];
       int xcoord = Integer.parseInt(row[1]);
       int ycoord = Integer.parseInt(row[2]);
+
       String building = row[4];
 
       int floor;
-
-      if (building.equals("Faulkner")) {
+      floor = Integer.parseInt(row[3]);
+      /*  if (building.equals("Faulkner")) {
         floor = Integer.parseInt(row[3]);
       } else if (building.equals("Fuller Lower")) {
         return;
       } else {
         floor = convertFloor(row[3]);
-      }
+      }*/
 
       //      (building.equals("BTM")
       //              || building.equals("45 Francis")
@@ -109,7 +110,8 @@ public class CSVParser {
     } catch (Exception e) {
       // for debugging purposes
       System.out.println(row[0]);
-      throw (e);
+      e.printStackTrace();
+      // throw (e);
     }
   }
 

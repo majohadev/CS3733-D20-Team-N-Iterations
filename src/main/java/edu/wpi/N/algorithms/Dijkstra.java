@@ -4,7 +4,7 @@ import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Path;
 import java.util.*;
 
-public class Dijkstra extends AbsAlgo {
+public class Dijkstra extends AlgoTemplate {
 
   /**
    * Finds the shortest path from Start to Goal node using Dijkstra's algorithm

@@ -1,13 +1,14 @@
 package edu.wpi.N;
 
 import edu.wpi.N.database.*;
-import java.io.FileNotFoundException;
+import java.awt.*;
+import java.io.IOException;
 import java.sql.SQLException;
 
 public class Main {
 
   public static void main(String[] args)
-      throws SQLException, DBException, ClassNotFoundException, FileNotFoundException {
+      throws SQLException, DBException, ClassNotFoundException, IOException {
     MapDB.initDB();
     // ArduinoController periperal = new ArduinoController();
     // periperal.initialize();
@@ -19,6 +20,7 @@ public class Main {
     final InputStream INPUT_EDGES_DEFAULT = Main.class.getResourceAsStream(DEFAULT_PATHS);
     CSVParser.parseCSV(INPUT_NODES_DEFAULT);
     CSVParser.parseCSV(INPUT_EDGES_DEFAULT);*/
+
     App.launch(App.class, args);
   }
 }
