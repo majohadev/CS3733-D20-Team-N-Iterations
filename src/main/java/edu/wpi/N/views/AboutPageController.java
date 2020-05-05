@@ -22,6 +22,6 @@ public class AboutPageController implements Controller {
 
   @FXML
   public void onBtnBackClicked(MouseEvent event) throws IOException {
-    mainApp.switchScene("/edu/wpi/N/views/newMapDisplay.fxml", singleton);
+    mainApp.switchScene("/edu/wpi/N/views/mapDisplay/newMapDisplay.fxml", singleton);
   }
 }
