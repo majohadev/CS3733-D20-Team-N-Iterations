@@ -3,6 +3,7 @@ package edu.wpi.N.views.mapDisplay;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXNodesList;
 import edu.wpi.N.App;
+import edu.wpi.N.algorithms.Directions;
 import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
@@ -340,6 +341,7 @@ public class NewMapDisplayController implements Controller {
               locationSearchController.getFuzzyList().getItems().clear();
               locationSearchController.getTgHandicap().setSelected(false);
               mapBaseController.clearPath();
+              resetTextualDirections();
               enableAllFloorButtons();
               try {
                 setDefaultKioskNode();
@@ -362,6 +364,7 @@ public class NewMapDisplayController implements Controller {
               doctorSearchController.getFuzzyList().getItems().clear();
               doctorSearchController.getTgHandicap().setSelected(false);
               mapBaseController.clearPath();
+              resetTextualDirections();
               enableAllFloorButtons();
               try {
                 setDefaultKioskNode();
@@ -378,6 +381,7 @@ public class NewMapDisplayController implements Controller {
             e -> {
               DbNode first = locationSearchController.getDBNodes()[0];
               try {
+                resetTextualDirections();
                 this.path = singleton.savedAlgo.findQuickAccess(first, "REST");
                 mapBaseController.setFloor(first.getBuilding(), first.getFloor(), path);
                 if (path.size() == 0) {
@@ -461,6 +465,7 @@ public class NewMapDisplayController implements Controller {
     mapBaseController.clearPath();
     setGoogleButtonDisable(true);
     enableAllFloorButtons();
+    resetTextualDirections();
   }
 
   public void onIconClicked(MouseEvent e) throws IOException, DBException {
@@ -692,5 +697,30 @@ public class NewMapDisplayController implements Controller {
     if (!pathMain.equals("")) {
       mapQRController.getTextMain().setText(mainText);
     }
+
+    // For google maps
+    String googleDirections = "";
+    boolean isFirstFaulkner = this.path.get(0).getBuilding().equals("Faulkner");
+    boolean isSecondFaulkner = this.path.get(path.size() - 1).getBuilding().equals("Faulkner");
+    if (isFirstFaulkner ^ isSecondFaulkner) {
+      if (isFirstFaulkner) {
+        googleDirections = Directions.getGoogleDirections("Driving", false);
+      } else {
+        googleDirections = Directions.getGoogleDirections("Driving", true);
+      }
+    }
+
+    if (!googleDirections.equals("")) {
+      mapQRController.getTextDrive().setText(googleDirections);
+    }
+  }
+
+  public void resetTextualDirections() {
+    if (mapQRController == null) {
+      return;
+    }
+    mapQRController.getTextFaulkner().clear();
+    mapQRController.getTextDrive().clear();
+    mapQRController.getTextMain().clear();
   }
 }
