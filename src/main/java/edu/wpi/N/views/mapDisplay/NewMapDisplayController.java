@@ -19,6 +19,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
@@ -40,6 +41,7 @@ public class NewMapDisplayController implements Controller {
   @FXML Pane pn_mapContainer;
   @FXML Pane pn_googleMapView;
   @FXML Pane pn_hospitalView;
+  @FXML Label lbl_building_floor;
 
   @FXML MapBaseController mapBaseController;
   MapLocationSearchController locationSearchController;
@@ -53,6 +55,7 @@ public class NewMapDisplayController implements Controller {
   JFXNodesList buildingButtonList;
   JFXNodesList faulknerButtonList;
   JFXNodesList mainButtonList;
+  JFXButton btn_google;
 
   @Override
   public void setMainApp(App mainApp) {
@@ -73,6 +76,7 @@ public class NewMapDisplayController implements Controller {
     this.mainButtonList = new JFXNodesList();
     this.pn_hospitalView = mapBaseController.getAnchorPane();
     mapBaseController.setFloor(this.currentBuilding, this.currentFloor, this.path);
+    setFloorBuildingText(this.currentFloor, this.currentBuilding);
     pn_mapContainer.getChildren().setAll(pn_hospitalView);
     pn_iconBar.getChildren().get(0).setStyle("-fx-background-color: #4A69C6;");
     initFloorButtons();
@@ -110,8 +114,9 @@ public class NewMapDisplayController implements Controller {
     styleBuildingButtons(btn_faulkner);
     JFXButton btn_main = new JFXButton("Main");
     styleBuildingButtons(btn_main);
-    JFXButton btn_google = new JFXButton("Google");
+    btn_google = new JFXButton("Street View");
     styleBuildingButtons(btn_google);
+    setGoogleButtonDisable(true);
 
     // Faulkner Buttons
     JFXButton btn_faulkner1 = new JFXButton("F1");
@@ -172,7 +177,7 @@ public class NewMapDisplayController implements Controller {
     buildingButtonList.addAnimatedNode(btn_google);
 
     buildingButtonList.setSpacing(100);
-    buildingButtonList.setRotate(-90);
+    buildingButtonList.setRotate(90);
     faulknerButtonList.setSpacing(15);
     mainButtonList.setSpacing(15);
 
@@ -246,6 +251,7 @@ public class NewMapDisplayController implements Controller {
     mapBaseController.clearPath();
     this.currentFloor = newFloor;
     this.currentBuilding = newBuilding;
+    setFloorBuildingText(this.currentFloor, this.currentBuilding);
     setDefaultKioskNode();
     mapBaseController.setFloor(this.currentBuilding, this.currentFloor, this.path);
   }
@@ -288,7 +294,7 @@ public class NewMapDisplayController implements Controller {
         .setOnMouseClicked(
             e -> {
               this.path.clear();
-              //      enableAllFloorButtons;
+              setGoogleButtonDisable(true);
               locationSearchController.getTextFirstLocation().clear();
               locationSearchController.getTextSecondLocation().clear();
               locationSearchController.getFuzzyList().getItems().clear();
@@ -310,6 +316,7 @@ public class NewMapDisplayController implements Controller {
             e -> {
               this.path.clear();
               enableAllFloorButtons();
+              setGoogleButtonDisable(true);
               doctorSearchController.getTextLocation().clear();
               doctorSearchController.getTxtDoctor().clear();
               doctorSearchController.getFuzzyList().getItems().clear();
@@ -340,7 +347,9 @@ public class NewMapDisplayController implements Controller {
   public void displayGoogleMaps(DbNode first, DbNode second) throws IOException {
     boolean isFirstFaulkner = first.getBuilding().equals("Faulkner");
     boolean isSecondFaulkner = second.getBuilding().equals("Faulkner");
+    setGoogleButtonDisable(true);
     if (isFirstFaulkner ^ isSecondFaulkner) {
+      setGoogleButtonDisable(false);
       FXMLLoader loader = new FXMLLoader();
       loader.setLocation(App.class.getResource("views/mapDisplay/googleMap.fxml"));
 
@@ -382,6 +391,7 @@ public class NewMapDisplayController implements Controller {
 
   public void onIconClicked(MouseEvent e) throws IOException, DBException {
     mapBaseController.clearPath();
+    setGoogleButtonDisable(true);
     enableAllFloorButtons();
     Pane src = (Pane) e.getSource();
     pn_iconBar.getChildren().forEach(n -> n.setStyle("-fx-background-color: #263051"));
@@ -503,5 +513,13 @@ public class NewMapDisplayController implements Controller {
 
   public void switchHospitalView() {
     pn_mapContainer.getChildren().setAll(pn_hospitalView);
+  }
+
+  public void setGoogleButtonDisable(boolean b) {
+    this.btn_google.setDisable(b);
+  }
+
+  public void setFloorBuildingText(int floor, String building) {
+    lbl_building_floor.setText(building + ", " + floor);
   }
 }

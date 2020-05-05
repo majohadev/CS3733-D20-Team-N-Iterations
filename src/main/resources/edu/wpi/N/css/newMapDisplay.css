@@ -37,3 +37,8 @@
     -fx-background-color: #263051;
     -fx-font-size: 18;
 }
+
+.label {
+    -fx-text-fill: #E6EBF2;
+    -fx-font-size: 15;
+}
