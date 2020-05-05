@@ -197,6 +197,7 @@ public class NewMapDisplayController implements Controller {
   }
 
   public void handleFloorButtonClicked(String txt) throws DBException {
+    collapseAllFloorButtons();
     if (txt.equals("F1")) {
       changeFloor(1, "Faulkner");
       switchHospitalView();
@@ -241,9 +242,10 @@ public class NewMapDisplayController implements Controller {
       changeFloor(6, "Main");
       switchHospitalView();
       setDefaultKioskNode();
-    } else if (txt.equals("Google")) {
-      // TODO DEFAULT GOOGLE MAP VIEW
+    } else if (txt.equals("Street View")) {
       switchGoogleView();
+      setFloorBuildingText(-1, "");
+      // TODO DEFAULT GOOGLE MAP VIEW
     }
   }
 
@@ -338,6 +340,7 @@ public class NewMapDisplayController implements Controller {
       return;
     }
     this.path = singleton.savedAlgo.findPath(first, second, isSelected);
+    switchHospitalView();
     mapBaseController.setFloor(first.getBuilding(), first.getFloor(), path);
     disableNonPathFloors();
     displayGoogleMaps(first, second);
@@ -390,6 +393,7 @@ public class NewMapDisplayController implements Controller {
   }
 
   public void onIconClicked(MouseEvent e) throws IOException, DBException {
+    collapseAllFloorButtons();
     mapBaseController.clearPath();
     setGoogleButtonDisable(true);
     enableAllFloorButtons();
@@ -509,6 +513,7 @@ public class NewMapDisplayController implements Controller {
 
   public void switchGoogleView() {
     pn_mapContainer.getChildren().setAll(pn_googleMapView);
+    System.out.println("Hello");
   }
 
   public void switchHospitalView() {
@@ -520,6 +525,35 @@ public class NewMapDisplayController implements Controller {
   }
 
   public void setFloorBuildingText(int floor, String building) {
-    lbl_building_floor.setText(building + ", " + floor);
+    if (floor == -1) {
+      lbl_building_floor.setText("Driving Directions");
+    }
+    if (!building.equals("Faulkner")) {
+      if (floor == 1) {
+        lbl_building_floor.setText(building + ", " + "L2");
+      } else if (floor == 2) {
+        lbl_building_floor.setText(building + ", " + "L1");
+      }
+      if (floor == 3) {
+        lbl_building_floor.setText(building + ", " + "G");
+      }
+      if (floor == 4) {
+        lbl_building_floor.setText(building + ", " + "1");
+      }
+      if (floor == 5) {
+        lbl_building_floor.setText(building + ", " + "2");
+      }
+      if (floor == 6) {
+        lbl_building_floor.setText(building + ", " + "3");
+      }
+    } else {
+      lbl_building_floor.setText(building + ", " + floor);
+    }
+  }
+
+  public void collapseAllFloorButtons() {
+    buildingButtonList.animateList(false);
+    mainButtonList.animateList(false);
+    faulknerButtonList.animateList(false);
   }
 }

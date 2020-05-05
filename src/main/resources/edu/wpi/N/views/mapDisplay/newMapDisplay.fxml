@@ -77,6 +77,6 @@
                </children></AnchorPane>
          </children></AnchorPane>
       <AnchorPane fx:id="pn_floors" layoutX="1735.0" layoutY="14.0" prefHeight="55.0" prefWidth="90.0" />
-      <Label fx:id="lbl_building_floor" layoutX="416.0" layoutY="14.0" prefHeight="55.0" prefWidth="321.0" style="-fx-background-color: #263051;" />
+      <Label fx:id="lbl_building_floor" alignment="CENTER" layoutX="416.0" layoutY="14.0" prefHeight="55.0" prefWidth="321.0" style="-fx-background-color: #263051;" stylesheets="@../../css/newMapDisplay.css" />
    </children>
 </AnchorPane>

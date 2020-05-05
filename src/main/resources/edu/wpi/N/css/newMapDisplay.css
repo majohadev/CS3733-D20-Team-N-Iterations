@@ -39,6 +39,8 @@
 }
 
 .label {
+    -fx-text-alignment: center;
     -fx-text-fill: #E6EBF2;
-    -fx-font-size: 15;
+    -fx-font-size: 24;
+    -fx-background-radius: 25px;
 }

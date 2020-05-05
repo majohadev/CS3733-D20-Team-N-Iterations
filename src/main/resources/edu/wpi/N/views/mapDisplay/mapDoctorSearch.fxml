@@ -19,7 +19,7 @@
          </font>
       </Label>
       <TextField fx:id="txt_location" alignment="CENTER" layoutX="67.0" layoutY="106.0" onKeyPressed="#onSearchLocation" prefHeight="35.0" prefWidth="255.0" promptText="Please enter a location" styleClass="list-cell" stylesheets="@../../css/newMapDisplay.css" AnchorPane.leftAnchor="65.0" AnchorPane.topAnchor="110.0" />
-      <TextField fx:id="txt_doctor" alignment="CENTER" layoutX="66.0" layoutY="170.0" onKeyPressed="#onSearchDoctor" prefHeight="35.0" prefWidth="255.0" promptText="Please enter a location" styleClass="list-cell" stylesheets="@../../css/newMapDisplay.css" AnchorPane.leftAnchor="65.0" AnchorPane.topAnchor="170.0" />
+      <TextField fx:id="txt_doctor" alignment="CENTER" layoutX="66.0" layoutY="170.0" onKeyPressed="#onSearchDoctor" prefHeight="35.0" prefWidth="255.0" promptText="Please enter a doctor" styleClass="list-cell" stylesheets="@../../css/newMapDisplay.css" AnchorPane.leftAnchor="65.0" AnchorPane.topAnchor="170.0" />
       <ImageView fitHeight="28.0" fitWidth="33.0" layoutX="25.0" layoutY="112.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="112.0">
          <image>
             <Image url="@../../images/mapDisplayIcons/pinIcon.png" />
