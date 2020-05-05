@@ -6,6 +6,7 @@ import edu.wpi.N.views.Controller;
 import javafx.fxml.FXML;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.ImageView;
 
 public class MapQRController implements Controller {
 
@@ -16,6 +17,9 @@ public class MapQRController implements Controller {
   @FXML TextArea txt_faulkner_directions;
   @FXML TextArea txt_main_directions;
   @FXML TextArea txt_drive_directions;
+  @FXML ImageView img_faulkner;
+  @FXML ImageView img_main;
+  @FXML ImageView img_drive;
 
   @Override
   public void setMainApp(App mainApp) {}
@@ -42,5 +46,17 @@ public class MapQRController implements Controller {
 
   public TextArea getTextDrive() {
     return this.txt_drive_directions;
+  }
+
+  public ImageView getImageFaulkner() {
+    return this.img_faulkner;
+  }
+
+  public ImageView getImageMain() {
+    return this.img_main;
+  }
+
+  public ImageView getImageDrive() {
+    return this.img_drive;
   }
 }

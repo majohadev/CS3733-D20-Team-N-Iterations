@@ -60,7 +60,7 @@
 
 .jfx-tab-pane {
     -fx-pref-width: 345px;
-    -fx-pref-height: 500px;
+    -fx-pref-height: 800px;
 }
 
 .jfx-tab-pane .tab-selected-line {

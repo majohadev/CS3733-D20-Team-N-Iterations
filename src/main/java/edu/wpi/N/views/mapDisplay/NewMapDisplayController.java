@@ -11,6 +11,7 @@ import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Path;
 import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.entities.employees.Doctor;
+import edu.wpi.N.qrcontrol.QRGenerator;
 import edu.wpi.N.views.Controller;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 
-public class NewMapDisplayController implements Controller {
+public class NewMapDisplayController extends QRGenerator implements Controller {
   private App mainApp = null;
   private StateSingleton singleton;
 
@@ -461,6 +462,7 @@ public class NewMapDisplayController implements Controller {
   }
 
   public void resetMap() {
+    this.path = new Path(new LinkedList<>());
     collapseAllFloorButtons();
     mapBaseController.clearPath();
     setGoogleButtonDisable(true);
@@ -496,6 +498,7 @@ public class NewMapDisplayController implements Controller {
       loader = new FXMLLoader(getClass().getResource("mapQR.fxml"));
       Pane pane = loader.load();
       mapQRController = loader.getController();
+      resetTextualDirections();
       setDirectionsTab();
       setTextDescription();
       setDefaultKioskNode();
@@ -673,8 +676,9 @@ public class NewMapDisplayController implements Controller {
       }
     }
 
-    ArrayList<String> faulknerDirections;
-    ArrayList<String> mainDirections;
+    ArrayList<String> faulknerDirections = new ArrayList<>();
+    ArrayList<String> mainDirections = new ArrayList<>();
+
     if (pathFaulkner.size() > 0) {
       faulknerDirections = pathFaulkner.getDirections();
       for (String s : faulknerDirections) {
@@ -693,9 +697,11 @@ public class NewMapDisplayController implements Controller {
 
     if (!pathFaulkner.equals("")) {
       mapQRController.getTextFaulkner().setText(faulknerText);
+      mapQRController.getImageFaulkner().setImage(generateImage(faulknerDirections, false));
     }
     if (!pathMain.equals("")) {
       mapQRController.getTextMain().setText(mainText);
+      mapQRController.getImageMain().setImage(generateImage(mainDirections, false));
     }
 
     // For google maps
@@ -712,6 +718,9 @@ public class NewMapDisplayController implements Controller {
 
     if (!googleDirections.equals("")) {
       mapQRController.getTextDrive().setText(googleDirections);
+      ArrayList<String> driveDirections = new ArrayList<>();
+      driveDirections.add(googleDirections);
+      mapQRController.getImageDrive().setImage(generateImage(driveDirections, false));
     }
   }
 
@@ -722,5 +731,12 @@ public class NewMapDisplayController implements Controller {
     mapQRController.getTextFaulkner().clear();
     mapQRController.getTextDrive().clear();
     mapQRController.getTextMain().clear();
+    try {
+      mapQRController.getImageFaulkner().setImage(null);
+      mapQRController.getImageMain().setImage(null);
+      mapQRController.getImageDrive().setImage(null);
+    } catch (NullPointerException e) {
+      return;
+    }
   }
 }
