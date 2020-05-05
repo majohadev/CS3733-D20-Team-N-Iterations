@@ -23,6 +23,7 @@ public class MapLocationSearchController implements Controller {
   @FXML TextField activeText;
   @FXML JFXButton btn_search;
   @FXML JFXToggleButton tg_handicap;
+  @FXML JFXButton btn_reset;
   DbNode[] nodes = new DbNode[2];
 
   @Override
@@ -38,7 +39,10 @@ public class MapLocationSearchController implements Controller {
   public void onItemSelected(MouseEvent e) {
     try {
       ListView lst = (ListView) e.getSource();
-      activeText.setText(lst.getSelectionModel().getSelectedItem().toString());
+      activeText.setText(
+          lst.getSelectionModel().getSelectedItem().toString()
+              + ", "
+              + ((DbNode) lst.getSelectionModel().getSelectedItem()).getBuilding());
       if (activeText == txt_firstLocation) {
         nodes[0] = (DbNode) lst.getSelectionModel().getSelectedItem();
       } else {
@@ -59,5 +63,29 @@ public class MapLocationSearchController implements Controller {
 
   public boolean getHandicap() {
     return this.tg_handicap.isSelected();
+  }
+
+  public TextField getTextFirstLocation() {
+    return this.txt_firstLocation;
+  }
+
+  public TextField getTextSecondLocation() {
+    return this.txt_secondLocation;
+  }
+
+  public JFXButton getResetButton() {
+    return this.btn_reset;
+  }
+
+  public void setKioskLocation(DbNode node) {
+    this.nodes[0] = node;
+  }
+
+  public ListView getFuzzyList() {
+    return this.lst_fuzzySearch;
+  }
+
+  public JFXToggleButton getTgHandicap() {
+    return this.tg_handicap;
   }
 }
