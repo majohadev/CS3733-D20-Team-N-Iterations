@@ -40,7 +40,14 @@ public class MapDoctorSearchController implements Controller {
   public void onItemSelected(MouseEvent e) {
     try {
       ListView lst = (ListView) e.getSource();
-      activeText.setText(lst.getSelectionModel().getSelectedItem().toString());
+      if (activeText == txt_location) {
+        activeText.setText(
+            lst.getSelectionModel().getSelectedItem().toString()
+                + ", "
+                + ((DbNode) lst.getSelectionModel().getSelectedItem()).getBuilding());
+      } else {
+        activeText.setText(lst.getSelectionModel().getSelectedItem().toString());
+      }
       if (activeText == txt_location) {
         nodes[0] = (DbNode) lst.getSelectionModel().getSelectedItem();
       } else {

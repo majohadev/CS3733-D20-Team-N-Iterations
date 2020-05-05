@@ -160,6 +160,7 @@ public class NewMapDisplayController implements Controller {
     onFloorButtonClicked(btn_main3);
     onFloorButtonClicked(btn_main4);
     onFloorButtonClicked(btn_main5);
+    onFloorButtonClicked(btn_main6);
     onFloorButtonClicked(btn_google);
 
     mainButtonList
@@ -308,7 +309,7 @@ public class NewMapDisplayController implements Controller {
         .setOnMouseClicked(
             e -> {
               this.path.clear();
-              //      enableAllFloorButtons;
+              enableAllFloorButtons();
               doctorSearchController.getTextLocation().clear();
               doctorSearchController.getTxtDoctor().clear();
               doctorSearchController.getFuzzyList().getItems().clear();
@@ -419,7 +420,7 @@ public class NewMapDisplayController implements Controller {
 
   public void displayErrorMessage(String str) {
     Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-    errorAlert.setHeaderText("Something went WONG!");
+    errorAlert.setHeaderText("Something went wong...");
     errorAlert.setContentText(str);
     errorAlert.showAndWait();
   }
@@ -454,13 +455,17 @@ public class NewMapDisplayController implements Controller {
 
     try {
       if (locationSearchController != null) {
-        locationSearchController.getTextFirstLocation().setText(kiosk.toString());
+        locationSearchController
+            .getTextFirstLocation()
+            .setText(kiosk.toString() + ", " + kiosk.getBuilding());
         locationSearchController.getFuzzyList().getItems().add(kiosk);
         locationSearchController.getFuzzyList().getSelectionModel().select(0);
         locationSearchController.setKioskLocation(kiosk);
       }
       if (doctorSearchController != null) {
-        doctorSearchController.getTextLocation().setText(kiosk.toString());
+        doctorSearchController
+            .getTextLocation()
+            .setText(kiosk.toString() + ", " + kiosk.getBuilding());
         doctorSearchController.getFuzzyList().getItems().add(kiosk);
         doctorSearchController.getFuzzyList().getSelectionModel().select(0);
         doctorSearchController.setKioskLocation(kiosk);

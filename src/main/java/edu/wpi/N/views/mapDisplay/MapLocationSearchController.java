@@ -39,7 +39,10 @@ public class MapLocationSearchController implements Controller {
   public void onItemSelected(MouseEvent e) {
     try {
       ListView lst = (ListView) e.getSource();
-      activeText.setText(lst.getSelectionModel().getSelectedItem().toString());
+      activeText.setText(
+          lst.getSelectionModel().getSelectedItem().toString()
+              + ", "
+              + ((DbNode) lst.getSelectionModel().getSelectedItem()).getBuilding());
       if (activeText == txt_firstLocation) {
         nodes[0] = (DbNode) lst.getSelectionModel().getSelectedItem();
       } else {

@@ -34,17 +34,12 @@ public class MapBaseController implements Controller {
   private StateSingleton singleton;
 
   // Screen Constants
-  private final double BAR_WIDTH = 300;
-  private final float IMAGE_WIDTH = 2475;
-  private final double IMAGE_HEIGHT = 1485;
-  private final double SCREEN_WIDTH = 1920;
-  private final double SCREEN_HEIGHT = 1080;
-  private final double MAP_WIDTH = SCREEN_WIDTH - BAR_WIDTH;
-  private final double MAP_HEIGHT = (MAP_WIDTH / IMAGE_WIDTH) * IMAGE_HEIGHT;
-  private final double HORIZONTAL_OFFSET = 10;
-  private final double VERTICAL_OFFSET = 5;
-  private final double HORIZONTAL_SCALE = (MAP_WIDTH) / IMAGE_WIDTH;
-  private final double VERTICAL_SCALE = (MAP_HEIGHT) / IMAGE_HEIGHT;
+  double IMAGE_WIDTH;
+  double IMAGE_HEIGHT;
+  double MAP_WIDTH;
+  double MAP_HEIGHT;
+  double HORIZONTAL_SCALE;
+  double VERTICAL_SCALE;
 
   // Zoom constants
   private final double MIN_MAP_SCALE = 1;
@@ -112,21 +107,7 @@ public class MapBaseController implements Controller {
    */
   public void initialize() throws DBException {
     initPathAnim();
-  }
-
-  /**
-   * sets the current building of the map display
-   *
-   * @param building the name of the building to be displayed
-   * @param floor the new floor of the map display
-   * @param currentPath the current path finding nodes
-   */
-  public void setBuilding(String building, int floor, Path currentPath) throws DBException {
-    clearPath();
-    img_map.setImage(singleton.mapImageLoader.getMap(building, floor));
-    if (!(currentPath == null || currentPath.isEmpty())) {
-      drawPath(currentPath, 1);
-    }
+    setFaulknerDefaults();
   }
 
   /**
@@ -141,11 +122,32 @@ public class MapBaseController implements Controller {
     clearPath();
     if (!building.equals("Faulkner")) {
       building = "Main";
+      setMainDefaults();
+    } else {
+      setFaulknerDefaults();
     }
     img_map.setImage(singleton.mapImageLoader.getMap(building, floor));
     if (!(currentPath == null || currentPath.isEmpty())) {
-      drawPath(currentPath, floor);
+      drawPath(currentPath, floor, building);
     }
+  }
+
+  public void setFaulknerDefaults() {
+    IMAGE_WIDTH = 2475;
+    IMAGE_HEIGHT = 1485;
+    MAP_WIDTH = 1520;
+    MAP_HEIGHT = 912;
+    HORIZONTAL_SCALE = MAP_WIDTH / IMAGE_WIDTH;
+    VERTICAL_SCALE = MAP_HEIGHT / IMAGE_HEIGHT;
+  }
+
+  public void setMainDefaults() {
+    IMAGE_WIDTH = 5000;
+    IMAGE_HEIGHT = 3400;
+    MAP_WIDTH = 1444;
+    MAP_HEIGHT = 982;
+    HORIZONTAL_SCALE = MAP_WIDTH / IMAGE_WIDTH;
+    VERTICAL_SCALE = MAP_HEIGHT / IMAGE_HEIGHT;
   }
 
   /**
@@ -175,12 +177,19 @@ public class MapBaseController implements Controller {
    * @param currentPath Path object containing the DbNodes picked by pathfinder algorithm
    * @param floor The current floor
    */
-  public void drawPath(Path currentPath, int floor) {
+  public void drawPath(Path currentPath, int floor, String building) {
+    clearPath();
     DbNode firstNode, secondNode;
     for (int i = 0; i < currentPath.size() - 1; i++) {
       firstNode = currentPath.get(i);
       secondNode = currentPath.get(i + 1);
-      if (firstNode.getFloor() == floor && secondNode.getFloor() == floor) {
+      boolean isFirstFaulkner = firstNode.getBuilding().equals("Faulkner");
+      boolean isSecondFaulkner = secondNode.getBuilding().equals("Faulkner");
+      boolean drawFaulkner = building.equals("Faulkner") && isFirstFaulkner && isSecondFaulkner;
+      boolean drawMain = !building.equals("Faulkner") && !isFirstFaulkner && !isSecondFaulkner;
+      if (firstNode.getFloor() == floor
+          && secondNode.getFloor() == floor
+          && (drawFaulkner || drawMain)) {
         if (i == 0) {
           drawCircle(firstNode, START_NODE_COLOR);
         } else if (i == currentPath.size() - 2) {
@@ -188,10 +197,10 @@ public class MapBaseController implements Controller {
         }
         Line line =
             new Line(
-                scaleX(secondNode.getX()) + HORIZONTAL_OFFSET,
-                scaleY(secondNode.getY()) + VERTICAL_OFFSET,
-                scaleX(firstNode.getX()) + HORIZONTAL_OFFSET,
-                scaleY(firstNode.getY()) + VERTICAL_OFFSET);
+                scaleX(secondNode.getX()),
+                scaleY(secondNode.getY()),
+                scaleX(firstNode.getX()),
+                scaleY(firstNode.getY()));
         styleLine(line);
         pn_path.getChildren().add(line);
       }
@@ -251,8 +260,8 @@ public class MapBaseController implements Controller {
   public void drawCircle(DbNode node, Color c) {
     Circle circle = new Circle();
     circle.setRadius(5);
-    circle.setCenterX(scaleX(node.getX()) + HORIZONTAL_OFFSET);
-    circle.setCenterY(scaleY(node.getY()) + VERTICAL_OFFSET);
+    circle.setCenterX(scaleX(node.getX()));
+    circle.setCenterY(scaleY(node.getY()));
     circle.setFill(c);
     pn_path.getChildren().add(circle);
   }
