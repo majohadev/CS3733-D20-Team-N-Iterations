@@ -8,6 +8,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -20,7 +21,11 @@
         </Label>
       <HBox layoutX="14.0" layoutY="61.0">
          <children>
-              <JFXListView fx:id="lst_align_node" prefHeight="159.0" prefWidth="350.0" style="-fx-background-radius: 10; -fx-border-radius: 10;" />
+            <Pane fx:id="pn_listClipper" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-radius: 10;">
+               <children>
+                    <JFXListView fx:id="lst_align_node" prefHeight="159.0" prefWidth="350.0" />
+               </children>
+            </Pane>
             <VBox alignment="BOTTOM_CENTER" spacing="20.0">
                <children>
                   <JFXCheckBox fx:id="alignX" text="Align X" textFill="WHITE" unCheckedColor="WHITE" />

@@ -17,6 +17,13 @@
         <items>
             <AnchorPane maxHeight="110.0" maxWidth="1920.0" minHeight="110.0" minWidth="0.0" prefHeight="190.0" prefWidth="1918.0" style="-fx-background-color: #002186;" SplitPane.resizableWithParent="false">
                 <children>
+                  <JFXButton fx:id="btn_changeAlgo" layoutX="223.0" layoutY="14.0" onMouseClicked="#changeAlgorithm" text="Change Algorithm" textFill="WHITE" />
+                  <JFXComboBox fx:id="cb_changeAlgo" focusColor="#cddaff" layoutX="205.0" layoutY="43.0" prefHeight="25.0" prefWidth="170.0" promptText="Change Algorithm" unFocusColor="WHITE" />
+                    <JFXButton fx:id="btn_home" buttonType="RAISED" layoutX="-9.0" layoutY="22.0" onMouseClicked="#onBtnHomeClicked" text="Back" textFill="WHITE">
+                        <font>
+                            <Font name="Calibri Bold" size="36.0" />
+                        </font>
+                    </JFXButton>
                     <ImageView fitHeight="110.0" fitWidth="167.0" layoutX="696.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="true">
                         <image>
                             <Image url="@../../images/hospitalLogo/Brigham_and_Womens_Hospital_logo.svg.png" />
@@ -42,16 +49,16 @@
                         <Pane fx:id="pn_display" onMouseClicked="#onPaneDisplayClicked" />
                      </children>
                   </StackPane>
+                   <!--
                   <JFXButton fx:id="btn_home" buttonType="RAISED" layoutX="275.0" layoutY="378.0" onMouseClicked="#onBtnHomeClicked" prefHeight="52.0" prefWidth="104.0" ripplerFill="#002186" style="-fx-background-color: #00339A;" styleClass="animated-option-button" stylesheets="@../../css/MapDisplayFloors.css" text="Home" textFill="WHITE">
                      <font>
                         <Font size="24.0" />
                      </font>
                   </JFXButton>
+                  -->
                   <Pane fx:id="pn_changeFloor" layoutX="1790.0" layoutY="9.0" prefHeight="550.0" prefWidth="131.0" />
                   <Pane fx:id="pn_editor" layoutX="1300.0" layoutY="20.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="280.0" prefWidth="470.0" />
                   <Pane fx:id="pn_elev" layoutX="1790.0" layoutY="452.0" prefHeight="510.0" prefWidth="131.0" visible="false" />
-                  <JFXButton fx:id="btn_changeAlgo" layoutX="70.0" layoutY="260.0" onMouseClicked="#changeAlgorithm" text="Change Algorithm" />
-                  <JFXComboBox fx:id="cb_changeAlgo" layoutX="46.0" layoutY="299.0" prefHeight="25.0" prefWidth="170.0" promptText="Change Algorithm" />
                   <JFXButton fx:id="btn_cancel_elev" buttonType="RAISED" disable="true" layoutX="275.0" layoutY="440.0" onMouseClicked="#onBtnCancelElevClicked" prefHeight="52.0" prefWidth="104.0" ripplerFill="#002186" style="-fx-background-color: #00339A;" styleClass="animated-option-button" stylesheets="@../../css/MapDisplayFloors.css" text="Exit" textFill="WHITE">
                      <font>
                         <Font size="24.0" />

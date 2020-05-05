@@ -4,6 +4,7 @@
 <?import com.jfoenix.controls.JFXListView?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="280.0" prefWidth="470.0" style="-fx-background-color: #002186; -fx-background-radius: 10; -fx-border-radius: 10;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.mapEditor.MapEditorDeleteEdgeController">
@@ -13,7 +14,11 @@
             <Font name="Calibri" size="25.0" />
          </font>
       </Label>
-      <JFXListView fx:id="lst_delete_edge" layoutX="14.0" layoutY="61.0" prefHeight="159.0" prefWidth="442.0" style="-fx-background-radius: 10; -fx-border-radius: 10;" />
+      <Pane fx:id="pn_listClipper" layoutX="15.0" layoutY="61.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-radius: 10;">
+         <children>
+            <JFXListView fx:id="lst_delete_edge" prefHeight="159.0" prefWidth="442.0" />
+         </children>
+      </Pane>
       <JFXButton fx:id="btn_cancel" layoutX="14.0" layoutY="229.0" prefHeight="37.0" prefWidth="92.0" text="Cancel" textFill="WHITE">
          <font>
             <Font name="Calibri" size="16.0" />
