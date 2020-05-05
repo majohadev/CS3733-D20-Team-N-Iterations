@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #263051;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.AboutPageController">
+   <children>
+      <Label layoutX="895.0" layoutY="70.0" styleClass="label-header" stylesheets="@../css/sanitationRequestUI.css" text="About" />
+      <Separator layoutX="610.0" layoutY="151.0" prefWidth="700.0" stylesheets="@../css/sanitationRequestUI.css" />
+      <Label alignment="CENTER" layoutX="70.0" layoutY="170.0" prefHeight="696.0" prefWidth="1780.0" styleClass="label-mid-size" stylesheets="@../css/sanitationRequestUI.css" text="This application was made by a team of students as part of the CS3733-D20 Software Engineering course provided by the Worcester Polytechnic Institute Computer Science Department. The following is a list of the people who contributed to this application:&#10;&#10;Professor Wilson Wong: Vice President of Software Engineering&#10;Sam Goldman: Team Coach&#10;Michael Laks: Project Manager (User Interface)&#10;Tian Yu Fan: Lead Software Engineer (User Interface)&#10;Noah Preston Capucilli-Shatan: Assistant Lead Software Engineer (Database)&#10;Ivan Eroshenko: Assistant Lead Software Engineer (Algorithms)&#10;Chris Lee: Scrum Master (Database)&#10;Kaitlyn Fichtner: Documentation Analyst (Algorithms)&#10;Nick Wood: Software Engineer (User Interface)&#10;Matt Johannesen: Software Engineer (User Interface)&#10;Evan Llewellyn: Software Engineer (Algorithms)&#10;Nick Pelletier: Software Engineer (Database)&#10;&#10;We would also like to thank Brigham and Women's Hospital, along with their representative Andrew Shinn, for the time and input they gave during the development of this application." textAlignment="CENTER" textFill="WHITE" wrapText="true">
+         <font>
+            <Font name="Calibri" size="24.0" />
+         </font>
+      </Label>
+      <JFXButton fx:id="btn_back" alignment="CENTER" buttonType="RAISED" layoutX="848.0" layoutY="901.0" onMouseClicked="#onBtnBackClicked" prefHeight="52.0" prefWidth="104.0" ripplerFill="#002186" styleClass="jfx-button-regular" stylesheets="@../css/sanitationRequestUI.css" text="Back" textFill="WHITE">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </JFXButton>
+   </children>
+</AnchorPane>
