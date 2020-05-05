@@ -20,7 +20,7 @@ public class HomeController implements Controller {
   }
 
   public void onBtnMapClicked() throws IOException {
-    this.mainApp.switchScene("/edu/wpi/N/views/mapDisplay/mapDisplay.fxml", singleton);
+    this.mainApp.switchScene("/edu/wpi/N/views/mapDisplay/newMapDisplay.fxml", singleton);
   }
 
   public void onBtnFileClicked() throws IOException {

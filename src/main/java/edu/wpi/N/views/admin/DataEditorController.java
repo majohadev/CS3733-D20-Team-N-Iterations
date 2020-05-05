@@ -111,7 +111,7 @@ public class DataEditorController implements Controller {
     // reload map data into singleton
     singleton.savedAlgo.uploadMapData();
 
-    MapDB.setKiosk("NSERV00301", 180);
+    // MapDB.setKiosk("NSERV00301", 180);
   }
 
   /**

@@ -1,6 +1,5 @@
 package edu.wpi.N.algorithms;
 
-import edu.wpi.N.database.DBException;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Path;
 import java.util.*;
@@ -10,19 +9,18 @@ public class BFS extends AbsAlgo {
   /**
    * Finds the shortest path from Start to Goal node using the BFS algorithm
    *
+   * @param mapData: HashMap of the nodes and edges
    * @param startNode: The start node
    * @param endNode: The destination node
    * @param handicap: Boolean saying whether path should be handicap accessible
-   * @return: Path object indicating the shortest path to the Goal Node from Start Node
-   * @throws DBException
+   * @return: Path object indicating a short path to the Goal Node from Start Node
    */
   @Override
   public Path findPath(
       HashMap<String, LinkedList<DbNode>> mapData,
       DbNode startNode,
       DbNode endNode,
-      boolean handicap)
-      throws DBException {
+      boolean handicap) {
     try {
 
       // Initialize variables
@@ -40,19 +38,21 @@ public class BFS extends AbsAlgo {
         DbNode currNode = queue.poll();
         checked.add(currNode);
 
-        // Get the current nodes neighbors and check if it connects to the end node
-        LinkedList<DbNode> neighbors = mapData.get(currNode.getNodeID());
-        if (neighbors.contains(endNode)) {
-          cameFrom.put(endNode.getNodeID(), currNode.getNodeID());
+        // if the goal node was found, break out of the loop
+        if (currNode.equals(endNode)) {
           break;
         }
 
-        // If it doesn't connect with the end node, get all of its neighbors that aren't checked or
-        // in the queue
+        // Get the current nodes neighbors and check if it connects to the end node
+        LinkedList<DbNode> neighbors = mapData.get(currNode.getNodeID());
+
+        // Look at each neighboring node
         for (DbNode nextNode : neighbors) {
+          // if handicap is selected and it's a stair, skip
           if (handicap && nextNode.getNodeType().equals("STAI")) {
             continue;
           }
+          // If the neighbor hasn't been checked or isn't in the queue
           if (!checked.contains(nextNode) && !queue.contains(nextNode)) {
             queue.add(nextNode);
             cameFrom.put(nextNode.getNodeID(), currNode.getNodeID());

@@ -18,6 +18,7 @@ import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -33,17 +34,17 @@ public class MapBaseController implements Controller {
   private StateSingleton singleton;
 
   // Screen Constants
-  private final float BAR_WIDTH = 300;
+  private final double BAR_WIDTH = 300;
   private final float IMAGE_WIDTH = 2475;
-  private final float IMAGE_HEIGHT = 1485;
-  private final float SCREEN_WIDTH = 1920;
-  private final float SCREEN_HEIGHT = 1080;
-  private final float MAP_WIDTH = SCREEN_WIDTH - BAR_WIDTH;
-  private final float MAP_HEIGHT = (MAP_WIDTH / IMAGE_WIDTH) * IMAGE_HEIGHT;
-  private final float HORIZONTAL_OFFSET = 10;
-  private final float VERTICAL_OFFSET = 8;
-  private final float HORIZONTAL_SCALE = (MAP_WIDTH) / IMAGE_WIDTH;
-  private final float VERTICAL_SCALE = (MAP_HEIGHT) / IMAGE_HEIGHT;
+  private final double IMAGE_HEIGHT = 1485;
+  private final double SCREEN_WIDTH = 1920;
+  private final double SCREEN_HEIGHT = 1080;
+  private final double MAP_WIDTH = SCREEN_WIDTH - BAR_WIDTH;
+  private final double MAP_HEIGHT = (MAP_WIDTH / IMAGE_WIDTH) * IMAGE_HEIGHT;
+  private final double HORIZONTAL_OFFSET = 10;
+  private final double VERTICAL_OFFSET = 5;
+  private final double HORIZONTAL_SCALE = (MAP_WIDTH) / IMAGE_WIDTH;
+  private final double VERTICAL_SCALE = (MAP_HEIGHT) / IMAGE_HEIGHT;
 
   // Zoom constants
   private final double MIN_MAP_SCALE = 1;
@@ -83,6 +84,7 @@ public class MapBaseController implements Controller {
   @FXML Pane pn_path;
   @FXML ImageView img_map;
   @FXML Button btn_zoomIn, btn_zoomOut;
+  @FXML AnchorPane controllerAnchorPane;
 
   /**
    * the constructor of MapBaseController
@@ -116,9 +118,15 @@ public class MapBaseController implements Controller {
    * sets the current building of the map display
    *
    * @param building the name of the building to be displayed
+   * @param floor the new floor of the map display
+   * @param currentPath the current path finding nodes
    */
   public void setBuilding(String building, int floor, Path currentPath) throws DBException {
-    setFloor(building, floor, currentPath);
+    clearPath();
+    img_map.setImage(singleton.mapImageLoader.getMap(building, floor));
+    if (!(currentPath == null || currentPath.isEmpty())) {
+      drawPath(currentPath, 1);
+    }
   }
 
   /**
@@ -135,6 +143,15 @@ public class MapBaseController implements Controller {
     if (!(currentPath == null || currentPath.isEmpty())) {
       drawPath(currentPath, floor);
     }
+  }
+
+  /**
+   * Returns AnchorPane of this controller
+   *
+   * @return
+   */
+  public AnchorPane getAnchorPane() {
+    return this.controllerAnchorPane;
   }
 
   private void initPathAnim() {
@@ -168,10 +185,10 @@ public class MapBaseController implements Controller {
         }
         Line line =
             new Line(
-                scaleX(secondNode.getX()),
-                scaleY(secondNode.getY()),
-                scaleX(firstNode.getX()),
-                scaleY(firstNode.getY()));
+                scaleX(secondNode.getX()) + HORIZONTAL_OFFSET,
+                scaleY(secondNode.getY()) + VERTICAL_OFFSET,
+                scaleX(firstNode.getX()) + HORIZONTAL_OFFSET,
+                scaleY(firstNode.getY()) + VERTICAL_OFFSET);
         styleLine(line);
         pn_path.getChildren().add(line);
       }
@@ -231,8 +248,8 @@ public class MapBaseController implements Controller {
   public void drawCircle(DbNode node, Color c) {
     Circle circle = new Circle();
     circle.setRadius(5);
-    circle.setCenterX(scaleX(node.getX()));
-    circle.setCenterY(scaleY(node.getY()));
+    circle.setCenterX(scaleX(node.getX()) + HORIZONTAL_OFFSET);
+    circle.setCenterY(scaleY(node.getY()) + VERTICAL_OFFSET);
     circle.setFill(c);
     pn_path.getChildren().add(circle);
   }
