@@ -54,6 +54,7 @@ public class MapBaseController implements Controller {
   private final String THIRD_KIOSK = "NSERV00103";
   private final Color START_NODE_COLOR = Color.GREEN;
   private final Color END_NODE_COLOR = Color.RED;
+  private final Color MIDDLE_NODE_COLOR = Color.PURPLE;
 
   // Path GUI constants
   private final Color DEFAULT_PATH_COLOR = Color.DODGERBLUE; // Default color of path
@@ -217,9 +218,19 @@ public class MapBaseController implements Controller {
           && secondNode.getFloor() == floor
           && (drawFaulkner || drawMain)) {
         if (i == 0) {
+          startLabel.setText("Start at ");
           drawCircle(firstNode, START_NODE_COLOR, startLabel);
         } else if (i == currentPath.size() - 2) {
+          endLabel.setText("End at ");
           drawCircle(secondNode, END_NODE_COLOR, endLabel);
+        } else if (currentPath.get(i - 1).getFloor() != floor) {
+          // If firstNode is first on current floor
+          startLabel.setText("Exit from ");
+          drawCircle(firstNode, MIDDLE_NODE_COLOR, startLabel);
+        } else if (currentPath.get(i + 2).getFloor() != floor) {
+          // If secondNode is last on current floor
+          endLabel.setText("Enter ");
+          drawCircle(secondNode, MIDDLE_NODE_COLOR, endLabel);
         }
         Line line =
             new Line(
