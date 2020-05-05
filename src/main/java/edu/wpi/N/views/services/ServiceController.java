@@ -7,6 +7,7 @@ import edu.wpi.N.views.Controller;
 import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
 public class ServiceController implements Controller {
@@ -88,4 +89,6 @@ public class ServiceController implements Controller {
     AnchorPane currentPane = FXMLLoader.load(getClass().getResource("securityRequest.fxml"));
     service_anchor.getChildren().setAll(currentPane);
   }
+
+  public void onIconClicked(MouseEvent event) {}
 }

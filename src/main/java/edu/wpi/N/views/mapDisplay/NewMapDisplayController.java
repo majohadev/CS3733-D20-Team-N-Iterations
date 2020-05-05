@@ -451,7 +451,7 @@ public class NewMapDisplayController implements Controller {
       setDefaultKioskNode();
       pn_change.getChildren().add(pane);
     } else if (src == pn_serviceIcon) {
-      // TODO load service page here
+      this.mainApp.switchScene("/edu/wpi/N/views/services/newServicesPage.fxml", singleton);
     } else if (src == pn_infoIcon) {
       this.mainApp.switchScene("/edu/wpi/N/views/aboutPage.fxml", singleton);
     } else if (src == pn_adminIcon) {
