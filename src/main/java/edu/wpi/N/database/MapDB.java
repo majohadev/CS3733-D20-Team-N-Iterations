@@ -423,7 +423,7 @@ public class MapDB {
       throws DBException {
     try {
       String nodeID =
-          "I"
+          "S"
               + nodeType.toUpperCase()
               + nextAvailNum(nodeType, floor)
               + String.format("%02d", floor);
@@ -437,7 +437,7 @@ public class MapDB {
       stmt.setString(6, nodeType);
       stmt.setString(7, longName);
       stmt.setString(8, shortName);
-      stmt.setString(9, "I");
+      stmt.setString(9, "S");
       stmt.executeUpdate();
       // System.out.println("Values Inserted");
       return getNode(nodeID);
@@ -687,6 +687,85 @@ public class MapDB {
     } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Unknown error: floorNodes", e);
+    }
+  }
+
+  /**
+   * Gets a lits of all the nodes on the specified floor and different buildings
+   *
+   * @param floor the floor from which you want to get all the Nodes.
+   * @return a LinkedList of all the nodes with the specified floor.
+   * @throws DBException
+   */
+  public static LinkedList<DbNode> NobuildingfloorNodes(int floor) throws DBException {
+    String query = "SELECT * FROM nodes WHERE floor =? AND building <> ?";
+    try {
+      PreparedStatement st = con.prepareStatement(query);
+
+      st.setInt(1, floor);
+      st.setString(2, "Faulkner");
+      return getAllNodesSQL(st);
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown error: NobuildingfloorNodes", e);
+    }
+  }
+
+  /**
+   * gets the edges from the floor specified.
+   *
+   * @param floor The floor we are searching
+   * @return a Linkedlist of array of DbNode
+   * @throws DBException
+   */
+  public static LinkedList<DbNode[]> nobuildingFloorEdges(int floor) throws DBException {
+    try {
+      LinkedList<DbNode[]> ret = new LinkedList<>();
+      String query =
+          "SELECT edges.node1, n1.xcoord AS x1, n1.ycoord AS y1, n1.floor AS floor1, n1.building AS build1, n1.nodeType AS type1, "
+              + "n1.longName AS long1, n1.shortName AS short1, n1.teamAssigned AS team1, "
+              + "edges.node2, n2.xcoord AS x2, n2.ycoord AS y2, n2.floor AS floor2, n2.building AS build2, n2.nodeType AS type2, "
+              + "n2.longName AS long2, n2.shortName AS short2, n2.teamAssigned AS team2 "
+              + "FROM edges "
+              + "JOIN nodes n1 ON edges.node1 = n1.nodeID "
+              + "JOIN nodes n2 ON edges.node2 = n2.nodeID "
+              + "WHERE n1.floor = ? AND n2.floor = ? AND n1.building <> ? AND n2.building <> ?";
+      PreparedStatement stmt = con.prepareStatement(query);
+      stmt.setInt(1, floor);
+      stmt.setInt(2, floor);
+      stmt.setString(3, "Faulkner");
+      stmt.setString(4, "Faulkner");
+      ResultSet rs = stmt.executeQuery();
+      while (rs.next()) {
+        DbNode node1 =
+            new DbNode(
+                rs.getString("node1"),
+                rs.getInt("x1"),
+                rs.getInt("y1"),
+                rs.getInt("floor1"),
+                rs.getString("build1"),
+                rs.getString("type1"),
+                rs.getString("long1"),
+                rs.getString("short1"),
+                rs.getString("team1").charAt(0));
+        DbNode node2 =
+            new DbNode(
+                rs.getString("node2"),
+                rs.getInt("x2"),
+                rs.getInt("y2"),
+                rs.getInt("floor2"),
+                rs.getString("build2"),
+                rs.getString("type2"),
+                rs.getString("long2"),
+                rs.getString("short2"),
+                rs.getString("team2").charAt(0));
+
+        ret.add(new DbNode[] {node1, node2});
+      }
+      return ret;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown error: nobuildingFloorEdges", e);
     }
   }
 
