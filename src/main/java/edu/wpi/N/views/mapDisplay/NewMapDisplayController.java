@@ -56,6 +56,7 @@ public class NewMapDisplayController implements Controller {
   JFXNodesList faulknerButtonList;
   JFXNodesList mainButtonList;
   JFXButton btn_google;
+  ArrayList<JFXButton> pathButtonList;
 
   @Override
   public void setMainApp(App mainApp) {
@@ -71,7 +72,7 @@ public class NewMapDisplayController implements Controller {
     this.currentFloor = 1;
     this.currentBuilding = "Faulkner";
     this.directions = new ArrayList<>();
-
+    this.pathButtonList = new ArrayList<>();
     this.buildingButtonList = new JFXNodesList();
     this.faulknerButtonList = new JFXNodesList();
     this.mainButtonList = new JFXNodesList();
@@ -192,6 +193,15 @@ public class NewMapDisplayController implements Controller {
         e -> {
           try {
             handleFloorButtonClicked(txt);
+            if (this.path != null && this.path.size() > 0) {
+              for (int i = 0; i < pathButtonList.size(); i++) {
+                pathButtonList.get(i).setStyle("-fx-background-color: #263051");
+                if (pathButtonList.get(i) == btn && i < pathButtonList.size() - 1) {
+                  pathButtonList.get(i + 1).setStyle("-fx-background-color: #4A69C6");
+                  i++;
+                }
+              }
+            }
           } catch (DBException ex) {
             ex.printStackTrace();
           }
@@ -297,7 +307,9 @@ public class NewMapDisplayController implements Controller {
         .getResetButton()
         .setOnMouseClicked(
             e -> {
-              this.path.clear();
+              if (path != null) {
+                this.path.clear();
+              }
               setGoogleButtonDisable(true);
               locationSearchController.getTextFirstLocation().clear();
               locationSearchController.getTextSecondLocation().clear();
@@ -318,7 +330,9 @@ public class NewMapDisplayController implements Controller {
         .getResetButton()
         .setOnMouseClicked(
             e -> {
-              this.path.clear();
+              if (this.path != null) {
+                this.path.clear();
+              }
               enableAllFloorButtons();
               setGoogleButtonDisable(true);
               doctorSearchController.getTextLocation().clear();
@@ -326,7 +340,6 @@ public class NewMapDisplayController implements Controller {
               doctorSearchController.getFuzzyList().getItems().clear();
               doctorSearchController.getTgHandicap().setSelected(false);
               mapBaseController.clearPath();
-              enableAllFloorButtons();
               try {
                 setDefaultKioskNode();
               } catch (DBException ex) {
@@ -352,7 +365,9 @@ public class NewMapDisplayController implements Controller {
                 return;
               }
               disableNonPathFloors();
-              //        setTextDescriptions();
+              if (pathButtonList.size() > 1) {
+                pathButtonList.get(1).setStyle("-fx-background-color: #4A69C6;");
+              }
             });
   }
 
@@ -369,8 +384,10 @@ public class NewMapDisplayController implements Controller {
     switchHospitalView();
     mapBaseController.setFloor(first.getBuilding(), first.getFloor(), path);
     disableNonPathFloors();
+    if (pathButtonList.size() > 1) {
+      pathButtonList.get(1).setStyle("-fx-background-color: #4A69C6;");
+    }
     displayGoogleMaps(first, second);
-    //    setTextDecription();
   }
 
   public void displayGoogleMaps(DbNode first, DbNode second) throws IOException {
@@ -424,7 +441,7 @@ public class NewMapDisplayController implements Controller {
     setGoogleButtonDisable(true);
     enableAllFloorButtons();
     Pane src = (Pane) e.getSource();
-    pn_iconBar.getChildren().forEach(n -> n.setStyle("-fx-background-color: #263051"));
+    pn_iconBar.getChildren().forEach(n -> n.setStyle("-fx-background-color: #263051;"));
     src.setStyle("-fx-background-color: #4A69C6;");
     FXMLLoader loader;
     if (src == pn_locationIcon) {
@@ -521,13 +538,24 @@ public class NewMapDisplayController implements Controller {
     faulknerButtonList.getChildren().get(0).setDisable(false);
     mainButtonList.getChildren().forEach(e -> e.setDisable(true));
     mainButtonList.getChildren().get(0).setDisable(false);
+    if (path == null) {
+      return;
+    }
     for (int i = 0; i < path.size(); i++) {
       DbNode node = path.get(i);
       if (!(node.getNodeType().equals("ELEV") || node.getNodeType().equals("STAI"))) {
         if (node.getBuilding().equals("Faulkner")) {
-          faulknerButtonList.getChildren().get(node.getFloor()).setDisable(false);
+          JFXButton btn = (JFXButton) faulknerButtonList.getChildren().get(node.getFloor());
+          btn.setDisable(false);
+          if (!pathButtonList.contains(btn)) {
+            pathButtonList.add(btn);
+          }
         } else {
-          mainButtonList.getChildren().get(node.getFloor()).setDisable(false);
+          JFXButton btn = (JFXButton) mainButtonList.getChildren().get(node.getFloor());
+          btn.setDisable(false);
+          if (!pathButtonList.contains(btn)) {
+            pathButtonList.add(btn);
+          }
         }
       }
     }
@@ -536,6 +564,8 @@ public class NewMapDisplayController implements Controller {
   public void enableAllFloorButtons() {
     faulknerButtonList.getChildren().forEach(e -> e.setDisable(false));
     mainButtonList.getChildren().forEach(e -> e.setDisable(false));
+    pathButtonList.forEach(n -> n.setStyle("-fx-background-color: #263051;"));
+    pathButtonList = new ArrayList<>();
   }
 
   public void switchGoogleView() {
