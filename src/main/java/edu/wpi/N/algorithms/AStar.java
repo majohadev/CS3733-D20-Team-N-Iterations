@@ -1,19 +1,18 @@
 package edu.wpi.N.algorithms;
 
-import edu.wpi.N.database.DBException;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Path;
 import java.util.*;
 
-public class AStar extends AbsAlgo {
+public class AStar extends AlgoTemplate {
 
   /**
    * Finds the shortest path from Start to Goal node using the A* algorithm
    *
+   * @param mapData: HashMap of the nodes and edges
    * @param startNode: The start node
    * @param endNode: The destination node
    * @param handicap: Boolean saying whether path should be handicap accessible
-   * @throws DBException
    * @return: Path object indicating the shortest path to the Goal Node from Start Node
    */
   @Override
@@ -21,8 +20,7 @@ public class AStar extends AbsAlgo {
       HashMap<String, LinkedList<DbNode>> mapData,
       DbNode startNode,
       DbNode endNode,
-      boolean handicap)
-      throws DBException {
+      boolean handicap) {
     try {
 
       // Initialize variables
@@ -58,12 +56,14 @@ public class AStar extends AbsAlgo {
             if (!costSoFar.containsKey(nextNodeID) || newCost < costSoFar.get(nextNodeID)) {
               // update the cost of nextNode
               costSoFar.put(nextNodeID, newCost);
+
               // calculate and update the Score of nextNode
               double priority = newCost + heuristic(nextNode, endNode);
-
               nextNode.setScore(priority);
+
               // add to the priority queue
               frontier.add(nextNode);
+
               // keep track of where nodes come from
               // to generate the path to goal node
               cameFrom.put(nextNodeID, current.getNodeID());
@@ -77,7 +77,6 @@ public class AStar extends AbsAlgo {
     } catch (Exception e) {
       e.printStackTrace();
       return null;
-      // throw e;
     }
   }
 }

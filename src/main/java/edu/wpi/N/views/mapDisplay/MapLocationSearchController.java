@@ -1,0 +1,63 @@
+package edu.wpi.N.views.mapDisplay;
+
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXToggleButton;
+import edu.wpi.N.App;
+import edu.wpi.N.database.DBException;
+import edu.wpi.N.entities.DbNode;
+import edu.wpi.N.entities.States.StateSingleton;
+import edu.wpi.N.views.Controller;
+import javafx.fxml.FXML;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+
+public class MapLocationSearchController implements Controller {
+  App mainApp;
+  private StateSingleton singleton;
+
+  @FXML TextField txt_firstLocation;
+  @FXML TextField txt_secondLocation;
+  @FXML ListView lst_fuzzySearch;
+  @FXML TextField activeText;
+  @FXML JFXButton btn_search;
+  @FXML JFXToggleButton tg_handicap;
+  DbNode[] nodes = new DbNode[2];
+
+  @Override
+  public void setMainApp(App mainApp) {
+    this.mainApp = mainApp;
+  }
+
+  public void onSearchLocation(KeyEvent e) throws DBException {
+    activeText = (TextField) e.getSource();
+    NewMapDisplayController.fuzzyLocationSearch(activeText, lst_fuzzySearch);
+  }
+
+  public void onItemSelected(MouseEvent e) {
+    try {
+      ListView lst = (ListView) e.getSource();
+      activeText.setText(lst.getSelectionModel().getSelectedItem().toString());
+      if (activeText == txt_firstLocation) {
+        nodes[0] = (DbNode) lst.getSelectionModel().getSelectedItem();
+      } else {
+        nodes[1] = (DbNode) lst.getSelectionModel().getSelectedItem();
+      }
+    } catch (NullPointerException ex) {
+      return;
+    }
+  }
+
+  public JFXButton getSearchButton() {
+    return this.btn_search;
+  }
+
+  public DbNode[] getDBNodes() {
+    return this.nodes;
+  }
+
+  public boolean getHandicap() {
+    return this.tg_handicap.isSelected();
+  }
+}

@@ -146,6 +146,12 @@ public class DirectionsTest {
   //    //    }
   //    Assertions.assertEquals(directions, path.getDirections());
   //  }
+  @Test
+  public void gdir() {
+    System.out.println(Directions.getGoogleDirections("walking", true));
+    System.out.println("_____________________");
+    System.out.println(Directions.getGoogleDirections("walking", false));
+  }
 
   @AfterAll
   public static void clearDB() throws DBException {
