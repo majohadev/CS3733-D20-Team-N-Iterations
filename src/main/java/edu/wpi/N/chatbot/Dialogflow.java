@@ -63,6 +63,11 @@ public class Dialogflow {
             .build();
   }
 
+  /**
+   * Extracts private key from a txt file
+   *
+   * @throws Exception
+   */
   private void extractPrivateKey() throws Exception {
     String path = getClass().getResource("../credentials/privatekey.txt").getPath();
 
@@ -168,15 +173,18 @@ public class Dialogflow {
   public String replyToUserInput(String userText) throws Exception {
     try {
       QueryResult queryResults = detectIntentTexts(userText, "en-US");
+      String message;
 
       // If intent matches with get-weather
       if (queryResults.getIntent().getDisplayName().equals("get-weather")) {
-        String message = getCurrentWeatherReply();
+        message = getCurrentWeatherReply();
         System.out.println(message);
-        return message;
+      } else {
+        // else, use Dialogflow text
+        message = queryResults.getFulfillmentText();
       }
 
-      return queryResults.getFulfillmentText();
+      return message;
     } catch (Exception e) {
       e.printStackTrace();
       return null;
@@ -190,10 +198,12 @@ public class Dialogflow {
    */
   public String getCurrentWeatherReply() {
 
+    // initialize and send request
     String url =
         "http://api.openweathermap.org/data/2.5/weather?appid=495b2d2af36253b0fd2e15dacdab5067&lat=42.361145&lon=-71.057083";
     OkHttpClient client = new OkHttpClient();
     Request request = new Request.Builder().url(url).build();
+
     ObjectMapper objectMapper = new ObjectMapper();
 
     // Ignore fields we don't need
@@ -201,9 +211,11 @@ public class Dialogflow {
 
     try (ResponseBody response = client.newCall(request).execute().body()) {
 
+      // Convert the string-json response into object with our custom fields
       JSONResponseWeather jsResponse =
           objectMapper.readValue(response.string(), JSONResponseWeather.class);
 
+      // get the necessary fields
       Double tempK = jsResponse.getMain().get("temp");
       int tempF = (int) Math.round((tempK - 273.15) * 9 / 5 + 32);
 

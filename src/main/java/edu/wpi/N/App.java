@@ -30,8 +30,8 @@ public class App extends Application {
 
     StateSingleton newSingleton = StateSingleton.getInstance();
 
-    switchScene("views/mapDisplay/newMapDisplay.fxml", newSingleton);
-    // switchScene("views/mapDisplay/googleMap.fxml", newSingleton);
+    // switchScene("views/mapDisplay/newMapDisplay.fxml", newSingleton);
+    switchScene("views/chatbot/chatBox.fxml", newSingleton);
     masterStage.setMaximized(true);
   }
 
