@@ -6,7 +6,6 @@
 <?import com.jfoenix.controls.JFXTextArea?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Separator?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -52,19 +51,13 @@
                      </VBox.margin>
                   </Label>
                   <JFXComboBox fx:id="cmbo_text" editable="true" labelFloat="true" onKeyTyped="#locationTextChanged" prefHeight="46.0" prefWidth="394.0" promptText="Enter Location" styleClass="jfx-combo-box" stylesheets="@../../css/sanitationRequestUI.css" />
-                  <Separator prefWidth="200.0">
-                     <padding>
-                        <Insets bottom="10.0" top="10.0" />
-                     </padding>
-                  </Separator>
-                  <JFXCheckBox fx:id="cb_isEmergency" checkedColor="#002186" minHeight="-Infinity" minWidth="-Infinity" prefHeight="77.0" prefWidth="412.0" styleClass="jfx-radio-button" stylesheets="@../../css/sanitationRequestUI.css" text="This is an emergency!">
+                  <JFXCheckBox fx:id="cb_isEmergency" checkedColor="#002186" minHeight="-Infinity" minWidth="-Infinity" prefHeight="128.0" prefWidth="412.0" styleClass="jfx-radio-button" stylesheets="@../../css/sanitationRequestUI.css" text="This is an emergency!">
                      <font>
                         <Font size="36.0" />
                      </font>
                   </JFXCheckBox>
                </children>
             </VBox>
-            <Separator orientation="VERTICAL" prefHeight="200.0" />
             <VBox alignment="CENTER" maxWidth="500.0" minWidth="500.0" prefWidth="500.0" spacing="10.0">
                <children>
                   <Label styleClass="label-mid-size" stylesheets="@../../css/sanitationRequestUI.css" text="I see/hear...">
@@ -115,13 +108,6 @@
                         </JFXCheckBox>
                      </children>
                   </GridPane>
-                  <Separator prefWidth="200.0">
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                     <padding>
-                        <Insets bottom="10.0" top="10.0" />
-                     </padding></Separator>
                   <Label styleClass="label-mid-size" stylesheets="@../../css/sanitationRequestUI.css" text="Details">
                      <font>
                         <Font name="Calibri" size="36.0" />

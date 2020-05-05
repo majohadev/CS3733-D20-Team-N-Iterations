@@ -14,14 +14,14 @@
 
 <AnchorPane fx:id="itService" prefHeight="900.0" prefWidth="1264.0" styleClass="anchor" stylesheets="@../../css/sanitationRequestUI.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.services.ITServiceController">
    <children>
-      <HBox alignment="CENTER_LEFT" layoutX="318.0" layoutY="14.0" prefHeight="150.0" prefWidth="629.0" spacing="30.0" stylesheets="@../../css/sanitationRequestUI.css">
+      <HBox alignment="CENTER_LEFT" layoutX="413.0" layoutY="14.0" prefHeight="150.0" prefWidth="439.0" spacing="30.0" stylesheets="@../../css/sanitationRequestUI.css">
          <children>
             <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../images/serviceIcons/ITservicesWhite.png" />
                </image>
             </ImageView>
-            <Label alignment="CENTER" prefHeight="63.0" prefWidth="405.0" styleClass="label-header" stylesheets="@../../css/sanitationRequestUI.css" text="IT Request" textFill="WHITE">
+            <Label alignment="CENTER" prefHeight="70.0" prefWidth="255.0" styleClass="label-header" stylesheets="@../../css/sanitationRequestUI.css" text="IT Request" textFill="WHITE">
                <font>
                   <Font name="Calibri" size="55.0" />
                </font>
