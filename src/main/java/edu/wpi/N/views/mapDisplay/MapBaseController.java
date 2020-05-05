@@ -109,22 +109,8 @@ public class MapBaseController implements Controller {
    * @throws DBException
    */
   public void initialize() throws DBException {
-    startLabel = new Label();
-    startLabel.setTextAlignment(TextAlignment.CENTER);
-    startLabel.setAlignment(Pos.CENTER);
-    startLabel.setMouseTransparent(true);
-    startLabel.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
-    startLabel.setBorder(
-        new Border(
-            new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, null, BorderWidths.DEFAULT)));
-    endLabel = new Label();
-    endLabel.setTextAlignment(TextAlignment.CENTER);
-    endLabel.setAlignment(Pos.CENTER);
-    endLabel.setMouseTransparent(true);
-    endLabel.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
-    endLabel.setBorder(
-        new Border(
-            new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, null, BorderWidths.DEFAULT)));
+
+    initNodeLabels();
     initPathAnim();
     setFaulknerDefaults();
   }
@@ -188,6 +174,25 @@ public class MapBaseController implements Controller {
 
     // Setup initial (empty) frames
     setAnimFrames();
+  }
+
+  private void initNodeLabels() {
+    startLabel = new Label();
+    startLabel.setTextAlignment(TextAlignment.CENTER);
+    startLabel.setAlignment(Pos.CENTER);
+    startLabel.setMouseTransparent(true);
+    startLabel.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
+    startLabel.setBorder(
+        new Border(
+            new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, null, BorderWidths.DEFAULT)));
+    endLabel = new Label();
+    endLabel.setTextAlignment(TextAlignment.CENTER);
+    endLabel.setAlignment(Pos.CENTER);
+    endLabel.setMouseTransparent(true);
+    endLabel.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
+    endLabel.setBorder(
+        new Border(
+            new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, null, BorderWidths.DEFAULT)));
   }
 
   /**
@@ -291,8 +296,7 @@ public class MapBaseController implements Controller {
       label.setText(label.getText() + node.getLongName());
       label.applyCss(); // To make sure prefWidth doesn't return 0, for whatever reason
       label.relocate(
-          scaleX(node.getX()) + HORIZONTAL_OFFSET - label.prefWidth(-1) / 2,
-          scaleY(node.getY()) + VERTICAL_OFFSET - NODE_LABEL_PADDING);
+          scaleX(node.getX()) - label.prefWidth(-1) / 2, scaleY(node.getY()) - NODE_LABEL_PADDING);
       pn_path.getChildren().remove(label); // Gets added back after all lines are drawn
     }
   }
