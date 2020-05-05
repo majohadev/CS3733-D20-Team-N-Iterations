@@ -44,7 +44,7 @@
             <Font name="Calibri" size="24.0" />
          </font>
       </JFXButton>
-      <ChoiceBox fx:id="cb_EmployeeRemove" layoutX="149.0" layoutY="318.0" prefWidth="150.0" />
+      <ChoiceBox fx:id="cb_languageRemove" layoutX="149.0" layoutY="318.0" prefWidth="150.0" />
       <TableView fx:id="tb_languagesRemove" layoutX="149.0" layoutY="362.0" prefHeight="202.0" prefWidth="150.0" />
       <Label layoutX="17.0" layoutY="362.0" text="Languages:" textFill="#e6ebf2">
          <font>

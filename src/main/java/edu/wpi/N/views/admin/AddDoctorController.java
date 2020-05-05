@@ -5,6 +5,7 @@ import com.jfoenix.controls.JFXTextField;
 import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.DoctorDB;
+import edu.wpi.N.database.ServiceDB;
 import edu.wpi.N.entities.DbNode;
 import java.util.LinkedList;
 import javafx.collections.FXCollections;
@@ -96,6 +97,17 @@ public class AddDoctorController {
       return;
     }
 
+    if (!ServiceDB.getEmployee(Integer.parseInt(txtf_docid.getText()))
+        .getServiceType()
+        .equals("Medicine")) {
+
+      Alert invalidID = new Alert(Alert.AlertType.ERROR);
+      invalidID.setContentText("Employee isn't a doctor.");
+      invalidID.show();
+
+      return;
+    }
+
     DbNode addOfficeNode = fuzzySearchNodeList.get(currentSelection);
 
     if (txtf_docid.getText().equals("")) {
@@ -148,6 +160,25 @@ public class AddDoctorController {
    * @throws DBException
    */
   public void removeOffice() throws DBException {
+
+    if (txtf_docid.getText().equals("")) {
+      Alert invalidID = new Alert(Alert.AlertType.ERROR);
+      invalidID.setContentText("Invalid ID");
+      invalidID.show();
+
+      return;
+    }
+
+    if (!ServiceDB.getEmployee(Integer.parseInt(txtf_docid.getText()))
+        .getServiceType()
+        .equals("Medicine")) {
+
+      Alert invalidID = new Alert(Alert.AlertType.ERROR);
+      invalidID.setContentText("Employee isn't a doctor.");
+      invalidID.show();
+
+      return;
+    }
 
     int currentSelection = lst_docoffice.getSelectionModel().getSelectedIndex();
     int docid = Integer.parseInt(txtf_docid.getText());

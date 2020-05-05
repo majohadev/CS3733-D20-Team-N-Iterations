@@ -213,14 +213,10 @@
 
 .table-row-cell{
     -fx-background-color: #7E9AB6, transparent;
+    /*
     -fx-border-color: #E6EBF2;
+     */
     -fx-fit-to-width: true;
-
-}
-
-.table-row-cell:odd{
-    -fx-background-color: #7E9AB6, transparent;
-    -fx-border-color: #E6EBF2;
 
 }
 

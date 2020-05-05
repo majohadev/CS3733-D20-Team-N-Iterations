@@ -46,6 +46,14 @@ public class AddEmployeeController implements Initializable, Controller {
       switch (cb_employeeTypes.getValue().getServiceType()) {
         case "Laundry":
           {
+            if (!txtf_languages.getText().equals("")) {
+              Alert acceptReq = new Alert(Alert.AlertType.ERROR);
+              acceptReq.setContentText(
+                  "Trying to add language to an employee that isn't a translator.");
+              acceptReq.show();
+              return;
+            }
+
             ServiceDB.addLaundry(name);
 
             Alert acceptReq = new Alert(Alert.AlertType.CONFIRMATION);
@@ -55,6 +63,15 @@ public class AddEmployeeController implements Initializable, Controller {
           }
         case "Wheelchair":
           {
+            if (!txtf_languages.getText().equals("")) {
+              Alert acceptReq = new Alert(Alert.AlertType.ERROR);
+              acceptReq.setContentText(
+                  "Trying to add language to an employee that isn't a translator.");
+              acceptReq.show();
+
+              return;
+            }
+
             ServiceDB.addWheelchairEmployee(name);
 
             Alert acceptReq = new Alert(Alert.AlertType.CONFIRMATION);
@@ -64,6 +81,15 @@ public class AddEmployeeController implements Initializable, Controller {
           }
         case "IT":
           {
+            if (!txtf_languages.getText().equals("")) {
+              Alert acceptReq = new Alert(Alert.AlertType.ERROR);
+              acceptReq.setContentText(
+                  "Trying to add language to an employee that isn't a translator.");
+              acceptReq.show();
+
+              return;
+            }
+
             ServiceDB.addIT(name);
 
             Alert acceptReq = new Alert(Alert.AlertType.CONFIRMATION);
@@ -73,6 +99,15 @@ public class AddEmployeeController implements Initializable, Controller {
           }
         case "Emotional Support":
           {
+            if (!txtf_languages.getText().equals("")) {
+              Alert acceptReq = new Alert(Alert.AlertType.ERROR);
+              acceptReq.setContentText(
+                  "Trying to add language to an employee that isn't a translator.");
+              acceptReq.show();
+
+              return;
+            }
+
             ServiceDB.addEmotionalSupporter(name);
 
             Alert acceptReq = new Alert(Alert.AlertType.CONFIRMATION);
@@ -82,6 +117,15 @@ public class AddEmployeeController implements Initializable, Controller {
           }
         case "Sanitation":
           {
+            if (!txtf_languages.getText().equals("")) {
+              Alert acceptReq = new Alert(Alert.AlertType.ERROR);
+              acceptReq.setContentText(
+                  "Trying to add language to an employee that isn't a translator.");
+              acceptReq.show();
+
+              return;
+            }
+
             ServiceDB.addSanitationEmp(name);
 
             Alert acceptReq = new Alert(Alert.AlertType.CONFIRMATION);
@@ -91,6 +135,15 @@ public class AddEmployeeController implements Initializable, Controller {
           }
         case "Flower":
           {
+            if (!txtf_languages.getText().equals("")) {
+              Alert acceptReq = new Alert(Alert.AlertType.ERROR);
+              acceptReq.setContentText(
+                  "Trying to add language to an employee that isn't a translator.");
+              acceptReq.show();
+
+              return;
+            }
+
             ServiceDB.addFlowerDeliverer(name);
 
             Alert acceptReq = new Alert(Alert.AlertType.CONFIRMATION);
@@ -100,6 +153,15 @@ public class AddEmployeeController implements Initializable, Controller {
           }
         case "Internal Transportation":
           {
+            if (!txtf_languages.getText().equals("")) {
+              Alert acceptReq = new Alert(Alert.AlertType.ERROR);
+              acceptReq.setContentText(
+                  "Trying to add language to an employee that isn't a translator.");
+              acceptReq.show();
+
+              return;
+            }
+
             ServiceDB.addInternalTransportationEmployee(name);
 
             Alert acceptReq = new Alert(Alert.AlertType.CONFIRMATION);
@@ -109,6 +171,15 @@ public class AddEmployeeController implements Initializable, Controller {
           }
         case "Security":
           {
+            if (!txtf_languages.getText().equals("")) {
+              Alert acceptReq = new Alert(Alert.AlertType.ERROR);
+              acceptReq.setContentText(
+                  "Trying to add language to an employee that isn't a translator.");
+              acceptReq.show();
+
+              return;
+            }
+
             ServiceDB.addSecurityOfficer(name);
 
             Alert acceptReq = new Alert(Alert.AlertType.CONFIRMATION);

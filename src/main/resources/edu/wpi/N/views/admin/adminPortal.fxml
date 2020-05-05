@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXCheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.image.Image?>
@@ -15,6 +16,7 @@
    <children>
     <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="1080.0" prefWidth="400.0" style="-fx-background-color: #263051;" AnchorPane.topAnchor="0.0">
          <children>
+            <AnchorPane fx:id="ap_swapPane" prefHeight="970.0" prefWidth="200.0" AnchorPane.leftAnchor="75.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="110.0" />
             <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="970.0" prefWidth="75.0" style="-fx-background-color: #263051;" AnchorPane.topAnchor="110.0">
                <children>
                   <Pane prefHeight="60.0" prefWidth="80.0">
@@ -65,7 +67,20 @@
                            <graphic>
                               <ImageView fitHeight="42.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../../images/adminIcons/doctor-suitecase-64(2).png" />
+                                    <Image url="@../../images/adminIcons/doctor-2-64(1).png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </JFXButton>
+                     </children>
+                  </Pane>
+                  <Pane prefHeight="60.0" prefWidth="80.0">
+                     <children>
+                        <JFXButton fx:id="btn_addDoc1" ellipsisString="" onMouseClicked="#addAdmin" prefHeight="51.0" prefWidth="66.0" text="   ">
+                           <graphic>
+                              <ImageView fitHeight="42.0" fitWidth="45.0" onMouseClicked="#addAdmin" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../images/adminIcons/administrator-2-64.png" />
                                  </image>
                               </ImageView>
                            </graphic>
@@ -175,14 +190,15 @@
                   </Label>
                </children>
             </Pane>
-            <AnchorPane fx:id="ap_swapPane" layoutX="75.0" layoutY="96.0" prefHeight="970.0" prefWidth="320.0" AnchorPane.leftAnchor="75.0" AnchorPane.topAnchor="96.0" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="anchorSwap" layoutX="186.0" layoutY="96.0" prefHeight="970.0" prefWidth="1520.0" AnchorPane.leftAnchor="400.0" AnchorPane.topAnchor="110.0">
+      <AnchorPane fx:id="anchorSwap" layoutX="186.0" layoutY="96.0" prefHeight="1080.0" prefWidth="1520.0" AnchorPane.leftAnchor="400.0" AnchorPane.topAnchor="0.0">
          <children>
-            <TableView fx:id="tb_RequestTable" layoutX="404.0" layoutY="94.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="429.0" prefWidth="960.0" stylesheets="@../../css/adminTables.css" AnchorPane.bottomAnchor="270.5" AnchorPane.leftAnchor="280.0" AnchorPane.rightAnchor="280.0" AnchorPane.topAnchor="270.5" />
-            <TableView fx:id="tbl_Employees" layoutX="20.0" layoutY="-137.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="500.0" />
-            <JFXCheckBox fx:id="ch_requestFilter" layoutX="370.0" layoutY="707.0" text="Filter to Open Requests" />
+            <TableView fx:id="tb_RequestTable" layoutX="52.0" layoutY="245.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="429.0" prefWidth="960.0" stylesheets="@../../css/adminTables.css" AnchorPane.bottomAnchor="296.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="508.0" AnchorPane.topAnchor="245.0" />
+            <TableView fx:id="tbl_Employees" layoutX="1060.0" layoutY="245.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" />
+            <JFXCheckBox fx:id="ch_requestFilter" layoutX="50.0" layoutY="784.0" text="Filter to Open Requests" AnchorPane.leftAnchor="50.0" />
+            <ChoiceBox fx:id="cb_reqFilter" layoutX="410.0" layoutY="785.0" prefWidth="150.0" />
+            <Label layoutX="292.0" layoutY="789.0" text="Filter by request type:" />
          </children></AnchorPane>
    </children>
 </AnchorPane>

@@ -47,7 +47,12 @@ public class RequestHandelerController implements Initializable {
     try {
       LinkedList<Employee> empList = ServiceDB.getEmployees();
       ObservableList<Employee> empObv = FXCollections.observableArrayList();
-      empObv.addAll(empList);
+
+      for (Employee emp : empList) {
+        if (!emp.getServiceType().equals("Medicine")) {
+          empObv.add(emp);
+        }
+      }
       cb_Employees.setItems(empObv);
     } catch (DBException e) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
