@@ -13,17 +13,19 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 
 public class MapBaseController implements Controller {
@@ -77,6 +79,8 @@ public class MapBaseController implements Controller {
   private Timeline pathAnimTimeline = new Timeline(); // Timeline object to set line animation
   private KeyFrame keyStart, keyEnd; // Keyframes in path animation
   private ArrayList<KeyValue> keyStartVals, keyEndVals;
+  private Label startLabel, endLabel;
+  private final int NODE_LABEL_PADDING = 35;
 
   // FXML Item IDs
   @FXML StackPane pn_movableMap;
@@ -109,6 +113,22 @@ public class MapBaseController implements Controller {
    * @throws DBException
    */
   public void initialize() throws DBException {
+    startLabel = new Label();
+    startLabel.setTextAlignment(TextAlignment.CENTER);
+    startLabel.setAlignment(Pos.CENTER);
+    startLabel.setMouseTransparent(true);
+    startLabel.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
+    startLabel.setBorder(
+        new Border(
+            new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, null, BorderWidths.DEFAULT)));
+    endLabel = new Label();
+    endLabel.setTextAlignment(TextAlignment.CENTER);
+    endLabel.setAlignment(Pos.CENTER);
+    endLabel.setMouseTransparent(true);
+    endLabel.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
+    endLabel.setBorder(
+        new Border(
+            new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, null, BorderWidths.DEFAULT)));
     initPathAnim();
   }
 
@@ -157,14 +177,16 @@ public class MapBaseController implements Controller {
    */
   public void drawPath(Path currentPath, int floor) {
     DbNode firstNode, secondNode;
+    startLabel.setText("Start: ");
+    endLabel.setText("Destination: ");
     for (int i = 0; i < currentPath.size() - 1; i++) {
       firstNode = currentPath.get(i);
       secondNode = currentPath.get(i + 1);
       if (firstNode.getFloor() == floor && secondNode.getFloor() == floor) {
         if (i == 0) {
-          drawCircle(firstNode, START_NODE_COLOR);
+          drawCircle(firstNode, START_NODE_COLOR, startLabel);
         } else if (i == currentPath.size() - 2) {
-          drawCircle(secondNode, END_NODE_COLOR);
+          drawCircle(secondNode, END_NODE_COLOR, endLabel);
         }
         Line line =
             new Line(
@@ -176,6 +198,7 @@ public class MapBaseController implements Controller {
         pn_path.getChildren().add(line);
       }
     }
+    pn_path.getChildren().addAll(startLabel, endLabel); // To make sure they render over the path
     setAnimFrames();
   }
 
@@ -223,18 +246,27 @@ public class MapBaseController implements Controller {
   }
 
   /**
-   * draws either the start of end circle on the map
+   * draws either the start or end circle on the map, as well as a text label above it
    *
    * @param node the DbNode to be displayed on the map
    * @param c the color of the circle
    */
-  public void drawCircle(DbNode node, Color c) {
+  public void drawCircle(DbNode node, Color c, Label label) {
     Circle circle = new Circle();
     circle.setRadius(5);
     circle.setCenterX(scaleX(node.getX()) + HORIZONTAL_OFFSET);
     circle.setCenterY(scaleY(node.getY()) + VERTICAL_OFFSET);
     circle.setFill(c);
     pn_path.getChildren().add(circle);
+    if (label != null) {
+      pn_path.getChildren().add(label);
+      label.setText(label.getText() + node.getLongName());
+      label.applyCss(); // To make sure prefWidth doesn't return 0, for whatever reason
+      label.relocate(
+          scaleX(node.getX()) + HORIZONTAL_OFFSET - label.prefWidth(-1) / 2,
+          scaleY(node.getY()) + VERTICAL_OFFSET - NODE_LABEL_PADDING);
+      pn_path.getChildren().remove(label); // Gets added back after all lines are drawn
+    }
   }
 
   public double scaleX(double x) {
