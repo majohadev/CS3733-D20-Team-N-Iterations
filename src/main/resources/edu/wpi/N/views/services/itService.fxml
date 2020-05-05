@@ -12,16 +12,16 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="itService" prefHeight="900.0" prefWidth="1264.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.services.ITServiceController">
+<AnchorPane fx:id="itService" prefHeight="900.0" prefWidth="1264.0" styleClass="anchor" stylesheets="@../../css/sanitationRequestUI.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.services.ITServiceController">
    <children>
-      <HBox alignment="CENTER_LEFT" layoutX="318.0" layoutY="14.0" prefHeight="150.0" prefWidth="629.0" spacing="30.0" style="-fx-background-color: #002186; -fx-background-radius: 10;">
+      <HBox alignment="CENTER_LEFT" layoutX="413.0" layoutY="14.0" prefHeight="150.0" prefWidth="439.0" spacing="30.0" stylesheets="@../../css/sanitationRequestUI.css">
          <children>
             <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../images/serviceIcons/ITservicesWhite.png" />
                </image>
             </ImageView>
-            <Label alignment="CENTER" prefHeight="63.0" prefWidth="405.0" text="IT Request" textFill="WHITE">
+            <Label alignment="CENTER" prefHeight="70.0" prefWidth="255.0" styleClass="label-header" stylesheets="@../../css/sanitationRequestUI.css" text="IT Request" textFill="WHITE">
                <font>
                   <Font name="Calibri" size="55.0" />
                </font>
@@ -35,7 +35,7 @@
          <children>
             <VBox alignment="CENTER" maxHeight="509.0" maxWidth="500.0" minWidth="500.0" prefHeight="509.0" prefWidth="500.0" spacing="30.0">
                <children>
-                  <Label prefHeight="80.0" prefWidth="416.0" text="Please Enter A Location Where You Want To Meet IT Services" textAlignment="CENTER" wrapText="true">
+                  <Label prefHeight="80.0" prefWidth="416.0" styleClass="label-mid-size" stylesheets="@../../css/sanitationRequestUI.css" text="Please Enter A Location Where You Want To Meet IT Services" textAlignment="CENTER" wrapText="true">
                      <font>
                         <Font name="Calibri" size="24.0" />
                      </font>
@@ -43,8 +43,8 @@
                         <Insets />
                      </VBox.margin>
                   </Label>
-                  <JFXComboBox fx:id="cmbo_text" editable="true" labelFloat="true" onKeyTyped="#locationTextChanged" prefHeight="46.0" prefWidth="394.0" promptText="Enter Location" style="-fx-font-size: 18;" />
-                  <Label text="Please Enter Your Device">
+                  <JFXComboBox fx:id="cmbo_text" editable="true" labelFloat="true" onKeyTyped="#locationTextChanged" prefHeight="46.0" prefWidth="394.0" promptText="Enter Location" styleClass="jfx-combo-box" stylesheets="@../../css/sanitationRequestUI.css" />
+                  <Label styleClass="label-mid-size" stylesheets="@../../css/sanitationRequestUI.css" text="Please Enter Your Device">
                      <font>
                         <Font name="Calibri" size="24.0" />
                      </font>
@@ -52,18 +52,18 @@
                         <Insets top="50.0" />
                      </VBox.margin>
                   </Label>
-                  <JFXTextArea fx:id="txtf_device" maxWidth="394.0" minWidth="394.0" prefHeight="127.0" prefWidth="394.0" promptText="Enter Device Here" style="-fx-font-size: 18;" />
+                  <JFXTextArea fx:id="txtf_device" maxWidth="394.0" minWidth="394.0" prefHeight="127.0" prefWidth="394.0" promptText="Enter Device Here" styleClass="jfx-text-area" stylesheets="@../../css/sanitationRequestUI.css" />
                </children>
             </VBox>
             <VBox alignment="CENTER" maxHeight="500.0" maxWidth="500.0" minWidth="500.0" prefHeight="200.0" prefWidth="100.0" spacing="30.0">
                <children>
-                  <Label alignment="CENTER" prefWidth="459.0" text="Please Enter The Problem You Are Having">
+                  <Label alignment="CENTER" prefWidth="459.0" styleClass="label-mid-size" stylesheets="@../../css/sanitationRequestUI.css" text="Please Enter The Problem You Are Having">
                      <font>
                         <Font name="Calibri" size="24.0" />
                      </font>
                   </Label>
-                  <JFXTextArea fx:id="txtf_problem" maxWidth="394.0" minWidth="394.0" prefHeight="79.0" prefWidth="394.0" promptText="Enter Problem Here" style="-fx-font-size: 18;" />
-                  <Label text="Please Enter Additional Notes Below">
+                  <JFXTextArea fx:id="txtf_problem" maxWidth="394.0" minWidth="394.0" prefHeight="79.0" prefWidth="394.0" promptText="Enter Problem Here" styleClass="jfx-text-area" stylesheets="@../../css/sanitationRequestUI.css" />
+                  <Label styleClass="label-mid-size" stylesheets="@../../css/sanitationRequestUI.css" text="Please Enter Additional Notes Below">
                      <font>
                         <Font name="Calibri" size="24.0" />
                      </font>
@@ -71,11 +71,11 @@
                         <Insets top="50.0" />
                      </VBox.margin>
                   </Label>
-                  <JFXTextArea fx:id="txtf_ITnotes" maxWidth="394.0" minWidth="394.0" prefHeight="129.0" prefWidth="394.0" promptText="Enter Notes Here" style="-fx-font-size: 18;" />
+                  <JFXTextArea fx:id="txtf_ITnotes" maxWidth="394.0" minWidth="394.0" prefHeight="129.0" prefWidth="394.0" promptText="Enter Notes Here" styleClass="jfx-text-area" stylesheets="@../../css/sanitationRequestUI.css" />
                </children></VBox>
          </children>
       </HBox>
-      <JFXButton fx:id="btn_submit" buttonType="RAISED" contentDisplay="RIGHT" graphicTextGap="20.0" layoutX="382.0" layoutY="743.0" minHeight="75.0" minWidth="200.0" onMouseClicked="#createNewITRequest" ripplerFill="#c1c9eb" style="-fx-background-color: #002186;" stylesheets="@../../css/submitButton.css" text="Submit Request">
+      <JFXButton fx:id="btn_submit" buttonType="RAISED" contentDisplay="RIGHT" graphicTextGap="20.0" layoutX="435.0" layoutY="740.0" minHeight="75.0" minWidth="200.0" onMouseClicked="#createNewITRequest" ripplerFill="#c1c9eb" styleClass="jfx-button-submit" stylesheets="@../../css/sanitationRequestUI.css" text="Submit Request">
          <font>
             <Font size="48.0" />
          </font>

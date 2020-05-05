@@ -71,6 +71,7 @@ public class NewMapDisplayController implements Controller {
     this.currentFloor = 1;
     this.currentBuilding = "Faulkner";
     this.directions = new ArrayList<>();
+
     this.buildingButtonList = new JFXNodesList();
     this.faulknerButtonList = new JFXNodesList();
     this.mainButtonList = new JFXNodesList();
@@ -500,6 +501,7 @@ public class NewMapDisplayController implements Controller {
     } else if (src == pn_infoIcon) {
       resetMap();
       // TODO load info page here
+      this.mainApp.switchScene("/edu/wpi/N/views/aboutPage.fxml", singleton);
     } else if (src == pn_adminIcon) {
       resetMap();
       this.mainApp.switchScene("/edu/wpi/N/views/admin/newLogin.fxml", singleton);
