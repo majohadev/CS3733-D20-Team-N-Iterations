@@ -414,7 +414,7 @@ public class NewMapDisplayController implements Controller {
     } else if (src == pn_infoIcon) {
       // TODO load info page here
     } else if (src == pn_adminIcon) {
-      // TODO load admin page here
+      this.mainApp.switchScene("/edu/wpi/N/views/admin/newLogin.fxml", singleton);
     }
   }
 
