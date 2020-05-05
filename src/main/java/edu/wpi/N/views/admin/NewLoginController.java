@@ -58,7 +58,7 @@ public class NewLoginController implements Controller, Initializable {
   }
 
   public void goBack() throws IOException {
-    mainApp.switchScene("views/newHomePage.fxml", singleton);
+    mainApp.switchScene("views/mapDisplay/newMapDisplay.fxml", singleton);
   }
 
   @FXML
