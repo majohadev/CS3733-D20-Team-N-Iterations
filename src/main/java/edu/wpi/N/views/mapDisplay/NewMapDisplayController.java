@@ -68,6 +68,7 @@ public class NewMapDisplayController implements Controller {
     this.currentFloor = 1;
     this.currentBuilding = "Faulkner";
     this.directions = new ArrayList<>();
+
     this.buildingButtonList = new JFXNodesList();
     this.faulknerButtonList = new JFXNodesList();
     this.mainButtonList = new JFXNodesList();
