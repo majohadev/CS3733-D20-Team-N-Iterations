@@ -423,7 +423,7 @@ public class MapDB {
       throws DBException {
     try {
       String nodeID =
-          "I"
+          "S"
               + nodeType.toUpperCase()
               + nextAvailNum(nodeType, floor)
               + String.format("%02d", floor);
@@ -437,7 +437,7 @@ public class MapDB {
       stmt.setString(6, nodeType);
       stmt.setString(7, longName);
       stmt.setString(8, shortName);
-      stmt.setString(9, "I");
+      stmt.setString(9, "S");
       stmt.executeUpdate();
       // System.out.println("Values Inserted");
       return getNode(nodeID);
