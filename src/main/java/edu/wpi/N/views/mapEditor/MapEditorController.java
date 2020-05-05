@@ -90,6 +90,7 @@ public class MapEditorController implements Controller {
   double MAP_HEIGHT = 997;
   double HORIZONTAL_SCALE = MAP_WIDTH / IMAGE_WIDTH;
   double VERTICAL_SCALE = MAP_HEIGHT / IMAGE_HEIGHT;
+  int numFloors;
 
   // Zoom constants
   private final double MIN_MAP_SCALE = 0.8;
@@ -156,9 +157,10 @@ public class MapEditorController implements Controller {
   }
 
   public void initialize() throws DBException, IOException {
+    setFaulknerDefaults();
     nodesMap2 = new HashMap<>();
     currentFloor = DEFAULT_FLOOR;
-    currentBuilding = DEFAULT_BUILDING; // set to actual building
+    currentBuilding = DEFAULT_BUILDING;
     initializeChangeFloorButtons();
     initializeMainCampusFloorButtons();
     setFloorButtonColors();
@@ -169,7 +171,6 @@ public class MapEditorController implements Controller {
     edgesMap = HashBiMap.create();
     mode = Mode.NO_STATE;
     loadFloor();
-    setFaulknerDefaults();
     addNodeCircle = null;
     elevCircle = null;
     deleteNodeCircles = new LinkedList<>();
@@ -195,6 +196,7 @@ public class MapEditorController implements Controller {
     MAP_HEIGHT = 997;
     HORIZONTAL_SCALE = MAP_WIDTH / IMAGE_WIDTH;
     VERTICAL_SCALE = MAP_HEIGHT / IMAGE_HEIGHT;
+    numFloors = 5;
   }
 
   private void setMainCampusDefaults() {
@@ -207,6 +209,7 @@ public class MapEditorController implements Controller {
     MAP_HEIGHT = 994;
     HORIZONTAL_SCALE = MAP_WIDTH / IMAGE_WIDTH;
     VERTICAL_SCALE = MAP_HEIGHT / IMAGE_HEIGHT;
+    numFloors = 6;
   }
 
   private void loadFloor() throws DBException, IOException {
@@ -389,7 +392,7 @@ public class MapEditorController implements Controller {
     if (mode == Mode.EDIT_ELEV) {
       pn_elev.getChildren().add(pane);
       pn_elev.setVisible(true);
-      controllerEditElev.setFloor(currentFloor);
+      controllerEditElev.setFloor(currentFloor, currentBuilding);
       onBtnAddShaftClicked();
       pn_editor.setVisible(false);
 
@@ -519,7 +522,9 @@ public class MapEditorController implements Controller {
       }
       elevCircle = circle;
       elevCircle.setFill(EDIT_ELEV_SELECTED_COLOR);
-      controllerEditElev.setFloor(nodesMap.get(circle).getDBNode().getFloor());
+      controllerEditElev.setFloor(
+          nodesMap.get(circle).getDBNode().getFloor(),
+          nodesMap.get(circle).getDBNode().getBuilding());
       controllerEditElev.setNode(nodesMap.get(circle).getDBNode());
       pn_elev.setVisible(true);
     }
@@ -1111,7 +1116,7 @@ public class MapEditorController implements Controller {
               }
               // sort nodes list by floor
               LinkedList<DbNode> sortedNodes = new LinkedList<>();
-              for (int i = 1; i <= 5; i++) {
+              for (int i = 1; i <= numFloors; i++) {
                 for (DbNode n : addShaftNodeCircles) {
                   if (n.getFloor() == i) {
                     sortedNodes.add(n);
@@ -1135,7 +1140,7 @@ public class MapEditorController implements Controller {
               pn_editor.setVisible(false);
 
               pn_elev.setDisable(false);
-              controllerEditElev.setFloor(currentFloor);
+              controllerEditElev.setFloor(currentFloor, currentBuilding);
               for (Circle c : editElevNodes) {
                 c.setFill(DEFAULT_CIRCLE_COLOR);
               }
