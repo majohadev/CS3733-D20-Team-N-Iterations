@@ -14,9 +14,9 @@
             <children>
                   <Pane fx:id="pn_routeNodes" maxHeight="1.7976931348623157E308" maxWidth="1520.0" minHeight="0.0" minWidth="1520.0" prefWidth="1520.0">
                <children>
-                      <ImageView fx:id="img_map" fitHeight="982.0" fitWidth="1520.0" pickOnBounds="true" preserveRatio="true">
+                      <ImageView fx:id="img_map" fitHeight="1034.0" fitWidth="1520.0" pickOnBounds="true" preserveRatio="true">
                           <image>
-                              <Image url="@../../images/map/Floor1Reclor.png" />
+                              <Image url="@../../images/map/MainL2.png" />
                           </image>
                       </ImageView>
                       <Pane fx:id="pn_path" maxHeight="1.7976931348623157E308" maxWidth="1520.0" minHeight="0.0" minWidth="1520.0" prefWidth="1520.0" />

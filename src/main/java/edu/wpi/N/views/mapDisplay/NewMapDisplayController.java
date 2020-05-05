@@ -19,6 +19,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
@@ -40,6 +41,7 @@ public class NewMapDisplayController implements Controller {
   @FXML Pane pn_mapContainer;
   @FXML Pane pn_googleMapView;
   @FXML Pane pn_hospitalView;
+  @FXML Label lbl_building_floor;
 
   @FXML MapBaseController mapBaseController;
   MapLocationSearchController locationSearchController;
@@ -53,6 +55,7 @@ public class NewMapDisplayController implements Controller {
   JFXNodesList buildingButtonList;
   JFXNodesList faulknerButtonList;
   JFXNodesList mainButtonList;
+  JFXButton btn_google;
 
   @Override
   public void setMainApp(App mainApp) {
@@ -74,6 +77,7 @@ public class NewMapDisplayController implements Controller {
     this.mainButtonList = new JFXNodesList();
     this.pn_hospitalView = mapBaseController.getAnchorPane();
     mapBaseController.setFloor(this.currentBuilding, this.currentFloor, this.path);
+    setFloorBuildingText(this.currentFloor, this.currentBuilding);
     pn_mapContainer.getChildren().setAll(pn_hospitalView);
     pn_iconBar.getChildren().get(0).setStyle("-fx-background-color: #4A69C6;");
     initFloorButtons();
@@ -88,6 +92,7 @@ public class NewMapDisplayController implements Controller {
     locationSearchController = loader.getController();
     initLocationSearchButton();
     initResetLocationSearch();
+    initRestroomSearchButton();
     pn_change.getChildren().add(pane);
   }
 
@@ -111,8 +116,9 @@ public class NewMapDisplayController implements Controller {
     styleBuildingButtons(btn_faulkner);
     JFXButton btn_main = new JFXButton("Main");
     styleBuildingButtons(btn_main);
-    JFXButton btn_google = new JFXButton("Google");
+    btn_google = new JFXButton("Street View");
     styleBuildingButtons(btn_google);
+    setGoogleButtonDisable(true);
 
     // Faulkner Buttons
     JFXButton btn_faulkner1 = new JFXButton("F1");
@@ -173,7 +179,7 @@ public class NewMapDisplayController implements Controller {
     buildingButtonList.addAnimatedNode(btn_google);
 
     buildingButtonList.setSpacing(100);
-    buildingButtonList.setRotate(-90);
+    buildingButtonList.setRotate(90);
     faulknerButtonList.setSpacing(15);
     mainButtonList.setSpacing(15);
 
@@ -193,6 +199,7 @@ public class NewMapDisplayController implements Controller {
   }
 
   public void handleFloorButtonClicked(String txt) throws DBException {
+    collapseAllFloorButtons();
     if (txt.equals("F1")) {
       changeFloor(1, "Faulkner");
       switchHospitalView();
@@ -237,9 +244,10 @@ public class NewMapDisplayController implements Controller {
       changeFloor(6, "Main");
       switchHospitalView();
       setDefaultKioskNode();
-    } else if (txt.equals("Google")) {
-      // TODO DEFAULT GOOGLE MAP VIEW
+    } else if (txt.equals("Street View")) {
       switchGoogleView();
+      setFloorBuildingText(-1, "");
+      // TODO DEFAULT GOOGLE MAP VIEW
     }
   }
 
@@ -247,6 +255,7 @@ public class NewMapDisplayController implements Controller {
     mapBaseController.clearPath();
     this.currentFloor = newFloor;
     this.currentBuilding = newBuilding;
+    setFloorBuildingText(this.currentFloor, this.currentBuilding);
     setDefaultKioskNode();
     mapBaseController.setFloor(this.currentBuilding, this.currentFloor, this.path);
   }
@@ -289,7 +298,7 @@ public class NewMapDisplayController implements Controller {
         .setOnMouseClicked(
             e -> {
               this.path.clear();
-              //      enableAllFloorButtons;
+              setGoogleButtonDisable(true);
               locationSearchController.getTextFirstLocation().clear();
               locationSearchController.getTextSecondLocation().clear();
               locationSearchController.getFuzzyList().getItems().clear();
@@ -311,6 +320,7 @@ public class NewMapDisplayController implements Controller {
             e -> {
               this.path.clear();
               enableAllFloorButtons();
+              setGoogleButtonDisable(true);
               doctorSearchController.getTextLocation().clear();
               doctorSearchController.getTxtDoctor().clear();
               doctorSearchController.getFuzzyList().getItems().clear();
@@ -325,6 +335,27 @@ public class NewMapDisplayController implements Controller {
             });
   }
 
+  public void initRestroomSearchButton() throws DBException {
+    locationSearchController
+        .getBtnRestRoom()
+        .setOnMouseClicked(
+            e -> {
+              DbNode first = locationSearchController.getDBNodes()[0];
+              try {
+                this.path = singleton.savedAlgo.findQuickAccess(first, "REST");
+                mapBaseController.setFloor(first.getBuilding(), first.getFloor(), path);
+                if (path.size() == 0) {
+                  displayErrorMessage("Please select the first node");
+                }
+              } catch (DBException | NullPointerException ex) {
+                displayErrorMessage("Please select the first node");
+                return;
+              }
+              disableNonPathFloors();
+              //        setTextDescriptions();
+            });
+  }
+
   public void initPathfind(DbNode first, DbNode second, boolean isSelected)
       throws DBException, IOException {
     if (first == null || second == null) {
@@ -332,6 +363,10 @@ public class NewMapDisplayController implements Controller {
       return;
     }
     this.path = singleton.savedAlgo.findPath(first, second, isSelected);
+    if (path == null) {
+      displayErrorMessage("No path can be found");
+    }
+    switchHospitalView();
     mapBaseController.setFloor(first.getBuilding(), first.getFloor(), path);
     disableNonPathFloors();
     displayGoogleMaps(first, second);
@@ -345,7 +380,9 @@ public class NewMapDisplayController implements Controller {
   public void displayGoogleMaps(DbNode first, DbNode second) throws IOException {
     boolean isFirstFaulkner = first.getBuilding().equals("Faulkner");
     boolean isSecondFaulkner = second.getBuilding().equals("Faulkner");
+    setGoogleButtonDisable(true);
     if (isFirstFaulkner ^ isSecondFaulkner) {
+      setGoogleButtonDisable(false);
       FXMLLoader loader = new FXMLLoader();
       loader.setLocation(App.class.getResource("views/mapDisplay/googleMap.fxml"));
 
@@ -386,7 +423,9 @@ public class NewMapDisplayController implements Controller {
   }
 
   public void onIconClicked(MouseEvent e) throws IOException, DBException {
+    collapseAllFloorButtons();
     mapBaseController.clearPath();
+    setGoogleButtonDisable(true);
     enableAllFloorButtons();
     Pane src = (Pane) e.getSource();
     pn_iconBar.getChildren().forEach(n -> n.setStyle("-fx-background-color: #263051"));
@@ -398,6 +437,7 @@ public class NewMapDisplayController implements Controller {
       locationSearchController = loader.getController();
       initLocationSearchButton();
       initResetLocationSearch();
+      initRestroomSearchButton();
       setDefaultKioskNode();
       pn_change.getChildren().add(pane);
     } else if (src == pn_doctorIcon) {
@@ -431,7 +471,13 @@ public class NewMapDisplayController implements Controller {
   }
 
   public void setDefaultKioskNode() throws DBException {
-    if (path.size() > 0) {
+    boolean noFaulknerKiosk =
+        !(currentBuilding.equals("Faulkner") && (currentFloor == 1 || currentFloor == 3));
+    if (noFaulknerKiosk) {
+      return;
+    }
+
+    if (path == null && path.size() > 0) {
       return;
     }
     if (locationSearchController != null) {
@@ -443,12 +489,6 @@ public class NewMapDisplayController implements Controller {
       doctorSearchController.getTextLocation().clear();
       doctorSearchController.getTxtDoctor().clear();
       doctorSearchController.getFuzzyList().getItems().clear();
-    }
-
-    boolean noFaulknerKiosk =
-        !(currentBuilding.equals("Faulkner") && (currentFloor == 1 || currentFloor == 3));
-    if (noFaulknerKiosk) {
-      return;
     }
 
     DbNode kiosk = null;
@@ -485,7 +525,7 @@ public class NewMapDisplayController implements Controller {
     faulknerButtonList.getChildren().get(0).setDisable(false);
     mainButtonList.getChildren().forEach(e -> e.setDisable(true));
     mainButtonList.getChildren().get(0).setDisable(false);
-    for (int i = 0; i < path.size() - 1; i++) {
+    for (int i = 0; i < path.size(); i++) {
       DbNode node = path.get(i);
       if (!(node.getNodeType().equals("ELEV") || node.getNodeType().equals("STAI"))) {
         if (node.getBuilding().equals("Faulkner")) {
@@ -504,9 +544,47 @@ public class NewMapDisplayController implements Controller {
 
   public void switchGoogleView() {
     pn_mapContainer.getChildren().setAll(pn_googleMapView);
+    System.out.println("Hello");
   }
 
   public void switchHospitalView() {
     pn_mapContainer.getChildren().setAll(pn_hospitalView);
+  }
+
+  public void setGoogleButtonDisable(boolean b) {
+    this.btn_google.setDisable(b);
+  }
+
+  public void setFloorBuildingText(int floor, String building) {
+    if (floor == -1) {
+      lbl_building_floor.setText("Driving Directions");
+    }
+    if (!building.equals("Faulkner")) {
+      if (floor == 1) {
+        lbl_building_floor.setText(building + ", " + "L2");
+      } else if (floor == 2) {
+        lbl_building_floor.setText(building + ", " + "L1");
+      }
+      if (floor == 3) {
+        lbl_building_floor.setText(building + ", " + "G");
+      }
+      if (floor == 4) {
+        lbl_building_floor.setText(building + ", " + "1");
+      }
+      if (floor == 5) {
+        lbl_building_floor.setText(building + ", " + "2");
+      }
+      if (floor == 6) {
+        lbl_building_floor.setText(building + ", " + "3");
+      }
+    } else {
+      lbl_building_floor.setText(building + ", " + floor);
+    }
+  }
+
+  public void collapseAllFloorButtons() {
+    buildingButtonList.animateList(false);
+    mainButtonList.animateList(false);
+    faulknerButtonList.animateList(false);
   }
 }
