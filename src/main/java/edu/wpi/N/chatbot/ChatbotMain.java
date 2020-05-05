@@ -8,7 +8,7 @@ public class ChatbotMain {
     dialogflow.initializeSession();
 
     // Test detecting intent
-    String userText = "Hello!";
+    String userText = "Look up weather forecast";
     dialogflow.detectIntentTexts(userText, "en-US");
 
     // Test weather

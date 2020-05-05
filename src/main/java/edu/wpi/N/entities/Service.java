@@ -42,9 +42,11 @@ public class Service {
 
     Service other = (Service) o;
 
-    return startTime.toString().equals(other.startTime.toString())
-        && endTime.toString().equals(other.endTime.toString())
-        && serviceType.equals(other.serviceType)
-        && description.equals(other.description);
+    return serviceType.equals(other.serviceType);
+  }
+
+  @Override
+  public String toString() {
+    return serviceType;
   }
 }

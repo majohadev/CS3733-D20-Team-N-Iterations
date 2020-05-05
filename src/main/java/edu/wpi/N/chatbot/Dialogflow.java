@@ -1,5 +1,7 @@
 package edu.wpi.N.chatbot;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.gax.core.FixedCredentialsProvider;
 import com.google.auth.Credentials;
 import com.google.auth.oauth2.ServiceAccountCredentials;
@@ -17,9 +19,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Base64;
 import javax.swing.*;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import okhttp3.*;
 
 public class Dialogflow {
   private String projectId;
@@ -168,6 +168,14 @@ public class Dialogflow {
   public String replyToUserInput(String userText) throws Exception {
     try {
       QueryResult queryResults = detectIntentTexts(userText, "en-US");
+
+      // If intent matches with get-weather
+      if (queryResults.getIntent().getDisplayName().equals("get-weather")) {
+        String message = getCurrentWeatherReply();
+        System.out.println(message);
+        return message;
+      }
+
       return queryResults.getFulfillmentText();
     } catch (Exception e) {
       e.printStackTrace();
@@ -185,15 +193,27 @@ public class Dialogflow {
     String url =
         "http://api.openweathermap.org/data/2.5/weather?appid=495b2d2af36253b0fd2e15dacdab5067&lat=42.361145&lon=-71.057083";
     OkHttpClient client = new OkHttpClient();
-
     Request request = new Request.Builder().url(url).build();
+    ObjectMapper objectMapper = new ObjectMapper();
 
-    try (Response response = client.newCall(request).execute()) {
-      response.body();
+    // Ignore fields we don't need
+    objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+    try (ResponseBody response = client.newCall(request).execute().body()) {
+
+      JSONResponseWeather jsResponse =
+          objectMapper.readValue(response.string(), JSONResponseWeather.class);
+
+      Double tempK = jsResponse.getMain().get("temp");
+      int tempF = (int) Math.round((tempK - 273.15) * 9 / 5 + 32);
+
+      String description = jsResponse.getWeather().get(0).getDescription();
+
+      return "Current temperature outside is " + tempF + " F, " + description;
+      // response.body();
     } catch (Exception e) {
       e.printStackTrace();
+      return null;
     }
-
-    return null;
   }
 }

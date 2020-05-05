@@ -26,7 +26,7 @@ import javafx.scene.image.Image;
 public abstract class QRGenerator {
 
   // Path of image containing last stored QR code
-  private final String IMAGE_PATH = "edu/wpi/N/images/qrTemp.png";
+  private final String IMAGE_PATH = "edu/wpi/N/images/mapIcons/qrTemp.png";
 
   // Number of characters after which QR codes get unreasonably large
   private final int MAX_CHARS = 500;
@@ -36,7 +36,7 @@ public abstract class QRGenerator {
 
   // Generate QR code as JavaFX Image using concatenated list of strings, optionally storing the
   // result
-  protected Image generateImage(ArrayList<String> linesToEncode, boolean storeImage) {
+  public Image generateImage(ArrayList<String> linesToEncode, boolean storeImage) {
 
     if (linesToEncode != null) {
 

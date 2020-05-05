@@ -6,14 +6,20 @@ import static java.lang.Math.atan2;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Scanner;
 
 public class Directions {
   private ArrayList<String> directions;
   private static ArrayList<DbNode> path;
   private static State state;
   private static final double TURN_THRESHOLD = 30;
+  private static LinkedList<DbNode> entranceNodes;
 
   enum State {
     STARTING,
@@ -25,6 +31,7 @@ public class Directions {
   }
 
   public Directions(LinkedList<DbNode> path) {
+    // this.entranceNodes.add();
     this.directions = new ArrayList<>();
     ArrayList<DbNode> pathNodes = new ArrayList<DbNode>();
     for (DbNode node : path) {
@@ -43,17 +50,23 @@ public class Directions {
     String startFloor = "";
     String message = "";
     boolean messageCheck = false;
+    double totalDistance = 0;
+    double totalTime = 0;
     for (int i = 0; i <= path.size() - 1; i++) {
       currNode = path.get(i);
       if (i < path.size() - 1) {
         nextNode = path.get(i + 1);
         angle = getAngle(i);
         stateChange = !getState(i + 1).equals(state);
+        totalDistance += getDistance(path.get(i), path.get(i + 1));
       }
       state = getState(i);
       switch (state) {
         case STARTING:
-          if (!path.get(0).getNodeType().equals("HALL")) {
+          if (currNode.getNodeID().equals("NSERV00301")
+              || currNode.getNodeID().equals("NSERV00103")) {
+            message = "Start in the direction of the kiosk arrow ";
+          } else if (!path.get(0).getNodeType().equals("HALL")) {
             message = "Exit " + path.get(0).getLongName(); // "Start by exiting "
           } else if (!(getLandmark(nextNode) == null)) {
             message =
@@ -72,28 +85,34 @@ public class Directions {
           break;
         case CONTINUING:
           distance += getDistance(currNode, nextNode);
-          if (!message.equals("")) {
-            directions.add(message); // + " and proceed down the hall");
-            message = "";
-          } else if (stateChange || atIntersection(currNode)) {
-            if (getLandmark(nextNode) == null) {
-              message = "Continue to next intersection " + getDistanceString(distance);
-            } else if (getLandmark(nextNode).equals(nextNode)) {
-              message =
-                  "Go towards " // "Proceed straight towards "
-                      + getLandmark(nextNode).getLongName()
-                      + " "
-                      + getDistanceString(distance);
-              // } else if (atEndOfHall(nextNode)) { //this should go before first if
-              // message = "Continue to the end of the hallway " + getDistanceString(distance);
-            } else {
-              message =
-                  "Continue past "
-                      + getLandmark(nextNode).getLongName()
-                      + " "
-                      + getDistanceString(distance);
+          if (getState(i - 1).equals(CHANGING_FLOOR)) {
+            message = "Exit " + currNode.getLongName();
+          } else {
+            if (!message.equals("")) {
+              directions.add(message); // + " and proceed down the hall");
+              message = "";
+            } else if (stateChange || atIntersection(currNode)) {
+              if (getLandmark(nextNode) == null) {
+                message = "Continue to next intersection " + getDistanceString(distance);
+              } else if (getLandmark(nextNode).equals(nextNode)) {
+                message =
+                    "Go towards " // "Proceed straight towards "
+                        + getLandmark(nextNode).getLongName()
+                        + " "
+                        + getDistanceString(distance);
+                // } else if (atEndOfHall(nextNode)) { //this should go before first if
+                // message = "Continue to the end of the hallway " + getDistanceString(distance);
+              } else if (getState(i - 1).equals(CHANGING_FLOOR)) {
+                message = "Exit " + currNode.getLongName();
+              } else {
+                message =
+                    "Continue past "
+                        + getLandmark(nextNode).getLongName()
+                        + " "
+                        + getDistanceString(distance);
+              }
+              distance = 0;
             }
-            distance = 0;
           }
           break;
         case TURNING:
@@ -120,6 +139,7 @@ public class Directions {
           }
           break;
         case CHANGING_FLOOR:
+          totalTime += 37; // add 37 sec for average floor change time
           if (!getState(i - 1).equals(CHANGING_FLOOR)) {
             startFloor = currNode.getLongName();
           }
@@ -128,7 +148,7 @@ public class Directions {
             message = "";
             messageCheck = true;
           }
-          if (stateChange) {
+          if (stateChange && getState(i - 1).equals(CHANGING_FLOOR)) {
             if (messageCheck) {
               directions.add("Take " + startFloor + " to floor " + currNode.getFloor());
               messageCheck = false;
@@ -140,14 +160,39 @@ public class Directions {
         case ARRIVING:
           if (getState(i - 1).equals(TURNING)) {
             String turnMessage = "Turn " + getTurnType(angle, getAngle(i - 2));
-            directions.add(turnMessage + " and arrive at " + currNode.getLongName());
+            directions.add(
+                turnMessage
+                    + " and arrive at "
+                    + currNode.getLongName()
+                    + " "
+                    + getTotalTimeString(totalDistance, totalTime));
           } else if (!message.equals("")) {
-            directions.add(message + " and arrive at destination");
+            directions.add(
+                message
+                    + " and arrive at destination "
+                    + getTotalTimeString(totalDistance, totalTime));
           } else {
-            directions.add("Arrive at destination");
+            directions.add("Arrive at destination " + getTotalTimeString(totalDistance, totalTime));
           }
           break;
       }
+    }
+  }
+
+  /**
+   * gets string for total time using average walking speed of 4.6 ft/s and avg elevator ride of 37
+   * sec
+   *
+   * @param totalDistance
+   * @param time
+   * @return String
+   */
+  public static String getTotalTimeString(double totalDistance, double time) {
+    int totalTime = (int) Math.round((totalDistance / 4.6 + time) / 60);
+    if (totalTime <= 0) {
+      return "(Estimated time less than 1 minute)";
+    } else {
+      return "(Estimated time " + totalTime + " minutes)";
     }
   }
 
@@ -162,14 +207,15 @@ public class Directions {
       return STARTING;
     } else if (i == path.size() - 1) {
       return ARRIVING;
-    } else if (Math.abs(getAngle(i) - getAngle(i - 1)) > TURN_THRESHOLD
-        && Math.abs(getAngle(i) - getAngle(i - 1)) < 360 - TURN_THRESHOLD) {
-      return TURNING;
     } else if ((path.get(i).getNodeType().equals("ELEV")
             || path.get(i).getNodeType().equals("STAI"))
         && (path.get(i).getFloor() != path.get(i + 1).getFloor()
             || path.get(i).getNodeType().equals(path.get(i - 1).getNodeType()))) {
       return CHANGING_FLOOR;
+    } else if (Math.abs(getAngle(i) - getAngle(i - 1)) > TURN_THRESHOLD
+        && Math.abs(getAngle(i) - getAngle(i - 1)) < 360 - TURN_THRESHOLD) {
+      return TURNING;
+
     } else if (!path.get(i).getBuilding().equals(path.get(i + 1).getBuilding())) {
       return EXITING;
     } else {
@@ -209,7 +255,9 @@ public class Directions {
   private static DbNode getLandmark(DbNode node) throws DBException {
     if (node.getNodeType().equals("HALL")) {
       for (DbNode n : MapDB.getAdjacent(node.getNodeID())) {
-        if (!n.getNodeType().equals("HALL")) {
+        if (!n.getNodeType().equals("HALL")
+            && !n.getNodeType().equals("ELEV")
+            && !n.getNodeType().equals("STAI")) {
           return n;
         }
       }
@@ -251,7 +299,7 @@ public class Directions {
         Math.sqrt(
             Math.pow(nextNode.getX() - currNode.getX(), 2)
                 + Math.pow(nextNode.getY() - currNode.getY(), 2));
-    double conversion = 1;
+    double conversion = 0.338;
     return distance * conversion;
   }
 
@@ -303,24 +351,63 @@ public class Directions {
     }
   }
 
-  /*    */
   /**
-   * Determines if a node is the last node in a hallway
+   * gets the google directions with the specified mode and direction
    *
-   * @param node, DbNode
-   * @return true, if the node is at the end of the hall, false otherwise
+   * @param mode walking, driving,, bycycling, transit; gets directions in one of those formats
+   * @param dir the direction. True = from 45 francis street to 1153 centre street, false = opposite
+   *     direction
+   * @return The google directions as a string
    */
-  /*
-  private static boolean atEndOfHall(DbNode node) throws DBException {
-      int hallNodeCount = 0;
-      if (node.getNodeType().equals("HALL")) {
-          for (DbNode n : MapDB.getAdjacent(node.getNodeID())) {
-              if (n.getNodeType().equals("HALL")) {
-                  hallNodeCount++;
-              }
-          }
-        return hallNodeCount <= 1;
+  public static String getGoogleDirections(String mode, boolean dir) {
+    String urls;
+    if (dir) {
+      urls =
+          "https://maps.googleapis.com/maps/api/directions/json?mode="
+              + mode
+              + "&origin=45|Francis|Street,|Boston,|MA,"
+              + "&destination=1153|Centre|St,|Boston,|MA"
+              + "&key=AIzaSyDx7BSweq5dRzXavs1vxuMWeR2ETMR6b3Q";
+    } else {
+      urls =
+          "https://maps.googleapis.com/maps/api/directions/json?mode="
+              + mode
+              + "&origin=1153|Centre|St,|Boston,|MA"
+              + "&destination=45|Francis|Street,|Boston,|MA,"
+              + "&key=AIzaSyDx7BSweq5dRzXavs1vxuMWeR2ETMR6b3Q";
+    }
+    try {
+      URL url = new URL(urls);
+      HttpURLConnection httpcon = (HttpURLConnection) (url.openConnection());
+      httpcon.setDoOutput(true);
+      httpcon.setRequestProperty("Content-Type", "application/json");
+      httpcon.setRequestProperty("Accept", "application/json");
+      httpcon.setRequestMethod("GET");
+      httpcon.connect();
+      Scanner sc = new Scanner(url.openStream());
+      String dirs = "";
+      while (sc.hasNext()) {
+        String next = sc.nextLine();
+        // if (next.contains("\"html_instructions\"")) System.out.println(next);
+        if (next.contains("\"html_instructions\""))
+          dirs +=
+              next.substring(44)
+                      .replace("\\u003cb\\u003e", "")
+                      .replace("\\u003c/b\\u003e", "")
+                      .replace("\\u003cwbr/\\u003e", "\n")
+                      .replace("&nbsp;", " ")
+                      .replaceAll("(\\\\u003c)(.*?)(\\\\u003e)", "\n")
+                      .replace("\",", "")
+                  + "\n";
+        // System.out.println(sc.nextLine() + "K");
       }
-      return false;
-  }*/
+      return dirs;
+    } catch (MalformedURLException e) {
+      e.printStackTrace();
+      return null;
+    } catch (IOException e) {
+      e.printStackTrace();
+      return null;
+    }
+  }
 }

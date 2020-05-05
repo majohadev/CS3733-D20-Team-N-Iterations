@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+
+<AnchorPane fx:id="controllerAnchorPane" maxWidth="1520.0" minWidth="1520.0" prefWidth="1520.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.mapDisplay.MapBaseController">
+    <children>
+        <StackPane fx:id="pn_movableMap" maxWidth="1520.0" minHeight="0.0" minWidth="1520.0" onMouseDragged="#mapDragHandler" onMousePressed="#mapPressHandler" onMouseReleased="#mapReleaseHandler" onScroll="#mapScrollHandler" prefWidth="1520.0">
+            <children>
+                  <Pane fx:id="pn_routeNodes" maxHeight="1.7976931348623157E308" maxWidth="1520.0" minHeight="0.0" minWidth="1520.0" prefWidth="1520.0">
+               <children>
+                      <ImageView fx:id="img_map" fitHeight="982.0" fitWidth="1520.0" pickOnBounds="true" preserveRatio="true">
+                          <image>
+                              <Image url="@../../images/map/Floor1Reclor.png" />
+                          </image>
+                      </ImageView>
+                      <Pane fx:id="pn_path" maxHeight="1.7976931348623157E308" maxWidth="1520.0" minHeight="0.0" minWidth="1520.0" prefWidth="1520.0" />
+               </children></Pane>
+            </children>
+            <cursor>
+                <Cursor fx:constant="OPEN_HAND" />
+            </cursor>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+        </StackPane>
+    </children>
+</AnchorPane>

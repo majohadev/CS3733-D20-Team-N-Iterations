@@ -1,9 +1,10 @@
 package edu.wpi.N.entities;
 
-public class DbNode implements INode {
+public class DbNode implements Comparable<DbNode>, INode {
   private int x, y, floor;
   private String nodeID, building, nodeType, longName, shortName;
   private char teamAssigned;
+  private double score;
 
   /**
    * Gets the x value of the node
@@ -86,6 +87,14 @@ public class DbNode implements INode {
     return y;
   }
 
+  public double getScore() {
+    return score;
+  }
+
+  public void setScore(double newScore) {
+    this.score = newScore;
+  }
+
   public DbNode(
       String nodeID,
       int x,
@@ -127,14 +136,26 @@ public class DbNode implements INode {
 
     DbNode other = (DbNode) o;
 
-    return nodeID.equals(other.nodeID)
-        && x == other.x
-        && y == other.y
-        && floor == other.floor
-        && building.equals(other.building)
-        && nodeType.equals(other.nodeType)
-        && longName.equals(other.longName)
-        && shortName.equals(other.shortName)
-        && teamAssigned == other.teamAssigned;
+    return nodeID.equals(other.nodeID);
+  }
+
+  @Override
+  public int hashCode() {
+    // XOR values/multiply by prime num to mix them up
+    return nodeID.hashCode() ^ ((x ^ y) * 17) ^ building.hashCode();
+  }
+
+  @Override
+  public String toString() {
+    return this.getLongName();
+  }
+
+  public int compareTo(DbNode o) {
+    if (this.score > o.score) {
+      return 1;
+    }
+    if (this.score < o.score) {
+      return -1;
+    } else return 0;
   }
 }

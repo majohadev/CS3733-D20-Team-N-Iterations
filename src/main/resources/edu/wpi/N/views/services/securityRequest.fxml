@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXTextArea?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="securityPage" prefHeight="900.0" prefWidth="1264.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.services.SecurityRequestController">
+   <children>
+      <HBox alignment="CENTER_LEFT" layoutX="318.0" layoutY="14.0" prefHeight="150.0" prefWidth="629.0" spacing="30.0" style="-fx-background-color: #002186; -fx-background-radius: 10;">
+         <children>
+            <ImageView fitHeight="130.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../images/serviceIcons/securityWhite.png" />
+               </image>
+               <HBox.margin>
+                  <Insets left="30.0" />
+               </HBox.margin>
+            </ImageView>
+            <Label text="Security Request" textFill="WHITE">
+               <font>
+                  <Font name="Calibri" size="55.0" />
+               </font>
+               <HBox.margin>
+                  <Insets />
+               </HBox.margin>
+            </Label>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" layoutX="54.0" layoutY="182.0" prefHeight="530.0" prefWidth="1196.0" spacing="50.0">
+         <children>
+            <VBox alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" spacing="20.0">
+               <children>
+                  <Label text="Where is security needed?">
+                     <font>
+                        <Font name="Calibri" size="48.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </Label>
+                  <JFXComboBox fx:id="cmbo_text" editable="true" labelFloat="true" onKeyTyped="#locationTextChanged" prefHeight="46.0" prefWidth="394.0" promptText="Enter Location" style="-fx-font-size: 24;" />
+                  <Separator prefWidth="200.0">
+                     <padding>
+                        <Insets bottom="10.0" top="10.0" />
+                     </padding>
+                  </Separator>
+                  <JFXCheckBox fx:id="cb_isEmergency" checkedColor="#002186" minHeight="-Infinity" minWidth="-Infinity" prefHeight="77.0" prefWidth="412.0" text="This is an emergency!">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                  </JFXCheckBox>
+               </children>
+            </VBox>
+            <Separator orientation="VERTICAL" prefHeight="200.0" />
+            <VBox alignment="CENTER" maxWidth="500.0" minWidth="500.0" prefWidth="500.0" spacing="10.0">
+               <children>
+                  <Label text="I see/hear...">
+                     <font>
+                        <Font name="Calibri" size="36.0" />
+                     </font>
+                  </Label>
+                  <GridPane alignment="CENTER" hgap="20.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="168.0" prefWidth="519.0" vgap="10.0">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints maxHeight="75.0" minHeight="10.0" prefHeight="46.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="87.0" minHeight="0.0" prefHeight="56.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="76.0" minHeight="0.0" prefHeight="47.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <JFXCheckBox fx:id="cb_susPerson" checkedColor="#002186" minHeight="-Infinity" minWidth="-Infinity" prefHeight="77.0" prefWidth="230.0" text="Suspicious person">
+                           <font>
+                              <Font size="25.0" />
+                           </font>
+                        </JFXCheckBox>
+                        <JFXCheckBox fx:id="cb_susPackage" checkedColor="#002186" layoutX="10.0" layoutY="8.0" minHeight="-Infinity" minWidth="-Infinity" text="Suspicious package" GridPane.columnIndex="1">
+                           <font>
+                              <Font size="25.0" />
+                           </font>
+                        </JFXCheckBox>
+                        <JFXCheckBox fx:id="cb_weapons" checkedColor="#002186" layoutX="265.0" layoutY="8.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="36.0" prefWidth="166.0" text="Weapons " GridPane.columnIndex="1" GridPane.rowIndex="1">
+                           <font>
+                              <Font size="25.0" />
+                           </font>
+                        </JFXCheckBox>
+                        <JFXCheckBox fx:id="cb_shouting" checkedColor="#002186" layoutX="10.0" layoutY="8.0" minHeight="-Infinity" minWidth="-Infinity" text="Shouting" GridPane.rowIndex="2">
+                           <font>
+                              <Font size="25.0" />
+                           </font>
+                        </JFXCheckBox>
+                        <JFXCheckBox fx:id="cb_harassment" checkedColor="#002186" minHeight="-Infinity" minWidth="-Infinity" text="Harassment" GridPane.rowIndex="1">
+                           <font>
+                              <Font size="25.0" />
+                           </font>
+                        </JFXCheckBox>
+                        <JFXCheckBox fx:id="cb_violence" checkedColor="#002186" minHeight="-Infinity" minWidth="-Infinity" text="Violence" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                           <font>
+                              <Font size="25.0" />
+                           </font>
+                        </JFXCheckBox>
+                     </children>
+                  </GridPane>
+                  <Separator prefWidth="200.0">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                     <padding>
+                        <Insets bottom="10.0" top="10.0" />
+                     </padding></Separator>
+                  <Label text="Details">
+                     <font>
+                        <Font name="Calibri" size="36.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </Label>
+                  <JFXTextArea fx:id="txtf_description" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="168.0" prefWidth="500.0" promptText="Please describe the situation here." style="-fx-font-size: 18;">
+                     <font>
+                        <Font size="6.0" />
+                     </font>
+                  </JFXTextArea>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+      <JFXButton fx:id="btn_submit" buttonType="RAISED" contentDisplay="RIGHT" graphicTextGap="20.0" layoutX="382.0" layoutY="743.0" minHeight="75.0" minWidth="200.0" onMouseClicked="#createNewSecRequest" ripplerFill="#c1c9eb" style="-fx-background-color: #002186;" stylesheets="@../../css/submitButton.css" text="Submit Request">
+         <font>
+            <Font size="48.0" />
+         </font>
+         <graphic>
+            <ImageView fitHeight="54.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" style="fx-border-color: yellow;">
+               <image>
+                  <Image url="@../../images/mapIcons/yellowArrow.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </JFXButton>
+   </children>
+</AnchorPane>
