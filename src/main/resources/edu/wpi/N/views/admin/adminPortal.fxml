@@ -16,7 +16,7 @@
    <children>
     <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="1080.0" prefWidth="400.0" style="-fx-background-color: #263051;" AnchorPane.topAnchor="0.0">
          <children>
-            <AnchorPane fx:id="ap_swapPane" prefHeight="970.0" prefWidth="200.0" AnchorPane.leftAnchor="75.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="110.0" />
+            <AnchorPane fx:id="ap_swapPane" layoutX="69.0" layoutY="110.0" prefHeight="970.0" prefWidth="200.0" AnchorPane.leftAnchor="69.0" AnchorPane.rightAnchor="6.0" AnchorPane.topAnchor="110.0" />
             <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="970.0" prefWidth="75.0" style="-fx-background-color: #263051;" AnchorPane.topAnchor="110.0">
                <children>
                   <Pane prefHeight="60.0" prefWidth="80.0">
@@ -192,7 +192,7 @@
             </Pane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="anchorSwap" layoutX="186.0" layoutY="96.0" prefHeight="1080.0" prefWidth="1520.0" AnchorPane.leftAnchor="400.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane fx:id="anchorSwap" layoutX="186.0" layoutY="96.0" prefHeight="1080.0" prefWidth="1520.0" style="-fx-background-color: #7e9ab6;" AnchorPane.leftAnchor="400.0" AnchorPane.topAnchor="0.0">
          <children>
             <TableView fx:id="tb_RequestTable" layoutX="52.0" layoutY="245.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="429.0" prefWidth="960.0" stylesheets="@../../css/adminTables.css" AnchorPane.bottomAnchor="296.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="508.0" AnchorPane.topAnchor="245.0" />
             <TableView fx:id="tbl_Employees" layoutX="1060.0" layoutY="245.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" />
