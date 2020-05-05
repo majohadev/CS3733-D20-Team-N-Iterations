@@ -14,6 +14,12 @@ public class MapImageLoader {
     storeImage("Faulkner3", "edu/wpi/N/images/map/Floor3TeamN.png");
     storeImage("Faulkner4", "edu/wpi/N/images/map/Floor4SolidBackground.png");
     storeImage("Faulkner5", "edu/wpi/N/images/map/Floor5TeamN.png");
+    storeImage("Main1", "edu/wpi/N/images/map/MainL2.png");
+    storeImage("Main2", "edu/wpi/N/images/map/MainL1.png");
+    storeImage("Main3", "edu/wpi/N/images/map/MainGround.png");
+    storeImage("Main4", "edu/wpi/N/images/map/MainResizedF1.png");
+    storeImage("Main5", "edu/wpi/N/images/map/MainFloor2.png");
+    storeImage("Main6", "edu/wpi/N/images/map/MainFloor3.png");
   }
 
   /**

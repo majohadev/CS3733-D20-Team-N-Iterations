@@ -13,16 +13,16 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="internalTransportPage" prefHeight="900.0" prefWidth="1264.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.services.InternalTransportController">
+<AnchorPane fx:id="internalTransportPage" prefHeight="900.0" prefWidth="1264.0" styleClass="anchor" stylesheets="@../../css/sanitationRequestUI.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.services.InternalTransportController">
    <children>
-      <HBox alignment="CENTER_LEFT" layoutX="166.0" layoutY="14.0" prefHeight="150.0" prefWidth="932.0" spacing="30.0" style="-fx-background-color: #002186; -fx-background-radius: 10;">
+      <HBox alignment="CENTER_LEFT" layoutX="166.0" layoutY="14.0" prefHeight="150.0" prefWidth="932.0" spacing="30.0" stylesheets="@../../css/sanitationRequestUI.css">
          <children>
             <ImageView fitHeight="140.0" fitWidth="190.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../images/serviceIcons/PatientTransportationIconWhite.png" />
                </image>
             </ImageView>
-            <Label text="Internal Transportation Request" textFill="WHITE">
+            <Label styleClass="label-header" stylesheets="@../../css/sanitationRequestUI.css" text="Internal Transportation Request" textFill="WHITE">
                <font>
                   <Font name="Calibri" size="55.0" />
                </font>
@@ -36,7 +36,7 @@
          <children>
             <VBox alignment="CENTER" maxHeight="509.0" maxWidth="500.0" minWidth="500.0" prefHeight="509.0" prefWidth="500.0" spacing="30.0">
                <children>
-                  <Label text="Please Enter A Destination For Transportation">
+                  <Label styleClass="label-mid-size" stylesheets="@../../css/sanitationRequestUI.css" text="Please Enter A Destination For Transportation">
                      <font>
                         <Font name="Calibri" size="24.0" />
                      </font>
@@ -44,8 +44,8 @@
                         <Insets />
                      </VBox.margin>
                   </Label>
-                  <JFXComboBox fx:id="cmbo_dest" editable="true" labelFloat="true" onKeyTyped="#locationTextChanged" prefHeight="46.0" prefWidth="394.0" promptText="Enter Destination Location" style="-fx-font-size: 18;" />
-                  <Label text="Please Enter A Pickup Location ">
+                  <JFXComboBox fx:id="cmbo_dest" editable="true" labelFloat="true" onKeyTyped="#locationTextChanged" prefHeight="46.0" prefWidth="394.0" promptText="Enter Destination Location" styleClass="jfx-combo-box" stylesheets="@../../css/sanitationRequestUI.css" />
+                  <Label styleClass="label-mid-size" stylesheets="@../../css/sanitationRequestUI.css" text="Please Enter A Pickup Location ">
                      <font>
                         <Font name="Calibri" size="24.0" />
                      </font>
@@ -53,8 +53,8 @@
                         <Insets top="30.0" />
                      </VBox.margin>
                   </Label>
-                  <JFXComboBox fx:id="cmbo_pickup" editable="true" labelFloat="true" onKeyTyped="#locationTextChanged" prefHeight="46.0" prefWidth="394.0" promptText="Enter Pickup Location" style="-fx-font-size: 18;" />
-                  <Label text="Please Select Your Transport Type">
+                  <JFXComboBox fx:id="cmbo_pickup" editable="true" labelFloat="true" onKeyTyped="#locationTextChanged" prefHeight="46.0" prefWidth="394.0" promptText="Enter Pickup Location" styleClass="jfx-combo-box" stylesheets="@../../css/sanitationRequestUI.css" />
+                  <Label styleClass="label-mid-size" stylesheets="@../../css/sanitationRequestUI.css" text="Please Select Your Transport Type">
                      <font>
                         <Font name="Calibri" size="24.0" />
                      </font>
@@ -62,18 +62,18 @@
                         <Insets top="30.0" />
                      </VBox.margin>
                   </Label>
-                  <JFXComboBox fx:id="cmbo_type" labelFloat="true" layoutX="63.0" layoutY="279.0" prefHeight="46.0" prefWidth="394.0" promptText="Transport Types" style="-fx-font-size: 18;" />
+                  <JFXComboBox fx:id="cmbo_type" labelFloat="true" layoutX="63.0" layoutY="279.0" prefHeight="46.0" prefWidth="394.0" promptText="Transport Types" styleClass="jfx-combo-box" stylesheets="@../../css/sanitationRequestUI.css" />
                </children>
             </VBox>
             <VBox alignment="CENTER" maxHeight="500.0" maxWidth="500.0" minWidth="500.0" prefHeight="200.0" prefWidth="100.0" spacing="47.0">
                <children>
-                  <Label text="Please Schedule A Pickup Time">
+                  <Label styleClass="label-mid-size" stylesheets="@../../css/sanitationRequestUI.css" text="Please Schedule A Pickup Time">
                      <font>
                         <Font name="Calibri" size="24.0" />
                      </font>
                   </Label>
-                  <JFXTimePicker fx:id="tp_transporttime" defaultColor="#002186" prefHeight="46.0" prefWidth="394.0" style="-fx-font-size: 18;" />
-                  <Label text="Please Enter Additional Notes Below">
+                  <JFXTimePicker fx:id="tp_transporttime" defaultColor="#002185" prefHeight="46.0" prefWidth="394.0" styleClass="combo-box" stylesheets="@../../css/sanitationRequestUI.css" />
+                  <Label styleClass="label-mid-size" stylesheets="@../../css/sanitationRequestUI.css" text="Please Enter Additional Notes Below">
                      <font>
                         <Font name="Calibri" size="24.0" />
                      </font>
@@ -81,11 +81,11 @@
                         <Insets top="50.0" />
                      </VBox.margin>
                   </Label>
-                  <JFXTextArea fx:id="txtf_transNotes" maxWidth="394.0" minWidth="394.0" prefHeight="138.0" prefWidth="394.0" promptText="Enter Notes Here" style="-fx-font-size: 18;" />
+                  <JFXTextArea fx:id="txtf_transNotes" maxWidth="394.0" minWidth="394.0" prefHeight="138.0" prefWidth="394.0" promptText="Enter Notes Here" styleClass="jfx-text-area" stylesheets="@../../css/sanitationRequestUI.css" />
                </children></VBox>
          </children>
       </HBox>
-      <JFXButton fx:id="btn_submit" buttonType="RAISED" contentDisplay="RIGHT" graphicTextGap="20.0" layoutX="382.0" layoutY="742.0" minHeight="75.0" minWidth="200.0" onMouseClicked="#createNewTransportationRequest" ripplerFill="#c1c9eb" style="-fx-background-color: #002186;" stylesheets="@../../css/submitButton.css" text="Submit Request">
+      <JFXButton fx:id="btn_submit" buttonType="RAISED" contentDisplay="RIGHT" graphicTextGap="20.0" layoutX="435.0" layoutY="740.0" minHeight="75.0" minWidth="200.0" onMouseClicked="#createNewTransportationRequest" ripplerFill="#c1c9eb" styleClass="jfx-button-submit" stylesheets="@../../css/sanitationRequestUI.css" text="Submit Request">
          <font>
             <Font size="48.0" />
          </font>

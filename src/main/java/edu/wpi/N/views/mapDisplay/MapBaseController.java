@@ -13,17 +13,19 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 
 public class MapBaseController implements Controller {
@@ -33,17 +35,12 @@ public class MapBaseController implements Controller {
   private StateSingleton singleton;
 
   // Screen Constants
-  private final float BAR_WIDTH = 300;
-  private final float IMAGE_WIDTH = 2475;
-  private final float IMAGE_HEIGHT = 1485;
-  private final float SCREEN_WIDTH = 1920;
-  private final float SCREEN_HEIGHT = 1080;
-  private final float MAP_WIDTH = SCREEN_WIDTH - BAR_WIDTH;
-  private final float MAP_HEIGHT = (MAP_WIDTH / IMAGE_WIDTH) * IMAGE_HEIGHT;
-  private final float HORIZONTAL_OFFSET = 10;
-  private final float VERTICAL_OFFSET = 8;
-  private final float HORIZONTAL_SCALE = (MAP_WIDTH) / IMAGE_WIDTH;
-  private final float VERTICAL_SCALE = (MAP_HEIGHT) / IMAGE_HEIGHT;
+  double IMAGE_WIDTH;
+  double IMAGE_HEIGHT;
+  double MAP_WIDTH;
+  double MAP_HEIGHT;
+  double HORIZONTAL_SCALE;
+  double VERTICAL_SCALE;
 
   // Zoom constants
   private final double MIN_MAP_SCALE = 1;
@@ -57,6 +54,7 @@ public class MapBaseController implements Controller {
   private final String THIRD_KIOSK = "NSERV00103";
   private final Color START_NODE_COLOR = Color.GREEN;
   private final Color END_NODE_COLOR = Color.RED;
+  private final Color MIDDLE_NODE_COLOR = Color.PURPLE;
 
   // Path GUI constants
   private final Color DEFAULT_PATH_COLOR = Color.DODGERBLUE; // Default color of path
@@ -77,12 +75,15 @@ public class MapBaseController implements Controller {
   private Timeline pathAnimTimeline = new Timeline(); // Timeline object to set line animation
   private KeyFrame keyStart, keyEnd; // Keyframes in path animation
   private ArrayList<KeyValue> keyStartVals, keyEndVals;
+  private Label startLabel, endLabel;
+  private final int NODE_LABEL_PADDING = 35;
 
   // FXML Item IDs
   @FXML StackPane pn_movableMap;
   @FXML Pane pn_path;
   @FXML ImageView img_map;
   @FXML Button btn_zoomIn, btn_zoomOut;
+  @FXML AnchorPane controllerAnchorPane;
 
   /**
    * the constructor of MapBaseController
@@ -109,16 +110,10 @@ public class MapBaseController implements Controller {
    * @throws DBException
    */
   public void initialize() throws DBException {
-    initPathAnim();
-  }
 
-  /**
-   * sets the current building of the map display
-   *
-   * @param building the name of the building to be displayed
-   */
-  public void setBuilding(String building, int floor, Path currentPath) throws DBException {
-    setFloor(building, floor, currentPath);
+    initNodeLabels();
+    initPathAnim();
+    setFaulknerDefaults();
   }
 
   /**
@@ -131,10 +126,43 @@ public class MapBaseController implements Controller {
    */
   public void setFloor(String building, int floor, Path currentPath) throws DBException {
     clearPath();
+    if (!building.equals("Faulkner")) {
+      building = "Main";
+      setMainDefaults();
+    } else {
+      setFaulknerDefaults();
+    }
     img_map.setImage(singleton.mapImageLoader.getMap(building, floor));
     if (!(currentPath == null || currentPath.isEmpty())) {
-      drawPath(currentPath, floor);
+      drawPath(currentPath, floor, building);
     }
+  }
+
+  public void setFaulknerDefaults() {
+    IMAGE_WIDTH = 2475;
+    IMAGE_HEIGHT = 1485;
+    MAP_WIDTH = 1520;
+    MAP_HEIGHT = 912;
+    HORIZONTAL_SCALE = MAP_WIDTH / IMAGE_WIDTH;
+    VERTICAL_SCALE = MAP_HEIGHT / IMAGE_HEIGHT;
+  }
+
+  public void setMainDefaults() {
+    IMAGE_WIDTH = 5000;
+    IMAGE_HEIGHT = 3400;
+    MAP_WIDTH = 1520;
+    MAP_HEIGHT = 1034;
+    HORIZONTAL_SCALE = MAP_WIDTH / IMAGE_WIDTH;
+    VERTICAL_SCALE = MAP_HEIGHT / IMAGE_HEIGHT;
+  }
+
+  /**
+   * Returns AnchorPane of this controller
+   *
+   * @return
+   */
+  public AnchorPane getAnchorPane() {
+    return this.controllerAnchorPane;
   }
 
   private void initPathAnim() {
@@ -149,22 +177,60 @@ public class MapBaseController implements Controller {
     setAnimFrames();
   }
 
+  private void initNodeLabels() {
+    startLabel = new Label();
+    startLabel.setTextAlignment(TextAlignment.CENTER);
+    startLabel.setAlignment(Pos.CENTER);
+    startLabel.setMouseTransparent(true);
+    startLabel.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
+    startLabel.setBorder(
+        new Border(
+            new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, null, BorderWidths.DEFAULT)));
+    endLabel = new Label();
+    endLabel.setTextAlignment(TextAlignment.CENTER);
+    endLabel.setAlignment(Pos.CENTER);
+    endLabel.setMouseTransparent(true);
+    endLabel.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
+    endLabel.setBorder(
+        new Border(
+            new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, null, BorderWidths.DEFAULT)));
+  }
+
   /**
    * Draws lines between each location specified by currentPath
    *
    * @param currentPath Path object containing the DbNodes picked by pathfinder algorithm
    * @param floor The current floor
    */
-  public void drawPath(Path currentPath, int floor) {
+  public void drawPath(Path currentPath, int floor, String building) {
+    clearPath();
     DbNode firstNode, secondNode;
+    startLabel.setText("Start: ");
+    endLabel.setText("Destination: ");
     for (int i = 0; i < currentPath.size() - 1; i++) {
       firstNode = currentPath.get(i);
       secondNode = currentPath.get(i + 1);
-      if (firstNode.getFloor() == floor && secondNode.getFloor() == floor) {
+      boolean isFirstFaulkner = firstNode.getBuilding().equals("Faulkner");
+      boolean isSecondFaulkner = secondNode.getBuilding().equals("Faulkner");
+      boolean drawFaulkner = building.equals("Faulkner") && isFirstFaulkner && isSecondFaulkner;
+      boolean drawMain = !building.equals("Faulkner") && !isFirstFaulkner && !isSecondFaulkner;
+      if (firstNode.getFloor() == floor
+          && secondNode.getFloor() == floor
+          && (drawFaulkner || drawMain)) {
         if (i == 0) {
-          drawCircle(firstNode, START_NODE_COLOR);
+          startLabel.setText("Start at ");
+          drawCircle(firstNode, START_NODE_COLOR, startLabel);
         } else if (i == currentPath.size() - 2) {
-          drawCircle(secondNode, END_NODE_COLOR);
+          endLabel.setText("End at ");
+          drawCircle(secondNode, END_NODE_COLOR, endLabel);
+        } else if (currentPath.get(i - 1).getFloor() != floor) {
+          // If firstNode is first on current floor
+          startLabel.setText("Exit from ");
+          drawCircle(firstNode, MIDDLE_NODE_COLOR, startLabel);
+        } else if (currentPath.get(i + 2).getFloor() != floor) {
+          // If secondNode is last on current floor
+          endLabel.setText("Enter ");
+          drawCircle(secondNode, MIDDLE_NODE_COLOR, endLabel);
         }
         Line line =
             new Line(
@@ -176,6 +242,7 @@ public class MapBaseController implements Controller {
         pn_path.getChildren().add(line);
       }
     }
+    pn_path.getChildren().addAll(startLabel, endLabel); // To make sure they render over the path
     setAnimFrames();
   }
 
@@ -223,18 +290,26 @@ public class MapBaseController implements Controller {
   }
 
   /**
-   * draws either the start of end circle on the map
+   * draws either the start or end circle on the map, as well as a text label above it
    *
    * @param node the DbNode to be displayed on the map
    * @param c the color of the circle
    */
-  public void drawCircle(DbNode node, Color c) {
+  public void drawCircle(DbNode node, Color c, Label label) {
     Circle circle = new Circle();
     circle.setRadius(5);
     circle.setCenterX(scaleX(node.getX()));
     circle.setCenterY(scaleY(node.getY()));
     circle.setFill(c);
     pn_path.getChildren().add(circle);
+    if (label != null) {
+      pn_path.getChildren().add(label);
+      label.setText(label.getText() + node.getLongName());
+      label.applyCss(); // To make sure prefWidth doesn't return 0, for whatever reason
+      label.relocate(
+          scaleX(node.getX()) - label.prefWidth(-1) / 2, scaleY(node.getY()) - NODE_LABEL_PADDING);
+      pn_path.getChildren().remove(label); // Gets added back after all lines are drawn
+    }
   }
 
   public double scaleX(double x) {

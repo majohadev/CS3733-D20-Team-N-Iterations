@@ -1,6 +1,8 @@
 package edu.wpi.N.entities.employees;
 
-public abstract class Employee {
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+
+public abstract class Employee extends RecursiveTreeObject<Employee> {
   private int id;
   private String name;
 

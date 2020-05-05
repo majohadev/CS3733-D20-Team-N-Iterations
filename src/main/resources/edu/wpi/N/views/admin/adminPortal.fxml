@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -11,86 +14,191 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.admin.NewAdminController">
    <children>
-      <Pane layoutX="32.0" layoutY="127.0" prefHeight="110.0" prefWidth="1920.0" style="-fx-background-color: #002186;" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+    <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="1080.0" prefWidth="400.0" style="-fx-background-color: #263051;" AnchorPane.topAnchor="0.0">
          <children>
-            <JFXButton layoutX="14.0" layoutY="27.0" onMouseClicked="#logoutUser" text="Logout" textFill="WHITE">
-               <font>
-                  <Font name="Calibri Bold" size="24.0" />
-               </font>
-            </JFXButton>
-            <Label layoutX="728.0" layoutY="-5.0" text="Admin Portal" textFill="WHITE">
-               <font>
-                  <Font name="Calibri Bold" size="96.0" />
-               </font></Label>
-            <ImageView fitHeight="77.0" fitWidth="62.0" layoutX="663.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../images/hospitalLogo/Brigham_and_Womens_Hospital_logo.svg.png" />
-               </image>
-            </ImageView>
-            <Label fx:id="lbl_title" layoutX="344.0" layoutY="36.0" text="Label" textFill="WHITE">
-               <font>
-                  <Font name="Calibri Bold" size="24.0" />
-               </font>
-            </Label>
-            <JFXButton fx:id="btn_arduino" buttonType="RAISED" layoutX="1327.0" layoutY="32.0" onMouseClicked="#loadArduino" ripplerFill="#0026ff" text="Access Arduino Control" textFill="WHITE">
-               <font>
-                  <Font name="Calibri" size="18.0" />
-               </font>
-            </JFXButton>
-         </children></Pane>
-    <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="970.0" prefWidth="200.0" AnchorPane.topAnchor="110.0">
-         <children>
-            <VBox prefHeight="1005.0" prefWidth="192.0">
+            <AnchorPane fx:id="ap_swapPane" prefHeight="970.0" prefWidth="200.0" AnchorPane.leftAnchor="75.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="110.0" />
+            <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="970.0" prefWidth="75.0" style="-fx-background-color: #263051;" AnchorPane.topAnchor="110.0">
                <children>
-                  <Pane prefHeight="201.0" prefWidth="192.0">
+                  <Pane prefHeight="60.0" prefWidth="80.0">
                      <children>
-                        <JFXButton fx:id="btn_EmployeeEdit" layoutX="16.0" layoutY="17.0" onMouseClicked="#swapToEmployee" prefHeight="121.0" prefWidth="160.0" text="Add / Edit / Delete Employee" textAlignment="CENTER" wrapText="true">
-                           <font>
-                              <Font name="Calibri" size="24.0" />
-                           </font>
+                        <JFXButton fx:id="btn_addEmp" ellipsisString="" onMouseClicked="#addEmp" prefHeight="57.0" prefWidth="62.0" text="    ">
+                           <graphic>
+                              <ImageView fitHeight="51.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../images/adminIcons/add-user-2-64.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
                         </JFXButton>
                      </children>
                   </Pane>
-                  <Pane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="201.0" prefWidth="192.0">
+                  <Pane prefHeight="10.0" prefWidth="80.0" />
+                  <Pane prefHeight="60.0" prefWidth="80.0">
                      <children>
-                        <JFXButton fx:id="btn_AccountEdit" layoutX="15.0" layoutY="4.0" onMouseClicked="#swapToAccount" prefHeight="155.0" prefWidth="162.0" text="Add / Edit / Delete Account" textAlignment="CENTER" wrapText="true">
-                           <font>
-                              <Font name="Calibri" size="24.0" />
-                           </font>
+                        <JFXButton fx:id="btn_editEmp" ellipsisString="" onMouseClicked="#editEmp" prefHeight="50.0" prefWidth="57.0" text="     ">
+                           <graphic>
+                              <ImageView fitHeight="42.0" fitWidth="47.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../images/adminIcons/edit-user-64.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
                         </JFXButton>
                      </children>
                   </Pane>
-                  <Pane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="201.0" prefWidth="192.0">
+                  <Pane prefHeight="10.0" prefWidth="80.0" />
+                  <Pane prefHeight="60.0" prefWidth="80.0">
                      <children>
-                        <JFXButton fx:id="btn_ViewRequests" layoutX="16.0" layoutY="40.0" onMouseClicked="#swapToRequests" prefHeight="121.0" prefWidth="160.0" text="View Service Requests" textAlignment="CENTER" wrapText="true">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
+                        <JFXButton fx:id="btn_remEmp" ellipsisString="" onMouseClicked="#delEmp" prefHeight="52.0" prefWidth="64.0" text="   ">
+                           <graphic>
+                              <ImageView fitHeight="42.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../images/adminIcons/remove-user-64.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
                         </JFXButton>
                      </children>
                   </Pane>
-                  <Pane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="201.0" prefWidth="192.0">
+                  <Pane prefHeight="10.0" prefWidth="80.0" />
+                  <Pane prefHeight="60.0" prefWidth="80.0">
                      <children>
-                        <JFXButton fx:id="btn_EditMap" layoutX="36.0" layoutY="79.0" onMouseClicked="#adminEditMap" text="Edit Map">
-                           <font>
-                              <Font name="Calibri" size="24.0" />
-                           </font>
+                        <JFXButton fx:id="btn_addDoc" ellipsisString="" onMouseClicked="#addDoc" prefHeight="51.0" prefWidth="66.0" text="   ">
+                           <graphic>
+                              <ImageView fitHeight="42.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../images/adminIcons/doctor-2-64(1).png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
                         </JFXButton>
                      </children>
                   </Pane>
-                  <Pane maxHeight="-Infinity" minHeight="-Infinity" prefHeight="201.0" prefWidth="192.0">
+                  <Pane prefHeight="60.0" prefWidth="80.0">
                      <children>
-                        <JFXButton layoutX="11.0" layoutY="50.0" onMouseClicked="#popUpFileManager" text="Manage Files">
-                           <font>
-                              <Font size="24.0" />
-                           </font>
+                        <JFXButton fx:id="btn_addDoc1" ellipsisString="" onMouseClicked="#addAdmin" prefHeight="51.0" prefWidth="66.0" text="   ">
+                           <graphic>
+                              <ImageView fitHeight="42.0" fitWidth="45.0" onMouseClicked="#addAdmin" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../images/adminIcons/administrator-2-64.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </JFXButton>
+                     </children>
+                  </Pane>
+                  <Pane prefHeight="117.5" prefWidth="80.0" />
+                  <Pane prefHeight="50.0" prefWidth="75.0">
+                     <children>
+                        <JFXButton fx:id="btn_acceptReq" ellipsisString="" onMouseClicked="#assignReq" prefHeight="50.0" prefWidth="66.0" text="    ">
+                           <graphic>
+                              <ImageView fitHeight="42.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../images/adminIcons/ok-64.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </JFXButton>
+                     </children>
+                  </Pane>
+                  <Pane prefHeight="10.0" prefWidth="75.0" />
+                  <Pane prefHeight="60.0" prefWidth="104.0">
+                     <children>
+                        <JFXButton fx:id="btn_denyReq" ellipsisString="" onMouseClicked="#denyReq" prefHeight="49.0" prefWidth="63.0" text="    ">
+                           <graphic>
+                              <ImageView fitHeight="42.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../images/adminIcons/x-mark-3-64.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </JFXButton>
+                     </children>
+                  </Pane>
+                  <Pane prefHeight="117.5" prefWidth="80.0" />
+                  <Pane prefHeight="60.0" prefWidth="104.0">
+                     <children>
+                        <JFXButton fx:id="btn_upload" ellipsisString="" onMouseClicked="#popUpFileManager" prefHeight="53.0" prefWidth="67.0" text="    ">
+                           <graphic>
+                              <ImageView fitHeight="42.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../images/adminIcons/upload-2-64.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </JFXButton>
+                     </children>
+                  </Pane>
+                  <Pane prefHeight="60.0" prefWidth="104.0">
+                     <children>
+                        <JFXButton fx:id="btn_editMap" ellipsisString="" onMouseClicked="#editMap" prefHeight="51.0" prefWidth="65.0" text="   ">
+                           <graphic>
+                              <ImageView fitHeight="42.0" fitWidth="45.0" onMouseClicked="#editMap" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../images/adminIcons/map-3-64(1).png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </JFXButton>
+                     </children>
+                  </Pane>
+                  <Pane prefHeight="60.0" prefWidth="104.0">
+                     <children>
+                        <JFXButton fx:id="btn_arduino" ellipsisString="" onMouseClicked="#loadArduino" prefHeight="51.0" prefWidth="65.0" text="   ">
+                           <graphic>
+                              <ImageView fitHeight="42.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../images/adminIcons/gear-64.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </JFXButton>
+                     </children>
+                  </Pane>
+                  <Pane prefHeight="140.0" prefWidth="80.0" />
+                  <Pane prefHeight="92.0" prefWidth="75.0">
+                     <children>
+                        <JFXButton ellipsisString="" onMouseClicked="#logoutUser" prefHeight="72.0" prefWidth="62.0" text="    ">
+                           <graphic>
+                              <ImageView fitHeight="42.0" fitWidth="51.0" onMouseClicked="#logoutUser" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../images/adminIcons/logout-64.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
                         </JFXButton>
                      </children>
                   </Pane>
                </children>
             </VBox>
+            <Pane layoutX="100.0" layoutY="33.0" prefHeight="110.0" prefWidth="400.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <ImageView fitHeight="77.0" fitWidth="62.0" layoutX="15.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../images/hospitalLogo/Brigham_and_Womens_Hospital_logo.svg.png" />
+                     </image>
+                  </ImageView>
+                  <Label layoutX="98.0" layoutY="14.0" style="-fx-background-color: #26 3051;" text="Admin Portal" textFill="#e6ebf2">
+                     <font>
+                        <Font name="Calibri Bold" size="48.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="lbl_title" layoutX="98.0" layoutY="73.0" style="-fx-background-color: #26 3051;" text="Label" textFill="#e6ebf2">
+                     <font>
+                        <Font name="Calibri Bold" size="24.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Pane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="anchorSwap" prefHeight="970.0" prefWidth="1720.0" AnchorPane.leftAnchor="200.0" AnchorPane.topAnchor="110.0" />
+      <AnchorPane fx:id="anchorSwap" layoutX="186.0" layoutY="96.0" prefHeight="1080.0" prefWidth="1520.0" AnchorPane.leftAnchor="400.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <TableView fx:id="tb_RequestTable" layoutX="52.0" layoutY="245.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="429.0" prefWidth="960.0" stylesheets="@../../css/adminTables.css" AnchorPane.bottomAnchor="296.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="508.0" AnchorPane.topAnchor="245.0" />
+            <TableView fx:id="tbl_Employees" layoutX="1060.0" layoutY="245.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" />
+            <JFXCheckBox fx:id="ch_requestFilter" layoutX="50.0" layoutY="784.0" text="Filter to Open Requests" AnchorPane.leftAnchor="50.0" />
+            <ChoiceBox fx:id="cb_reqFilter" layoutX="410.0" layoutY="785.0" prefWidth="150.0" />
+            <Label layoutX="292.0" layoutY="789.0" text="Filter by request type:" />
+         </children></AnchorPane>
    </children>
 </AnchorPane>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="970.0" prefWidth="320.0" style="-fx-background-color: #263051;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.admin.EditEmployeeController">
+   <children>
+      <Label layoutX="14.0" layoutY="84.0" text="Employee ID:" textFill="#e6ebf2">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="48.0" layoutY="14.0" text="Add Language" textFill="#e6ebf2">
+         <font>
+            <Font size="36.0" />
+         </font>
+      </Label>
+      <Label layoutX="17.0" layoutY="130.0" text="Languages:" textFill="#e6ebf2">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <JFXTextField fx:id="txtf_empid" focusColor="#e6ebf2" layoutX="161.0" layoutY="89.0" maxHeight="-Infinity" minWidth="-Infinity" prefWidth="150.0" style="-fx-text-fill: #e6ebf2;" unFocusColor="#e6ebf2" />
+      <JFXTextField fx:id="txtf_newLang" focusColor="#e6ebf2" layoutX="161.0" layoutY="135.0" maxHeight="-Infinity" minWidth="-Infinity" prefWidth="150.0" style="-fx-text-fill: #e6ebf2;" unFocusColor="#e6ebf2" />
+      <JFXButton fx:id="btn_addLang" buttonType="RAISED" layoutX="125.0" layoutY="179.0" onMouseClicked="#updateTranslator" text="Add" textFill="#e6ebf2">
+         <font>
+            <Font name="Calibri" size="24.0" />
+         </font>
+      </JFXButton>
+      <Line endX="146.0" layoutX="175.0" layoutY="230.0" startX="-174.0" stroke="#7e9ab6" />
+      <Label layoutX="14.0" layoutY="248.0" text="Remove Language" textFill="#e6ebf2">
+         <font>
+            <Font size="36.0" />
+         </font>
+      </Label>
+      <JFXButton fx:id="btn_removeLang" buttonType="RAISED" layoutX="104.0" layoutY="584.0" onMouseClicked="#updateTranslator" text="Remove" textFill="#e6ebf2">
+         <font>
+            <Font name="Calibri" size="24.0" />
+         </font>
+      </JFXButton>
+      <ChoiceBox fx:id="cb_languageRemove" layoutX="149.0" layoutY="318.0" prefWidth="150.0" />
+      <TableView fx:id="tb_languagesRemove" layoutX="149.0" layoutY="362.0" prefHeight="202.0" prefWidth="150.0" />
+      <Label layoutX="17.0" layoutY="362.0" text="Languages:" textFill="#e6ebf2">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="17.0" layoutY="313.0" text="Employee:" textFill="#e6ebf2">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

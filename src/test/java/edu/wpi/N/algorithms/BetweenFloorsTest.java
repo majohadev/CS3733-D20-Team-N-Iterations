@@ -40,15 +40,15 @@ public class BetweenFloorsTest {
     Assertions.assertTrue(edgesBetweenFloors.size() == 2);
   }
 
-  @Test
-  public void edgesBetweenFloorsTester2() throws DBException {
-    LinkedList<DbNode[]> edgesBetweenFloors =
-        AbsAlgo.getEdgesBetweenFloors(MapDB.getNode("ELEV033000"));
-    DbNode[] firstEdge = edgesBetweenFloors.getFirst();
-    System.out.println(firstEdge[0].getNodeID());
-    System.out.println(firstEdge[1].getNodeID());
-    Assertions.assertTrue(edgesBetweenFloors.size() == 1);
-  }
+  //  @Test
+  //  public void edgesBetweenFloorsTester2() throws DBException {
+  //    LinkedList<DbNode[]> edgesBetweenFloors =
+  //        AbsAlgo.getEdgesBetweenFloors(MapDB.getNode("ELEV033000"));
+  //    DbNode[] firstEdge = edgesBetweenFloors.getFirst();
+  //    System.out.println(firstEdge[0].getNodeID());
+  //    System.out.println(firstEdge[1].getNodeID());
+  //    Assertions.assertTrue(edgesBetweenFloors.size() == 1);
+  //  }
 
   @Test
   public void edgesBetweenFloorsTester3() throws DBException {
