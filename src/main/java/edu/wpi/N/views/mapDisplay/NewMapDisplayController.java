@@ -481,7 +481,7 @@ public class NewMapDisplayController implements Controller {
     faulknerButtonList.getChildren().get(0).setDisable(false);
     mainButtonList.getChildren().forEach(e -> e.setDisable(true));
     mainButtonList.getChildren().get(0).setDisable(false);
-    for (int i = 0; i < path.size() - 1; i++) {
+    for (int i = 0; i < path.size(); i++) {
       DbNode node = path.get(i);
       if (!(node.getNodeType().equals("ELEV") || node.getNodeType().equals("STAI"))) {
         if (node.getBuilding().equals("Faulkner")) {
