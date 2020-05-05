@@ -202,49 +202,85 @@ public class NewMapDisplayController implements Controller {
     if (txt.equals("F1")) {
       changeFloor(1, "Faulkner");
       switchHospitalView();
+      this.currentFloor = 1;
+      this.currentBuilding = "Faulkner";
+      setDirectionsTab();
       setDefaultKioskNode();
     } else if (txt.equals("F2")) {
       changeFloor(2, "Faulkner");
       switchHospitalView();
+      this.currentFloor = 2;
+      this.currentBuilding = "Faulkner";
+      setDirectionsTab();
       setDefaultKioskNode();
     } else if (txt.equals("F3")) {
       changeFloor(3, "Faulkner");
       switchHospitalView();
+      this.currentFloor = 3;
+      this.currentBuilding = "Faulkner";
+      setDirectionsTab();
       setDefaultKioskNode();
     } else if (txt.equals("F4")) {
       changeFloor(4, "Faulkner");
       switchHospitalView();
+      this.currentFloor = 4;
+      this.currentBuilding = "Faulkner";
+      setDirectionsTab();
       setDefaultKioskNode();
     } else if (txt.equals("F5")) {
       changeFloor(5, "Faulkner");
       switchHospitalView();
+      this.currentFloor = 5;
+      this.currentBuilding = "Faulkner";
+      setDirectionsTab();
       setDefaultKioskNode();
     } else if (txt.equals("L2")) {
       changeFloor(1, "Main");
       switchHospitalView();
+      this.currentFloor = 1;
+      this.currentBuilding = "Main";
+      setDirectionsTab();
       setDefaultKioskNode();
     } else if (txt.equals("L1")) {
-      changeFloor(2, "Main");
       switchHospitalView();
+      changeFloor(2, "Main");
+      this.currentFloor = 2;
+      this.currentBuilding = "Main";
+      setDirectionsTab();
       setDefaultKioskNode();
     } else if (txt.equals("G")) {
-      changeFloor(3, "Main");
       switchHospitalView();
+      changeFloor(3, "Main");
+      this.currentFloor = 3;
+      this.currentBuilding = "Main";
+      setDirectionsTab();
       setDefaultKioskNode();
     } else if (txt.equals("1")) {
-      changeFloor(4, "Main");
       switchHospitalView();
+      changeFloor(4, "Main");
+      this.currentFloor = 4;
+      this.currentBuilding = "Main";
+      setDirectionsTab();
       setDefaultKioskNode();
     } else if (txt.equals("2")) {
-      changeFloor(5, "Main");
       switchHospitalView();
+      changeFloor(5, "Main");
+      this.currentFloor = 5;
+      this.currentBuilding = "Main";
+      setDirectionsTab();
       setDefaultKioskNode();
     } else if (txt.equals("3")) {
-      changeFloor(6, "Main");
       switchHospitalView();
+      changeFloor(6, "Main");
+      this.currentFloor = 6;
+      this.currentBuilding = "Main";
+      setDirectionsTab();
       setDefaultKioskNode();
     } else if (txt.equals("Street View")) {
       switchGoogleView();
+      this.currentFloor = -1;
+      this.currentBuilding = "Street View";
+      setDirectionsTab();
       setFloorBuildingText(-1, "");
       // TODO DEFAULT GOOGLE MAP VIEW
     }
@@ -367,6 +403,8 @@ public class NewMapDisplayController implements Controller {
     }
     switchHospitalView();
     mapBaseController.setFloor(first.getBuilding(), first.getFloor(), path);
+    this.currentBuilding = first.getBuilding();
+    this.currentFloor = first.getFloor();
     disableNonPathFloors();
     displayGoogleMaps(first, second);
     //    setTextDecription();
@@ -417,16 +455,20 @@ public class NewMapDisplayController implements Controller {
     lst.setItems(fuzzyList);
   }
 
-  public void onIconClicked(MouseEvent e) throws IOException, DBException {
+  public void resetMap() {
     collapseAllFloorButtons();
     mapBaseController.clearPath();
     setGoogleButtonDisable(true);
     enableAllFloorButtons();
+  }
+
+  public void onIconClicked(MouseEvent e) throws IOException, DBException {
     Pane src = (Pane) e.getSource();
     pn_iconBar.getChildren().forEach(n -> n.setStyle("-fx-background-color: #263051"));
     src.setStyle("-fx-background-color: #4A69C6;");
     FXMLLoader loader;
     if (src == pn_locationIcon) {
+      resetMap();
       loader = new FXMLLoader(getClass().getResource("mapLocationSearch.fxml"));
       Pane pane = loader.load();
       locationSearchController = loader.getController();
@@ -436,6 +478,7 @@ public class NewMapDisplayController implements Controller {
       setDefaultKioskNode();
       pn_change.getChildren().add(pane);
     } else if (src == pn_doctorIcon) {
+      resetMap();
       loader = new FXMLLoader(getClass().getResource("mapDoctorSearch.fxml"));
       Pane pane = loader.load();
       doctorSearchController = loader.getController();
@@ -447,15 +490,35 @@ public class NewMapDisplayController implements Controller {
       loader = new FXMLLoader(getClass().getResource("mapQR.fxml"));
       Pane pane = loader.load();
       mapQRController = loader.getController();
+      setDirectionsTab();
+      setTextDescription();
       setDefaultKioskNode();
       pn_change.getChildren().add(pane);
     } else if (src == pn_serviceIcon) {
+      resetMap();
       // TODO load service page here
     } else if (src == pn_infoIcon) {
+      resetMap();
       // TODO load info page here
     } else if (src == pn_adminIcon) {
+      resetMap();
       this.mainApp.switchScene("/edu/wpi/N/views/admin/newLogin.fxml", singleton);
     }
+  }
+
+  public void setDirectionsTab() {
+    if (mapQRController == null) {
+      return;
+    }
+    if (pn_mapContainer.getChildren().get(0) == pn_googleMapView) {
+      mapQRController.setDirectionTab("Street View");
+      return;
+    }
+    if (this.currentBuilding.equals("Faulkner")) {
+      mapQRController.setDirectionTab("Faulkner");
+      return;
+    }
+    mapQRController.setDirectionTab("Main");
   }
 
   public void displayErrorMessage(String str) {
@@ -581,5 +644,51 @@ public class NewMapDisplayController implements Controller {
     buildingButtonList.animateList(false);
     mainButtonList.animateList(false);
     faulknerButtonList.animateList(false);
+  }
+
+  public void setTextDescription() throws DBException {
+    if (this.path.size() == 0 || path == null) {
+      return;
+    }
+
+    String faulknerText = "";
+    String mainText = "";
+    String driveText = "";
+
+    Path pathFaulkner = new Path(new LinkedList<>());
+    Path pathMain = new Path(new LinkedList<>());
+
+    for (DbNode node : this.path.getPath()) {
+      if (node.getBuilding().equals("Faulkner")) {
+        pathFaulkner.getPath().add(node);
+      } else {
+        pathMain.getPath().add(node);
+      }
+    }
+
+    ArrayList<String> faulknerDirections;
+    ArrayList<String> mainDirections;
+    if (pathFaulkner.size() > 0) {
+      faulknerDirections = pathFaulkner.getDirections();
+      for (String s : faulknerDirections) {
+        faulknerText += s;
+        faulknerText += "\n";
+      }
+    }
+
+    if (pathMain.size() > 0) {
+      mainDirections = pathMain.getDirections();
+      for (String s : mainDirections) {
+        mainText += s;
+        mainText += "\n";
+      }
+    }
+
+    if (!pathFaulkner.equals("")) {
+      mapQRController.getTextFaulkner().setText(faulknerText);
+    }
+    if (!pathMain.equals("")) {
+      mapQRController.getTextMain().setText(mainText);
+    }
   }
 }
