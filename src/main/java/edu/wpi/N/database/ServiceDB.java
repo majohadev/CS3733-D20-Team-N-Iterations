@@ -1533,6 +1533,7 @@ public class ServiceDB {
     try {
       Employee emp = getEmployee(employeeID);
       Request req = getRequest(requestID);
+      if(!req.getStatus().equals("OPEN")) throw new DBException("You may only assign employees to open service requests!");
       if (!emp.getServiceType().equals(req.getServiceType())) {
         throw new DBException(
             "Invalid kind of employee! That employee isn't authorized for that kind of job!");
@@ -1676,6 +1677,22 @@ public class ServiceDB {
    * @throws DBException if the request isn't open, or if there was an error
    */
   public static void denyRequest(int requestID, String compNotes) throws DBException {
+    Request req = getRequest(requestID);
+    try {
+      if (req instanceof MedicineRequest) {
+        Doctor doc = (Doctor) req.getEmp_assigned();
+        try {
+          if (!(LoginDB.currentLogin().equals(doc.getUsername()))) {
+            throw new DBException(
+                    "Error: You muse login as the Doctor "
+                            + doc.getName()
+                            + " with username "
+                            + doc.getUsername());
+          }
+        } catch (DBException e) {
+          throw new DBException("Error: No login");
+        }
+      }
     try {
       String query = "SELECT status FROM request WHERE requestID = ?";
       PreparedStatement stmt = con.prepareStatement(query);
