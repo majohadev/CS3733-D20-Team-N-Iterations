@@ -33,7 +33,8 @@ dependencies {
             'com.google.zxing:core:3.4.0',
             'com.google.zxing:javase:3.4.0',
             'com.google.cloud:google-cloud-dialogflow:1.0.0',
-            'com.google.cloud:google-cloud-storage:1.107.0'
+            'com.google.cloud:google-cloud-storage:1.107.0',
+            'com.squareup.okhttp3:okhttp:4.6.0'
     )
 
 

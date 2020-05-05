@@ -17,6 +17,9 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.Base64;
 import javax.swing.*;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class Dialogflow {
   private String projectId;
@@ -170,5 +173,27 @@ public class Dialogflow {
       e.printStackTrace();
       return null;
     }
+  }
+
+  /**
+   * Gets the message containing current weather in Boston
+   *
+   * @return
+   */
+  public String getCurrentWeatherReply() {
+
+    String url =
+        "http://api.openweathermap.org/data/2.5/weather?appid=495b2d2af36253b0fd2e15dacdab5067&lat=42.361145&lon=-71.057083";
+    OkHttpClient client = new OkHttpClient();
+
+    Request request = new Request.Builder().url(url).build();
+
+    try (Response response = client.newCall(request).execute()) {
+      response.body();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    return null;
   }
 }

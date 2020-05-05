@@ -11,6 +11,9 @@ public class ChatbotMain {
     String userText = "Hello!";
     dialogflow.detectIntentTexts(userText, "en-US");
 
+    // Test weather
+    System.out.println(dialogflow.getCurrentWeatherReply());
+
     dialogflow.closeSession();
   }
 }
