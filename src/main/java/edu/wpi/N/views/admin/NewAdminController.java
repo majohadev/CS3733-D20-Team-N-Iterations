@@ -4,6 +4,7 @@ import com.jfoenix.controls.*;
 import edu.wpi.N.App;
 import edu.wpi.N.algorithms.*;
 import edu.wpi.N.database.*;
+import edu.wpi.N.entities.Service;
 import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.entities.employees.Employee;
 import edu.wpi.N.entities.request.Request;
@@ -28,35 +29,42 @@ import javafx.stage.Stage;
 public class NewAdminController implements Controller, Initializable {
 
   private App mainApp = null;
-
+  DeleteEmployeeController deleteEmployeeController;
   private StateSingleton singleton;
 
   public void setSingleton(StateSingleton singleton) {
     this.singleton = singleton;
   }
 
-  @FXML JFXButton btn_EmployeeEdit;
-  @FXML JFXButton btn_AccountEdit;
-  @FXML JFXButton btn_ViewRequests;
-  @FXML JFXButton btn_EditMap;
   @FXML Label lbl_title;
   @FXML AnchorPane anchorSwap;
-  @FXML JFXButton btn_arduino;
-  @FXML TableView tb_RequestTable;
+  @FXML TableView<Request> tb_RequestTable;
   @FXML JFXCheckBox ch_requestFilter;
+  @FXML AnchorPane ap_swapPane;
+  @FXML JFXButton btn_addDoc;
+  @FXML JFXButton btn_arduino;
+  @FXML JFXButton btn_denyReq;
+  @FXML JFXButton btn_acceptReq;
+  @FXML JFXButton btn_upload;
+  @FXML JFXButton btn_editMap;
+  @FXML JFXButton btn_editEmp;
+  @FXML JFXButton btn_addEmp;
+  @FXML JFXButton btn_remEmp;
+  // @FXML JFXButton btn_addDoc;
+  @FXML TableView<Employee> tbl_Employees;
+  @FXML ChoiceBox<Employee> cb_EmployeeRemove;
 
-  ObservableList<Request> tableData = FXCollections.observableArrayList();
-
-  // inject singleton
-  public NewAdminController(StateSingleton singleton) {
-    this.singleton = singleton;
-  }
+  private ObservableList<Request> tableData = FXCollections.observableArrayList();
+  private ObservableList<Employee> emps = FXCollections.observableArrayList();
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
     try {
       setTitleLabel();
       populateRequestTable();
+      initTooltips();
+      tableSetup();
+      populateTable();
 
     } catch (DBException e) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
@@ -66,10 +74,110 @@ public class NewAdminController implements Controller, Initializable {
     initializeTable();
   }
 
+  @FXML
+  private void initTooltips() {
+    btn_acceptReq.setTooltip(new Tooltip("Accepts a Given Request"));
+    btn_addDoc.setTooltip(new Tooltip("Adds a Doctor"));
+    btn_addEmp.setTooltip(new Tooltip("Adds an Employee"));
+    btn_arduino.setTooltip(new Tooltip("Opens Arduino Menu"));
+    btn_denyReq.setTooltip(new Tooltip("Denies a given Request"));
+    btn_editEmp.setTooltip(new Tooltip("Edits Employees"));
+    btn_editMap.setTooltip(new Tooltip("Opens Map Editor"));
+    btn_remEmp.setTooltip(new Tooltip("Removes a Given Employee"));
+    btn_upload.setTooltip(new Tooltip("Uploads New CSV's"));
+    // btn_acceptReq.setTooltip(new Tooltip("Accepts a given request"));
+
+  }
+
+  @FXML
+  private void addEmp() {
+    try {
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(getClass().getResource("addEmployee.fxml"));
+      AnchorPane currentpane = loader.load();
+      AddEmployeeController controller = loader.getController();
+      controller.setAdminController(this);
+      ap_swapPane.getChildren().setAll(currentpane);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  @FXML
+  private void delEmp() {
+    try {
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(getClass().getResource("deleteEmployee.fxml"));
+      AnchorPane currentpane = loader.load();
+      DeleteEmployeeController controller = loader.getController();
+      controller.setAdminController(this);
+      ap_swapPane.getChildren().setAll(currentpane);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  @FXML
+  private void addDoc() {
+    try {
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(getClass().getResource("addDoctor.fxml"));
+      AnchorPane currentpane = loader.load();
+      AddDoctorController controller = loader.getController();
+      controller.setAdminController(this);
+      ap_swapPane.getChildren().setAll(currentpane);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  @FXML
+  private void denyReq() {
+    try {
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(getClass().getResource("denyRequest.fxml"));
+      AnchorPane currentpane = loader.load();
+      DenyRequestController controller = loader.getController();
+      controller.setAdminController(this);
+      ap_swapPane.getChildren().setAll(currentpane);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  @FXML
+  private void editEmp() {
+    try {
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(getClass().getResource("editEmployee.fxml"));
+      AnchorPane currentpane = loader.load();
+      EditEmployeeController controller = loader.getController();
+      controller.setAdminController(this);
+      ap_swapPane.getChildren().setAll(currentpane);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  @FXML
+  private void assignReq() {
+    try {
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(getClass().getResource("acceptRequest.fxml"));
+      AnchorPane currentpane = loader.load();
+      RequestHandelerController controller = loader.getController();
+      controller.setAdminController(this);
+      ap_swapPane.getChildren().setAll(currentpane);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
   /** Pops up a new window with File Manager */
   @FXML
   private void popUpFileManager() {
     try {
+      System.out.println("here");
       Stage stage = new Stage();
       Parent root;
 
@@ -110,6 +218,7 @@ public class NewAdminController implements Controller, Initializable {
     mainApp.switchScene("views/mapEditor/mapEditor.fxml", singleton);
   }
 
+  @FXML
   public void logoutUser() throws DBException {
     try {
       LoginDB.logout();
@@ -127,6 +236,7 @@ public class NewAdminController implements Controller, Initializable {
   }
 
   public void editMap() throws IOException {
+    System.out.println("here");
     mainApp.switchScene("views/mapEditor/mapEdit.fxml", singleton);
   }
 
@@ -142,42 +252,19 @@ public class NewAdminController implements Controller, Initializable {
 
   @FXML
   public void loadArduino() {
-    Stage stage = new Stage();
-    Parent root = null;
+
     try {
-      root = FXMLLoader.load(getClass().getResource("edu/wpi/N/views/admin/arduinoInterface.fxml"));
+      AnchorPane currentpane = FXMLLoader.load(getClass().getResource("arduinoInterface.fxml"));
+      ap_swapPane.getChildren().setAll(currentpane);
     } catch (IOException e) {
       e.printStackTrace();
     }
-    Scene scene = new Scene(root);
-    stage.setScene(scene);
-    // stage.initModality(Modality.APPLICATION_MODAL);
-    stage.show();
-  }
-
-  @FXML
-  public void swapToAccount() throws IOException {
-    AnchorPane currentPane = FXMLLoader.load(getClass().getResource("accountHandeler.fxml"));
-    anchorSwap.getChildren().setAll(currentPane);
-  }
-
-  @FXML
-  public void swapToEmployee() throws IOException {
-    AnchorPane currentPane = FXMLLoader.load(getClass().getResource("employeeHandler.fxml"));
-    anchorSwap.getChildren().setAll(currentPane);
-  }
-
-  @FXML
-  public void swapToRequests() throws IOException {
-    AnchorPane currentPane = FXMLLoader.load(getClass().getResource("viewRequest.fxml"));
-    anchorSwap.getChildren().setAll(currentPane);
   }
 
   public void populateRequestTable() throws DBException {
     LinkedList<Request> reqs = ServiceDB.getRequests();
     tableData.setAll(reqs);
 
-    /*
     ch_requestFilter
         .selectedProperty()
         .addListener(
@@ -196,7 +283,6 @@ public class NewAdminController implements Controller, Initializable {
                 errorAlert.show();
               }
             });
-     */
 
     tb_RequestTable.setItems(tableData);
   }
@@ -258,5 +344,138 @@ public class NewAdminController implements Controller, Initializable {
         .getColumns()
         .addAll(
             requestID, service, emp_assigned, notes, nodeID, status, attr1, attr2, attr3, attr4);
+  }
+
+  public void populateTable() throws DBException {
+    try {
+      tbl_Employees.getItems().clear();
+      LinkedList<Employee> empList = ServiceDB.getEmployees();
+      emps.addAll(empList);
+      tbl_Employees.setItems(emps);
+
+    } catch (DBException e) {
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setContentText(e.getMessage());
+      errorAlert.show();
+    }
+  }
+
+  public void tableSetup() {
+    TableColumn<Employee, Integer> empID = new TableColumn<>("ID");
+    empID.setMaxWidth(100);
+    empID.setMinWidth(100);
+    empID.setCellValueFactory(new PropertyValueFactory<Employee, Integer>("ID"));
+
+    TableColumn<Employee, String> name = new TableColumn<>("Name");
+    name.setMaxWidth(200);
+    name.setMinWidth(200);
+    name.setCellValueFactory(new PropertyValueFactory<Employee, String>("name"));
+
+    TableColumn<Employee, Service> serviceType = new TableColumn<>("Service Type");
+    serviceType.setMaxWidth(200);
+    serviceType.setMinWidth(200);
+    serviceType.setCellValueFactory(new PropertyValueFactory<Employee, Service>("ServiceType"));
+
+    tbl_Employees.getColumns().addAll(empID, name, serviceType);
+  }
+
+  public void deleteEmployee() throws DBException {
+    try {
+
+      if (tbl_Employees.getSelectionModel().getSelectedIndex() <= -1) {
+        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+        errorAlert.setContentText("Select an Employee");
+        errorAlert.show();
+
+        return;
+      }
+
+      int employeeIndex = tbl_Employees.getSelectionModel().getSelectedIndex();
+      ServiceDB.removeEmployee(tbl_Employees.getSelectionModel().getSelectedItem().getID());
+
+      Alert confAlert = new Alert(Alert.AlertType.CONFIRMATION);
+      confAlert.setContentText("Employee removed");
+      confAlert.show();
+
+      int removeLine = tbl_Employees.getSelectionModel().getSelectedIndex();
+      tbl_Employees.getItems().remove(removeLine);
+    } catch (DBException e) {
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setContentText(e.getMessage());
+      errorAlert.show();
+    }
+  }
+
+  @FXML
+  public void acceptRow() {
+    try {
+      ServiceDB.completeRequest(
+          tb_RequestTable.getSelectionModel().getSelectedItems().get(0).getRequestID(), "");
+
+      Alert acceptReq = new Alert(Alert.AlertType.CONFIRMATION);
+      acceptReq.setContentText("Request Accepted");
+      acceptReq.show();
+
+      if (ch_requestFilter.isSelected()) {
+        tb_RequestTable.getItems().removeAll(tb_RequestTable.getSelectionModel().getSelectedItem());
+      } else {
+        LinkedList<Request> reqs = ServiceDB.getRequests();
+        tableData.setAll(reqs);
+      }
+
+    } catch (DBException ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  public void assignEmployeeToRequest(Employee employee) throws DBException {
+    Alert confAlert = new Alert(Alert.AlertType.CONFIRMATION);
+    try {
+      ServiceDB.assignToRequest(
+          employee.getID(), tb_RequestTable.getSelectionModel().getSelectedItem().getRequestID());
+      confAlert.setContentText(employee.getName() + " was assigned to the request");
+      confAlert.show();
+    } catch (DBException e) {
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setContentText(e.getMessage());
+      errorAlert.show();
+    }
+    populateRequestTable();
+  }
+
+  @FXML
+  public void denyRow(String compNotes) {
+    try {
+      ServiceDB.denyRequest(
+          tb_RequestTable.getSelectionModel().getSelectedItems().get(0).getRequestID(), compNotes);
+
+      Alert denyReq = new Alert(Alert.AlertType.WARNING);
+      denyReq.setContentText("Request Denied");
+      denyReq.show();
+
+      if (ch_requestFilter.isSelected()) {
+        tb_RequestTable.getItems().removeAll(tb_RequestTable.getSelectionModel().getSelectedItem());
+      } else {
+        LinkedList<Request> reqs = ServiceDB.getRequests();
+        tableData.setAll(reqs);
+      }
+
+    } catch (DBException e) {
+      e.printStackTrace();
+    }
+  }
+
+  @FXML
+  public void assignPressed(Employee employee) throws DBException {
+    int rID;
+    try {
+      rID = tb_RequestTable.getSelectionModel().getSelectedItem().getRequestID();
+    } catch (NullPointerException indx) {
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setContentText("Please select a request and an employee!");
+      errorAlert.show();
+      return;
+    }
+    assignEmployeeToRequest(employee);
   }
 }

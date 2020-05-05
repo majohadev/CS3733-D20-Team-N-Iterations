@@ -193,11 +193,11 @@ public class ViewRequestController implements Controller, Initializable {
   }
 
   @FXML
-  private void assignPressed(MouseEvent e) throws DBException {
+  private void assignPressed(Employee employee) throws DBException {
     int eID;
     int rID;
     try {
-      eID = cb_Employee.getSelectionModel().getSelectedItem().getID();
+      eID = employee.getID();
       rID = tb_RequestTable.getSelectionModel().getSelectedItem().getRequestID();
     } catch (NullPointerException indx) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
