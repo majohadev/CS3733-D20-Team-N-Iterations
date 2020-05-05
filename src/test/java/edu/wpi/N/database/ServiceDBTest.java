@@ -119,6 +119,7 @@ public class ServiceDBTest {
 
   @Test
   public void testCompleteRequest() throws DBException {
+    ServiceDB.assignToRequest(felixID, transReqID1);
     ServiceDB.completeRequest(transReqID1, null);
     Request req = ServiceDB.getRequest(transReqID1);
     assertNotNull(req.getTimeCompleted());
@@ -190,7 +191,8 @@ public class ServiceDBTest {
 
   @Test
   public void testassigntoRequest() throws DBException {
-    ServiceDB.assignToRequest(felix.getID(), transReqID1);
+    assertFalse(ServiceDB.getRequest(transReqID1).getStatus().equals("OPEN"));
+    assertThrows(DBException.class, () -> ServiceDB.assignToRequest(felix.getID(), transReqID1));
     assertEquals(felix, ServiceDB.getRequest(transReqID1).getEmp_assigned());
     assertThrows(
         DBException.class,
