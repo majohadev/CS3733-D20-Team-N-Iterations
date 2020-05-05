@@ -27,7 +27,7 @@
     -fx-background-color: #4A69C6;
     -fx-background-radius: 25px;
     -fx-text-fill: #E6EBF2;
-    -fx-pref-width: 125px;
+    -fx-pref-width: 100px;
     -fx-pref-height: 25px;
     -fx-font-size: 18;
 }
@@ -36,4 +36,17 @@
     -fx-text-fill: #e6ebf2;
     -fx-background-color: #263051;
     -fx-font-size: 18;
+}
+
+.label {
+    -fx-text-alignment: center;
+    -fx-text-fill: #E6EBF2;
+    -fx-font-size: 24;
+    -fx-background-radius: 25px;
+}
+
+.quick-access {
+    -fx-pref-width: 125px;
+    -fx-pref-height: 25px;
+    -fx-background-color: #4A69C6;
 }
