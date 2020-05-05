@@ -18,8 +18,7 @@
       <SplitPane dividerPositions="0.10575139146567718" layoutX="880.0" layoutY="462.0" orientation="VERTICAL" prefHeight="1080.0" prefWidth="1920.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
            <AnchorPane maxHeight="110.0" maxWidth="1920.0" minHeight="110.0" minWidth="0.0" prefHeight="190.0" prefWidth="1918.0" style="-fx-background-color: #263051;" SplitPane.resizableWithParent="false">
-              <fx:include fx:id="time" layoutX="1750.0" layoutY="20.0" source="features/timeTab.fxml" />
-               <Label alignment="CENTER" prefHeight="109.0" prefWidth="1920.0" text="About" textAlignment="CENTER" textFill="WHITE">
+               <Label alignment="CENTER" prefHeight="109.0" prefWidth="1920.0" text="About" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                   <font>
                      <Font name="Calibri Bold" size="96.0" />
                   </font>
