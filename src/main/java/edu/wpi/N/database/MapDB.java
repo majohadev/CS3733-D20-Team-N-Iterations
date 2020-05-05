@@ -877,13 +877,13 @@ public class MapDB {
       String type2 = result.getString("nodeType");
 
       if (floor1 != floor2) {
-        if (!type1.equals(type2) || !(type1.equals("STAI") || type1.equals("ELEV"))) {
+        if (!type1.equals(type2) || !(type1.equals("STAI") || type1.equals("ELEV") || type1.equals("EXIT"))) {
           throw new DBException(
               "Cannot add edge between "
                   + nodeID1
                   + " and "
                   + nodeID2
-                  + "since they are on different floors and not stairs or elevators");
+                  + "since they are on different floors and not exits, stairs or elevators");
         }
       }
 
@@ -910,7 +910,7 @@ public class MapDB {
       st.setString(3, nodeID2);
 
       boolean updated = st.executeUpdate() > 0;
-      if (floor1 != floor2) { // want to do this after the edge is added
+      if (floor1 != floor2 && !type1.equals("EXIT")) { // want to do this after the edge is added and not for exits
         addToShaft(nodeID1, nodeID2);
       }
       return updated;
