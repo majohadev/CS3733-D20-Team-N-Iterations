@@ -54,14 +54,4 @@ public class MapEditorAlignNodeController {
     alignX.setSelected(false);
     alignY.setSelected(false);
   }
-
-  //    public void alignLstAlignNode(String shortName) {
-  //        if (alignX.isSelected() && !alignY.isSelected()) {
-  //
-  //        } else if (alignY.isSelected() && !alignX.isSelected()) {
-  //            //MapDB.modifyNode()
-  //        } else {
-  //            displayErrorMessage("Invalid input");
-  //        }
-  //    }
 }

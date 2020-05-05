@@ -1,23 +1,24 @@
-.animated-option-button {
-    -fx-pref-width: 100px;
-    -fx-background-color: #002186;
-    -jfx-rippler-fill: #ffd965;
+.header-button {
+    -fx-pref-width: 125px;
+    -fx-background-color: #263051;
+    -jfx-rippler-fill: #E6EBF2;
     -fx-background-radius: 50px;
-    -fx-pref-height: 50px;
+    -fx-pref-height: 40px;
     -fx-text-fill: white;
-    -fx-font-size: 24;
-    -fx-font-type: Calibri;
+    -fx-font-size: 18;
     -jfx-button-type: RAISED;
 }
 
-.animated-option-button-selected {
-    -fx-pref-width: 100px;
-    -fx-background-color: F7B80F;
-    -jfx-rippler-fill: #ffd965;
-    -fx-background-radius: 50px;
+.choice-button {
+    -fx-pref-width: 50px;
+    -fx-background-color: #263051;
+    -jfx-rippler-fill: #E6EBF2;
+    -fx-background-radius: 25px;
     -fx-pref-height: 50px;
     -fx-text-fill: white;
-    -fx-font-size: 24;
-    -fx-font-type: Calibri;
+    -fx-font-size: 15;
     -jfx-button-type: RAISED;
+    -fx-border-color: #4A69C6;
+    -fx-border-width: 4px;
+    -fx-border-radius: 25px;
 }
