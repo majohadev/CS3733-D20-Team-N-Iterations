@@ -85,6 +85,7 @@ public class EditEmployeeController implements Initializable {
 
               ServiceDB.addLanguage(empID, txtf_newLang.getText());
 
+              populateChoiceBox();
               populateLanguageTable();
 
               txtf_empid.clear();
@@ -148,8 +149,8 @@ public class EditEmployeeController implements Initializable {
                 + cb_languageRemove.getSelectionModel().getSelectedItem().getName());
         acceptReq.show();
 
-        int selectedIndex = tb_languagesRemove.getSelectionModel().getSelectedIndex();
-        tb_languagesRemove.getItems().remove(selectedIndex);
+        populateChoiceBox();
+        populateLanguageTable();
       }
     } catch (DBException | NumberFormatException e) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);

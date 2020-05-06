@@ -39,13 +39,13 @@
             <Font size="36.0" />
          </font>
       </Label>
-      <JFXButton fx:id="btn_removeLang" buttonType="RAISED" layoutX="104.0" layoutY="669.0" onMouseClicked="#updateTranslator" text="Remove" textFill="#e6ebf2">
+      <JFXButton fx:id="btn_removeLang" buttonType="RAISED" layoutX="104.0" layoutY="669.0" onMouseClicked="#updateTranslator" text="Remove" textFill="#e6ebf2" AnchorPane.leftAnchor="104.0" AnchorPane.rightAnchor="104.0">
          <font>
             <Font name="Calibri" size="24.0" />
          </font>
       </JFXButton>
       <ChoiceBox fx:id="cb_languageRemove" layoutX="149.0" layoutY="403.0" prefWidth="150.0" />
-      <TableView fx:id="tb_languagesRemove" layoutX="61.0" layoutY="455.0" prefHeight="202.0" prefWidth="200.0" />
+      <TableView fx:id="tb_languagesRemove" layoutX="74.0" layoutY="456.0" prefHeight="202.0" prefWidth="150.0" AnchorPane.leftAnchor="85.0" AnchorPane.rightAnchor="85.0" />
       <Label layoutX="17.0" layoutY="398.0" text="Employee:" textFill="#e6ebf2">
          <font>
             <Font size="24.0" />
