@@ -1,9 +1,14 @@
+@font-face {
+    src: url('Karla-Regular.ttf');
+}
+
 .pane:hover {
     -fx-border-color: #4A69C6;
     -fx-border-width: 2px;
 }
 
 .textField {
+    -fx-font-family: 'Karla';
     -fx-text-fill: BLACK;
     -fx-background-color: #E6EBF2;
     -fx-pref-height: 35px;
@@ -13,6 +18,7 @@
 }
 
 .list-cell {
+    -fx-font-family: 'Karla';
     -fx-background-radius: 25px;
     -fx-background-color: #E6EBF2;
     -fx-font-size: 12;
@@ -24,6 +30,7 @@
 }
 
 .button {
+    -fx-font-family: 'Karla';
     -fx-background-color: #4A69C6;
     -fx-background-radius: 25px;
     -fx-text-fill: #E6EBF2;
@@ -33,12 +40,14 @@
 }
 
 .toggle {
+    -fx-font-family: 'Karla';
     -fx-text-fill: #e6ebf2;
     -fx-background-color: #263051;
     -fx-font-size: 18;
 }
 
 .label {
+    -fx-font-family: 'Karla';
     -fx-text-alignment: center;
     -fx-text-fill: #E6EBF2;
     -fx-font-size: 24;
@@ -46,6 +55,7 @@
 }
 
 .quick-access {
+    -fx-font-family: 'Karla';
     -fx-pref-width: 125px;
     -fx-pref-height: 25px;
     -fx-background-color: #4A69C6;

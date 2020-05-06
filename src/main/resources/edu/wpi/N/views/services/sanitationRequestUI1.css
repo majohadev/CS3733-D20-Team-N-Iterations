@@ -4,10 +4,60 @@
  */
 
 @font-face {
-    src: url('edu/wpi/N/Karla-Regular1.ttf');
+    src: url('Karla-Regular2.ttf');
 }
 
 .anchor{
+    -fx-background-color: #263051;
+    -fx-border-color: #263051;
+    -fx-border-width: 4px;
+}
+
+.hbox{
+    -fx-background-color: #263051;
+
+}
+.anchor-pane {
+    -fx-background-color: #263051;
+    -fx-border-color: #E6EBF2;
+    -fx-border-width: 4px;
+}
+
+#shit {
+    -fx-background-color: #263051;
+    -fx-border-color: #E6EBF2;
+    -fx-border-width: 4px;
+}
+
+#maAdminMenu{
+    -jfx-button-type: RAISED;
+    -jfx-rippler-fill: #6C5C7F;
+    -fx-background-color: #7E9AB6;
+    -fx-border-color: #E6EBF2;
+    -fx-border-width: 4px;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-text-fill: #E6EBF2;
+    -fx-font-family: 'Karla';
+}
+
+#maSubmit{
+    -jfx-button-type: RAISED;
+    -jfx-rippler-fill: #6C5C7F;
+    -fx-background-color: #7E9AB6;
+    -fx-border-color: #E6EBF2;
+    -fx-border-width: 4px;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-text-fill: #E6EBF2;
+    -fx-font-family: 'Karla';
+}
+
+#maAppointmentDay{
+    -fx-pref-width: 425;
+}
+
+.vbox{
     -fx-background-color: #263051;
     -fx-border-color: #E6EBF2;
     -fx-border-width: 4px;
@@ -44,7 +94,7 @@
     -fx-font-size: 24px;
 }
 
-.pane{
+/*.pane{
     -fx-background-color: #7E9AB6;
     -fx-border-color: #E6EBF2;
     -fx-border-width: 4px;
@@ -53,6 +103,10 @@
     -fx-text-fill: #E6EBF2;
     -fx-font-family: 'Karla';
     -fx-font-size: 18px;
+}*/
+.label{
+    -fx-text-fill: #E6EBF2;
+    -fx-font-family: 'Karla';
 }
 
 .label-header {
