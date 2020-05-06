@@ -35,8 +35,8 @@ dependencies {
             'com.google.zxing:javase:3.4.0',
             'com.google.cloud:google-cloud-dialogflow:1.0.0',
             'com.google.cloud:google-cloud-storage:1.107.0',
-            'com.squareup.okhttp3:okhttp:4.6.0'
-            //[group: 'edu.wpi.cs3733.c20.teamR', name: 'AppointmentRequest', version:'5.0.0']
+            'com.squareup.okhttp3:okhttp:4.6.0',
+            [group: 'edu.wpi.cs3733.c20.teamR', name: 'AppointmentRequest', version:'5.0.0']
 
     )
 

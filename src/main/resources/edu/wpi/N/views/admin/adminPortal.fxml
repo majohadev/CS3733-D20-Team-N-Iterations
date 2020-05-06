@@ -202,7 +202,7 @@
                </children>
             </Pane>
             <JFXComboBox fx:id="cb_changeAlgo" focusColor="#e6ebf2" layoutX="120.0" layoutY="200.0" prefHeight="39.0" prefWidth="200.0" promptText="Change Algorithm" style="-fx-prompt-text-fill: #e6ebf2; -fx-font-size: 18px;" unFocusColor="#e6ebf2" visible="false" />
-            <JFXButton fx:id="btn_submit" layoutX="160.0" layoutY="260.0" onMouseClicked="#changeAlgorithm" prefWidth="100.0" text="Submit" textFill="#e6ebf2" visible="false">
+            <JFXButton fx:id="btn_submit" layoutX="160.0" layoutY="260.0" onMouseClicked="#changeAlgorithm" prefWidth="100.0" styleClass="jfx-button-regular-arduino" stylesheets="@../../css/sanitationRequestUI.css" text="Submit" textFill="#e6ebf2" visible="false">
                <font>
                   <Font size="18.0" />
                </font>
@@ -213,12 +213,12 @@
          <children>
             <TableView fx:id="tb_RequestTable" layoutX="52.0" layoutY="245.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="429.0" prefWidth="975.0" stylesheets="@../../css/adminTables.css" AnchorPane.bottomAnchor="296.0" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="245.0" />
             <TableView fx:id="tbl_Employees" layoutX="1060.0" layoutY="245.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" stylesheets="@../../css/adminTables.css" AnchorPane.bottomAnchor="296.0" AnchorPane.topAnchor="245.0" />
-            <JFXCheckBox fx:id="ch_requestFilter" checkedColor="#5a69c6" layoutX="50.0" layoutY="789.0" text="Filter to Open Requests" textFill="#e6ebf2" AnchorPane.leftAnchor="50.0">
+            <JFXCheckBox fx:id="ch_requestFilter" checkedColor="#5a69c6" layoutX="50.0" layoutY="789.0" styleClass="label-mid-size" stylesheets="@../../css/sanitationRequestUI.css" text="Filter to Open Requests" textFill="#e6ebf2" AnchorPane.leftAnchor="50.0">
                <font>
                   <Font size="24.0" />
                </font></JFXCheckBox>
-            <ChoiceBox fx:id="cb_reqFilter" layoutX="610.0" layoutY="794.0" prefWidth="150.0" />
-            <Label layoutX="369.0" layoutY="789.0" text="Filter by request type:" textFill="#e6ebf2">
+            <ChoiceBox fx:id="cb_reqFilter" layoutX="610.0" layoutY="794.0" prefWidth="150.0" stylesheets="@../../css/sanitationRequestUI.css" />
+            <Label layoutX="369.0" layoutY="789.0" styleClass="label-mid-size" stylesheets="@../../css/sanitationRequestUI.css" text="Filter by request type:" textFill="#e6ebf2">
                <font>
                   <Font size="24.0" />
                </font></Label>

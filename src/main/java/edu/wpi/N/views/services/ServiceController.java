@@ -5,6 +5,7 @@ import edu.wpi.N.App;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.views.Controller;
+import edu.wpi.cs3733.c20.teamR.AppointmentRequest;
 import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,8 +13,6 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-
-// import edu.wpi.cs3733.c20.teamR.AppointmentRequest;
 
 public class ServiceController implements Controller {
 
@@ -124,12 +123,12 @@ public class ServiceController implements Controller {
     service_anchor.getChildren().setAll(currentPane);
   }
 
-  //  @FXML
-  //  public void switchToScheduler() throws Exception {
-  //    AppointmentRequest apt = new AppointmentRequest();
-  //    String css = this.getClass().getResource("sanitationRequestUI1.css").toExternalForm();
-  //    AppointmentRequest.run(576, 90, 1280, 900, css, null, null);
-  //  }
+  @FXML
+  public void switchToScheduler() throws Exception {
+    AppointmentRequest apt = new AppointmentRequest();
+    String css = this.getClass().getResource("sanitationRequestUI1.css").toExternalForm();
+    AppointmentRequest.run(576, 90, 1280, 900, css, null, null);
+  }
 
   public void onIconClicked(MouseEvent event) throws IOException {
     backHome();

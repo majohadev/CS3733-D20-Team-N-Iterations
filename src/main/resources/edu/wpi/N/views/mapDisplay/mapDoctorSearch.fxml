@@ -25,15 +25,15 @@
             <Image url="@../../images/mapDisplayIcons/pinIcon.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="35.0" fitWidth="28.0" layoutX="26.0" layoutY="174.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="26.0" AnchorPane.topAnchor="174.0">
+      <ImageView fitHeight="35.0" fitWidth="28.0" layoutX="27.0" layoutY="174.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="27.0" AnchorPane.topAnchor="174.0">
          <image>
             <Image url="@../../images/mapDisplayIcons/stethoscope_files/stethoscope-xl.png" />
          </image>
       </ImageView>
       <Line endX="-100.00001525878906" endY="40.19999694824219" layoutX="139.0" layoutY="125.39999389648438" startX="-100.00001525878906" startY="16.600006103515625" stroke="#e6ebf2" strokeMiterLimit="2.0" strokeWidth="2.0" style="-fx-stroke-dash-array: 8;" AnchorPane.topAnchor="141.0" />
-      <ListView fx:id="lst_fuzzySearch" layoutX="66.0" layoutY="238.0" onMouseClicked="#onItemSelected" prefHeight="481.0" prefWidth="255.0" styleClass="list-cell" stylesheets="@../../css/newMapDisplay.css" AnchorPane.leftAnchor="65.0" AnchorPane.topAnchor="235.0" />
-      <JFXButton fx:id="btn_search" layoutX="220.0" layoutY="750.0" maxHeight="40.0" maxWidth="105.0" minHeight="40.0" minWidth="105.0" prefHeight="40.0" prefWidth="105.0" stylesheets="@../../css/newMapDisplay.css" text="Search" textFill="#e6ebf2" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="750.0" />
-      <JFXToggleButton fx:id="tg_handicap" layoutX="38.0" layoutY="801.0" maxHeight="60.0" maxWidth="160.0" minHeight="60.0" minWidth="160.0" prefHeight="60.0" prefWidth="160.0" styleClass="toggle" stylesheets="@../../css/newMapDisplay.css" text="Handicap" textFill="#e6ebf2" toggleColor="#4a69c6" toggleLineColor="#6c5c7f" unToggleColor="#4a69c6" unToggleLineColor="#e6ebf2" AnchorPane.leftAnchor="40.0" AnchorPane.topAnchor="800.0" />
-      <JFXButton fx:id="btn_reset" layoutX="54.0" layoutY="750.0" maxHeight="40.0" maxWidth="105.0" minHeight="40.0" minWidth="105.0" prefHeight="40.0" prefWidth="105.0" stylesheets="@../../css/newMapDisplay.css" text="Reset" textFill="#e6ebf2" AnchorPane.leftAnchor="65.0" AnchorPane.topAnchor="750.0" />
+      <ListView fx:id="lst_fuzzySearch" layoutX="24.0" layoutY="238.0" onMouseClicked="#onItemSelected" prefHeight="481.0" prefWidth="296.0" styleClass="list-cell" stylesheets="@../../css/newMapDisplay.css" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="235.0" />
+      <JFXButton fx:id="btn_search" layoutX="230.0" layoutY="750.0" maxWidth="90.0" minWidth="90.0" prefHeight="39.0" prefWidth="90.0" stylesheets="@../../css/newMapDisplay.css" text="Search" textFill="#e6ebf2" AnchorPane.leftAnchor="230.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="750.0" />
+      <JFXToggleButton fx:id="tg_handicap" layoutX="2.0" layoutY="789.0" prefHeight="62.0" prefWidth="160.0" styleClass="toggle" stylesheets="@../../css/newMapDisplay.css" text="Handicap" textFill="#e6ebf2" toggleColor="#4a69c6" toggleLineColor="#6c5c7f" unToggleColor="#4a69c6" unToggleLineColor="#e6ebf2" />
+      <JFXButton fx:id="btn_reset" layoutX="20.0" layoutY="750.0" maxWidth="90.0" minWidth="90.0" prefWidth="90.0" stylesheets="@../../css/newMapDisplay.css" text="Reset" textFill="#e6ebf2" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="750.0" />
    </children>
 </AnchorPane>
