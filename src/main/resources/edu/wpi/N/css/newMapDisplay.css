@@ -3,6 +3,13 @@
     -fx-border-width: 2px;
 }
 
+.text-area {
+    -fx-text-fill: black;
+    -fx-background-color: #E6EBF2;
+    -fx-pref-height: 395;
+    -fx-pref-width: 255;
+}
+
 .textField {
     -fx-text-fill: BLACK;
     -fx-background-color: #E6EBF2;
@@ -49,4 +56,29 @@
     -fx-pref-width: 125px;
     -fx-pref-height: 25px;
     -fx-background-color: #4A69C6;
+}
+
+.jfx-tab-pane {
+    -fx-pref-width: 345px;
+    -fx-pref-height: 800px;
+}
+
+.jfx-tab-pane .tab-selected-line {
+    -fx-background-color: transparent;
+}
+
+.jfx-tab-pane .tab-header-background {
+    -fx-background-color: #4A69C6;
+}
+
+.jfx-tab-pane .tab {
+    -fx-pref-width: 110px;
+}
+
+.jfx-tab-pane .tab:hover {
+    -fx-background-color: #7E9AB6;
+}
+
+.jfx-tab-pane .tab:selected {
+    -fx-background-color: #6C5C7F;
 }

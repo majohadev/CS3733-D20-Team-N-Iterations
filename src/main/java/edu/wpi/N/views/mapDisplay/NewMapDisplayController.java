@@ -3,6 +3,7 @@ package edu.wpi.N.views.mapDisplay;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXNodesList;
 import edu.wpi.N.App;
+import edu.wpi.N.algorithms.Directions;
 import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
@@ -10,6 +11,7 @@ import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Path;
 import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.entities.employees.Doctor;
+import edu.wpi.N.qrcontrol.QRGenerator;
 import edu.wpi.N.views.Controller;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,7 +27,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 
-public class NewMapDisplayController implements Controller {
+public class NewMapDisplayController extends QRGenerator implements Controller {
   private App mainApp = null;
   private StateSingleton singleton;
 
@@ -57,15 +59,31 @@ public class NewMapDisplayController implements Controller {
   JFXNodesList mainButtonList;
   JFXButton btn_google;
 
+  /**
+   * provides reference to the main application class
+   *
+   * @param mainApp the main class of the application
+   */
   @Override
   public void setMainApp(App mainApp) {
     this.mainApp = mainApp;
   }
 
+  /**
+   * constructor for the map display class
+   *
+   * @param singleton the singleton which is initiated at the beginning of the program
+   */
   public NewMapDisplayController(StateSingleton singleton) {
     this.singleton = singleton;
   }
 
+  /**
+   * initializes all variables required for the map display
+   *
+   * @throws DBException
+   * @throws IOException
+   */
   public void initialize() throws DBException, IOException {
     this.path = new Path(new LinkedList<>());
     this.currentFloor = 1;
@@ -85,6 +103,12 @@ public class NewMapDisplayController implements Controller {
     setDefaultKioskNode();
   }
 
+  /**
+   * initializes the map display with the location search functionality
+   *
+   * @throws IOException
+   * @throws DBException
+   */
   public void initFunctionPane() throws IOException, DBException {
     FXMLLoader loader;
     loader = new FXMLLoader(getClass().getResource("mapLocationSearch.fxml"));
@@ -96,18 +120,33 @@ public class NewMapDisplayController implements Controller {
     pn_change.getChildren().add(pane);
   }
 
+  /**
+   * styles the switch, faulkner, main, and driving directions buttons
+   *
+   * @param btn the building button which is to be styled
+   */
   public void styleBuildingButtons(JFXButton btn) {
     btn.getStylesheets()
         .add(getClass().getResource("/edu/wpi/N/css/MapDisplayFloors.css").toExternalForm());
     btn.getStyleClass().add("header-button");
   }
 
+  /**
+   * styles the sub buttons of the building buttons
+   *
+   * @param btn the floor button which is to be styled
+   */
   public void styleFloorButtons(JFXButton btn) {
     btn.getStylesheets()
         .add(getClass().getResource("/edu/wpi/N/css/MapDisplayFloors.css").toExternalForm());
     btn.getStyleClass().add("choice-button");
   }
 
+  /**
+   * initializes all buttons required to switch between floors
+   *
+   * @throws DBException
+   */
   public void initFloorButtons() throws DBException {
     // Building Buttons
     JFXButton btn_buildings = new JFXButton("Switch Map");
@@ -186,6 +225,12 @@ public class NewMapDisplayController implements Controller {
     pn_floors.getChildren().add(buildingButtonList);
   }
 
+  /**
+   * initializes a listener for a floor button click event
+   *
+   * @param btn the floor button which is clicked
+   * @throws DBException
+   */
   public void onFloorButtonClicked(JFXButton btn) throws DBException {
     String txt = btn.getText();
     btn.setOnMouseClicked(
@@ -198,59 +243,108 @@ public class NewMapDisplayController implements Controller {
         });
   }
 
+  /**
+   * handles the event of a button click
+   *
+   * @param txt the text of the button which is clicked
+   * @throws DBException
+   */
   public void handleFloorButtonClicked(String txt) throws DBException {
     collapseAllFloorButtons();
     if (txt.equals("F1")) {
       changeFloor(1, "Faulkner");
       switchHospitalView();
+      this.currentFloor = 1;
+      this.currentBuilding = "Faulkner";
+      setDirectionsTab();
       setDefaultKioskNode();
     } else if (txt.equals("F2")) {
       changeFloor(2, "Faulkner");
       switchHospitalView();
+      this.currentFloor = 2;
+      this.currentBuilding = "Faulkner";
+      setDirectionsTab();
       setDefaultKioskNode();
     } else if (txt.equals("F3")) {
       changeFloor(3, "Faulkner");
       switchHospitalView();
+      this.currentFloor = 3;
+      this.currentBuilding = "Faulkner";
+      setDirectionsTab();
       setDefaultKioskNode();
     } else if (txt.equals("F4")) {
       changeFloor(4, "Faulkner");
       switchHospitalView();
+      this.currentFloor = 4;
+      this.currentBuilding = "Faulkner";
+      setDirectionsTab();
       setDefaultKioskNode();
     } else if (txt.equals("F5")) {
       changeFloor(5, "Faulkner");
       switchHospitalView();
+      this.currentFloor = 5;
+      this.currentBuilding = "Faulkner";
+      setDirectionsTab();
       setDefaultKioskNode();
     } else if (txt.equals("L2")) {
       changeFloor(1, "Main");
       switchHospitalView();
+      this.currentFloor = 1;
+      this.currentBuilding = "Main";
+      setDirectionsTab();
       setDefaultKioskNode();
     } else if (txt.equals("L1")) {
-      changeFloor(2, "Main");
       switchHospitalView();
+      changeFloor(2, "Main");
+      this.currentFloor = 2;
+      this.currentBuilding = "Main";
+      setDirectionsTab();
       setDefaultKioskNode();
     } else if (txt.equals("G")) {
-      changeFloor(3, "Main");
       switchHospitalView();
+      changeFloor(3, "Main");
+      this.currentFloor = 3;
+      this.currentBuilding = "Main";
+      setDirectionsTab();
       setDefaultKioskNode();
     } else if (txt.equals("1")) {
-      changeFloor(4, "Main");
       switchHospitalView();
+      changeFloor(4, "Main");
+      this.currentFloor = 4;
+      this.currentBuilding = "Main";
+      setDirectionsTab();
       setDefaultKioskNode();
     } else if (txt.equals("2")) {
-      changeFloor(5, "Main");
       switchHospitalView();
+      changeFloor(5, "Main");
+      this.currentFloor = 5;
+      this.currentBuilding = "Main";
+      setDirectionsTab();
       setDefaultKioskNode();
     } else if (txt.equals("3")) {
-      changeFloor(6, "Main");
       switchHospitalView();
+      changeFloor(6, "Main");
+      this.currentFloor = 6;
+      this.currentBuilding = "Main";
+      setDirectionsTab();
       setDefaultKioskNode();
     } else if (txt.equals("Street View")) {
       switchGoogleView();
+      this.currentFloor = -1;
+      this.currentBuilding = "Street View";
+      setDirectionsTab();
       setFloorBuildingText(-1, "");
       // TODO DEFAULT GOOGLE MAP VIEW
     }
   }
 
+  /**
+   * switches the current floor displayed on the map
+   *
+   * @param newFloor the new floor
+   * @param newBuilding the new building
+   * @throws DBException
+   */
   public void changeFloor(int newFloor, String newBuilding) throws DBException {
     mapBaseController.clearPath();
     this.currentFloor = newFloor;
@@ -260,6 +354,7 @@ public class NewMapDisplayController implements Controller {
     mapBaseController.setFloor(this.currentBuilding, this.currentFloor, this.path);
   }
 
+  /** initiates a listener for the search button on location search */
   public void initLocationSearchButton() {
     locationSearchController
         .getSearchButton()
@@ -276,6 +371,7 @@ public class NewMapDisplayController implements Controller {
             });
   }
 
+  /** initiates a listener for the search button on a doctor search */
   public void initDoctorSearchButton() {
     doctorSearchController
         .getSearchButton()
@@ -292,6 +388,11 @@ public class NewMapDisplayController implements Controller {
             });
   }
 
+  /**
+   * initiates a listener for the reset button on a location search
+   *
+   * @throws DBException
+   */
   public void initResetLocationSearch() throws DBException {
     locationSearchController
         .getResetButton()
@@ -304,6 +405,7 @@ public class NewMapDisplayController implements Controller {
               locationSearchController.getFuzzyList().getItems().clear();
               locationSearchController.getTgHandicap().setSelected(false);
               mapBaseController.clearPath();
+              resetTextualDirections();
               enableAllFloorButtons();
               try {
                 setDefaultKioskNode();
@@ -313,6 +415,11 @@ public class NewMapDisplayController implements Controller {
             });
   }
 
+  /**
+   * initiates a listener for the reset button on a doctor search
+   *
+   * @throws DBException
+   */
   public void initResetDoctorSearch() throws DBException {
     doctorSearchController
         .getResetButton()
@@ -326,6 +433,7 @@ public class NewMapDisplayController implements Controller {
               doctorSearchController.getFuzzyList().getItems().clear();
               doctorSearchController.getTgHandicap().setSelected(false);
               mapBaseController.clearPath();
+              resetTextualDirections();
               enableAllFloorButtons();
               try {
                 setDefaultKioskNode();
@@ -335,6 +443,11 @@ public class NewMapDisplayController implements Controller {
             });
   }
 
+  /**
+   * initiates a listener for the restroom quick search on a location search
+   *
+   * @throws DBException
+   */
   public void initRestroomSearchButton() throws DBException {
     locationSearchController
         .getBtnRestRoom()
@@ -342,6 +455,7 @@ public class NewMapDisplayController implements Controller {
             e -> {
               DbNode first = locationSearchController.getDBNodes()[0];
               try {
+                resetTextualDirections();
                 this.path = singleton.savedAlgo.findQuickAccess(first, "REST");
                 mapBaseController.setFloor(first.getBuilding(), first.getFloor(), path);
                 if (path.size() == 0) {
@@ -356,6 +470,15 @@ public class NewMapDisplayController implements Controller {
             });
   }
 
+  /**
+   * switches the floor to the first node of the path and initiates path finding
+   *
+   * @param first the first node in the path
+   * @param second last node in the path
+   * @param isSelected determines whether the handicap option is selected
+   * @throws DBException
+   * @throws IOException
+   */
   public void initPathfind(DbNode first, DbNode second, boolean isSelected)
       throws DBException, IOException {
     if (first == null || second == null) {
@@ -368,11 +491,21 @@ public class NewMapDisplayController implements Controller {
     }
     switchHospitalView();
     mapBaseController.setFloor(first.getBuilding(), first.getFloor(), path);
+    this.currentBuilding = first.getBuilding();
+    this.currentFloor = first.getFloor();
     disableNonPathFloors();
     displayGoogleMaps(first, second);
     //    setTextDecription();
   }
 
+  /**
+   * determine whether the google map button should be activated and display a path between
+   * buildings
+   *
+   * @param first the first node in the path
+   * @param second the second node in the path
+   * @throws IOException
+   */
   public void displayGoogleMaps(DbNode first, DbNode second) throws IOException {
     boolean isFirstFaulkner = first.getBuilding().equals("Faulkner");
     boolean isSecondFaulkner = second.getBuilding().equals("Faulkner");
@@ -404,6 +537,13 @@ public class NewMapDisplayController implements Controller {
     }
   }
 
+  /**
+   * initiates fuzzy search based on a location
+   *
+   * @param txt the textfield which initiates the fuzzy search
+   * @param lst the list which will store the results of the fuzzy search
+   * @throws DBException
+   */
   public static void fuzzyLocationSearch(TextField txt, ListView lst) throws DBException {
     ObservableList<DbNode> fuzzyList;
     String str = txt.getText();
@@ -411,6 +551,13 @@ public class NewMapDisplayController implements Controller {
     lst.setItems(fuzzyList);
   }
 
+  /**
+   * initiates the fuzzy search based on a doctor
+   *
+   * @param txt the textfield which initiates the fuzzy search
+   * @param lst the list which will store the result of the fuzzy search
+   * @throws DBException
+   */
   public static void fuzzyDoctorSearch(TextField txt, ListView lst) throws DBException {
     ObservableList<Doctor> fuzzyList;
     String str = txt.getText();
@@ -418,16 +565,30 @@ public class NewMapDisplayController implements Controller {
     lst.setItems(fuzzyList);
   }
 
-  public void onIconClicked(MouseEvent e) throws IOException, DBException {
+  /** clears necessary variables when the map is reset */
+  public void resetMap() {
+    this.path = new Path(new LinkedList<>());
     collapseAllFloorButtons();
     mapBaseController.clearPath();
     setGoogleButtonDisable(true);
     enableAllFloorButtons();
+    resetTextualDirections();
+  }
+
+  /**
+   * determines which icon was clicked and performs the specified function
+   *
+   * @param e the event which triggers the click of an icon
+   * @throws IOException
+   * @throws DBException
+   */
+  public void onIconClicked(MouseEvent e) throws IOException, DBException {
     Pane src = (Pane) e.getSource();
     pn_iconBar.getChildren().forEach(n -> n.setStyle("-fx-background-color: #263051"));
     src.setStyle("-fx-background-color: #4A69C6;");
     FXMLLoader loader;
     if (src == pn_locationIcon) {
+      resetMap();
       loader = new FXMLLoader(getClass().getResource("mapLocationSearch.fxml"));
       Pane pane = loader.load();
       locationSearchController = loader.getController();
@@ -437,6 +598,7 @@ public class NewMapDisplayController implements Controller {
       setDefaultKioskNode();
       pn_change.getChildren().add(pane);
     } else if (src == pn_doctorIcon) {
+      resetMap();
       loader = new FXMLLoader(getClass().getResource("mapDoctorSearch.fxml"));
       Pane pane = loader.load();
       doctorSearchController = loader.getController();
@@ -448,17 +610,45 @@ public class NewMapDisplayController implements Controller {
       loader = new FXMLLoader(getClass().getResource("mapQR.fxml"));
       Pane pane = loader.load();
       mapQRController = loader.getController();
+      resetTextualDirections();
+      setDirectionsTab();
+      setTextDescription();
       setDefaultKioskNode();
       pn_change.getChildren().add(pane);
     } else if (src == pn_serviceIcon) {
+      resetMap();
       // TODO load service page here
     } else if (src == pn_infoIcon) {
+      resetMap();
+      // TODO load info page here
       this.mainApp.switchScene("/edu/wpi/N/views/aboutPage.fxml", singleton);
     } else if (src == pn_adminIcon) {
+      resetMap();
       this.mainApp.switchScene("/edu/wpi/N/views/admin/newLogin.fxml", singleton);
     }
   }
 
+  /** changes the tabs of the textual direction page based on the current floor */
+  public void setDirectionsTab() {
+    if (mapQRController == null) {
+      return;
+    }
+    if (pn_mapContainer.getChildren().get(0) == pn_googleMapView) {
+      mapQRController.setDirectionTab("Street View");
+      return;
+    }
+    if (this.currentBuilding.equals("Faulkner")) {
+      mapQRController.setDirectionTab("Faulkner");
+      return;
+    }
+    mapQRController.setDirectionTab("Main");
+  }
+
+  /**
+   * displays an error message if something does wrong
+   *
+   * @param str the message to be displayed if something goes wrong
+   */
   public void displayErrorMessage(String str) {
     Alert errorAlert = new Alert(Alert.AlertType.ERROR);
     errorAlert.setHeaderText("Something went wong...");
@@ -466,6 +656,11 @@ public class NewMapDisplayController implements Controller {
     errorAlert.showAndWait();
   }
 
+  /**
+   * determines whether there is a kiosk on the floor and sets it as the default first entry
+   *
+   * @throws DBException
+   */
   public void setDefaultKioskNode() throws DBException {
     boolean noFaulknerKiosk =
         !(currentBuilding.equals("Faulkner") && (currentFloor == 1 || currentFloor == 3));
@@ -516,6 +711,7 @@ public class NewMapDisplayController implements Controller {
     }
   }
 
+  /** disables all floor buttons which do not partake in the path */
   public void disableNonPathFloors() {
     faulknerButtonList.getChildren().forEach(e -> e.setDisable(true));
     faulknerButtonList.getChildren().get(0).setDisable(false);
@@ -533,24 +729,38 @@ public class NewMapDisplayController implements Controller {
     }
   }
 
+  /** enables all floor buttons */
   public void enableAllFloorButtons() {
     faulknerButtonList.getChildren().forEach(e -> e.setDisable(false));
     mainButtonList.getChildren().forEach(e -> e.setDisable(false));
   }
 
+  /** switches the current map view to the google map */
   public void switchGoogleView() {
     pn_mapContainer.getChildren().setAll(pn_googleMapView);
     System.out.println("Hello");
   }
 
+  /** switches the current map view to the hospital view */
   public void switchHospitalView() {
     pn_mapContainer.getChildren().setAll(pn_hospitalView);
   }
 
+  /**
+   * disables or enables the driving direction button
+   *
+   * @param b whether the google button should be disabled or not
+   */
   public void setGoogleButtonDisable(boolean b) {
     this.btn_google.setDisable(b);
   }
 
+  /**
+   * displays the label text
+   *
+   * @param floor the current floor
+   * @param building the current building
+   */
   public void setFloorBuildingText(int floor, String building) {
     if (floor == -1) {
       lbl_building_floor.setText("Driving Directions");
@@ -578,9 +788,101 @@ public class NewMapDisplayController implements Controller {
     }
   }
 
+  /** collapses all the floor buttons back to the main button */
   public void collapseAllFloorButtons() {
     buildingButtonList.animateList(false);
     mainButtonList.animateList(false);
     faulknerButtonList.animateList(false);
+  }
+
+  /**
+   * sets the textual description when pathfinding
+   * @throws DBException
+   */
+  public void setTextDescription() throws DBException {
+    if (this.path.size() == 0 || path == null) {
+      return;
+    }
+
+    String faulknerText = "";
+    String mainText = "";
+    String driveText = "";
+
+    Path pathFaulkner = new Path(new LinkedList<>());
+    Path pathMain = new Path(new LinkedList<>());
+
+    for (DbNode node : this.path.getPath()) {
+      if (node.getBuilding().equals("Faulkner")) {
+        pathFaulkner.getPath().add(node);
+      } else {
+        pathMain.getPath().add(node);
+      }
+    }
+
+    ArrayList<String> faulknerDirections = new ArrayList<>();
+    ArrayList<String> mainDirections = new ArrayList<>();
+
+    if (pathFaulkner.size() > 0) {
+      faulknerDirections = pathFaulkner.getDirections();
+      for (String s : faulknerDirections) {
+        faulknerText += s;
+        faulknerText += "\n";
+      }
+    }
+
+    if (pathMain.size() > 0) {
+      mainDirections = pathMain.getDirections();
+      for (String s : mainDirections) {
+        mainText += s;
+        mainText += "\n";
+      }
+    }
+
+    if (!pathFaulkner.equals("")) {
+      mapQRController.getTextFaulkner().setText(faulknerText);
+      mapQRController.getImageFaulkner().setImage(generateImage(faulknerDirections, false));
+    }
+    if (!pathMain.equals("")) {
+      mapQRController.getTextMain().setText(mainText);
+      mapQRController.getImageMain().setImage(generateImage(mainDirections, false));
+    }
+
+    // For google maps
+    String googleDirections = "";
+    boolean isFirstFaulkner = this.path.get(0).getBuilding().equals("Faulkner");
+    boolean isSecondFaulkner = this.path.get(path.size() - 1).getBuilding().equals("Faulkner");
+    if (isFirstFaulkner ^ isSecondFaulkner) {
+      if (isFirstFaulkner) {
+        googleDirections = Directions.getGoogleDirections("Driving", false);
+      } else {
+        googleDirections = Directions.getGoogleDirections("Driving", true);
+      }
+    }
+
+    if (!googleDirections.equals("")) {
+      mapQRController.getTextDrive().setText(googleDirections);
+      ArrayList<String> driveDirections = new ArrayList<>();
+      driveDirections.add(googleDirections);
+      mapQRController.getImageDrive().setImage(generateImage(driveDirections, false));
+    }
+  }
+
+  /**
+   * resets the fields for textual description
+   */
+  public void resetTextualDirections() {
+    if (mapQRController == null) {
+      return;
+    }
+    mapQRController.getTextFaulkner().clear();
+    mapQRController.getTextDrive().clear();
+    mapQRController.getTextMain().clear();
+    try {
+      mapQRController.getImageFaulkner().setImage(null);
+      mapQRController.getImageMain().setImage(null);
+      mapQRController.getImageDrive().setImage(null);
+    } catch (NullPointerException e) {
+      return;
+    }
   }
 }
