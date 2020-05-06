@@ -64,7 +64,7 @@ public class Directions {
         totalDistance += getDistance(path.get(i), path.get(i + 1));
       }
       state = getState(i);
-      //System.out.println(state);
+      // System.out.println(state);
       switch (state) {
         case STARTING:
           if (currNode.getNodeType().equals("EXIT")) {
@@ -88,42 +88,32 @@ public class Directions {
           break;
         case CONTINUING:
           distance += getDistance(currNode, nextNode);
-          if (endOfHallNode == null) {
-            endOfHallNode = findEndOfHall(i);
-          }
-          if (endOfHallNode == null) {
-            if (getState(i - 1).equals(CHANGING_FLOOR)) {
-              message = "Exit " + currNode.getLongName();
-              //            } else if (!message.equals("")) {
-              //              directions.add(message);
-            } else if (stateChange || atIntersection(currNode)) {
-              if (getLandmark(nextNode) == null) {
-                if (currNode.getBuilding().equals("Faulkner"))
-                  message = "Continue to next intersection " + getDistanceString(distance);
+          //          if (endOfHallNode == null) {
+          //            endOfHallNode = findEndOfHall(i);
+          //          }
+          if (!message.equals("") && i == 1) { // TODO:NEW
+            directions.add(message);
+            message = "";
+          } else if (getState(i - 1).equals(CHANGING_FLOOR)) {
+            message = "Exit " + currNode.getLongName();
+          } else if (stateChange || atIntersection(currNode)) {
+            if (getLandmark(nextNode) == null) {
+              if (currNode.getBuilding().equals("Faulkner"))
+                message = "Continue to next intersection " + getDistanceString(distance);
 
-              } else if (getLandmark(nextNode).equals(nextNode)) {
-                message =
-                    "Go towards " // "Proceed straight towards "
-                        + getLandmark(nextNode).getLongName()
-                        + " "
-                        + getDistanceString(distance);
-                //              } else if (atIntersection(nextNode)) {
-                //                directions.add(message + " and continue"); // + " and proceed down
-                // the hall");
-                //                message = "";
-              } else {
-                message =
-                    "Continue past "
-                        + getLandmark(nextNode).getLongName()
-                        + " "
-                        + getDistanceString(distance);
-              }
-              distance = 0;
+            } else if (getLandmark(nextNode).equals(nextNode)) {
+              message =
+                  "Go towards " // "Proceed straight towards "
+                      + getLandmark(nextNode).getLongName()
+                      + " "
+                      + getDistanceString(distance);
+            } else {
+              message =
+                  "Continue past "
+                      + getLandmark(nextNode).getLongName()
+                      + " "
+                      + getDistanceString(distance);
             }
-
-          } else if (!(endOfHallNode == null) && endOfHallNode.equals(nextNode)) {
-            message = "Continue to the end of the hallway " + getDistanceString(distance);
-            endOfHallNode = null;
             distance = 0;
           }
           break;
@@ -178,7 +168,13 @@ public class Directions {
           }
           break;
         case ARRIVING:
-          if (getState(i - 1).equals(TURNING)) {
+          if (currNode.getNodeType().equals("EXIT")) {
+            if (!message.equals("")) {
+              directions.add(message + " and exit at " + currNode.getLongName());
+              message = "";
+            } else directions.add("Exit at " + currNode.getLongName());
+
+          } else if (getState(i - 1).equals(TURNING)) {
             String turnMessage = "T" + getTurnType(angle, getAngle(i - 2));
             directions.add(
                 turnMessage
@@ -187,17 +183,19 @@ public class Directions {
                     + " "
                     + getTotalTimeString(totalDistance, totalTime));
           } else if (!message.equals("")) {
-            if (currNode.getNodeType().equals("EXIT")) {
-              directions.add(message + " and exit at " + currNode.getLongName());
-            }
             directions.add(
                 message
                     + " and arrive at destination "
                     + getTotalTimeString(totalDistance, totalTime));
+            message = "";
           } else if (currNode.getNodeType().equals("EXIT")) {
             directions.add("Exit " + currNode.getLongName());
           } else {
-            directions.add("Arrive at destination " + getTotalTimeString(totalDistance, totalTime));
+            directions.add(
+                "Arrive at "
+                    + currNode.getLongName()
+                    + " "
+                    + getTotalTimeString(totalDistance, totalTime));
           }
           break;
       }
@@ -245,7 +243,7 @@ public class Directions {
         }
       }
       if (endOfHall) {
-        //System.out.println(path.get(index));
+        // System.out.println(path.get(index));
         return path.get(index);
       }
       index++;
@@ -290,7 +288,7 @@ public class Directions {
     } else if (angleChange < -180) {
       angleChange += 360;
     }
-   // System.out.println(angleChange);
+    // System.out.println(angleChange);
     if (angleChange <= TURN_THRESHOLD && angleChange >= SLIGHT_TURN_THRESHOLD) {
       return "ake a slight right";
     } else if (angleChange > SHARP_TURN_THRESHOLD) {
@@ -397,7 +395,7 @@ public class Directions {
   }
 
   /** @return directions with numbers at beginning of each line */
-  private ArrayList<String> getNumberedDirection() {
+  public ArrayList<String> getNumberedDirection() {
     ArrayList<String> newDirections = new ArrayList<>();
     int index = 1;
     if (!this.directions.isEmpty()) {
