@@ -68,7 +68,6 @@ public class LoginDBTest {
         () -> {
           LoginDB.removeLogin("Wong");
         });
-
     ServiceDB.removeEmployee(wID);
   }
 

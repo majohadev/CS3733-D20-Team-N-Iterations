@@ -50,8 +50,6 @@ public class MapBaseController implements Controller {
   private double mapScaleAlpha;
   private double clickStartX, clickStartY;
 
-  private final String FIRST_KIOSK = "NSERV00301";
-  private final String THIRD_KIOSK = "NSERV00103";
   private final Color START_NODE_COLOR = Color.GREEN;
   private final Color END_NODE_COLOR = Color.RED;
   private final Color MIDDLE_NODE_COLOR = Color.PURPLE;
@@ -207,6 +205,12 @@ public class MapBaseController implements Controller {
     DbNode firstNode, secondNode;
     startLabel.setText("Start: ");
     endLabel.setText("Destination: ");
+    if (currentPath.get(0).getFloor() == floor) {
+      drawCircle(currentPath.get(0), START_NODE_COLOR, startLabel);
+    } else if (currentPath.get(currentPath.size() - 1).getFloor() == floor) {
+      drawCircle(currentPath.get(currentPath.size() - 1), END_NODE_COLOR, endLabel);
+    }
+
     for (int i = 0; i < currentPath.size() - 1; i++) {
       firstNode = currentPath.get(i);
       secondNode = currentPath.get(i + 1);
