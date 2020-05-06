@@ -4,6 +4,7 @@ import static java.lang.Math.abs;
 
 import com.fazecast.jSerialComm.*;
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXToggleButton;
 import edu.wpi.N.App;
@@ -11,6 +12,7 @@ import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.views.Controller;
+import edu.wpi.N.views.admin.NewAdminController;
 import java.io.*;
 import javafx.fxml.FXML;
 
@@ -20,6 +22,7 @@ public class ArduinoController implements Controller {
   private static SerialPort arduinoPort = SerialPort.getCommPort("COM14");
   private static double arrowAngle = 0;
   private StateSingleton singleton;
+  NewAdminController newAdminController;
 
   private App mainApp;
 
@@ -33,10 +36,19 @@ public class ArduinoController implements Controller {
   @FXML JFXTextField txtf_msg;
   @FXML JFXTextField txtf_angle;
   @FXML JFXToggleButton tog_serial;
+  @FXML JFXComboBox cb_changeAlgo;
 
   private int kioskAngle;
 
+  public ArduinoController(StateSingleton singleton) {
+    this.singleton = singleton;
+  }
+
   public ArduinoController() throws DBException {}
+
+  public void setAdminController(NewAdminController adminController) {
+    this.newAdminController = adminController;
+  }
 
   public void setMainApp(App mainApp) {
     this.mainApp = mainApp;

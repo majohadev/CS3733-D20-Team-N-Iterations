@@ -1,27 +1,33 @@
 package edu.wpi.N.views.chatbot;
 
+import com.jfoenix.controls.JFXTextField;
 import edu.wpi.N.App;
+import edu.wpi.N.Main;
 import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.views.Controller;
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-public class ChatbotController implements Controller {
+public class ChatbotController implements Controller, Initializable {
   private StateSingleton state;
   private App mainApp;
 
-  @FXML private TextField textField;
+  @FXML private JFXTextField textField;
   @FXML private VBox chatBox;
   @FXML private AnchorPane chatBotView;
   @FXML private AnchorPane buttonOnlyView;
+  @FXML private ScrollPane scrollPane;
 
   // Inject state singleton
   public ChatbotController(StateSingleton state) {
@@ -33,17 +39,17 @@ public class ChatbotController implements Controller {
   private void onBtnAskMeClicked() {
 
     // If message history is empty
-    if (state.chatBotState.getMessageHistory() == null) {
-      try {
-        state.chatBotState.initSession();
-      } catch (Exception e) {
-        e.printStackTrace();
-        displayErrorMessage("Error initializing Client Session");
-      }
-    } else {
-      // else, load existing message history
-      loadMessageHistory();
+    //    if (state.chatBotState.getMessageHistory() == null) {
+    try {
+      state.chatBotState.initSession();
+    } catch (Exception e) {
+      e.printStackTrace();
+      displayErrorMessage("Error initializing Client Session");
     }
+    //    } else {
+    //      // else, load existing message history
+    //      loadMessageHistory();
+    //    }
 
     buttonOnlyView.setVisible(false);
     chatBotView.setVisible(true);
@@ -63,7 +69,7 @@ public class ChatbotController implements Controller {
    * the left side, User messages on the right side
    */
   private void loadMessageHistory() {
-    this.chatBox = singleton.chatBotState.getMessageHistory();
+    this.chatBox = state.chatBotState.getMessageHistory();
   }
 
   // TODO: add styleshits to labels
@@ -104,13 +110,17 @@ public class ChatbotController implements Controller {
     messageAsLabel.setWrapText(true);
 
     HBox singleMessage = new HBox(messageAsLabel);
-    singleMessage.setPadding(new Insets(20));
+    singleMessage.setPadding(new Insets(5));
 
     if (isUserMessage) {
-      messageAsLabel.setStyle("-fx-background-color: grey;");
+      messageAsLabel
+          .getStylesheets()
+          .add(Main.class.getResource("css/labelUserMessage.css").toString());
       singleMessage.setAlignment(Pos.CENTER_RIGHT);
     } else {
-      messageAsLabel.setStyle("-fx-background-color: green;");
+      messageAsLabel
+          .getStylesheets()
+          .add(Main.class.getResource("css/labelBotReply.css").toString());
       singleMessage.setAlignment(Pos.CENTER_LEFT);
     }
 
@@ -118,6 +128,11 @@ public class ChatbotController implements Controller {
     chatBox.getChildren().add(singleMessage);
     // Save changes in Message history
     this.state.chatBotState.setMessageHistory(chatBox);
+
+    // TODO: Make sure we autoscroll down
+
+    // Clear text field input
+    textField.clear();
   }
 
   // TODO: clear it up. Has redundant code with MapDisplayController
@@ -136,5 +151,10 @@ public class ChatbotController implements Controller {
   @Override
   public void setMainApp(App mainApp) {
     this.mainApp = mainApp;
+  }
+
+  @Override
+  public void initialize(URL location, ResourceBundle resources) {
+    scrollPane.vvalueProperty().bind(chatBox.heightProperty());
   }
 }

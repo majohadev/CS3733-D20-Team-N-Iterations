@@ -1,0 +1,14 @@
+@font-face {
+    src: url('Karla-Regular.ttf');
+}
+
+.jfx-text-field {
+    -fx-text-fill: BLACK;
+    -fx-background-color: WHITE;
+    -fx-font-family: 'Karla';
+    -fx-font-size: 17;
+    -fx-border-width: 1;
+    -fx-border-color: #ECECEC;
+    -fx-border-radius: 5;
+    -fx-padding: 5;
+}

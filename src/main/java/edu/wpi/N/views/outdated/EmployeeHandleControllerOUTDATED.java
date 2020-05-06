@@ -1,4 +1,4 @@
-package edu.wpi.N.views.admin;
+package edu.wpi.N.views.outdated;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListView;
@@ -30,7 +30,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 
-public class EmployeeHandleController implements Controller, Initializable {
+public class EmployeeHandleControllerOUTDATED implements Controller, Initializable {
 
   @FXML TableView<Employee> tbl_Employees;
   @FXML ChoiceBox<Employee> cb_EmployeeRemove;
@@ -84,7 +84,7 @@ public class EmployeeHandleController implements Controller, Initializable {
     try {
 
       populateEmployeeType();
-      populateChoiceBox();
+      // populateChoiceBox();
       populateTable();
       populateLanguageTable();
       langRem();
@@ -140,18 +140,6 @@ public class EmployeeHandleController implements Controller, Initializable {
    *
    * @throws DBException
    */
-  public void populateChoiceBox() throws DBException {
-    try {
-      LinkedList<Employee> empList = ServiceDB.getEmployees();
-      ObservableList<Employee> empObv = FXCollections.observableArrayList();
-      empObv.addAll(empList);
-      cb_EmployeeRemove.setItems(empObv);
-    } catch (DBException e) {
-      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-      errorAlert.setContentText(e.getMessage());
-      errorAlert.show();
-    }
-  }
 
   /**
    * Populates the ChoiceBox for each different employee type that is offered from the DB (Based on
@@ -206,7 +194,7 @@ public class EmployeeHandleController implements Controller, Initializable {
     TableColumn<String, String> langRem = new TableColumn<>("Languages");
     langRem.setMaxWidth(150);
     langRem.setMinWidth(150);
-    langRem.setCellValueFactory(new EmployeeHandleController.selfFactory<String>());
+    langRem.setCellValueFactory(new EmployeeHandleControllerOUTDATED.selfFactory<String>());
 
     tb_languagesRemove.getColumns().addAll(langRem);
   }
@@ -373,7 +361,6 @@ public class EmployeeHandleController implements Controller, Initializable {
    * @throws DBException
    */
   public void removeOffice() throws DBException {
-    System.out.println(txtf_docid.getText());
 
     int currentSelection = lst_docoffice.getSelectionModel().getSelectedIndex();
 
@@ -384,6 +371,14 @@ public class EmployeeHandleController implements Controller, Initializable {
 
       return;
     }
+    System.out.println("here1");
+    DbNode removeOfficeNode = fuzzySearchNodeList.get(currentSelection);
+    System.out.println("here2");
+    DoctorDB.removeOffice(Integer.parseInt(txtf_docid.getText()), removeOfficeNode);
+
+    Alert acceptReq = new Alert(Alert.AlertType.ERROR);
+    acceptReq.setContentText("Office " + removeOfficeNode.getLongName() + "removed.");
+    acceptReq.show();
   }
 
   public void addEmployee() throws DBException {
@@ -461,7 +456,7 @@ public class EmployeeHandleController implements Controller, Initializable {
     txtf_empln.clear();
     txtf_languages.clear();
     populateTable();
-    populateChoiceBox();
+    // populateChoiceBox();
   }
 
   public void deleteEmployee() throws DBException {
@@ -488,7 +483,7 @@ public class EmployeeHandleController implements Controller, Initializable {
       errorAlert.setContentText(e.getMessage());
       errorAlert.show();
     }
-    populateChoiceBox();
+    // populateChoiceBox();
   }
 
   public void fuzzySearchDoctorsOffices(KeyEvent keyInput) throws DBException {

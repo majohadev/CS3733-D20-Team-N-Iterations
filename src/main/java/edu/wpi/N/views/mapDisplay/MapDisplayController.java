@@ -290,13 +290,13 @@
 //  // lst_doctorlocations.getSelectionModel().getSelectedItem());
 //  //  }
 //
-//  public void findPathToCafetaria(MouseEvent e) throws DBException {
-//    initPathfind(lst_firstLocation, MapDB.getNode("MRETL00203"));
-//  }
-//
-//  public void findPathToStarBucks(MouseEvent e) throws DBException {
-//    initPathfind(lst_firstLocation, MapDB.getNode("NRETL00201"));
-//  }
+////  public void findPathToCafetaria(MouseEvent e) throws DBException {
+////    initPathfind(lst_firstLocation, MapDB.getNode("MRETL00203"));
+////  }
+////
+////  public void findPathToStarBucks(MouseEvent e) throws DBException {
+////    initPathfind(lst_firstLocation, MapDB.getNode("NRETL00201"));
+////  }
 //
 ////  public void initPathfind(ListView<DbNode> firstLst, DbNode second) throws DBException {
 ////    DbNode first = firstLst.getSelectionModel().getSelectedItem();
@@ -358,17 +358,17 @@
 ////    setTextDecription();
 ////  }
 //
-//  public void findPathToBathroom(MouseEvent e) throws DBException {
-//    initQuickAccess(lst_firstLocation, "REST");
-//  }
-//
-//  public void initQuickAccess(ListView<DbNode> firstLst, String type) throws DBException {
-//    DbNode first = lst_firstLocation.getSelectionModel().getSelectedItem();
-//    this.path = singleton.savedAlgo.findQuickAccess(first, type);
-//    mapBaseController.setFloor(first.getBuilding(), first.getFloor(), path);
-//    disableNonPathFloors();
-//    setTextDecription();
-//  }
+////  public void findPathToBathroom(MouseEvent e) throws DBException {
+////    initQuickAccess(lst_firstLocation, "REST");
+////  }
+////
+////  public void initQuickAccess(ListView<DbNode> firstLst, String type) throws DBException {
+////    DbNode first = lst_firstLocation.getSelectionModel().getSelectedItem();
+////    this.path = singleton.savedAlgo.findQuickAccess(first, type);
+////    mapBaseController.setFloor(first.getBuilding(), first.getFloor(), path);
+////    disableNonPathFloors();
+////    setTextDecription();
+////  }
 //
 ////  private void enableAllFloorButtons() {
 ////    for (int i = 1; i < floorButtonList.getChildren().size(); i++) {

@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="970.0" prefWidth="1720.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.admin.AccountHandleController">
+<AnchorPane prefHeight="970.0" prefWidth="1720.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.outdated.AccountHandleControllerOUTDATED">
    <children>
       <Label layoutX="175.0" layoutY="116.0" text="Add Admin Account" textAlignment="CENTER">
          <font>
