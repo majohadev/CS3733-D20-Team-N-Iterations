@@ -9,36 +9,36 @@
 
 <AnchorPane maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="970.0" prefWidth="320.0" style="-fx-background-color: #263051;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.admin.AddEmployeeController">
    <children>
-      <Label layoutX="10.0" layoutY="84.0" text="First Name:" textFill="#e6ebf2">
+      <Label layoutX="16.0" layoutY="123.0" text="First Name:" textFill="#e6ebf2">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <Label layoutX="47.0" layoutY="14.0" text="Add Employee" textFill="#e6ebf2">
+      <Label layoutX="47.0" layoutY="46.0" text="Add Employee" textFill="#e6ebf2">
          <font>
             <Font size="36.0" />
          </font>
       </Label>
-      <Label layoutX="10.0" layoutY="128.0" text="Last Name:" textFill="#e6ebf2">
+      <Label layoutX="16.0" layoutY="167.0" text="Last Name:" textFill="#e6ebf2">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <JFXTextField fx:id="txtf_empfn" focusColor="#e6ebf2" layoutX="140.0" layoutY="89.0" maxHeight="-Infinity" minWidth="-Infinity" prefWidth="150.0" style="-fx-text-fill: #e6ebf2;" unFocusColor="#e6ebf2" />
-      <JFXTextField fx:id="txtf_empln" layoutX="140.0" layoutY="133.0" maxHeight="-Infinity" minWidth="-Infinity" prefWidth="150.0" style="-fx-text-fill: #e6ebf2;" unFocusColor="#e6ebf2" />
-      <Label fx:id="lbl_languages" layoutX="9.0" layoutY="179.0" text="Languages:" textFill="#e6ebf2">
+      <JFXTextField fx:id="txtf_empfn" focusColor="#e6ebf2" layoutX="146.0" layoutY="128.0" maxHeight="-Infinity" minWidth="-Infinity" prefWidth="150.0" style="-fx-text-fill: #e6ebf2;" unFocusColor="#e6ebf2" />
+      <JFXTextField fx:id="txtf_empln" layoutX="146.0" layoutY="172.0" maxHeight="-Infinity" minWidth="-Infinity" prefWidth="150.0" style="-fx-text-fill: #e6ebf2;" unFocusColor="#e6ebf2" />
+      <Label fx:id="lbl_languages" layoutX="15.0" layoutY="218.0" text="Languages:" textFill="#e6ebf2">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <JFXTextField fx:id="txtf_languages" layoutX="140.0" layoutY="184.0" maxHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="150.0" style="-fx-text-fill: #e6ebf2;" unFocusColor="#e6ebf2" />
-      <JFXButton buttonType="RAISED" layoutX="122.0" layoutY="292.0" onMouseClicked="#addEmployee" text="Add" textFill="#e6ebf2">
+      <JFXTextField fx:id="txtf_languages" layoutX="146.0" layoutY="223.0" maxHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="150.0" style="-fx-text-fill: #e6ebf2;" unFocusColor="#e6ebf2" />
+      <JFXButton buttonType="RAISED" layoutX="128.0" layoutY="331.0" onMouseClicked="#addEmployee" text="Add" textFill="#e6ebf2">
          <font>
             <Font size="24.0" />
          </font>
       </JFXButton>
-      <ChoiceBox fx:id="cb_employeeTypes" layoutX="150.0" layoutY="243.0" prefWidth="150.0" />
-      <Label fx:id="lbl_languages1" layoutX="10.0" layoutY="238.0" text="Department:" textFill="#e6ebf2">
+      <ChoiceBox fx:id="cb_employeeTypes" layoutX="156.0" layoutY="282.0" prefWidth="150.0" />
+      <Label fx:id="lbl_languages1" layoutX="16.0" layoutY="277.0" text="Department:" textFill="#e6ebf2">
          <font>
             <Font size="24.0" />
          </font>
