@@ -586,6 +586,8 @@ public class NewAdminController implements Controller, Initializable {
         Alert denyReq = new Alert(Alert.AlertType.WARNING);
         denyReq.setContentText("Request Denied");
         denyReq.show();
+
+        return;
       }
 
       if (ch_requestFilter.isSelected()) {
