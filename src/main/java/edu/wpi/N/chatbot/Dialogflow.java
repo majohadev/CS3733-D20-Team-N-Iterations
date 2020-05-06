@@ -6,10 +6,14 @@ import com.google.api.gax.core.FixedCredentialsProvider;
 import com.google.auth.Credentials;
 import com.google.auth.oauth2.ServiceAccountCredentials;
 import com.google.cloud.dialogflow.v2.*;
+import edu.wpi.N.Main;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
@@ -66,42 +70,13 @@ public class Dialogflow {
    * @throws Exception
    */
   private void extractPrivateKey() throws Exception {
-    // String path = this.getClass().getResource("privatekey.txt").getPath();
+    String path =
+        (new File("src/main/resources/edu/wpi/N/credentials/privatekey.txt")).getAbsolutePath();
 
-    // String path = Main.class.getResource("credentials/privatekey.txt").getPath();
-
-    // String privKey = Files.readString(Paths.get(path));
+    String privKey = Files.readString(Paths.get(path));
 
     StringBuilder pkcs8Lines = new StringBuilder();
-    BufferedReader rdr =
-        new BufferedReader(
-            new StringReader(
-                "MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCGPL0El3GiYe+3\n"
-                    + "Ge7fueUQuI+3KfWu5AeVx0E6HN0X/ntU0U/jQLSwn+ODkJACVKgmgZawS8wLCkf4\n"
-                    + "o6i7oa3uA6/ajshfIXiW9seCRg7tEpV8zZWsP7IbsalTBhxXE2CNJBE+2Ox+rRG7\n"
-                    + "960Cmv/RYQF0J0NJw5RLH9gyktPnsv/zxuqIGAKJaL7Hbu145m13IsGhey1tkGRo\n"
-                    + "+d2Bf/BIjWmJSwBz3bpnNSXfSsP0t6xXcoWRb8tH6UffFaQGhP7Yj2sDh3+9ysAc\n"
-                    + "ToJSS6JSz5jJEuk/B6ejZUj3OytYYgMAddl6BSufNBfBkMI19+n6Cugjw2Ni+YV+\n"
-                    + "ExtgCRVzAgMBAAECggEAFHl3KxgeUPI3KepesOkdsyszYHCZ9I77STEXFdIJNvut\n"
-                    + "vAYg9TyNUtNQVGTcUj6vVxA097bX7GcpCxeLSPMkIEWXsPJORZRJXF1PmOMuq6JG\n"
-                    + "Ar8osRkWBXtXpD4uXGmsNFrn9noHuFqVdeIVFWym0DzHh/vlG38lQ0AcLbqPb6t5\n"
-                    + "KctiSdIla9aZBtnWfK8iHRE5E20FXJbE1T1sdHXyRvVBagQDbj7b/pXe4Oy9Usmd\n"
-                    + "NgHhxHAdCbrkej7aHf7o4/bWkaLWdiVRuI5f+it3drVnavmgOylxEXN6f55+ojnl\n"
-                    + "+9VBwCM76DhylDTUE1uIkXUurpFAsCO54zMIybK3IQKBgQC56ek2+2MWq66i7uDB\n"
-                    + "HrzGNtSQ5Yu5Ji2PXkR3fx4rR6BGQ+nbT19Thz4F8Vij16/rh/PfvFKo780AXIl3\n"
-                    + "Uur2s0pyRfuhTlD3kYzf5VQ2ErRFM4BznFnSahKECRkLN4+TPeyi1XyrpmXESKpd\n"
-                    + "jwjR6EUaSSA8yU4oFYDvi3R+pQKBgQC416fq8Hkdf8nClS2ju9mTRSMcOrQe5396\n"
-                    + "sExAKQsIy9+1XtnIlJukgeByoVRpRLPAaRO0hknc8cYR53gWPsrsuGGxU7BV2z/O\n"
-                    + "INR4TvctF1Ahr5C9BEMvmu+BV59ALHyV7RGFlsfo4qtsp++A0Y82Dyq0dIFdRKH9\n"
-                    + "p1f8LTRgNwKBgCmTZdQl48LuId/OC/UkKpMpL+A3dUeygf3N1wHiK50CJ5WPGn0x\n"
-                    + "AuBrHjO2BVyen3jMrn0aYGHnPrEWAKfuox0Ie12SyPMJ0JGMuzRW1L5C8I2JNvCj\n"
-                    + "xnKHxhxA7JjVlAYZkxHXLEo2rAt5NKA3nIFUsB9wuwTc/9128Z6gUS0BAoGAQLki\n"
-                    + "zx1NC4tHdp8N0Bti4DKBTM0xbPDarnc0+/JjLr1UpAmGcLm4li30Da94AzRPTLx+\n"
-                    + "bePn0TnHhVVrsz5hh+o4KwOG50lSWjccrtPXsS5MnL8BC26GqBC0dLHdzXbGWSkd\n"
-                    + "zY0yitVz+SQEtTKr1t4QsgdplOMHZe5G3MJnaJkCgYBni56LfOx7Trs6H1ggZPeF\n"
-                    + "pPdghhvK5tO3SI6l4X4vyjn+E4KG2aePKQc2rAhjmKzK01PHxgsjKHFIm4Fvjs/4\n"
-                    + "yPDXFDdFhLH/8qem9o11GaUZpB1MbOxLq/+7sj484QsRYarsQZ0l5l0sKgCYJ+nI\n"
-                    + "Ak/tP14RKUcFuYIeVfCn5A=="));
+    BufferedReader rdr = new BufferedReader(new StringReader(privKey));
     String line;
     while ((line = rdr.readLine()) != null) {
       pkcs8Lines.append(line);
