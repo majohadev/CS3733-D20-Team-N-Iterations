@@ -2,6 +2,9 @@ package edu.wpi.N.views.admin;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
+import com.jfoenix.controls.JFXTreeTableView;
+import com.jfoenix.controls.RecursiveTreeItem;
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import edu.wpi.N.App;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
@@ -21,11 +24,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 
@@ -40,9 +39,15 @@ public class ViewRequestController implements Controller, Initializable {
   @FXML JFXButton btn_Deny;
   @FXML JFXCheckBox ch_requestFilter;
   @FXML ChoiceBox<Employee> cb_Employee;
+  @FXML JFXTreeTableView trtbl_requests;
+  @FXML JFXTreeTableView trtbl_languages;
 
   ObservableList<Request> tableData = FXCollections.observableArrayList();
   ObservableList<String> languageData = FXCollections.observableArrayList();
+  ObservableList<Request> newTableData = FXCollections.observableArrayList();
+  TreeItem<Request> root =
+      new RecursiveTreeItem<Request>(newTableData, RecursiveTreeObject::getChildren);
+  TreeItem<String> lang;
 
   @Override
   public void setMainApp(App mainApp) {}
@@ -58,12 +63,13 @@ public class ViewRequestController implements Controller, Initializable {
       populateChoiceBox();
       populateRequestTable();
       populateLanguageTable();
+      populateLangTable();
+
     } catch (DBException e) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
       errorAlert.setContentText(e.getMessage());
       errorAlert.show();
     }
-    initializeTable();
   }
 
   public static class nodeLongName
@@ -95,74 +101,24 @@ public class ViewRequestController implements Controller, Initializable {
     }
   }
 
-  /** Initializes a table with all given parameters for service requests */
-  private void initializeTable() {
+  private static class selfFactoryTest<G>
+      implements Callback<TreeTableColumn.CellDataFeatures<G, G>, ObservableValue<G>> {
+    public selfFactoryTest() {}
 
-    // Request Table
-    TableColumn<Request, Integer> requestID = new TableColumn<>("ID");
-    requestID.setMaxWidth(30);
-    requestID.setMinWidth(30);
-    requestID.setCellValueFactory(new PropertyValueFactory<Request, Integer>("requestID"));
+    @Override
+    public ObservableValue<G> call(TreeTableColumn.CellDataFeatures<G, G> param) {
+      return new ReadOnlyObjectWrapper<>(param.getValue().getValue());
+    }
+  }
 
-    TableColumn<Request, Employee> emp_assigned = new TableColumn<>("Assigned");
-    emp_assigned.setMaxWidth(100);
-    emp_assigned.setMinWidth(100);
-    emp_assigned.setCellValueFactory(new PropertyValueFactory<Request, Employee>("emp_assigned"));
-
-    TableColumn<Request, String> notes = new TableColumn<>("Notes");
-    notes.setMaxWidth(150);
-    notes.setMinWidth(150);
-    notes.setCellValueFactory(new PropertyValueFactory<Request, String>("reqNotes"));
-
-    TableColumn<Request, String> nodeID = new TableColumn<>("Location");
-    nodeID.setMaxWidth(100);
-    nodeID.setMinWidth(100);
-    nodeID.setCellValueFactory(new ViewRequestController.nodeLongName());
-
-    TableColumn<Request, String> status = new TableColumn<>("Status");
-    status.setMaxWidth(100);
-    status.setMinWidth(100);
-    status.setCellValueFactory(new PropertyValueFactory<Request, String>("status"));
-
-    TableColumn<Request, String> attr1 = new TableColumn<>("Attribute 1");
-    attr1.setMaxWidth(100);
-    attr1.setMinWidth(100);
-    attr1.setCellValueFactory(new PropertyValueFactory<Request, String>("Atr1"));
-
-    TableColumn<Request, String> service = new TableColumn<>("Service");
-    service.setMaxWidth(75);
-    service.setMinWidth(75);
-    service.setCellValueFactory(new PropertyValueFactory<Request, String>("serviceType"));
-
-    TableColumn<Request, String> attr2 = new TableColumn<>("Attribute 2");
-    attr2.setMaxWidth(100);
-    attr2.setMinWidth(100);
-    attr2.setCellValueFactory(new PropertyValueFactory<Request, String>("Atr2"));
-
-    TableColumn<Request, String> attr3 = new TableColumn<>("Attribute 3");
-    attr3.setMaxWidth(100);
-    attr3.setMinWidth(100);
-    attr3.setCellValueFactory(new PropertyValueFactory<Request, String>("Atr3"));
-
-    TableColumn<Request, String> attr4 = new TableColumn<>("Attribute 4");
-    attr4.setMaxWidth(100);
-    attr4.setMinWidth(100);
-    attr4.setCellValueFactory(new PropertyValueFactory<Request, String>("Atr4"));
-
+  private void populateLangTable() {
     // Language Table for Translators
-    TableColumn<String, String> languages = new TableColumn<>("Languages");
+    TreeTableColumn<String, String> languages = new TreeTableColumn<>("Languages");
     languages.setMaxWidth(150);
     languages.setMinWidth(150);
-    languages.setCellValueFactory(new ViewRequestController.selfFactory<String>());
+    languages.setCellValueFactory(new ViewRequestController.selfFactoryTest<String>());
 
-    // Initializes Columns for Language Table (Filling Requests) and Request Table (Viewing,
-    // Accepting, Denying)
-    tb_RequestTable
-        .getColumns()
-        .addAll(
-            requestID, service, emp_assigned, notes, nodeID, status, attr1, attr2, attr3, attr4);
-
-    tb_languages.getColumns().addAll(languages);
+    trtbl_languages.getColumns().addAll(languages);
   }
 
   @FXML
@@ -237,11 +193,11 @@ public class ViewRequestController implements Controller, Initializable {
   }
 
   @FXML
-  private void assignPressed(MouseEvent e) throws DBException {
+  private void assignPressed(Employee employee) throws DBException {
     int eID;
     int rID;
     try {
-      eID = cb_Employee.getSelectionModel().getSelectedItem().getID();
+      eID = employee.getID();
       rID = tb_RequestTable.getSelectionModel().getSelectedItem().getRequestID();
     } catch (NullPointerException indx) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
@@ -301,6 +257,6 @@ public class ViewRequestController implements Controller, Initializable {
                 languageData.setAll(new LinkedList<String>());
               }
             });
-    tb_languages.setItems(languageData);
+    trtbl_languages.setRoot(lang);
   }
 }

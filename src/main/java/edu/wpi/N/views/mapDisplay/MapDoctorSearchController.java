@@ -6,6 +6,7 @@ import edu.wpi.N.App;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.States.StateSingleton;
+import edu.wpi.N.entities.employees.Doctor;
 import edu.wpi.N.views.Controller;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
@@ -29,11 +30,23 @@ public class MapDoctorSearchController implements Controller {
 
   public void onSearchLocation(KeyEvent e) throws DBException {
     activeText = (TextField) e.getSource();
+    if (activeText == txt_location) {
+      nodes[0] = null;
+    } else {
+      nodes[1] = null;
+    }
+    lst_fuzzySearch.getSelectionModel().clearSelection();
     NewMapDisplayController.fuzzyLocationSearch(activeText, lst_fuzzySearch);
   }
 
   public void onSearchDoctor(KeyEvent e) throws DBException {
     activeText = (TextField) e.getSource();
+    if (activeText == txt_location) {
+      nodes[0] = null;
+    } else {
+      nodes[1] = null;
+    }
+    lst_fuzzySearch.getSelectionModel().clearSelection();
     NewMapDisplayController.fuzzyDoctorSearch(activeText, lst_fuzzySearch);
   }
 
@@ -45,17 +58,31 @@ public class MapDoctorSearchController implements Controller {
             lst.getSelectionModel().getSelectedItem().toString()
                 + ", "
                 + ((DbNode) lst.getSelectionModel().getSelectedItem()).getBuilding());
-      } else {
-        activeText.setText(lst.getSelectionModel().getSelectedItem().toString());
-      }
-      if (activeText == txt_location) {
         nodes[0] = (DbNode) lst.getSelectionModel().getSelectedItem();
       } else {
-        nodes[1] = (DbNode) lst.getSelectionModel().getSelectedItem();
+        if (lst.getSelectionModel().getSelectedItem() instanceof Doctor) {
+          activeText.setText(lst.getSelectionModel().getSelectedItem().toString());
+          Doctor doc = (Doctor) lst.getSelectionModel().getSelectedItem();
+          lst.getSelectionModel().clearSelection();
+          lst.getItems().clear();
+          lst.getItems().addAll(doc.getLoc());
+        } else {
+          System.out.println("Hello");
+          activeText.setText(
+              lst.getSelectionModel().getSelectedItem().toString()
+                  + ", "
+                  + ((DbNode) lst.getSelectionModel().getSelectedItem()).getBuilding());
+          nodes[1] = (DbNode) lst.getSelectionModel().getSelectedItem();
+        }
       }
     } catch (NullPointerException ex) {
       return;
     }
+  }
+
+  public void clearDbNodes() {
+    this.nodes[0] = null;
+    this.nodes[1] = null;
   }
 
   public JFXButton getSearchButton() {
@@ -83,7 +110,8 @@ public class MapDoctorSearchController implements Controller {
   }
 
   public void setKioskLocation(DbNode node) {
-    this.nodes[1] = node;
+    this.nodes[0] = node;
+    this.lst_fuzzySearch.getSelectionModel().select(0);
   }
 
   public JFXButton getResetButton() {
