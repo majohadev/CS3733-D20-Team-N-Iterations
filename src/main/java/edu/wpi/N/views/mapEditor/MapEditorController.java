@@ -5,10 +5,6 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXNodesList;
 import edu.wpi.N.App;
-import edu.wpi.N.algorithms.AStar;
-import edu.wpi.N.algorithms.BFS;
-import edu.wpi.N.algorithms.DFS;
-import edu.wpi.N.algorithms.Dijkstra;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
@@ -47,8 +43,6 @@ public class MapEditorController implements Controller {
 
   private StateSingleton singleton;
 
-  @FXML JFXComboBox<String> cb_changeAlgo;
-  @FXML JFXButton btn_changeAlgo;
   @FXML Pane pn_display;
   @FXML Pane pn_editor;
   @FXML Pane pn_elev;
@@ -195,7 +189,6 @@ public class MapEditorController implements Controller {
 
     initAutoFocus();
 
-    populateChangeAlgo();
     System.out.println("Doing ok");
   }
 
@@ -1816,17 +1809,6 @@ public class MapEditorController implements Controller {
     }
   }
 
-  public void populateChangeAlgo() {
-    LinkedList<String> algoTypes = new LinkedList<>();
-    algoTypes.add("BFS");
-    algoTypes.add("DFS");
-    algoTypes.add("AStar");
-    algoTypes.add("Dijkstra");
-    ObservableList<String> algos = FXCollections.observableArrayList();
-    algos.addAll(algoTypes);
-    cb_changeAlgo.setItems(algos);
-  }
-
   public void onBtnCancelElevClicked() {
     resetEditElev();
     mode = Mode.NO_STATE;
@@ -1858,19 +1840,6 @@ public class MapEditorController implements Controller {
     onBtnConfirmAddShaftClicked();
     for (Circle c : editElevNodes) {
       if (!(c.getFill() == Color.BLACK)) c.setFill(Color.CADETBLUE);
-    }
-  }
-
-  @FXML
-  public void changeAlgorithm() {
-    if (cb_changeAlgo.getSelectionModel().getSelectedItem().equals("BFS")) {
-      singleton.savedAlgo.setPathFinder(new BFS());
-    } else if (cb_changeAlgo.getSelectionModel().getSelectedItem().equals("DFS")) {
-      singleton.savedAlgo.setPathFinder(new DFS());
-    } else if (cb_changeAlgo.getSelectionModel().getSelectedItem().equals("AStar")) {
-      singleton.savedAlgo.setPathFinder(new AStar());
-    } else if (cb_changeAlgo.getSelectionModel().getSelectedItem().equals("Dijkstra")) {
-      singleton.savedAlgo.setPathFinder(new Dijkstra());
     }
   }
 
