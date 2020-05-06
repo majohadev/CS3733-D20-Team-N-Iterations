@@ -218,17 +218,25 @@ public class MapBaseController implements Controller {
           && secondNode.getFloor() == floor
           && (drawFaulkner || drawMain)) {
         if (i == 0) {
+          startLabel.setVisible(true);
+          endLabel.setVisible(true);
           startLabel.setText("Start at ");
           drawCircle(firstNode, START_NODE_COLOR, startLabel);
         } else if (i == currentPath.size() - 2) {
+          startLabel.setVisible(true);
+          endLabel.setVisible(true);
           endLabel.setText("End at ");
           drawCircle(secondNode, END_NODE_COLOR, endLabel);
         } else if (currentPath.get(i - 1).getFloor() != floor) {
           // If firstNode is first on current floor
+          startLabel.setVisible(true);
+          endLabel.setVisible(true);
           startLabel.setText("Exit from ");
           drawCircle(firstNode, MIDDLE_NODE_COLOR, startLabel);
         } else if (currentPath.get(i + 2).getFloor() != floor) {
           // If secondNode is last on current floor
+          startLabel.setVisible(true);
+          endLabel.setVisible(true);
           endLabel.setText("Enter ");
           drawCircle(secondNode, MIDDLE_NODE_COLOR, endLabel);
         }
@@ -327,6 +335,8 @@ public class MapBaseController implements Controller {
     keyEnd = null;
     keyStartVals.clear();
     keyEndVals.clear();
+    startLabel.setVisible(false);
+    endLabel.setVisible(false);
     pn_path.getChildren().clear();
   }
 
