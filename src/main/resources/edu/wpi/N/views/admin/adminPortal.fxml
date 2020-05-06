@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXCheckBox?>
+<?import com.jfoenix.controls.JFXComboBox?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableView?>
@@ -152,6 +153,19 @@
                         </JFXButton>
                      </children>
                   </Pane>
+                  <Pane prefHeight="60.0" prefWidth="104.0" style="-fx-background-color: #263051;">
+                     <children>
+                        <JFXButton fx:id="btn_arduino1" ellipsisString="" onMouseClicked="#changeAlgo" prefHeight="51.0" prefWidth="65.0" text="   ">
+                           <graphic>
+                              <ImageView fitHeight="42.0" fitWidth="45.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../images/adminIcons/WHITEvector-path-icon-6.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </JFXButton>
+                     </children>
+                  </Pane>
                   <Pane prefHeight="140.0" prefWidth="80.0" style="-fx-background-color: #263051;" />
                   <Pane prefHeight="92.0" prefWidth="75.0" style="-fx-background-color: #263051;">
                      <children>
@@ -172,7 +186,7 @@
                <children>
                   <ImageView fitHeight="77.0" fitWidth="62.0" layoutX="15.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../images/hospitalLogo/Brigham_and_Womens_Hospital_logo.svg.png" />
+                        <Image url="@../../images/hospitalLogo/Brigham_and_Womens_Hospital_logo.png" />
                      </image>
                   </ImageView>
                   <Label layoutX="98.0" layoutY="14.0" style="-fx-background-color: #26 3051;" text="Admin Portal" textFill="#e6ebf2">
@@ -187,6 +201,12 @@
                   </Label>
                </children>
             </Pane>
+            <JFXComboBox fx:id="cb_changeAlgo" focusColor="#e6ebf2" layoutX="120.0" layoutY="200.0" prefHeight="39.0" prefWidth="200.0" promptText="Change Algorithm" style="-fx-prompt-text-fill: #e6ebf2; -fx-font-size: 18px;" unFocusColor="#e6ebf2" visible="false" />
+            <JFXButton fx:id="btn_submit" layoutX="160.0" layoutY="260.0" onMouseClicked="#changeAlgorithm" prefWidth="100.0" text="Submit" textFill="#e6ebf2" visible="false">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </JFXButton>
          </children>
       </AnchorPane>
       <AnchorPane fx:id="anchorSwap" layoutX="186.0" layoutY="96.0" prefHeight="1080.0" prefWidth="1552.0" style="-fx-background-color: #263051;" AnchorPane.leftAnchor="380.0" AnchorPane.topAnchor="0.0">
@@ -202,6 +222,11 @@
                <font>
                   <Font size="24.0" />
                </font></Label>
+            <JFXButton layoutX="797.0" layoutY="789.0" onMouseClicked="#resetTable" text="Reset" textFill="#e6ebf2">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </JFXButton>
          </children></AnchorPane>
    </children>
 </AnchorPane>
