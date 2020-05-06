@@ -1,9 +1,10 @@
+
 /**
  * Team N Sanitation Request API Stylesheet
  */
 
 @font-face {
-    src: url('Karla-Regular.ttf');
+    src: url('edu/wpi/N/Karla-Regular1.ttf');
 }
 
 .anchor{
@@ -39,36 +40,6 @@
     -fx-text-fill: #E6EBF2;
     -fx-min-width: 225;
     -fx-min-height: 60;
-    -fx-font-family: 'Karla';
-    -fx-font-size: 24px;
-}
-
-.jfx-button-switch {
-    -jfx-button-type: RAISED;
-    -jfx-rippler-fill: #6C5C7F;
-    -fx-background-color: #7E9AB6;
-    -fx-border-color: #E6EBF2;
-    -fx-border-width: 4px;
-    -fx-border-radius: 10;
-    -fx-background-radius: 10;
-    -fx-text-fill: #E6EBF2;
-    -fx-min-width: 50;
-    -fx-min-height: 50;
-    -fx-font-family: 'Karla';
-    -fx-font-size: 24px;
-}
-
-.jfx-button-assign {
-    -jfx-button-type: RAISED;
-    -jfx-rippler-fill: #6C5C7F;
-    -fx-background-color: #7E9AB6;
-    -fx-border-color: #E6EBF2;
-    -fx-border-width: 4px;
-    -fx-border-radius: 10;
-    -fx-background-radius: 10;
-    -fx-text-fill: #E6EBF2;
-    -fx-min-width: 150;
-    -fx-min-height: 50;
     -fx-font-family: 'Karla';
     -fx-font-size: 24px;
 }
@@ -167,16 +138,9 @@
     -jfx-unselected-color: #6C5C7F;
 }
 
-.jfx-checkbox {
-    -fx-font-family: 'Karla';
-    -fx-font-size: 14px;
-    -fx-text-fill: #E6EBF2;
-    -jfx-checked-color: #4A69C6;
-    -jfx-unchecked-color: #6C5C7F;
-}
 
 .table-view{
-    -fx-background-color: #7E9AB6;
+    -fx-background-color: transparent;
     -fx-arrows-visible: false;
     -fx-fit-to-width: true;
 }
@@ -198,22 +162,11 @@
     -fx-page-information-alignment: center;
 }
 
-.table-view .table-row-cell{
-    -fx-background-color: #E6EBF2, #7E9AB6 ;
-    -fx-background-insets: 0, 1 ;
-    -fx-fit-to-width: true;
-
-}
-
-.table-view .table-row-cell:odd{
-    -fx-background-color: #7E9AB6, #7E9AB6 ;
-    -fx-background-insets: 0, 1 ;
-}
 
 .table-view .column-header {
     -fx-background-color: transparent;
     -fx-border-color: #E6EBF2;
-}
+    }
 
 .table-view .table-cell{
     -fx-background-color: transparent;
@@ -224,10 +177,14 @@
 
 .table-row-cell{
     -fx-background-color: #7E9AB6, transparent;
-    /*
     -fx-border-color: #E6EBF2;
-     */
     -fx-fit-to-width: true;
+
+}
+
+.table-row-cell:odd{
+    -fx-background-color: #7E9AB6, transparent;
+    -fx-border-color: #E6EBF2;
 
 }
 

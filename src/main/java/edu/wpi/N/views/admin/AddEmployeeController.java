@@ -43,6 +43,10 @@ public class AddEmployeeController implements Initializable, Controller {
     try {
       if (txtf_empfn.getText().equals("")) throw new DBException("Employee has no first name");
 
+      if (cb_employeeTypes.getSelectionModel().getSelectedIndex() < 0) {
+        throw new DBException("No employee type selected");
+      }
+
       switch (cb_employeeTypes.getValue().getServiceType()) {
         case "Laundry":
           {

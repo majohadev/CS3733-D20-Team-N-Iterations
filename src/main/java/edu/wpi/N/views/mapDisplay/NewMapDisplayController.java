@@ -636,8 +636,8 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
       setDefaultKioskNode();
       pn_change.getChildren().add(pane);
     } else if (src == pn_serviceIcon) {
+      this.mainApp.switchScene("/edu/wpi/N/views/services/newServicesPage.fxml", singleton);
       resetMap();
-      // TODO load service page here
     } else if (src == pn_infoIcon) {
       resetMap();
       // TODO load info page here
@@ -897,6 +897,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
       mapQRController.getTextDrive().setText(googleDirections);
       ArrayList<String> driveDirections = new ArrayList<>();
       driveDirections.add(googleDirections);
+
       mapQRController.getImageDrive().setImage(generateImage(driveDirections, false));
     }
   }

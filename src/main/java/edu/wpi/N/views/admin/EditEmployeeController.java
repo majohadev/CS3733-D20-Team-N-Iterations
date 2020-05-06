@@ -85,11 +85,14 @@ public class EditEmployeeController implements Initializable {
 
               ServiceDB.addLanguage(empID, txtf_newLang.getText());
 
-              tb_languagesRemove.getItems().add(txtf_newLang.getText());
+              populateChoiceBox();
+              populateLanguageTable();
+
+              txtf_empid.clear();
+              txtf_newLang.clear();
 
               Alert acceptReq = new Alert(Alert.AlertType.CONFIRMATION);
-              acceptReq.setContentText(
-                  ServiceDB.getEmployee(empID).getName() + " languages were added");
+              acceptReq.setContentText(ServiceDB.getEmployee(empID).getName() + " was updated.");
               acceptReq.show();
 
               return;
@@ -145,15 +148,15 @@ public class EditEmployeeController implements Initializable {
                 + " from "
                 + cb_languageRemove.getSelectionModel().getSelectedItem().getName());
         acceptReq.show();
+
+        populateChoiceBox();
+        populateLanguageTable();
       }
-    } catch (DBException e) {
+    } catch (DBException | NumberFormatException e) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
       errorAlert.setContentText(e.getMessage());
       errorAlert.show();
     }
-
-    int selectedIndex = tb_languagesRemove.getSelectionModel().getSelectedIndex();
-    tb_languagesRemove.getItems().remove(selectedIndex);
 
     txtf_empid.clear();
     txtf_newLang.clear();
@@ -169,16 +172,12 @@ public class EditEmployeeController implements Initializable {
         .addListener(
             (ov, old, emp) -> {
               if (emp instanceof Translator) {
-                System.out.println("In Translator");
                 languageData.setAll(((Translator) emp).getLanguages());
-                System.out.println(((Translator) emp).getLanguages().get(0));
               } else {
-                System.out.println("Outside Translator");
                 languageData.setAll(new LinkedList<String>());
               }
             });
     tb_languagesRemove.setItems(languageData);
-    System.out.println("Outside Renewed Table");
   }
 
   public void populateChoiceBox() throws DBException {
