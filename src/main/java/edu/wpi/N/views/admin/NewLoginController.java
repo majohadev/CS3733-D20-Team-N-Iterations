@@ -23,7 +23,7 @@ public class NewLoginController implements Controller, Initializable {
   @FXML JFXPasswordField pwf_password;
   @FXML JFXTextField txtf_username;
 
-  String medReq = "views/newMedRequest.fxml";
+  String medReq = "views/services/newMedRequest.fxml";
 
   // Inject singleton
   public NewLoginController(StateSingleton singleton) {
