@@ -17,7 +17,7 @@
       </Label>
       <Label layoutX="34.0" layoutY="44.0" styleClass="label-admin-display" stylesheets="@../../css/sanitationRequestUI.css" text="Accept Request" textFill="#e6ebf2">
          <font>
-            <Font size="36.0" />
+            <Font name="Calibri" size="36.0" />
          </font>
       </Label>
       <Line endX="146.0" layoutX="174.0" layoutY="427.0" startX="-174.0" stroke="#7e9ab6" />

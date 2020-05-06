@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="pn_arduino" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="300.0" style="-fx-background-color: #263051;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.features.ArduinoController">
+<AnchorPane fx:id="pn_arduino" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="636.0" prefWidth="300.0" style="-fx-background-color: #263051;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.features.ArduinoController">
     <children>
         <JFXTextField fx:id="txtf_com" focusColor="#e6ebf2" layoutX="33.0" layoutY="92.0" prefHeight="34.0" prefWidth="125.0" promptText="COM Port" style="-fx-prompt-text-fill: #e6ebf2;" styleClass="jfx-text-field" stylesheets="@../../css/sanitationRequestUI.css" unFocusColor="#e6ebf2">
          <font>

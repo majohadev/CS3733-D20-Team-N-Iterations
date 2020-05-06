@@ -78,7 +78,7 @@
          <children>
             <ImageView fitHeight="288.0" fitWidth="235.0" layoutX="82.0" layoutY="99.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../images/hospitalLogo/Brigham_and_Womens_Hospital_logo.svg.png" />
+                  <Image url="@../../images/hospitalLogo/Brigham_and_Womens_Hospital_logo.png" />
                </image>
             </ImageView>
             <JFXButton buttonType="RAISED" layoutX="10.0" layoutY="426.0" onMouseClicked="#goBack" ripplerFill="BLACK" styleClass="jfx-button-login-page" stylesheets="@../../css/sanitationRequestUI.css" text="Return" textFill="WHITE">
