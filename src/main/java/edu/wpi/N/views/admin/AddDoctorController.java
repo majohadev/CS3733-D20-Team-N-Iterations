@@ -89,64 +89,67 @@ public class AddDoctorController {
   public void addOffice() throws DBException {
     int currentSelection = lst_docoffice.getSelectionModel().getSelectedIndex();
 
-    if (currentSelection == -1) {
-      Alert acceptReq = new Alert(Alert.AlertType.ERROR);
-      acceptReq.setContentText("Invalid / No Location Selected");
-      acceptReq.show();
-
-      return;
-    }
-
-    if (!ServiceDB.getEmployee(Integer.parseInt(txtf_docid.getText()))
-        .getServiceType()
-        .equals("Medicine")) {
-
-      Alert invalidID = new Alert(Alert.AlertType.ERROR);
-      invalidID.setContentText("Employee isn't a doctor.");
-      invalidID.show();
-
-      return;
-    }
-
-    DbNode addOfficeNode = fuzzySearchNodeList.get(currentSelection);
-
-    if (txtf_docid.getText().equals("")) {
-      Alert invalidID = new Alert(Alert.AlertType.ERROR);
-      invalidID.setContentText("Invalid ID");
-      invalidID.show();
-
-      return;
-    }
-
-    int doctorID = Integer.parseInt(txtf_docid.getText());
-
-    for (DbNode node : DoctorDB.getDoctor(doctorID).getLoc()) {
-      if (node.equals(addOfficeNode)) {
+    try {
+      if (currentSelection == -1) {
         Alert acceptReq = new Alert(Alert.AlertType.ERROR);
-        acceptReq.setContentText("Doctor already works there");
+        acceptReq.setContentText("Invalid / No Location Selected");
         acceptReq.show();
 
         return;
       }
-    }
 
-    try {
+      if (!ServiceDB.getEmployee(Integer.parseInt(txtf_docid.getText()))
+          .getServiceType()
+          .equals("Medicine")) {
 
-      DoctorDB.addOffice(doctorID, addOfficeNode);
+        Alert invalidID = new Alert(Alert.AlertType.ERROR);
+        invalidID.setContentText("Employee isn't a doctor.");
+        invalidID.show();
 
-      Alert acceptReq = new Alert(Alert.AlertType.CONFIRMATION);
-      acceptReq.setContentText("Office " + addOfficeNode.getLongName() + " was added.");
+        return;
+      }
+
+      DbNode addOfficeNode = fuzzySearchNodeList.get(currentSelection);
+
+      if (txtf_docid.getText().equals("")) {
+        Alert invalidID = new Alert(Alert.AlertType.ERROR);
+        invalidID.setContentText("Invalid ID");
+        invalidID.show();
+
+        return;
+      }
+
+      int doctorID = Integer.parseInt(txtf_docid.getText());
+
+      for (DbNode node : DoctorDB.getDoctor(doctorID).getLoc()) {
+        if (node.equals(addOfficeNode)) {
+          Alert acceptReq = new Alert(Alert.AlertType.ERROR);
+          acceptReq.setContentText("Doctor already works there");
+          acceptReq.show();
+
+          return;
+        }
+      }
+
+      try {
+
+        DoctorDB.addOffice(doctorID, addOfficeNode);
+
+        Alert acceptReq = new Alert(Alert.AlertType.CONFIRMATION);
+        acceptReq.setContentText("Office " + addOfficeNode.getLongName() + " was added.");
+        acceptReq.show();
+
+      } catch (DBException e) {
+        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+        errorAlert.setContentText(e.getMessage());
+        errorAlert.show();
+      }
+    } catch (DBException e) {
+      Alert acceptReq = new Alert(Alert.AlertType.ERROR);
+      acceptReq.setContentText(e.getMessage());
       acceptReq.show();
 
-    } catch (DBException e) {
-      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-      errorAlert.setContentText(e.getMessage());
-      errorAlert.show();
-    }
-
-    for (DbNode node : DoctorDB.getDoctor(doctorID).getLoc()) {
-      System.out.println("Node: " + node.getLongName());
-      System.out.println("Given: " + addOfficeNode.getLongName());
+      return;
     }
 
     txtf_docid.clear();
@@ -161,55 +164,65 @@ public class AddDoctorController {
    */
   public void removeOffice() throws DBException {
 
-    if (txtf_docid.getText().equals("")) {
-      Alert invalidID = new Alert(Alert.AlertType.ERROR);
-      invalidID.setContentText("Invalid ID");
-      invalidID.show();
+    try {
+      if (txtf_docid.getText().equals("")) {
+        Alert invalidID = new Alert(Alert.AlertType.ERROR);
+        invalidID.setContentText("Invalid ID");
+        invalidID.show();
 
-      return;
-    }
+        return;
+      }
 
-    if (!ServiceDB.getEmployee(Integer.parseInt(txtf_docid.getText()))
-        .getServiceType()
-        .equals("Medicine")) {
+      if (!ServiceDB.getEmployee(Integer.parseInt(txtf_docid.getText()))
+          .getServiceType()
+          .equals("Medicine")) {
 
-      Alert invalidID = new Alert(Alert.AlertType.ERROR);
-      invalidID.setContentText("Employee isn't a doctor.");
-      invalidID.show();
+        Alert invalidID = new Alert(Alert.AlertType.ERROR);
+        invalidID.setContentText("Employee isn't a doctor.");
+        invalidID.show();
 
-      return;
-    }
+        return;
+      }
 
-    int currentSelection = lst_docoffice.getSelectionModel().getSelectedIndex();
-    int docid = Integer.parseInt(txtf_docid.getText());
+      int currentSelection = lst_docoffice.getSelectionModel().getSelectedIndex();
+      int docid = Integer.parseInt(txtf_docid.getText());
 
-    if (currentSelection == -1) {
-      Alert acceptReq = new Alert(Alert.AlertType.ERROR);
-      acceptReq.setContentText("Invalid / No Location Selected");
-      acceptReq.show();
-
-      return;
-    }
-
-    DbNode removeOfficeNode = fuzzySearchNodeList.get(currentSelection);
-    System.out.println(removeOfficeNode.getLongName());
-
-    for (DbNode node : DoctorDB.getDoctor(docid).getLoc()) {
-      if (node.getLongName().equals(removeOfficeNode.getLongName())) {
-
-        DoctorDB.removeOffice(Integer.parseInt(txtf_docid.getText()), removeOfficeNode);
-
-        Alert acceptReq = new Alert(Alert.AlertType.CONFIRMATION);
-        acceptReq.setContentText("Office " + removeOfficeNode.getLongName() + " removed.");
+      if (currentSelection == -1) {
+        Alert acceptReq = new Alert(Alert.AlertType.ERROR);
+        acceptReq.setContentText("Invalid / No Location Selected");
         acceptReq.show();
 
         return;
       }
-    }
 
+      DbNode removeOfficeNode = fuzzySearchNodeList.get(currentSelection);
+      System.out.println(removeOfficeNode.getLongName());
+
+      for (DbNode node : DoctorDB.getDoctor(docid).getLoc()) {
+        if (node.getLongName().equals(removeOfficeNode.getLongName())) {
+
+          DoctorDB.removeOffice(Integer.parseInt(txtf_docid.getText()), removeOfficeNode);
+
+          Alert acceptReq = new Alert(Alert.AlertType.CONFIRMATION);
+          acceptReq.setContentText("Office " + removeOfficeNode.getLongName() + " removed.");
+          acceptReq.show();
+
+          return;
+        }
+      }
+    } catch (DBException e) {
+      Alert acceptReq = new Alert(Alert.AlertType.ERROR);
+      acceptReq.setContentText(e.getMessage());
+      acceptReq.show();
+
+      return;
+    }
     Alert acceptReq = new Alert(Alert.AlertType.ERROR);
     acceptReq.setContentText("Doctor does not work there");
     acceptReq.show();
+
+    txtf_docid.clear();
+    txtf_docoffice.clear();
   }
 
   public void fuzzySearchDoctorsOffices(KeyEvent keyInput) throws DBException {
