@@ -52,6 +52,7 @@ public class NewAdminController implements Controller, Initializable {
   @FXML JFXButton btn_remEmp;
   @FXML TableView<Employee> tbl_Employees;
   @FXML ChoiceBox<Service> cb_reqFilter;
+  @FXML JFXButton btn_admin;
 
   private ObservableList<Request> tableData = FXCollections.observableArrayList();
   private ObservableList<Employee> emps = FXCollections.observableArrayList();
@@ -85,9 +86,8 @@ public class NewAdminController implements Controller, Initializable {
     btn_editEmp.setTooltip(new Tooltip("Edits Employees"));
     btn_editMap.setTooltip(new Tooltip("Opens Map Editor"));
     btn_remEmp.setTooltip(new Tooltip("Removes a Given Employee"));
-    btn_upload.setTooltip(new Tooltip("Uploads New CSV's"));
-    // btn_acceptReq.setTooltip(new Tooltip("Accepts a given request"));
-
+    btn_upload.setTooltip(new Tooltip("File Manager"));
+    btn_admin.setTooltip(new Tooltip("Adds an Admin"));
   }
 
   @FXML
@@ -302,8 +302,8 @@ public class NewAdminController implements Controller, Initializable {
 
     // Request Table
     TableColumn<Request, Integer> requestID = new TableColumn<>("ID");
-    requestID.setMaxWidth(30);
-    requestID.setMinWidth(30);
+    requestID.setMaxWidth(50);
+    requestID.setMinWidth(50);
     requestID.setCellValueFactory(new PropertyValueFactory<Request, Integer>("requestID"));
 
     TableColumn<Request, Employee> emp_assigned = new TableColumn<>("Assigned");
