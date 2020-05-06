@@ -25,9 +25,9 @@
             <Image url="@../../images/mapDisplayIcons/pinIcon.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="35.0" fitWidth="28.0" layoutX="24.0" layoutY="174.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="24.0" AnchorPane.topAnchor="174.0">
+      <ImageView fitHeight="35.0" fitWidth="28.0" layoutX="27.0" layoutY="174.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="27.0" AnchorPane.topAnchor="174.0">
          <image>
-            <Image url="@../../images/mapDisplayIcons/doctorButton.png" />
+            <Image url="@../../images/mapDisplayIcons/stethoscope_files/stethoscope-xl.png" />
          </image>
       </ImageView>
       <Line endX="-100.00001525878906" endY="40.19999694824219" layoutX="139.0" layoutY="125.39999389648438" startX="-100.00001525878906" startY="16.600006103515625" stroke="#e6ebf2" strokeMiterLimit="2.0" strokeWidth="2.0" style="-fx-stroke-dash-array: 8;" AnchorPane.topAnchor="141.0" />
