@@ -2,7 +2,6 @@ package edu.wpi.N.views.mapEditor;
 
 import com.google.common.collect.HashBiMap;
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXNodesList;
 import edu.wpi.N.App;
 import edu.wpi.N.database.DBException;
@@ -15,6 +14,12 @@ import edu.wpi.N.views.*;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
+import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
@@ -27,6 +32,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.StrokeLineCap;
+import javafx.util.Duration;
 
 public class MapEditorController implements Controller {
 
@@ -34,33 +40,16 @@ public class MapEditorController implements Controller {
 
   private StateSingleton singleton;
 
-  @FXML JFXComboBox<String> cb_changeAlgo;
-  @FXML JFXButton btn_changeAlgo;
   @FXML Pane pn_display;
   @FXML Pane pn_editor;
   @FXML Pane pn_elev;
   @FXML Button btn_home;
   @FXML StackPane pn_stack;
   @FXML Pane pn_edges;
-  @FXML Pane pn_changeFloor;
+  @FXML Pane pn_floors;
   @FXML ImageView img_map;
   @FXML JFXButton btn_cancel_elev;
-  private JFXButton btn_floors,
-      btn_floor1,
-      btn_floor2,
-      btn_floor3,
-      btn_floor4,
-      btn_floor5,
-      btn_floor6;
-  private JFXButton btn_floorsM,
-      btn_floor1M,
-      btn_floor2M,
-      btn_floor3M,
-      btn_floor4M,
-      btn_floor5M,
-      btn_floor6M,
-      btn_floor7M;
-  private JFXNodesList nodesListF, nodesListM;
+  @FXML Label lbl_building_floor;
 
   final int DEFAULT_FLOOR = 1;
   final String DEFAULT_BUILDING = "Faulkner";
@@ -91,8 +80,11 @@ public class MapEditorController implements Controller {
   private final double MAX_MAP_SCALE = 4;
   private final double ZOOM_STEP_SCROLL = 0.01;
   private final double ZOOM_STEP_BUTTON = 0.1;
-  private double mapScaleAlpha;
+  private DoubleProperty mapScaleAlpha = new SimpleDoubleProperty(0);
   private double clickStartX, clickStartY;
+
+  private Timeline autoFocus = new Timeline();
+  private LinkedList<KeyValue> endFocusVals = new LinkedList<>();
 
   private boolean isDraggingNode = false;
 
@@ -140,6 +132,11 @@ public class MapEditorController implements Controller {
   HashMap<DbNode, Circle> nodesMap2;
   LinkedList<DbNode> originalShaftNodes;
 
+  // Floor switching
+  JFXNodesList buildingButtonList;
+  JFXNodesList faulknerButtonList;
+  JFXNodesList mainButtonList;
+
   // Inject singleton
   public MapEditorController(StateSingleton singleton) {
     this.singleton = singleton;
@@ -155,9 +152,9 @@ public class MapEditorController implements Controller {
     nodesMap2 = new HashMap<>();
     currentFloor = DEFAULT_FLOOR;
     currentBuilding = DEFAULT_BUILDING;
-    initializeChangeFloorButtons();
-    initializeMainCampusFloorButtons();
-    setFloorButtonColors();
+    // initializeChangeFloorButtons();
+    // initializeMainCampusFloorButtons();
+    // setFloorButtonColors();
     editElevNodes = new LinkedList<>();
     // btn_cancel_elev.setDisable(true);
     btn_cancel_elev.setVisible(false);
@@ -176,6 +173,14 @@ public class MapEditorController implements Controller {
     addEdgeLine.setStrokeLineCap(StrokeLineCap.ROUND);
     pn_edges.getChildren().add(addEdgeLine);
     deleteEdgeLines = new LinkedList<>();
+
+    setFloorBuildingText(this.currentFloor, this.currentBuilding);
+    this.buildingButtonList = new JFXNodesList();
+    this.faulknerButtonList = new JFXNodesList();
+    this.mainButtonList = new JFXNodesList();
+
+    initFloorButtons();
+    initAutoFocus();
   }
 
   private void setFaulknerDefaults() {
@@ -394,6 +399,11 @@ public class MapEditorController implements Controller {
     }
   }
 
+  @FXML
+  private void onIconClicked(MouseEvent event) {
+    // Nothing yet
+  }
+
   private void handleCircleDragEvents(MouseEvent event, Circle circle) {
     isDraggingNode = true;
     circle.setCursor(Cursor.CLOSED_HAND);
@@ -536,6 +546,8 @@ public class MapEditorController implements Controller {
     controllerEditNode.setShortName(node.getShortName());
     controllerEditNode.setLongName(node.getLongName());
     controllerEditNode.setPos(circle.getCenterX(), circle.getCenterY());
+
+    autoFocusToNode(node);
   }
 
   private void onCircleEditNodeDragged(MouseEvent event, Circle circle) {
@@ -603,6 +615,8 @@ public class MapEditorController implements Controller {
         deleteNodeCircles.remove(circle);
         controllerDeleteNode.removeLstDeleteNode(nodesMap.get(circle).getDBNode().getShortName());
       }
+
+      autoFocusToNodesGroup(deleteNodeCircles);
     }
   }
 
@@ -617,6 +631,7 @@ public class MapEditorController implements Controller {
       alignNodeCircles.remove(circle);
       controllerAlignNode.removeLstAlignNode(nodesMap.get(circle).getDBNode().getShortName());
     }
+    autoFocusToNodesGroup(alignNodeCircles);
   }
 
   private void onCircleAddShaftNodeClicked(MouseEvent event, Circle circle) {
@@ -753,6 +768,7 @@ public class MapEditorController implements Controller {
     onTxtPosAddNodeTextChanged(addNodeCircle);
     onBtnConfirmAddNodeClicked(addNodeCircle);
     onBtnCancelAddNodeClicked();
+    autoFocusToPoint(event.getX(), event.getY());
   }
 
   public void onCircleAddNodeDragged(MouseEvent event, Circle circle) {
@@ -908,8 +924,8 @@ public class MapEditorController implements Controller {
                   return;
                 }
                 String type = controllerAddNode.getType();
-                String longName = controllerAddNode.getShortName();
-                String shortName = controllerAddNode.getLongName();
+                String longName = controllerAddNode.getLongName();
+                String shortName = controllerAddNode.getShortName();
                 String building = controllerAddNode.getBuilding();
                 if (type == null || longName == null || shortName == null || building == null) {
                   displayErrorMessage("Invalid input");
@@ -1485,6 +1501,7 @@ public class MapEditorController implements Controller {
     }
   }
 
+  /*
   public void initializeChangeFloorButtons() {
     btn_floors = new JFXButton("Floors");
     btn_floor1 = new JFXButton("1");
@@ -1580,7 +1597,9 @@ public class MapEditorController implements Controller {
           nodesListM.setVisible(true);
         });
   }
+   */
 
+  /*
   public void initializeMainCampusFloorButtons() {
     btn_floorsM = new JFXButton("Floors");
     btn_floor1M = new JFXButton("L2");
@@ -1692,6 +1711,9 @@ public class MapEditorController implements Controller {
         });
   }
 
+   */
+
+  /*
   private void setFloorButtonColorsM() {
     if (currentFloor == 1) {
       btn_floor1M.setStyle("-fx-background-color: #F7B80F");
@@ -1772,6 +1794,8 @@ public class MapEditorController implements Controller {
     }
   }
 
+   */
+
   private void setFloorImg(String path) {
     resetAllExceptShafts();
     hideEditElevButton();
@@ -1847,13 +1871,15 @@ public class MapEditorController implements Controller {
   private void zoom(double percentDelta) {
 
     // Scaling parameter (alpha) is clamped between 0 (min. scale) and 1 (max. scale)
-    mapScaleAlpha =
+    mapScaleAlpha.set(
         Math.max(
             0,
-            Math.min(1, mapScaleAlpha + percentDelta)); // TODO: use zoom to scale line & node size
+            Math.min(
+                1,
+                mapScaleAlpha.get() + percentDelta))); // TODO: use zoom to scale line & node size
 
     // Linearly interpolate (lerp) alpha to actual scale value
-    double lerpedScale = MIN_MAP_SCALE + mapScaleAlpha * (MAX_MAP_SCALE - MIN_MAP_SCALE);
+    double lerpedScale = MIN_MAP_SCALE + mapScaleAlpha.get() * (MAX_MAP_SCALE - MIN_MAP_SCALE);
 
     // Apply new scale and correct panning
     pn_stack.setScaleX(lerpedScale);
@@ -1909,5 +1935,297 @@ public class MapEditorController implements Controller {
 
     pn_stack.setTranslateX(newTranslateX);
     pn_stack.setTranslateY(newTranslateY);
+  }
+
+  private void initAutoFocus() {
+    autoFocus.setCycleCount(1);
+    autoFocus.setOnFinished(event -> onAutoFocusEnd());
+  }
+
+  private void autoFocusToNode(DbNode node) {
+    autoFocusToPoint(node.getX(), node.getY());
+  }
+
+  private void autoFocusToNodesGroup(LinkedList<Circle> circles) {
+
+    double xSum = 0;
+    double ySum = 0;
+    int nodesCount = circles.size();
+
+    for (Circle circle : circles) {
+      xSum += circle.getCenterX();
+      ySum += circle.getCenterY();
+    }
+
+    autoFocusToPoint(xSum / nodesCount, ySum / nodesCount);
+  }
+
+  private void autoFocusToPoint(double x, double y) {
+
+    endFocusVals.add(new KeyValue(pn_stack.scaleXProperty(), MAX_MAP_SCALE, Interpolator.LINEAR));
+    endFocusVals.add(new KeyValue(pn_stack.scaleYProperty(), MAX_MAP_SCALE, Interpolator.LINEAR));
+    endFocusVals.add(
+        new KeyValue(
+            pn_stack.translateXProperty(),
+            MAX_MAP_SCALE * (MAP_WIDTH / 2 - x),
+            Interpolator.LINEAR));
+    endFocusVals.add(
+        new KeyValue(
+            pn_stack.translateYProperty(),
+            MAX_MAP_SCALE * (MAP_HEIGHT / 2 - y),
+            Interpolator.LINEAR));
+    endFocusVals.add(new KeyValue(mapScaleAlpha, 1, Interpolator.LINEAR));
+
+    KeyFrame endFrame = new KeyFrame(Duration.millis(500), "endFocus", null, endFocusVals);
+
+    autoFocus.getKeyFrames().setAll(endFrame);
+    autoFocus.playFromStart();
+  }
+
+  private void onAutoFocusEnd() {
+    autoFocus.stop();
+    autoFocus.getKeyFrames().clear();
+    endFocusVals.clear();
+  }
+
+  //////////////
+
+  /**
+   * styles the switch, faulkner, main, and driving directions buttons
+   *
+   * @param btn the building button which is to be styled
+   */
+  public void styleBuildingButtons(JFXButton btn) {
+    btn.getStylesheets()
+        .add(getClass().getResource("/edu/wpi/N/css/MapDisplayFloors.css").toExternalForm());
+    btn.getStyleClass().add("header-button");
+  }
+
+  /**
+   * styles the sub buttons of the building buttons
+   *
+   * @param btn the floor button which is to be styled
+   */
+  public void styleFloorButtons(JFXButton btn) {
+    btn.getStylesheets()
+        .add(getClass().getResource("/edu/wpi/N/css/MapDisplayFloors.css").toExternalForm());
+    btn.getStyleClass().add("choice-button");
+  }
+
+  /**
+   * initializes all buttons required to switch between floors
+   *
+   * @throws DBException
+   */
+  public void initFloorButtons() throws DBException {
+    // Building Buttons
+    JFXButton btn_buildings = new JFXButton("Switch Map");
+    styleBuildingButtons(btn_buildings);
+    JFXButton btn_faulkner = new JFXButton("Faulkner");
+    styleBuildingButtons(btn_faulkner);
+    JFXButton btn_main = new JFXButton("Main");
+    styleBuildingButtons(btn_main);
+
+    // Faulkner Buttons
+    JFXButton btn_faulkner1 = new JFXButton("F1");
+    styleFloorButtons(btn_faulkner1);
+
+    JFXButton btn_faulkner2 = new JFXButton("F2");
+    styleFloorButtons(btn_faulkner2);
+    JFXButton btn_faulkner3 = new JFXButton("F3");
+    styleFloorButtons(btn_faulkner3);
+    JFXButton btn_faulkner4 = new JFXButton("F4");
+    styleFloorButtons(btn_faulkner4);
+    JFXButton btn_faulkner5 = new JFXButton("F5");
+    styleFloorButtons(btn_faulkner5);
+    faulknerButtonList
+        .getChildren()
+        .addAll(
+            btn_faulkner,
+            btn_faulkner1,
+            btn_faulkner2,
+            btn_faulkner3,
+            btn_faulkner4,
+            btn_faulkner5);
+
+    // Main Buttons
+    JFXButton btn_main1 = new JFXButton("L2");
+    styleFloorButtons(btn_main1);
+    JFXButton btn_main2 = new JFXButton("L1");
+    styleFloorButtons(btn_main2);
+    JFXButton btn_main3 = new JFXButton("G");
+    styleFloorButtons(btn_main3);
+    JFXButton btn_main4 = new JFXButton("1");
+    styleFloorButtons(btn_main4);
+    JFXButton btn_main5 = new JFXButton("2");
+    styleFloorButtons(btn_main5);
+    JFXButton btn_main6 = new JFXButton("3");
+    styleFloorButtons(btn_main6);
+
+    // Set onClick properties
+    onFloorButtonClicked(btn_faulkner1);
+    onFloorButtonClicked(btn_faulkner2);
+    onFloorButtonClicked(btn_faulkner3);
+    onFloorButtonClicked(btn_faulkner4);
+    onFloorButtonClicked(btn_faulkner5);
+    onFloorButtonClicked(btn_main1);
+    onFloorButtonClicked(btn_main2);
+    onFloorButtonClicked(btn_main3);
+    onFloorButtonClicked(btn_main4);
+    onFloorButtonClicked(btn_main5);
+    onFloorButtonClicked(btn_main6);
+
+    mainButtonList
+        .getChildren()
+        .addAll(btn_main, btn_main1, btn_main2, btn_main3, btn_main4, btn_main5, btn_main6);
+    buildingButtonList.addAnimatedNode(btn_buildings);
+    buildingButtonList.addAnimatedNode(faulknerButtonList);
+    buildingButtonList.addAnimatedNode(mainButtonList);
+
+    buildingButtonList.setSpacing(100);
+    buildingButtonList.setRotate(90);
+    faulknerButtonList.setSpacing(15);
+    mainButtonList.setSpacing(15);
+
+    pn_floors.getChildren().add(buildingButtonList);
+  }
+
+  /**
+   * initializes a listener for a floor button click event
+   *
+   * @param btn the floor button which is clicked
+   * @throws DBException
+   */
+  public void onFloorButtonClicked(JFXButton btn) throws DBException {
+    String txt = btn.getText();
+    btn.setOnMouseClicked(
+        e -> {
+          try {
+            handleFloorButtonClicked(txt);
+          } catch (DBException ex) {
+            ex.printStackTrace();
+          }
+        });
+  }
+
+  /**
+   * handles the event of a button click
+   *
+   * @param txt the text of the button which is clicked
+   * @throws DBException
+   */
+  public void handleFloorButtonClicked(String txt) throws DBException {
+    collapseAllFloorButtons();
+    if (txt.equals("F1")) {
+      changeFloor(1, "Faulkner");
+      this.currentFloor = 1;
+      this.currentBuilding = "Faulkner";
+      setFloorImg("/edu/wpi/N/images/map/Floor1Reclor.png");
+    } else if (txt.equals("F2")) {
+      changeFloor(2, "Faulkner");
+      this.currentFloor = 2;
+      this.currentBuilding = "Faulkner";
+      setFloorImg("/edu/wpi/N/images/map/Floor2TeamN.png");
+    } else if (txt.equals("F3")) {
+      changeFloor(3, "Faulkner");
+      this.currentFloor = 3;
+      this.currentBuilding = "Faulkner";
+      setFloorImg("/edu/wpi/N/images/map/Floor3TeamN.png");
+    } else if (txt.equals("F4")) {
+      changeFloor(4, "Faulkner");
+      this.currentFloor = 4;
+      this.currentBuilding = "Faulkner";
+      setFloorImg("/edu/wpi/N/images/map/Floor4SolidBackground.png");
+    } else if (txt.equals("F5")) {
+      changeFloor(5, "Faulkner");
+      this.currentFloor = 5;
+      this.currentBuilding = "Faulkner";
+      setFloorImg("/edu/wpi/N/images/map/Floor5TeamN.png");
+    } else if (txt.equals("L2")) {
+      changeFloor(1, "Main");
+      this.currentFloor = 1;
+      this.currentBuilding = "Main";
+      setFloorImg("/edu/wpi/N/images/map/MainL2.png");
+    } else if (txt.equals("L1")) {
+      changeFloor(2, "Main");
+      this.currentFloor = 2;
+      this.currentBuilding = "Main";
+      setFloorImg("/edu/wpi/N/images/map/MainL1.png");
+
+    } else if (txt.equals("G")) {
+      changeFloor(3, "Main");
+      this.currentFloor = 3;
+      this.currentBuilding = "Main";
+      setFloorImg("/edu/wpi/N/images/map/MainGround.png");
+    } else if (txt.equals("1")) {
+      changeFloor(4, "Main");
+      this.currentFloor = 4;
+      this.currentBuilding = "Main";
+      setFloorImg("/edu/wpi/N/images/map/MainResizedF1.png");
+    } else if (txt.equals("2")) {
+      changeFloor(5, "Main");
+      this.currentFloor = 5;
+      this.currentBuilding = "Main";
+      setFloorImg("/edu/wpi/N/images/map/MainFloor2.png");
+
+    } else if (txt.equals("3")) {
+      changeFloor(6, "Main");
+      this.currentFloor = 6;
+      this.currentBuilding = "Main";
+      setFloorImg("/edu/wpi/N/images/map/MainFloor3.png");
+    }
+  }
+
+  /**
+   * switches the current floor displayed on the map
+   *
+   * @param newFloor the new floor
+   * @param newBuilding the new building
+   * @throws DBException
+   */
+  public void changeFloor(int newFloor, String newBuilding) throws DBException {
+    this.currentFloor = newFloor;
+    this.currentBuilding = newBuilding;
+    setFloorBuildingText(this.currentFloor, this.currentBuilding);
+  }
+
+  /** collapses all the floor buttons back to the main button */
+  public void collapseAllFloorButtons() {
+    buildingButtonList.animateList(false);
+    mainButtonList.animateList(false);
+    faulknerButtonList.animateList(false);
+  }
+
+  /**
+   * displays the label text
+   *
+   * @param floor the current floor
+   * @param building the current building
+   */
+  public void setFloorBuildingText(int floor, String building) {
+    if (floor == -1) {
+      lbl_building_floor.setText("Driving Directions");
+    }
+    if (!building.equals("Faulkner")) {
+      if (floor == 1) {
+        lbl_building_floor.setText(building + ", " + "L2");
+      } else if (floor == 2) {
+        lbl_building_floor.setText(building + ", " + "L1");
+      }
+      if (floor == 3) {
+        lbl_building_floor.setText(building + ", " + "G");
+      }
+      if (floor == 4) {
+        lbl_building_floor.setText(building + ", " + "1");
+      }
+      if (floor == 5) {
+        lbl_building_floor.setText(building + ", " + "2");
+      }
+      if (floor == 6) {
+        lbl_building_floor.setText(building + ", " + "3");
+      }
+    } else {
+      lbl_building_floor.setText(building + ", " + floor);
+    }
   }
 }
