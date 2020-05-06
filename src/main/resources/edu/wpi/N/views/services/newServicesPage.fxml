@@ -13,7 +13,6 @@
 
 <AnchorPane maxHeight="1080.0" maxWidth="1920.0" minHeight="1080.0" minWidth="1920.0" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #263051;" stylesheets="@../../css/sanitationRequestUI.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.services.ServiceController">
    <children>
-      <Separator layoutX="55.0" orientation="VERTICAL" prefHeight="1080.0" />
       <AnchorPane layoutX="576.0" maxHeight="1080.0" maxWidth="1280.0" prefHeight="1080.0" prefWidth="1280.0">
          <children>
             <StackPane prefHeight="1080.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -179,5 +178,6 @@
             <VBox alignment="CENTER" minHeight="200.0" prefHeight="200.0" prefWidth="100.0" />
          </children>
       </VBox>
+      <Separator layoutX="52.0" orientation="VERTICAL" prefHeight="1080.0" />
    </children>
 </AnchorPane>
