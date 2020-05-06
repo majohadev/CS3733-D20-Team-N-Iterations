@@ -196,6 +196,7 @@ public class MapEditorController implements Controller {
     initAutoFocus();
 
     populateChangeAlgo();
+    System.out.println("Doing ok");
   }
 
   private void setFaulknerDefaults() {
