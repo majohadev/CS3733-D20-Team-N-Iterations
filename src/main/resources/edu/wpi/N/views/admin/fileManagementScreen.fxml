@@ -8,7 +8,7 @@
 
 <AnchorPane maxHeight="462.0" maxWidth="742.0" minHeight="462.0" minWidth="742.0" prefHeight="462.0" prefWidth="742.0" styleClass="anchor" stylesheets="@../../css/sanitationRequestUI.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.admin.DataEditorController">
    <children>
-      <Button layoutX="65.0" layoutY="102.0" mnemonicParsing="false" onMouseClicked="#onSelectClicked" prefHeight="28.0" prefWidth="132.0" styleClass="jfx-button-files" stylesheets="@../../css/sanitationRequestUI.css" text="Select File" textFill="WHITE">
+      <Button layoutX="65.0" layoutY="102.0" mnemonicParsing="false" onMouseClicked="#onSelectClicked" prefHeight="28.0" prefWidth="132.0" style="-fx-background-color: transparent; -fx-border-width: 5; -fx-border-color: #6C5C7F; -fx-border-radius: 10;" styleClass="jfx-button-files" stylesheets="@../../css/sanitationRequestUI.css" text="Select File" textFill="WHITE">
          <font>
             <Font name="Calibri" size="14.0" />
          </font></Button>
@@ -25,16 +25,16 @@
          <font>
             <Font name="Calibri" size="14.0" />
          </font></Label>
-      <Button layoutX="65.0" layoutY="169.0" mnemonicParsing="false" onMouseClicked="#onSelectEdgesClicked" prefHeight="28.0" prefWidth="132.0" styleClass="jfx-button-files" stylesheets="@../../css/sanitationRequestUI.css" text="Select File" textFill="WHITE">
+      <Button layoutX="65.0" layoutY="169.0" mnemonicParsing="false" onMouseClicked="#onSelectEdgesClicked" prefHeight="28.0" prefWidth="132.0" style="-fx-background-color: transparent; -fx-border-width: 5; -fx-border-color: #6C5C7F; -fx-border-radius: 10;" styleClass="jfx-button-files" stylesheets="@../../css/sanitationRequestUI.css" text="Select File" textFill="WHITE">
          <font>
             <Font name="Calibri" size="14.0" />
          </font></Button>
       <Label fx:id="lbl_filePath_edges" disable="true" layoutX="237.0" layoutY="169.0" prefHeight="25.0" prefWidth="436.0" style="-fx-border-color: #E6EBF2;" text="File Path" textFill="WHITE" />
-      <Button layoutX="346.0" layoutY="205.0" mnemonicParsing="false" onMouseClicked="#onDefaultClicked" prefHeight="28.0" prefWidth="156.0" styleClass="jfx-button-files" stylesheets="@../../css/sanitationRequestUI.css" text="Reset Paths To Default" textFill="WHITE">
+      <Button layoutX="312.0" layoutY="204.0" mnemonicParsing="false" onMouseClicked="#onDefaultClicked" prefHeight="28.0" prefWidth="156.0" style="-fx-background-color: transparent; -fx-border-width: 5; -fx-border-color: #6C5C7F; -fx-border-radius: 10;" styleClass="jfx-button-files" stylesheets="@../../css/sanitationRequestUI.css" text="Reset Paths To Default" textFill="WHITE">
          <font>
             <Font name="Calibri" size="14.0" />
          </font></Button>
-      <Button layoutX="515.0" layoutY="204.0" mnemonicParsing="false" onMouseClicked="#onUploadNodesEdgesClicked" prefHeight="28.0" prefWidth="156.0" styleClass="jfx-button-files" stylesheets="@../../css/sanitationRequestUI.css" text="Upload Both CSV Files" textFill="WHITE">
+      <Button layoutX="505.0" layoutY="204.0" mnemonicParsing="false" onMouseClicked="#onUploadNodesEdgesClicked" prefHeight="28.0" prefWidth="156.0" style="-fx-background-color: transparent; -fx-border-width: 5; -fx-border-color: #6C5C7F; -fx-border-radius: 10;" styleClass="jfx-button-files" stylesheets="@../../css/sanitationRequestUI.css" text="Upload Both CSV Files" textFill="WHITE">
          <font>
             <Font name="Calibri" size="14.0" />
          </font>
@@ -44,12 +44,12 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <Button layoutX="61.0" layoutY="403.0" mnemonicParsing="false" onMouseClicked="#onDownloadNodesClicked" styleClass="jfx-button-files" stylesheets="@../../css/sanitationRequestUI.css" text="Download Current Node CSV File" textFill="WHITE">
+      <Button layoutX="61.0" layoutY="403.0" mnemonicParsing="false" onMouseClicked="#onDownloadNodesClicked" style="-fx-background-color: transparent; -fx-border-width: 5; -fx-border-color: #6C5C7F; -fx-border-radius: 10;" styleClass="jfx-button-files" stylesheets="@../../css/sanitationRequestUI.css" text="Download Current Node CSV File" textFill="WHITE">
          <font>
             <Font name="Calibri" size="14.0" />
          </font>
       </Button>
-      <Button layoutX="289.0" layoutY="403.0" mnemonicParsing="false" onMouseClicked="#onDownloadEdgesClicked" styleClass="jfx-button-files" stylesheets="@../../css/sanitationRequestUI.css" text="Download Current Edge CSV File" textFill="WHITE">
+      <Button layoutX="289.0" layoutY="403.0" mnemonicParsing="false" onMouseClicked="#onDownloadEdgesClicked" style="-fx-background-color: transparent; -fx-border-width: 5; -fx-border-color: #6C5C7F; -fx-border-radius: 10;" styleClass="jfx-button-files" stylesheets="@../../css/sanitationRequestUI.css" text="Download Current Edge CSV File" textFill="WHITE">
          <font>
             <Font name="Calibri" size="14.0" />
          </font>
@@ -64,18 +64,18 @@
             <Font name="Calibri" size="14.0" />
          </font>
       </Label>
-      <Button layoutX="66.0" layoutY="302.0" mnemonicParsing="false" onMouseClicked="#onSelectEmployeesClicked" prefHeight="28.0" prefWidth="132.0" styleClass="jfx-button-files" stylesheets="@../../css/sanitationRequestUI.css" text="Select File" textFill="WHITE">
+      <Button layoutX="65.0" layoutY="295.0" mnemonicParsing="false" onMouseClicked="#onSelectEmployeesClicked" prefHeight="28.0" prefWidth="132.0" style="-fx-background-color: transparent; -fx-border-width: 5; -fx-border-color: #6C5C7F; -fx-border-radius: 10;" styleClass="jfx-button-files" stylesheets="@../../css/sanitationRequestUI.css" text="Select File" textFill="WHITE">
          <font>
             <Font name="Calibri" size="14.0" />
          </font>
       </Button>
       <Label fx:id="lbl_filePath_employees" disable="true" layoutX="238.0" layoutY="302.0" prefHeight="25.0" prefWidth="436.0" style="-fx-border-color: #E6EBF2;" text="File Path" textFill="WHITE" />
-      <Button layoutX="518.0" layoutY="338.0" mnemonicParsing="false" onMouseClicked="#onUploadEmployeesClicked" prefHeight="28.0" prefWidth="156.0" styleClass="jfx-button-files" stylesheets="@../../css/sanitationRequestUI.css" text="Upload CSV" textFill="WHITE">
+      <Button layoutX="505.0" layoutY="338.0" mnemonicParsing="false" onMouseClicked="#onUploadEmployeesClicked" prefHeight="28.0" prefWidth="156.0" style="-fx-background-color: transparent; -fx-border-width: 5; -fx-border-color: #6C5C7F; -fx-border-radius: 10;" styleClass="jfx-button-files" stylesheets="@../../css/sanitationRequestUI.css" text="Upload CSV" textFill="WHITE">
          <font>
             <Font name="Calibri" size="14.0" />
          </font>
       </Button>
-      <Button layoutX="349.0" layoutY="339.0" mnemonicParsing="false" onMouseClicked="#onDefaultEmployeesClicked" prefHeight="28.0" prefWidth="156.0" styleClass="jfx-button-files" stylesheets="@../../css/sanitationRequestUI.css" text="Reset Paths To Default" textFill="WHITE">
+      <Button layoutX="312.0" layoutY="338.0" mnemonicParsing="false" onMouseClicked="#onDefaultEmployeesClicked" prefHeight="28.0" prefWidth="156.0" style="-fx-background-color: transparent; -fx-border-width: 5; -fx-border-color: #6C5C7F; -fx-border-radius: 10;" styleClass="jfx-button-files" stylesheets="@../../css/sanitationRequestUI.css" text="Reset Paths To Default" textFill="WHITE">
          <font>
             <Font name="Calibri" size="14.0" />
          </font>
