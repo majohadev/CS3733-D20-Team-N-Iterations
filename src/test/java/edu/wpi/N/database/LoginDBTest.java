@@ -53,8 +53,8 @@ public class LoginDBTest {
     int wID = DoctorDB.addDoctor("Wong", "field", "Wong", "password", null);
     // LoginDB.createDoctorLogin("Wong", "password"); //I'm allowed to do i, you're not
     LoginDB.logout();
+    // LoginDB.removeLogin("Gaben");
     /*
-    LoginDB.removeLogin("Gaben");
     assertThrows(
         DBException.class,
         () -> {

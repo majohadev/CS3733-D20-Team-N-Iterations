@@ -7,6 +7,7 @@ import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.DoctorDB;
 import edu.wpi.N.database.ServiceDB;
 import edu.wpi.N.entities.DbNode;
+import edu.wpi.N.entities.employees.Doctor;
 import java.util.LinkedList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -87,9 +88,9 @@ public class AddDoctorController {
   }
 
   public void addOffice() throws DBException {
-    int currentSelection = lst_docoffice.getSelectionModel().getSelectedIndex();
-
     try {
+      int currentSelection = lst_docoffice.getSelectionModel().getSelectedIndex();
+
       if (currentSelection == -1) {
         Alert acceptReq = new Alert(Alert.AlertType.ERROR);
         acceptReq.setContentText("Invalid / No Location Selected");
@@ -131,25 +132,16 @@ public class AddDoctorController {
         }
       }
 
-      try {
+      DoctorDB.addOffice(doctorID, addOfficeNode);
 
-        DoctorDB.addOffice(doctorID, addOfficeNode);
-
-        Alert acceptReq = new Alert(Alert.AlertType.CONFIRMATION);
-        acceptReq.setContentText("Office " + addOfficeNode.getLongName() + " was added.");
-        acceptReq.show();
-
-      } catch (DBException e) {
-        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-        errorAlert.setContentText(e.getMessage());
-        errorAlert.show();
-      }
-    } catch (DBException e) {
-      Alert acceptReq = new Alert(Alert.AlertType.ERROR);
-      acceptReq.setContentText(e.getMessage());
+      Alert acceptReq = new Alert(Alert.AlertType.CONFIRMATION);
+      acceptReq.setContentText("Office " + addOfficeNode.getLongName() + " was added.");
       acceptReq.show();
 
-      return;
+    } catch (DBException e) {
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setContentText(e.getMessage());
+      errorAlert.show();
     }
 
     txtf_docid.clear();
@@ -164,15 +156,15 @@ public class AddDoctorController {
    */
   public void removeOffice() throws DBException {
 
-    try {
-      if (txtf_docid.getText().equals("")) {
-        Alert invalidID = new Alert(Alert.AlertType.ERROR);
-        invalidID.setContentText("Invalid ID");
-        invalidID.show();
+    if (txtf_docid.getText().equals("")) {
+      Alert invalidID = new Alert(Alert.AlertType.ERROR);
+      invalidID.setContentText("Invalid ID");
+      invalidID.show();
 
         return;
       }
 
+    try {
       if (!ServiceDB.getEmployee(Integer.parseInt(txtf_docid.getText()))
           .getServiceType()
           .equals("Medicine")) {
@@ -200,29 +192,33 @@ public class AddDoctorController {
 
       for (DbNode node : DoctorDB.getDoctor(docid).getLoc()) {
         if (node.getLongName().equals(removeOfficeNode.getLongName())) {
+          for (Doctor docs : DoctorDB.getDoctors()) {
+            if (docid == docs.getID()) {
+              DoctorDB.removeOffice(Integer.parseInt(txtf_docid.getText()), removeOfficeNode);
 
-          DoctorDB.removeOffice(Integer.parseInt(txtf_docid.getText()), removeOfficeNode);
+              Alert acceptReq = new Alert(Alert.AlertType.CONFIRMATION);
+              acceptReq.setContentText("Office " + removeOfficeNode.getLongName() + " removed.");
+              acceptReq.show();
 
-          Alert acceptReq = new Alert(Alert.AlertType.CONFIRMATION);
-          acceptReq.setContentText("Office " + removeOfficeNode.getLongName() + " removed.");
-          acceptReq.show();
+              return;
+            }
 
-          return;
+            Alert acceptReq = new Alert(Alert.AlertType.ERROR);
+            acceptReq.setContentText("Doctor with that ID doesnt exist");
+            acceptReq.show();
+          }
         }
       }
+
+      Alert acceptReq = new Alert(Alert.AlertType.ERROR);
+      acceptReq.setContentText("Doctor does not work there");
+      acceptReq.show();
+
     } catch (DBException e) {
       Alert acceptReq = new Alert(Alert.AlertType.ERROR);
       acceptReq.setContentText(e.getMessage());
       acceptReq.show();
-
-      return;
     }
-    Alert acceptReq = new Alert(Alert.AlertType.ERROR);
-    acceptReq.setContentText("Doctor does not work there");
-    acceptReq.show();
-
-    txtf_docid.clear();
-    txtf_docoffice.clear();
   }
 
   public void fuzzySearchDoctorsOffices(KeyEvent keyInput) throws DBException {

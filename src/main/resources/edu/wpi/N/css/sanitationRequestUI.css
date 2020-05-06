@@ -9,8 +9,6 @@
 
 .anchor{
     -fx-background-color: #263051;
-    -fx-border-color: #E6EBF2;
-    -fx-border-width: 4px;
 }
 
 .jfx-button-service {
@@ -70,6 +68,13 @@
     -fx-font-size: 24px;
 }
 
+.jfx-button-files {
+    -fx-min-width: 100;
+    -fx-min-height: 40;
+    -fx-font-family: 'Karla';
+    -fx-font-size: 12px;
+}
+
 .jfx-button-regular-half {
     -jfx-button-type: RAISED;
     -jfx-rippler-fill: #6C5C7F;
@@ -98,6 +103,7 @@
     -fx-min-height: 30;
     -fx-font-family: 'Karla';
     -fx-font-size: 14px;
+>>>>>>> dev
 }
 
 .pane{
@@ -133,6 +139,12 @@
     -fx-text-fill: #E6EBF2;
     -fx-font-family: 'Karla';
     -fx-font-size: 24px;
+}
+
+.label-file-size {
+    -fx-text-fill: #E6EBF2;
+    -fx-font-family: 'Karla';
+    -fx-font-size: 18px;
 }
 
 .separator *.line {

@@ -222,7 +222,7 @@
                <font>
                   <Font size="24.0" />
                </font></Label>
-            <JFXButton layoutX="797.0" layoutY="789.0" onMouseClicked="#resetTable" styleClass="jfx-button-regular-arduino" stylesheets="@../../css/sanitationRequestUI.css" text="Reset" textFill="#e6ebf2">
+            <JFXButton layoutX="797.0" layoutY="789.0" onMouseClicked="#resetTable" text="Reset" textFill="#e6ebf2">
                <font>
                   <Font size="18.0" />
                </font>

@@ -13,10 +13,7 @@
     -fx-border-width: 4px;
 }
 
-.hbox{
-    -fx-background-color: #263051;
 
-}
 .anchor-pane {
     -fx-background-color: #263051;
     -fx-border-color: #E6EBF2;
@@ -24,16 +21,24 @@
 }
 
 #shit {
+     -fx-background-color: #263051;
+     -fx-border-color: #E6EBF2;
+     -fx-border-width: 4px;
+     -fx-pref-width: 1000;
+ }
+
+#Pane {
     -fx-background-color: #263051;
     -fx-border-color: #E6EBF2;
     -fx-border-width: 4px;
+    -fx-pref-width: 1200;
 }
 
 #maAdminMenu{
     -jfx-button-type: RAISED;
     -jfx-rippler-fill: #6C5C7F;
-    -fx-background-color: #7E9AB6;
-    -fx-border-color: #E6EBF2;
+    -fx-background-color: transparent;
+    -fx-border-color: #6C5C7F;
     -fx-border-width: 4px;
     -fx-border-radius: 10;
     -fx-background-radius: 10;
@@ -44,8 +49,20 @@
 #maSubmit{
     -jfx-button-type: RAISED;
     -jfx-rippler-fill: #6C5C7F;
-    -fx-background-color: #7E9AB6;
-    -fx-border-color: #E6EBF2;
+    -fx-background-color: transparent;
+    -fx-border-color: #6C5C7F;
+    -fx-border-width: 4px;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-text-fill: #E6EBF2;
+    -fx-font-family: 'Karla';
+}
+
+#rtnMakeAppt{
+    -jfx-button-type: RAISED;
+    -jfx-rippler-fill: #6C5C7F;
+    -fx-background-color: transparent;
+    -fx-border-color: #6C5C7F;
     -fx-border-width: 4px;
     -fx-border-radius: 10;
     -fx-background-radius: 10;
@@ -54,10 +71,10 @@
 }
 
 #maAppointmentDay{
-    -fx-pref-width: 425;
+    -fx-pref-width: 210;
 }
 
-.vbox{
+.hbox{
     -fx-background-color: #263051;
     -fx-border-color: #E6EBF2;
     -fx-border-width: 4px;
@@ -107,6 +124,13 @@
 .label{
     -fx-text-fill: #E6EBF2;
     -fx-font-family: 'Karla';
+    -fx-min-width: 70;
+}
+
+.label[text= "Appointment Date: "]{
+    -fx-text-fill: #E6EBF2;
+    -fx-font-family: 'Karla';
+    -fx-pref-width: 200;
 }
 
 .label-header {
@@ -193,10 +217,17 @@
 }
 
 
+#amTable{
+    -fx-pref-width: 1260;
+    -fx-min-width: 1260;
+    -fx-max-width: 1260;
+    -fx-translate-y: 10;
+    -fx-translate-x: 10;
+}
+
 .table-view{
     -fx-background-color: transparent;
     -fx-arrows-visible: false;
-    -fx-fit-to-width: true;
 }
 
 .table-view:focused{
@@ -213,14 +244,13 @@
     -fx-font-family: 'Karla';
     -fx-font-size: 18px;
     -fx-text-fill: #E6EBF2;
-    -fx-page-information-alignment: center;
 }
 
 
 .table-view .column-header {
     -fx-background-color: transparent;
     -fx-border-color: #E6EBF2;
-    }
+}
 
 .table-view .table-cell{
     -fx-background-color: transparent;
@@ -230,16 +260,14 @@
 }
 
 .table-row-cell{
-    -fx-background-color: #7E9AB6, transparent;
-    -fx-border-color: #E6EBF2;
-    -fx-fit-to-width: true;
+    -fx-background-color: #E6EBF2, #7E9AB6 ;
+    -fx-background-insets: 0, 1 ;
 
 }
 
 .table-row-cell:odd{
-    -fx-background-color: #7E9AB6, transparent;
-    -fx-border-color: #E6EBF2;
-
+    -fx-background-color: #7E9AB6, #7E9AB6 ;
+    -fx-background-insets: 0, 1 ;
 }
 
 .table-row-cell:selected {
@@ -247,3 +275,41 @@
     -fx-background-insets: 0;
     -fx-background-radius: 1;
 }
+
+#LabelBox{
+    -fx-min-width: 1000;
+}
+
+#doctorCombo{
+    -fx-font-family: 'Karla';
+    -fx-font-size: 18px;
+    -fx-prompt-text-fill: #263051;
+    -fx-text-inner-color: #263051;
+    -fx-text-fill: #263051;
+    -jfx-focus-color: #6C5C7F;
+    -jfx-unfocus-color: #263051;}
+
+#assignDept{
+    -fx-font-family: 'Karla';
+    -fx-font-size: 18px;
+    -fx-prompt-text-fill: #263051;
+    -fx-text-inner-color: #263051;
+    -fx-text-fill: #263051;
+    -jfx-focus-color: #6C5C7F;
+    -jfx-unfocus-color: #263051;
+}
+
+#AssignTime{
+    -fx-font-family: 'Karla';
+    -fx-font-size: 18px;
+    -fx-prompt-text-fill: #263051;
+    -fx-text-inner-color: #263051;
+    -fx-text-fill: #263051;
+    -jfx-focus-color: #6C5C7F;
+    -jfx-unfocus-color: #263051;}
+
+#description{}
+
+#dateWanted{}
+
+#patientName{}
