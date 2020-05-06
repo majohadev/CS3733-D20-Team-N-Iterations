@@ -33,7 +33,7 @@
                      <children>
                         <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
                            <image>
-                              <Image url="@../../images/mapDisplayIcons/doctorButton.png" />
+                              <Image url="@../../images/mapDisplayIcons/stethoscope_files/stethoscope-xl.png" />
                            </image>
                         </ImageView>
                      </children>
