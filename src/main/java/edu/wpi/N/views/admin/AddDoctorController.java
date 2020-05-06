@@ -202,10 +202,12 @@ public class AddDoctorController {
 
               return;
             }
-
+/*
             Alert acceptReq = new Alert(Alert.AlertType.ERROR);
             acceptReq.setContentText("Doctor with that ID doesnt exist");
             acceptReq.show();
+
+ */
           }
         }
       }
