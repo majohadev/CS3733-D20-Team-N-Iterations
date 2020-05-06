@@ -7,6 +7,7 @@ import com.google.auth.Credentials;
 import com.google.auth.oauth2.ServiceAccountCredentials;
 import com.google.cloud.dialogflow.v2.*;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URI;
@@ -69,7 +70,8 @@ public class Dialogflow {
    * @throws Exception
    */
   private void extractPrivateKey() throws Exception {
-    String path = getClass().getResource("../credentials/privatekey.txt").getPath();
+    String path =
+        (new File("src/main/resources/edu/wpi/N/credentials/privatekey.txt")).getAbsolutePath();
 
     String privKey = Files.readString(Paths.get(path));
 
