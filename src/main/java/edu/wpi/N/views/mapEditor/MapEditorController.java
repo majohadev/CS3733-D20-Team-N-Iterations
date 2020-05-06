@@ -19,6 +19,12 @@ import edu.wpi.N.views.*;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
+import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -33,6 +39,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.StrokeLineCap;
+import javafx.util.Duration;
 
 public class MapEditorController implements Controller {
 
@@ -97,8 +104,11 @@ public class MapEditorController implements Controller {
   private final double MAX_MAP_SCALE = 4;
   private final double ZOOM_STEP_SCROLL = 0.01;
   private final double ZOOM_STEP_BUTTON = 0.1;
-  private double mapScaleAlpha;
+  private DoubleProperty mapScaleAlpha = new SimpleDoubleProperty(0);
   private double clickStartX, clickStartY;
+
+  private Timeline autoFocus = new Timeline();
+  private LinkedList<KeyValue> endFocusVals = new LinkedList<>();
 
   private boolean isDraggingNode = false;
 
@@ -182,6 +192,8 @@ public class MapEditorController implements Controller {
     addEdgeLine.setStrokeLineCap(StrokeLineCap.ROUND);
     pn_edges.getChildren().add(addEdgeLine);
     deleteEdgeLines = new LinkedList<>();
+
+    initAutoFocus();
 
     populateChangeAlgo();
   }
@@ -402,6 +414,11 @@ public class MapEditorController implements Controller {
     }
   }
 
+  @FXML
+  private void onIconClicked(MouseEvent event) {
+    // Nothing yet
+  }
+
   private void handleCircleDragEvents(MouseEvent event, Circle circle) {
     isDraggingNode = true;
     circle.setCursor(Cursor.CLOSED_HAND);
@@ -544,6 +561,8 @@ public class MapEditorController implements Controller {
     controllerEditNode.setShortName(node.getShortName());
     controllerEditNode.setLongName(node.getLongName());
     controllerEditNode.setPos(circle.getCenterX(), circle.getCenterY());
+
+    autoFocusToNode(node);
   }
 
   private void onCircleEditNodeDragged(MouseEvent event, Circle circle) {
@@ -611,6 +630,8 @@ public class MapEditorController implements Controller {
         deleteNodeCircles.remove(circle);
         controllerDeleteNode.removeLstDeleteNode(nodesMap.get(circle).getDBNode().getShortName());
       }
+
+      autoFocusToNodesGroup(deleteNodeCircles);
     }
   }
 
@@ -625,6 +646,7 @@ public class MapEditorController implements Controller {
       alignNodeCircles.remove(circle);
       controllerAlignNode.removeLstAlignNode(nodesMap.get(circle).getDBNode().getShortName());
     }
+    autoFocusToNodesGroup(alignNodeCircles);
   }
 
   private void onCircleAddShaftNodeClicked(MouseEvent event, Circle circle) {
@@ -761,6 +783,7 @@ public class MapEditorController implements Controller {
     onTxtPosAddNodeTextChanged(addNodeCircle);
     onBtnConfirmAddNodeClicked(addNodeCircle);
     onBtnCancelAddNodeClicked();
+    autoFocusToPoint(event.getX(), event.getY());
   }
 
   public void onCircleAddNodeDragged(MouseEvent event, Circle circle) {
@@ -1879,13 +1902,15 @@ public class MapEditorController implements Controller {
   private void zoom(double percentDelta) {
 
     // Scaling parameter (alpha) is clamped between 0 (min. scale) and 1 (max. scale)
-    mapScaleAlpha =
+    mapScaleAlpha.set(
         Math.max(
             0,
-            Math.min(1, mapScaleAlpha + percentDelta)); // TODO: use zoom to scale line & node size
+            Math.min(
+                1,
+                mapScaleAlpha.get() + percentDelta))); // TODO: use zoom to scale line & node size
 
     // Linearly interpolate (lerp) alpha to actual scale value
-    double lerpedScale = MIN_MAP_SCALE + mapScaleAlpha * (MAX_MAP_SCALE - MIN_MAP_SCALE);
+    double lerpedScale = MIN_MAP_SCALE + mapScaleAlpha.get() * (MAX_MAP_SCALE - MIN_MAP_SCALE);
 
     // Apply new scale and correct panning
     pn_stack.setScaleX(lerpedScale);
@@ -1941,5 +1966,56 @@ public class MapEditorController implements Controller {
 
     pn_stack.setTranslateX(newTranslateX);
     pn_stack.setTranslateY(newTranslateY);
+  }
+
+  private void initAutoFocus() {
+    autoFocus.setCycleCount(1);
+    autoFocus.setOnFinished(event -> onAutoFocusEnd());
+  }
+
+  private void autoFocusToNode(DbNode node) {
+    autoFocusToPoint(node.getX(), node.getY());
+  }
+
+  private void autoFocusToNodesGroup(LinkedList<Circle> circles) {
+
+    double xSum = 0;
+    double ySum = 0;
+    int nodesCount = circles.size();
+
+    for (Circle circle : circles) {
+      xSum += circle.getCenterX();
+      ySum += circle.getCenterY();
+    }
+
+    autoFocusToPoint(xSum / nodesCount, ySum / nodesCount);
+  }
+
+  private void autoFocusToPoint(double x, double y) {
+
+    endFocusVals.add(new KeyValue(pn_stack.scaleXProperty(), MAX_MAP_SCALE, Interpolator.LINEAR));
+    endFocusVals.add(new KeyValue(pn_stack.scaleYProperty(), MAX_MAP_SCALE, Interpolator.LINEAR));
+    endFocusVals.add(
+        new KeyValue(
+            pn_stack.translateXProperty(),
+            MAX_MAP_SCALE * (MAP_WIDTH / 2 - x),
+            Interpolator.LINEAR));
+    endFocusVals.add(
+        new KeyValue(
+            pn_stack.translateYProperty(),
+            MAX_MAP_SCALE * (MAP_HEIGHT / 2 - y),
+            Interpolator.LINEAR));
+    endFocusVals.add(new KeyValue(mapScaleAlpha, 1, Interpolator.LINEAR));
+
+    KeyFrame endFrame = new KeyFrame(Duration.millis(500), "endFocus", null, endFocusVals);
+
+    autoFocus.getKeyFrames().setAll(endFrame);
+    autoFocus.playFromStart();
+  }
+
+  private void onAutoFocusEnd() {
+    autoFocus.stop();
+    autoFocus.getKeyFrames().clear();
+    endFocusVals.clear();
   }
 }
