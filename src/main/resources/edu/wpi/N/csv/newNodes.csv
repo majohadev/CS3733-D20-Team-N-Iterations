@@ -1,4 +1,532 @@
 nodeID,xcoord,ycoord,floor,building,nodeType,longName,shortName,teamAssigned
+DINFO00202,3490,825,5,15 Francis,INFO,Security Desk Thorn,Security Desk,Z
+DLABS00102,3830,775,5,15 Francis,LABS,MRI Associates Lab,MRI Associates,Z
+DREST00102,4125,625,5,15 Francis,REST,Restroom,Restroom B,Z
+DREST00202,3894,694,5,15 Francis,REST,Restroom,Restroom C,Z
+DREST00302,3662,827,5,15 Francis,REST,Restroom,Restroom C-D,Z
+DREST00402,3532,865,5,15 Francis,REST,Restroom,Restroom D,Z
+DRETL00102,4270,480,5,15 Francis,RETL,Pats Place,Pats Place,Z
+DSTAI00102,4650,675,5,15 Francis,STAI,Staircase1 Floor2,Staircase1,Z
+DSTAI00202,4320,550,5,15 Francis,STAI,Staircase2 Floor2,Staircase2,Z
+DSTAI00302,4259,441,5,15 Francis,STAI,Staircase3 Floor2,Staircase3,Z
+DSTAI00402,4177,612,5,15 Francis,STAI,Staircase4 Floor2,Staircase4,Z
+DSTAI00502,4065,630,5,15 Francis,STAI,Staircase5 Floor2,Staircase5,Z
+DSTAI00602,3952,868,5,15 Francis,STAI,Staircase6 Floor2,Staircase6,Z
+DSTAI00702,3853,571,5,15 Francis,STAI,Staircase7 Floor2,Staircase7,Z
+DSTAI00802,3535,645,5,15 Francis,STAI,Staircase8 Floor2,Staircase8,Z
+EDEPT00101,2310,872,4,45 Francis,DEPT,Waiting Room 1,Wait 1,Z
+EDEPT00201,3102,872,4,45 Francis,DEPT,Wound and Ambulatory Department,WCCAT 1,Z
+EDEPT00301,3204,865,4,45 Francis,DEPT,Ocupational Health Department,Ocupational 1,Z
+EDEPT00401,2790,1409,4,45 Francis,DEPT,Rehabilitation Services,Rehab 1,Z
+EEXIT00101,2275,785,4,45 Francis,EXIT,Ambulance Parking Exit,AmbExit 1,Z
+EEXIT00201,2950,705,4,45 Francis,EXIT,Exit 2,Exit 2,Z
+EHALL00301,2240,910,4,45 Francis,HALL,Hallway Node 1 Floor 1,Hall 01,Z
+EHALL00401,2275,910,4,45 Francis,HALL,Hallway Node 2 Floor 1,HallE02,Z
+EHALL00501,2310,910,4,45 Francis,HALL,Hallway Node 3 Floor 1,HallE03,Z
+EHALL00601,2389,910,4,45 Francis,HALL,Hallway Node 4 Floor 1,HallE04,Z
+EHALL00701,2389,860,4,45 Francis,HALL,Hallway Node 5 Floor 1,HallE05,Z
+EHALL00801,2460,910,4,45 Francis,HALL,Hallway Node 6 Floor 1,HallE06,Z
+EHALL01101,2610,913,4,45 Francis,HALL,Hallway Node 9 Floor 1,HallE09,Z
+EHALL01201,2610,950,4,45 Francis,HALL,Hallway Node 10 Floor 1,HallE10,Z
+EHALL01701,2989,988,4,45 Francis,HALL,Hallway Node 15 Floor 1,HallE15,Z
+EHALL01801,2925,910,4,45 Francis,HALL,Hallway Node 16 Floor 1,HallE16,Z
+EHALL01901,2962,906,4,45 Francis,HALL,Hallway Node 17 Floor 1,HallE17,Z
+EHALL02001,2950,745,4,45 Francis,HALL,Hallway Node 18 Floor 1,HallE18,Z
+EHALL02101,3204,889,4,45 Francis,HALL,Hallway Node 19 Floor 1,HallE19,Z
+EHALL02201,3276,875,4,45 Francis,HALL,Hallway Node 20 Floor 1,HallE20,Z
+EHALL02301,3105,896,4,45 Francis,HALL,Hallway Node 21 Floor 1,HallE21,Z
+EHALL02401,2770,1010,4,45 Francis,HALL,Hallway Node 22 Floor 1,HallE22,Z
+EHALL02501,2924,988,4,45 Francis,HALL,Hallway Node 23 Floor 1,HallE23,Z
+EHALL02601,3058,988,4,45 Francis,HALL,Hallway Node 24 Floor 1,HallE24,Z
+EHALL02701,3081,1005,4,45 Francis,HALL,Hallway Node 25 Floor 1,HallE25,Z
+EHALL02801,2925,1050,4,45 Francis,HALL,Hallway Node 26 Floor 1,HallE26,Z
+EHALL02901,2770,1077,4,45 Francis,HALL,Hallway Node 27 Floor 1,HallE27,Z
+EHALL03001,2790,1077,4,45 Francis,HALL,Hallway Node 28 Floor 1,HallE28,Z
+EHALL03101,2790,1460,4,45 Francis,HALL,Hallway Node 29 Floor 1,HallE29,Z
+EHALL03201,2790,1381,4,45 Francis,HALL,Hallway Node 30 Floor 1,HallE30,Z
+EHALL03301,2610,1381,4,45 Francis,HALL,Hallway Node 31 Floor 1,HallE31,Z
+EHALL03401,2925,1460,4,45 Francis,HALL,Hallway Node 32 Floor 1,HallE32,Z
+EINFO00101,2460,860,4,45 Francis,INFO,Connors Center Security Desk,Security 1,Z
+ELABS00101,3047,731,4,45 Francis,LABS,Asthma Research Lab,Asthma 1,Z
+ELABS00201,2771,1292,4,45 Francis,LABS,Ambulatory X-Ray,X-Ray 1,Z
+EREST00101,2918,738,4,45 Francis,REST,Restroom,Restroom G1,Z
+EREST00201,2989,964,4,45 Francis,REST,Restroom,Restroom F1,Z
+EREST00301,2757,1200,4,45 Francis,REST,Restroom,Restroom H1,Z
+ESTAI00101,2187,933,4,45 Francis,STAI,Staircase K1 Floor 1,Stair K1,Z
+ESTAI00201,2300,834,4,45 Francis,STAI,Staircase J1 Floor 1,Stair J1,Z
+ESTAI00301,2815,1152,4,45 Francis,STAI,Staircase H1 Floor 1,Stair H1,Z
+ESTAI00401,2610,1340,4,45 Francis,STAI,Staircase H2 Floor 1,Stair H2,Z
+FDEPT00101,1617,825,4,Tower,DEPT,Center for International Medicine,CIM,Z
+FDEPT00201,1610,1120,4,Tower,DEPT,Bretholtz Center for Patients and Families,Bretholtz WR,Z
+FDEPT00301,1721,931,4,Tower,DEPT,Multifaith Chapel,Chapel,Z
+FDEPT00401,1798,1149,4,Tower,DEPT,Sharf Admitting Center,Sharf Center,Z
+FDEPT00501,2126,1292,4,Tower,DEPT,Emergency Department,Emergency,Z
+FDEPT00601,1780,1029,4,Tower,DEPT,International Patient Center,IPC,Z
+FEXIT00101,2017,799,4,Tower,EXIT,Shattuck Street Lobby Exit,Shattuck St. Exit,Z
+FEXIT00201,1750,1323,4,Tower,EXIT,75 Francis Valet Drop-off,75 Francis Exit,Z
+FEXIT00301,2102,1361,4,Tower,EXIT,Emergency Department Entrance,Emergency Entrance,Z
+FHALL00101,2055,910,4,Tower,HALL,Lower Pike Hallway Exit Lobby,Hallway F00101,Z
+FHALL00201,1989,858,4,Tower,HALL,Lobby Shattuck Street,Hallway F00201,Z
+FHALL00301,2026,910,4,Tower,HALL,Shattuck Street Lobby 1,Hallway F00301,Z
+FHALL00401,1969,885,4,Tower,HALL,Shattuck Street Lobby 2,Hallway F00401,Z
+FHALL00501,1950,910,4,Tower,HALL,Shattuck Street Lobby 3,Hallway F00501,Z
+FHALL00601,1869,930,4,Tower,HALL,Tower Lobby Entrance 1,Tower Entrance,Z
+FHALL00701,1758,930,4,Tower,HALL,Tower Elevator Entrance,Hallway F00701,Z
+FHALL00801,1757,851,4,Tower,HALL,Tower Hallway 1,Hallway F00801,Z
+FHALL00901,1627,851,4,Tower,HALL,Tower Hallway 2,Hallway F00901,Z
+FHALL01001,1627,802,4,Tower,HALL,Tower Hallway 3,Hallway F01001,Z
+FHALL01101,1627,930,4,Tower,HALL,Tower Hallway 4,Hallway F01101,Z
+FHALL01201,1548,930,4,Tower,HALL,Tower Staff Entrance,Hallway F01201,Z
+FHALL01301,1627,825,4,Tower,HALL,Tower Hallway 5,Hallway F01301,Z
+FHALL01401,1627,1029,4,Tower,HALL,Tower Hallway 6,Hallway F01401,Z
+FHALL01501,1627,1060,4,Tower,HALL,Tower Hallway 7,Hallway F01501,Z
+FHALL01601,1758,1060,4,Tower,HALL,Tower Hallway 8,Hallway F01601,Z
+FHALL01701,1721,956,4,Tower,HALL,Tower Hallway 9,Hallway F01701,Z
+FHALL01801,1758,956,4,Tower,HALL,Tower Hallway 10,Hallway F01801,Z
+FHALL01901,1758,1120,4,Tower,HALL,Tower Hallway 11,Hallway F01901,Z
+FHALL02001,1700,1120,4,Tower,HALL,Tower Hallway 12,Hallway F02001,Z
+FHALL02101,1769,1146,4,Tower,HALL,Tower Hallway Entrance,Tower Entrance 2,Z
+FHALL02301,1845,1280,4,Tower,HALL,Lobby Hallway 1,Hallway F02301,Z
+FHALL02401,1955,1269,4,Tower,HALL,Lobby Hallway 2,Hallway F02401,Z
+FHALL02501,1965,1241,4,Tower,HALL,Lobby Hallway 3,Hallway F02501,Z
+FHALL02601,2026,1241,4,Tower,HALL,Lobby Hallway 4,Hallway F02601,Z
+FHALL02801,1686,1323,4,Tower,HALL,Lobby Entrance Hallway,HallwayF02801,Z
+FHALL03001,1686,1248,4,Tower,HALL,Lobby Hallway 5,Hallway F02701,Z
+FHALL03101,2026,976,4,Tower,HALL,Lobby Hallway 6,Hallway F02801,Z
+FHALL03201,1758,1029,4,Tower,HALL,Tower Hallway 13,Hallway F03201,Z
+FHALL03301,2064,1262,4,Tower,HALL,Emergency Hallway,Hallway F03301,Z
+FINFO00101,1686,1217,4,Tower,INFO,75 Lobby Information Desk,Lobby Info Desk,Z
+FLABS00101,1846,1248,4,Tower,LABS,Obstetrics Admitting,Obs Admitting,Z
+FREST00101,2091,976,4,Tower,REST,Restroom,Bathroom Lobby,Z
+FRETL00101,1973,844,4,Tower,RETL,Lobby Vending Machine,VM Lobby,Z
+FRETL00201,1610,1248,4,Tower,RETL,Au Bon Pain,ABP,Z
+FSERV00101,1950,871,4,Tower,SERV,Shattuck Street Lobby ATM,Lobby ATM,Z
+FSERV00201,1605,1029,4,Tower,SERV,Tower Medical Cashier,Tower Cashier,Z
+FSERV00301,1700,1158,4,Tower,SERV,Kessler Library,Kessler Library,Z
+FSERV00401,1721,970,4,Tower,DEPT,Spiritual Care Office,SCO,Z
+FSERV00501,1597,1323,4,Tower,SERV,75 Lobby Valet Cashier,Valet Cashier,Z
+FSTAI00101,2034,889,4,Tower,STAI,Lobby Shattuck Street Stairs,Stairway F00101,Z
+FSTAI00201,1665,800,4,Tower,STAI,Tower Stairway 1,Tower Stairs 1,Z
+FSTAI00301,1941,1241,4,Tower,STAI,Lobby Escalator,Lobby Escalator,Z
+GCONF02001,1494,2124,4,Shapiro,CONF,Shapiro Board Room,Shapiro Board Room,Z
+GDEPT00403,1559,2151,6,Shapiro,DEPT,Brigham Circle Medical Associates,Brigham Circle Medical Associates,Z
+GDEPT00702,1344,1788,5,Shapiro,DEPT,Waiting room,Waiting Area Shapiro Floor 2,Z
+GDEPT01403,1559,1908,6,Shapiro,DEPT,Watkins Clinic C,Watkins Clinic C,Z
+GDEPT01901,1566,2139,4,Shapiro,DEPT,Zinner Breakout Room,Zinner Breakout Room,Z
+GDEPT02402,1559,1939,5,Shapiro,DEPT,Watkins A,Watkins A,Z
+GDEPT03502,1559,2172,5,Shapiro,DEPT,Watkins B,Watkins B,Z
+GELEV00N01,1648,1936,4,Shapiro,ELEV,Elevator N,Hall,Z
+GELEV00N02,1631,1939,5,Shapiro,ELEV,Elevator N,Elevator N Floor 1,Z
+GELEV00N03,1631,1908,6,Shapiro,ELEV,Elevator N,Elevator N Floor 3,Z
+GELEV00Q01,1651,2134,4,Shapiro,ELEV,Elevator Q,Elevator Q Floor 1,Z
+GELEV00Q02,1627,2124,5,Shapiro,ELEV,Elevator Q,Elevator Q Floor 2,Z
+GELEV00Q03,1628,2110,6,Shapiro,ELEV,Elevator Q,Elevator Q Floor 3,Z
+GELEV00QL1,1624,2120,2,Shapiro,ELEV,Elevator Q,Elevator Q L1,Z
+GELEV00QL2,1624,2124,1,Shapiro,ELEV,Elevator Q,Elevator Q L2,Z
+GEXIT00101,1730,1819,4,Shapiro,EXIT,Francis Street Exit,Francis Street Exit Floor 1,Z
+GEXIT001L1,1703,2284,2,Shapiro,EXIT,Fenwood Road,Fenwood Road EntranceExit L1,Z
+GHALL00103,1580,2151,6,Shapiro,HALL,Hallway Node 1 Floor 3,Hall,Z
+GHALL001L2,1730,1584,1,Shapiro,HALL,Hallway MapNode 1 Floor L2,Hall,Z
+GHALL00201,1750,2018,4,Shapiro,HALL,Hallway MapNode 2 Floor 1,Hall,Z
+GHALL002L1,1703,2226,2,Shapiro,HALL,Hallway MapNode 2 Floor L1,Hall,Z
+GHALL00301,1750,1853,4,Shapiro,HALL,Hallway MapNode 3 Floor 1,Hall,Z
+GHALL003L1,1686,2059,2,Shapiro,HALL,Hallway MapNode 3 Floor L1,Hall,Z
+GHALL004L1,1686,2158,2,Shapiro,HALL,Hallway MapNode 4 Floor L1,Hall,Z
+GHALL00502,1286,1820,5,Shapiro,HALL,Hall Node 5 Floor 2,Hall,Z
+GHALL005L1,1723,2059,2,Shapiro,HALL,Hallway MapNode 5 Floor L1,Hall,Z
+GHALL005L2,1730,2097,1,Shapiro,HALL,Hallway MapNode 5 Floor L2,Hall,Z
+GHALL00601,1707,2018,4,Shapiro,HALL,Hallway MapNode 6 Floor 1,Hall,Z
+GHALL00603,1685,2151,6,Shapiro,HALL,Hallway Node 6 Floor 3,Hall,Z
+GHALL006L1,1624,2059,2,Shapiro,HALL,Hallway MapNode 6 Floor L1,Hall,Z
+GHALL00701,1707,2094,4,Shapiro,HALL,Hallway MapNode 7 Floor 1,Hall,Z
+GHALL007L2,1624,2097,1,Shapiro,HALL,Hallway MapNode 7 Floor L2,Hall,Z
+GHALL00801,1566,2124,4,Shapiro,HALL,Hallway MapNode 8 Floor 1,Hall,Z
+GHALL00803,1685,2110,6,Shapiro,HALL,Hallway Node 8 Floor 3,Hall,Z
+GHALL009L2,1578,2031,1,Shapiro,HALL,Hallway MapNode 9 Floor L2,Hall,Z
+GHALL01002,1578,2172,5,Shapiro,HALL,Hall Node 10 Floor 2,Hall,Z
+GHALL01003,1580,2070,6,Shapiro,HALL,Hallway Node 10 Floor 3,Hall,Z
+GHALL010L2,1550,2031,1,Shapiro,HALL,Hallway MapNode 10 Floor L2,Hall,Z
+GHALL01102,1344,1820,5,Shapiro,HALL,Hall Node 11 Floor 2,Hall,Z
+GHALL01103,1628,2070,6,Shapiro,HALL,Hallway Node 11 Floor 3,Hall,Z
+GHALL011L2,1550,1966,1,Shapiro,HALL,Hallway MapNode 11 Floor L2,Hall,Z
+GHALL01202,1491,2096,5,Shapiro,HALL,Hall 1,Hall,Z
+GHALL012L2,1511,1966,1,Shapiro,HALL,Hallway MapNode 12 Floor L2,Hall,Z
+GHALL01303,1580,1908,6,Shapiro,HALL,Hallway Node 13 Floor 3,Hall,Z
+GHALL013L2,1511,1909,1,Shapiro,HALL,Hallway MapNode 13 Floor L2,Hall,Z
+GHALL01402,1686,1939,5,Shapiro,HALL,Hall Node 14 Floor 2,Hall,Z
+GHALL01602,1502,1820,5,Shapiro,HALL,Hall Node 16 Floor 2,Hall,Z
+GHALL016L2,1511,1700,1,Shapiro,HALL,Hallway MapNode 16 Floor L2,Hall,Z
+GHALL01701,1620,2124,4,Shapiro,HALL,Hallway MapNode 17 Floor 1,Hall,Z
+GHALL01702,1578,1820,5,Shapiro,HALL,Hall Node 17 (Exit?) Floor 2,Hall,Z
+GHALL017L2,1511,1525,1,Shapiro,HALL,Hallway MapNode 17 Floor L2,Hall,Z
+GHALL01802,1631,1820,5,Shapiro,HALL,Hall Node 18 Floor 2,Hall,Z
+GHALL02101,1600,1826,4,Shapiro,HALL,Hallway MapNode 21 Floor 1,Hall,Z
+GHALL02201,1600,1901,4,Shapiro,HALL,Hallway MapNode 22 Floor 1,Hall,Z
+GHALL02202,1726,1819,5,Shapiro,HALL,Hall 8,Hall,Z
+GHALL02401,1600,1936,4,Shapiro,HALL,Hallway MapNode 24 Floor 1,Hall,Z
+GHALL02702,1726,1939,5,Shapiro,HALL,Hall 7,Hall,Z
+GHALL02902,1726,2024,5,Shapiro,HALL,Hall Node 6,Hall,Z
+GHALL03002,1576,2096,5,Shapiro,HALL,Hall 2,Hall,Z
+GHALL03202,1682,2096,5,Shapiro,HALL,Hall 4,Hall,Z
+GHALL03402,1720,2096,5,Shapiro,HALL,Hall 5,Hall,Z
+GHALL03602,1578,2211,5,Shapiro,HALL,Hall Node 36 Floor 2,Hall,Z
+GHALL03702,1692,2209,5,Shapiro,HALL,Hall Node 37 Floor 2,Hall,Z
+GINFO01902,1631,1836,5,Shapiro,INFO,Shapiro Information Center,Information Center Shapiro Floor 2,Z
+GLABS003L2,1733,2117,1,Shapiro,LABS,Cardiovascular Imaging Center,Cardiovascular Imaging Center,Z
+GLABS014L2,1525,1847,1,Shapiro,LABS,Cardiac Stress Test Lab,Cardiac Stress Test Lab,Z
+GLABS015L2,1529,1816,1,Shapiro,LABS,CVRR,CVRR,Z
+GREST01201,1672,2018,4,Shapiro,REST,Restroom,Restroom Shapiro Floor 1,Z
+GREST01203,1628,2052,6,Shapiro,REST,Restroom,Restroom Shapiro Floor 3,Z
+GREST03102,1627,2076,5,Shapiro,REST,Restroom,Handicap Accessible Restrooms Shapiro Floor 2,Z
+GSERV01603,1580,1858,6,Shapiro,SERV,The Porch,The Porch,Z
+GSERV02301,1583,1901,4,Shapiro,SERV,ATM,ATM Floor 1,Z
+GSTAI00501,1707,1992,4,Shapiro,STAI,Stairway MapNode 5 Floor 1,Northbound Stairs Floor 2,Z
+GSTAI008L1,1723,2107,2,Shapiro,STAI,Stairs MapNode 8 Floor L1,L1 Stairs,Z
+GSTAI00903,1685,2052,6,Shapiro,STAI,Staircase Node 9 Floor 3,Floor 3 Stairs,Z
+GSTAI01301,1750,2042,4,Shapiro,STAI,Southbound Escalator Floor 1,Southbound Escalator Floor 1,Z
+GSTAI02602,1686,1912,5,Shapiro,STAI,Stairs Node 26 Floor 2,Floor 2 Stairs Upper,Z
+GSTAI02802,1686,2024,5,Shapiro,STAI,Stairs Node 28 Floor 2,Floor 2 Stairs Lower,Z
+HBATH00102,1600,1005,5,Tower,REST,Restroom,Bathroom 0102,Z
+HBATH00103,1788,841,6,Tower,REST,Restroom,Bathroom 0103,Z
+HBATH00203,1761,991,6,Tower,REST,Restroom,Bathroom 0203,Z
+HDEPT00102,2058,1334,5,Tower,DEPT,Endoscopy,Endoscopy,Z
+HDEPT00103,1696,923,6,Tower,DEPT,Dialysis Waiting Room,Dialysis WR,Z
+HDEPT00203,1689,838,6,Tower,DEPT,MICU 3BC Waiting Room,MICU 3BC WR,Z
+HHALL00102,1880,926,5,Tower,HALL,Hallway Connector 1,Hallway H00102,Z
+HHALL00202,1959,909,5,Tower,HALL,Hallway Connector 2,Hallway H00202,Z
+HHALL00203,1235,985,6,Tower,HALL,Hallway Connector 2,Hallway H00203,Z
+HHALL00302,2061,903,5,Tower,HALL,Hallway Connector 3,Hallway H00302,Z
+HHALL00303,1325,985,6,Tower,HALL,Hallway Connector 3,Hallway H00303,Z
+HHALL00402,1866,974,5,Tower,HALL,Hallway Connector 4,Hallway H00402,Z
+HHALL00403,1325,1290,6,Tower,HALL,Hallway Connector 4,Hallway H00403,Z
+HHALL00502,1829,1029,5,Tower,HALL,Hallway Connector 5,Hallway H00502,Z
+HHALL00503,1682,1290,6,Tower,HALL,Hallway Connector 5,Hallway H00502,Z
+HHALL00602,1791,1084,5,Tower,HALL,Hallway Connector 6,Hallway H00602,Z
+HHALL00603,1735,930,6,Tower,HALL,Hallway Connector 6,Hallway H00603,Z
+HHALL00702,1740,1169,5,Tower,HALL,Hallway Connector 7,Hallway H00702,Z
+HHALL00802,1740,1234,5,Tower,HALL,Hallway Connector 8,Hallway H00802,Z
+HHALL00803,1735,865,6,Tower,HALL,Hallway Connector 8,Hallway H00803,Z
+HHALL00902,1740,1286,5,Tower,HALL,Hall 11,Hallway H00902,Z
+HHALL00903,1735,824,6,Tower,HALL,Hallway Connector 9,Hallway H00903,Z
+HHALL01002,2058,1286,5,Tower,HALL,Hallway Connector 10,Hallway H01002,Z
+HHALL01003,1785,824,6,Tower,HALL,Hallway Connector 10,Hallway H01003,Z
+HHALL01103,1689,824,6,Tower,HALL,Hallway Connector 11,Hallway H01103,Z
+HHALL01203,1600,824,6,Tower,HALL,Hallway Connector 12,Hallway H01203,Z
+HHALL01303,1600,1036,6,Tower,HALL,Hallway Connector 13,Hallway H01303,Z
+HHALL01403,1737,1036,6,Tower,HALL,Hallway Connector 14,Hallway H01403,Z
+HHALL01503,1735,991,6,Tower,HALL,Hallway Connector 15,Hallway H01503,Z
+HLABS00103,1235,865,6,Tower,LABS,Reproductive Endocrine Labs,Reproductive Endocrine Labs,Z
+HRETL00102,1935,860,5,Tower,RETL,Garden Cafe,Garden Cafe,Z
+HRETL00202,1597,1032,5,Tower,RETL,Vending Machine,Vending Machine,Z
+HRETL00302,1832,1084,5,Tower,RETL,Gift Shop Tower,Gift Shop,Z
+HSERV00103,1761,865,6,Tower,SERV,Nursing Room,Nursing Room,Z
+HSTAI00102,2060,880,5,Tower,STAI,Stairwell 1,Stairwell 0102,Z
+HSTAI00103,1682,1272,6,Tower,STAI,Stairwell 1,Stairwell,Z
+HSTAI00202,1696,1169,5,Tower,STAI,Stairwell 2 Tower,Stairwell 0202,Z
+HSTAI00302,1791,1234,5,Tower,STAI,Escalator 1,Escalator 1,Z
+ICONF00101,2570,673,1,45 Francis,CONF,Radiaion Oncology,Radiation Oncology Conference Room,I
+ICONF00205,1491,2076,5,Shapiro,CONF,Reflection Rooms,Reflection Rooms,I
+ICONF00206,1769,739,6,Tower,CONF,Reflection,Tower Reflection Room,I
+ICONF00402,2572,869,2,45 Francis,CONF,Helen Conf,Helen Hogan Conference Room,I
+IDEPT00101,1623,2650,1,Shapiro,DEPT,MRI/CT Entrance 2,MRI/CT Scan Imaging,I
+IDEPT00103,2323,1316,6,45 Francis,DEPT,Center for Infertility and Reproductive Surgery,D1,Z
+IDEPT00203,2448,1328,6,45 Francis,DEPT,Gynecology Oncology MIGS,D2,Z
+IDEPT00303,2730,1315,6,45 Francis,DEPT,General Surgical Specialties Suite A,D3,Z
+IDEPT00403,2747,1231,6,45 Francis,DEPT,General Surgical Specialties Suite B,D4,Z
+IDEPT00503,2868,1074,6,45 Francis,DEPT,Urology,D5,Z
+IDEPT00603,2333,766,6,45 Francis,DEPT,Maternal Fetal Practice,D6,Z
+IDEPT00703,2400,766,6,45 Francis,DEPT,Obstetrics,D7,Z
+IDEPT00803,2492,887,6,45 Francis,DEPT,Fetal Med & Genetics,D8,Z
+IDEPT00903,2631,855,6,45 Francis,DEPT,Gynecology,D9,Z
+IDEPT01006,1814,1036,6,Tower,DEPT,Dialysis,Dialysis,I
+IEXIT00106,1323,643,6,Tower,EXIT,Bridge,Bridge to Dana-Farber,I
+IEXIT00205,2331,581,5,45 Francis,EXIT,Bridge,Bridge to Children's,I
+IHALL00103,2266,1290,6,45 Francis,HALL,Hallway Node 1,H1,Z
+IHALL00203,2323,1290,6,45 Francis,HALL,Hallway Node 2,H2,Z
+IHALL00303,2448,1290,6,45 Francis,HALL,Hallway Node 3,H3,Z
+IHALL00403,2570,1290,6,45 Francis,HALL,Hallway Node 4,H4,Z
+IHALL00503,2730,1290,6,45 Francis,HALL,Hallway Node 5,H5,Z
+IHALL00601,1679,2097,1,Shapiro,HALL,Hall,Hall,I
+IHALL00603,2772,1290,6,45 Francis,HALL,Hallway Node 6,H6,Z
+IHALL00703,2772,1231,6,45 Francis,HALL,Hallway Node 7,H7,Z
+IHALL00803,2772,1152,6,45 Francis,HALL,Hallway Node 8,H8,Z
+IHALL00903,2686,1074,6,45 Francis,HALL,Hallway Node 9,H9,Z
+IHALL01003,2772,1074,6,45 Francis,HALL,Hallway Node 10,H10,Z
+IHALL01203,2221,1039,6,45 Francis,HALL,Hallway Node 12,H12,Z
+IHALL01303,2323,1039,6,45 Francis,HALL,Hallway Node 13,H13,Z
+IHALL01401,1577,2097,1,Shapiro,HALL,Hall,Hall,I
+IHALL01403,2323,995,6,45 Francis,HALL,Hallway Node 14,H14,Z
+IHALL01501,1511,1829,1,Shapiro,HALL,Hall,Halll,I
+IHALL01503,2221,988,6,45 Francis,HALL,Hallway Node 15,H15,Z
+IHALL01505,2245,964,5,45 Francis,HALL,Hall,Hall,I
+IHALL01602,1728,1702,2,Shapiro,HALL,Hall L1,Hallway L1,I
+IHALL01603,1366,317,3,Faulkner,HALL,Hall,Hall,I
+IHALL01606,2365,893,6,45 Francis,HALL,Hall,Hall,I
+IHALL01702,1754,1525,2,45 Francis,HALL,Hall L1,Hallway L1,I
+IHALL01703,2323,855,6,45 Francis,HALL,Hallway Node 17,H17,Z
+IHALL01801,1822,1286,1,45 Francis,HALL,Hall L2,Hall L2,I
+IHALL01802,1819,1286,2,45 Francis,HALL,Hall L1,Hallway L1,I
+IHALL01803,2365,855,6,45 Francis,HALL,Hallway Node 18,H18,Z
+IHALL01901,1917,1286,1,45 Francis,HALL,Hall,Hall,I
+IHALL01902,1969,1286,2,45 Francis,HALL,Hall L1,Hallway L1,I
+IHALL01903,2492,855,6,45 Francis,HALL,Hallway Node 19,H19,Z
+IHALL02001,2023,1286,1,45 Francis,HALL,Hall,Hall,I
+IHALL02002,2069,1286,2,45 Francis,HALL,Hall L1,Hallway L1,I
+IHALL02003,2597,855,6,45 Francis,HALL,Hallway Node 20,H20,Z
+IHALL02101,2225,1286,1,45 Francis,HALL,Hall L2,Hallway Intersection L2,I
+IHALL02103,1256,256,3,Faulkner,HALL,Hall,Hall,I
+IHALL02106,1781,766,6,Tower,HALL,HallF3,Hallway Floor 3,I
+IHALL02201,1737,993,1,45 Francis,HALL,Hall,Hall L2,I
+IHALL02202,1734,1022,2,45 Francis,HALL,Hall L1,Hallway L1,I
+IHALL02203,2365,766,6,45 Francis,HALL,Hallway Node 22,H22,Z
+IHALL02301,1734,854,1,45 Francis,HALL,HallL2,Hallway Intersection L2,I
+IHALL02302,1846,846,2,45 Francis,HALL,Hall L1,Hallway L1,I
+IHALL02303,1254,920,3,Faulkner,HALL,Hall,Hall,I
+IHALL02306,2144,1039,6,45 Francis,HALL,Hall,Hall,I
+IHALL02401,2218,985,1,45 Francis,HALL,Hall L2,Hallway L2,I
+IHALL02402,1983,846,2,45 Francis,HALL,Hall L1,Hallway L1,I
+IHALL02403,1208,490,3,Faulkner,HALL,Hall,Hall,I
+IHALL02406,2323,893,6,45 Francis,HALL,Hall,Hall,I
+IHALL02501,2296,882,1,45 Francis,HALL,Hall L2,Hallway L2,I
+IHALL02502,2133,1525,2,45 Francis,HALL,Hall L1,Hallway L1,I
+IHALL02503,1256,284,3,Faulkner,HALL,Hall,Hall,I
+IHALL02601,2322,854,1,45 Francis,HALL,Hall L2,Hallway L2,I
+IHALL02602,2308,1286,2,45 Francis,HALL,Hall L1,Hallway L1,I
+IHALL02701,2436,854,1,45 Francis,HALL,Hallway L2,Hallway L2,I
+IHALL02702,2445,1241,2,45 Francis,HALL,Hall L1,Hallway L1,I
+IHALL02801,2566,854,1,45 Francis,HALL,Hall L2,Hallway L2,I
+IHALL02802,2310,1050,2,45 Francis,HALL,Hall L1,Hallway L1,I
+IHALL02805,1250,342,5,Faulkner,HALL,Hall,Hall,I
+IHALL02901,2436,701,1,45 Francis,HALL,Hallway L2,Hallway L2,I
+IHALL02902,2494,1050,2,45 Francis,HALL,Hall L1,Hallway L1,I
+IHALL03001,2566,701,1,45 Francis,HALL,Hall L2,Hallway L2,I
+IHALL03002,2546,1039,2,45 Francis,HALL,Hall L1,Hallway L1,I
+IHALL03101,1507,854,1,45 Francis,HALL,Hallway L2,Hallway L2,I
+IHALL03102,2668,1039,2,45 Francis,HALL,Hall L1,Hallway L1,I
+IHALL03201,1622,2626,1,Shapiro,HALL,Hall L2,Hallway L2,I
+IHALL03202,2771,1074,2,45 Francis,HALL,Hall L1,Hallway L1,I
+IHALL03301,1659,2626,1,Shapiro,HALL,Hall L2,Hallway L2,I
+IHALL03302,2770,1286,2,45 Francis,HALL,Hall L1,Hallway L1,I
+IHALL03401,1658,2514,1,Shapiro,HALL,Hall L2,Hallway L2,I
+IHALL03402,2187,909,2,45 Francis,HALL,Hall L1,Hallway L1,I
+IHALL03404,382,1219,4,Faulkner,HALL,Hall 35,Hall 35,I
+IHALL03502,2300,878,2,45 Francis,HALL,Hall L1,Hallway L1,I
+IHALL03504,1812,1282,4,Tower,HALL,Hall,Hall,I
+IHALL03601,1617,2435,1,Shapiro,HALL,Hall L2,Hallway L2,I
+IHALL03602,2572,849,2,45 Francis,HALL,Hall L1,Hallway L1,I
+IHALL03604,2962,875,4,45 Francis,HALL,Hall,Hall,I
+IHALL03701,1617,2243,1,45 Francis,HALL,Hall L2,Hallway L2,I
+IHALL03702,1624,2089,2,Shapiro,HALL,Hall,Hall,I
+IHALL03704,1620,2094,4,Shapiro,HALL,HallF1,Hallway Floor 1,I
+IHALL03801,1577,2243,1,45 Francis,HALL,Hall L2,Hallway L2,I
+IHALL03802,2771,1125,2,45 Francis,HALL,Hall,Hall,I
+IHALL03804,1426,2663,4,BTM,HALL,Hallway,Hallway Level 1,I
+IHALL03904,1767,1248,4,Tower,HALL,HallF1,Hallway Floor 1,I
+IHALL04104,2790,1152,4,45 Francis,HALL,HallF1,Hallway Floor 1,I
+IHALL04204,2790,1200,4,45 Francis,HALL,Hall F1,Hallway Floor 1,I
+IHALL04304,2790,1292,4,45 Francis,HALL,Hall F1,Hallway Floor 1,I
+IHALL06105,2247,1251,5,45 Francis,HALL,Hall F2,Hallway Floor 2,I
+IHALL06205,1825,1286,5,Tower,HALL,Hall 12,Hallway Floor 2,I
+IHALL06305,2554,1316,5,45 Francis,HALL,Hall F2,Hallway Floor 2,I
+IHALL06405,1627,1029,5,Tower,HALL,Hall F2,Hallway Floor 2,I
+IHALL06505,2440,902,5,45 Francis,HALL,HallF2,Hallway Floor 2,I
+IHALL06605,2605,844,5,45 Francis,HALL,Hall F2,Hallway Floor 2,I
+IHALL06705,2945,978,5,45 Francis,HALL,Hall F2,Hallway Floor 2,I
+IHALL06805,2989,978,5,45 Francis,HALL,Hall F2,Hallway F2,I
+IHALL06905,2945,844,5,45 Francis,HALL,Hall F2,Hallway Floor 2,I
+IHALL07105,3147,963,5,45 Francis,HALL,Hall F2,Hallway Floor 2,I
+IHALL07205,3259,882,5,45 Francis,HALL,Hall F2,Hallway Floor 2,I
+IHALL07305,3365,861,5,15 Francis,HALL,Hall F2,Hallway Floor 2,I
+ILABS00306,2365,933,6,45 Francis,LABS,Blood Lab,OB/GYN Blood Lab,I
+IREST00103,2266,1255,6,45 Francis,REST,Restroom,R1,Z
+IREST00203,2570,1257,6,45 Francis,REST,Restroom,R2,Z
+IREST00301,1114,488,1,Faulkner,REST,Restroom Female Level 1,Restroom Female Level 1,I
+IREST00303,2744,1152,6,45 Francis,REST,Restroom,R3,Z
+IREST00401,1679,2130,1,Shapiro,REST,RestL2Q,Restroom L2 Q,I
+IREST00403,2303,995,6,45 Francis,REST,Restroom,R4,Z
+IREST00502,1972,786,2,45 Francis,REST,Rest L1,Day Surgery Restroom,I
+IREST00506,1358,2739,6,BTM,REST,Rest,Restroom,I
+IREST00602,2738,1161,2,45 Francis,REST,Rest HL2,Restroom H ,I
+IREST00705,1286,1856,5,Shapiro,REST,Rest F2,Family Center Restroom,I
+IREST00805,2623,844,5,45 Francis,REST,Restroom,Women's Restroom,I
+IRETL00405,3310,1005,5,45 Francis,RETL,Coffee Connection,Coffee Connection,I
+ISTAI00102,2795,1125,2,45 Francis,STAI,Stairs,Stairwell L1,I
+ISTAI00206,2798,1152,6,45 Francis,STAI,Stair,Stairwell Floor 3,I
+LDEPT00102,737,838,2,Faulkner,DEPT,Morgue,DEPT L2003,L
+LDEPT00202,757,1122,2,Faulkner,DEPT,Biomedical Engineering,DEPT L2001,L
+LDEPT00302,1450,1066,2,Faulkner,DEPT,Occupational Therapy,DEPT L2004,L
+LDEPT00402,1166,288,2,Faulkner,DEPT,Otolaryngology,DEPT L2005,L
+LDEPT00502,764,713,2,Faulkner,DEPT,Pharmacy,DEPT L2006,L
+LDEPT00602,1450,861,2,Faulkner,DEPT,Physical Therapy,DEPT L2007,L
+LDEPT00702,1363,474,2,Faulkner,DEPT,Plastic Surgery,DEPT L2008,L
+LDEPT00802,1200,1234,2,Faulkner,DEPT,Psych/Addiction Care,DEPT L2009,L
+LDEPT00902,1626,1205,2,Faulkner,DEPT,Psychiatric Inpatient Care,DEPT L2010,L
+LELEV00X02,1208,414,2,Faulkner,ELEV,Elevator 1 Level 2,ELEV L2003,L
+LELEV00Y02,1151,1167,2,Faulkner,ELEV,Elevator 2 Level 2,ELEV L2001,L
+LELEV00Z02,1358,1124,2,Faulkner,ELEV,Elevator 3 Level 2,ELEV L2002,L
+LHALL00102,747,713,2,Faulkner,HALL,Hallway Intersection 2 Level 2,HALL L2002,L
+LHALL00202,747,838,2,Faulkner,HALL,Hallway Intersection 3 Level 2,HALL L2003,L
+LHALL00302,747,937,2,Faulkner,HALL,Hallway Intersection 4 Level 2,HALL L2004,L
+LHALL00402,747,980,2,Faulkner,HALL,Hallway Intersection 5 Level 2,HALL L2005,L
+LHALL00502,747,1122,2,Faulkner,HALL,Hallway Intersection 6 Level 2,HALL L2006,L
+LHALL00602,747,1205,2,Faulkner,HALL,Hallway Intersection 7 Level 2,HALL L2007,L
+LHALL00702,1151,1204,2,Faulkner,HALL,Hallway Intersection 8 Level 2,HALL L2008,L
+LHALL00802,1200,1205,2,Faulkner,HALL,Hallway Intersection 9 Level 2,HALL L2009,L
+LHALL00902,1433,1205,2,Faulkner,HALL,Hallway Intersection 10 Level 2,HALL L2010,L
+LHALL01002,1433,1124,2,Faulkner,HALL,Hallway Intersection 11 Level 2,HALL L2011,L
+LHALL01102,1433,1066,2,Faulkner,HALL,Hallway Intersection 12 Level 2,HALL L2012,L
+LHALL01202,1433,944,2,Faulkner,HALL,Hallway Intersection 13 Level 2,HALL L2013,L
+LHALL01302,1433,861,2,Faulkner,HALL,Hallway Intersection 14 Level 2,HALL L2014,L
+LHALL01402,1433,501,2,Faulkner,HALL,Hallway Intersection 15 Level 2,HALL L2015,L
+LHALL01502,1349,501,2,Faulkner,HALL,Hallway Intersection 16 Level 2,HALL L2016,L
+LHALL01602,1349,474,2,Faulkner,HALL,Hallway Intersection 17 Level 2,HALL L2017,L
+LHALL01702,1349,288,2,Faulkner,HALL,Hallway Intersection 18 Level 2,HALL L2018,L
+LHALL01802,1250,288,2,Faulkner,HALL,Hallway Intersection 19 Level 2,HALL L2019,L
+LHALL01902,1250,414,2,Faulkner,HALL,Hallway Intersection 20 Level 2,HALL L2020,L
+LHALL02002,1250,474,2,Faulkner,HALL,Hallway Intersection 21 Level 2,HALL L2021,L
+LHALL02202,747,658,2,Faulkner,HALL,Hallway Intersection 1 Level 2,HALL L2001,L
+LREST00202,1450,1124,2,Faulkner,REST,Restroom 1 Level 2,REST L2001,L
+LRETL00202,1349,507,2,Faulkner,RETL,Food Service,FOOD L2001,L
+LSERV00102,757,937,2,Faulkner,SERV,Central Sterile Supply,STAFF L2001,L
+LSERV00202,737,981,2,Faulkner,SERV,Facilities 2,STAFF L2002,L
+LSERV00302,1423,944,2,Faulkner,SERV,Central Sterile Supply 2,STAFF L2002,L
+LSERV00402,747,646,2,Faulkner,SERV,Material Management,STAFF L2003,L
+LSERV00502,667,1205,2,Faulkner,SERV,Mechanical Space,STAFF L2004,L
+LSERV00602,737,713,2,Faulkner,SERV,Facilities 5,STAFF L2005,L
+LSTAI00202,1290,415,2,Faulkner,STAI,Staircase 1 Level 2,STAIR L2001,L
+MDEPT00103,1387,436,3,Faulkner,DEPT,Medical Staff Lounge,Staff Lounge,M
+MDEPT00203,1387,317,3,Faulkner,DEPT,Division of GYN,GYN,M
+MDEPT00403,1376,271,3,Faulkner,DEPT,OB/GYN Association,OB/GYN,M
+MDEPT00503,1323,238,3,Faulkner,DEPT,Gynocology/Oncology,,M
+MDEPT00603,1190,239,3,Faulkner,DEPT,Roslindale Pediatric Association,Pediatrics,M
+MELEV00X03,1206,388,3,Faulkner,ELEV,Elevator 1 Level 3,Elevator,M
+MELEV00Y03,1163,1164,3,Faulkner,ELEV,Elevator 2 Level 3,Elevator,M
+MELEV00Z03,1342,1164,3,Faulkner,ELEV,Elevator 3 Level 3,Elevator,M
+MHALL00103,1254,1249,3,Faulkner,HALL,Hall,Hall,M
+MHALL00203,1254,1053,3,Faulkner,HALL,Hall,Hall,M
+MHALL00403,1208,649,3,Faulkner,HALL,Hall,Hall,M
+MHALL00503,1208,463,3,Faulkner,HALL,Hall,Hall,M
+MHALL00603,1150,463,3,Faulkner,HALL,Hall,Hall,M
+MHALL00703,1256,463,3,Faulkner,HALL,Hall,Hall,M
+MHALL00803,1366,463,3,Faulkner,HALL,Hall,Hall,M
+MHALL00903,1256,388,3,Faulkner,HALL,Hall,Hall,M
+MHALL01103,1148,293,3,Faulkner,HALL,Hall,Hall,M
+MHALL01703,1105,689,3,Faulkner,HALL,Hall,hall,M
+MRETL00103,1229,920,3,Faulkner,RETL,Gift Shop,Gift Shop,M
+MRETL00203,1276,649,3,Faulkner,RETL,Cafeteria Hall enterance,Cafeteria,M
+MRETL00403,1208,574,3,Faulkner,RETL,Cafeteria Hall enterance,Cafeteria,M
+MRETL00503,1440,890,3,Faulkner,RETL,Cafeteria Exterior Entrance,Cafeteria,M
+MSERV00203,1254,1380,3,Faulkner,SERV,Shuttle Pickup,Shuttle,M
+MSERV00403,1130,1340,3,Faulkner,SERV,Chapel,Chapel,M
+MSERV00503,1380,1340,3,Faulkner,SERV,Volunteer Room,Volunteer,M
+MSERV00603,1125,1250,3,Faulkner,SERV,Mechanical Space,MechSpace,M
+MSERV00703,1333,1249,3,Faulkner,SERV,Mechanical Space,MechSpace,M
+MSERV00803,1185,490,3,Faulkner,SERV,Family Patient Resources,Resources,M
+MSERV01003,1075,745,3,Faulkner,SERV,Huvos Auditorium Top,Auditorium,M
+MSTAI00103,1221,1053,3,Faulkner,STAI,Stairs,Stairs,M
+MSTAI00203,1303,388,3,Faulkner,STAI,Stairs,Stairs,M
+NCONF00104,538,1240,4,Faulkner,CONF,Tynan Conference Room,CONF N0104,N
+NCONF00304,1078,1230,4,Faulkner,CONF,Sadowsky Conference Room,CONF N0204,N
+NDEPT00104,911,1200,4,Faulkner,DEPT,Department Office,DEPT N0204,N
+NDEPT00204,1227,986,4,Faulkner,DEPT,MOHS Clinic,DEPT N0304,N
+NDEPT00304,1232,612,4,Faulkner,DEPT,BD Cardiology,DEPT N0404,N
+NDEPT00904,1266,639,4,Faulkner,DEPT,Neurology,DEPT N1004,N
+NDEPT01004,1274,848,4,Faulkner,DEPT,Pulmonary Services,DEPT N1104,N
+NDEPT01104,1268,1053,4,Faulkner,DEPT,Lung Research,DEPT N1204,N
+NDEPT01204,1465,1200,4,Faulkner,DEPT,PATSAFE,DEPT N1304,N
+NDEPT01304,1580,1230,4,Faulkner,DEPT,Primary Care Physician,DEPT N1404,N
+NDEPT01404,1580,1200,4,Faulkner,DEPT,Surgery Department,DEPT N1504,N
+NDEPT01504,1698,1200,4,Faulkner,DEPT,QUALIMP,DEPT N1604,N
+NDEPT01604,1782,1200,4,Faulkner,DEPT,SURGSPEC,DEPT N1704,N
+NDEPT01704,2110,1200,4,Faulkner,DEPT,Foot and Ankle Center,DEPT N1804,N
+NDEPT01804,2110,1230,4,Faulkner,DEPT,BWH Plastics,DEPT N1904,N
+NDEPT01904,2192,1200,4,Faulkner,DEPT,Spine FAC,DEPT N2004,N
+NDEPT02004,2286,1200,4,Faulkner,DEPT,IS,DEPTN2104,N
+NDEPT02204,381,1200,4,Faulkner,DEPT,Urology,DEPT N0104,N
+NELEV00X04,1208,414,4,Faulkner,ELEV,Elevator 1 Level 4,ELEV N0304,N
+NELEV00Y04,1181,1157,4,Faulkner,ELEV,Elevator 2 Level 4,ELEV N0104,N
+NELEV00Z01,1323,1157,1,Faulkner,ELEV,Elevator 3 Level 1,Elevator Z Floor 1,N
+NELEV00Z04,1323,1157,4,Faulkner,ELEV,Elevator 3 Level 4,ELEV N0204,N
+NHALL00104,538,1219,4,Faulkner,HALL,Hall 2,HALL N0204,N
+NHALL00204,722,1219,4,Faulkner,HALL,Hall 3,HALL N0304,N
+NHALL00304,911,1219,4,Faulkner,HALL,Hall 4,HALL N0404,N
+NHALL00404,985,1219,4,Faulkner,HALL,Hall 5,HALL N0504,N
+NHALL00504,1078,1219,4,Faulkner,HALL,Hall 6,HALL N0604,N
+NHALL00604,1250,1219,4,Faulkner,HALL,Hall 7,HALL N0704,N
+NHALL00704,1250,1157,4,Faulkner,HALL,Hall 8,HALL N0804,N
+NHALL00804,1250,1053,4,Faulkner,HALL,Hall 9,HALL N0904,N
+NHALL00904,1250,967,4,Faulkner,HALL,Hall 10,HALL N1004,N
+NHALL01004,1250,913,4,Faulkner,HALL,Hall 11,HALL N1104,N
+NHALL01104,1250,847,4,Faulkner,HALL,Hall 12,HALL N1204,N
+NHALL01204,1250,612,4,Faulkner,HALL,Hall 13,HALL N1304,N
+NHALL01304,1250,529,4,Faulkner,HALL,Hall 14,HALL N1404,N
+NHALL01504,1144,479,4,Faulkner,HALL,Hall 16,HALL N1604,N
+NHALL01604,1144,308,4,Faulkner,HALL,Hall 17,HALL N1704,N
+NHALL01704,1188,288,4,Faulkner,HALL,Hall 18,HALL N1804,N
+NHALL01804,1250,280,4,Faulkner,HALL,Hall 19,HALL N1904,N
+NHALL01904,1250,415,4,Faulkner,HALL,Hall 20,HALL N2004,N
+NHALL02004,1316,288,4,Faulkner,HALL,Hall 21,HALL N2104,N
+NHALL02104,1357,308,4,Faulkner,HALL,Hall 22,HALL N2204,N
+NHALL02304,1465,1219,4,Faulkner,HALL,Hall 24,HALL N2404,N
+NHALL02404,1580,1219,4,Faulkner,HALL,Hall 25,HALL N2504,N
+NHALL02504,1698,1219,4,Faulkner,HALL,Hall 26,HALL N2604,N
+NHALL02604,1782,1219,4,Faulkner,HALL,Hall 27,HALL N2704,N
+NHALL02704,1864,1219,4,Faulkner,HALL,Hall 28,HALL N2804,N
+NHALL02804,1913,1219,4,Faulkner,HALL,Hall 29,HALL N2904,N
+NHALL02904,1954,1219,4,Faulkner,HALL,Hall 30,HALL N3004,N
+NHALL03004,2022,1219,4,Faulkner,HALL,Hall 31,HALL N3104,N
+NHALL03104,2110,1219,4,Faulkner,HALL,Hall 32,HALL N3204,N
+NHALL03204,2192,1219,4,Faulkner,HALL,Hall 33,HALL N3304,N
+NHALL03304,2286,1219,4,Faulkner,HALL,Hall 34,HALL N3404,N
+NHALL03504,256,1219,4,Faulkner,HALL,Hall 1,HALL N0104,N
+NLABS00104,985,1230,4,Faulkner,LABS,Medical Library,LABS N0204,N
+NLABS00304,256,1230,4,Faulkner,LABS,On Call Room,LABS N0104,N
+NREST00104,1233,342,4,Faulkner,REST,Restroom ,REST N0204,N
+NREST00204,1270,342,4,Faulkner,REST,Restroom ,REST N0304,N
+NREST00205,1232,342,5,Faulkner,REST,Restroom,RESTN0305,N
+NREST00303,1108,665,3,Faulkner,REST,Restroom,RESTN0403,N
+NREST00305,1270,342,5,Faulkner,REST,Restroom,RESTN0405,N
+NREST00404,911,1240,4,Faulkner,REST,Restroom ,REST N0104,N
+NRETL00201,1059,232,1,Faulkner,RETL,Starbucks,RETLN0101,N
+NSERV00103,1254,1224,3,Faulkner,SERV,3rd Floor Kiosk,SERVN0603,N
+NSERV00204,1270,529,4,Faulkner,SERV,Suites,SERV N0304,N
+NSERV00301,1256,269,1,Faulkner,SERV,1st Floor Kiosk,SERVN0201,N
+NSERV00304,1268,913,4,Faulkner,SERV,Nurse's Suite,SERV N0404,N
+NSERV00404,1270,967,4,Faulkner,SERV,House Keeping,SERV N0504,N
+NSERV00504,1864,1200,4,Faulkner,SERV,HR,SERV N0604,N
+NSERV00604,1864,1230,4,Faulkner,SERV,Compliance,SERV N0704,N
+NSERV00704,1913,1200,4,Faulkner,SERV,Finance 1,SERV N0804,N
+NSERV00804,1913,1230,4,Faulkner,SERV,Finance 2,SERV N0904,N
+NSERV00904,2022,1200,4,Faulkner,SERV,Lockers,SERV N1004,N
+NSERV01004,2022,1230,4,Faulkner,SERV,Patient Relations,SERV N1104,N
+NSERV01104,1954,1230,4,Faulkner,SERV,VP Clinicial Service,SERV N1204,N
+NSERV01204,2192,1230,4,Faulkner,SERV,Finance Office,SERV N1304,N
+NSERV01304,980,1130,4,Faulkner,SERV,Admin,SERV N1404,N
+NSERV01404,1078,1200,4,Faulkner,SERV,Social Work,SERV N0104,N
+NSERV01504,1250,1230,4,Faulkner,SERV,Administration,SERV N0204,N
+NSTAI00104,722,1240,4,Faulkner,STAI,Stair 2,STAI N0204,N
+NSTAI00204,1221,1053,4,Faulkner,STAI,STAI N0304,Stair 3,N
+NSTAI00304,1290,415,4,Faulkner,STAI,Stair 4,STAI N0404,N
+NSTAI00404,1782,1240,4,Faulkner,STAI,Stair 5,STAI N0504,N
+NSTAI00504,2342,1233,4,Faulkner,STAI,Stair 6,STAI N0604,N
+NSTAI00704,174,1219,4,Faulkner,STAI,Stair 1,STAI N0104,N
+PCONF00105,1369,451,5,Faulkner,CONF,Suite 58,CONF002,P
+PCONF00205,1233,553,5,Faulkner,CONF,Suite 5940,CONF003,P
+PCONF00305,1235,518,5,Faulkner,CONF,Suite 5945,CONF004,P
+PCONF00405,1257,1230,5,Faulkner,CONF,Vacant,CONF005,P
+PCONF00605,1128,436,5,Faulkner,CONF,Suite 51,CONF001,P
+PDEPT00105,1250,266,5,Faulkner,DEPT,Orthopedic Association,DEPT002,P
+PDEPT00205,1370,348,5,Faulkner,DEPT,BWH Surgical Specialties,DEPT003,P
+PDEPT00305,1264,519,5,Faulkner,DEPT,Endocrinology/Diabetes/Hem-Onc,DEPT004,P
+PDEPT00405,1264,553,5,Faulkner,DEPT,Ambulatory Clinic,DEPT005,P
+PDEPT00505,1264,691,5,Faulkner,DEPT,Ambulatory Care 1,DEPT006,P
+PDEPT00605,1264,750,5,Faulkner,DEPT,Ambulatory Care 2,DEPT007,P
+PDEPT00705,1264,788,5,Faulkner,DEPT,Ambulatory Care 3,DEPT008,P
+PDEPT00805,1264,847,5,Faulkner,DEPT,Ambulatory Care 4,DEPT009,P
+PDEPT00905,1235,611,5,Faulkner,DEPT,Internal Medicine/Headache,DEPT010,P
+PDEPT01005,1235,750,5,Faulkner,DEPT,BWH Primary Care Physicians,DEPT011,P
+PDEPT01105,1181,1109,5,Faulkner,DEPT,Nursing Staff Development,DEPT012,P
+PDEPT01205,1266,1053,5,Faulkner,DEPT,X-Ray Waiting,DEPT013,P
 PDEPT01305,1332,1212,5,Faulkner,DEPT,Oncology Clinic west,DEPT014,P
 PDEPT01405,2320,1233,5,Faulkner,DEPT,DEPT014,Oncology Clinic east,P
 PDEPT01505,1077,1230,5,Faulkner,DEPT,Outpatient Infusion Center,DEPT016,P
@@ -6,10 +534,11 @@ PDEPT01605,1078,1191,5,Faulkner,DEPT,Residents,DEPT017,P
 PDEPT01705,818,1191,5,Faulkner,DEPT,HemoDialysis,DEPT018,P
 PDEPT01805,673,1212,5,Faulkner,DEPT,Intesive Care Unit/Critical Care Unit east,DEPT019,P
 PDEPT01905,205,1219,5,Faulkner,DEPT,Intesive Care Unit/Critical Care Unit west,DEPT019,P
+PDEPT02105,1191,274,5,Faulkner,DEPT,ENT/Eye/Physical/Dermatologist,DEPT001,P
 PELEV00X05,1208,414,5,Faulkner,ELEV,Elevator 1 Level 5,ELEVX,P
-PELEV00Y05,1181,1157,5,Faulkner,ELEV,Elevator 2 Level 5,ELEVY,P
+PELEV00Y05,1157,1179,5,Faulkner,ELEV,Elevator 2 Level 5,ELEVY,P
 PELEV00Z05,1323,1157,5,Faulkner,ELEV,Elevator 3 Level 5,ELEVZ,P
-PHALL03305,1145,479,5,Faulkner,HALL,Hall 1,HALL001,P
+PHALL00102,4303,632,5,45 Francis,HALL,Kiosk,HALL,Z
 PHALL00105,1145,436,5,Faulkner,HALL,Hall 2,HALL002,P
 PHALL00205,1145,310,5,Faulkner,HALL,Hall 3,HALL003,P
 PHALL00305,1195,287,5,Faulkner,HALL,Hall 4,HALL004,P
@@ -34,284 +563,384 @@ PHALL02105,1250,1110,5,Faulkner,HALL,Hall 22,HALL022,P
 PHALL02205,1257,1157,5,Faulkner,HALL,Hall 23,HALL023,P
 PHALL02305,1257,1213,5,Faulkner,HALL,Hall 24,HALL024,P
 PHALL02505,1217,1212,5,Faulkner,HALL,Hall 26,HALL026,P
-PHALL02605,1181,1212,5,Faulkner,HALL,Hall 27,HALL027,P
+PHALL02605,1157,1212,5,Faulkner,HALL,Hall 27,HALL027,P
 PHALL02705,1077,1212,5,Faulkner,HALL,Hall 28,HALL028,P
 PHALL02905,818,1212,5,Faulkner,HALL,Hall 30,HALL030,P
 PHALL03005,722,1212,5,Faulkner,HALL,Hall 31,HALL031,P
+PHALL03305,1145,479,5,Faulkner,HALL,Hall 1,HALL001,P
 PLABS00205,1231,992,5,Faulkner,LABS,X-Ray,LABS001,P
 PREST00505,1217,1190,5,Faulkner,REST,Restroom A,RESTA,P
-PSTAI00605,174,1219,5,Faulkner,STAI,Staircase A,STAIRA,P
 PSTAI00105,722,1240,5,Faulkner,STAI,Staircase B,STAIRB,P
 PSTAI00205,2342,1233,5,Faulkner,STAI,Staircase C,STAIRC,P
 PSTAI00305,1221,1053,5,Faulkner,STAI,Staircase D,STAIRD,P
-PSTAI00405,1290,415,5,Faulkner,STAI,Staircase E,STAIRE,P
-ADEPT01401,916,831,1,Faulkner,DEPT,Emergency Department,Emergency Department,A
-ADEPT00201,1403,500,1,Faulkner,DEPT,MRI/CT,MRI/CT,A
-ADEPT00301,987,557,1,Faulkner,DEPT,AUD,AUD,A
-ADEPT00401,939,892,1,Faulkner,DEPT,Endoscopy,,A
-ADEPT00501,1156,564,1,Faulkner,DEPT,Cardiac Rehabilitation,Cardiac Rehabilitation,A
-ADEPT00601,1272,554,1,Faulkner,DEPT,Pre-Operative Evaluation,Pre-Operative Evaluation,A
-ADEPT00701,1311,1097,1,Faulkner,DEPT,QR MAT Management,QR MAT Management,A
-ADEPT00801,1531,515,1,Faulkner,DEPT,Radiology,Radiology,A
-ADEPT00901,1992,756,1,Faulkner,DEPT,Recovery,Recovery,A
-ADEPT01001,1752,1072,1,Faulkner,DEPT,Operation Room Entrance 1,Operation Room Entrance 1,A
-ADEPT01101,2244,1090,1,Faulkner,DEPT,Operation Room Entrance 2,Operation Room Entrance 2,A
-ADEPT01201,2160,1133,1,Faulkner,DEPT,Operation Room,Operation Room,A
-AELEV00X01,1208,414,1,Faulkner,ELEV,Elevator 1 Level 1,Elevator Intersection 1 Level 1,A
-AELEV00Y01,1181,1157,1,Faulkner,ELEV,Elevator 2 Level 1,Elevator Intersection 2 Level 2,A
-AEXIT00501,1256,144,1,Faulkner,EXIT,Atrium Main Entrance,,A
-AEXIT00101,868,415,1,Faulkner,EXIT,Emergency Department Exit,Emergency Department Exit,A
-AEXIT00301,2342,1136,1,Faulkner,EXIT,Stair Exit,Stair Exit,A
-AHALL02401,1256,232,1,Faulkner,HALL,Hallway Intersection 1,,A
-AHALL00101,1256,306,1,Faulkner,HALL,Hallway Intersection 2,Hallway Intersection 2,A
-AHALL00201,1256,414,1,Faulkner,HALL,Hallway Intersection 3,,A
-AHALL00301,1256,515,1,Faulkner,HALL,Hallway Intersection 4,Hallway Intersection 4,A
-AHALL00401,1114,515,1,Faulkner,HALL,Hall,Hallway Intersection 5,A
-AHALL00501,1114,588,1,Faulkner,HALL,Hallway Intersection 6,,A
-AHALL00701,868,509,1,Faulkner,HALL,Hallway Intersection 8,Hallway Intersection 8,A
-AHALL00801,1403,515,1,Faulkner,HALL,Hallway Intersection 9,Hallway Intersection 9,A
-AHALL00901,1403,737,1,Faulkner,HALL,Hallway Intersection 10,Hallway Intersection 10,A
-AHALL01001,1992,740,1,Faulkner,HALL,Hallway Intersection 11,Hallway Intersection 11,A
+PSTAI00405,1290,414,5,Faulkner,STAI,Staircase E,STAIRE,P
+PSTAI00605,174,1219,5,Faulkner,STAI,Staircase A,STAIRA,P
+WELEV00E01,3265,830,4,45 Francis,ELEV,Elevator E,Elevator E1,Z
+WELEV00E02,3238,865,5,45 Francis,ELEV,Elevator E,Elevator E2,Z
+WELEV00F01,3058,954,4,45 Francis,ELEV,Elevator F,Elevator F1,Z
+WELEV00F02,3078,944,5,45 Francis,ELEV,Elevator F,Elevator F2,Z
+WELEV00G01,2935,875,4,45 Francis,ELEV,Elevator G,Elevator G1,Z
+WELEV00G02,2924,872,5,45 Francis,ELEV,Elevator G,Elevator G2,Z
+WELEV00H01,2740,1077,4,45 Francis,ELEV,Elevator H,Elevator H1,Z
+WELEV00H02,2733,1104,5,45 Francis,ELEV,Elevator H,Elevator H2,Z
+AHALL00101,1638,2551,4,BTM,HALL,Hall,Hall,Z
+AHALL00102,1593,2565,5,BTM,HALL,Hall,Hall,Z
+AHALL00103,1539,2739,6,BTM,HALL,Hall,Hall,Z
+AHALL001L2,1627,2780,1,BTM,HALL,Hallway to Elevator,Hall,Z
+AHALL00201,1608,2596,4,BTM,HALL,Hall,Hall,Z
+AHALL00202,1593,2604,5,BTM,HALL,Hall,Hall,Z
+AHALL00203,1600,2739,6,BTM,HALL,Hall,Hall,Z
+AHALL00301,1608,2746,4,BTM,HALL,Hall,Hall,Z
+AHALL00302,1593,2743,5,BTM,HALL,Hall,Hall,Z
+AHALL00303,1650,2739,6,BTM,HALL,Hall,Hall,Z
+AHALL003L2,1699,2753,1,BTM,HALL,Hall,Hall,Z
+AHALL00401,1426,2746,4,BTM,HALL,Hall,Hall,Z
+AHALL00402,1593,2784,5,BTM,HALL,Hall,Hall,Z
+AHALL00403,1650,2766,6,BTM,HALL,Hall,Hall,Z
+AHALL0040G,1529,2544,3,BTM,HALL,Hall,Hall,Z
+AHALL004L2,1699,2780,1,BTM,HALL,Hall,Hall,Z
+AHALL00501,1426,2869,4,BTM,HALL,Hall,Hall,Z
+AHALL00502,1398,2743,5,BTM,HALL,Hall,Hall,Z
+AHALL00503,1650,2866,6,BTM,HALL,Hall,Hall,Z
+AHALL00601,1679,2869,4,BTM,HALL,Hall,Hall,Z
+AHALL00602,1692,2543,5,BTM,HALL,Hall,Hall,Z
+AHALL00603,1593,2866,6,BTM,HALL,HallNode,HallNode,Z
+AHALL0060G,1598,2640,3,BTM,HALL,Hall,Hall,Z
+AHALL00701,1017,2869,4,BTM,HALL,Hall,Hall,Z
+AHALL00801,1535,2746,4,BTM,HALL,Hall,Hall,Z
+AHALL00901,1559,2575,4,BTM,HALL,Hall,Hall,Z
+AHALL0090G,1525,2732,3,BTM,HALL,Hall,Hall,Z
+AHALL01001,1605,2568,4,BTM,HALL,Hall,Hall,Z
+AHALL0100G,1600,2859,3,BTM,HALL,Hall,Hall,Z
 AHALL01101,1403,829,1,Faulkner,HALL,Hallway Intersection 12,Hallway Intersection 12,A
+AHALL0110G,1552,2859,3,BTM,HALL,Hall,Hall,Z
 AHALL01201,1256,762,1,Faulkner,HALL,Hallway Intersection 13,Hallway Intersection 13,A
 AHALL01301,1256,829,1,Faulkner,HALL,Hallway Intersection 14,Hallway Intersection 14,A
 AHALL01401,1256,923,1,Faulkner,HALL,Hallway Intersection 15,Hallway Intersection 15,A
+AHALL0140G,1600,2732,3,BTM,HALL,Hall,Hall,Z
 AHALL01501,1256,1053,1,Faulkner,HALL,Hallway Intersection 16,,A
 AHALL01601,1256,1157,1,Faulkner,HALL,Hallway Intersection 17,,A
 AHALL01701,1403,963,1,Faulkner,HALL,Hallway Intersection 18,Hallway Intersection 18,A
-AHALL01801,1403,1115,1,Faulkner,HALL,Hallway Intersection 19,Hallway Intersection 19,A
-AHALL01901,1752,1115,1,Faulkner,HALL,Hallway Intersection 20,Hallway Intersection 20,A
+WELEV00H03,2686,1101,6,45 Francis,ELEV,Elevator H,Elevator H3,Z
+WELEV00HL1,2716,1097,2,45 Francis,ELEV,Elevator H,Elevator HL1,Z
+WELEV00J01,2389,817,4,45 Francis,ELEV,Elevator J,Elevator J1,Z
+WELEV00J02,2389,800,5,45 Francis,ELEV,Elevator J,Elevator J2,Z
+WELEV00J03,2365,800,6,45 Francis,ELEV,Elevator J,Elevator J3,Z
+WELEV00JL1,2358,800,2,45 Francis,ELEV,Elevator J,Elevator JL1,Z
+WELEV00JL2,2361,807,1,45 Francis,ELEV,Elevator J,Elevator JL2,Z
+WELEV00K01,2240,985,4,45 Francis,ELEV,Elevator K,Elevator K1,Z
+WELEV00K02,2211,964,5,45 Francis,ELEV,Elevator K,Elevator K2,Z
+WELEV00K03,2194,988,6,45 Francis,ELEV,Elevator K,Elevator K3,Z
+WELEV00KL1,2220,974,2,45 Francis,ELEV,Elevator K,Elevator KL1,Z
+WELEV00KL2,2191,985,1,45 Francis,ELEV,Elevator K,Elevator KL2,Z
+WELEV00L01,1810,930,4,Tower,ELEV,Elevator L,Elevator L1,Z
+WELEV00L02,1805,923,5,Tower,ELEV,Elevator L,Elevator L2,Z
+WELEV00L03,1788,930,6,Tower,ELEV,Elevator L,Elevator L3,Z
+WELEV00LL1,1785,924,2,Tower,ELEV,Elevator L,Elevator LL1,Z
+WELEV00LL2,1788,926,1,Tower,ELEV,Elevator L,Elevator LL2,Z
+WELEV00M01,1815,1323,4,Tower,ELEV,Elevator M,Elevator M1,Z
+WELEV00M02,1825,1320,5,Tower,ELEV,Elevator M,Elevator M2,Z
+WELEV00M03,1815,1320,6,Tower,ELEV,Elevator M,Elevator M3,Z
+WELEV00ML1,1819,1316,2,Tower,ELEV,Elevator M,Elevator ML1,Z
+WELEV00ML2,1822,1313,1,Tower,ELEV,Elevator M,Elevator ML2,Z
+WHALL00102,3160,892,5,45 Francis,HALL,Hallway Connector 1 Floor 2,Hallway W0102,Z
+WHALL00103,1815,1292,6,45 Francis,HALL,Hallway Connector 1 Floor 3,Hallway W0103,Z
+WHALL001L2,1745,1525,1,Tower,HALL,Hallway Connector 1 Floor L2,Hallway W01L2,Z
+WHALL00201,2187,910,4,45 Francis,HALL,Hallway Connector 2 Floor 1,Hallway W0201,Z
+WHALL00202,3228,885,5,15 Francis,HALL,Hallway Connector 2 Floor 2,Hallway W0202,Z
+WHALL00203,2139,1289,6,45 Francis,HALL,Hallway Connector 2 Floor 3,Hallway W0203,Z
+WHALL00402,2180,903,5,45 Francis,HALL,Hallway Connector 4 Floor 2,Hallway W0402,Z
+WHALL00502,2187,1286,5,45 Francis,HALL,Hallway Connector 5 Floor 2,Hallway W0502,Z
+WHALL00602,2215,1286,5,45 Francis,HALL,Hallway Connector 6 Floor 2,Hallway W0602,Z
+WHALL00702,1740,1501,5,Tower,HALL,Hall 10,Hallway W0702,Z
+WHALL00802,1726,1744,5,Shapiro,HALL,Hall 9,Hallway W0802,Z
+XELEV00803,3742,2260,6,FLEX,ELEV,Elevator T,Flex Elevator,Z
+XELEV01502,3740,2250,5,FLEX,ELEV,Elevator T,FLEX Elevator,Z
+XEXIT00102,3068,1094,5,45 Francis,EXIT,45 Francis Entrance,45 Entrance,Z
+XEXIT00202,3867,1923,5,FLEX,EXIT,Flexible Workspaces Entrance,Flex Entrance,Z
+XHALL15702,3281,1134,5,45 Francis,HALL,45 sidewalk,45 sidewalk,Z
+XHALL15802,3372,1219,5,45 Francis,HALL,45 sidewalk,45 sidewalk,Z
+XHALL15902,3378,1576,5,45 Francis,HALL,45 sidewalk,45 sidewalk,Z
+XHALL16002,3873,1576,5,45 Francis,HALL,45 sidewalk,45 sidewalk,Z
+XHALL16102,3836,1997,5,FLEX,HALL,FLEX Entry Hall,FLEX Entry Hall,Z
+XHALL16202,3836,2316,5,FLEX,HALL,FLEX Hall,FLEX Hall,Z
+XHALL16302,3771,2322,5,FLEX,HALL,FLEX Entry Hall,FLEX Entry Hall,Z
+XHALL16402,3338,1166,5,45 Francis,HALL,45 sidewalk,45 sidewalk,Z
+IHALL03901,1256,865,1,Faulkner,HALL,Hall,Hall,I
+IHALL04101,1403,519,1,Faulkner,HALL,Hall,Hall,I
+IHALL04201,868,512,1,Faulkner,HALL,Hall,Hall,I
+IHALL04301,943,512,1,Faulkner,HALL,Hall,Hall,I
+IHALL04401,983,512,1,Faulkner,HALL,Hall,Hall,I
+IDEPT00201,943,473,1,Faulkner,DEPT,Admitting,Admitting,I
+IDEPT00301,1481,764,1,Faulkner,DEPT,Day Surgery,Day Surgery,I
+IDEPT01301,983,564,1,Faulkner,DEPT,AUD,AUD,I
+IDEPT01501,1403,494,1,Faulkner,DEPT,MRI/CT,MRI/CT,I
+IHALL04501,1256,1097,1,Faulkner,HALL,Hall,Hall,I
+IREST00501,1187,487,1,Faulkner,REST,Restroom Male,Restroom Male,I
+ISTAI00101,1296,414,1,Faulkner,STAI,Stair,Stairwell,I
+IHALL04601,1114,588,1,Faulkner,HALL,Hall,Hall,I
+IHALL04701,1114,512,1,Faulkner,HALL,Hall,Hall,I
+IHALL04801,1187,512,1,Faulkner,HALL,Hall,Hall,I
+IHALL05301,1403,740,1,Faulkner,HALL,Hall,Hall,I
+IHALL05401,1481,740,1,Faulkner,HALL,Hall,Hall,I
+IHALL05501,1996,740,1,Faulkner,HALL,Hall,Hall,I
+IHALL04404,1250,986,4,Faulkner,HALL,Hall,Hall,I
+IHALL04504,1250,639,4,Faulkner,HALL,Hall,Hall,I
+IHALL04604,1144,433,4,Faulkner,HALL,Hall,Hall,I
+IHALL04804,1357,341,4,Faulkner,HALL,Hall,Hall,I
+IHALL04904,1250,342,4,Faulkner,HALL,Hall,Hall,I
+ACONF00102,1580,2538,5,BTM,HALL,Hall,Hall,Z
+ACONF00103,1650,2968,6,BTM,CONF,BTM Conference Center,BTM Conference,Z
+ACONF0010G,1699,2640,3,BTM,CONF,Schlagler Innovation Lobby,Schlagler Lobby,Z
+ADEPT00101,1402,2633,4,BTM,DEPT,Neuroscience Waiting Room,Neuro Waiting Room,Z
+ADEPT00102,1372,2743,5,BTM,DEPT,Orthopedics and Rhemutalogy,Orthopedics and Rhemutalogy,Z
+ADEPT0010G,1529,2496,3,BTM,DEPT,Neuro Testing Waiting Area ,Neuro Wating Area,Z
+ADEPT00201,1720,2856,4,BTM,DEPT,MS Waiting,MS Waiting,Z
+ADEPT0020G,1552,2828,3,BTM,DEPT,Infusion Waiting Area G,Infusion Waiting Area,Z
+ADEPT00301,986,2859,4,BTM,DEPT,CART Waiting,CART Waiting,Z
+ADEPT00401,939,892,1,Faulkner,DEPT,Endoscopy,,A
+ADEPT00501,1145,588,1,Faulkner,DEPT,Cardiac Rehabilitation,Cardiac Rehabilitation,A
+ADEPT00701,1311,1097,1,Faulkner,DEPT,QR MAT Management,QR MAT Management,A
+ADEPT00801,1531,519,1,Faulkner,DEPT,Radiology,Radiology,A
+ADEPT00901,1996,764,1,Faulkner,DEPT,Recovery,Recovery,A
+ADEPT01001,1752,1072,1,Faulkner,DEPT,Operation Room Entrance 1,Operation Room Entrance 1,A
+ADEPT01101,2244,1090,1,Faulkner,DEPT,Operation Room Entrance 2,Operation Room Entrance 2,A
+ADEPT01201,2160,1133,1,Faulkner,DEPT,Operation Room,Operation Room,A
+ADEPT01401,916,831,1,Faulkner,DEPT,Emergency Department,Emergency Department,A
+AELEV00S01,1535,2784,4,BTM,ELEV,Elevator S,Elevator S 1,Z
+AELEV00S02,1532,2784,5,BTM,ELEV,Elevator S,Elevator S 2,Z
+AELEV00S03,1539,2773,6,BTM,ELEV,Elevator S,Elevator S 3,Z
+AELEV00S0G,1525,2770,3,BTM,ELEV,Elevator S,Elevator S G,Z
+AELEV00SL2,1627,2750,1,BTM,ELEV,Elevator S,Elevator S L2,Z
+AELEV00X01,1208,414,1,Faulkner,ELEV,Elevator 1 Level 1,Elevator Intersection 1 Level 1,A
+AELEV00Y01,1181,1157,1,Faulkner,ELEV,Elevator 2 Level 1,Elevator Intersection 2 Level 2,A
+AEXIT00101,868,415,1,Faulkner,EXIT,Emergency Department Exit,Emergency Department Exit,A
+AEXIT0010G,1679,2459,3,BTM,EXIT,Fenwood Road,Fenwood Road,Z
+AEXIT001L2,1699,2797,1,BTM,EXIT,Parking Garage,Parking Garage L2,Z
+AEXIT00301,2342,1136,1,Faulkner,EXIT,Stair Exit,Stair Exit,A
+AEXIT00501,1256,144,1,Faulkner,EXIT,Atrium Main Entrance,,A
+SHALL00303,1199,256,3,Faulkner,HALL,Hall,Hall,S
+SHALL01203,1315,260,3,Faulkner,HALL,Hall,Hall,S
+SHALL01303,1364,649,3,Faulkner,HALL,Hall,Hall,S
+SHALL01503,1431,829,3,Faulkner,HALL,Hall,Hall,S
+SHALL01803,1208,689,3,Faulkner,HALL,Hall,Hall,S
+SHALL01903,1254,755,3,Faulkner,HALL,Hall,Hall,S
+SHALL02003,1254,1339,3,Faulkner,HALL,Hall,Hall,S
+SHALL02203,1254,1164,3,Faulkner,HALL,Hall,Hall,S
+SHALL02603,1366,290,3,Faulkner,HALL,Hall,Hall,S
+SHALL02703,1366,436,3,Faulkner,HALL,Hall,Hall,S
+SREST00103,1457,2917,3,BTM,REST,Rest,Restroom Ground Floor,S
+SDEPT00303,1686,2924,3,BTM,DEPT,Outpatient,Outpatient Phlebotomy,S
+SDEPT00703,1576,2972,3,BTM,DEPT,Infusion,Infusion,S
+SHALL02803,1600,2972,3,BTM,HALL,Hall,Hall,S
+SHALL02903,1491,2917,3,BTM,HALL,Hall,Hall,S
+SHALL03003,1491,3023,3,BTM,HALL,Hall,Hall,S
+SHALL03103,1600,3023,3,BTM,HALL,Hall,Hall,S
+SHALL03203,1686,3023,3,BTM,HALL,Hall,Hall,S
+SHALL03303,1491,2859,3,BTM,HALL,Hall,Hall,S
+SHALL03403,1597,2544,3,BTM,HALL,Hall,Hall,S
+SHALL03503,1706,2572,3,BTM,HALL,Hall,Hall,S
+SHALL05601,1658,2691,1,Shapiro,HALL,Hall,Hall,S
+SHALL05004,1357,480,4,Faulkner,HALL,Hall,Hall,S
+SHALL05104,1250,479,4,Faulkner,HALL,Hall,Hall,S
+SDEPT00601,1275,554,1,Faulkner,DEPT,Preop eval,Preoperative Evaluation,S
+SHALL04001,1254,554,1,Faulkner,HALL,Hall,Hall,S
+SDEPT00804,1376,440,4,Faulkner,DEPT,Rheuma,Rheumatology Center,S
+SDEPT00704,1376,339,4,Faulkner,DEPT,HVMA,HVMA Neurology,S
+SDEPT02104,1324,269,4,Faulkner,DEPT,GA,Gastroentology Associates,S
+SDEPT02304,1178,268,4,Faulkner,DEPT,HVMA,HVMA Internal Medicine,S
+SDEPT02404,1125,428,4,Faulkner,DEPT,Cardio,Cardiology,S
+SHALL04704,1357,437,4,Faulkner,HALL,Hall,Hall,S
+SHALL02102,1747,1094,2,45 Francis,HALL,Hall,Hall,S
+SHALL04004,2275,834,4,45 Francis,HALL,Hall,Hall,S
+SREST00601,1323,485,1,Faulkner,REST,Restroom,Restroom Floor 1,S
+SHALL05001,1323,519,1,Faulkner,HALL,Hall,Hall,S
+SHALL05201,1256,512,1,Faulkner,HALL,Hall,Hall,S
+SHALL04901,1256,414,1,Faulkner,HALL,Hall,Hall,S
+SHALL05101,1256,308,1,Faulkner,HALL,Hall,Hall,S
 AHALL02001,2160,1115,1,Faulkner,HALL,Hallway Intersection 21,Hallway Intersection 21,A
 AHALL02101,2244,1115,1,Faulkner,HALL,Hall,Hallway Intersection 22,A
 AHALL02201,938,831,1,Faulkner,HALL,Hallway Intersection 23,Hallway Intersection 23,A
-ALABS00601,1080,588,1,Faulkner,LABS,Blood Draw Lab,Blood Draw Lab,A
+AHALL02401,1256,232,1,Faulkner,HALL,Hallway Intersection 1,,A
+AINFO0010G,1488,2715,3,BTM,INFO,BTM Security Desk,Security,Z
+AINFO001L2,1679,2753,1,BTM,INFO,BTM Security Desk,Security,Z
+AINFO0020G,1699,2715,3,BTM,INFO,Information Desk G,Information,Z
 ALABS00101,1241,762,1,Faulkner,LABS,Special Testing,,A
+ALABS00103,1600,2715,6,BTM,LABS,Innovation Hub,Innovation Hub,Z
+ALABS001L2,1699,2722,1,BTM,LABS,MRI CT Scan Imaging,MRI CT Imaging,Z
 ALABS00201,1272,865,1,Faulkner,LABS,PLUM Lab,,A
+ALABS00203,1650,2709,6,BTM,LABS,Clinical Trials,Clinical Trials,Z
 ALABS00301,1272,923,1,Faulkner,LABS,VASC Lab,,A
 ALABS00401,2320,1233,1,Faulkner,LABS,Labs,Labs,A
-AREST00101,1189,498,1,Faulkner,REST,Restroom Male Level 1,Restroom Male Level 1,A
-AREST00201,1326,500,1,Faulkner,REST,Restroom Handicap Level 1,Restroom Handicap Level 1,A
+ALABS00601,1080,588,1,Faulkner,LABS,Blood Draw Lab,Blood Draw Lab,A
+AREST00101,1559,2609,4,BTM,REST,Restroom,Restroom,Z
+AREST00103,1556,2866,6,BTM,REST,Restroom BTM Conference Center,Restroom,Z
+ARETL00101,1617,2527,4,BTM,RETL,Cafe,Cafe,Z
 ASERV00201,1381,963,1,Faulkner,SERV,Linens,Linens,A
-ASTAI00501,1284,308,1,Faulkner,STAI,Staircase 1 Level 1,Staircase 1 Level 1,A
-ASTAI00101,1290,415,1,Faulkner,STAI,Staircase 2 Level 1,Staircase 2 Level 1,A
+ASTAI00101,1648,2596,4,BTM,STAI,Cafe Stairs,Cafe Staris,Z
+ASTAI00102,1650,2604,5,BTM,STAI,Stairs,Stairs Floor 2,Z
+ASTAI0010G,1621,2561,3,BTM,STAI,Schlagler Stairs,Schlager Stairs,Z
 ASTAI00201,1220,1053,1,Faulkner,STAI,Staircase 3 Level 1,Staircase,A
 ASTAI00301,2342,1233,1,Faulkner,STAI,Staircase 4 Level 1,Staircase 4 Level 1,A
-LDEPT00202,757,1122,2,Faulkner,DEPT,Biomedical Engineering,DEPT L2001,L
-LDEPT00102,737,840,2,Faulkner,DEPT,Morgue,DEPT L2003,L
-LDEPT00302,1450,1066,2,Faulkner,DEPT,Occupational Therapy,DEPT L2004,L
-LDEPT00402,1166,288,2,Faulkner,DEPT,Otolaryngology,DEPT L2005,L
-LDEPT00502,757,713,2,Faulkner,DEPT,Pharmacy,DEPT L2006,L
-LDEPT00602,1450,861,2,Faulkner,DEPT,Physical Therapy,DEPT L2007,L
-LDEPT00702,1363,474,2,Faulkner,DEPT,Plastic Surgery,DEPT L2008,L
-LDEPT00802,1200,1234,2,Faulkner,DEPT,Psych/Addiction Care,DEPT L2009,L
-LDEPT00902,1626,1205,2,Faulkner,DEPT,Psychiatric Inpatient Care,DEPT L2010,L
-LELEV00X02,1208,414,2,Faulkner,ELEV,Elevator 1 Level 2,ELEV L2003,L
-LELEV00Y02,1181,1157,2,Faulkner,ELEV,Elevator 2 Level 2,ELEV L2001,L
-LELEV00Z02,1323,1157,2,Faulkner,ELEV,Elevator 3 Level 2,ELEV L2002,L
-LHALL02202,747,658,2,Faulkner,HALL,Hallway Intersection 1 Level 2,HALL L2001,L
-LHALL00102,747,713,2,Faulkner,HALL,Hallway Intersection 2 Level 2,HALL L2002,L
-LHALL00202,747,840,2,Faulkner,HALL,Hallway Intersection 3 Level 2,HALL L2003,L
-LHALL00302,747,937,2,Faulkner,HALL,Hallway Intersection 4 Level 2,HALL L2004,L
-LHALL00402,747,981,2,Faulkner,HALL,Hallway Intersection 5 Level 2,HALL L2005,L
-LHALL00502,747,1122,2,Faulkner,HALL,Hallway Intersection 6 Level 2,HALL L2006,L
-LHALL00602,747,1205,2,Faulkner,HALL,Hallway Intersection 7 Level 2,HALL L2007,L
-LHALL00702,1181,1204,2,Faulkner,HALL,Hallway Intersection 8 Level 2,HALL L2008,L
-LHALL00802,1200,1205,2,Faulkner,HALL,Hallway Intersection 9 Level 2,HALL L2009,L
-LHALL00902,1433,1205,2,Faulkner,HALL,Hallway Intersection 10 Level 2,HALL L2010,L
-LHALL01002,1433,1124,2,Faulkner,HALL,Hallway Intersection 11 Level 2,HALL L2011,L
-LHALL01102,1433,1066,2,Faulkner,HALL,Hallway Intersection 12 Level 2,HALL L2012,L
-LHALL01202,1433,944,2,Faulkner,HALL,Hallway Intersection 13 Level 2,HALL L2013,L
-LHALL01302,1433,861,2,Faulkner,HALL,Hallway Intersection 14 Level 2,HALL L2014,L
-LHALL01402,1433,501,2,Faulkner,HALL,Hallway Intersection 15 Level 2,HALL L2015,L
-LHALL01502,1349,501,2,Faulkner,HALL,Hallway Intersection 16 Level 2,HALL L2016,L
-LHALL01602,1349,474,2,Faulkner,HALL,Hallway Intersection 17 Level 2,HALL L2017,L
-LHALL01702,1349,288,2,Faulkner,HALL,Hallway Intersection 18 Level 2,HALL L2018,L
-LHALL01802,1250,288,2,Faulkner,HALL,Hallway Intersection 19 Level 2,HALL L2019,L
-LHALL01902,1250,414,2,Faulkner,HALL,Hallway Intersection 20 Level 2,HALL L2020,L
-LHALL02002,1250,474,2,Faulkner,HALL,Hallway Intersection 21 Level 2,HALL L2021,L
-LREST00202,1450,1124,2,Faulkner,REST,Restroom 1 Level 2,REST L2001,L
-LRETL00202,1349,507,2,Faulkner,RETL,Food Service,FOOD L2001,L
-LSERV00102,757,937,2,Faulkner,SERV,Central Sterile Supply,STAFF L2001,L
-LSERV00202,737,981,2,Faulkner,SERV,Facilities 2,STAFF L2002,L
-LSERV00302,1423,944,2,Faulkner,SERV,Central Sterile Supply 2,STAFF L2002,L
-LSERV00402,747,646,2,Faulkner,SERV,Material Management,STAFF L2003,L
-LSERV00502,667,1205,2,Faulkner,SERV,Mechanical Space,STAFF L2004,L
-LSERV00602,737,713,2,Faulkner,SERV,Facilities 5,STAFF L2005,L
-LSTAI00202,1290,415,2,Faulkner,STAI,Staircase 1 Level 2,STAIR L2001,L
-MDEPT00103,1378,439,3,Faulkner,DEPT,Medical Staff Lounge,Staff Lounge,M
-MDEPT00203,1378,317,3,Faulkner,DEPT,Division of GYN,GYN,M
-MDEPT00403,1370,277,3,Faulkner,DEPT,OB/GYN Association,OB/GYN,M
-MDEPT00503,1315,254,3,Faulkner,DEPT,Gynocology/Oncology,,M
-MDEPT00603,1198,254,3,Faulkner,DEPT,Roslindale Pediatric Association,Pediatrics,M
-MELEV00X03,1208,414,3,Faulkner,ELEV,Elevator 1 Level 3,Elevator,M
-MELEV00Y03,1181,1157,3,Faulkner,ELEV,Elevator 2 Level 3,Elevator,M
-MELEV00Z03,1323,1157,3,Faulkner,ELEV,Elevator 3 Level 3,Elevator,M
-MHALL00103,1254,1249,3,Faulkner,HALL,Hall,Hall,M
-MHALL00203,1254,1053,3,Faulkner,HALL,Hall,Hall,M
-MHALL00403,1208,649,3,Faulkner,HALL,Hall,Hall,M
-MHALL00503,1208,463,3,Faulkner,HALL,Hall,Hall,M
-MHALL00603,1150,463,3,Faulkner,HALL,Hall,Hall,M
-MHALL00703,1256,463,3,Faulkner,HALL,Hall,Hall,M
-MHALL00803,1363,463,3,Faulkner,HALL,Hall,Hall,M
-MHALL00903,1256,414,3,Faulkner,HALL,Hall,Hall,M
-MHALL01103,1148,293,3,Faulkner,HALL,Hall,Hall,M
-MHALL01703,1105,689,3,Faulkner,HALL,Hall,hall,M
-MREST00103,1297,285,3,Faulkner,REST,Restroom,Restroom,M
-MREST00203,1220,285,3,Faulkner,REST,Restroom,Restroom,M
-MRETL00103,1229,920,3,Faulkner,RETL,Gift Shop,Gift Shop,M
-MRETL00203,1276,649,3,Faulkner,RETL,Cafeteria Hall enterance,Cafeteria,M
-MRETL00403,1208,574,3,Faulkner,RETL,Cafeteria Hall enterance,Cafeteria,M
-MRETL00503,1440,890,3,Faulkner,RETL,Cafeteria Exterior Entrance,Cafeteria,M
-MSERV00203,1254,1380,3,Faulkner,SERV,Shuttle Pickup,Shuttle,M
-MSERV00403,1130,1340,3,Faulkner,SERV,Chapel,Chapel,M
-MSERV00503,1380,1340,3,Faulkner,SERV,Volunteer Room,Volunteer,M
-MSERV00603,1125,1250,3,Faulkner,SERV,Mechanical Space,MechSpace,M
-MSERV00703,1333,1249,3,Faulkner,SERV,Mechanical Space,MechSpace,M
-MSERV00803,1185,490,3,Faulkner,SERV,Family Patient Resources,Resources,M
-MSERV01003,1075,745,3,Faulkner,SERV,Huvos Auditorium Top,Auditorium,M
-MSTAI00103,1221,1053,3,Faulkner,STAI,Stairs,Stairs,M
-MSTAI00203,1290,415,3,Faulkner,STAI,Stairs,Stairs,M
-NCONF00304,1078,1230,4,Faulkner,CONF,Sadowsky Conference Room,CONF N0204,N
-NCONF00104,538,1240,4,Faulkner,CONF,Tynan Conference Room,CONF N0104,N
-NDEPT02204,381,1200,4,Faulkner,DEPT,Urology,DEPT N0104,N
-NDEPT00104,911,1200,4,Faulkner,DEPT,Department Office,DEPT N0204,N
-NDEPT00204,1235,986,4,Faulkner,DEPT,MOHS Clinic,DEPT N0304,N
-NDEPT00304,1232,612,4,Faulkner,DEPT,BD Cardiology,DEPT N0404,N
-NDEPT00404,1132,433,4,Faulkner,DEPT,Cardiology,DEPT N0504,N
-NDEPT00504,1136,302,4,Faulkner,DEPT,HVMA Internal Medicine,DEPT N0604,N
-NDEPT00604,1321,280,4,Faulkner,DEPT,Gastroentology Associates,DEPT N0704,N
-NDEPT00704,1372,341,4,Faulkner,DEPT,HVMA Neurology,DEPT N0804,N
-NDEPT00804,1371,446,4,Faulkner,DEPT,Rheumatology Center,DEPT N0904,N
-NDEPT00904,1266,639,4,Faulkner,DEPT,Neurology,DEPT N1004,N
-NDEPT01004,1274,848,4,Faulkner,DEPT,Pulmonary Services,DEPT N1104,N
-NDEPT01104,1268,1053,4,Faulkner,DEPT,Lung Research,DEPT N1204,N
-NDEPT01204,1465,1200,4,Faulkner,DEPT,PATSAFE,DEPT N1304,N
-NDEPT01304,1580,1230,4,Faulkner,DEPT,Primary Care Physician,DEPT N1404,N
-NDEPT01404,1580,1200,4,Faulkner,DEPT,Surgery Department,DEPT N1504,N
-NDEPT01504,1698,1200,4,Faulkner,DEPT,QUALIMP,DEPT N1604,N
-NDEPT01604,1782,1200,4,Faulkner,DEPT,SURGSPEC,DEPT N1704,N
-NDEPT01704,2110,1200,4,Faulkner,DEPT,Foot and Ankle Center,DEPT N1804,N
-NDEPT01804,2110,1230,4,Faulkner,DEPT,BWH Plastics,DEPT N1904,N
-NDEPT01904,2192,1200,4,Faulkner,DEPT,Spine FAC,DEPT N2004,N
-NDEPT02004,2286,1200,4,Faulkner,DEPT,IS,DEPTN2104,N
-NELEV00X04,1208,414,4,Faulkner,ELEV,Elevator 1 Level 4,ELEV N0304,N
-NELEV00Y04,1181,1157,4,Faulkner,ELEV,Elevator 2 Level 4,ELEV N0104,N
-NELEV00Z01,1323,1157,1,Faulkner,ELEV,Elevator 3 Level 1,Elevator Z Floor 1,N
-NELEV00Z04,1323,1157,4,Faulkner,ELEV,Elevator 3 Level 4,ELEV N0204,N
-NHALL03504,256,1219,4,Faulkner,HALL,Hall 1,HALL N0104,N
-NHALL00104,538,1219,4,Faulkner,HALL,Hall 2,HALL N0204,N
-NHALL00204,722,1219,4,Faulkner,HALL,Hall 3,HALL N0304,N
-NHALL00304,911,1219,4,Faulkner,HALL,Hall 4,HALL N0404,N
-NHALL00404,985,1219,4,Faulkner,HALL,Hall 5,HALL N0504,N
-NHALL00504,1078,1219,4,Faulkner,HALL,Hall 6,HALL N0604,N
-NHALL00604,1250,1219,4,Faulkner,HALL,Hall 7,HALL N0704,N
-NHALL00704,1250,1157,4,Faulkner,HALL,Hall 8,HALL N0804,N
-NHALL00804,1250,1053,4,Faulkner,HALL,Hall 9,HALL N0904,N
-NHALL00904,1250,966,4,Faulkner,HALL,Hall 10,HALL N1004,N
-NHALL01004,1250,913,4,Faulkner,HALL,Hall 11,HALL N1104,N
-NHALL01104,1250,847,4,Faulkner,HALL,Hall 12,HALL N1204,N
-NHALL01204,1250,612,4,Faulkner,HALL,Hall 13,HALL N1304,N
-NHALL01304,1250,530,4,Faulkner,HALL,Hall 14,HALL N1404,N
-NHALL01404,1250,480,4,Faulkner,HALL,Hall 15,HALL N1504,N
-NHALL01504,1144,479,4,Faulkner,HALL,Hall 16,HALL N1604,N
-NHALL01604,1144,308,4,Faulkner,HALL,Hall 17,HALL N1704,N
-NHALL01704,1188,288,4,Faulkner,HALL,Hall 18,HALL N1804,N
-NHALL01804,1250,280,4,Faulkner,HALL,Hall 19,HALL N1904,N
-NHALL01904,1250,415,4,Faulkner,HALL,Hall 20,HALL N2004,N
-NHALL02004,1316,288,4,Faulkner,HALL,Hall 21,HALL N2104,N
-NHALL02104,1357,308,4,Faulkner,HALL,Hall 22,HALL N2204,N
-NHALL02204,1357,480,4,Faulkner,HALL,Hall 23,HALL N2304,N
-NHALL02304,1465,1219,4,Faulkner,HALL,Hall 24,HALL N2404,N
-NHALL02404,1580,1219,4,Faulkner,HALL,Hall 25,HALL N2504,N
-NHALL02504,1698,1219,4,Faulkner,HALL,Hall 26,HALL N2604,N
-NHALL02604,1782,1219,4,Faulkner,HALL,Hall 27,HALL N2704,N
-NHALL02704,1864,1219,4,Faulkner,HALL,Hall 28,HALL N2804,N
-NHALL02804,1913,1219,4,Faulkner,HALL,Hall 29,HALL N2904,N
-NHALL02904,1954,1219,4,Faulkner,HALL,Hall 30,HALL N3004,N
-NHALL03004,2022,1219,4,Faulkner,HALL,Hall 31,HALL N3104,N
-NHALL03104,2110,1219,4,Faulkner,HALL,Hall 32,HALL N3204,N
-NHALL03204,2192,1219,4,Faulkner,HALL,Hall 33,HALL N3304,N
-NHALL03304,2286,1219,4,Faulkner,HALL,Hall 34,HALL N3404,N
-NLABS00304,256,1230,4,Faulkner,LABS,Medical Records,LABS N0104,N
-NLABS00104,985,1230,4,Faulkner,LABS,Medical Library,LABS N0204,N
-NREST00404,911,1240,4,Faulkner,REST,Restroom ,REST N0104,N
-NREST00104,1233,342,4,Faulkner,REST,Restroom ,REST N0204,N
-NREST00204,1270,342,4,Faulkner,REST,Restroom ,REST N0304,N
-NREST00205,1232,342,5,Faulkner,REST,Restroom,RESTN0305,N
-NREST00303,1108,665,3,Faulkner,REST,Restroom,RESTN0403,N
-NREST00305,1270,342,5,Faulkner,REST,Restroom,RESTN0405,N
-NRETL00201,1059,232,1,Faulkner,RETL,Starbucks,RETLN0101,N
-NSERV01404,1078,1200,4,Faulkner,SERV,Social Work,SERV N0104,N
-IHALL03404,382,1219,4,Faulkner,HALL,Hall 35,Hall 35,I
-NSERV00301,1256,269,1,Faulkner,SERV,1st Floor Kiosk,SERVN0201,N
-NSERV01504,1250,1230,4,Faulkner,SERV,Administration,SERV N0204,N
-NSERV00204,1270,529,4,Faulkner,SERV,Suites,SERV N0304,N
-NSERV00304,1268,913,4,Faulkner,SERV,Nurse's Suite,SERV N0404,N
-NSERV00404,1270,967,4,Faulkner,SERV,House Keeping,SERV N0504,N
-NSERV00103,1254,1224,3,Faulkner,SERV,3rd Floor Kiosk,SERVN0603,N
-NSERV00504,1864,1200,4,Faulkner,SERV,HR,SERV N0604,N
-NSERV00604,1864,1230,4,Faulkner,SERV,Compliance,SERV N0704,N
-NSERV00704,1913,1200,4,Faulkner,SERV,Finance 1,SERV N0804,N
-NSERV00804,1913,1230,4,Faulkner,SERV,Finance 2,SERV N0904,N
-NSERV00904,2022,1200,4,Faulkner,SERV,Lockers,SERV N1004,N
-NSERV01004,2022,1230,4,Faulkner,SERV,Patient Relations,SERV N1104,N
-NSERV01104,1954,1230,4,Faulkner,SERV,VP Clinicial Service,SERV N1204,N
-NSERV01204,2192,1230,4,Faulkner,SERV,Finance Office,SERV N1304,N
-NSERV01304,980,1130,4,Faulkner,SERV,Admin,SERV N1404,N
-NSTAI00704,174,1219,4,Faulkner,STAI,Stair 1,STAI N0104,N
-NSTAI00104,722,1240,4,Faulkner,STAI,Stair 2,STAI N0204,N
-NSTAI00204,1221,1053,4,Faulkner,STAI,STAI N0304,Stair 3,N
-NSTAI00304,1290,415,4,Faulkner,STAI,Stair 4,STAI N0404,N
-NSTAI00404,1782,1240,4,Faulkner,STAI,Stair 5,STAI N0504,N
-NSTAI00504,2342,1233,4,Faulkner,STAI,Stair 6,STAI N0604,N
-PCONF00605,1128,437,5,Faulkner,CONF,Suite 51,CONF001,P
-PCONF00105,1369,451,5,Faulkner,CONF,Suite 58,CONF002,P
-PCONF00205,1233,553,5,Faulkner,CONF,Suite 5940,CONF003,P
-PCONF00305,1235,518,5,Faulkner,CONF,Suite 5945,CONF004,P
-PCONF00405,1257,1230,5,Faulkner,CONF,Vacant,CONF005,P
-PDEPT02105,1191,274,5,Faulkner,DEPT,ENT/Eye/Physical/Dermatologist,DEPT001,P
-PDEPT00105,1250,266,5,Faulkner,DEPT,Orthopedic Association,DEPT002,P
-PDEPT00205,1370,348,5,Faulkner,DEPT,BWH Surgical Specialties,DEPT003,P
-PDEPT00305,1264,519,5,Faulkner,DEPT,Endocrinology/Diabetes/Hem-Onc,DEPT004,P
-PDEPT00405,1264,553,5,Faulkner,DEPT,Ambulatory Clinic,DEPT005,P
-PDEPT00505,1264,691,5,Faulkner,DEPT,Ambulatory Care 1,DEPT006,P
-PDEPT00605,1264,750,5,Faulkner,DEPT,Ambulatory Care 2,DEPT007,P
-PDEPT00705,1264,788,5,Faulkner,DEPT,Ambulatory Care 3,DEPT008,P
-PDEPT00805,1264,847,5,Faulkner,DEPT,Ambulatory Care 4,DEPT009,P
-PDEPT00905,1235,611,5,Faulkner,DEPT,Internal Medicine/Headache,DEPT010,P
-PDEPT01005,1235,750,5,Faulkner,DEPT,BWH Primary Care Physicians,DEPT011,P
-PDEPT01105,1181,1109,5,Faulkner,DEPT,Nursing Staff Development,DEPT012,P
-PDEPT01205,1266,1053,5,Faulkner,DEPT,X-Ray Waiting,DEPT013,P
-IHALL00601,988,515,1,Faulkner,HALL,Hall ,Hall Intersection 2 Floor 1,I
-IDEPT00101,947,482,1,Faulkner,DEPT,Admitting,Admitting,I
-IHALL02301,947,509,1,Faulkner,HALL,Hall,Hall,I
-IREST00301,1114,500,1,Faulkner,REST,Restroom Female Level 1,Restroom Female Level 1,I
-IHALL02501,1189,516,1,Faulkner,HALL,Hallway Intersection 9,Hall,I
-IHALL02601,1256,554,1,Faulkner,HALL,Hall,Hallway Intersection,I
-IHALL02701,1326,516,1,Faulkner,HALL,Hallway Intersection,Hall,I
-IHALL02801,1256,865,1,Faulkner,HALL,Hall,Hall,I
-IHALL02901,1256,1097,1,Faulkner,HALL,Hall,Hall,I
-IHALL00303,1375,649,3,Faulkner,HALL,Hall,Hall,I
-IHALL01203,1440,848,3,Faulkner,HALL,Hall,Hall,I
-IHALL01303,1375,847,3,Faulkner,HALL,Hall,Hall,I
-IHALL01003,1254,1340,3,Faulkner,HALL,Hall,Hall,I
-IHALL01403,1254,689,3,Faulkner,HALL,Hall,Hall,I
-IHALL01503,1363,439,3,Faulkner,HALL,Hall,Hall,I
-IHALL01603,1363,317,3,Faulkner,HALL,Hall,Hall,I
-IHALL01803,1363,284,3,Faulkner,HALL,Hall,Hall,I
-IHALL01903,1312,263,3,Faulkner,HALL,Hall,Hall,I
-IHALL02003,1202,263,3,Faulkner,HALL,Hall,Hall,I
-IHALL02103,1256,256,3,Faulkner,HALL,Hall,Hall,I
-IHALL02203,1254,1157,3,Faulkner,HALL,Hall,Hall,I
-IHALL02303,1254,920,3,Faulkner,HALL,Hall,Hall,I
-IHALL02403,1208,490,3,Faulkner,HALL,Hall,Hall,I
-IHALL02503,1256,284,3,Faulkner,HALL,Hall,Hall,I
-IHALL03604,1250,986,4,Faulkner,HALL,Hall,Hall,I
-IHALL03704,1144,433,4,Faulkner,HALL,Hall,Hall,I
-IHALL03804,1357,341,4,Faulkner,HALL,Hall,Hall,I
-IHALL03904,1357,445,4,Faulkner,HALL,Hall,Hall,I
-IHALL04004,1250,342,4,Faulkner,HALL,Hall,Hall,I
-IHALL04104,1250,638,4,Faulkner,HALL,Hall,Hall,I
-IHALL02805,1250,342,5,Faulkner,HALL,Hall,Hall,I
-IHALL02102,1433,1157,2,Faulkner,HALL,Hall,Hall,I
-IHALL03001,1114,564,1,Faulkner,HALL,Hall,Hall,I
+ASTAI00501,1284,308,1,Faulkner,STAI,Staircase 1 Level 1,Staircase 1 Level 1,A
+BCONF00102,2139,1029,5,45 Francis,CONF,Duncan Reid Conference Room,Conf B0102,Z
+BDEPT00102,2260,786,5,45 Francis,DEPT,Comprehensive Breast Heath,DEPT B0102,Z
+BDEPT00202,2177,1046,5,45 Francis,DEPT,Oral Medicine and Dentistry,DEPT B0202,Z
+BDEPT00302,2389,752,5,45 Francis,DEPT,Lee Bell Breast Center,DEPT B0302,Z
+BDEPT00402,2440,923,5,45 Francis,DEPT,Jen Center for Primary Care,DEPT B0402,Z
+BDEPT00502,2614,1032,5,45 Francis,DEPT,Ear Nose & Throat,DEPT B0502,Z
+BDEPT00602,2784,1306,5,45 Francis,HALL,Hallway Intersection 31,Hallway B3102,Z
+BDEPT00702,2969,779,5,45 Francis,DEPT,Plastic Surgery,DEPT B0702,Z
+AHALL01801,1403,1115,1,Faulkner,HALL,Hallway Intersection 19,Hallway Intersection 19,A
+AHALL01901,1752,1115,1,Faulkner,HALL,Hallway Intersection 20,Hallway Intersection 20,A
+BDEPT00802,3160,868,5,45 Francis,DEPT,Outpatient Pharmacy,DEPT B0802,Z
+BDEPT00902,3259,865,5,45 Francis,DEPT,Weiner Center for Preoperative Evaluation,DEPT B0902,Z
+BHALL00102,2245,902,5,45 Francis,HALL,Hallway Intersection 1 Level 2,Hallway B0102,Z
+BHALL00202,2279,902,5,45 Francis,HALL,Hallway Intersection 2 Level 2,Hallway B0202,Z
+BHALL00402,2246,1286,5,45 Francis,HALL,Hallway Intersection 4 Level 2,Hallway B0402,Z
+BHALL00502,2389,902,5,45 Francis,HALL,Hallway Intersection 5 Level 2,Hallway B0502,Z
+BHALL00602,2614,902,5,45 Francis,HALL,Hallway Intersection 6 Level 2,Hallway B0602,Z
+BHALL00802,2605,786,5,45 Francis,HALL,Hallway Intersection 8 Level 2,Hallway B0802,Z
+BHALL00902,2279,827,5,45 Francis,HALL,Hallway Intersection 9 Level 2,Hallway B0902,Z
+BHALL01102,2921,903,5,45 Francis,HALL,Hallway Intersection 11 Level 2,Hallway B1102,Z
+BHALL01202,2945,902,5,45 Francis,HALL,Hallway Intersection 12 Level 2,Hallway B1202,Z
+BHALL01302,3136,896,5,45 Francis,HALL,Hallway Intersection 13 Level 2,Hallway B1302,Z
+BHALL01402,3296,880,5,45 Francis,HALL,Hallway Intersection 14 Level 2,Hallway B1402,Z
+BHALL01702,2945,779,5,45 Francis,HALL,Hallway Intersection 17 Level 2,Hallway B1702,Z
+BHALL01802,2617,933,5,45 Francis,HALL,Hallway Intersection 18 Level 2,Hallway B1802,Z
+BHALL01902,2627,1009,5,45 Francis,HALL,Hallway Intersection 19 Level 2,Hallway B1902,Z
+BHALL02002,2781,1043,5,45 Francis,HALL,Hallway Intersection 20 Level 2,Hallway B2002,Z
+BHALL02102,2856,1032,5,45 Francis,HALL,Hallway Intersection 21 Level 2,Hallway B2102,Z
+BHALL02202,2911,971,5,45 Francis,HALL,Hallway Intersection 22 Level 2,Hallway B2202,Z
+BHALL02302,2918,933,5,45 Francis,HALL,Hallway Intersection 23 Level 2,Hallway B2302,Z
+BHALL02502,3139,920,5,45 Francis,HALL,Hallway Intersection 25 Level 2,Hallway B2502,Z
+BHALL02602,3290,940,5,45 Francis,HALL,Hallway Intersection 26 Level 2,Hallway B2602,Z
+BHALL02702,3279,1005,5,45 Francis,HALL,Hallway Intersection 27 Level 2,Hallway B2702,Z
+BHALL02802,3068,1039,5,45 Francis,HALL,Hallway Intersection 28 Level 2,Hallway B2802,Z
+BHALL03002,2784,1156,5,45 Francis,HALL,Hallway Intersection 30 Level 2,Hallway B3002,Z
+BHALL03102,2554,1286,5,45 Francis,HALL,Hallway Intersection 31 Level 2,Hallway B3102,Z
+BHALL03202,2556,1388,5,45 Francis,HALL,Hallway Intersection 32 Level 2,Hallway B3202,Z
+BHALL03302,2784,1286,5,45 Francis,HALL,Hallway Intersection 33 Level 2,Hallway B3302,Z
+BHALL03402,2177,1029,5,45 Francis,HALL,Hallway Intersection 34 Level 2,Hallway B3402,Z
+BHALL03502,2245,1029,5,45 Francis,HALL,Hallway Intersection 35 Level 2,Hallway B3502,Z
+BHALL03602,2279,762,5,45 Francis,HALL,Hallway Intersection 36 Level 2,Hallway B3602,Z
+BHALL03702,2331,632,5,45 Francis,HALL,Hallway Intersection 37 Level 2,Hallway B3702,Z
+BHALL03802,2279,786,5,45 Francis,HALL,Hallway Intersection 38 Level 2,Hallway B3802,Z
+BHALL04102,2730,1070,5,45 Francis,HALL,Hallway Intersection 41 Level 2,Hallway B04102,Z
+BHALL04302,2784,1074,5,45 Francis,HALL,Hallway Intersection 43 level 2,Hallway B04302,Z
+BHALL04402,3075,974,5,45 Francis,HALL,Hallway Intersection 44 Level 2,Hallway B4402,Z
+BINFO00102,2989,940,5,45 Francis,INFO,Information Desk,INFO B0102,Z
+BINFO00202,3119,940,5,45 Francis,INFO,Valet Service,INFO B0202,Z
+BLABS00102,2246,1350,5,45 Francis,LABS,Vascular Diagnostic Lab,Labs B0102,Z
+BLABS00202,2945,1005,5,45 Francis,LABS,Outpatient Specimen Collection,Labs B0202,Z
+BREST00102,2177,998,5,45 Francis,REST,Restroom,REST B0102,Z
+BREST00202,2587,844,5,45 Francis,REST,Men's Restroom,REST B0202,Z
+BREST00302,2215,1251,5,45 Francis,REST,Restroom,REST B0302,Z
+BREST00402,2583,1388,5,45 Francis,REST,Restroom,REST B0402,Z
+BREST00502,2754,1156,5,45 Francis,REST,Restroom,REST B0502,Z
+BSERV00102,2856,1084,5,45 Francis,SERV,Patient Financial Services,SERV B0102,Z
+BSTAI00102,2180,926,5,45 Francis,STAI,Staircase Intersection 1 Level 2,Stair B0102,Z
+BSTAI00202,2300,827,5,45 Francis,STAI,Staircase Intersection 2 Level 2,Stair B0202,Z
+BSTAI00302,2535,786,5,45 Francis,STAI,Staircase Intersection 3 Level 2,Stair B0302,Z
+BSTAI00502,2924,844,5,45 Francis,STAI,Staircase Intersection 5 Level 2,Stair B0502,Z
+BSTAI00602,3215,868,5,45 Francis,STAI,Staircase Intersection 6 Level 2,Stair B0602,Z
+BSTAI00702,2812,1156,5,45 Francis,STAI,Staircase Intersection 7 Level 2,Stair B0702,Z
+BSTAI00802,2569,1316,5,45 Francis,STAI,Staircase Intersection 8 Level 2,Stair B0802,Z
+BSTAI00902,2187,1306,5,45 Francis,STAI,Staircase Intersection 9 Level 2,Stair B0902,Z
+BSTAI01002,2180,954,5,45 Francis,STAI,Staircase,Stair B1002,Z
+CCONF001L1,2255,851,2,45 Francis,CONF,Anesthesia Conference Room,Conf C001L1,Z
+CCONF002L1,2668,1019,2,45 Francis,CONF,Medical Records Conference Room,Conf C002L1,Z
+CCONF003L1,2460,1241,2,45 Francis,CONF,Abrams Conference Room,Conf C003L1,Z
+CDEPT002L1,1982,824,2,Tower,DEPT,Day Surgery Family Waiting,Department C002L1,Z
+CDEPT003L1,1846,827,2,Tower,DEPT,Day Surgery Family Waiting Exit,Department C003L1,Z
+CDEPT004L1,2310,1029,2,45 Francis,DEPT,Medical Records Film Library,Department C004L1,Z
+CHALL001L1,1734,924,2,Tower,HALL,Hallway 1 Floor L1,Hallway C001L1,Z
+CHALL001L2,2360,854,1,45 Francis,HALL,Hallway K Elevator Floor L2,Hallway C001L2,Z
+CHALL002L1,2445,1050,2,45 Francis,HALL,Hallway 2 Floor L1,Hallway C002L1,Z
+CHALL002L2,2269,909,1,45 Francis,HALL,Hallway 2 Floor L2,Hallway C002L2,Z
+CHALL003L1,2445,1286,2,45 Francis,HALL,Hallway 3 Floor L1,Hallway C003L1,Z
+CHALL003L2,2218,916,1,45 Francis,HALL,Hallway 3 Floor L2,Hallway C003L2,Z
+CHALL004L1,2716,1074,2,45 Francis,HALL,Hallway 4 Floor L1,Hallway C004L1,Z
+CHALL004L2,2130,913,1,45 Francis,HALL,Hallway 4 Floor L2,Hallway C004L2,Z
+CHALL005L1,1754,1286,2,Tower,HALL,Hallway 5 Floor L1,Hallway C005L1,Z
+CHALL005L2,1747,1286,1,Tower,HALL,Hallway 5 Floor L2,Hallway C005L2,Z
+CHALL006L1,2133,1286,2,Tower,HALL,Hallway 6 Floor L1,Hallway C006L1,Z
+CHALL007L1,2133,1050,2,Tower,HALL,Hallway 7 Floor L1,Hallway C007L1,Z
+CHALL007L2,1747,1043,1,Tower,HALL,Hallway 7 Floor L2,Hallway C007L2,Z
+CHALL008L1,2220,1050,2,45 Francis,HALL,Hallway 8 Floor L1,Hallway C008L1,Z
+CHALL008L2,1734,926,1,Tower,HALL,Hallway 8 Floor L2,Hallway C008L2,Z
+CHALL009L1,2220,909,2,45 Francis,HALL,Hallway 9 Floor L1,Hallway C009L1,Z
+CHALL010L1,2265,909,2,45 Francis,HALL,Hallway 10 Floor L1,Hallway C010L1,Z
+CHALL010L2,2130,854,1,Tower,HALL,Hallway 10 Floor L2,Hallway C010L2,Z
+CHALL011L1,2358,849,2,45 Francis,HALL,Hallway 11 Floor L1,Hallway C011L1,Z
+CHALL012L1,2133,909,2,45 Francis,HALL,Hallway 12 Floor L1,Hallway C012L1,Z
+CHALL013L1,2133,846,2,45 Francis,HALL,Hallway 13 Floor L1,Hallway C013L1,Z
+CHALL014L1,1846,924,2,Tower,HALL,Hallway 14 Floor L1,Hallway C014L1,Z
+CHALL015L1,2300,851,2,45 Francis,HALL,Hallway 15 Floor L1,Hallway C015L1,Z
+CLABS001L1,1969,1272,2,Tower,LABS,Outpatient Fluoroscopy,Lab C001L1,Z
+CLABS001L2,2300,855,1,45 Francis,LABS,Radiation Oncology TX Suite,Lab C001L2,Z
+CLABS002L1,1726,1094,2,Tower,LABS,Pre-Op PACU,Lab C002L1,Z
+CLABS002L2,2249,1286,1,45 Francis,LABS,Radiation Oncology Lab,Lab C002L2,Z
+CLABS003L1,2296,1306,2,45 Francis,LABS,Nuclear Medicine,Lab C003L1,Z
+CLABS004L1,2320,1265,2,45 Francis,LABS,Ultrasound Lab,Lab C004L1,Z
+CLABS005L1,2791,1286,2,45 Francis,LABS,CSIR MRI Lab,Lab C005L1,Z
+CREST001L1,1699,1022,2,Tower,REST,Restroom,Restroom C001L1,Z
+CREST001L2,2324,906,1,45 Francis,REST,Restroom,Restroom C001L2,Z
+CREST002L1,2068,1248,2,Tower,REST,Restroom,Restroom C002L1,Z
+CREST002L2,1918,1255,1,45 Francis,REST,Restroom,Restroom C002L2,Z
+CREST003L1,2334,909,2,45 Francis,REST,Restroom,Restroom C003L1,Z
+CREST004L1,2771,1161,2,45 Francis,REST,Restroom,Restroom C004L1,Z
+CRETL001L1,2187,896,2,45 Francis,RETL,Vending Machine,Retail C001L1,Z
+CSERV001L1,2494,1063,2,45 Francis,SERV,Volunteers Floor,Service C001L1,Z
+CSERV001L2,2023,1262,1,45 Francis,SERV,Interpreter Services,Service C001L2,Z
+DCONF00102,4595,550,5,15 Francis,CONF,Carrie M. Hall Conference Center,Conference Center,Z
+DDEPT00102,4334,701,5,15 Francis,DEPT,Chest Diseases,Chest Diseases,Z
+DDEPT00202,4245,728,5,15 Francis,DEPT,Thoracic Surgery Clinic,Thoracic Surgery Clinic,Z
+DDEPT00302,3904,660,5,15 Francis,DEPT,Brigham Health,Brigham Health,Z
+DDEPT00402,3416,896,5,15 Francis,DEPT,Waiting Room,Waiting Room,Z
+DELEV00A02,4549,376,5,15 Francis,ELEV,Elevator A,Elevator A2,Z
+DELEV00B02,4163,643,5,15 Francis,ELEV,Elevator B,Elevator B2,Z
+DELEV00C02,3955,885,5,15 Francis,ELEV,Elevator C,Elevator C2,Z
+DELEV00D02,3475,760,5,15 Francis,ELEV,Elevator D,Elevator D2,Z
+DEXIT00102,4300,749,5,15 Francis,EXIT,15 Lobby Entrance,15 Lobby Entrance,Z
+DHALL00902,4635,680,5,15 Francis,HALL,Hallway 9 Floor 2,Hallway D0902,Z
+DHALL01002,4625,650,5,15 Francis,HALL,Hallway 10 Floor 2,Hallway D1002,Z
+DHALL01102,4607,656,5,15 Francis,HALL,Hallway 11 Floor 2,Hallway D1102,Z
+DHALL02102,4303,557,5,15 Francis,HALL,Hallway 21 Floor 2,Hallway D2102,Z
+DHALL02202,4283,478,5,15 Francis,HALL,Hallway 22 Floor 2,Hallway D2202,Z
+DHALL02302,4270,440,5,15 Francis,HALL,Hallway 23 Floor 2,Hallway D2302,Z
+DHALL02602,4269,639,5,15 Francis,HALL,15 Lobby,Hallway D2602,Z
+DHALL02702,4290,714,5,15 Francis,HALL,Hallway 27 Floor 2,Hallway D2702,Z
+DHALL02802,4194,660,5,15 Francis,HALL,Hallway 28 Floor 2,Hallway D2802,Z
+DHALL02902,4170,670,5,15 Francis,HALL,Hallway 29 Floor 2,Hallway D2902,Z
+DHALL03002,4140,680,5,15 Francis,HALL,Hallway 30 Floor 2,Hallway D3002,Z
+DHALL03102,4133,649,5,15 Francis,HALL,Hallway 31 Floor 2,Hallway D3102,Z
+DHALL03202,4027,714,5,15 Francis,HALL,Hallway 32 Floor 2,Hallway D3202,Z
+DHALL03302,4006,649,5,15 Francis,HALL,Hallway 33 Floor 2,Hallway D3302,Z
+DHALL03402,3925,740,5,15 Francis,HALL,Hallway 34 Floor 2,Hallway D3402,Z
+DHALL03502,3938,776,5,15 Francis,HALL,Hallway 35 Floor 2,Hallway D3502,Z
+DHALL03602,3959,824,5,15 Francis,HALL,Hallway 36 Floor 2,Hallway D3602,Z
+DHALL03702,3969,865,5,15 Francis,HALL,Hallway 37 Floor 2,Hallway D3702,Z
+DHALL04002,3911,687,5,15 Francis,HALL,Hallway 40 Floor 2,Hallway D4002,Z
+DHALL04102,3877,564,5,15 Francis,HALL,Hallway 41 Floor 2,Hallway D4102,Z
+DHALL04602,3825,760,5,15 Francis,HALL,Hallway 46 Floor 2,Hallway D4602,Z
+DHALL04702,3745,780,5,15 Francis,HALL,Hallway 47 Floor 2,Hallway D4702,Z
+DHALL04802,3655,805,5,15 Francis,HALL,Hallway 48 Floor 2,Hallway D4802,Z
+DHALL05102,3580,827,5,15 Francis,HALL,Hallway 51 Floor 2,Hallway D5102,Z
+DHALL05202,3555,730,5,15 Francis,HALL,Hallway 52 Floor 2,Hallway D5202,Z
+DHALL05302,3525,840,5,15 Francis,HALL,Hallway 53 Floor 2,Hallway D5302,Z
+DHALL05402,3494,844,5,15 Francis,HALL,Hallway 54 Floor 2,Hallway D5402,Z
+DHALL05502,3450,850,5,15 Francis,HALL,Hallway 55 Floor 2,Hallway D5502,Z
+DHALL05602,3440,800,5,15 Francis,HALL,Hallway 56 Floor 2,Hallway D5602,Z
+DHALL05702,3480,790,5,15 Francis,HALL,Hallway 57 Floor 2,Hallway D5702,Z
+DHALL05902,3409,855,5,15 Francis,HALL,Hallway 59 Floor 2,Hallway D5902,Z
+DHALL06002,4330,580,5,15 Francis,HALL,Hallway 60 Floor 2,Hallway D6002,Z
+DINFO00102,4204,622,5,15 Francis,INFO,15 Francis Security Desk,Information Desk,Z
+DHALL01202,4573,557,5,15 Francis,HALL,Hallway 12 Floor 2,Hallway D1202,Z
+DHALL01302,4545,460,5,15 Francis,HALL,Hallway 13 Floor 2,Hallway D1302,Z
+DHALL01402,4573,451,5,15 Francis,HALL,Hallway 14 Floor 2,Hallway D1402,Z
+DHALL01902,4344,622,5,15 Francis,HALL,Hallway 19 Floor 2,Hallway D1902,Z
+DHALL02002,4215,653,5,15 Francis,HALL,Hallway 20 Floor 2,Hallway D2002,Z
+SHALL02405,1578,1939,5,Shapiro,HALL,Hall,Hall,S
+SHALL03905,1627,2096,5,Shapiro,HALL,Hall 3,Hall 3,S
+SHALL04205,3160,998,5,15 Francis,HALL,Hall,Hall,S

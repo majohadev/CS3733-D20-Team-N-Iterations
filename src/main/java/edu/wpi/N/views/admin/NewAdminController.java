@@ -2,13 +2,18 @@ package edu.wpi.N.views.admin;
 
 import com.jfoenix.controls.*;
 import edu.wpi.N.App;
-import edu.wpi.N.algorithms.*;
+import edu.wpi.N.algorithms.AStar;
+import edu.wpi.N.algorithms.BFS;
+import edu.wpi.N.algorithms.DFS;
+import edu.wpi.N.algorithms.Dijkstra;
 import edu.wpi.N.database.*;
 import edu.wpi.N.entities.Service;
 import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.entities.employees.Employee;
 import edu.wpi.N.entities.request.*;
 import edu.wpi.N.views.Controller;
+import edu.wpi.N.views.features.ArduinoController;
+import edu.wpi.N.views.outdated.ViewRequestControllerOUTDATED;
 import java.io.IOException;
 import java.net.URL;
 import java.util.LinkedList;
@@ -32,7 +37,7 @@ public class NewAdminController implements Controller, Initializable {
   DeleteEmployeeController deleteEmployeeController;
   private StateSingleton singleton;
 
-  public void setSingleton(StateSingleton singleton) {
+  public NewAdminController(StateSingleton singleton) {
     this.singleton = singleton;
   }
 
@@ -52,6 +57,9 @@ public class NewAdminController implements Controller, Initializable {
   @FXML JFXButton btn_remEmp;
   @FXML TableView<Employee> tbl_Employees;
   @FXML ChoiceBox<Service> cb_reqFilter;
+  @FXML JFXButton btn_admin;
+  @FXML JFXComboBox cb_changeAlgo;
+  @FXML JFXButton btn_submit;
 
   private ObservableList<Request> tableData = FXCollections.observableArrayList();
   private ObservableList<Employee> emps = FXCollections.observableArrayList();
@@ -66,7 +74,9 @@ public class NewAdminController implements Controller, Initializable {
       populateTable();
       populateByType();
       populateEmployeeType();
-
+      btn_submit.setVisible(false);
+      cb_changeAlgo.setVisible(false);
+      populateChangeAlgo();
     } catch (DBException e) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
       errorAlert.setContentText(e.getMessage());
@@ -85,9 +95,15 @@ public class NewAdminController implements Controller, Initializable {
     btn_editEmp.setTooltip(new Tooltip("Edits Employees"));
     btn_editMap.setTooltip(new Tooltip("Opens Map Editor"));
     btn_remEmp.setTooltip(new Tooltip("Removes a Given Employee"));
-    btn_upload.setTooltip(new Tooltip("Uploads New CSV's"));
-    // btn_acceptReq.setTooltip(new Tooltip("Accepts a given request"));
+    btn_upload.setTooltip(new Tooltip("File Manager"));
+    btn_admin.setTooltip(new Tooltip("Adds an Admin"));
+  }
 
+  @FXML
+  private void changeAlgo() {
+    btn_submit.setVisible(true);
+    cb_changeAlgo.setVisible(true);
+    ap_swapPane.setVisible(false);
   }
 
   @FXML
@@ -99,6 +115,9 @@ public class NewAdminController implements Controller, Initializable {
       AddEmployeeController controller = loader.getController();
       controller.setAdminController(this);
       ap_swapPane.getChildren().setAll(currentpane);
+      ap_swapPane.setVisible(true);
+      btn_submit.setVisible(false);
+      cb_changeAlgo.setVisible(false);
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -107,12 +126,16 @@ public class NewAdminController implements Controller, Initializable {
   @FXML
   private void addAdmin() {
     try {
+      ap_swapPane.setVisible(true);
       FXMLLoader loader = new FXMLLoader();
       loader.setLocation(getClass().getResource("adminPage.fxml"));
       AnchorPane currentpane = loader.load();
       AddAdminController controller = loader.getController();
       controller.setAdminController(this);
       ap_swapPane.getChildren().setAll(currentpane);
+      ap_swapPane.setVisible(true);
+      btn_submit.setVisible(false);
+      cb_changeAlgo.setVisible(false);
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -121,12 +144,16 @@ public class NewAdminController implements Controller, Initializable {
   @FXML
   private void delEmp() {
     try {
+      ap_swapPane.setVisible(true);
       FXMLLoader loader = new FXMLLoader();
       loader.setLocation(getClass().getResource("deleteEmployee.fxml"));
       AnchorPane currentpane = loader.load();
       DeleteEmployeeController controller = loader.getController();
       controller.setAdminController(this);
       ap_swapPane.getChildren().setAll(currentpane);
+      ap_swapPane.setVisible(true);
+      btn_submit.setVisible(false);
+      cb_changeAlgo.setVisible(false);
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -135,12 +162,16 @@ public class NewAdminController implements Controller, Initializable {
   @FXML
   private void addDoc() {
     try {
+      ap_swapPane.setVisible(true);
       FXMLLoader loader = new FXMLLoader();
       loader.setLocation(getClass().getResource("addDoctor.fxml"));
       AnchorPane currentpane = loader.load();
       AddDoctorController controller = loader.getController();
       controller.setAdminController(this);
       ap_swapPane.getChildren().setAll(currentpane);
+      ap_swapPane.setVisible(true);
+      btn_submit.setVisible(false);
+      cb_changeAlgo.setVisible(false);
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -149,12 +180,16 @@ public class NewAdminController implements Controller, Initializable {
   @FXML
   private void denyReq() {
     try {
+      ap_swapPane.setVisible(true);
       FXMLLoader loader = new FXMLLoader();
       loader.setLocation(getClass().getResource("denyRequest.fxml"));
       AnchorPane currentpane = loader.load();
       DenyRequestController controller = loader.getController();
       controller.setAdminController(this);
       ap_swapPane.getChildren().setAll(currentpane);
+      ap_swapPane.setVisible(true);
+      btn_submit.setVisible(false);
+      cb_changeAlgo.setVisible(false);
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -163,12 +198,16 @@ public class NewAdminController implements Controller, Initializable {
   @FXML
   private void editEmp() {
     try {
+      ap_swapPane.setVisible(true);
       FXMLLoader loader = new FXMLLoader();
       loader.setLocation(getClass().getResource("editEmployee.fxml"));
       AnchorPane currentpane = loader.load();
       EditEmployeeController controller = loader.getController();
       controller.setAdminController(this);
       ap_swapPane.getChildren().setAll(currentpane);
+      ap_swapPane.setVisible(true);
+      btn_submit.setVisible(false);
+      cb_changeAlgo.setVisible(false);
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -177,12 +216,16 @@ public class NewAdminController implements Controller, Initializable {
   @FXML
   private void assignReq() {
     try {
+      ap_swapPane.setVisible(true);
       FXMLLoader loader = new FXMLLoader();
       loader.setLocation(getClass().getResource("acceptRequest.fxml"));
       AnchorPane currentpane = loader.load();
       RequestHandelerController controller = loader.getController();
       controller.setAdminController(this);
       ap_swapPane.getChildren().setAll(currentpane);
+      ap_swapPane.setVisible(true);
+      btn_submit.setVisible(false);
+      cb_changeAlgo.setVisible(false);
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -229,10 +272,6 @@ public class NewAdminController implements Controller, Initializable {
     }
   }
 
-  public void adminEditMap() throws IOException {
-    mainApp.switchScene("views/mapEditor/mapEditor.fxml", singleton);
-  }
-
   @FXML
   public void logoutUser() throws DBException {
     try {
@@ -269,8 +308,15 @@ public class NewAdminController implements Controller, Initializable {
   public void loadArduino() {
 
     try {
-      AnchorPane currentpane = FXMLLoader.load(getClass().getResource("arduinoInterface.fxml"));
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(getClass().getResource("arduinoInterface.fxml"));
+      AnchorPane currentpane = loader.load();
+      ArduinoController controller = loader.getController();
+      controller.setAdminController(this);
       ap_swapPane.getChildren().setAll(currentpane);
+      ap_swapPane.setVisible(true);
+      btn_submit.setVisible(false);
+      cb_changeAlgo.setVisible(false);
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -306,8 +352,8 @@ public class NewAdminController implements Controller, Initializable {
 
     // Request Table
     TableColumn<Request, Integer> requestID = new TableColumn<>("ID");
-    requestID.setMaxWidth(30);
-    requestID.setMinWidth(30);
+    requestID.setMaxWidth(50);
+    requestID.setMinWidth(50);
     requestID.setCellValueFactory(new PropertyValueFactory<Request, Integer>("requestID"));
 
     TableColumn<Request, Employee> emp_assigned = new TableColumn<>("Assigned");
@@ -323,7 +369,7 @@ public class NewAdminController implements Controller, Initializable {
     TableColumn<Request, String> nodeID = new TableColumn<>("Location");
     nodeID.setMaxWidth(100);
     nodeID.setMinWidth(100);
-    nodeID.setCellValueFactory(new ViewRequestController.nodeLongName());
+    nodeID.setCellValueFactory(new ViewRequestControllerOUTDATED.nodeLongName());
 
     TableColumn<Request, String> status = new TableColumn<>("Status");
     status.setMaxWidth(100);
@@ -721,5 +767,48 @@ public class NewAdminController implements Controller, Initializable {
     }
     empTypeList.setAll(employeeList);
     cb_reqFilter.setItems(empTypeList);
+  }
+
+  public StateSingleton getSingletion() {
+    return this.singleton;
+  }
+
+  public void populateChangeAlgo() {
+    LinkedList<String> algoTypes = new LinkedList<>();
+    algoTypes.add("BFS");
+    algoTypes.add("DFS");
+    algoTypes.add("AStar");
+    algoTypes.add("Dijkstra");
+    ObservableList<String> algos = FXCollections.observableArrayList();
+    algos.addAll(algoTypes);
+    cb_changeAlgo.setItems(algos);
+  }
+
+  @FXML
+  public void changeAlgorithm() {
+    if (cb_changeAlgo.getSelectionModel().getSelectedItem().equals("BFS")) {
+      singleton.savedAlgo.setPathFinder(new BFS());
+      System.out.println("here1");
+    } else if (cb_changeAlgo.getSelectionModel().getSelectedItem().equals("DFS")) {
+      singleton.savedAlgo.setPathFinder(new DFS());
+      System.out.println("here2");
+
+    } else if (cb_changeAlgo.getSelectionModel().getSelectedItem().equals("AStar")) {
+      singleton.savedAlgo.setPathFinder(new AStar());
+      System.out.println("here3");
+
+    } else if (cb_changeAlgo.getSelectionModel().getSelectedItem().equals("Dijkstra")) {
+      singleton.savedAlgo.setPathFinder(new Dijkstra());
+      System.out.println("here4");
+    }
+  }
+
+  public void resetTable() {
+    tb_RequestTable.getItems().clear();
+    try {
+      populateRequestTable();
+    } catch (DBException e) {
+      e.printStackTrace();
+    }
   }
 }

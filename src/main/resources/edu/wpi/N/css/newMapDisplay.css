@@ -78,11 +78,13 @@
 }
 
 .jfx-tab-pane .tab-header-background {
-    -fx-background-color: #4A69C6;
+    -fx-background-color: #6C5C7F;
 }
+
 
 .jfx-tab-pane .tab {
     -fx-pref-width: 110px;
+    -fx-pref-height: 41px;
 }
 
 .jfx-tab-pane .tab:hover {
@@ -90,5 +92,5 @@
 }
 
 .jfx-tab-pane .tab:selected {
-    -fx-background-color: #6C5C7F;
+    -fx-background-color: #4A69C6;
 }

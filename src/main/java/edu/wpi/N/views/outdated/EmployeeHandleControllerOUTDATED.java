@@ -1,4 +1,4 @@
-package edu.wpi.N.views.admin;
+package edu.wpi.N.views.outdated;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListView;
@@ -30,7 +30,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 
-public class EmployeeHandleController implements Controller, Initializable {
+public class EmployeeHandleControllerOUTDATED implements Controller, Initializable {
 
   @FXML TableView<Employee> tbl_Employees;
   @FXML ChoiceBox<Employee> cb_EmployeeRemove;
@@ -194,7 +194,7 @@ public class EmployeeHandleController implements Controller, Initializable {
     TableColumn<String, String> langRem = new TableColumn<>("Languages");
     langRem.setMaxWidth(150);
     langRem.setMinWidth(150);
-    langRem.setCellValueFactory(new EmployeeHandleController.selfFactory<String>());
+    langRem.setCellValueFactory(new EmployeeHandleControllerOUTDATED.selfFactory<String>());
 
     tb_languagesRemove.getColumns().addAll(langRem);
   }

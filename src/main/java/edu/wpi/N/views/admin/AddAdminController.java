@@ -85,7 +85,7 @@ public class AddAdminController {
         return;
       }
 
-      if (!txtf_oldpassword.getText().equals(txtf_newpassword.getText())) {
+      if (txtf_oldpassword.getText().equals(txtf_newpassword.getText())) {
 
         Alert errorAlert = new Alert(Alert.AlertType.ERROR);
         errorAlert.setContentText("Old and New password is the same.");

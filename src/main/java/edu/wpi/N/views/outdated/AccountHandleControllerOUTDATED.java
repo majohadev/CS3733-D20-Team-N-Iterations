@@ -1,4 +1,4 @@
-package edu.wpi.N.views.admin;
+package edu.wpi.N.views.outdated;
 
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.N.database.DBException;
@@ -6,7 +6,7 @@ import edu.wpi.N.database.LoginDB;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 
-public class AccountHandleController {
+public class AccountHandleControllerOUTDATED {
 
   @FXML JFXTextField txtf_adminuser;
   @FXML JFXTextField txtf_adminpass;
