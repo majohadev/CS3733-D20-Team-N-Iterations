@@ -189,11 +189,6 @@
     -fx-background-color: transparent;
 }
 
-.jfx-combo-box .text-field {
-    -fx-text-fill: #263051;
-    -fx-background-color: transparent;
-}
-
 .combo-box-popup > .list-view {
     -fx-background-color: #E6EBF2;
     -fx-background-radius: 2;
