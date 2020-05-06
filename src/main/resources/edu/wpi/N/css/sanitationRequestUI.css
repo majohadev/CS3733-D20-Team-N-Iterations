@@ -93,6 +93,12 @@
     -fx-font-size: 32px;
 }
 
+.label-admin-display {
+    -fx-text-fill: #E6EBF2;
+    -fx-font-family: 'Karla';
+    -fx-font-size: 36px;
+}
+
 .label-mid-size {
     -fx-text-fill: #E6EBF2;
     -fx-font-family: 'Karla';
