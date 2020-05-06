@@ -2,13 +2,13 @@ package edu.wpi.N.views.admin;
 
 import com.jfoenix.controls.*;
 import edu.wpi.N.App;
-import edu.wpi.N.algorithms.*;
 import edu.wpi.N.database.*;
 import edu.wpi.N.entities.Service;
 import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.entities.employees.Employee;
 import edu.wpi.N.entities.request.*;
 import edu.wpi.N.views.Controller;
+import edu.wpi.N.views.outdated.ViewRequestControllerOUTDATED;
 import java.io.IOException;
 import java.net.URL;
 import java.util.LinkedList;
@@ -32,7 +32,7 @@ public class NewAdminController implements Controller, Initializable {
   DeleteEmployeeController deleteEmployeeController;
   private StateSingleton singleton;
 
-  public void setSingleton(StateSingleton singleton) {
+  public NewAdminController(StateSingleton singleton) {
     this.singleton = singleton;
   }
 
@@ -229,10 +229,6 @@ public class NewAdminController implements Controller, Initializable {
     }
   }
 
-  public void adminEditMap() throws IOException {
-    mainApp.switchScene("views/mapEditor/mapEditor.fxml", singleton);
-  }
-
   @FXML
   public void logoutUser() throws DBException {
     try {
@@ -323,7 +319,7 @@ public class NewAdminController implements Controller, Initializable {
     TableColumn<Request, String> nodeID = new TableColumn<>("Location");
     nodeID.setMaxWidth(100);
     nodeID.setMinWidth(100);
-    nodeID.setCellValueFactory(new ViewRequestController.nodeLongName());
+    nodeID.setCellValueFactory(new ViewRequestControllerOUTDATED.nodeLongName());
 
     TableColumn<Request, String> status = new TableColumn<>("Status");
     status.setMaxWidth(100);
