@@ -66,7 +66,7 @@ public class LoginDB {
    * @throws DBException on error or when the specified user doesn't exist.
    */
   public static void removeLogin(String username) throws DBException {
-    if (currentUser != null) logout();
+    if (currentUser.equals(username)) logout();
     String query = "DELETE FROM credential WHERE username = ?";
     try {
       PreparedStatement stmt = con.prepareStatement(query);
