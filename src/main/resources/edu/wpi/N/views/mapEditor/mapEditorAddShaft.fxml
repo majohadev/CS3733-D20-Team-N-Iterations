@@ -14,7 +14,7 @@
                 <Font name="Calibri" size="25.0" />
             </font>
         </Label>
-        <Pane fx:id="pn_listClipper" layoutX="20.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-radius: 10;">
+        <Pane fx:id="pn_listClipper" layoutX="20.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
             <children>
                 <JFXListView fx:id="lst_add_shaft_node" prefHeight="159.0" prefWidth="430.0" style="-fx-background-radius: 10; -fx-border-radius: 10;" />
             </children>

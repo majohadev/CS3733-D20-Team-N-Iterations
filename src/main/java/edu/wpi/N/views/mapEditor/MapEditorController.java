@@ -2,7 +2,6 @@ package edu.wpi.N.views.mapEditor;
 
 import com.google.common.collect.HashBiMap;
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXNodesList;
 import edu.wpi.N.App;
 import edu.wpi.N.database.DBException;
@@ -21,8 +20,6 @@ import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
@@ -49,25 +46,10 @@ public class MapEditorController implements Controller {
   @FXML Button btn_home;
   @FXML StackPane pn_stack;
   @FXML Pane pn_edges;
-  @FXML Pane pn_changeFloor;
+  @FXML Pane pn_floors;
   @FXML ImageView img_map;
   @FXML JFXButton btn_cancel_elev;
-  private JFXButton btn_floors,
-      btn_floor1,
-      btn_floor2,
-      btn_floor3,
-      btn_floor4,
-      btn_floor5,
-      btn_floor6;
-  private JFXButton btn_floorsM,
-      btn_floor1M,
-      btn_floor2M,
-      btn_floor3M,
-      btn_floor4M,
-      btn_floor5M,
-      btn_floor6M,
-      btn_floor7M;
-  private JFXNodesList nodesListF, nodesListM;
+  @FXML Label lbl_building_floor;
 
   final int DEFAULT_FLOOR = 1;
   final String DEFAULT_BUILDING = "Faulkner";
@@ -150,6 +132,11 @@ public class MapEditorController implements Controller {
   HashMap<DbNode, Circle> nodesMap2;
   LinkedList<DbNode> originalShaftNodes;
 
+  // Floor switching
+  JFXNodesList buildingButtonList;
+  JFXNodesList faulknerButtonList;
+  JFXNodesList mainButtonList;
+
   // Inject singleton
   public MapEditorController(StateSingleton singleton) {
     this.singleton = singleton;
@@ -165,9 +152,9 @@ public class MapEditorController implements Controller {
     nodesMap2 = new HashMap<>();
     currentFloor = DEFAULT_FLOOR;
     currentBuilding = DEFAULT_BUILDING;
-    initializeChangeFloorButtons();
-    initializeMainCampusFloorButtons();
-    setFloorButtonColors();
+    // initializeChangeFloorButtons();
+    // initializeMainCampusFloorButtons();
+    // setFloorButtonColors();
     editElevNodes = new LinkedList<>();
     // btn_cancel_elev.setDisable(true);
     btn_cancel_elev.setVisible(false);
@@ -187,9 +174,13 @@ public class MapEditorController implements Controller {
     pn_edges.getChildren().add(addEdgeLine);
     deleteEdgeLines = new LinkedList<>();
 
-    initAutoFocus();
+    setFloorBuildingText(this.currentFloor, this.currentBuilding);
+    this.buildingButtonList = new JFXNodesList();
+    this.faulknerButtonList = new JFXNodesList();
+    this.mainButtonList = new JFXNodesList();
 
-    System.out.println("Doing ok");
+    initFloorButtons();
+    initAutoFocus();
   }
 
   private void setFaulknerDefaults() {
@@ -933,8 +924,8 @@ public class MapEditorController implements Controller {
                   return;
                 }
                 String type = controllerAddNode.getType();
-                String longName = controllerAddNode.getShortName();
-                String shortName = controllerAddNode.getLongName();
+                String longName = controllerAddNode.getLongName();
+                String shortName = controllerAddNode.getShortName();
                 String building = controllerAddNode.getBuilding();
                 if (type == null || longName == null || shortName == null || building == null) {
                   displayErrorMessage("Invalid input");
@@ -1510,6 +1501,7 @@ public class MapEditorController implements Controller {
     }
   }
 
+  /*
   public void initializeChangeFloorButtons() {
     btn_floors = new JFXButton("Floors");
     btn_floor1 = new JFXButton("1");
@@ -1605,7 +1597,9 @@ public class MapEditorController implements Controller {
           nodesListM.setVisible(true);
         });
   }
+   */
 
+  /*
   public void initializeMainCampusFloorButtons() {
     btn_floorsM = new JFXButton("Floors");
     btn_floor1M = new JFXButton("L2");
@@ -1717,6 +1711,9 @@ public class MapEditorController implements Controller {
         });
   }
 
+   */
+
+  /*
   private void setFloorButtonColorsM() {
     if (currentFloor == 1) {
       btn_floor1M.setStyle("-fx-background-color: #F7B80F");
@@ -1796,6 +1793,8 @@ public class MapEditorController implements Controller {
       btn_floor5.setStyle("-fx-background-color: #F7B80F");
     }
   }
+
+   */
 
   private void setFloorImg(String path) {
     resetAllExceptShafts();
@@ -1987,5 +1986,246 @@ public class MapEditorController implements Controller {
     autoFocus.stop();
     autoFocus.getKeyFrames().clear();
     endFocusVals.clear();
+  }
+
+  //////////////
+
+  /**
+   * styles the switch, faulkner, main, and driving directions buttons
+   *
+   * @param btn the building button which is to be styled
+   */
+  public void styleBuildingButtons(JFXButton btn) {
+    btn.getStylesheets()
+        .add(getClass().getResource("/edu/wpi/N/css/MapDisplayFloors.css").toExternalForm());
+    btn.getStyleClass().add("header-button");
+  }
+
+  /**
+   * styles the sub buttons of the building buttons
+   *
+   * @param btn the floor button which is to be styled
+   */
+  public void styleFloorButtons(JFXButton btn) {
+    btn.getStylesheets()
+        .add(getClass().getResource("/edu/wpi/N/css/MapDisplayFloors.css").toExternalForm());
+    btn.getStyleClass().add("choice-button");
+  }
+
+  /**
+   * initializes all buttons required to switch between floors
+   *
+   * @throws DBException
+   */
+  public void initFloorButtons() throws DBException {
+    // Building Buttons
+    JFXButton btn_buildings = new JFXButton("Switch Map");
+    styleBuildingButtons(btn_buildings);
+    JFXButton btn_faulkner = new JFXButton("Faulkner");
+    styleBuildingButtons(btn_faulkner);
+    JFXButton btn_main = new JFXButton("Main");
+    styleBuildingButtons(btn_main);
+
+    // Faulkner Buttons
+    JFXButton btn_faulkner1 = new JFXButton("F1");
+    styleFloorButtons(btn_faulkner1);
+
+    JFXButton btn_faulkner2 = new JFXButton("F2");
+    styleFloorButtons(btn_faulkner2);
+    JFXButton btn_faulkner3 = new JFXButton("F3");
+    styleFloorButtons(btn_faulkner3);
+    JFXButton btn_faulkner4 = new JFXButton("F4");
+    styleFloorButtons(btn_faulkner4);
+    JFXButton btn_faulkner5 = new JFXButton("F5");
+    styleFloorButtons(btn_faulkner5);
+    faulknerButtonList
+        .getChildren()
+        .addAll(
+            btn_faulkner,
+            btn_faulkner1,
+            btn_faulkner2,
+            btn_faulkner3,
+            btn_faulkner4,
+            btn_faulkner5);
+
+    // Main Buttons
+    JFXButton btn_main1 = new JFXButton("L2");
+    styleFloorButtons(btn_main1);
+    JFXButton btn_main2 = new JFXButton("L1");
+    styleFloorButtons(btn_main2);
+    JFXButton btn_main3 = new JFXButton("G");
+    styleFloorButtons(btn_main3);
+    JFXButton btn_main4 = new JFXButton("1");
+    styleFloorButtons(btn_main4);
+    JFXButton btn_main5 = new JFXButton("2");
+    styleFloorButtons(btn_main5);
+    JFXButton btn_main6 = new JFXButton("3");
+    styleFloorButtons(btn_main6);
+
+    // Set onClick properties
+    onFloorButtonClicked(btn_faulkner1);
+    onFloorButtonClicked(btn_faulkner2);
+    onFloorButtonClicked(btn_faulkner3);
+    onFloorButtonClicked(btn_faulkner4);
+    onFloorButtonClicked(btn_faulkner5);
+    onFloorButtonClicked(btn_main1);
+    onFloorButtonClicked(btn_main2);
+    onFloorButtonClicked(btn_main3);
+    onFloorButtonClicked(btn_main4);
+    onFloorButtonClicked(btn_main5);
+    onFloorButtonClicked(btn_main6);
+
+    mainButtonList
+        .getChildren()
+        .addAll(btn_main, btn_main1, btn_main2, btn_main3, btn_main4, btn_main5, btn_main6);
+    buildingButtonList.addAnimatedNode(btn_buildings);
+    buildingButtonList.addAnimatedNode(faulknerButtonList);
+    buildingButtonList.addAnimatedNode(mainButtonList);
+
+    buildingButtonList.setSpacing(100);
+    buildingButtonList.setRotate(90);
+    faulknerButtonList.setSpacing(15);
+    mainButtonList.setSpacing(15);
+
+    pn_floors.getChildren().add(buildingButtonList);
+  }
+
+  /**
+   * initializes a listener for a floor button click event
+   *
+   * @param btn the floor button which is clicked
+   * @throws DBException
+   */
+  public void onFloorButtonClicked(JFXButton btn) throws DBException {
+    String txt = btn.getText();
+    btn.setOnMouseClicked(
+        e -> {
+          try {
+            handleFloorButtonClicked(txt);
+          } catch (DBException ex) {
+            ex.printStackTrace();
+          }
+        });
+  }
+
+  /**
+   * handles the event of a button click
+   *
+   * @param txt the text of the button which is clicked
+   * @throws DBException
+   */
+  public void handleFloorButtonClicked(String txt) throws DBException {
+    collapseAllFloorButtons();
+    if (txt.equals("F1")) {
+      changeFloor(1, "Faulkner");
+      this.currentFloor = 1;
+      this.currentBuilding = "Faulkner";
+      setFloorImg("/edu/wpi/N/images/map/Floor1Reclor.png");
+    } else if (txt.equals("F2")) {
+      changeFloor(2, "Faulkner");
+      this.currentFloor = 2;
+      this.currentBuilding = "Faulkner";
+      setFloorImg("/edu/wpi/N/images/map/Floor2TeamN.png");
+    } else if (txt.equals("F3")) {
+      changeFloor(3, "Faulkner");
+      this.currentFloor = 3;
+      this.currentBuilding = "Faulkner";
+      setFloorImg("/edu/wpi/N/images/map/Floor3TeamN.png");
+    } else if (txt.equals("F4")) {
+      changeFloor(4, "Faulkner");
+      this.currentFloor = 4;
+      this.currentBuilding = "Faulkner";
+      setFloorImg("/edu/wpi/N/images/map/Floor4SolidBackground.png");
+    } else if (txt.equals("F5")) {
+      changeFloor(5, "Faulkner");
+      this.currentFloor = 5;
+      this.currentBuilding = "Faulkner";
+      setFloorImg("/edu/wpi/N/images/map/Floor5TeamN.png");
+    } else if (txt.equals("L2")) {
+      changeFloor(1, "Main");
+      this.currentFloor = 1;
+      this.currentBuilding = "Main";
+      setFloorImg("/edu/wpi/N/images/map/MainL2.png");
+    } else if (txt.equals("L1")) {
+      changeFloor(2, "Main");
+      this.currentFloor = 2;
+      this.currentBuilding = "Main";
+      setFloorImg("/edu/wpi/N/images/map/MainL1.png");
+
+    } else if (txt.equals("G")) {
+      changeFloor(3, "Main");
+      this.currentFloor = 3;
+      this.currentBuilding = "Main";
+      setFloorImg("/edu/wpi/N/images/map/MainGround.png");
+    } else if (txt.equals("1")) {
+      changeFloor(4, "Main");
+      this.currentFloor = 4;
+      this.currentBuilding = "Main";
+      setFloorImg("/edu/wpi/N/images/map/MainResizedF1.png");
+    } else if (txt.equals("2")) {
+      changeFloor(5, "Main");
+      this.currentFloor = 5;
+      this.currentBuilding = "Main";
+      setFloorImg("/edu/wpi/N/images/map/MainFloor2.png");
+
+    } else if (txt.equals("3")) {
+      changeFloor(6, "Main");
+      this.currentFloor = 6;
+      this.currentBuilding = "Main";
+      setFloorImg("/edu/wpi/N/images/map/MainFloor3.png");
+    }
+  }
+
+  /**
+   * switches the current floor displayed on the map
+   *
+   * @param newFloor the new floor
+   * @param newBuilding the new building
+   * @throws DBException
+   */
+  public void changeFloor(int newFloor, String newBuilding) throws DBException {
+    this.currentFloor = newFloor;
+    this.currentBuilding = newBuilding;
+    setFloorBuildingText(this.currentFloor, this.currentBuilding);
+  }
+
+  /** collapses all the floor buttons back to the main button */
+  public void collapseAllFloorButtons() {
+    buildingButtonList.animateList(false);
+    mainButtonList.animateList(false);
+    faulknerButtonList.animateList(false);
+  }
+
+  /**
+   * displays the label text
+   *
+   * @param floor the current floor
+   * @param building the current building
+   */
+  public void setFloorBuildingText(int floor, String building) {
+    if (floor == -1) {
+      lbl_building_floor.setText("Driving Directions");
+    }
+    if (!building.equals("Faulkner")) {
+      if (floor == 1) {
+        lbl_building_floor.setText(building + ", " + "L2");
+      } else if (floor == 2) {
+        lbl_building_floor.setText(building + ", " + "L1");
+      }
+      if (floor == 3) {
+        lbl_building_floor.setText(building + ", " + "G");
+      }
+      if (floor == 4) {
+        lbl_building_floor.setText(building + ", " + "1");
+      }
+      if (floor == 5) {
+        lbl_building_floor.setText(building + ", " + "2");
+      }
+      if (floor == 6) {
+        lbl_building_floor.setText(building + ", " + "3");
+      }
+    } else {
+      lbl_building_floor.setText(building + ", " + floor);
+    }
   }
 }

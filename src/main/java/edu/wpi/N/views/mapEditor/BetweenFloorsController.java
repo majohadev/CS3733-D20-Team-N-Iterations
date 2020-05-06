@@ -73,12 +73,12 @@ public class BetweenFloorsController implements Controller, Initializable {
     this.floors = new LinkedList<Integer>();
     this.originalEdges = new LinkedList<DbNode>();
     this.addShaftButtons = new LinkedList<Integer>();
-    JFXNodesList n6 = createButton(60, 100, 6);
-    JFXNodesList n5 = createButton(60, 150, 5);
-    JFXNodesList n4 = createButton(60, 200, 4);
-    JFXNodesList n3 = createButton(60, 250, 3);
-    JFXNodesList n2 = createButton(60, 300, 2);
-    JFXNodesList n1 = createButton(60, 350, 1);
+    JFXNodesList n6 = createButton(50, 100, 6);
+    JFXNodesList n5 = createButton(50, 150, 5);
+    JFXNodesList n4 = createButton(50, 200, 4);
+    JFXNodesList n3 = createButton(50, 250, 3);
+    JFXNodesList n2 = createButton(50, 300, 2);
+    JFXNodesList n1 = createButton(50, 350, 1);
   }
 
   public JFXButton getBtnCancel() {

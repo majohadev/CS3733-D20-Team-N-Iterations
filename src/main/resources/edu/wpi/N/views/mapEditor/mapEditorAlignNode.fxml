@@ -4,7 +4,6 @@
 <?import com.jfoenix.controls.JFXListView?>
 <?import com.jfoenix.controls.JFXRadioButton?>
 <?import com.jfoenix.controls.JFXTextField?>
-<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ToggleGroup?>
@@ -52,10 +51,6 @@
                 <Font name="Calibri" size="16.0" />
             </font>
         </JFXButton>
-      <JFXTextField fx:id="txt_Pos" focusColor="#fdfdff" layoutX="163.0" layoutY="235.0" promptText="Position" stylesheets="@../../css/whiteTextComboBox.css" unFocusColor="WHITE">
-         <styleClass>
-            <String fx:value="jfx-combo-box" />
-            <String fx:value="cell" />
-         </styleClass></JFXTextField>
+      <JFXTextField fx:id="txt_Pos" focusColor="#fdfdff" layoutX="125.0" layoutY="230.0" promptText="Position" stylesheets="@../../css/sanitationRequestUI.css" unFocusColor="WHITE" />
     </children>
 </AnchorPane>
