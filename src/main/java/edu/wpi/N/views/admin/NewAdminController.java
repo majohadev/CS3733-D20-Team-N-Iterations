@@ -252,7 +252,7 @@ public class NewAdminController implements Controller, Initializable {
 
   public void editMap() throws IOException {
     System.out.println("here");
-    mainApp.switchScene("views/mapEditor/mapEdit.fxml", singleton);
+    mainApp.switchScene("views/mapEditor/mapEditor.fxml", singleton);
   }
 
   public void setTitleLabel() throws DBException {
