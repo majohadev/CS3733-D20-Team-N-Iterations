@@ -802,4 +802,13 @@ public class NewAdminController implements Controller, Initializable {
       System.out.println("here4");
     }
   }
+
+  public void resetTable() {
+    tb_RequestTable.getItems().clear();
+    try {
+      populateRequestTable();
+    } catch (DBException e) {
+      e.printStackTrace();
+    }
+  }
 }

@@ -159,7 +159,7 @@
                            <graphic>
                               <ImageView fitHeight="42.0" fitWidth="45.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../../images/adminIcons/vector-path-icon-6.png" />
+                                    <Image url="@../../images/adminIcons/WHITEvector-path-icon-6.png" />
                                  </image>
                               </ImageView>
                            </graphic>
@@ -222,6 +222,11 @@
                <font>
                   <Font size="24.0" />
                </font></Label>
+            <JFXButton layoutX="797.0" layoutY="789.0" onMouseClicked="#resetTable" text="Reset" textFill="#e6ebf2">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </JFXButton>
          </children></AnchorPane>
    </children>
 </AnchorPane>
