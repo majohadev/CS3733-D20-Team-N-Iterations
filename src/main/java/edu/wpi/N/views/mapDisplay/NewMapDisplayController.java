@@ -416,6 +416,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
               locationSearchController.getTextSecondLocation().clear();
               locationSearchController.getFuzzyList().getItems().clear();
               locationSearchController.getTgHandicap().setSelected(false);
+              locationSearchController.clearDbNodes();
               mapBaseController.clearPath();
               resetTextualDirections();
               enableAllFloorButtons();
@@ -446,6 +447,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
               doctorSearchController.getTxtDoctor().clear();
               doctorSearchController.getFuzzyList().getItems().clear();
               doctorSearchController.getTgHandicap().setSelected(false);
+              doctorSearchController.clearDbNodes();
               mapBaseController.clearPath();
               resetTextualDirections();
               enableAllFloorButtons();
@@ -828,6 +830,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
 
   /**
    * sets the textual description when pathfinding
+   *
    * @throws DBException
    */
   public void setTextDescription() throws DBException {
@@ -898,9 +901,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     }
   }
 
-  /**
-   * resets the fields for textual description
-   */
+  /** resets the fields for textual description */
   public void resetTextualDirections() {
     if (mapQRController == null) {
       return;
