@@ -126,8 +126,9 @@ public class ServiceController implements Controller {
   @FXML
   public void switchToScheduler() throws Exception {
     AppointmentRequest apt = new AppointmentRequest();
-    String css = this.getClass().getResource("sanitationRequestUI1.css").toExternalForm();
-    AppointmentRequest.run(576, 90, 1280, 900, css, null, null);
+    // String css = this.getClass().getResource("sanitationRequestUI1.css").toExternalForm();
+    String css = this.getClass().getResource("default.css").toExternalForm();
+    AppointmentRequest.run(576, 90, 1280, 950, css, null, null);
   }
 
   public void onIconClicked(MouseEvent event) throws IOException {
