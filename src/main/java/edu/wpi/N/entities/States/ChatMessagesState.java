@@ -2,16 +2,14 @@ package edu.wpi.N.entities.States;
 
 import edu.wpi.N.chatbot.Dialogflow;
 import java.io.IOException;
-import java.util.LinkedList;
-import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
 
 public class ChatMessagesState {
-  private LinkedList<Label> messageHistory;
-  private boolean sessionActive;
+  private VBox messageHistory;
   public Dialogflow dialogflow;
 
   public ChatMessagesState() {
-    messageHistory = new LinkedList<Label>();
+    messageHistory = null;
     try {
       dialogflow = new Dialogflow();
     } catch (Exception ex) {
@@ -19,20 +17,11 @@ public class ChatMessagesState {
     }
   }
 
-  /**
-   * Gets the current status of dialogflow session
-   *
-   * @return
-   */
-  public boolean getSessionStatus() {
-    return this.sessionActive;
-  }
-
-  public LinkedList<Label> getMessageHistory() {
+  public VBox getMessageHistory() {
     return messageHistory;
   }
 
-  public void setMessageHistory(LinkedList<Label> messageHistory) {
+  public void setMessageHistory(VBox messageHistory) {
     this.messageHistory = messageHistory;
   }
 
@@ -42,22 +31,12 @@ public class ChatMessagesState {
   }
 
   /**
-   * Adds a single message to message history
-   *
-   * @param message
-   */
-  public void addMessage(Label message) {
-    messageHistory.add(message);
-  }
-
-  /**
    * Initializes Session with the end user
    *
    * @throws IOException
    */
   public void initSession() throws IOException {
     dialogflow.initializeSession();
-    sessionActive = true;
   }
 
   /**
@@ -67,6 +46,7 @@ public class ChatMessagesState {
    */
   public void closeSession() throws IOException {
     dialogflow.closeSession();
-    sessionActive = false;
+    // Reset message history
+    messageHistory = null;
   }
 }

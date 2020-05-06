@@ -40,8 +40,10 @@ public class NewMapDisplayController implements Controller {
   @FXML Pane pn_mapContainer;
   @FXML Pane pn_googleMapView;
   @FXML Pane pn_hospitalView;
+  @FXML Pane chatbotView;
 
   @FXML MapBaseController mapBaseController;
+
   MapLocationSearchController locationSearchController;
   MapDoctorSearchController doctorSearchController;
   MapQRController mapQRController;

@@ -10,6 +10,8 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class ChatbotController implements Controller {
@@ -18,22 +20,42 @@ public class ChatbotController implements Controller {
 
   @FXML private TextField textField;
   @FXML private VBox chatBox;
+  @FXML private AnchorPane chatBotView;
+  @FXML private AnchorPane buttonOnlyView;
 
   // Inject state singleton
-  public ChatbotController(StateSingleton state) throws IOException {
+  public ChatbotController(StateSingleton state) {
     this.state = state;
-
-    // If the session with client is not active, initialize new
-    if (!state.chatBotState.getSessionStatus()) state.chatBotState.initSession();
-    else {
-      loadMessageHistory();
-    }
   }
 
-  /** When user closes chat-dialog, close the Dialogflow Client Session */
+  /** Opens up the Chat-bot window */
+  @FXML
+  private void onBtnAskMeClicked() {
+
+    // If message history is empty
+    if (state.chatBotState.getMessageHistory() == null) {
+      try {
+        state.chatBotState.initSession();
+      } catch (Exception e) {
+        e.printStackTrace();
+        displayErrorMessage("Error initializing Client Session");
+      }
+    } else {
+      // else, load existing message history
+      loadMessageHistory();
+    }
+
+    buttonOnlyView.setVisible(false);
+    chatBotView.setVisible(true);
+  }
+
+  /** When user closes chat-dialog, close the Dialogflow Client Session and clear message history */
   @FXML
   private void onBtnCloseDialogClicked() throws IOException {
     state.chatBotState.closeSession();
+    chatBotView.setVisible(false);
+    buttonOnlyView.setVisible(true);
+    chatBox.getChildren().clear();
   }
 
   /**
@@ -41,19 +63,7 @@ public class ChatbotController implements Controller {
    * the left side, User messages on the right side
    */
   private void loadMessageHistory() {
-    int index = 0;
-    for (Label message : state.chatBotState.getMessageHistory()) {
-      if (index % 2 == 0) {
-        message.setAlignment(Pos.CENTER_LEFT);
-        // System.out.println("1");
-      } else {
-        message.setAlignment(Pos.CENTER_RIGHT);
-        // System.out.println("2");
-      }
-
-      chatBox.getChildren().add(message);
-      index++;
-    }
+    this.chatBox = singleton.chatBotState.getMessageHistory();
   }
 
   // TODO: add styleshits to labels
@@ -90,13 +100,11 @@ public class ChatbotController implements Controller {
   private void displayAndSaveMessage(String message, boolean isUserMessage) {
     // Common settings for both User's and Chatbot's messages
     Label messageAsLabel = new Label(message);
-    messageAsLabel.setPadding(new Insets(3)); // Add padding
-    //    messageAsLabel.setMaxWidth(200);
-    //    messageAsLabel.setMinWidth(20);
+    messageAsLabel.setMaxWidth(300);
     messageAsLabel.setWrapText(true);
 
-    VBox singleMessage = new VBox(messageAsLabel);
-    singleMessage.setPadding(new Insets(5));
+    HBox singleMessage = new HBox(messageAsLabel);
+    singleMessage.setPadding(new Insets(20));
 
     if (isUserMessage) {
       messageAsLabel.setStyle("-fx-background-color: grey;");
@@ -108,8 +116,8 @@ public class ChatbotController implements Controller {
 
     // Update the chatBox (VBOX)
     chatBox.getChildren().add(singleMessage);
-    // Save the message to Client Session history
-    state.chatBotState.addMessage(messageAsLabel);
+    // Save changes in Message history
+    this.state.chatBotState.setMessageHistory(chatBox);
   }
 
   // TODO: clear it up. Has redundant code with MapDisplayController
