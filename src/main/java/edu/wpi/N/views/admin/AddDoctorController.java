@@ -161,8 +161,8 @@ public class AddDoctorController {
       invalidID.setContentText("Invalid ID");
       invalidID.show();
 
-        return;
-      }
+      return;
+    }
 
     try {
       if (!ServiceDB.getEmployee(Integer.parseInt(txtf_docid.getText()))
@@ -202,10 +202,12 @@ public class AddDoctorController {
 
               return;
             }
-
+/*
             Alert acceptReq = new Alert(Alert.AlertType.ERROR);
             acceptReq.setContentText("Doctor with that ID doesnt exist");
             acceptReq.show();
+
+ */
           }
         }
       }
