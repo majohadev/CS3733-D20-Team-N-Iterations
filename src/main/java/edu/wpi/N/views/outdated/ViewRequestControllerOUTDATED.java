@@ -1,4 +1,4 @@
-package edu.wpi.N.views.admin;
+package edu.wpi.N.views.outdated;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
@@ -28,7 +28,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 
-public class ViewRequestController implements Controller, Initializable {
+public class ViewRequestControllerOUTDATED implements Controller, Initializable {
 
   private App mainApp = null;
   private StateSingleton singleton;
@@ -116,7 +116,7 @@ public class ViewRequestController implements Controller, Initializable {
     TreeTableColumn<String, String> languages = new TreeTableColumn<>("Languages");
     languages.setMaxWidth(150);
     languages.setMinWidth(150);
-    languages.setCellValueFactory(new ViewRequestController.selfFactoryTest<String>());
+    languages.setCellValueFactory(new ViewRequestControllerOUTDATED.selfFactoryTest<String>());
 
     trtbl_languages.getColumns().addAll(languages);
   }

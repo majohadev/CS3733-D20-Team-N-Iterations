@@ -176,7 +176,7 @@
 }
 
 .table-view{
-    -fx-background-color: transparent;
+    -fx-background-color: #7E9AB6;
     -fx-arrows-visible: false;
     -fx-fit-to-width: true;
 }
@@ -198,6 +198,17 @@
     -fx-page-information-alignment: center;
 }
 
+.table-view .table-row-cell{
+    -fx-background-color: #E6EBF2, #7E9AB6 ;
+    -fx-background-insets: 0, 1 ;
+    -fx-fit-to-width: true;
+
+}
+
+.table-view .table-row-cell:odd{
+    -fx-background-color: #7E9AB6, #7E9AB6 ;
+    -fx-background-insets: 0, 1 ;
+}
 
 .table-view .column-header {
     -fx-background-color: transparent;
