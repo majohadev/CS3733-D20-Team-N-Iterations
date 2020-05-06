@@ -58,6 +58,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
   JFXNodesList faulknerButtonList;
   JFXNodesList mainButtonList;
   JFXButton btn_google;
+  ArrayList<JFXButton> pathButtonList;
 
   /**
    * provides reference to the main application class
@@ -89,7 +90,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     this.currentFloor = 1;
     this.currentBuilding = "Faulkner";
     this.directions = new ArrayList<>();
-
+    this.pathButtonList = new ArrayList<>();
     this.buildingButtonList = new JFXNodesList();
     this.faulknerButtonList = new JFXNodesList();
     this.mainButtonList = new JFXNodesList();
@@ -237,6 +238,15 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
         e -> {
           try {
             handleFloorButtonClicked(txt);
+            if (this.path != null && this.path.size() > 0) {
+              for (int i = 0; i < pathButtonList.size(); i++) {
+                pathButtonList.get(i).setStyle("-fx-background-color: #263051");
+                if (pathButtonList.get(i) == btn && i < pathButtonList.size() - 1) {
+                  pathButtonList.get(i + 1).setStyle("-fx-background-color: #4A69C6");
+                  i++;
+                }
+              }
+            }
           } catch (DBException ex) {
             ex.printStackTrace();
           }
@@ -398,12 +408,15 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
         .getResetButton()
         .setOnMouseClicked(
             e -> {
-              this.path.clear();
+              if (path != null) {
+                this.path.clear();
+              }
               setGoogleButtonDisable(true);
               locationSearchController.getTextFirstLocation().clear();
               locationSearchController.getTextSecondLocation().clear();
               locationSearchController.getFuzzyList().getItems().clear();
               locationSearchController.getTgHandicap().setSelected(false);
+              locationSearchController.clearDbNodes();
               mapBaseController.clearPath();
               resetTextualDirections();
               enableAllFloorButtons();
@@ -425,13 +438,16 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
         .getResetButton()
         .setOnMouseClicked(
             e -> {
-              this.path.clear();
+              if (this.path != null) {
+                this.path.clear();
+              }
               enableAllFloorButtons();
               setGoogleButtonDisable(true);
               doctorSearchController.getTextLocation().clear();
               doctorSearchController.getTxtDoctor().clear();
               doctorSearchController.getFuzzyList().getItems().clear();
               doctorSearchController.getTgHandicap().setSelected(false);
+              doctorSearchController.clearDbNodes();
               mapBaseController.clearPath();
               resetTextualDirections();
               enableAllFloorButtons();
@@ -466,7 +482,9 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
                 return;
               }
               disableNonPathFloors();
-              //        setTextDescriptions();
+              if (pathButtonList.size() > 1) {
+                pathButtonList.get(1).setStyle("-fx-background-color: #4A69C6;");
+              }
             });
   }
 
@@ -494,8 +512,10 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     this.currentBuilding = first.getBuilding();
     this.currentFloor = first.getFloor();
     disableNonPathFloors();
+    if (pathButtonList.size() > 1) {
+      pathButtonList.get(1).setStyle("-fx-background-color: #4A69C6;");
+    }
     displayGoogleMaps(first, second);
-    //    setTextDecription();
   }
 
   /**
@@ -584,7 +604,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
    */
   public void onIconClicked(MouseEvent e) throws IOException, DBException {
     Pane src = (Pane) e.getSource();
-    pn_iconBar.getChildren().forEach(n -> n.setStyle("-fx-background-color: #263051"));
+    pn_iconBar.getChildren().forEach(n -> n.setStyle("-fx-background-color: #263051;"));
     src.setStyle("-fx-background-color: #4A69C6;");
     FXMLLoader loader;
     if (src == pn_locationIcon) {
@@ -717,13 +737,24 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     faulknerButtonList.getChildren().get(0).setDisable(false);
     mainButtonList.getChildren().forEach(e -> e.setDisable(true));
     mainButtonList.getChildren().get(0).setDisable(false);
+    if (path == null) {
+      return;
+    }
     for (int i = 0; i < path.size(); i++) {
       DbNode node = path.get(i);
       if (!(node.getNodeType().equals("ELEV") || node.getNodeType().equals("STAI"))) {
         if (node.getBuilding().equals("Faulkner")) {
-          faulknerButtonList.getChildren().get(node.getFloor()).setDisable(false);
+          JFXButton btn = (JFXButton) faulknerButtonList.getChildren().get(node.getFloor());
+          btn.setDisable(false);
+          if (!pathButtonList.contains(btn)) {
+            pathButtonList.add(btn);
+          }
         } else {
-          mainButtonList.getChildren().get(node.getFloor()).setDisable(false);
+          JFXButton btn = (JFXButton) mainButtonList.getChildren().get(node.getFloor());
+          btn.setDisable(false);
+          if (!pathButtonList.contains(btn)) {
+            pathButtonList.add(btn);
+          }
         }
       }
     }
@@ -733,6 +764,8 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
   public void enableAllFloorButtons() {
     faulknerButtonList.getChildren().forEach(e -> e.setDisable(false));
     mainButtonList.getChildren().forEach(e -> e.setDisable(false));
+    pathButtonList.forEach(n -> n.setStyle("-fx-background-color: #263051;"));
+    pathButtonList = new ArrayList<>();
   }
 
   /** switches the current map view to the google map */
@@ -797,6 +830,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
 
   /**
    * sets the textual description when pathfinding
+   *
    * @throws DBException
    */
   public void setTextDescription() throws DBException {
@@ -867,9 +901,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     }
   }
 
-  /**
-   * resets the fields for textual description
-   */
+  /** resets the fields for textual description */
   public void resetTextualDirections() {
     if (mapQRController == null) {
       return;
