@@ -108,6 +108,9 @@ public class DataEditorController implements Controller {
       CSVParser.parseCSVfromPath(path_edges);
     }
 
+    Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+    confirmAlert.setContentText("Your Nodes and Edges CSV Files Have Been Successfully Uploaded");
+    confirmAlert.show();
     // reload map data into singleton
     singleton.savedAlgo.uploadMapData();
 
@@ -129,7 +132,13 @@ public class DataEditorController implements Controller {
       String path = lbl_filePath_employees.getText();
       if (path.equals(DEFAULT_EMPLOYEES)) {
         CSVParser.parseCSVEmployees(INPUT_EMPLOYEES_DEFAULT);
+        Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmAlert.setContentText("Your Employee CSV File Has Been Successfully Uploaded");
+        confirmAlert.show();
       } else {
+        Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmAlert.setContentText("Your Employee CSV File Has Been Successfully Uploaded");
+        confirmAlert.show();
         CSVParser.parseCSVEmployeesFromPath(path);
       }
     } catch (Exception e) {
@@ -220,6 +229,9 @@ public class DataEditorController implements Controller {
       csvWriter.flush();
       csvWriter.close();
     }
+    Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+    confirmAlert.setContentText("Your CSV File Has Been Successfully Downloaded");
+    confirmAlert.show();
   }
 
   @FXML
@@ -255,6 +267,10 @@ public class DataEditorController implements Controller {
       csvWriter.flush();
       csvWriter.close();
     }
+
+    Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+    confirmAlert.setContentText("Your CSV File Has Been Successfully Downloaded");
+    confirmAlert.show();
   }
 
   // TODO: change name of the function or a button to match
