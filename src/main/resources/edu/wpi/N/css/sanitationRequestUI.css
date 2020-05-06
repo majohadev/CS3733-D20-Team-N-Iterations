@@ -13,6 +13,32 @@
     -fx-border-width: 4px;
 }
 
+.jfx-button-service {
+    -jfx-button-type: RAISED;
+    -jfx-rippler-fill: #4A69C6;
+    -fx-background-color: transparent;
+    -fx-border-color: #6C5C7F;
+    -fx-border-width: 8px;
+    -fx-border-radius: 15;
+    -fx-background-radius: 15;
+    -fx-text-fill: #E6EBF2;
+    -fx-min-width: 125;
+    -fx-min-height: 125;
+    -fx-max-width: 125;
+    -fx-max-height: 125;
+    -fx-font-family: 'Karla';
+    -fx-font-size: 18px;
+}
+
+.label-buttons{
+    -fx-text-fill: #E6EBF2;
+    -fx-font-family: 'Karla';
+    -fx-font-size: 16px;
+    -fx-min-height: 63;
+    -fx-min-width: 127;
+    -fx-max-height: 63;
+    -fx-max-width: 127;
+}
 
 .jfx-button-submit {
     -jfx-button-type: RAISED;

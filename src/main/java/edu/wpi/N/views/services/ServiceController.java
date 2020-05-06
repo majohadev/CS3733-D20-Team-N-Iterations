@@ -3,22 +3,45 @@ package edu.wpi.N.views.services;
 import com.jfoenix.controls.JFXButton;
 import edu.wpi.N.App;
 import edu.wpi.N.database.DBException;
+import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.views.Controller;
 import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 
 public class ServiceController implements Controller {
 
-  public AnchorPane service_anchor;
+  private StateSingleton singleton;
+  public Pane service_anchor;
   private App mainApp;
 
   @FXML JFXButton btn_translator;
   @FXML JFXButton btn_laundry;
+  @FXML JFXButton btn_it;
+  @FXML JFXButton btn_flower;
+  @FXML JFXButton btn_schedule;
+  @FXML JFXButton btn_security;
+  @FXML JFXButton btn_wheelchair;
+  @FXML JFXButton btn_sanitation;
+  @FXML JFXButton btn_transport;
 
-  public ServiceController() throws DBException {}
+  @FXML Label txt_translator;
+  @FXML Label txt_laundry;
+  @FXML Label txt_it;
+  @FXML Label txt_flower;
+  @FXML Label txt_schedule;
+  @FXML Label txt_security;
+  @FXML Label txt_wheelchair;
+  @FXML Label txt_sanitation;
+  @FXML Label txt_transport;
+
+  public ServiceController(StateSingleton singleton) {
+    this.singleton = singleton;
+  }
 
   public void setMainApp(App mainApp) {
     this.mainApp = mainApp;
@@ -27,6 +50,15 @@ public class ServiceController implements Controller {
   public void initialize() throws DBException, IOException {
     AnchorPane currentPane = FXMLLoader.load(getClass().getResource("mainServicePage.fxml"));
     service_anchor.getChildren().setAll(currentPane);
+    txt_flower.setVisible(false);
+    txt_it.setVisible(false);
+    txt_laundry.setVisible(false);
+    txt_sanitation.setVisible(false);
+    txt_schedule.setVisible(false);
+    txt_security.setVisible(false);
+    txt_wheelchair.setVisible(false);
+    txt_transport.setVisible(false);
+    txt_translator.setVisible(false);
   }
 
   @FXML
@@ -75,7 +107,7 @@ public class ServiceController implements Controller {
 
   @FXML
   public void backHome() throws IOException {
-    mainApp.switchScene("views/newHomePage.fxml", singleton);
+    mainApp.switchScene("views/mapDisplay/newMapDisplay.fxml", singleton);
   }
 
   @FXML
@@ -90,5 +122,34 @@ public class ServiceController implements Controller {
     service_anchor.getChildren().setAll(currentPane);
   }
 
-  public void onIconClicked(MouseEvent event) {}
+  public void onIconClicked(MouseEvent event) throws IOException {
+    backHome();
+  }
+
+  @FXML
+  public void showLabel(MouseEvent e) {
+    if (e.getSource() == btn_flower) txt_flower.setVisible(true);
+    if (e.getSource() == btn_translator) txt_translator.setVisible(true);
+    if (e.getSource() == btn_sanitation) txt_sanitation.setVisible(true);
+    if (e.getSource() == btn_schedule) txt_schedule.setVisible(true);
+    if (e.getSource() == btn_security) txt_security.setVisible(true);
+    if (e.getSource() == btn_it) txt_it.setVisible(true);
+    if (e.getSource() == btn_laundry) txt_laundry.setVisible(true);
+    if (e.getSource() == btn_wheelchair) txt_wheelchair.setVisible(true);
+    if (e.getSource() == btn_transport) txt_transport.setVisible(true);
+  }
+
+  @FXML
+  public void hideLabel(MouseEvent e) {
+
+    if (e.getSource() == btn_flower) txt_flower.setVisible(false);
+    if (e.getSource() == btn_translator) txt_translator.setVisible(false);
+    if (e.getSource() == btn_sanitation) txt_sanitation.setVisible(false);
+    if (e.getSource() == btn_schedule) txt_schedule.setVisible(false);
+    if (e.getSource() == btn_security) txt_security.setVisible(false);
+    if (e.getSource() == btn_it) txt_it.setVisible(false);
+    if (e.getSource() == btn_laundry) txt_laundry.setVisible(false);
+    if (e.getSource() == btn_wheelchair) txt_wheelchair.setVisible(false);
+    if (e.getSource() == btn_transport) txt_transport.setVisible(false);
+  }
 }

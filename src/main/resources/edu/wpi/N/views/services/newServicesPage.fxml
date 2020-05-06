@@ -1,75 +1,183 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="1080.0" maxWidth="1920.0" minHeight="1080.0" minWidth="1920.0" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #263051;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.services.ServiceController" stylesheets="@../../css/sanitationRequestUI.css">
+<AnchorPane maxHeight="1080.0" maxWidth="1920.0" minHeight="1080.0" minWidth="1920.0" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #263051;" stylesheets="@../../css/sanitationRequestUI.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.services.ServiceController">
    <children>
       <Separator layoutX="55.0" orientation="VERTICAL" prefHeight="1080.0" />
-      <AnchorPane fx:id="service_anchor" layoutX="640.0" maxHeight="900.0" maxWidth="1280.0" minHeight="1080.0" minWidth="1280.0" prefHeight="1080" prefWidth="1280.0">
+      <AnchorPane layoutX="576.0" maxHeight="1080.0" maxWidth="1280.0" prefHeight="1080.0" prefWidth="1280.0">
          <children>
+            <StackPane prefHeight="1080.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <Pane fx:id="service_anchor" StackPane.alignment="CENTER">
+                     <StackPane.margin>
+                        <Insets bottom="90.0" left="8.0" right="8.0" top="90.0" />
+                     </StackPane.margin>
+                  </Pane>
+               </children>
+            </StackPane>
          </children></AnchorPane>
-      <JFXButton fx:id="btn_laundry" layoutX="304.0" layoutY="250.0" onMouseClicked="#switchToEmotionalPage" prefHeight="143.0" prefWidth="188.0" textFill="WHITE" />
       <AnchorPane fx:id="pn_iconBar" maxHeight="1080.0" maxWidth="55.0" minHeight="1080.0" minWidth="55.0" prefHeight="1080.0" prefWidth="55.0" style="-fx-background-color: #263051;">
          <children>
             <AnchorPane fx:id="pn_locationIcon" onMouseClicked="#onIconClicked" prefHeight="55.0" prefWidth="55.0" stylesheets="@../../css/newMapDisplay.css">
                <children>
                   <ImageView fitHeight="35.0" fitWidth="29.0" layoutX="13.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="13.0">
                      <image>
-                        <Image url="@../../images/mapDisplayIcons/locationButton.png" />
+                        <Image url="@../../images/mapDisplayIcons/houseButton.png" />
                      </image>
                   </ImageView>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="pn_doctorIcon" layoutY="55.0" onMouseClicked="#onIconClicked" prefHeight="55.0" prefWidth="55.0" stylesheets="@../../css/newMapDisplay.css">
-               <children>
-                  <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
-                     <image>
-                        <Image url="@../../images/mapDisplayIcons/doctorButton.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </AnchorPane>
-            <AnchorPane fx:id="pn_qrIcon" layoutY="110.0" onMouseClicked="#onIconClicked" prefHeight="55.0" prefWidth="55.0" stylesheets="@../../css/newMapDisplay.css">
-               <children>
-                  <ImageView fitHeight="29.0" fitWidth="35.0" layoutX="13.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="13.0">
-                     <image>
-                        <Image url="@../../images/mapDisplayIcons/qrButton.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </AnchorPane>
-            <AnchorPane fx:id="pn_adminIcon" layoutY="1025.0" onMouseClicked="#onIconClicked" prefHeight="55.0" prefWidth="55.0" stylesheets="@../../css/newMapDisplay.css">
-               <children>
-                  <ImageView fitHeight="29.0" fitWidth="35.0" layoutX="13.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../images/mapDisplayIcons/adminButton.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </AnchorPane>
-            <AnchorPane fx:id="pn_infoIcon" layoutY="970.0" onMouseClicked="#onIconClicked" prefHeight="55.0" prefWidth="55.0" stylesheets="@../../css/newMapDisplay.css">
-               <children>
-                  <ImageView fitHeight="29.0" fitWidth="35.0" layoutX="13.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../images/mapDisplayIcons/helpButton.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </AnchorPane>
-            <AnchorPane fx:id="pn_serviceIcon" layoutY="915.0" onMouseClicked="#onIconClicked" prefHeight="55.0" prefWidth="55.0" stylesheets="@../../css/newMapDisplay.css">
-               <children>
-                  <ImageView fitHeight="29.0" fitWidth="35.0" layoutX="13.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="13.0">
-                     <image>
-                        <Image url="@../../images/mapDisplayIcons/serviceButton.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </AnchorPane>
+            <AnchorPane fx:id="pn_doctorIcon" layoutY="55.0" onMouseClicked="#onIconClicked" prefHeight="55.0" prefWidth="55.0" stylesheets="@../../css/newMapDisplay.css" />
+            <AnchorPane fx:id="pn_qrIcon" layoutY="110.0" onMouseClicked="#onIconClicked" prefHeight="55.0" prefWidth="55.0" stylesheets="@../../css/newMapDisplay.css" />
+            <AnchorPane fx:id="pn_adminIcon" layoutY="1025.0" onMouseClicked="#onIconClicked" prefHeight="55.0" prefWidth="55.0" stylesheets="@../../css/newMapDisplay.css" />
+            <AnchorPane fx:id="pn_infoIcon" layoutY="970.0" onMouseClicked="#onIconClicked" prefHeight="55.0" prefWidth="55.0" stylesheets="@../../css/newMapDisplay.css" />
+            <AnchorPane fx:id="pn_serviceIcon" layoutY="915.0" onMouseClicked="#onIconClicked" prefHeight="55.0" prefWidth="55.0" stylesheets="@../../css/newMapDisplay.css" />
          </children>
       </AnchorPane>
+      <VBox alignment="CENTER" layoutX="115.0" prefHeight="1036.0" prefWidth="100.0">
+         <children>
+            <VBox alignment="CENTER" minHeight="200.0" prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <Label fx:id="txt_laundry" alignment="CENTER" contentDisplay="CENTER" prefHeight="70.0" prefWidth="127.0" styleClass="label-buttons" text="Laundry" textAlignment="CENTER" wrapText="true" />
+                  <JFXButton fx:id="btn_laundry" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" minHeight="95.0" minWidth="72.0" onMouseClicked="#switchToLaundryPage" onMouseEntered="#showLabel" onMouseExited="#hideLabel" prefHeight="95.0" prefWidth="125.0" styleClass="jfx-button-service" text="Internal Transport" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+                     <graphic>
+                        <ImageView fitHeight="90.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../images/serviceIcons/LaundryWhite.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </JFXButton>
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" minHeight="200.0" prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <Label fx:id="txt_translator" alignment="CENTER" contentDisplay="CENTER" prefHeight="70.0" prefWidth="127.0" styleClass="label-buttons" text="Translator" textAlignment="CENTER" wrapText="true" />
+                  <JFXButton fx:id="btn_translator" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" minHeight="95.0" minWidth="72.0" onMouseClicked="#switchToTranslatorPage" onMouseEntered="#showLabel" onMouseExited="#hideLabel" prefHeight="95.0" prefWidth="125.0" styleClass="jfx-button-service" text="Internal Transport" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+                     <graphic>
+                        <ImageView fitHeight="90.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../images/serviceIcons/languageWhite.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </JFXButton>
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" minHeight="200.0" prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <Label fx:id="txt_transport" alignment="CENTER" contentDisplay="CENTER" prefHeight="70.0" prefWidth="127.0" styleClass="label-buttons" text="Internal Transport" textAlignment="CENTER" wrapText="true" />
+                  <JFXButton fx:id="btn_transport" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" minHeight="95.0" minWidth="72.0" onMouseClicked="#switchToTransportPage" onMouseEntered="#showLabel" onMouseExited="#hideLabel" prefHeight="95.0" prefWidth="125.0" styleClass="jfx-button-service" text="Internal Transport" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+                     <graphic>
+                        <ImageView fitHeight="90.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../images/serviceIcons/PatientTransportationIconWhite.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </JFXButton>
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" minHeight="200.0" prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <Label fx:id="txt_sanitation" alignment="CENTER" contentDisplay="CENTER" prefHeight="70.0" prefWidth="127.0" styleClass="label-buttons" text="Sanitation" textAlignment="CENTER" wrapText="true" />
+                  <JFXButton fx:id="btn_sanitation" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" minHeight="95.0" minWidth="72.0" onMouseClicked="#switchToSanitationPage" onMouseEntered="#showLabel" onMouseExited="#hideLabel" prefHeight="95.0" prefWidth="125.0" styleClass="jfx-button-service" text="Internal Transport" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+                     <graphic>
+                        <ImageView fitHeight="90.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../images/serviceIcons/SanitationIconWhite.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </JFXButton>
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" minHeight="200.0" prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <Label fx:id="txt_schedule" alignment="CENTER" contentDisplay="CENTER" prefHeight="70.0" prefWidth="127.0" styleClass="label-buttons" text="Schedule Appointment" textAlignment="CENTER" wrapText="true" />
+                  <JFXButton fx:id="btn_schedule" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" minHeight="95.0" minWidth="72.0" onMouseClicked="#switchToWheelchairPage" onMouseEntered="#showLabel" onMouseExited="#hideLabel" prefHeight="95.0" prefWidth="125.0" styleClass="jfx-button-service" text="Internal Transport" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+                     <graphic>
+                        <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../images/serviceIcons/appointment-scheduler-white.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </JFXButton>
+               </children>
+            </VBox>
+         </children>
+      </VBox>
+      <VBox alignment="CENTER" layoutX="315.0" prefHeight="1036.0" prefWidth="100.0">
+         <children>
+            <VBox alignment="CENTER" minHeight="200.0" prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <Label fx:id="txt_flower" alignment="CENTER" contentDisplay="CENTER" prefHeight="70.0" prefWidth="127.0" styleClass="label-buttons" text="Flower Delivery" textAlignment="CENTER" wrapText="true" />
+                  <JFXButton fx:id="btn_flower" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" minHeight="95.0" minWidth="72.0" onMouseClicked="#switchToFloralPage" onMouseEntered="#showLabel" onMouseExited="#hideLabel" prefHeight="95.0" prefWidth="125.0" styleClass="jfx-button-service" text="Internal Transport" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+                     <graphic>
+                        <ImageView fitHeight="90.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../images/serviceIcons/GivingFlowerWhite.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </JFXButton>
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" minHeight="200.0" prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <Label fx:id="txt_security" alignment="CENTER" contentDisplay="CENTER" prefHeight="70.0" prefWidth="127.0" styleClass="label-buttons" text="Security" textAlignment="CENTER" wrapText="true" />
+                  <JFXButton fx:id="btn_security" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" minHeight="95.0" minWidth="72.0" onMouseClicked="#switchToSecurityPage" onMouseEntered="#showLabel" onMouseExited="#hideLabel" prefHeight="95.0" prefWidth="125.0" styleClass="jfx-button-service" text="Internal Transport" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+                     <graphic>
+                        <ImageView fitHeight="90.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../images/serviceIcons/securityWhite.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </JFXButton>
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" minHeight="200.0" prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <Label fx:id="txt_it" alignment="CENTER" contentDisplay="CENTER" prefHeight="70.0" prefWidth="127.0" styleClass="label-buttons" text="IT Assistance" textAlignment="CENTER" wrapText="true" />
+                  <JFXButton fx:id="btn_it" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" minHeight="95.0" minWidth="72.0" onMouseClicked="#switchToITServicePage" onMouseEntered="#showLabel" onMouseExited="#hideLabel" prefHeight="95.0" prefWidth="125.0" styleClass="jfx-button-service" text="Internal Transport" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+                     <graphic>
+                        <ImageView fitHeight="90.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../images/serviceIcons/ITservicesWhite.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </JFXButton>
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" minHeight="200.0" prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <Label fx:id="txt_wheelchair" alignment="CENTER" contentDisplay="CENTER" prefHeight="70.0" prefWidth="127.0" styleClass="label-buttons" text="Wheelchair" textAlignment="CENTER" wrapText="true" />
+                  <JFXButton fx:id="btn_wheelchair" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" minHeight="95.0" minWidth="72.0" onMouseClicked="#switchToWheelchairPage" onMouseEntered="#showLabel" onMouseExited="#hideLabel" prefHeight="95.0" prefWidth="125.0" styleClass="jfx-button-service" text="Internal Transport" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+                     <graphic>
+                        <ImageView fitHeight="90.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../images/serviceIcons/WheelchairWhite.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </JFXButton>
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" minHeight="200.0" prefHeight="200.0" prefWidth="100.0" />
+         </children>
+      </VBox>
    </children>
 </AnchorPane>
