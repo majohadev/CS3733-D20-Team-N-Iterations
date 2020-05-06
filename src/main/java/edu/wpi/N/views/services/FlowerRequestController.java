@@ -100,6 +100,25 @@ public class FlowerRequestController implements Controller {
   @FXML
   public void createNewFlowerReq() throws DBException, IOException {
 
+    if (cb_flowerType.getSelectionModel().getSelectedIndex() > 0) {
+
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setContentText("Select a Flower");
+      errorAlert.show();
+      return;
+    }
+
+    if (txt_visitorName.getText().equals("")
+        || txt_creditNum.getText().equals("")
+        || txt_patientName.getText().equals("")
+        || txt_quantity.getText().equals("")) {
+
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setContentText("One or more arguments is NULL!");
+      errorAlert.show();
+      return;
+    }
+
     String visitorName = txt_visitorName.getText();
     String patientName = txt_patientName.getText();
     String creditNum = txt_creditNum.getText();
@@ -134,6 +153,16 @@ public class FlowerRequestController implements Controller {
       errorAlert.show();
       return;
     }
+
+    if (txt_creditNum.getText().length() != 16) {
+
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setContentText("Invalid Credit Card Number!");
+      errorAlert.show();
+
+      return;
+    }
+
     LinkedList<String> flowers = new LinkedList<>();
     for (int i = 0; i < Integer.parseInt(quantity); i++) {
       flowers.add(flowerSelection);
