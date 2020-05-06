@@ -68,7 +68,7 @@
 }
 
 .jfx-tab-pane .tab-header-background {
-    -fx-background-color: #4A69C6;
+    -fx-background-color: #6C5C7F;
 }
 
 
@@ -82,5 +82,5 @@
 }
 
 .jfx-tab-pane .tab:selected {
-    -fx-background-color: #6C5C7F;
+    -fx-background-color: #4A69C6;
 }
