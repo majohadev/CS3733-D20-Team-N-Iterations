@@ -8,10 +8,12 @@ public class StateSingleton {
   private static StateSingleton _instance = null;
   public Algorithm savedAlgo;
   public MapImageLoader mapImageLoader;
+  public ChatMessagesState chatBotState;
 
   private StateSingleton() throws DBException {
     savedAlgo = new Algorithm();
     mapImageLoader = new MapImageLoader();
+    chatBotState = new ChatMessagesState();
   }
 
   public static StateSingleton getInstance() throws DBException {

@@ -10,42 +10,42 @@
 
 <AnchorPane maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="970.0" prefWidth="320.0" style="-fx-background-color: #263051;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.admin.RequestHandelerController">
    <children>
-      <Label layoutX="16.0" layoutY="110.0" text="Notes:" textFill="#e6ebf2">
+      <Label layoutX="16.0" layoutY="110.0" styleClass="label-mid-size" stylesheets="@../../css/sanitationRequestUI.css" text="Notes:" textFill="#e6ebf2">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <Label layoutX="42.0" layoutY="46.0" text="Accept Request" textFill="#e6ebf2">
+      <Label layoutX="34.0" layoutY="44.0" styleClass="label-admin-display" stylesheets="@../../css/sanitationRequestUI.css" text="Accept Request" textFill="#e6ebf2">
          <font>
-            <Font size="36.0" />
+            <Font name="Calibri" size="36.0" />
          </font>
       </Label>
       <Line endX="146.0" layoutX="174.0" layoutY="427.0" startX="-174.0" stroke="#7e9ab6" />
-      <Label layoutX="29.0" layoutY="458.0" text="Assign Employee" textFill="#e6ebf2">
+      <Label layoutX="21.0" layoutY="455.0" styleClass="label-admin-display" stylesheets="@../../css/sanitationRequestUI.css" text="Assign Employee" textFill="#e6ebf2">
          <font>
             <Font size="36.0" />
          </font>
       </Label>
-      <JFXButton fx:id="btn_addoffice" buttonType="RAISED" layoutX="113.0" layoutY="578.0" onMouseClicked="#assignEmployee" text="Assign" textFill="#e6ebf2">
+      <JFXButton fx:id="btn_addoffice" buttonType="RAISED" layoutX="49.0" layoutY="572.0" onMouseClicked="#assignEmployee" styleClass="jfx-button-regular" stylesheets="@../../css/sanitationRequestUI.css" text="Assign" textFill="#e6ebf2">
          <font>
             <Font name="Calibri" size="24.0" />
          </font>
       </JFXButton>
-      <JFXTextArea focusColor="#e6ebf2" layoutX="93.0" layoutY="110.0" prefHeight="208.0" prefWidth="211.0" style="-fx-text-fill: #e6ebf2;" unFocusColor="#e6ebf2">
+      <JFXTextArea focusColor="#e6ebf2" layoutX="93.0" layoutY="110.0" prefHeight="202.0" prefWidth="211.0" style="-fx-text-fill: #e6ebf2;" styleClass="jfx-text-area" stylesheets="@../../css/sanitationRequestUI.css" unFocusColor="#e6ebf2">
          <font>
             <Font size="14.0" />
          </font>
       </JFXTextArea>
-      <JFXButton layoutX="113.0" layoutY="327.0" onMouseClicked="#acceptRequest" text="Accept" textFill="#e6ebf2">
+      <JFXButton layoutX="49.0" layoutY="336.0" onMouseClicked="#acceptRequest" styleClass="jfx-button-regular" stylesheets="@../../css/sanitationRequestUI.css" text="Accept" textFill="#e6ebf2">
          <font>
             <Font size="24.0" />
          </font>
       </JFXButton>
-      <Label layoutX="11.0" layoutY="524.0" text="Employees:" textFill="#e6ebf2">
+      <Label layoutX="11.0" layoutY="524.0" styleClass="label-mid-size" stylesheets="@../../css/sanitationRequestUI.css" text="Employees:" textFill="#e6ebf2">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <ChoiceBox fx:id="cb_Employees" layoutX="138.0" layoutY="529.0" prefWidth="150.0" />
+      <ChoiceBox fx:id="cb_Employees" layoutX="138.0" layoutY="529.0" prefWidth="150.0" stylesheets="@../../css/sanitationRequestUI.css" />
    </children>
 </AnchorPane>

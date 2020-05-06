@@ -24,11 +24,13 @@ public class App extends Application {
   @Override
   public void start(Stage primaryStage) throws IOException, DBException {
     // Configure the primary Stage
+
     this.masterStage = primaryStage;
     this.masterStage.setTitle("Brigham and Women's Hospital Kiosk Application");
+
     StateSingleton newSingleton = StateSingleton.getInstance();
     switchScene("views/mapDisplay/newMapDisplay.fxml", newSingleton);
-    // switchScene("views/mapDisplay/googleMap.fxml", newSingleton);
+    // switchScene("views/chatbot/chatBox.fxml", newSingleton);
     masterStage.setMaximized(true);
   }
 

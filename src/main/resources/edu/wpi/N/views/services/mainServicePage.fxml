@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="mainServicePage" prefHeight="900.0" prefWidth="1264.0" styleClass="anchor" stylesheets="@../../css/sanitationRequestUI.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="mainServicePage" minHeight="900.0" minWidth="1264.0" prefHeight="900.0" prefWidth="1264.0" styleClass="anchor" stylesheets="@../../css/sanitationRequestUI.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <HBox alignment="CENTER" layoutX="437.0" layoutY="345.0" prefHeight="278.0" prefWidth="317.0" stylesheets="@../../css/sanitationRequestUI.css">
          <children>
