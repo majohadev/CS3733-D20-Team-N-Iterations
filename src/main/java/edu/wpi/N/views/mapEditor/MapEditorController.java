@@ -547,7 +547,7 @@ public class MapEditorController implements Controller {
     controllerEditNode.setLongName(node.getLongName());
     controllerEditNode.setPos(circle.getCenterX(), circle.getCenterY());
 
-    //autoFocusToNode(node);
+    // autoFocusToNode(node);
   }
 
   private void onCircleEditNodeDragged(MouseEvent event, Circle circle) {

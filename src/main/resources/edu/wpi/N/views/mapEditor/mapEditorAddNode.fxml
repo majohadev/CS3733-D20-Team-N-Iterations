@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="280.0" prefWidth="470.0" style="-fx-background-color: #002186; -fx-background-radius: 10; -fx-border-radius: 10;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.mapEditor.MapEditorAddNodeController">
+<AnchorPane prefHeight="280.0" prefWidth="470.0" style="-fx-background-color: #263051; -fx-background-radius: 10; -fx-border-radius: 10;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.mapEditor.MapEditorAddNodeController">
    <children>
       <JFXTextField fx:id="txt_shortName" layoutX="44.0" layoutY="98.0" prefHeight="25.0" prefWidth="377.0" promptText="Short Name" style="-fx-text-inner-color: WHITE; -fx-prompt-text-fill: WHITE;" unFocusColor="WHITE">
          <font>

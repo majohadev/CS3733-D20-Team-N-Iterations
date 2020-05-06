@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="280.0" prefWidth="470.0" style="-fx-background-color: #002186; -fx-background-radius: 10; -fx-border-radius: 10;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.mapEditor.MapEditorDeleteEdgeController">
+<AnchorPane prefHeight="280.0" prefWidth="470.0" style="-fx-background-color: #263051; -fx-background-radius: 10; -fx-border-radius: 10;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.mapEditor.MapEditorDeleteEdgeController">
    <children>
       <Label layoutX="41.0" layoutY="14.0" prefHeight="39.0" prefWidth="246.0" text="Delete Edge" textFill="WHITE">
          <font>
