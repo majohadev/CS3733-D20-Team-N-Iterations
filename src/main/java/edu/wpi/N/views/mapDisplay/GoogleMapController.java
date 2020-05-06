@@ -1,7 +1,5 @@
 package edu.wpi.N.views.mapDisplay;
 
-import com.lynden.gmapsfx.javascript.object.*;
-import com.lynden.gmapsfx.service.directions.*;
 import edu.wpi.N.App;
 import edu.wpi.N.Main;
 import edu.wpi.N.entities.States.StateSingleton;

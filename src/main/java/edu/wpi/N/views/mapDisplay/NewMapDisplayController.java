@@ -43,9 +43,11 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
   @FXML Pane pn_mapContainer;
   @FXML Pane pn_googleMapView;
   @FXML Pane pn_hospitalView;
+  @FXML Pane chatbotView;
   @FXML Label lbl_building_floor;
 
   @FXML MapBaseController mapBaseController;
+
   MapLocationSearchController locationSearchController;
   MapDoctorSearchController doctorSearchController;
   MapQRController mapQRController;
