@@ -547,7 +547,7 @@ public class MapEditorController implements Controller {
     controllerEditNode.setLongName(node.getLongName());
     controllerEditNode.setPos(circle.getCenterX(), circle.getCenterY());
 
-    autoFocusToNode(node);
+    //autoFocusToNode(node);
   }
 
   private void onCircleEditNodeDragged(MouseEvent event, Circle circle) {
@@ -2187,6 +2187,11 @@ public class MapEditorController implements Controller {
     this.currentFloor = newFloor;
     this.currentBuilding = newBuilding;
     setFloorBuildingText(this.currentFloor, this.currentBuilding);
+    if (this.currentBuilding.equals("Main")) {
+      setMainCampusDefaults();
+    } else {
+      setFaulknerDefaults();
+    }
   }
 
   /** collapses all the floor buttons back to the main button */
