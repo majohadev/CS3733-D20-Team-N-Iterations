@@ -70,10 +70,6 @@
     -fx-font-size: 24px;
 }
 
-.jfx-button-login-page {
-    -fx-font-family: 'Karla';
-}
-
 .jfx-button-regular-half {
     -jfx-button-type: RAISED;
     -jfx-rippler-fill: #6C5C7F;
@@ -133,12 +129,6 @@
     -fx-font-size: 36px;
 }
 
-.label-login-display {
-    -fx-text-fill: #E6EBF2;
-    -fx-font-family: 'Karla';
-    -fx-font-size: 48px;
-}
-
 .label-mid-size {
     -fx-text-fill: #E6EBF2;
     -fx-font-family: 'Karla';
@@ -195,6 +185,11 @@
 }
 
 .jfx-combo-box .cell {
+    -fx-text-fill: #263051;
+    -fx-background-color: transparent;
+}
+
+.jfx-combo-box .text-field {
     -fx-text-fill: #263051;
     -fx-background-color: transparent;
 }

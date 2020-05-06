@@ -57,17 +57,17 @@
                <font>
                   <Font size="24.0" />
                </font></JFXPasswordField>
-            <JFXButton buttonType="RAISED" layoutX="147.0" layoutY="428.0" onMouseClicked="#clearFields" ripplerFill="BLACK" styleClass="jfx-button-login-page" stylesheets="@../../css/sanitationRequestUI.css" text="Clear" textFill="WHITE">
+            <JFXButton buttonType="RAISED" layoutX="147.0" layoutY="428.0" onMouseClicked="#clearFields" ripplerFill="BLACK" stylesheets="@../../css/sanitationRequestUI.css" text="Clear" textFill="WHITE">
                <font>
                   <Font name="Calibri Bold" size="36.0" />
                </font>
             </JFXButton>
-            <JFXButton buttonType="RAISED" layoutX="259.0" layoutY="428.0" onMouseClicked="#checkUser" ripplerFill="BLACK" styleClass="jfx-button-login-page" stylesheets="@../../css/sanitationRequestUI.css" text="Login" textFill="WHITE">
+            <JFXButton buttonType="RAISED" layoutX="259.0" layoutY="428.0" onMouseClicked="#checkUser" ripplerFill="BLACK" text="Login" textFill="WHITE">
                <font>
                   <Font name="Calibri Bold" size="36.0" />
                </font>
             </JFXButton>
-            <Label layoutX="28.0" layoutY="25.0" styleClass="label-login-display" stylesheets="@../../css/sanitationRequestUI.css" text="Employee Login" textFill="#e6ebf2">
+            <Label layoutX="49.0" layoutY="26.0" text="Employee Login" textFill="#e6ebf2">
                <font>
                   <Font name="Calibri" size="48.0" />
                </font>
@@ -81,7 +81,7 @@
                   <Image url="@../../images/hospitalLogo/Brigham_and_Womens_Hospital_logo.png" />
                </image>
             </ImageView>
-            <JFXButton buttonType="RAISED" layoutX="10.0" layoutY="426.0" onMouseClicked="#goBack" ripplerFill="BLACK" styleClass="jfx-button-login-page" stylesheets="@../../css/sanitationRequestUI.css" text="Return" textFill="WHITE">
+            <JFXButton buttonType="RAISED" layoutX="10.0" layoutY="426.0" onMouseClicked="#goBack" ripplerFill="BLACK" text="Return" textFill="WHITE">
                <font>
                   <Font name="Calibri Bold" size="36.0" />
                </font>
