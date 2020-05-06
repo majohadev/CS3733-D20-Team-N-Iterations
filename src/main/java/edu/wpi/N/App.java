@@ -24,12 +24,19 @@ public class App extends Application {
   @Override
   public void start(Stage primaryStage) throws IOException, DBException {
     // Configure the primary Stage
-    this.masterStage = primaryStage;
-    this.masterStage.setTitle("Brigham and Women's Hospital Kiosk Application");
-    StateSingleton newSingleton = StateSingleton.getInstance();
-    switchScene("views/mapDisplay/newMapDisplay.fxml", newSingleton);
-    // switchScene("views/mapDisplay/googleMap.fxml", newSingleton);
-    masterStage.setMaximized(true);
+    primaryStage.setTitle("Team N Sanitation Request API");
+    FXMLLoader loader = new FXMLLoader();
+    loader.setLocation(getClass().getResource("demo.fxml"));
+    Pane pane = loader.load();
+    Scene scene = new Scene(pane);
+    primaryStage.setScene(scene);
+    primaryStage.show();
+    //    this.masterStage = primaryStage;
+    //    this.masterStage.setTitle("Brigham and Women's Hospital Kiosk Application");
+    //    StateSingleton newSingleton = StateSingleton.getInstance();
+    //    switchScene("views/mapDisplay/newMapDisplay.fxml", newSingleton);
+    //    // switchScene("views/mapDisplay/googleMap.fxml", newSingleton);
+    //    masterStage.setMaximized(true);
   }
 
   public Stage getStage() {
