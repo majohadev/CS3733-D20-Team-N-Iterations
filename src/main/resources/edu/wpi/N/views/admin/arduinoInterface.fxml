@@ -9,41 +9,41 @@
 
 <AnchorPane fx:id="pn_arduino" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="300.0" style="-fx-background-color: #263051;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.features.ArduinoController">
     <children>
-        <JFXTextField fx:id="txtf_com" focusColor="#e6ebf2" layoutX="33.0" layoutY="92.0" prefHeight="26.0" prefWidth="104.0" promptText="COM Port" style="-fx-prompt-text-fill: #e6ebf2;" unFocusColor="#e6ebf2">
+        <JFXTextField fx:id="txtf_com" focusColor="#e6ebf2" layoutX="33.0" layoutY="92.0" prefHeight="34.0" prefWidth="125.0" promptText="COM Port" style="-fx-prompt-text-fill: #e6ebf2;" styleClass="jfx-text-field" stylesheets="@../../css/sanitationRequestUI.css" unFocusColor="#e6ebf2">
          <font>
             <Font size="14.0" />
          </font></JFXTextField>
-        <JFXButton fx:id="btn_com" layoutX="178.0" layoutY="93.0" onMouseClicked="#setComPort" ripplerFill="#ffc911" text="Set COM Port" textFill="#e6ebf2">
+        <JFXButton fx:id="btn_com" layoutX="171.0" layoutY="92.0" onMouseClicked="#setComPort" ripplerFill="#ffc911" styleClass="jfx-button-regular-arduino" stylesheets="@../../css/sanitationRequestUI.css" text="Set COM Port" textFill="#e6ebf2">
          <font>
             <Font size="14.0" />
          </font></JFXButton>
-        <JFXToggleButton fx:id="tog_serial" layoutX="71.0" layoutY="326.0" onMouseClicked="#toggleSerial" prefHeight="49.0" prefWidth="180.0" text="Open/Close Serial" textAlignment="CENTER" textFill="#e6ebf2" toggleColor="#4a69c6" toggleLineColor="#7e9ab6" wrapText="true">
+        <JFXToggleButton fx:id="tog_serial" layoutX="64.0" layoutY="326.0" onMouseClicked="#toggleSerial" prefHeight="49.0" prefWidth="180.0" stylesheets="@../../css/sanitationRequestUI.css" text="Open/Close Serial" textAlignment="CENTER" textFill="#e6ebf2" toggleColor="#4a69c6" toggleLineColor="#7e9ab6" wrapText="true">
          <font>
             <Font size="14.0" />
          </font></JFXToggleButton>
-        <JFXTextField fx:id="txtf_msg" layoutX="32.0" layoutY="146.0" prefHeight="26.0" prefWidth="104.0" promptText="Enter Message" style="-fx-prompt-text-fill: #e6ebf2;" unFocusColor="#e6ebf2" />
-        <JFXButton fx:id="btn_sendmsg" layoutX="176.0" layoutY="147.0" onMouseClicked="#sendMessage" ripplerFill="#ffc911" text="Send Message" textFill="#e6ebf2">
+        <JFXTextField fx:id="txtf_msg" layoutX="32.0" layoutY="146.0" prefHeight="34.0" prefWidth="125.0" promptText="Enter Message" style="-fx-prompt-text-fill: #e6ebf2;" styleClass="jfx-text-field" stylesheets="@../../css/sanitationRequestUI.css" unFocusColor="#e6ebf2" />
+        <JFXButton fx:id="btn_sendmsg" layoutX="167.0" layoutY="146.0" onMouseClicked="#sendMessage" ripplerFill="#ffc911" styleClass="jfx-button-regular-arduino" stylesheets="@../../css/sanitationRequestUI.css" text="Send Message" textFill="#e6ebf2">
          <font>
             <Font size="14.0" />
          </font></JFXButton>
-      <JFXButton fx:id="btn_home" layoutX="23.0" layoutY="267.0" onMouseClicked="#homeArrow" ripplerFill="#ffc911" text="Home The Arrow" textFill="#e6ebf2">
+      <JFXButton fx:id="btn_home" layoutX="8.0" layoutY="267.0" onMouseClicked="#homeArrow" ripplerFill="#ffc911" styleClass="jfx-button-regular-arduino" stylesheets="@../../css/sanitationRequestUI.css" text="Home The Arrow" textFill="#e6ebf2">
          <font>
             <Font size="14.0" />
          </font></JFXButton>
-      <Label layoutX="51.0" layoutY="39.0" text="Arduino Proxy Setup" textFill="#e6ebf2">
+      <Label layoutX="39.0" layoutY="40.0" styleClass="label-mid-size" stylesheets="@../../css/sanitationRequestUI.css" text="Arduino Proxy Setup" textFill="#e6ebf2">
          <font>
             <Font name="Calibri" size="24.0" />
          </font>
       </Label>
-      <JFXButton fx:id="btn_check" layoutX="161.0" layoutY="267.0" onMouseClicked="#checkConnection" ripplerFill="#ffc911" text="Check Connection" textFill="#e6ebf2">
+      <JFXButton fx:id="btn_check" layoutX="148.0" layoutY="267.0" onMouseClicked="#checkConnection" ripplerFill="#ffc911" styleClass="jfx-button-regular-arduino" stylesheets="@../../css/sanitationRequestUI.css" text="Check Connection" textFill="#e6ebf2">
          <font>
             <Font size="14.0" />
          </font></JFXButton>
-      <JFXTextField fx:id="txtf_angle" editable="false" layoutX="154.0" layoutY="215.0" prefHeight="30.0" prefWidth="89.0" unFocusColor="#e6ebf2">
+      <JFXTextField fx:id="txtf_angle" editable="false" layoutX="154.0" layoutY="212.0" prefHeight="30.0" prefWidth="89.0" styleClass="jfx-text-field" stylesheets="@../../css/sanitationRequestUI.css" unFocusColor="#e6ebf2">
          <font>
             <Font size="14.0" />
          </font></JFXTextField>
-      <JFXButton fx:id="btn_angle" layoutX="61.0" layoutY="215.0" onMouseClicked="#displayKioskAngle" ripplerFill="#ffc911" text="Kiosk Angle :" textFill="#e6ebf2">
+      <JFXButton fx:id="btn_angle" layoutX="61.0" layoutY="215.0" onMouseClicked="#displayKioskAngle" ripplerFill="#ffc911" styleClass="label" stylesheets="@../../css/sanitationRequestUI.css" text="Kiosk Angle :" textFill="#e6ebf2">
          <font>
             <Font size="14.0" />
          </font></JFXButton>

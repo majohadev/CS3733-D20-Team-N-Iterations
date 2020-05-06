@@ -16,7 +16,7 @@
    <children>
       <Pane layoutX="726.0" layoutY="324.0" prefHeight="500.0" prefWidth="400.0" style="-fx-background-color: #4a69c6;" AnchorPane.bottomAnchor="285.0" AnchorPane.rightAnchor="560.0" AnchorPane.topAnchor="285.0">
          <children>
-            <Label layoutX="29.0" layoutY="241.0" text="Password: " textFill="WHITE">
+            <Label layoutX="29.0" layoutY="241.0" styleClass="label-mid-size" stylesheets="@../../css/sanitationRequestUI.css" text="Password: " textFill="WHITE">
                <font>
                   <Font name="Calibri Bold" size="24.0" />
                </font>
@@ -28,7 +28,7 @@
                   </ImageView>
                </graphic>
             </Label>
-            <Label layoutX="32.0" layoutY="177.0" prefHeight="30.0" prefWidth="166.0" text="Username:" textFill="WHITE">
+            <Label layoutX="32.0" layoutY="177.0" prefHeight="30.0" prefWidth="166.0" styleClass="label-mid-size" stylesheets="@../../css/sanitationRequestUI.css" text="Username:" textFill="WHITE">
                <font>
                   <Font name="Calibri Bold" size="24.0" />
                </font>
@@ -49,25 +49,25 @@
                   </HBox>
                </buttons>
             </ButtonBar>
-            <JFXTextField fx:id="txtf_username" focusColor="WHITE" layoutX="203.0" layoutY="170.0" prefWidth="150.0" style="-fx-text-fill: #e6ebf2;" unFocusColor="WHITE">
+            <JFXTextField fx:id="txtf_username" focusColor="WHITE" layoutX="203.0" layoutY="170.0" prefWidth="150.0" style="-fx-text-fill: #e6ebf2;" styleClass="jfx-text-field" stylesheets="@../../css/sanitationRequestUI.css" unFocusColor="WHITE">
                <font>
                   <Font name="Calibri" size="24.0" />
                </font></JFXTextField>
-            <JFXPasswordField fx:id="pwf_password" layoutX="203.0" layoutY="225.0" prefHeight="50.0" prefWidth="150.0" style="-fx-text-fill: #e6ebf2;" unFocusColor="WHITE">
+            <JFXPasswordField fx:id="pwf_password" layoutX="203.0" layoutY="225.0" prefHeight="50.0" prefWidth="150.0" style="-fx-text-fill: #e6ebf2;" styleClass="jfx-text-field" stylesheets="@../../css/sanitationRequestUI.css" unFocusColor="WHITE">
                <font>
                   <Font size="24.0" />
                </font></JFXPasswordField>
-            <JFXButton buttonType="RAISED" layoutX="160.0" layoutY="428.0" onMouseClicked="#clearFields" ripplerFill="BLACK" text="Clear" textFill="WHITE">
+            <JFXButton buttonType="RAISED" layoutX="147.0" layoutY="428.0" onMouseClicked="#clearFields" ripplerFill="BLACK" styleClass="jfx-button-login-page" stylesheets="@../../css/sanitationRequestUI.css" text="Clear" textFill="WHITE">
                <font>
                   <Font name="Calibri Bold" size="36.0" />
                </font>
             </JFXButton>
-            <JFXButton buttonType="RAISED" layoutX="270.0" layoutY="428.0" onMouseClicked="#checkUser" ripplerFill="BLACK" text="Login" textFill="WHITE">
+            <JFXButton buttonType="RAISED" layoutX="259.0" layoutY="428.0" onMouseClicked="#checkUser" ripplerFill="BLACK" styleClass="jfx-button-login-page" stylesheets="@../../css/sanitationRequestUI.css" text="Login" textFill="WHITE">
                <font>
                   <Font name="Calibri Bold" size="36.0" />
                </font>
             </JFXButton>
-            <Label layoutX="48.0" layoutY="26.0" text="Employee Login" textFill="#e6ebf2">
+            <Label layoutX="28.0" layoutY="25.0" styleClass="label-login-display" stylesheets="@../../css/sanitationRequestUI.css" text="Employee Login" textFill="#e6ebf2">
                <font>
                   <Font name="Calibri" size="48.0" />
                </font>
@@ -81,7 +81,7 @@
                   <Image url="@../../images/hospitalLogo/Brigham_and_Womens_Hospital_logo.svg.png" />
                </image>
             </ImageView>
-            <JFXButton buttonType="RAISED" layoutX="10.0" layoutY="426.0" onMouseClicked="#goBack" ripplerFill="BLACK" text="Return" textFill="WHITE">
+            <JFXButton buttonType="RAISED" layoutX="10.0" layoutY="426.0" onMouseClicked="#goBack" ripplerFill="BLACK" styleClass="jfx-button-login-page" stylesheets="@../../css/sanitationRequestUI.css" text="Return" textFill="WHITE">
                <font>
                   <Font name="Calibri Bold" size="36.0" />
                </font>
