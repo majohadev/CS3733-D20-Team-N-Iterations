@@ -897,6 +897,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
       mapQRController.getTextDrive().setText(googleDirections);
       ArrayList<String> driveDirections = new ArrayList<>();
       driveDirections.add(googleDirections);
+
       mapQRController.getImageDrive().setImage(generateImage(driveDirections, false));
     }
   }
