@@ -9,11 +9,13 @@ public class StateSingleton {
   public Algorithm savedAlgo;
   public MapImageLoader mapImageLoader;
   public ChatMessagesState chatBotState;
+  public String algoState;
 
   private StateSingleton() throws DBException {
     savedAlgo = new Algorithm();
     mapImageLoader = new MapImageLoader();
     chatBotState = new ChatMessagesState();
+    algoState = "AStar";
   }
 
   public static StateSingleton getInstance() throws DBException {

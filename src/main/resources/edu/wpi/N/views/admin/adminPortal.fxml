@@ -201,12 +201,14 @@
                   </Label>
                </children>
             </Pane>
-            <JFXComboBox fx:id="cb_changeAlgo" focusColor="#e6ebf2" layoutX="120.0" layoutY="200.0" prefHeight="39.0" prefWidth="200.0" promptText="Change Algorithm" style="-fx-prompt-text-fill: #e6ebf2; fx-text-inner-fill: #e6ebf2; -fx-font-size: 18px;" styleClass="cell" stylesheets="@../../css/adminTables.css" unFocusColor="#e6ebf2" visible="false" />
-            <JFXButton fx:id="btn_submit" layoutX="160.0" layoutY="260.0" onMouseClicked="#changeAlgorithm" prefWidth="100.0" styleClass="jfx-button-regular-arduino" stylesheets="@../../css/sanitationRequestUI.css" text="Submit" textFill="#e6ebf2" visible="false">
+            <Label layoutX="120.0" layoutY="180.0" styleClass="label-file-size" stylesheets="@../../css/sanitationRequestUI.css" text="Current Algorithm:" />
+            <JFXComboBox fx:id="cb_changeAlgo" focusColor="#e6ebf2" layoutX="120.0" layoutY="200.0" prefHeight="39.0" prefWidth="200.0" promptText="Change Algorithm" style="-fx-prompt-text-fill: #e6ebf2; fx-text-inner-fill: #e6ebf2; -fx-font-size: 18px;" styleClass="cell" stylesheets="@../../css/adminTables.css" unFocusColor="#e6ebf2" />
+            <JFXButton fx:id="btn_submit" layoutX="160.0" layoutY="260.0" onMouseClicked="#changeAlgorithm" prefWidth="100.0" styleClass="jfx-button-regular-arduino" stylesheets="@../../css/sanitationRequestUI.css" text="Submit" textFill="#e6ebf2">
                <font>
                   <Font size="18.0" />
                </font>
             </JFXButton>
+            <Label fx:id="lbl_algo" layoutX="280.0" layoutY="180.0" styleClass="label-file-size" stylesheets="@../../css/sanitationRequestUI.css" text="AStar" />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="anchorSwap" layoutX="186.0" layoutY="96.0" prefHeight="1080.0" prefWidth="1552.0" style="-fx-background-color: #263051;" AnchorPane.leftAnchor="380.0" AnchorPane.topAnchor="0.0">
