@@ -63,6 +63,7 @@ public class Directions {
         angle = getAngle(i);
         stateChange = !getState(i + 1).equals(state);
         totalDistance += getDistance(path.get(i), path.get(i + 1));
+        addFloorLevelDirection(i);
       }
       state = getState(i);
       switch (state) {
@@ -305,6 +306,32 @@ public class Directions {
     } else {
       return CONTINUING;
     }
+  }
+
+  private void addFloorLevelDirection(int i){
+    if(i==0){
+      directions.add(new Direction(getFloorString(path.get(i)), Level.FLOOR, path.get(i), Icon.HIGHER_LEVEL));
+    } else if(path.get(i-1).getFloor()!=path.get(i).getFloor()){
+      directions.add(new Direction(getFloorString(path.get(i)), Level.FLOOR, path.get(i), Icon.HIGHER_LEVEL));
+    }
+  }
+
+  private String getFloorString(DbNode n){
+    if(n.getBuilding().equals("Faulkner")) {
+      if (n.getFloor() == 1) return "First floor";
+      if (n.getFloor() == 2) return "Second floor";
+      if (n.getFloor() == 2) return "Third floor";
+      if (n.getFloor() == 2) return "Fourth floor";
+      if (n.getFloor() == 2) return "Fifth floor";
+    }else{
+      if(n.getFloor()==1) return "Lower Level Two";
+      if(n.getFloor()==2) return "Lower Level One";
+      if(n.getFloor()==3) return "Ground Floor";
+      if(n.getFloor()==4) return "First floor";
+      if(n.getFloor()==5) return "Second floor";
+      if(n.getFloor()==6) return "Third floor";
+    }
+    return "Unknown Floor Number";
   }
 
   /**
