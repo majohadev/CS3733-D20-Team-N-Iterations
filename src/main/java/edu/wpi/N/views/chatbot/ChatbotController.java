@@ -39,17 +39,17 @@ public class ChatbotController implements Controller, Initializable {
   private void onBtnAskMeClicked() {
 
     // If message history is empty
-    //    if (state.chatBotState.getMessageHistory() == null) {
-    try {
-      state.chatBotState.initSession();
-    } catch (Exception e) {
-      e.printStackTrace();
-      displayErrorMessage("Error initializing Client Session");
+    if (state.chatBotState.getMessageHistory().isEmpty()) {
+      try {
+        state.chatBotState.initSession();
+      } catch (Exception e) {
+        e.printStackTrace();
+        displayErrorMessage("Error initializing Client Session");
+      }
+    } else {
+      // else, load existing message history
+      loadMessageHistory();
     }
-    //    } else {
-    //      // else, load existing message history
-    //      loadMessageHistory();
-    //    }
 
     buttonOnlyView.setVisible(false);
     chatBotView.setVisible(true);
@@ -69,10 +69,11 @@ public class ChatbotController implements Controller, Initializable {
    * the left side, User messages on the right side
    */
   private void loadMessageHistory() {
-    this.chatBox = state.chatBotState.getMessageHistory();
+    for (HBox singleMessage : state.chatBotState.getMessageHistory()) {
+      chatBox.getChildren().add(singleMessage);
+    }
   }
 
-  // TODO: add styleshits to labels
   /**
    * Upon click, sends the user's message to chat-bot Displays user's message and chat-bot reply in
    * Chatbox
@@ -127,15 +128,12 @@ public class ChatbotController implements Controller, Initializable {
     // Update the chatBox (VBOX)
     chatBox.getChildren().add(singleMessage);
     // Save changes in Message history
-    this.state.chatBotState.setMessageHistory(chatBox);
-
-    // TODO: Make sure we autoscroll down
+    this.state.chatBotState.addMessageToHistory(singleMessage);
 
     // Clear text field input
     textField.clear();
   }
 
-  // TODO: clear it up. Has redundant code with MapDisplayController
   /**
    * Displays allert message
    *
@@ -155,6 +153,7 @@ public class ChatbotController implements Controller, Initializable {
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
+    // Do such that scroll pane auto-scrolls down
     scrollPane.vvalueProperty().bind(chatBox.heightProperty());
   }
 }
