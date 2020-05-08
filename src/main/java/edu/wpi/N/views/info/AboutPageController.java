@@ -1,7 +1,8 @@
-package edu.wpi.N.views;
+package edu.wpi.N.views.info;
 
 import edu.wpi.N.App;
 import edu.wpi.N.entities.States.StateSingleton;
+import edu.wpi.N.views.Controller;
 import java.io.IOException;
 import javafx.scene.input.MouseEvent;
 
@@ -22,6 +23,6 @@ public class AboutPageController implements Controller {
   }
 
   public void onBtnCreditsClicked() throws IOException {
-    mainApp.switchScene("/edu/wpi/N/views/creditsPage.fxml", singleton);
+    mainApp.switchScene("/edu/wpi/N/views/info/creditsPage.fxml", singleton);
   }
 }

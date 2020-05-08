@@ -688,7 +688,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     } else if (src == pn_infoIcon) {
       resetMap();
       // TODO load info page here
-      this.mainApp.switchScene("/edu/wpi/N/views/aboutPage.fxml", singleton);
+      this.mainApp.switchScene("/edu/wpi/N/views/info/aboutPage.fxml", singleton);
     } else if (src == pn_adminIcon) {
       resetMap();
       this.mainApp.switchScene("/edu/wpi/N/views/admin/newLogin.fxml", singleton);
