@@ -10,12 +10,14 @@ public class StateSingleton {
   private static StateSingleton _instance = null;
   public Algorithm savedAlgo;
   public MapImageLoader mapImageLoader;
+  public ChatMessagesState chatBotState;
   public Originator originator;
   public CareTaker careTaker;
 
   private StateSingleton() throws DBException {
     savedAlgo = new Algorithm();
     mapImageLoader = new MapImageLoader();
+    chatBotState = new ChatMessagesState();
     originator = new Originator();
     careTaker = new CareTaker();
   }

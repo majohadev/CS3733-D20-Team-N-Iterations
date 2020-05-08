@@ -45,7 +45,7 @@
                      </VBox.margin>
                   </Label>
                   <JFXComboBox fx:id="cmbo_text" editable="true" labelFloat="true" onKeyTyped="#locationTextChanged" prefHeight="46.0" prefWidth="394.0" promptText="Enter Location" styleClass="jfx-combo-box" stylesheets="@../../css/sanitationRequestUI.css" />
-                  <Label styleClass="label-mid-size" stylesheets="@../../css/sanitationRequestUI.css" text="Please Select the Size of the Spill if Applicable">
+                  <Label styleClass="label-mid-size" stylesheets="@../../css/sanitationRequestUI.css" text="Please Select the Size of the Spill">
                      <font>
                         <Font name="Calibri" size="24.0" />
                      </font>

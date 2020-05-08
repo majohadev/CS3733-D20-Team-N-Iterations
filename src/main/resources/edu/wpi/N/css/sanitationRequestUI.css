@@ -9,17 +9,41 @@
 
 .anchor{
     -fx-background-color: #263051;
-    -fx-border-color: #E6EBF2;
-    -fx-border-width: 4px;
 }
 
+.jfx-button-service {
+    -jfx-button-type: RAISED;
+    -jfx-rippler-fill: #4A69C6;
+    -fx-background-color: transparent;
+    -fx-border-color: #6C5C7F;
+    -fx-border-width: 8px;
+    -fx-border-radius: 15;
+    -fx-background-radius: 15;
+    -fx-text-fill: #E6EBF2;
+    -fx-min-width: 125;
+    -fx-min-height: 125;
+    -fx-max-width: 125;
+    -fx-max-height: 125;
+    -fx-font-family: 'Karla';
+    -fx-font-size: 18px;
+}
+
+.label-buttons{
+    -fx-text-fill: #E6EBF2;
+    -fx-font-family: 'Karla';
+    -fx-font-size: 16px;
+    -fx-min-height: 63;
+    -fx-min-width: 127;
+    -fx-max-height: 63;
+    -fx-max-width: 127;
+}
 
 .jfx-button-submit {
     -jfx-button-type: RAISED;
     -jfx-rippler-fill: #6C5C7F;
-    -fx-background-color: #7E9AB6;
-    -fx-border-color: #E6EBF2;
-    -fx-border-width: 4px;
+    -fx-background-color: #263051;
+    -fx-border-color: #6C5C7F;
+    -fx-border-width: 5px;
     -fx-border-radius: 10;
     -fx-background-radius: 10;
     -fx-text-fill: #E6EBF2;
@@ -32,8 +56,8 @@
 .jfx-button-regular {
     -jfx-button-type: RAISED;
     -jfx-rippler-fill: #6C5C7F;
-    -fx-background-color: #7E9AB6;
-    -fx-border-color: #E6EBF2;
+    -fx-background-color: #263051;
+    -fx-border-color: #6C5C7F;
     -fx-border-width: 4px;
     -fx-border-radius: 10;
     -fx-background-radius: 10;
@@ -42,6 +66,43 @@
     -fx-min-height: 60;
     -fx-font-family: 'Karla';
     -fx-font-size: 24px;
+}
+
+.jfx-button-files {
+    -fx-min-width: 100;
+    -fx-min-height: 40;
+    -fx-font-family: 'Karla';
+    -fx-font-size: 12px;
+}
+
+.jfx-button-regular-half {
+    -jfx-button-type: RAISED;
+    -jfx-rippler-fill: #6C5C7F;
+    -fx-background-color: #263051;
+    -fx-border-color: #6C5C7F;
+    -fx-border-width: 4px;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-text-fill: #E6EBF2;
+    -fx-min-width: 127;
+    -fx-min-height: 60;
+    -fx-font-family: 'Karla';
+    -fx-font-size: 24px;
+}
+
+.jfx-button-regular-arduino {
+    -jfx-button-type: RAISED;
+    -jfx-rippler-fill: #6C5C7F;
+    -fx-background-color: #263051;
+    -fx-border-color: #6C5C7F;
+    -fx-border-width: 4px;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-text-fill: #E6EBF2;
+    -fx-min-width: 63;
+    -fx-min-height: 30;
+    -fx-font-family: 'Karla';
+    -fx-font-size: 14px;
 }
 
 .pane{
@@ -61,10 +122,28 @@
     -fx-font-size: 48px;
 }
 
+.label-map-display {
+    -fx-text-fill: #E6EBF2;
+    -fx-font-family: 'Karla';
+    -fx-font-size: 32px;
+}
+
+.label-admin-display {
+    -fx-text-fill: #E6EBF2;
+    -fx-font-family: 'Karla';
+    -fx-font-size: 36px;
+}
+
 .label-mid-size {
     -fx-text-fill: #E6EBF2;
     -fx-font-family: 'Karla';
     -fx-font-size: 24px;
+}
+
+.label-file-size {
+    -fx-text-fill: #E6EBF2;
+    -fx-font-family: 'Karla';
+    -fx-font-size: 18px;
 }
 
 .separator *.line {
@@ -78,7 +157,7 @@
     -fx-font-family: 'Karla';
     -fx-font-size: 18px;
     -fx-prompt-text-fill: #E6EBF2;
-    -fx-text-inner-color: #4A69C6;
+    -fx-text-inner-color: #E6EBF2;
     -fx-text-fill: #E6EBF2;
     -jfx-focus-color: #7E9AB6;
     -jfx-unfocus-color: #E6EBF2;
@@ -122,12 +201,12 @@
 }
 
 .combo-box-popup > .list-view {
-    -fx-background-color: #7E9AB6;
-    -fx-border-color: #7E9AB6;
+    -fx-background-color: #263051;
+    -fx-background-radius: 2;
     -fx-font-family: 'Karla';
     -fx-font-size: 18px;
     -fx-min-height: 50;
-    -fx-pref-height: 150;
+    -fx-pref-height: 65;
 }
 
 .jfx-radio-button {
@@ -192,4 +271,8 @@
     -fx-background-color: #6C5C7F;
     -fx-background-insets: 0;
     -fx-background-radius: 1;
+}
+
+.toggle-button {
+    -fx-font-family: 'Karla';
 }

@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXCheckBox?>
+<?import com.jfoenix.controls.JFXComboBox?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableView?>
@@ -16,14 +17,14 @@
    <children>
     <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="1080.0" prefWidth="400.0" style="-fx-background-color: #263051;" AnchorPane.topAnchor="0.0">
          <children>
-            <AnchorPane fx:id="ap_swapPane" prefHeight="970.0" prefWidth="200.0" AnchorPane.leftAnchor="75.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="110.0" />
-            <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="970.0" prefWidth="75.0" style="-fx-background-color: #263051;" AnchorPane.topAnchor="110.0">
+            <AnchorPane fx:id="ap_swapPane" layoutX="69.0" layoutY="110.0" prefHeight="970.0" prefWidth="200.0" AnchorPane.leftAnchor="69.0" AnchorPane.rightAnchor="6.0" AnchorPane.topAnchor="110.0" />
+            <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="970.0" prefWidth="65.0" style="-fx-background-color: #263051;" AnchorPane.topAnchor="110.0">
                <children>
-                  <Pane prefHeight="60.0" prefWidth="80.0">
+                  <Pane prefHeight="60.0" prefWidth="80.0" style="-fx-background-color: #263051;">
                      <children>
                         <JFXButton fx:id="btn_addEmp" ellipsisString="" onMouseClicked="#addEmp" prefHeight="57.0" prefWidth="62.0" text="    ">
                            <graphic>
-                              <ImageView fitHeight="51.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="51.0" fitWidth="43.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../../images/adminIcons/add-user-2-64.png" />
                                  </image>
@@ -32,12 +33,12 @@
                         </JFXButton>
                      </children>
                   </Pane>
-                  <Pane prefHeight="10.0" prefWidth="80.0" />
-                  <Pane prefHeight="60.0" prefWidth="80.0">
+                  <Pane prefHeight="10.0" prefWidth="80.0" style="-fx-background-color: #263051;" />
+                  <Pane prefHeight="60.0" prefWidth="80.0" style="-fx-background-color: #263051;">
                      <children>
                         <JFXButton fx:id="btn_editEmp" ellipsisString="" onMouseClicked="#editEmp" prefHeight="50.0" prefWidth="57.0" text="     ">
                            <graphic>
-                              <ImageView fitHeight="42.0" fitWidth="47.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="42.0" fitWidth="47.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../../images/adminIcons/edit-user-64.png" />
                                  </image>
@@ -46,12 +47,12 @@
                         </JFXButton>
                      </children>
                   </Pane>
-                  <Pane prefHeight="10.0" prefWidth="80.0" />
-                  <Pane prefHeight="60.0" prefWidth="80.0">
+                  <Pane prefHeight="10.0" prefWidth="80.0" style="-fx-background-color: #263051;" />
+                  <Pane prefHeight="60.0" prefWidth="80.0" style="-fx-background-color: #263051;">
                      <children>
                         <JFXButton fx:id="btn_remEmp" ellipsisString="" onMouseClicked="#delEmp" prefHeight="52.0" prefWidth="64.0" text="   ">
                            <graphic>
-                              <ImageView fitHeight="42.0" fitWidth="63.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="42.0" fitWidth="63.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../../images/adminIcons/remove-user-64.png" />
                                  </image>
@@ -60,25 +61,25 @@
                         </JFXButton>
                      </children>
                   </Pane>
-                  <Pane prefHeight="10.0" prefWidth="80.0" />
-                  <Pane prefHeight="60.0" prefWidth="80.0">
+                  <Pane prefHeight="10.0" prefWidth="80.0" style="-fx-background-color: #263051;" />
+                  <Pane prefHeight="60.0" prefWidth="80.0" style="-fx-background-color: #263051;">
                      <children>
                         <JFXButton fx:id="btn_addDoc" ellipsisString="" onMouseClicked="#addDoc" prefHeight="51.0" prefWidth="66.0" text="   ">
                            <graphic>
-                              <ImageView fitHeight="42.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="42.0" fitWidth="45.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../../images/adminIcons/doctor-2-64(1).png" />
+                                    <Image url="@../../images/adminIcons/stethoscope-64.png" />
                                  </image>
                               </ImageView>
                            </graphic>
                         </JFXButton>
                      </children>
                   </Pane>
-                  <Pane prefHeight="60.0" prefWidth="80.0">
+                  <Pane prefHeight="60.0" prefWidth="80.0" style="-fx-background-color: #263051;">
                      <children>
-                        <JFXButton fx:id="btn_addDoc1" ellipsisString="" onMouseClicked="#addAdmin" prefHeight="51.0" prefWidth="66.0" text="   ">
+                        <JFXButton fx:id="btn_admin" ellipsisString="" onMouseClicked="#addAdmin" prefHeight="51.0" prefWidth="66.0" text="   ">
                            <graphic>
-                              <ImageView fitHeight="42.0" fitWidth="45.0" onMouseClicked="#addAdmin" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="42.0" fitWidth="45.0" mouseTransparent="true" onMouseClicked="#addAdmin" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../../images/adminIcons/administrator-2-64.png" />
                                  </image>
@@ -87,26 +88,23 @@
                         </JFXButton>
                      </children>
                   </Pane>
-                  <Pane prefHeight="117.5" prefWidth="80.0" />
-                  <Pane prefHeight="50.0" prefWidth="75.0">
+                  <Pane prefHeight="117.5" prefWidth="80.0" style="-fx-background-color: #263051;" />
+                  <Pane prefHeight="50.0" prefWidth="75.0" style="-fx-background-color: #263051;">
                      <children>
-                        <JFXButton fx:id="btn_acceptReq" ellipsisString="" onMouseClicked="#assignReq" prefHeight="50.0" prefWidth="66.0" text="    ">
-                           <graphic>
-                              <ImageView fitHeight="42.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../../images/adminIcons/ok-64.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </JFXButton>
+                        <JFXButton fx:id="btn_acceptReq" ellipsisString="" onMouseClicked="#assignReq" prefHeight="50.0" prefWidth="66.0" text="    " />
+                        <ImageView fitHeight="42.0" fitWidth="43.0" layoutX="10.0" layoutY="-6.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../images/adminIcons/ok-64.png" />
+                           </image>
+                        </ImageView>
                      </children>
                   </Pane>
-                  <Pane prefHeight="10.0" prefWidth="75.0" />
-                  <Pane prefHeight="60.0" prefWidth="104.0">
+                  <Pane prefHeight="10.0" prefWidth="75.0" style="-fx-background-color: #263051;" />
+                  <Pane prefHeight="60.0" prefWidth="104.0" style="-fx-background-color: #263051;">
                      <children>
                         <JFXButton fx:id="btn_denyReq" ellipsisString="" onMouseClicked="#denyReq" prefHeight="49.0" prefWidth="63.0" text="    ">
                            <graphic>
-                              <ImageView fitHeight="42.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="42.0" fitWidth="48.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../../images/adminIcons/x-mark-3-64.png" />
                                  </image>
@@ -115,12 +113,12 @@
                         </JFXButton>
                      </children>
                   </Pane>
-                  <Pane prefHeight="117.5" prefWidth="80.0" />
-                  <Pane prefHeight="60.0" prefWidth="104.0">
+                  <Pane prefHeight="117.5" prefWidth="80.0" style="-fx-background-color: #263051;" />
+                  <Pane prefHeight="60.0" prefWidth="104.0" style="-fx-background-color: #263051;">
                      <children>
                         <JFXButton fx:id="btn_upload" ellipsisString="" onMouseClicked="#popUpFileManager" prefHeight="53.0" prefWidth="67.0" text="    ">
                            <graphic>
-                              <ImageView fitHeight="42.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="42.0" fitWidth="45.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../../images/adminIcons/upload-2-64.png" />
                                  </image>
@@ -129,11 +127,11 @@
                         </JFXButton>
                      </children>
                   </Pane>
-                  <Pane prefHeight="60.0" prefWidth="104.0">
+                  <Pane prefHeight="60.0" prefWidth="104.0" style="-fx-background-color: #263051;">
                      <children>
                         <JFXButton fx:id="btn_editMap" ellipsisString="" onMouseClicked="#editMap" prefHeight="51.0" prefWidth="65.0" text="   ">
                            <graphic>
-                              <ImageView fitHeight="42.0" fitWidth="45.0" onMouseClicked="#editMap" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="42.0" fitWidth="45.0" mouseTransparent="true" onMouseClicked="#editMap" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../../images/adminIcons/map-3-64(1).png" />
                                  </image>
@@ -142,11 +140,11 @@
                         </JFXButton>
                      </children>
                   </Pane>
-                  <Pane prefHeight="60.0" prefWidth="104.0">
+                  <Pane prefHeight="60.0" prefWidth="104.0" style="-fx-background-color: #263051;">
                      <children>
                         <JFXButton fx:id="btn_arduino" ellipsisString="" onMouseClicked="#loadArduino" prefHeight="51.0" prefWidth="65.0" text="   ">
                            <graphic>
-                              <ImageView fitHeight="42.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="42.0" fitWidth="45.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../../images/adminIcons/gear-64.png" />
                                  </image>
@@ -155,12 +153,25 @@
                         </JFXButton>
                      </children>
                   </Pane>
-                  <Pane prefHeight="140.0" prefWidth="80.0" />
-                  <Pane prefHeight="92.0" prefWidth="75.0">
+                  <Pane prefHeight="60.0" prefWidth="104.0" style="-fx-background-color: #263051;">
+                     <children>
+                        <JFXButton fx:id="btn_arduino1" ellipsisString="" onMouseClicked="#changeAlgo" prefHeight="51.0" prefWidth="65.0" text="   ">
+                           <graphic>
+                              <ImageView fitHeight="42.0" fitWidth="45.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../images/adminIcons/WHITEvector-path-icon-6.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </JFXButton>
+                     </children>
+                  </Pane>
+                  <Pane prefHeight="140.0" prefWidth="80.0" style="-fx-background-color: #263051;" />
+                  <Pane prefHeight="92.0" prefWidth="75.0" style="-fx-background-color: #263051;">
                      <children>
                         <JFXButton ellipsisString="" onMouseClicked="#logoutUser" prefHeight="72.0" prefWidth="62.0" text="    ">
                            <graphic>
-                              <ImageView fitHeight="42.0" fitWidth="51.0" onMouseClicked="#logoutUser" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="42.0" fitWidth="51.0" mouseTransparent="true" onMouseClicked="#logoutUser" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../../images/adminIcons/logout-64.png" />
                                  </image>
@@ -175,7 +186,7 @@
                <children>
                   <ImageView fitHeight="77.0" fitWidth="62.0" layoutX="15.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../images/hospitalLogo/Brigham_and_Womens_Hospital_logo.svg.png" />
+                        <Image url="@../../images/hospitalLogo/Brigham_and_Womens_Hospital_logo.png" />
                      </image>
                   </ImageView>
                   <Label layoutX="98.0" layoutY="14.0" style="-fx-background-color: #26 3051;" text="Admin Portal" textFill="#e6ebf2">
@@ -190,15 +201,32 @@
                   </Label>
                </children>
             </Pane>
+            <JFXComboBox fx:id="cb_changeAlgo" focusColor="#e6ebf2" layoutX="120.0" layoutY="200.0" prefHeight="39.0" prefWidth="200.0" promptText="Change Algorithm" style="-fx-prompt-text-fill: #e6ebf2; fx-text-inner-fill: #e6ebf2; -fx-font-size: 18px;" styleClass="cell" stylesheets="@../../css/adminTables.css" unFocusColor="#e6ebf2" visible="false" />
+            <JFXButton fx:id="btn_submit" layoutX="160.0" layoutY="260.0" onMouseClicked="#changeAlgorithm" prefWidth="100.0" styleClass="jfx-button-regular-arduino" stylesheets="@../../css/sanitationRequestUI.css" text="Submit" textFill="#e6ebf2" visible="false">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </JFXButton>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="anchorSwap" layoutX="186.0" layoutY="96.0" prefHeight="1080.0" prefWidth="1520.0" AnchorPane.leftAnchor="400.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane fx:id="anchorSwap" layoutX="186.0" layoutY="96.0" prefHeight="1080.0" prefWidth="1552.0" style="-fx-background-color: #263051;" AnchorPane.leftAnchor="380.0" AnchorPane.topAnchor="0.0">
          <children>
-            <TableView fx:id="tb_RequestTable" layoutX="52.0" layoutY="245.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="429.0" prefWidth="960.0" stylesheets="@../../css/adminTables.css" AnchorPane.bottomAnchor="296.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="508.0" AnchorPane.topAnchor="245.0" />
-            <TableView fx:id="tbl_Employees" layoutX="1060.0" layoutY="245.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" />
-            <JFXCheckBox fx:id="ch_requestFilter" layoutX="50.0" layoutY="784.0" text="Filter to Open Requests" AnchorPane.leftAnchor="50.0" />
-            <ChoiceBox fx:id="cb_reqFilter" layoutX="410.0" layoutY="785.0" prefWidth="150.0" />
-            <Label layoutX="292.0" layoutY="789.0" text="Filter by request type:" />
+            <TableView fx:id="tb_RequestTable" layoutX="52.0" layoutY="245.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="429.0" prefWidth="975.0" stylesheets="@../../css/adminTables.css" AnchorPane.bottomAnchor="296.0" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="245.0" />
+            <TableView fx:id="tbl_Employees" layoutX="1060.0" layoutY="245.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" stylesheets="@../../css/adminTables.css" AnchorPane.bottomAnchor="296.0" AnchorPane.topAnchor="245.0" />
+            <JFXCheckBox fx:id="ch_requestFilter" checkedColor="#5a69c6" layoutX="50.0" layoutY="789.0" styleClass="label-mid-size" stylesheets="@../../css/sanitationRequestUI.css" text="Filter to Open Requests" textFill="#e6ebf2" AnchorPane.leftAnchor="50.0">
+               <font>
+                  <Font size="24.0" />
+               </font></JFXCheckBox>
+            <ChoiceBox fx:id="cb_reqFilter" layoutX="610.0" layoutY="794.0" prefWidth="150.0" stylesheets="@../../css/sanitationRequestUI.css" />
+            <Label layoutX="369.0" layoutY="789.0" styleClass="label-mid-size" stylesheets="@../../css/sanitationRequestUI.css" text="Filter by request type:" textFill="#e6ebf2">
+               <font>
+                  <Font size="24.0" />
+               </font></Label>
+            <JFXButton layoutX="797.0" layoutY="789.0" onMouseClicked="#resetTable" text="Reset" textFill="#e6ebf2">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </JFXButton>
          </children></AnchorPane>
    </children>
 </AnchorPane>

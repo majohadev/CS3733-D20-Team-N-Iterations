@@ -43,6 +43,10 @@ public class AddEmployeeController implements Initializable, Controller {
     try {
       if (txtf_empfn.getText().equals("")) throw new DBException("Employee has no first name");
 
+      if (cb_employeeTypes.getSelectionModel().getSelectedIndex() < 0) {
+        throw new DBException("No employee type selected");
+      }
+
       switch (cb_employeeTypes.getValue().getServiceType()) {
         case "Laundry":
           {
@@ -189,6 +193,14 @@ public class AddEmployeeController implements Initializable, Controller {
           }
         case "Translator":
           {
+            if (txtf_languages.getText().equals("")) {
+              Alert acceptReq = new Alert(Alert.AlertType.ERROR);
+              acceptReq.setContentText("Translator requires at lease one language");
+              acceptReq.show();
+
+              return;
+            }
+
             String[] arrOfString = txtf_languages.getText().split(",");
             LinkedList<String> languages = new LinkedList<>();
             for (String a : arrOfString) {

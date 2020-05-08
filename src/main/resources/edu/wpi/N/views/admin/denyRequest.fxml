@@ -9,23 +9,23 @@
 
 <AnchorPane maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="970.0" prefWidth="320.0" style="-fx-background-color: #263051;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.admin.DenyRequestController">
    <children>
-      <Label layoutX="11.0" layoutY="84.0" text="Notes:" textFill="#e6ebf2">
+      <Label layoutX="11.0" layoutY="117.0" styleClass="label-mid-size" stylesheets="@../../css/sanitationRequestUI.css" text="Notes:" textFill="#e6ebf2">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <Label layoutX="50.0" layoutY="14.0" text="Deny Request" textFill="#e6ebf2">
+      <Label layoutX="50.0" layoutY="46.0" styleClass="label-admin-display" stylesheets="@../../css/sanitationRequestUI.css" text="Deny Request" textFill="#e6ebf2">
          <font>
             <Font size="36.0" />
          </font>
       </Label>
-      <Line endX="146.0" layoutX="174.0" layoutY="384.0" startX="-174.0" stroke="#7e9ab6" />
-      <JFXTextArea fx:id="txtf_compNotes" focusColor="#e6ebf2" layoutX="88.0" layoutY="84.0" prefHeight="208.0" prefWidth="211.0" style="-fx-text-fill: #e6ebf2;" unFocusColor="#e6ebf2">
+      <Line endX="146.0" layoutX="174.0" layoutY="451.0" startX="-174.0" stroke="#7e9ab6" />
+      <JFXTextArea fx:id="txtf_compNotes" focusColor="#e6ebf2" layoutX="88.0" layoutY="118.0" prefHeight="208.0" prefWidth="211.0" style="-fx-text-fill: #e6ebf2;" styleClass="jfx-text-field" stylesheets="@../../css/sanitationRequestUI.css" unFocusColor="#e6ebf2">
          <font>
             <Font size="14.0" />
          </font>
       </JFXTextArea>
-      <JFXButton layoutX="117.0" layoutY="301.0" onMouseClicked="#denyRequest" text="Deny" textFill="#e6ebf2">
+      <JFXButton layoutX="48.0" layoutY="358.0" onMouseClicked="#denyRequest" styleClass="jfx-button-regular" stylesheets="@../../css/sanitationRequestUI.css" text="Deny" textFill="#e6ebf2">
          <font>
             <Font size="24.0" />
          </font>

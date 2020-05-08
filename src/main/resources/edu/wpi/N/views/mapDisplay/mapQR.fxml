@@ -15,7 +15,7 @@
             <Font size="34.0" />
          </font>
       </Label>
-      <JFXTabPane fx:id="tbpn_directions" layoutY="91.0" prefWidth="345.0" styleClass="jfx-tab-pane" stylesheets="@../../css/newMapDisplay.css">
+      <JFXTabPane fx:id="tbpn_directions" layoutY="91.0" prefWidth="345.0" styleClass="jfx-tab-pane" stylesheets="@../../css/newMapDisplay.css" AnchorPane.topAnchor="117.0">
          <tabs>
             <Tab fx:id="tb_faulkner_directions" styleClass="jtab" text="Faulkner">
               <content>
