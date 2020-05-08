@@ -18,14 +18,16 @@ import org.junit.jupiter.api.Test;
 public class GetPathWithStopBFSTest {
   Algorithm myBFS = new Algorithm();
 
+  public GetPathWithStopBFSTest() throws DBException {}
+
   @BeforeAll
   public static void initialize()
       throws SQLException, DBException, ClassNotFoundException, FileNotFoundException {
     MapDB.initTestDB();
     InputStream inputNodes =
-        GetPathWithStopBFSTest.class.getResourceAsStream("../csv/ThreeFloorsTestNode.csv");
+        GetPathWithStopBFSTest.class.getResourceAsStream("../csv/FourFloorsTestNode.csv");
     InputStream inputEdges =
-        GetPathWithStopBFSTest.class.getResourceAsStream("../csv/ThreeFloorsTestEdges.csv");
+        GetPathWithStopBFSTest.class.getResourceAsStream("../csv/FourFloorsTestEdges.csv");
     CSVParser.parseCSV(inputNodes);
     CSVParser.parseCSV(inputEdges);
   }

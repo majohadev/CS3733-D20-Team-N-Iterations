@@ -2,14 +2,13 @@ package edu.wpi.N.database;
 
 import edu.wpi.N.Main;
 import edu.wpi.N.entities.DbNode;
-import edu.wpi.N.entities.Node;
-import edu.wpi.N.views.ArduinoController;
+import edu.wpi.N.views.features.ArduinoController;
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import org.apache.ibatis.jdbc.ScriptRunner;
@@ -41,6 +40,8 @@ public class MapDB {
       }
       statement = con.createStatement();
     }
+
+    addHardCodedLogins();
   }
 
   //  /** Initializes a database in memory for tests */
@@ -66,11 +67,8 @@ public class MapDB {
    *
    * @throws SQLException on error
    * @throws ClassNotFoundException on error
-   * @throws DBException on error
-   * @throws FileNotFoundException when it can't find the file I guess. Or on error.
    */
-  public static void initTestDB()
-      throws SQLException, ClassNotFoundException, DBException, FileNotFoundException {
+  public static void initTestDB() throws SQLException, ClassNotFoundException {
     if (con != null) {
       ScriptRunner sr = new ScriptRunner(con);
       Reader reader =
@@ -88,6 +86,40 @@ public class MapDB {
     Reader reader =
         new BufferedReader(new InputStreamReader(Main.class.getResourceAsStream("sql/setup.sql")));
     sr.runScript(reader);
+
+    addHardCodedLogins();
+  }
+
+  /**
+   * Adds two hard-coded logins to the database
+   *
+   * @throws SQLException If there is an error (Note: if the SQLException is due to a login already
+   *     existing, the exception is ignored)
+   */
+  private static void addHardCodedLogins() throws SQLException {
+    BCryptSingleton hasher = BCryptSingleton.getInstance();
+    PreparedStatement st =
+        con.prepareStatement("INSERT INTO credential VALUES ('Gaben', ?, 'ADMIN')");
+    st.setBytes(1, hasher.hash("MoolyFTW"));
+    try {
+      st.executeUpdate();
+    } catch (SQLException e) {
+      if (!e.getSQLState()
+          .equals("23505")) { // primary key/unique constraint violation - login already exists
+        throw e;
+      }
+    }
+
+    st = con.prepareStatement("INSERT INTO credential VALUES ('admin', ?, 'ADMIN')");
+    st.setBytes(1, hasher.hash("admin"));
+    try {
+      st.executeUpdate();
+    } catch (SQLException e) {
+      if (!e.getSQLState()
+          .equals("23505")) { // primary key/unique constraint violation - login already exists
+        throw e;
+      }
+    }
   }
 
   /**
@@ -125,8 +157,6 @@ public class MapDB {
       stmt.setInt(4, floor);
       stmt.setString(5, building);
       stmt.setString(6, nodeType);
-      // stmt.setString(7, longName.replace("\'", "\\'"));
-      // stmt.setString(8, shortName.replace("\'", "\\'"));
       stmt.setString(7, longName);
       stmt.setString(8, shortName);
       stmt.setString(9, String.valueOf(teamAssigned));
@@ -151,8 +181,8 @@ public class MapDB {
    * @param longName the new longName
    * @param shortName the new shortName
    * @param teamAssigned the new teamAssigned
-   * @return
-   * @throws DBException
+   * @return True if the node is modified successfully, false otherwise
+   * @throws DBException On error
    */
   public static boolean modifyNode(
       String nodeID,
@@ -166,7 +196,7 @@ public class MapDB {
       char teamAssigned)
       throws DBException {
     String newID;
-    LinkedList<DbNode> edges = new LinkedList<DbNode>();
+    LinkedList<DbNode> edges = new LinkedList<>();
     String query;
     try {
       con.setAutoCommit(false);
@@ -197,14 +227,13 @@ public class MapDB {
       stmt.setInt(4, floor);
       stmt.setString(5, building);
       stmt.setString(6, nodeType);
-      stmt.setString(7, longName.replace("\'", "\\'"));
-      stmt.setString(8, shortName.replace("\'", "\\'"));
+      stmt.setString(7, longName);
+      stmt.setString(8, shortName);
       stmt.setString(9, String.valueOf(teamAssigned));
       stmt.setString(10, nodeID);
       stmt.executeUpdate();
-      Iterator<DbNode> it = edges.iterator();
-      while (it.hasNext()) {
-        addEdge(newID, it.next().getNodeID());
+      for (DbNode edge : edges) {
+        addEdge(newID, edge.getNodeID());
       }
       con.commit();
       con.setAutoCommit(true);
@@ -277,7 +306,7 @@ public class MapDB {
   }
 
   /**
-   * Deletes the node wiht the given nodeID from the database
+   * Deletes the node with the given nodeID from the database
    *
    * @param nodeID the nodeID of the node to be deleted
    * @return true if delete successful, false otherwise.
@@ -343,12 +372,12 @@ public class MapDB {
     stmt.setString(1, nodeType);
     stmt.setInt(2, floor);
     ResultSet rs = stmt.executeQuery();
-    ArrayList<Integer> nums = new ArrayList<Integer>();
+    ArrayList<Integer> nums = new ArrayList<>();
     while (rs.next()) {
       try {
         nums.add(Integer.parseInt(rs.getString("nodeID").substring(5, 8)));
       } catch (NumberFormatException e) {
-        continue; // skip all nodes with an invalid nodeID
+        // skip all nodes with an invalid nodeID
       }
     }
     int size = nums.size();
@@ -394,7 +423,7 @@ public class MapDB {
       throws DBException {
     try {
       String nodeID =
-          "I"
+          "S"
               + nodeType.toUpperCase()
               + nextAvailNum(nodeType, floor)
               + String.format("%02d", floor);
@@ -406,11 +435,9 @@ public class MapDB {
       stmt.setInt(4, floor);
       stmt.setString(5, building);
       stmt.setString(6, nodeType);
-      // stmt.setString(7, longName.replace("\'", "\\'"));
-      // stmt.setString(8, shortName.replace("\'", "\\'"));
       stmt.setString(7, longName);
       stmt.setString(8, shortName);
-      stmt.setString(9, "I");
+      stmt.setString(9, "S");
       stmt.executeUpdate();
       // System.out.println("Values Inserted");
       return getNode(nodeID);
@@ -469,7 +496,7 @@ public class MapDB {
       throws DBException {
     String query = "SELECT * FROM nodes WHERE ";
     if (visOnly) query = query + "(NOT nodeType = 'HALL') AND ";
-    LinkedList<String> queries = new LinkedList<String>();
+    LinkedList<String> queries = new LinkedList<>();
     if (floor >= 0) queries.add("floor = ? ");
     if (building != null) queries.add("building = ? ");
     if (nodeType != null) queries.add("nodeType = ? ");
@@ -498,67 +525,70 @@ public class MapDB {
     }
   }
 
-  /**
-   * Gets the graph-style node with the specified nodeID with a score of zero
-   *
-   * @param nodeID the nodeID of the node to fetch
-   * @return the specified graph-style Node
-   */
-  // Chris
-  public static Node getGNode(String nodeID) throws DBException {
-    ResultSet rs;
-    int x;
-    int y;
-    String id;
+  //  /**
+  //   * Gets the graph-style node with the specified nodeID with a score of zero
+  //   *
+  //   * @param nodeID the nodeID of the node to fetch
+  //   * @return the specified graph-style Node
+  //   */
+  //  // Chris
+  //  public static Node getGNode(String nodeID) throws DBException {
+  //    ResultSet rs;
+  //    int x;
+  //    int y;
+  //    String id;
+  //
+  //    try {
+  //      rs =
+  //          statement.executeQuery(
+  //              "SELECT xcoord, ycoord, nodeID FROM nodes WHERE nodeID = '" + nodeID + "'");
+  //
+  //      rs.next();
+  //
+  //      x = rs.getInt("xcoord");
+  //      y = rs.getInt("ycoord");
+  //      id = rs.getString("nodeID");
+  //    } catch (SQLException e) {
+  //      e.printStackTrace();
+  //      throw new DBException("Unknown error: getGNode", e);
+  //    }
+  //
+  //    return new Node(x, y, id);
+  //  }
 
-    try {
-      rs =
-          statement.executeQuery(
-              "SELECT xcoord, ycoord, nodeID FROM nodes WHERE nodeID = '" + nodeID + "'");
-
-      rs.next();
-
-      x = rs.getInt("xcoord");
-      y = rs.getInt("ycoord");
-      id = rs.getString("nodeID");
-    } catch (SQLException e) {
-      e.printStackTrace();
-      throw new DBException("Unknown error: getGNode", e);
-    }
-
-    return new Node(x, y, id);
-  }
-
-  /**
-   * Gets the graph-style nodes of all nodes adjacent to the specified Node
-   *
-   * @param nodeID The ID of the specified node
-   * @return A LinkedList containing all graph-style nodes adjacent to the specified node, or null
-   *     if there was an issue retrieving the nodes
-   */
-  // Chris
-  public static LinkedList<Node> getGAdjacent(String nodeID) throws DBException {
-    LinkedList<Node> ret = new LinkedList<Node>();
-    try {
-      ResultSet rs = null;
-      String query =
-          "SELECT nodeID, xcoord, ycoord FROM (SELECT nodeID, xcoord, ycoord  FROM nodes) AS nodes, edges "
-              + "WHERE ((edges.node1 = ? AND nodes.nodeID = edges.node2) OR (edges.node2 = ? AND nodes.nodeID = edges.node1))";
-      PreparedStatement stmt = con.prepareStatement(query);
-      stmt.setString(1, nodeID);
-      stmt.setString(2, nodeID);
-      // System.out.println(query);
-      rs = stmt.executeQuery();
-      while (rs.next()) {
-        ret.add(new Node(rs.getInt("xcoord"), rs.getInt("ycoord"), rs.getString("nodeID")));
-      }
-    } catch (SQLException e) {
-      e.printStackTrace();
-      throw new DBException("Unknown error: getGAdjacent", e);
-    }
-
-    return ret;
-  }
+  //  /**
+  //   * Gets the graph-style nodes of all nodes adjacent to the specified Node
+  //   *
+  //   * @param nodeID The ID of the specified node
+  //   * @return A LinkedList containing all graph-style nodes adjacent to the specified node, or
+  // null
+  //   *     if there was an issue retrieving the nodes
+  //   */
+  //  // Chris
+  //  public static LinkedList<Node> getGAdjacent(String nodeID) throws DBException {
+  //    LinkedList<Node> ret = new LinkedList<Node>();
+  //    try {
+  //      ResultSet rs = null;
+  //      String query =
+  //          "SELECT nodeID, xcoord, ycoord FROM (SELECT nodeID, xcoord, ycoord  FROM nodes) AS
+  // nodes, edges "
+  //              + "WHERE ((edges.node1 = ? AND nodes.nodeID = edges.node2) OR (edges.node2 = ? AND
+  // nodes.nodeID = edges.node1))";
+  //      PreparedStatement stmt = con.prepareStatement(query);
+  //      stmt.setString(1, nodeID);
+  //      stmt.setString(2, nodeID);
+  //      // System.out.println(query);
+  //      rs = stmt.executeQuery();
+  //      while (rs.next()) {
+  //        ret.add(new Node(rs.getInt("xcoord"), rs.getInt("ycoord"), rs.getString("nodeID")));
+  //      }
+  //    } catch (SQLException e) {
+  //      e.printStackTrace();
+  //      throw new DBException("Unknown error: getGAdjacent", e);
+  //    }
+  //
+  //    return ret;
+  //  }
 
   /**
    * Returns the Graph-style nodes adjacent to the given node and on either of the floors passed in,
@@ -570,9 +600,9 @@ public class MapDB {
    * @return A linked list of all the adjacent nodes on the proper floors or of the proper node type
    * @throws DBException on error
    */
-  public static LinkedList<Node> getGAdjacent(String nodeID, int startFloor, int endFloor)
+  public static LinkedList<DbNode> getAdjacent(String nodeID, int startFloor, int endFloor)
       throws DBException {
-    return getGAdjacent(nodeID, startFloor, endFloor, false);
+    return getAdjacent(nodeID, startFloor, endFloor, false);
   }
 
   /**
@@ -586,22 +616,21 @@ public class MapDB {
    * @return A linked list of all the adjacent nodes on the proper floors or of the proper node type
    * @throws DBException on error
    */
-  public static LinkedList<Node> getGAdjacent(
+  public static LinkedList<DbNode> getAdjacent(
       String nodeID, int startFloor, int endFloor, boolean wheelAccess) throws DBException {
-    LinkedList<Node> ret = new LinkedList<Node>();
+    LinkedList<DbNode> ret = new LinkedList<>();
     try {
-      ResultSet rs = null;
       String query;
       if (wheelAccess) {
         query =
-            "SELECT nodeID, xcoord, ycoord FROM (SELECT nodeID, xcoord, ycoord FROM nodes WHERE"
+            "SELECT nodeID, xcoord, ycoord, floor, building, nodeType, longName, shortName, teamAssigned FROM (SELECT * FROM nodes WHERE"
                 + " ((nodes.floor = ? OR nodes.floor = ? OR nodes.nodeType = 'ELEV') AND NOT nodes.nodeType = 'STAI')) AS nodes,"
-                + " (SELECT node1, node2 FROM edges  WHERE (edges.node1 = ?) OR (edges.node2 = ?)) AS edges "
+                + " (SELECT node1, node2 FROM edges  WHERE (edges.node1 = ?) OR (edges.node2 =  ?)) AS edges "
                 + "WHERE edges.node1 = nodes.nodeID OR edges.node2 = nodes.nodeID";
       } else {
         query =
-            "SELECT nodeID, xcoord, ycoord FROM (SELECT nodeID, xcoord, ycoord FROM nodes WHERE"
-                + " (nodes.floor = ? OR nodes.floor = ? OR nodes.nodeType = 'ELEV' OR nodes.nodeType = 'STAI')) AS nodes,"
+            "SELECT nodeID, xcoord, ycoord, floor, building, nodeType, longName, shortName, teamAssigned FROM (SELECT * FROM nodes WHERE"
+                + " (nodes.floor = ? OR nodes.floor = ? OR nodes.nodeType = 'ELEV' OR  nodes.nodeType = 'STAI')) AS nodes,"
                 + " (SELECT node1, node2 FROM edges  WHERE (edges.node1 = ?) OR (edges.node2 = ?)) AS edges "
                 + "WHERE edges.node1 = nodes.nodeID OR edges.node2 = nodes.nodeID";
       }
@@ -611,16 +640,31 @@ public class MapDB {
       stmt.setInt(1, startFloor);
       stmt.setInt(2, endFloor);
       // System.out.println(query);
-      rs = stmt.executeQuery();
-      while (rs.next()) {
-        ret.add(new Node(rs.getInt("xcoord"), rs.getInt("ycoord"), rs.getString("nodeID")));
-      }
+      buildDbNodeList(ret, stmt);
     } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Unknown error: getGAdjacent", e);
     }
 
     return ret;
+  }
+
+  private static void buildDbNodeList(LinkedList<DbNode> ret, PreparedStatement stmt)
+      throws SQLException {
+    ResultSet rs = stmt.executeQuery();
+    while (rs.next()) {
+      ret.add(
+          new DbNode(
+              rs.getString("nodeID"),
+              rs.getInt("xcoord"),
+              rs.getInt("ycoord"),
+              rs.getInt("floor"),
+              rs.getString("building"),
+              rs.getString("nodeType"),
+              rs.getString("longName"),
+              rs.getString("shortName"),
+              rs.getString("teamAssigned").charAt(0)));
+    }
   }
 
   /**
@@ -647,6 +691,85 @@ public class MapDB {
   }
 
   /**
+   * Gets a lits of all the nodes on the specified floor and different buildings
+   *
+   * @param floor the floor from which you want to get all the Nodes.
+   * @return a LinkedList of all the nodes with the specified floor.
+   * @throws DBException
+   */
+  public static LinkedList<DbNode> NobuildingfloorNodes(int floor) throws DBException {
+    String query = "SELECT * FROM nodes WHERE floor =? AND building <> ?";
+    try {
+      PreparedStatement st = con.prepareStatement(query);
+
+      st.setInt(1, floor);
+      st.setString(2, "Faulkner");
+      return getAllNodesSQL(st);
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown error: NobuildingfloorNodes", e);
+    }
+  }
+
+  /**
+   * gets the edges from the floor specified.
+   *
+   * @param floor The floor we are searching
+   * @return a Linkedlist of array of DbNode
+   * @throws DBException
+   */
+  public static LinkedList<DbNode[]> nobuildingFloorEdges(int floor) throws DBException {
+    try {
+      LinkedList<DbNode[]> ret = new LinkedList<>();
+      String query =
+          "SELECT edges.node1, n1.xcoord AS x1, n1.ycoord AS y1, n1.floor AS floor1, n1.building AS build1, n1.nodeType AS type1, "
+              + "n1.longName AS long1, n1.shortName AS short1, n1.teamAssigned AS team1, "
+              + "edges.node2, n2.xcoord AS x2, n2.ycoord AS y2, n2.floor AS floor2, n2.building AS build2, n2.nodeType AS type2, "
+              + "n2.longName AS long2, n2.shortName AS short2, n2.teamAssigned AS team2 "
+              + "FROM edges "
+              + "JOIN nodes n1 ON edges.node1 = n1.nodeID "
+              + "JOIN nodes n2 ON edges.node2 = n2.nodeID "
+              + "WHERE n1.floor = ? AND n2.floor = ? AND n1.building <> ? AND n2.building <> ?";
+      PreparedStatement stmt = con.prepareStatement(query);
+      stmt.setInt(1, floor);
+      stmt.setInt(2, floor);
+      stmt.setString(3, "Faulkner");
+      stmt.setString(4, "Faulkner");
+      ResultSet rs = stmt.executeQuery();
+      while (rs.next()) {
+        DbNode node1 =
+            new DbNode(
+                rs.getString("node1"),
+                rs.getInt("x1"),
+                rs.getInt("y1"),
+                rs.getInt("floor1"),
+                rs.getString("build1"),
+                rs.getString("type1"),
+                rs.getString("long1"),
+                rs.getString("short1"),
+                rs.getString("team1").charAt(0));
+        DbNode node2 =
+            new DbNode(
+                rs.getString("node2"),
+                rs.getInt("x2"),
+                rs.getInt("y2"),
+                rs.getInt("floor2"),
+                rs.getString("build2"),
+                rs.getString("type2"),
+                rs.getString("long2"),
+                rs.getString("short2"),
+                rs.getString("team2").charAt(0));
+
+        ret.add(new DbNode[] {node1, node2});
+      }
+      return ret;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown error: nobuildingFloorEdges", e);
+    }
+  }
+
+  /**
    * Gets a list of all the nodes on a floor except for invisible (HALL) nodes
    *
    * @param floor The floor from which to get the nodes
@@ -656,7 +779,6 @@ public class MapDB {
    */
   // Nick
   public static LinkedList<DbNode> visNodes(int floor, String building) throws DBException {
-    LinkedList<DbNode> ret = new LinkedList<DbNode>();
 
     String query = "SELECT * FROM nodes WHERE floor = ? AND building = ? AND NOT nodeType = 'HALL'";
 
@@ -679,7 +801,6 @@ public class MapDB {
    * @return A LinkedList of all the nodes in the database
    */
   public static LinkedList<DbNode> allNodes() throws DBException {
-    LinkedList<DbNode> nodes = new LinkedList<DbNode>();
 
     String query = "SELECT * FROM nodes";
 
@@ -699,22 +820,9 @@ public class MapDB {
    */
   // Nick
   private static LinkedList<DbNode> getAllNodesSQL(PreparedStatement st) throws SQLException {
-    LinkedList<DbNode> nodes = new LinkedList<DbNode>();
+    LinkedList<DbNode> nodes = new LinkedList<>();
 
-    ResultSet rs = st.executeQuery();
-    while (rs.next()) {
-      nodes.add(
-          new DbNode(
-              rs.getString("nodeID"),
-              rs.getInt("xcoord"),
-              rs.getInt("ycoord"),
-              rs.getInt("floor"),
-              rs.getString("building"),
-              rs.getString("nodeType"),
-              rs.getString("longName"),
-              rs.getString("shortName"),
-              rs.getString("teamAssigned").charAt(0)));
-    }
+    buildDbNodeList(nodes, st);
     return nodes;
   }
 
@@ -726,31 +834,15 @@ public class MapDB {
    */
   // Nick
   public static LinkedList<DbNode> getAdjacent(String nodeID) throws DBException {
-    LinkedList<DbNode> ret = new LinkedList<DbNode>();
+    LinkedList<DbNode> ret = new LinkedList<>();
     try {
-
-      ResultSet rs = null;
       String query =
           "SELECT nodes.* FROM nodes, edges WHERE (edges.node1 = ? AND nodes.nodeID = edges.node2) OR (edges.node2 = ? AND nodes.nodeID = edges.node1)";
 
       PreparedStatement st = con.prepareStatement(query);
       st.setString(1, nodeID);
       st.setString(2, nodeID);
-      rs = st.executeQuery();
-
-      while (rs.next()) {
-        ret.add(
-            new DbNode(
-                rs.getString("nodeID"),
-                rs.getInt("xcoord"),
-                rs.getInt("ycoord"),
-                rs.getInt("floor"),
-                rs.getString("building"),
-                rs.getString("nodeType"),
-                rs.getString("longName"),
-                rs.getString("shortName"),
-                rs.getString("teamAssigned").charAt(0)));
-      }
+      buildDbNodeList(ret, st);
       //      query = "DROP VIEW connected_edges";
       //      statement.executeUpdate(query);
     } catch (SQLException e) {
@@ -785,13 +877,14 @@ public class MapDB {
       String type2 = result.getString("nodeType");
 
       if (floor1 != floor2) {
-        if (!type1.equals(type2) || !(type1.equals("STAI") || type1.equals("ELEV"))) {
+        if (!type1.equals(type2)
+            || !(type1.equals("STAI") || type1.equals("ELEV") || type1.equals("EXIT"))) {
           throw new DBException(
               "Cannot add edge between "
                   + nodeID1
                   + " and "
                   + nodeID2
-                  + "since they are on different floors and not stairs or elevators");
+                  + "since they are on different floors and not exits, stairs or elevators");
         }
       }
 
@@ -818,7 +911,8 @@ public class MapDB {
       st.setString(3, nodeID2);
 
       boolean updated = st.executeUpdate() > 0;
-      if (floor1 != floor2) { // want to do this after the edge is added
+      if (floor1 != floor2
+          && !type1.equals("EXIT")) { // want to do this after the edge is added and not for exits
         addToShaft(nodeID1, nodeID2);
       }
       return updated;
@@ -862,7 +956,7 @@ public class MapDB {
   /**
    * Adds two nodes to the same shaft. If neither of them are in a shaft, makes a new shaft with
    * them. If one of them is in a shaft, then adds the other one to that shaft. If both of them are
-   * in different shafts, throws DBException.
+   * in different shafts, then the shafts get merged
    *
    * @param node1 the nodeID of the first node of the edge that should be added to the shaft
    * @param node2 the nodeID of the second node of the edge that should be added to the shaft
@@ -883,7 +977,39 @@ public class MapDB {
       error += "Nodes in a shaft must be in the same building!\n";
     if (!(DbNode1.getNodeType().equals("ELEV") || DbNode1.getNodeType().equals("STAI")))
       error += "Nodes in a shaft must be either elevators or stairs!\n";
+    // makes sure that no nodes on the same floor are ever in the same shaft
+    try {
+      for (DbNode next : getInShaft(node1)) {
+        if (next.getFloor() == DbNode2.getFloor()) {
+          if (next.getNodeID().equals(DbNode2.getNodeID()))
+            return; // already in the same shaft, just return.
+          error +=
+              DbNode2.getLongName()
+                  + " is on the same floor as another node in "
+                  + DbNode1.getLongName()
+                  + "'s shaft!\n";
+          break;
+        }
+      }
+    } catch (DBException ignored) {
+    } // do nothing, just means that node1 isn't in any shafts
+    try {
+      for (DbNode next : getInShaft(node2)) {
+        if (next.getFloor() == DbNode1.getFloor()) {
+          if (next.getNodeID().equals(DbNode1.getNodeID()))
+            return; // already in the same shaft, just return.
+          error +=
+              DbNode1.getLongName()
+                  + " is on the same floor as another node in "
+                  + DbNode2.getLongName()
+                  + "'s shaft!\n";
+          break;
+        }
+      }
+    } catch (DBException ignored) {
+    }
     if (error.length() != 0) throw new DBException(error);
+    // done enforcing most constraints: The actual code follows
     String query = "SELECT shaftID, nodeID FROM shaft WHERE nodeID = ? OR nodeID = ?";
     try {
       PreparedStatement stmt = con.prepareStatement(query);
@@ -894,13 +1020,23 @@ public class MapDB {
         String nodeID1 = rs.getString("nodeID");
         int shaftID1 = rs.getInt("shaftID");
         if (rs.next()) { // both in shaft, check if both have same id
-          if (shaftID1 == rs.getInt("shaftID")) return; // both already in the same shaft
-          else
-            throw new DBException(
-                "Those nodes are already in different shafts! Nodes can only ever be in one shaft.");
+          int shaftID2 = rs.getInt("shaftID");
+          if (shaftID1 == shaftID2) return; // both already in the same shaft, do nothing
+          else { // nodes are in different shafts and the shafts must be merged
+            query =
+                "UPDATE shaft SET shaftID = ? WHERE shaftID = ?"; // simply sets the shaftIDs for
+            // each shaft equal
+            // nodeID2 to the shaft of shaftID1
+            stmt = con.prepareStatement(query);
+            stmt.setInt(1, shaftID1);
+            stmt.setInt(2, shaftID2);
+            stmt.executeUpdate();
+          }
+
         } else { // only one in shaft
           String nodeID2 = node2;
-          if (nodeID1.equals(node2)) nodeID2 = node1;
+          if (nodeID1.equals(node2))
+            nodeID2 = node1; // nodeID2 is the one not found in the result set first
           query = "INSERT INTO shaft (shaftID, nodeID) VALUES (?, ?)";
           stmt = con.prepareStatement(query);
           stmt.setInt(1, shaftID1);
@@ -946,7 +1082,8 @@ public class MapDB {
   }
 
   /**
-   * gets all the DbNodes in the same shaft as the given nodeID
+   * gets all the DbNodes in the same shaft as the given nodeID, including the node represented by
+   * the given ID
    *
    * @param nodeID The ID of the node you want all the nodes in the shaft for
    * @return a linked list of DbNodes in the same shaft as the given nodeID
@@ -954,7 +1091,7 @@ public class MapDB {
    */
   public static LinkedList<DbNode> getInShaft(String nodeID) throws DBException {
     String query = "SELECT shaftID FROM shaft WHERE nodeID = ?";
-    LinkedList<DbNode> nodes = new LinkedList<DbNode>();
+    LinkedList<DbNode> nodes = new LinkedList<>();
     try {
       PreparedStatement stmt = con.prepareStatement(query);
       stmt.setString(1, nodeID);
@@ -977,6 +1114,43 @@ public class MapDB {
         throw new DBException("Unknown error: getInShaft " + nodeID, e);
       }
     }
+  }
+
+  /**
+   * Returns a linked list of Linked Lists of DBNodes. Each linked list returned is all of the nodes
+   * in a shaft.
+   *
+   * @param building The building that you want to get all of the shafts for
+   * @return All of the shafts in a building
+   * @throws DBException On error
+   */
+  public static LinkedList<LinkedList<DbNode>> getShafts(String building) throws DBException {
+    String query =
+        "SELECT shaftID, shaft.nodeID from shaft, "
+            + "(SELECT nodeID FROM nodes WHERE (nodeType = 'ELEV' OR nodeTYPE = 'STAI') AND building = ?) as nodes"
+            + " WHERE shaft.nodeID = nodes.nodeID order by shaftID"; // filter out nodes not in the
+    // right building in this
+    // statement rather than later
+    LinkedList<LinkedList<DbNode>> shafts = new LinkedList<>();
+    try {
+      PreparedStatement stmt = con.prepareStatement(query);
+      stmt.setString(1, building);
+      ResultSet rs = stmt.executeQuery();
+      boolean left = rs.next();
+      while (left) {
+        int shaft = rs.getInt("shaftID");
+        LinkedList<DbNode> nodesInShaft = new LinkedList<>();
+        do { // key to this is the order by statement, I know that all the nodes in a shaft will be
+          // consecutive
+          nodesInShaft.add(getNode(rs.getString("nodeID")));
+        } while (((left = rs.next()) && rs.getInt("shaftID") == shaft));
+        shafts.add(nodesInShaft);
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown errors: getShafts ", e);
+    }
+    return shafts;
   }
 
   public static LinkedList<DbNode[]> getFloorEdges(int floor, String building) throws DBException {
@@ -1040,7 +1214,7 @@ public class MapDB {
    */
   public static LinkedList<String> exportEdges() throws DBException {
     try {
-      LinkedList<String> edges = new LinkedList<String>();
+      LinkedList<String> edges = new LinkedList<>();
       String query = "SELECT * FROM edges";
       ResultSet rs = con.prepareStatement(query).executeQuery();
       while (rs.next()) {
@@ -1152,5 +1326,39 @@ public class MapDB {
         throw new DBException("Unknown error: setKiosk: " + nodeID + " " + angle, e);
       }
     }
+  }
+
+  /**
+   * Loads all Map edges and Nodes into a Hashmap
+   *
+   * @return Hashmap <NodeID, list of DbNodes has edges to>
+   */
+  public static HashMap<String, LinkedList<DbNode>> loadMapData() throws DBException {
+    String query = "SELECT node1, node2 FROM edges";
+    HashMap<String, LinkedList<DbNode>> map = new HashMap<>();
+    try {
+      PreparedStatement stmt = con.prepareStatement(query);
+      ResultSet rs = stmt.executeQuery();
+      while (rs.next()) {
+        String node1 = rs.getString("node1");
+        String node2 = rs.getString("node2");
+        if (map.get(node1) == null) map.put(node1, new LinkedList<>());
+        if (map.get(node2) == null) map.put(node2, new LinkedList<>());
+        map.get(node1).add(getNode(node2));
+        map.get(node2).add(getNode(node1));
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown error: loadMapData", e);
+    }
+    //    // Implementation using existing methods
+    //    HashMap<String, LinkedList<DbNode>> result = new HashMap<String, LinkedList<DbNode>>();
+    //    for (DbNode node : allNodes()) {
+    //      String id = node.getNodeID();
+    //      LinkedList<DbNode> adjacent = getAdjacent(id);
+    //      result.put(id, adjacent);
+    //    }
+    //    return result;
+    return map;
   }
 }

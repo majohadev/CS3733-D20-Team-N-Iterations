@@ -1,0 +1,23 @@
+.header-button {
+    -fx-pref-width: 150px;
+    -fx-background-color: #263051;
+    -jfx-rippler-fill: #E6EBF2;
+    -fx-background-radius: 50px;
+    -fx-pref-height: 50px;
+    -fx-text-fill: white;
+    -fx-font-size: 20;
+}
+
+.choice-button {
+    -fx-pref-width: 100px;
+    -fx-background-color: #263051;
+    -jfx-rippler-fill: #E6EBF2;
+    -fx-background-radius: 25px;
+    -fx-pref-height: 50px;
+    -fx-text-fill: white;
+    -fx-font-size: 15;
+    -jfx-button-type: RAISED;
+    -fx-border-color: #4A69C6;
+    -fx-border-width: 4px;
+    -fx-border-radius: 25px;
+}

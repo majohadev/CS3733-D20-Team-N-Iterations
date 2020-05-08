@@ -18,14 +18,16 @@ import org.junit.jupiter.api.Test;
 public class GetPathWithStopAStarTest {
   Algorithm myAStar = new Algorithm();
 
+  public GetPathWithStopAStarTest() throws DBException {}
+
   @BeforeAll
   public static void initialize()
       throws SQLException, DBException, ClassNotFoundException, FileNotFoundException {
     MapDB.initTestDB();
     InputStream inputNodes =
-        GetPathWithStopAStarTest.class.getResourceAsStream("../csv/ThreeFloorsTestNode.csv");
+        GetPathWithStopAStarTest.class.getResourceAsStream("../csv/FourFloorsTestNode.csv");
     InputStream inputEdges =
-        GetPathWithStopAStarTest.class.getResourceAsStream("../csv/ThreeFloorsTestEdges.csv");
+        GetPathWithStopAStarTest.class.getResourceAsStream("../csv/FourFloorsTestEdges.csv");
     CSVParser.parseCSV(inputNodes);
     CSVParser.parseCSV(inputEdges);
   }

@@ -8,6 +8,4 @@ public interface Controller {
   StateSingleton singleton = null;
 
   void setMainApp(App mainApp);
-
-  void setSingleton(StateSingleton singleton);
 }

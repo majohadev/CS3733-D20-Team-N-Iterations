@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXListView?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="280.0" prefWidth="470.0" style="-fx-background-color: #263051; -fx-background-radius: 10; -fx-border-radius: 10;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.mapEditor.MapEditorAddShaftController">
+    <children>
+        <Label layoutX="42.0" layoutY="14.0" prefHeight="39.0" prefWidth="246.0" text="Add to Shaft" textFill="WHITE">
+            <font>
+                <Font name="Calibri" size="25.0" />
+            </font>
+        </Label>
+        <Pane fx:id="pn_listClipper" layoutX="20.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
+            <children>
+                <JFXListView fx:id="lst_add_shaft_node" prefHeight="159.0" prefWidth="430.0" style="-fx-background-radius: 10; -fx-border-radius: 10;" />
+            </children>
+        </Pane>
+        <JFXButton fx:id="btn_cancel" layoutX="14.0" layoutY="229.0" prefHeight="37.0" prefWidth="92.0" text="Cancel" textFill="WHITE">
+            <font>
+                <Font name="Calibri" size="16.0" />
+            </font>
+        </JFXButton>
+        <JFXButton fx:id="btn_confirm" layoutX="364.0" layoutY="229.0" prefHeight="37.0" prefWidth="92.0" text="Confirm" textFill="WHITE">
+            <font>
+                <Font name="Calibri" size="16.0" />
+            </font>
+        </JFXButton>
+    </children>
+</AnchorPane>

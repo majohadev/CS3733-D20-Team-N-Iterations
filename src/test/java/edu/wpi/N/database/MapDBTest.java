@@ -3,7 +3,6 @@ package edu.wpi.N.database;
 import static org.junit.jupiter.api.Assertions.*;
 
 import edu.wpi.N.entities.DbNode;
-import edu.wpi.N.entities.Node;
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import java.util.LinkedList;
@@ -94,7 +93,6 @@ public class MapDBTest {
 
   // Chris
   @Test
-  // TODO: just see if it contains
   public void testAddNodeNoID() throws DBException {
     /*MapDB.addNode(1300, 1200, 4, "Faulkner", "DEPT", "Database", "Dept 7");
     assertTrue(MapDB.floorNodes(4, "Faulkner").contains());*/
@@ -179,67 +177,67 @@ public class MapDBTest {
         MapDB.searchNode(-1, null, null, "Cardiology").get(0).getNodeID().equals("NDEPT00104"));
   }
 
-  // Chris
-  @Test
-  public void testGetGNode() throws DBException {
-    Node sample = MapDB.getGNode("NDEPT01005");
-    assertNotNull(sample);
-    assertTrue(sample.getX() == 1300 && sample.getY() == 1200);
-  }
+  //  // Chris
+  //  @Test
+  //  public void testGetGNode() throws DBException {
+  //    Node sample = MapDB.getGNode("NDEPT01005");
+  //    assertNotNull(sample);
+  //    assertTrue(sample.getX() == 1300 && sample.getY() == 1200);
+  //  }
 
-  // Chris
-  @Test
-  public void testGetGAdjacent() throws SQLException, ClassNotFoundException, DBException {
-
-    MapDB.addEdge("NHALL00104", "NHALL00204");
-    MapDB.addEdge("NHALL00104", "NDEPT00104");
-    MapDB.addEdge("NHALL00104", "NDEPT00204");
-    MapDB.addNode("NELEV00X07", 1250, 850, 7, "Faulkner", "ELEV", "Elev X", "Hall 7", 'N');
-    MapDB.addNode("NELEV00X06", 1250, 850, 6, "Faulkner", "ELEV", "Elev X", "Hall 7", 'N');
-    MapDB.addNode("NELEV00X05", 1250, 850, 5, "Faulkner", "ELEV", "Elev X", "Hall 7", 'N');
-    MapDB.addNode("NHALL00105", 1250, 850, 5, "Faulkner", "HALL", "Hall 1", "Hall 1", 'N');
-    MapDB.addNode("NHALL00107", 1250, 850, 7, "Faulkner", "HALL", "Hall 1", "Hall 1", 'N');
-    MapDB.addNode("NHALL00106", 1250, 850, 6, "Faulkner", "HALL", "Hall 1", "Hall 1", 'N');
-    MapDB.addNode("NHALL00207", 1250, 850, 7, "Not faulkner", "HALL", "Hall 1", "Hall 1", 'N');
-    MapDB.addEdge("NELEV00X07", "NELEV00X06");
-    MapDB.addEdge("NELEV00X05", "NELEV00X06");
-    MapDB.addEdge("NHALL00105", "NELEV00X05");
-    MapDB.addEdge("NHALL00106", "NELEV00X06");
-    MapDB.addEdge("NHALL00107", "NELEV00X07");
-    MapDB.addEdge("NHALL00107", "NHALL00207");
-    LinkedList<Node> lst = MapDB.getGAdjacent("NELEV00X06", 5, 7);
-    assertTrue(
-        lst.contains(new Node(1250, 850, "NELEV00X07"))
-            && lst.contains(new Node(1250, 850, "NELEV00X05")));
-    assertFalse(lst.contains(new Node(1250, 850, "NHALL00106")));
-
-    lst = MapDB.getGAdjacent("NELEV00X07", 5, 7);
-    assertTrue(lst.contains(new Node(1250, 850, "NELEV00X06")));
-    assertTrue(lst.contains(new Node(1250, 850, "NHALL00107")));
-    lst = MapDB.getGAdjacent("NELEV00X05", 5, 7);
-    assertTrue(
-        lst.contains(new Node(1250, 850, "NELEV00X06"))
-            && lst.contains(new Node(1250, 850, "NHALL00105")));
-
-    LinkedList<Node> adjList = MapDB.getGAdjacent("NHALL00104");
-    assertNotNull(adjList); // error here
-
-    assertTrue(adjList.contains(new Node(1350, 1250, "NHALL00204")));
-    assertTrue(adjList.contains(new Node(1350, 950, "NDEPT00104")));
-    assertTrue(adjList.contains(new Node(1450, 950, "NDEPT00204")));
-
-    assertEquals(3, adjList.size());
-    MapDB.removeEdge("NHALL00104", "NHALL00204");
-    MapDB.removeEdge("NHALL00104", "NDEPT00104");
-    MapDB.removeEdge("NHALL00104", "NDEPT00204");
-    MapDB.deleteNode("NELEV00X07");
-    MapDB.deleteNode("NELEV00X06");
-    MapDB.deleteNode("NELEV00X05");
-    MapDB.deleteNode("NHALL00105");
-    MapDB.deleteNode("NHALL00107");
-    MapDB.deleteNode("NHALL00106");
-    MapDB.deleteNode("NHALL00207");
-  }
+  //  // Chris
+  //  @Test
+  //  public void testGetGAdjacent() throws SQLException, ClassNotFoundException, DBException {
+  //
+  //    MapDB.addEdge("NHALL00104", "NHALL00204");
+  //    MapDB.addEdge("NHALL00104", "NDEPT00104");
+  //    MapDB.addEdge("NHALL00104", "NDEPT00204");
+  //    MapDB.addNode("NELEV00X07", 1250, 850, 7, "Faulkner", "ELEV", "Elev X", "Hall 7", 'N');
+  //    MapDB.addNode("NELEV00X06", 1250, 850, 6, "Faulkner", "ELEV", "Elev X", "Hall 7", 'N');
+  //    MapDB.addNode("NELEV00X05", 1250, 850, 5, "Faulkner", "ELEV", "Elev X", "Hall 7", 'N');
+  //    MapDB.addNode("NHALL00105", 1250, 850, 5, "Faulkner", "HALL", "Hall 1", "Hall 1", 'N');
+  //    MapDB.addNode("NHALL00107", 1250, 850, 7, "Faulkner", "HALL", "Hall 1", "Hall 1", 'N');
+  //    MapDB.addNode("NHALL00106", 1250, 850, 6, "Faulkner", "HALL", "Hall 1", "Hall 1", 'N');
+  //    MapDB.addNode("NHALL00207", 1250, 850, 7, "Not faulkner", "HALL", "Hall 1", "Hall 1", 'N');
+  //    MapDB.addEdge("NELEV00X07", "NELEV00X06");
+  //    MapDB.addEdge("NELEV00X05", "NELEV00X06");
+  //    MapDB.addEdge("NHALL00105", "NELEV00X05");
+  //    MapDB.addEdge("NHALL00106", "NELEV00X06");
+  //    MapDB.addEdge("NHALL00107", "NELEV00X07");
+  //    MapDB.addEdge("NHALL00107", "NHALL00207");
+  //    LinkedList<Node> lst = MapDB.getGAdjacent("NELEV00X06", 5, 7);
+  //    assertTrue(
+  //        lst.contains(new Node(1250, 850, "NELEV00X07"))
+  //            && lst.contains(new Node(1250, 850, "NELEV00X05")));
+  //    assertFalse(lst.contains(new Node(1250, 850, "NHALL00106")));
+  //
+  //    lst = MapDB.getGAdjacent("NELEV00X07", 5, 7);
+  //    assertTrue(lst.contains(new Node(1250, 850, "NELEV00X06")));
+  //    assertTrue(lst.contains(new Node(1250, 850, "NHALL00107")));
+  //    lst = MapDB.getGAdjacent("NELEV00X05", 5, 7);
+  //    assertTrue(
+  //        lst.contains(new Node(1250, 850, "NELEV00X06"))
+  //            && lst.contains(new Node(1250, 850, "NHALL00105")));
+  //
+  //    LinkedList<Node> adjList = MapDB.getGAdjacent("NHALL00104");
+  //    assertNotNull(adjList); // error here
+  //
+  //    assertTrue(adjList.contains(new Node(1350, 1250, "NHALL00204")));
+  //    assertTrue(adjList.contains(new Node(1350, 950, "NDEPT00104")));
+  //    assertTrue(adjList.contains(new Node(1450, 950, "NDEPT00204")));
+  //
+  //    assertEquals(3, adjList.size());
+  //    MapDB.removeEdge("NHALL00104", "NHALL00204");
+  //    MapDB.removeEdge("NHALL00104", "NDEPT00104");
+  //    MapDB.removeEdge("NHALL00104", "NDEPT00204");
+  //    MapDB.deleteNode("NELEV00X07");
+  //    MapDB.deleteNode("NELEV00X06");
+  //    MapDB.deleteNode("NELEV00X05");
+  //    MapDB.deleteNode("NHALL00105");
+  //    MapDB.deleteNode("NHALL00107");
+  //    MapDB.deleteNode("NHALL00106");
+  //    MapDB.deleteNode("NHALL00207");
+  //  }
 
   // Chris
   @Test
@@ -403,12 +401,11 @@ public class MapDBTest {
 
   @Test
   public void testShafts() throws DBException {
-    DbNode n1 = MapDB.addNode(2, 1, 3, "Faulkner", "ELEV", "Elevator X3", "ELEV X3");
-    DbNode n2 = MapDB.addNode(2, 1, 4, "Faulkner", "ELEV", "Elevator X4", "ELEV X4");
+    DbNode n1 = MapDB.addNode(2, 1, 3, "Faulkner", "ELEV", "Elevator X3", "n1");
+    DbNode n2 = MapDB.addNode(2, 1, 4, "Faulkner", "ELEV", "Elevator X4", "n2");
     MapDB.addEdge(n1.getNodeID(), n2.getNodeID());
     LinkedList<DbNode> shafts = MapDB.getInShaft(n1.getNodeID());
     assertTrue(shafts.contains(n1) && shafts.contains(n2));
-    MapDB.addToShaft(n1.getNodeID(), n2.getNodeID());
     MapDB.removeFromShaft(n1.getNodeID());
     shafts = MapDB.getInShaft(n2.getNodeID());
     assertTrue(!shafts.contains(n1) && shafts.contains(n2));
@@ -421,39 +418,63 @@ public class MapDBTest {
     assertThrows(
         DBException.class, () -> MapDB.addToShaft(n1.getNodeID(), n3.getNodeID())); // not elev
 
-    DbNode n4 = MapDB.addNode(1, 2, 3, "Faulkner", "ELEV", "el", "el");
+    DbNode n4 = MapDB.addNode(1, 2, 1, "Faulkner", "ELEV", "el", "n4");
+    DbNode n10 = MapDB.addNode(1, 2, 3, "Faulkner", "ELEV", "el", "n10");
     assertThrows(
-        DBException.class, () -> MapDB.addToShaft(n1.getNodeID(), n4.getNodeID())); // same floor
+        DBException.class, () -> MapDB.addToShaft(n1.getNodeID(), n10.getNodeID())); // same floor
 
-    DbNode n5 = MapDB.addNode(1, 2, 4, "Not faulkner", "ELEV", "el", "el");
+    DbNode n5 = MapDB.addNode(1, 2, 4, "Not faulkner", "ELEV", "el", "n5");
     assertThrows(
         DBException.class, () -> MapDB.addToShaft(n1.getNodeID(), n5.getNodeID())); // not faulkner
 
-    DbNode n6 = MapDB.addNode(1, 2, 4, "Faulkner", "ELEV", "el", "el");
+    DbNode n6 = MapDB.addNode(1, 2, 6, "Faulkner", "ELEV", "el", "n6");
+
+    DbNode n9 = MapDB.addNode(1, 2, 5, "Not faulkner", "ELEV", "el", "n9");
+
     MapDB.addToShaft(n1.getNodeID(), n6.getNodeID()); // works
     MapDB.removeFromShaft(n6.getNodeID());
 
-    MapDB.addToShaft(n4.getNodeID(), n6.getNodeID()); // works
-    assertThrows(
-        DBException.class,
-        () ->
-            MapDB.addToShaft(
-                n1.getNodeID(),
-                n6.getNodeID())); // doesn't work because both already in different shafts
+    MapDB.addToShaft(n9.getNodeID(), n5.getNodeID());
 
-    DbNode n7 = MapDB.addNode(1, 2, 2, "Faulkner", "ELEV", "el", "el");
+    MapDB.addToShaft(n4.getNodeID(), n6.getNodeID()); // works
+    LinkedList<LinkedList<DbNode>> allShafts = MapDB.getShafts("Faulkner");
+    assertTrue(allShafts.size() == 2);
+    assertTrue(allShafts.get(0).contains(n2));
+    assertTrue(allShafts.get(0).contains(n1));
+    assertTrue(allShafts.get(1).contains(n6));
+    assertTrue(allShafts.get(1).contains(n4));
+    MapDB.addToShaft(n1.getNodeID(), n6.getNodeID()); // merges the shafts
+
+    allShafts = MapDB.getShafts("Faulkner");
+    assertTrue(allShafts.size() == 1); // shafts got merged
+
+    shafts = MapDB.getInShaft(n1.getNodeID());
+    assertTrue(shafts.contains(n1));
+    assertTrue(shafts.contains(n6));
+    assertTrue(shafts.contains(n4));
+    assertTrue(shafts.contains(n2));
+
+    DbNode n7 = MapDB.addNode(1, 2, 2, "Faulkner", "ELEV", "el", "n7");
     assertThrows(
         DBException.class, () -> MapDB.addToShaft(n4.getNodeID(), n4.getNodeID())); // same node
     MapDB.addToShaft(n4.getNodeID(), n7.getNodeID());
     MapDB.addToShaft(
         n7.getNodeID(), n6.getNodeID()); // does nothing since both already in the same shaft
-
+    assertThrows(
+        DBException.class,
+        () ->
+            MapDB.addToShaft(
+                n3.getNodeID(),
+                n1.getNodeID())); // different floors, but n3 has the same floor as n2, which is
+    // in the same shaft as n1.
     MapDB.deleteNode(n1.getNodeID());
     MapDB.deleteNode(n2.getNodeID());
     MapDB.deleteNode(n3.getNodeID());
     MapDB.deleteNode(n4.getNodeID());
     MapDB.deleteNode(n5.getNodeID());
     MapDB.deleteNode(n6.getNodeID());
+    MapDB.deleteNode(n9.getNodeID());
+    MapDB.deleteNode(n10.getNodeID());
   }
 
   @AfterAll

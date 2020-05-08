@@ -20,6 +20,8 @@ import org.junit.jupiter.api.Test;
 public class DirectionsTest {
   Algorithm myAStar = new Algorithm();
 
+  public DirectionsTest() throws DBException {}
+
   @BeforeAll
   public static void setup()
       throws SQLException, ClassNotFoundException, DBException, FileNotFoundException {
@@ -144,6 +146,12 @@ public class DirectionsTest {
   //    //    }
   //    Assertions.assertEquals(directions, path.getDirections());
   //  }
+  @Test
+  public void gdir() {
+    System.out.println(Directions.getGoogleDirections("walking", true));
+    System.out.println("_____________________");
+    System.out.println(Directions.getGoogleDirections("walking", false));
+  }
 
   @AfterAll
   public static void clearDB() throws DBException {

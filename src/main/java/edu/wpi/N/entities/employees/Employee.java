@@ -1,6 +1,8 @@
 package edu.wpi.N.entities.employees;
 
-public abstract class Employee {
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+
+public abstract class Employee extends RecursiveTreeObject<Employee> {
   private int id;
   private String name;
 
@@ -35,5 +37,3 @@ public abstract class Employee {
     return id == other.id && name.equals(other.name);
   }
 }
-
-/* TODO: Create your employee entity: make sure serviceType is the same as what you insert into service*/

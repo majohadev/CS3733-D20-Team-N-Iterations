@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXPasswordField?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #263051;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.admin.NewLoginController">
+   <children>
+      <Pane layoutX="726.0" layoutY="324.0" prefHeight="500.0" prefWidth="400.0" style="-fx-background-color: #4a69c6;" AnchorPane.bottomAnchor="285.0" AnchorPane.rightAnchor="560.0" AnchorPane.topAnchor="285.0">
+         <children>
+            <Label layoutX="29.0" layoutY="241.0" styleClass="label-mid-size" stylesheets="@../../css/sanitationRequestUI.css" text="Password: " textFill="WHITE">
+               <font>
+                  <Font name="Calibri Bold" size="24.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="43.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../images/adminIcons/key-6-64.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Label>
+            <Label layoutX="32.0" layoutY="177.0" prefHeight="30.0" prefWidth="166.0" styleClass="label-mid-size" stylesheets="@../../css/sanitationRequestUI.css" text="Username:" textFill="WHITE">
+               <font>
+                  <Font name="Calibri Bold" size="24.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="93.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../images/adminIcons/user-64.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Label>
+            <ButtonBar layoutX="19.0" layoutY="414.0" prefHeight="40.0" prefWidth="385.0">
+               <buttons>
+                  <HBox prefHeight="40.0" prefWidth="431.0">
+                     <children>
+                        <Pane prefHeight="40.0" prefWidth="119.0" />
+                     </children>
+                  </HBox>
+               </buttons>
+            </ButtonBar>
+            <JFXTextField fx:id="txtf_username" focusColor="WHITE" layoutX="203.0" layoutY="170.0" prefWidth="150.0" style="-fx-text-fill: #e6ebf2;" styleClass="jfx-text-field" stylesheets="@../../css/sanitationRequestUI.css" unFocusColor="WHITE">
+               <font>
+                  <Font name="Calibri" size="24.0" />
+               </font></JFXTextField>
+            <JFXPasswordField fx:id="pwf_password" layoutX="203.0" layoutY="225.0" prefHeight="50.0" prefWidth="150.0" style="-fx-text-fill: #e6ebf2;" styleClass="jfx-text-field" stylesheets="@../../css/sanitationRequestUI.css" unFocusColor="WHITE">
+               <font>
+                  <Font size="24.0" />
+               </font></JFXPasswordField>
+            <JFXButton buttonType="RAISED" layoutX="147.0" layoutY="428.0" onMouseClicked="#clearFields" ripplerFill="BLACK" stylesheets="@../../css/sanitationRequestUI.css" text="Clear" textFill="WHITE">
+               <font>
+                  <Font name="Calibri Bold" size="36.0" />
+               </font>
+            </JFXButton>
+            <JFXButton buttonType="RAISED" layoutX="259.0" layoutY="428.0" onMouseClicked="#checkUser" ripplerFill="BLACK" text="Login" textFill="WHITE">
+               <font>
+                  <Font name="Calibri Bold" size="36.0" />
+               </font>
+            </JFXButton>
+            <Label layoutX="49.0" layoutY="26.0" text="Employee Login" textFill="#e6ebf2">
+               <font>
+                  <Font name="Calibri" size="48.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      <Pane layoutX="736.0" layoutY="334.0" prefHeight="500.0" prefWidth="400.0" style="-fx-background-color: #7e9ab6;" AnchorPane.bottomAnchor="285.0" AnchorPane.leftAnchor="560.0" AnchorPane.topAnchor="285.0">
+         <children>
+            <ImageView fitHeight="288.0" fitWidth="235.0" layoutX="82.0" layoutY="99.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../images/hospitalLogo/Brigham_and_Womens_Hospital_logo.png" />
+               </image>
+            </ImageView>
+            <JFXButton buttonType="RAISED" layoutX="10.0" layoutY="426.0" onMouseClicked="#goBack" ripplerFill="BLACK" text="Return" textFill="WHITE">
+               <font>
+                  <Font name="Calibri Bold" size="36.0" />
+               </font>
+            </JFXButton>
+         </children>
+      </Pane>
+   </children>
+</AnchorPane>

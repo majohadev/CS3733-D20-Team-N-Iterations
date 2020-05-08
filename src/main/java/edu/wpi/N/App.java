@@ -1,10 +1,10 @@
 package edu.wpi.N;
 
-import edu.wpi.N.controllerData.MapDataStorage;
+import edu.wpi.N.database.DBException;
 import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.views.Controller;
-import edu.wpi.N.views.HomeController;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -15,8 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class App extends Application {
   private Stage masterStage;
-  public static MapDataStorage mapData = new MapDataStorage();
-  public static HomeController homeController = new HomeController();
 
   @Override
   public void init() {
@@ -24,13 +22,15 @@ public class App extends Application {
   }
 
   @Override
-  public void start(Stage primaryStage) throws IOException {
+  public void start(Stage primaryStage) throws IOException, DBException {
     // Configure the primary Stage
+
     this.masterStage = primaryStage;
     this.masterStage.setTitle("Brigham and Women's Hospital Kiosk Application");
+
     StateSingleton newSingleton = StateSingleton.getInstance();
-    // TODO: update to home or what not
-    switchScene("views/newHomePage.fxml", newSingleton);
+    switchScene("views/mapDisplay/newMapDisplay.fxml", newSingleton);
+    // switchScene("views/chatbot/chatBox.fxml", newSingleton);
     masterStage.setMaximized(true);
   }
 
@@ -46,15 +46,33 @@ public class App extends Application {
   public void switchScene(String path, StateSingleton singleton) throws IOException {
     FXMLLoader loader = new FXMLLoader();
     loader.setLocation(getClass().getResource(path));
-    Pane pane = loader.load();
 
+    // Inject Singleton object into classes with Constructors that take StateSingleton
+    loader.setControllerFactory(
+        type -> {
+          try {
+            // look for constructor taking StateSingleton as a parameter
+            for (Constructor<?> c : type.getConstructors()) {
+              if (c.getParameterCount() == 1) {
+                if (c.getParameterTypes()[0] == StateSingleton.class) {
+                  return c.newInstance(singleton);
+                }
+              }
+            }
+            // didn't find appropriate constructor, just use default constructor:
+            return type.getConstructor().newInstance();
+          } catch (Exception exc) {
+            throw new RuntimeException(exc);
+          }
+        });
+
+    Pane pane = loader.load();
+    Controller controller = loader.getController();
+    controller.setMainApp(this);
     Scene scene = new Scene(pane);
     masterStage.setScene(scene);
     // masterStage.setMaximized(true);
     masterStage.setFullScreenExitHint("");
     masterStage.show();
-    Controller controller = loader.getController();
-    controller.setMainApp(this);
-    controller.setSingleton(singleton);
   }
 }

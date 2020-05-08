@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="970.0" prefWidth="1720.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.outdated.AccountHandleControllerOUTDATED">
+   <children>
+      <Label layoutX="175.0" layoutY="116.0" text="Add Admin Account" textAlignment="CENTER">
+         <font>
+            <Font size="36.0" />
+         </font>
+      </Label>
+      <Label layoutX="115.0" layoutY="169.0" text="Add Username:" textAlignment="CENTER">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="109.0" layoutY="215.0" text="Add Password: " textAlignment="CENTER">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <JFXTextField fx:id="txtf_adminuser" layoutX="305.0" layoutY="178.0" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="250.0" />
+      <JFXTextField fx:id="txtf_adminpass" layoutX="305.0" layoutY="215.0" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="250.0" />
+      <JFXButton buttonType="RAISED" layoutX="239.0" layoutY="263.0" onMouseClicked="#addAdmin" text="Add Admin">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </JFXButton>
+      <Label layoutX="1190.0" layoutY="144.0" text="Change Account Password" textAlignment="CENTER">
+         <font>
+            <Font size="36.0" />
+         </font>
+      </Label>
+      <Label layoutX="655.0" layoutY="173.0" text="Username:" textAlignment="CENTER">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="1180.0" layoutY="288.0" prefHeight="35.0" prefWidth="168.0" text="New Password:" textAlignment="CENTER">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Label layoutX="1193.0" layoutY="245.0" text="Old Password:" textAlignment="CENTER">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <JFXTextField fx:id="txtf_cpoldpass" layoutX="1386.0" layoutY="253.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="250.0" />
+      <JFXTextField fx:id="txtf_cpuser" layoutX="1386.0" layoutY="210.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="250.0" />
+      <JFXTextField fx:id="txtf_cpnewpass" layoutX="1386.0" layoutY="288.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="250.0" />
+      <JFXButton buttonType="RAISED" layoutX="1351.0" layoutY="332.0" onMouseClicked="#changeAccountPass" text="Submit">
+         <font>
+            <Font name="Calibri" size="24.0" />
+         </font>
+      </JFXButton>
+      <Label layoutX="747.0" layoutY="114.0" text="Remove Login" textAlignment="CENTER">
+         <font>
+            <Font size="36.0" />
+         </font>
+      </Label>
+      <Label layoutX="1224.0" layoutY="205.0" text="Username:" textAlignment="CENTER">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <JFXTextField fx:id="txtf_rmuser" layoutX="790.0" layoutY="178.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="250.0" />
+      <JFXButton fx:id="btn_remove" layoutX="807.0" layoutY="242.0" onMouseClicked="#removeLogin" text="Remove">
+         <font>
+            <Font name="Calibri" size="24.0" />
+         </font>
+      </JFXButton>
+   </children>
+</AnchorPane>

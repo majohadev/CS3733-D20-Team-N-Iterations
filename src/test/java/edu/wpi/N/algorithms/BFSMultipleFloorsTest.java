@@ -17,14 +17,16 @@ import org.junit.jupiter.api.Test;
 public class BFSMultipleFloorsTest {
   Algorithm myBFS = new Algorithm();
 
+  public BFSMultipleFloorsTest() throws DBException {}
+
   @BeforeAll
   public static void initialize()
       throws SQLException, DBException, ClassNotFoundException, FileNotFoundException {
     MapDB.initTestDB();
     InputStream inputNodes =
-        BFSMultipleFloorsTest.class.getResourceAsStream("../csv/ThreeFloorsTestNode.csv");
+        BFSMultipleFloorsTest.class.getResourceAsStream("../csv/FourFloorsTestNode.csv");
     InputStream inputEdges =
-        BFSMultipleFloorsTest.class.getResourceAsStream("../csv/ThreeFloorsTestEdges.csv");
+        BFSMultipleFloorsTest.class.getResourceAsStream("../csv/FourFloorsTestEdges.csv");
     CSVParser.parseCSV(inputNodes);
     CSVParser.parseCSV(inputEdges);
   }

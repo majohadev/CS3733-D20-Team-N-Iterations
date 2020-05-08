@@ -1,5 +1,4 @@
 package edu.wpi.N.database;
-// TODO: Add your imports
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -18,14 +17,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-/*TODO: implement tests for your serviceType
-Follow the golden rule of database tests: WHEN THE CONTROL FLOW EXITS YOUR FUNCTION, THE DATABASE SHOULD BE 110,000%
-IDENTICAL TO WHAT IT WAS WHEN CONTROL FLOW ENTERED YOUR FUNCTION
-For service requests, if you mutate them, that's probably ok.
-DO NOT RELY ON IDS BEING PARTICULAR VALUES
-ServiceDB.getEmployee(1) <--- NO
-TURN OFF AUTOCOMMIT BEFORE ENTERING YOUR TESTS, CATCH DBEXCEPTION AND ROLLBACK
-*/
+/*
+ */
 public class ServicesTest {
   private static Connection con;
 
@@ -482,7 +475,7 @@ public class ServicesTest {
           ServiceDB.addITReq(
               "Had device for 1 year", node.getNodeID(), "IPhone X", "Literally nothing");
       int idL = ServiceDB.addLaundReq("Clean my clothes", node.getNodeID());
-      int idT = ServiceDB.addTransReq("Помогите!", node.getNodeID(), "Russian");
+      int idT = ServiceDB.addTransReq("Loser!", node.getNodeID(), "Russian");
 
       con.commit();
       con.setAutoCommit(true);
@@ -522,7 +515,7 @@ public class ServicesTest {
       int idIT2 =
           ServiceDB.addITReq("Had device for 2 years", node.getNodeID(), "LG G5", "Camera broke");
       int idLO = ServiceDB.addLaundReq("Filthy clothes", node.getNodeID());
-      int idTO = ServiceDB.addTransReq("Помогите! Пожалуйста", node.getNodeID(), "Russian");
+      int idTO = ServiceDB.addTransReq("I hate this", node.getNodeID(), "German");
 
       ServiceDB.denyRequest(idIT, "Nope");
       ServiceDB.denyRequest(idL, "Nope");
@@ -569,7 +562,7 @@ public class ServicesTest {
           ServiceDB.addITReq(
               "Just got the phone", node.getNodeID(), "Samsung Galaxy S10", "Exploded");
       int idL = ServiceDB.addLaundReq("Clean my stuff", node.getNodeID());
-      int idT = ServiceDB.addTransReq("Помогите!", node.getNodeID(), "Russian");
+      int idT = ServiceDB.addTransReq("Die!", node.getNodeID(), "French");
 
       con.commit();
       con.setAutoCommit(true);

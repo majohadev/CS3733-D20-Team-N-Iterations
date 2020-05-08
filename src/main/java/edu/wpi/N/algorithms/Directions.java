@@ -6,14 +6,22 @@ import static java.lang.Math.atan2;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Scanner;
 
 public class Directions {
   private ArrayList<String> directions;
   private static ArrayList<DbNode> path;
   private static State state;
-  private static final double TURN_THRESHOLD = 30;
+  private static final double TURN_THRESHOLD = 45;
+  private static final double SLIGHT_TURN_THRESHOLD = 20;
+  private static final double SHARP_TURN_THRESHOLD = 95;
+  private static LinkedList<DbNode> entranceNodes;
 
   enum State {
     STARTING,
@@ -25,6 +33,7 @@ public class Directions {
   }
 
   public Directions(LinkedList<DbNode> path) {
+    // this.entranceNodes.add();
     this.directions = new ArrayList<>();
     ArrayList<DbNode> pathNodes = new ArrayList<DbNode>();
     for (DbNode node : path) {
@@ -37,6 +46,7 @@ public class Directions {
   private void generateDirections() throws DBException {
     DbNode currNode;
     DbNode nextNode = path.get(0);
+    DbNode endOfHallNode = null;
     double distance = 0;
     boolean stateChange = true;
     double angle = 0;
@@ -54,9 +64,12 @@ public class Directions {
         totalDistance += getDistance(path.get(i), path.get(i + 1));
       }
       state = getState(i);
+      // System.out.println(state);
       switch (state) {
         case STARTING:
-          if (currNode.getNodeID().equals("NSERV00301")
+          if (currNode.getNodeType().equals("EXIT")) {
+            message = "Enter at " + getLandmark(currNode).getLongName();
+          } else if (currNode.getNodeID().equals("NSERV00301")
               || currNode.getNodeID().equals("NSERV00103")) {
             message = "Start in the direction of the kiosk arrow ";
           } else if (!path.get(0).getNodeType().equals("HALL")) {
@@ -73,45 +86,41 @@ public class Directions {
                     + getDistanceString(getDistance(currNode, nextNode));
           }
           break;
-        case EXITING: // not implemented yet, for building change
-          directions.add("Exit " + currNode.getLongName());
-          break;
         case CONTINUING:
           distance += getDistance(currNode, nextNode);
-          if (getState(i - 1).equals(CHANGING_FLOOR)) {
+          //          if (endOfHallNode == null) {
+          //            endOfHallNode = findEndOfHall(i);
+          //          }
+          if (!message.equals("") && i == 1) { // TODO:NEW
+            directions.add(message);
+            message = "";
+          } else if (getState(i - 1).equals(CHANGING_FLOOR)) {
             message = "Exit " + currNode.getLongName();
-          } else {
-            if (!message.equals("")) {
-              directions.add(message); // + " and proceed down the hall");
-              message = "";
-            } else if (stateChange || atIntersection(currNode)) {
-              if (getLandmark(nextNode) == null) {
+          } else if (stateChange || atIntersection(currNode)) {
+            if (getLandmark(nextNode) == null) {
+              if (currNode.getBuilding().equals("Faulkner"))
                 message = "Continue to next intersection " + getDistanceString(distance);
-              } else if (getLandmark(nextNode).equals(nextNode)) {
-                message =
-                    "Go towards " // "Proceed straight towards "
-                        + getLandmark(nextNode).getLongName()
-                        + " "
-                        + getDistanceString(distance);
-                // } else if (atEndOfHall(nextNode)) { //this should go before first if
-                // message = "Continue to the end of the hallway " + getDistanceString(distance);
-              } else if (getState(i - 1).equals(CHANGING_FLOOR)) {
-                message = "Exit " + currNode.getLongName();
-              } else {
-                message =
-                    "Continue past "
-                        + getLandmark(nextNode).getLongName()
-                        + " "
-                        + getDistanceString(distance);
-              }
-              distance = 0;
+
+            } else if (getLandmark(nextNode).equals(nextNode)) {
+              message =
+                  "Go towards " // "Proceed straight towards "
+                      + getLandmark(nextNode).getLongName()
+                      + " "
+                      + getDistanceString(distance);
+            } else {
+              message =
+                  "Continue past "
+                      + getLandmark(nextNode).getLongName()
+                      + " "
+                      + getDistanceString(distance);
             }
+            distance = 0;
           }
           break;
         case TURNING:
           if (!nextNode.equals(path.get(path.size() - 1))) {
             if (!message.equals("")) {
-              directions.add(message + " and turn " + getTurnType(angle, getAngle(i - 1)));
+              directions.add(message + " and t" + getTurnType(angle, getAngle(i - 1)));
               message = "";
             } else if (!(getLandmark(currNode) == null)) {
               directions.add(
@@ -119,15 +128,23 @@ public class Directions {
                       + getLandmark(currNode).getLongName()
                       + " "
                       + getDistanceString(getDistance(currNode, nextNode))
-                      + " and turn "
+                      + " and t"
                       + getTurnType(angle, getAngle(i - 1))
                       + " at the intersection");
             } else {
-              directions.add(
-                  "Proceed to next intersection "
-                      + getDistanceString(getDistance(currNode, nextNode))
-                      + " and turn "
-                      + getTurnType(angle, getAngle(i - 1)));
+              if (distance == 0) {
+                directions.add(
+                    "At the next intersection "
+                        + getDistanceString(getDistance(currNode, nextNode))
+                        + " t"
+                        + getTurnType(angle, getAngle(i - 1)));
+              } else {
+                directions.add(
+                    "At the next intersection "
+                        + getDistanceString(distance)
+                        + " t"
+                        + getTurnType(angle, getAngle(i - 1)));
+              }
             }
           }
           break;
@@ -151,8 +168,14 @@ public class Directions {
           }
           break;
         case ARRIVING:
-          if (getState(i - 1).equals(TURNING)) {
-            String turnMessage = "Turn " + getTurnType(angle, getAngle(i - 2));
+          if (currNode.getNodeType().equals("EXIT")) {
+            if (!message.equals("")) {
+              directions.add(message + " and exit at " + currNode.getLongName());
+              message = "";
+            } else directions.add("Exit at " + currNode.getLongName());
+
+          } else if (getState(i - 1).equals(TURNING)) {
+            String turnMessage = "T" + getTurnType(angle, getAngle(i - 2));
             directions.add(
                 turnMessage
                     + " and arrive at "
@@ -164,8 +187,15 @@ public class Directions {
                 message
                     + " and arrive at destination "
                     + getTotalTimeString(totalDistance, totalTime));
+            message = "";
+          } else if (currNode.getNodeType().equals("EXIT")) {
+            directions.add("Exit " + currNode.getLongName());
           } else {
-            directions.add("Arrive at destination " + getTotalTimeString(totalDistance, totalTime));
+            directions.add(
+                "Arrive at "
+                    + currNode.getLongName()
+                    + " "
+                    + getTotalTimeString(totalDistance, totalTime));
           }
           break;
       }
@@ -184,9 +214,41 @@ public class Directions {
     int totalTime = (int) Math.round((totalDistance / 4.6 + time) / 60);
     if (totalTime <= 0) {
       return "(Estimated time less than 1 minute)";
+    } else if (totalTime == 1) {
+      return "(Estimated time " + totalTime + " minute)";
     } else {
       return "(Estimated time " + totalTime + " minutes)";
     }
+  }
+
+  private static DbNode findEndOfHall(int index) throws DBException {
+    double angleChange;
+    boolean endOfHall = false;
+    while (getState(index).equals(CONTINUING)
+        && index < path.size()) { // || (getState(index - 1).equals(CONTINUING)
+      for (DbNode adj : MapDB.getAdjacent(path.get(index).getNodeID())) {
+        if (adj.getNodeType().equals("HALL")) {
+          angleChange = getAngle(index, adj) - getAngle(index - 1);
+          if (angleChange > 180) {
+            angleChange -= 360;
+          } else if (angleChange < -180) {
+            angleChange += 360;
+          }
+          if (Math.abs(angleChange) < SLIGHT_TURN_THRESHOLD && !adj.equals(path.get(index - 1))) {
+            endOfHall = false;
+            break;
+          } else {
+            endOfHall = true;
+          }
+        }
+      }
+      if (endOfHall) {
+        // System.out.println(path.get(index));
+        return path.get(index);
+      }
+      index++;
+    }
+    return null;
   }
 
   /**
@@ -205,12 +267,9 @@ public class Directions {
         && (path.get(i).getFloor() != path.get(i + 1).getFloor()
             || path.get(i).getNodeType().equals(path.get(i - 1).getNodeType()))) {
       return CHANGING_FLOOR;
-    } else if (Math.abs(getAngle(i) - getAngle(i - 1)) > TURN_THRESHOLD
-        && Math.abs(getAngle(i) - getAngle(i - 1)) < 360 - TURN_THRESHOLD) {
+    } else if (Math.abs(getAngle(i) - getAngle(i - 1)) > SLIGHT_TURN_THRESHOLD
+        && Math.abs(getAngle(i) - getAngle(i - 1)) < 360 - SLIGHT_TURN_THRESHOLD) {
       return TURNING;
-
-    } else if (!path.get(i).getBuilding().equals(path.get(i + 1).getBuilding())) {
-      return EXITING;
     } else {
       return CONTINUING;
     }
@@ -224,15 +283,24 @@ public class Directions {
    */
   private static String getTurnType(double angle, double prevAngle) {
     double angleChange = angle - prevAngle;
-    if (angleChange > 175) {
+    if (angleChange > 180) {
       angleChange -= 360;
-    } else if (angleChange < -175) {
+    } else if (angleChange < -180) {
       angleChange += 360;
     }
-    if (angleChange >= TURN_THRESHOLD) {
-      return "right";
+    // System.out.println(angleChange);
+    if (angleChange <= TURN_THRESHOLD && angleChange >= SLIGHT_TURN_THRESHOLD) {
+      return "ake a slight right";
+    } else if (angleChange > SHARP_TURN_THRESHOLD) {
+      return "ake a sharp right turn";
+    } else if (angleChange >= TURN_THRESHOLD) {
+      return "urn right";
+    } else if (angleChange >= -1 * TURN_THRESHOLD && angleChange <= -1 * SLIGHT_TURN_THRESHOLD) {
+      return "ake a slight left";
+    } else if (angleChange <= -1 * SHARP_TURN_THRESHOLD) {
+      return "ake a sharp left turn";
     } else if (angleChange <= -1 * TURN_THRESHOLD) {
-      return "left";
+      return "urn left";
     } else {
       return "straight" + angleChange;
     }
@@ -281,6 +349,17 @@ public class Directions {
   }
 
   /**
+   * gets the angle between two nodes use atan2
+   *
+   * @return double, angle
+   */
+  private static double getAngle(int i, DbNode n) {
+    double dy = n.getY() - path.get(i).getY();
+    double dx = n.getX() - path.get(i).getX();
+    return Math.toDegrees(atan2(dy, dx));
+  }
+
+  /**
    * calculates the distance between two nodes using appropriate conversion factor
    *
    * @param currNode, current DbNode
@@ -316,7 +395,7 @@ public class Directions {
   }
 
   /** @return directions with numbers at beginning of each line */
-  private ArrayList<String> getNumberedDirection() {
+  public ArrayList<String> getNumberedDirection() {
     ArrayList<String> newDirections = new ArrayList<>();
     int index = 1;
     if (!this.directions.isEmpty()) {
@@ -340,6 +419,66 @@ public class Directions {
       this.generateDirections();
       return this.getNumberedDirection();
     } else {
+      return null;
+    }
+  }
+
+  /**
+   * gets the google directions with the specified mode and direction
+   *
+   * @param mode walking, driving,, bycycling, transit; gets directions in one of those formats
+   * @param dir the direction. True = from 45 francis street to 1153 centre street, false = opposite
+   *     direction
+   * @return The google directions as a string
+   */
+  public static String getGoogleDirections(String mode, boolean dir) {
+    String urls;
+    if (dir) {
+      urls =
+          "https://maps.googleapis.com/maps/api/directions/json?mode="
+              + mode
+              + "&origin=45|Francis|Street,|Boston,|MA,"
+              + "&destination=1153|Centre|St,|Boston,|MA"
+              + "&key=AIzaSyDx7BSweq5dRzXavs1vxuMWeR2ETMR6b3Q";
+    } else {
+      urls =
+          "https://maps.googleapis.com/maps/api/directions/json?mode="
+              + mode
+              + "&origin=1153|Centre|St,|Boston,|MA"
+              + "&destination=45|Francis|Street,|Boston,|MA,"
+              + "&key=AIzaSyDx7BSweq5dRzXavs1vxuMWeR2ETMR6b3Q";
+    }
+    try {
+      URL url = new URL(urls);
+      HttpURLConnection httpcon = (HttpURLConnection) (url.openConnection());
+      httpcon.setDoOutput(true);
+      httpcon.setRequestProperty("Content-Type", "application/json");
+      httpcon.setRequestProperty("Accept", "application/json");
+      httpcon.setRequestMethod("GET");
+      httpcon.connect();
+      Scanner sc = new Scanner(url.openStream());
+      String dirs = "";
+      while (sc.hasNext()) {
+        String next = sc.nextLine();
+        // if (next.contains("\"html_instructions\"")) System.out.println(next);
+        if (next.contains("\"html_instructions\""))
+          dirs +=
+              next.substring(44)
+                      .replace("\\u003cb\\u003e", "")
+                      .replace("\\u003c/b\\u003e", "")
+                      .replace("\\u003cwbr/\\u003e", "\n")
+                      .replace("&nbsp;", " ")
+                      .replaceAll("(\\\\u003c)(.*?)(\\\\u003e)", "\n")
+                      .replace("\",", "")
+                  + "\n";
+        // System.out.println(sc.nextLine() + "K");
+      }
+      return dirs;
+    } catch (MalformedURLException e) {
+      e.printStackTrace();
+      return null;
+    } catch (IOException e) {
+      e.printStackTrace();
       return null;
     }
   }

@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXListView?>
+<?import com.jfoenix.controls.JFXTextArea?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: fff8e4;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.services.MedicineRequestController">
+   <children>
+      <SplitPane dividerPositions="0.15641293013555788" prefHeight="1080.0" prefWidth="1920.0" stylesheets="@../../css/sanitationRequestUI.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="1080.0" prefWidth="297.0" styleClass="anchor" stylesheets="@../../css/sanitationRequestUI.css">
+               <children>
+                  <VBox alignment="CENTER" layoutX="50.0" layoutY="114.0" prefHeight="200.0" prefWidth="200.0" stylesheets="@../../css/sanitationRequestUI.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <Pane prefHeight="251.25" prefWidth="200.0">
+                           <children>
+                              <JFXButton fx:id="btn_prescribe" buttonType="RAISED" layoutX="32.0" layoutY="89.0" onMouseClicked="#changeScene" styleClass="jfx-button-regular" stylesheets="@../../css/sanitationRequestUI.css" text="Prescribe">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </JFXButton>
+                           </children>
+                        </Pane>
+                        <Pane prefHeight="251.25" prefWidth="200.0">
+                           <children>
+                              <JFXButton fx:id="btn_viewreq" buttonType="RAISED" layoutX="32.0" layoutY="89.0" onMouseClicked="#changeScene" styleClass="jfx-button-regular" stylesheets="@../../css/sanitationRequestUI.css" text="View Requests">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </JFXButton>
+                           </children>
+                        </Pane>
+                        <Pane prefHeight="251.25" prefWidth="200.0">
+                           <children>
+                              <JFXButton buttonType="RAISED" disable="true" layoutX="32.0" layoutY="89.0" styleClass="jfx-button-regular" stylesheets="@../../css/sanitationRequestUI.css" text="Remove">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </JFXButton>
+                           </children>
+                        </Pane>
+                        <Pane prefHeight="251.25" prefWidth="200.0">
+                           <children>
+                              <JFXButton buttonType="RAISED" disable="true" layoutX="32.0" layoutY="89.0" styleClass="jfx-button-regular" stylesheets="@../../css/sanitationRequestUI.css" text="Exit">
+                                 <font>
+                                    <Font size="24.0" />
+                                 </font>
+                              </JFXButton>
+                           </children>
+                        </Pane>
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" style="-fx-background-color: fff8e4;">
+               <children>
+                  <AnchorPane fx:id="ap_prep" layoutX="-10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1078.0" prefWidth="1626.0" styleClass="anchor" stylesheets="@../../css/sanitationRequestUI.css" visible="false">
+                     <children>
+                        <HBox alignment="CENTER_LEFT" layoutX="502.0" layoutY="47.0" prefHeight="150.0" prefWidth="629.0" spacing="30.0" stylesheets="@../../css/sanitationRequestUI.css" AnchorPane.leftAnchor="502.0" AnchorPane.rightAnchor="501.0">
+                           <children>
+                              <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../images/serviceIcons/MedicineIconWhite.png" />
+                                 </image>
+                              </ImageView>
+                              <Label styleClass="label-header" stylesheets="@../../css/sanitationRequestUI.css" text="Medicine Request" textFill="WHITE">
+                                 <font>
+                                    <Font name="Calibri" size="55.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" layoutX="166.0" layoutY="255.0" prefHeight="542.0" prefWidth="1190.0" spacing="100.0">
+                           <children>
+                              <Pane maxWidth="-Infinity" minWidth="-Infinity" prefHeight="0.0" prefWidth="595.0">
+                                 <children>
+                                    <Label layoutX="214.0" layoutY="165.0" styleClass="label-mid-size" stylesheets="@../../css/sanitationRequestUI.css" text="Medicine Name">
+                                       <font>
+                                          <Font name="Calibri" size="24.0" />
+                                       </font>
+                                    </Label>
+                                    <JFXTextField fx:id="txtf_patient" alignment="CENTER" layoutX="46.0" layoutY="84.0" prefHeight="44.0" prefWidth="516.0" styleClass="jfx-text-field" stylesheets="@../../css/sanitationRequestUI.css">
+                                       <font>
+                                          <Font size="20.0" />
+                                       </font>
+                                    </JFXTextField>
+                                    <Label layoutX="226.0" layoutY="31.0" styleClass="label-mid-size" text="Patient Name">
+                                       <font>
+                                          <Font name="Calibri" size="24.0" />
+                                       </font>
+                                    </Label>
+                                    <JFXTextField fx:id="txtf_medicine" alignment="CENTER" layoutX="46.0" layoutY="215.0" prefHeight="44.0" prefWidth="516.0" styleClass="jfx-text-field" stylesheets="@../../css/sanitationRequestUI.css">
+                                       <font>
+                                          <Font size="20.0" />
+                                       </font>
+                                    </JFXTextField>
+                                    <JFXTextField fx:id="txtf_patientLocation" alignment="CENTER" layoutX="46.0" layoutY="337.0" onKeyTyped="#searchByLocationTextFill" prefHeight="44.0" prefWidth="516.0">
+                                       <font>
+                                          <Font size="20.0" />
+                                       </font>
+                                    </JFXTextField>
+                                    <JFXListView fx:id="lst_patientLocations" layoutX="46.0" layoutY="397.0" prefHeight="138.0" prefWidth="516.0" stylesheets="@../../css/sanitationRequestUI.css" />
+                                    <Label layoutX="252.0" layoutY="285.0" styleClass="label-mid-size" stylesheets="@../../css/sanitationRequestUI.css" text="Location">
+                                       <font>
+                                          <Font name="Calibri" size="24.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </Pane>
+                              <Pane maxWidth="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="595.0">
+                                 <children>
+                                    <JFXTextArea fx:id="txtf_notes" layoutX="69.0" layoutY="325.0" maxWidth="457.0" minWidth="394.0" prefHeight="138.0" prefWidth="457.0" promptText="Enter Notes Here" styleClass="jfx-text-area" stylesheets="@../../css/sanitationRequestUI.css" />
+                                    <JFXTextField fx:id="txtf_dosage" alignment="CENTER" layoutX="69.0" layoutY="157.0" prefHeight="45.0" prefWidth="327.0">
+                                       <font>
+                                          <Font size="20.0" />
+                                       </font>
+                                    </JFXTextField>
+                                    <JFXComboBox fx:id="cb_units" labelFloat="true" layoutX="414.0" layoutY="157.0" prefHeight="45.0" prefWidth="112.0" promptText="Units" style="-fx-font-size: 18;" />
+                                    <Label layoutX="178.0" layoutY="84.0" styleClass="label-mid-size" stylesheets="@../../css/sanitationRequestUI.css" text="Enter Dosage and Unit">
+                                       <font>
+                                          <Font name="Calibri" size="24.0" />
+                                       </font>
+                                    </Label>
+                                    <Label layoutX="112.0" layoutY="271.0" styleClass="label-mid-size" stylesheets="@../../css/sanitationRequestUI.css" text="Please Enter Aditional Notes Below">
+                                       <font>
+                                          <Font name="Calibri" size="24.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </Pane>
+                           </children>
+                        </HBox>
+                        <JFXButton fx:id="btn_submit" buttonType="RAISED" contentDisplay="RIGHT" graphicTextGap="20.0" layoutX="613.0" layoutY="917.0" minHeight="75.0" minWidth="200.0" onMouseClicked="#createMedRequest" ripplerFill="#c1c9eb" styleClass="jfx-button-submit" stylesheets="@../../css/sanitationRequestUI.css" text="Submit Request">
+                           <font>
+                              <Font size="48.0" />
+                           </font>
+                           <graphic>
+                              <ImageView fitHeight="54.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true" style="fx-border-color: yellow;">
+                                 <image>
+                                    <Image url="@../../images/mapIcons/yellowArrow.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </JFXButton>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane fx:id="ap_tableview" layoutX="-10.0" prefHeight="1078.0" prefWidth="1626.0" styleClass="anchor" stylesheets="@../../css/sanitationRequestUI.css">
+                     <children>
+                        <TableView fx:id="tb_patients" layoutX="333.0" layoutY="340.0" prefHeight="400.0" prefWidth="975.0" styleClass="table-row-cell" stylesheets="@../../css/adminTable.css" />
+                        <Label layoutX="639.0" layoutY="245.0" styleClass="label-header" stylesheets="@../../css/sanitationRequestUI.css" text="Current Requests">
+                           <font>
+                              <Font name="Calibri" size="36.0" />
+                           </font>
+                        </Label>
+                        <JFXButton fx:id="btn_Accept" layoutX="821.0" layoutY="772.0" onMouseClicked="#acceptRequest" styleClass="jfx-button-regular" stylesheets="@../../css/sanitationRequestUI.css" text="Accept">
+                           <font>
+                              <Font name="Calibri" size="24.0" />
+                           </font></JFXButton>
+                        <JFXButton fx:id="btn_Deny" layoutX="1083.0" layoutY="772.0" onMouseClicked="#acceptRequest" styleClass="jfx-button-regular" stylesheets="@../../css/sanitationRequestUI.css" text="Deny">
+                           <font>
+                              <Font name="Calibri" size="24.0" />
+                           </font></JFXButton>
+                     </children>
+                  </AnchorPane>
+               </children></AnchorPane>
+        </items>
+      </SplitPane>
+   </children>
+</AnchorPane>
