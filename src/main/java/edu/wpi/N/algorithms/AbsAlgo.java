@@ -19,8 +19,10 @@ public abstract class AbsAlgo implements IPathFinder {
    */
   public static double cost(DbNode currNode, DbNode nextNode) {
     return Math.sqrt(
-        Math.pow(nextNode.getX() - currNode.getX(), 2)
-            + Math.pow(nextNode.getY() - currNode.getY(), 2));
+            Math.pow(nextNode.getX() - currNode.getX(), 2)
+                + Math.pow(nextNode.getY() - currNode.getY(), 2))
+        + floorChangeCost(currNode, nextNode)
+        + buildingChangeCost(currNode, nextNode);
   }
 
   /**
@@ -30,7 +32,26 @@ public abstract class AbsAlgo implements IPathFinder {
    * @return Manhattan distance to the goal Node
    */
   public static double heuristic(DbNode currNode, DbNode end) {
-    return Math.abs(end.getX() - currNode.getX()) + Math.abs(end.getY() - currNode.getY());
+    return Math.abs(end.getX() - currNode.getX())
+        + Math.abs(end.getY() - currNode.getY())
+        + floorChangeCost(currNode, end)
+        + buildingChangeCost(currNode, end);
+  }
+
+  /** Return a cost for using elevators or stairs */
+  public static double floorChangeCost(DbNode currNode, DbNode nextNode) {
+    if (currNode.getNodeType().equals("STAI") && nextNode.getNodeType().equals("STAI")) {
+      return 500;
+    } else if (currNode.getNodeType().equals("ELEV") && nextNode.getNodeType().equals("ELEV")) {
+      return 250;
+    } else return 0;
+  }
+
+  /** Return a cost for changing between Faulkner and main campus */
+  public static double buildingChangeCost(DbNode currNode, DbNode nextNode) {
+    if (currNode.getBuilding().equals("Faulkner") && !(nextNode.getBuilding().equals("Faulkner"))) {
+      return 500;
+    } else return 0;
   }
 
   /**
