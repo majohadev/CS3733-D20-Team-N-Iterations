@@ -555,13 +555,13 @@ public class Directions {
     ArrayList<Direction> iconDirections = new ArrayList<>();
     for(int i=0; i<directions.size(); i++){
       if(i==directions.size()-1){
-        iconDirections.add(new Direction(directions.get(i), BUILDING,null,Icon.ARRIVE));
+        iconDirections.add(new Direction(directions.get(i), FLOOR,null,Icon.ARRIVE));
       }else if(directions.get(i).contains("right")){
-        iconDirections.add(new Direction(directions.get(i), BUILDING,null,Icon.RIGHT));
+        iconDirections.add(new Direction(directions.get(i), FLOOR,null,Icon.RIGHT));
       }else if(directions.get(i).contains("left")){
-        iconDirections.add(new Direction(directions.get(i), BUILDING,null,Icon.LEFT));
+        iconDirections.add(new Direction(directions.get(i), FLOOR,null,Icon.LEFT));
       }else{
-        iconDirections.add(new Direction(directions.get(i), BUILDING,null,Icon.CONTINUE));
+        iconDirections.add(new Direction(directions.get(i), FLOOR,null,Icon.CONTINUE));
       }
     }
     return iconDirections;
