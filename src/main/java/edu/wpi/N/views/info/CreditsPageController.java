@@ -47,17 +47,17 @@ public class CreditsPageController implements Controller {
   }
 
   public void onLink5Clicked() throws IOException {
-    InfoWebviewController.setURL("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+    InfoWebviewController.setURL("https://db.apache.org/derby/");
     mainApp.switchScene("/edu/wpi/N/views/info/infoWebview.fxml", singleton);
   }
 
   public void onLink6Clicked() throws IOException {
-    InfoWebviewController.setURL("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+    InfoWebviewController.setURL("https://guava.dev/");
     mainApp.switchScene("/edu/wpi/N/views/info/infoWebview.fxml", singleton);
   }
 
   public void onLink7Clicked() throws IOException {
-    InfoWebviewController.setURL("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+    InfoWebviewController.setURL("http://opencsv.sourceforge.net/");
     mainApp.switchScene("/edu/wpi/N/views/info/infoWebview.fxml", singleton);
   }
 

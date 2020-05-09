@@ -10,7 +10,7 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #263051;" stylesheets="@../../css/sanitationRequestUI.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.info.CreditsPageController">
    <children>
       <Label layoutX="70.0" layoutY="60.0" styleClass="label-header" stylesheets="@../../css/sanitationRequestUI.css" text="Credits" />
-      <Separator layoutX="70.0" layoutY="138.0" prefHeight="7.0" prefWidth="455.0" stylesheets="@../../css/sanitationRequestUI.css" />
+      <Separator layoutX="70.0" layoutY="138.0" prefHeight="7.0" prefWidth="501.0" stylesheets="@../../css/sanitationRequestUI.css" />
       <JFXButton fx:id="btn_about" alignment="CENTER" buttonType="RAISED" layoutX="70.0" layoutY="948.0" onMouseClicked="#onBtnAboutClicked" prefHeight="52.0" prefWidth="104.0" ripplerFill="#002186" styleClass="jfx-button-regular" stylesheets="@../../css/sanitationRequestUI.css" text="About" textFill="WHITE">
          <font>
             <Font size="24.0" />
@@ -39,28 +39,26 @@
       <Label layoutX="70.0" layoutY="592.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="Interpreter Request" />
       <Label layoutX="70.0" layoutY="662.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="Audio-Visual Request" />
       <Label layoutX="70.0" layoutY="732.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="Gift Delivery Service" />
-      <Label layoutX="70.0" layoutY="802.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="API Name" />
       <Label layoutX="70.0" layoutY="409.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="Team B" />
       <Label layoutX="70.0" layoutY="479.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="Team E" />
       <Label layoutX="70.0" layoutY="549.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="Team A" />
       <Label layoutX="70.0" layoutY="619.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="Team C" />
       <Label layoutX="70.0" layoutY="689.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="Team M" />
       <Label layoutX="70.0" layoutY="759.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="Team L" />
-      <Label layoutX="70.0" layoutY="829.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="Team Name" />
       <Label layoutX="960.0" layoutY="422.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="JFoenix" />
       <Label layoutX="960.0" layoutY="449.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="The JFoenix Team" />
       <Hyperlink layoutX="956.0" layoutY="476.0" onMouseClicked="#onLink3Clicked" styleClass="hyperlink-credits" stylesheets="@../../css/sanitationRequestUI.css" text="Home Page" />
       <Label layoutX="960.0" layoutY="512.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="Gradle Build Tool" />
       <Label layoutX="960.0" layoutY="539.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="Gradle, Inc." />
       <Hyperlink layoutX="956.0" layoutY="566.0" onMouseClicked="#onLink4Clicked" styleClass="hyperlink-credits" stylesheets="@../../css/sanitationRequestUI.css" text="Home Page" />
-      <Label layoutX="960.0" layoutY="602.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="Library Name" />
-      <Label layoutX="960.0" layoutY="629.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="Creator Name" />
+      <Label layoutX="960.0" layoutY="602.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="Apache Derby" />
+      <Label layoutX="960.0" layoutY="629.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="The Apache Software Foundation" />
       <Hyperlink layoutX="956.0" layoutY="656.0" onMouseClicked="#onLink5Clicked" styleClass="hyperlink-credits" stylesheets="@../../css/sanitationRequestUI.css" text="Home Page" />
-      <Label layoutX="960.0" layoutY="692.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="Library Name" />
-      <Label layoutX="960.0" layoutY="719.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="Creator Name" />
+      <Label layoutX="960.0" layoutY="692.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="Google Guava" />
+      <Label layoutX="960.0" layoutY="719.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="Google" />
       <Hyperlink layoutX="956.0" layoutY="746.0" onMouseClicked="#onLink6Clicked" styleClass="hyperlink-credits" stylesheets="@../../css/sanitationRequestUI.css" text="Home Page" />
-      <Label layoutX="960.0" layoutY="782.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="Library Name" />
-      <Label layoutX="960.0" layoutY="809.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="Creator Name" />
+      <Label layoutX="960.0" layoutY="782.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="Opencsv" />
+      <Label layoutX="960.0" layoutY="809.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="The Opencsv Team" />
       <Hyperlink layoutX="956.0" layoutY="836.0" onMouseClicked="#onLink7Clicked" styleClass="hyperlink-credits" stylesheets="@../../css/sanitationRequestUI.css" text="Home Page" />
       <Hyperlink layoutX="841.0" layoutY="961.0" onMouseClicked="#onLinkApacheLicenseClicked" styleClass="hyperlink-credits-apache-license" stylesheets="@../../css/sanitationRequestUI.css" text="Apache License, Version 2.0" />
    </children>
