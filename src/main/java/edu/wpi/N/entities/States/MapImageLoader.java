@@ -1,8 +1,7 @@
 package edu.wpi.N.entities.States;
 
-import java.util.HashMap;
-
 import edu.wpi.N.algorithms.Icon;
+import java.util.HashMap;
 import javafx.scene.image.Image;
 
 public class MapImageLoader {
@@ -23,7 +22,7 @@ public class MapImageLoader {
     storeImage("Main4", "edu/wpi/N/images/map/MainResizedF1.png");
     storeImage("Main5", "edu/wpi/N/images/map/MainFloor2.png");
     storeImage("Main6", "edu/wpi/N/images/map/MainFloor3.png");
-    storeIcon(Icon.RIGHT,"edu/wpi/N/images/TextDirIcons/Right_Turn.png");
+    storeIcon(Icon.RIGHT, "edu/wpi/N/images/TextDirIcons/Right_Turn.png");
     storeIcon(Icon.LEFT, "edu/wpi/N/images/TextDirIcons/Left_Turn.png");
     storeIcon(Icon.STAIR, "edu/wpi/N/images/TextDirIcons/Stairs.png");
     storeIcon(Icon.ELEVATOR, "edu/wpi/N/images/TextDirIcons/Elevator.png");
@@ -58,5 +57,9 @@ public class MapImageLoader {
    */
   public Image getMap(String building, int floor) {
     return floorMaps.get(building + floor);
+  }
+
+  public Image getIcon(Icon icon) {
+    return directionIcons.get(icon);
   }
 }

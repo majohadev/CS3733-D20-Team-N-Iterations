@@ -2,7 +2,6 @@ package edu.wpi.N.algorithms;
 
 import static edu.wpi.N.algorithms.Directions.State.*;
 import static edu.wpi.N.algorithms.Level.*;
-
 import static java.lang.Math.atan2;
 
 import edu.wpi.N.database.DBException;
@@ -46,7 +45,7 @@ public class Directions {
   private void generateDirections() throws DBException {
     DbNode currNode;
     DbNode nextNode = path.get(0);
-   // DbNode endOfHallNode = null;
+    // DbNode endOfHallNode = null;
     double distance = 0;
     boolean stateChange = true;
     double angle = 0;
@@ -94,7 +93,7 @@ public class Directions {
           //          }
           if (!message.equals("") && i == 1) {
             currIcon = Icon.CONTINUE;
-            directions.add(new Direction(message, STEP,currNode, currIcon ));
+            directions.add(new Direction(message, STEP, currNode, currIcon));
             message = "";
           } else if (getState(i - 1).equals(CHANGING_FLOOR)) {
             message = "Exit " + currNode.getLongName();
@@ -124,7 +123,7 @@ public class Directions {
           if (!nextNode.equals(path.get(path.size() - 1))) {
             if (!message.equals("")) {
               message = message + " and t" + getTurnType(angle, getAngle(i - 1));
-              directions.add(new Direction(message, STEP,currNode, currIcon ));
+              directions.add(new Direction(message, STEP, currNode, currIcon));
               message = "";
             } else if (!(getLandmark(currNode) == null)) {
               message =
@@ -135,7 +134,7 @@ public class Directions {
                       + " and t"
                       + getTurnType(angle, getAngle(i - 1))
                       + " at the intersection";
-              directions.add(new Direction(message, STEP,currNode, currIcon ));
+              directions.add(new Direction(message, STEP, currNode, currIcon));
               message = "";
             } else {
               if (distance == 0) {
@@ -144,7 +143,7 @@ public class Directions {
                         + getDistanceString(getDistance(currNode, nextNode))
                         + " t"
                         + getTurnType(angle, getAngle(i - 1));
-                directions.add(new Direction(message, STEP,currNode, currIcon ));
+                directions.add(new Direction(message, STEP, currNode, currIcon));
                 message = "";
               } else {
                 message =
@@ -165,21 +164,21 @@ public class Directions {
           }
           if (!message.equals("")) {
             message = message + " and enter " + currNode.getLongName();
-            directions.add(new Direction(message, STEP,currNode, currIcon ));
+            directions.add(new Direction(message, STEP, currNode, currIcon));
             message = "";
             messageCheck = true;
           }
-          if(path.get(i).getNodeType().equals("STAI")) currIcon = Icon.STAIR;
-          else if(path.get(i).getNodeType().equals("ELEV")) currIcon = Icon.ELEVATOR;
+          if (path.get(i).getNodeType().equals("STAI")) currIcon = Icon.STAIR;
+          else if (path.get(i).getNodeType().equals("ELEV")) currIcon = Icon.ELEVATOR;
           if (stateChange && getState(i - 1).equals(CHANGING_FLOOR)) {
             if (messageCheck) {
               message = "Take " + startFloor + " to floor " + currNode.getFloor();
-              directions.add(new Direction(message, STEP,currNode, currIcon ));
+              directions.add(new Direction(message, STEP, currNode, currIcon));
               message = "";
               messageCheck = false;
             } else {
               message = "Enter " + startFloor + " and go to floor " + currNode.getFloor();
-              directions.add(new Direction(message, STEP,currNode, currIcon ));
+              directions.add(new Direction(message, STEP, currNode, currIcon));
               message = "";
             }
           }
@@ -189,12 +188,12 @@ public class Directions {
             if (!message.equals("")) {
               message = message + " and exit at " + currNode.getLongName();
               currIcon = Icon.EXIT;
-              directions.add(new Direction(message, STEP,currNode, currIcon ));
+              directions.add(new Direction(message, STEP, currNode, currIcon));
               message = "";
             } else {
               message = "Exit at " + currNode.getLongName();
               currIcon = Icon.EXIT;
-              directions.add(new Direction(message, STEP,currNode, currIcon ));
+              directions.add(new Direction(message, STEP, currNode, currIcon));
               message = "";
             }
           } else if (getState(i - 1).equals(TURNING)) {
@@ -206,7 +205,7 @@ public class Directions {
                     + " "
                     + getTotalTimeString(totalDistance, totalTime);
             currIcon = Icon.ARRIVE;
-            directions.add(new Direction(message, STEP, currNode, currIcon ));
+            directions.add(new Direction(message, STEP, currNode, currIcon));
             message = "";
           } else if (!message.equals("")) {
             message =
@@ -214,7 +213,7 @@ public class Directions {
                     + " and arrive at destination "
                     + getTotalTimeString(totalDistance, totalTime);
             currIcon = Icon.ARRIVE;
-            directions.add(new Direction(message, STEP, currNode, currIcon ));
+            directions.add(new Direction(message, STEP, currNode, currIcon));
             message = "";
           } else if (currNode.getNodeType().equals("EXIT")) {
             message = "Exit " + currNode.getLongName();
@@ -228,7 +227,7 @@ public class Directions {
                     + " "
                     + getTotalTimeString(totalDistance, totalTime);
             currIcon = Icon.ARRIVE;
-            directions.add(new Direction(message, STEP, currNode, currIcon ));
+            directions.add(new Direction(message, STEP, currNode, currIcon));
             message = "";
           }
           break;
@@ -247,11 +246,11 @@ public class Directions {
   public static String getTotalTimeString(double totalDistance, double time) {
     int totalTime = (int) Math.round((totalDistance / 4.6 + time) / 60);
     if (totalTime <= 0) {
-      return "(Estimated time less than 1 minute)";
+      return "(Est. less than 1 min)";
     } else if (totalTime == 1) {
-      return "(Estimated time " + totalTime + " minute)";
+      return "(Est." + totalTime + " min)";
     } else {
-      return "(Estimated time " + totalTime + " minutes)";
+      return "(Est." + totalTime + " min)";
     }
   }
 
@@ -308,28 +307,30 @@ public class Directions {
     }
   }
 
-  private void addFloorLevelDirection(int i){
-    if(i==0){
-      directions.add(new Direction(getFloorString(path.get(i)), Level.FLOOR, path.get(i), Icon.FLOOR_LEVEL));
-    } else if(path.get(i-1).getFloor()!=path.get(i).getFloor()){
-      directions.add(new Direction(getFloorString(path.get(i)), Level.FLOOR, path.get(i), Icon.FLOOR_LEVEL));
+  private void addFloorLevelDirection(int i) {
+    if (i == 0) {
+      directions.add(
+          new Direction(getFloorString(path.get(i)), Level.FLOOR, path.get(i), Icon.FLOOR_LEVEL));
+    } else if (path.get(i - 1).getFloor() != path.get(i).getFloor()) {
+      directions.add(
+          new Direction(getFloorString(path.get(i)), Level.FLOOR, path.get(i), Icon.FLOOR_LEVEL));
     }
   }
 
-  private String getFloorString(DbNode n){
-    if(n.getBuilding().equals("Faulkner")) {
+  private String getFloorString(DbNode n) {
+    if (n.getBuilding().equals("Faulkner")) {
       if (n.getFloor() == 1) return "First floor";
       if (n.getFloor() == 2) return "Second floor";
-      if (n.getFloor() == 2) return "Third floor";
-      if (n.getFloor() == 2) return "Fourth floor";
-      if (n.getFloor() == 2) return "Fifth floor";
-    }else{
-      if(n.getFloor()==1) return "Lower Level Two";
-      if(n.getFloor()==2) return "Lower Level One";
-      if(n.getFloor()==3) return "Ground Floor";
-      if(n.getFloor()==4) return "First floor";
-      if(n.getFloor()==5) return "Second floor";
-      if(n.getFloor()==6) return "Third floor";
+      if (n.getFloor() == 3) return "Third floor";
+      if (n.getFloor() == 4) return "Fourth floor";
+      if (n.getFloor() == 5) return "Fifth floor";
+    } else {
+      if (n.getFloor() == 1) return "Lower Level Two";
+      if (n.getFloor() == 2) return "Lower Level One";
+      if (n.getFloor() == 3) return "Ground Floor";
+      if (n.getFloor() == 4) return "First floor";
+      if (n.getFloor() == 5) return "Second floor";
+      if (n.getFloor() == 6) return "Third floor";
     }
     return "Unknown Floor Number";
   }
@@ -460,7 +461,8 @@ public class Directions {
     return false;
   }
 
-  /** @return directions with numbers at beginning of each line *//*
+  /** @return directions with numbers at beginning of each line */
+  /*
   public ArrayList<String> getNumberedDirection() {
     ArrayList<String> newDirections = new ArrayList<>();
     int index = 1;

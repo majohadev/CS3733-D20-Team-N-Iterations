@@ -1,7 +1,7 @@
 package edu.wpi.N.algorithms;
 
-public enum Level{
-   BUILDING,
-   FLOOR,
-   STEP
+public enum Level {
+  BUILDING,
+  FLOOR,
+  STEP
 }
