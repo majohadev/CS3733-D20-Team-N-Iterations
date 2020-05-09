@@ -74,21 +74,19 @@
 }
 
 .jfx-tab-pane .tab-selected-line {
-    -fx-background-color: transparent;
+    -fx-background-color: #E6EBF2;
 }
 
 .jfx-tab-pane .tab-header-background {
-    -fx-background-color: #6C5C7F;
+    -fx-background-color: #263051;
+    -fx-pref-height: 50px;
+    -fx-effect: drop-shadow(20px 0px 30px #000000);
 }
 
 
 .jfx-tab-pane .tab {
-    -fx-pref-width: 110px;
-    -fx-pref-height: 41px;
-}
-
-.jfx-tab-pane .tab:hover {
-    -fx-background-color: #7E9AB6;
+    -fx-pref-width: 90px;
+    -fx-pref-height: 50px;
 }
 
 .jfx-tab-pane .tab:selected {

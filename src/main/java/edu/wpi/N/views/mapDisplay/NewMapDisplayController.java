@@ -62,6 +62,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
   JFXButton btn_google;
   ArrayList<JFXButton> pathButtonList;
 
+
   /**
    * provides reference to the main application class
    *
@@ -886,24 +887,21 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
    * @throws DBException
    */
   public void setTextDescription() throws DBException {
-    if (this.path.size() == 0 || path == null) {
-      return;
-    }
 
-    String faulknerText = "";
-    String mainText = "";
-    String driveText = "";
+    if (this.path.size() == 0 || path == null) {return;} // if the path does not exist, then return
 
-    Path pathFaulkner = new Path(new LinkedList<>());
-    Path pathMain = new Path(new LinkedList<>());
+    Path pathFaulkner = new Path(new LinkedList<>()); // contains the sub path which contains all Faulkner nodes
+    Path pathMain = new Path(new LinkedList<>()); // contains the sub path which contains all Main nodes
 
-    for (DbNode node : this.path.getPath()) {
-      if (node.getBuilding().equals("Faulkner")) {
-        pathFaulkner.getPath().add(node);
-      } else {
-        pathMain.getPath().add(node);
+    for (DbNode node: this.path.getPath()) { // traverse through the path finding
+      if (node.getBuilding().equals("Faulkner")) { // if the node node is in faulkner
+        pathFaulkner.getPath().add(node); // add the node to the faulkner path
+      }
+      else {
+        pathMain.getPath().add(node); // otherwise, add to the main path
       }
     }
+
 
     ArrayList<String> faulknerDirections = new ArrayList<>();
     ArrayList<String> mainDirections = new ArrayList<>();
