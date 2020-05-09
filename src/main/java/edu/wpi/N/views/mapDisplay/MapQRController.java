@@ -10,6 +10,8 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 
+import java.util.LinkedList;
+
 public class MapQRController implements Controller {
 
   @FXML JFXTabPane tbpn_directions;
@@ -52,6 +54,18 @@ public class MapQRController implements Controller {
     else if (b != "") { // determine whether the building is main
       tbpn_directions.getTabs().add(tb_main); // then add the main tab to the pane
     }
+  }
+
+  public void setFaulknerText() {
+
+  }
+
+  public void setMainText() {
+
+  }
+
+  public void setDriveText() {
+
   }
 
 
