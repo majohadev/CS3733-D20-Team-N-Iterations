@@ -80,7 +80,7 @@ public class ChatbotController implements Controller, Initializable {
    */
   @FXML
   private void onBtnSendMessageClicked() {
-    if (!textField.getText().equals(null) || !textField.getText().equals("")) {
+    if (!textField.getText().equals(null) && !textField.getText().equals("")) {
 
       // Display user's message first (right side)
       String userInput = textField.getText();
@@ -155,5 +155,8 @@ public class ChatbotController implements Controller, Initializable {
   public void initialize(URL location, ResourceBundle resources) {
     // Do such that scroll pane auto-scrolls down
     scrollPane.vvalueProperty().bind(chatBox.heightProperty());
+
+    // If message history still persists, open the dialog window right away
+    if (!state.chatBotState.getMessageHistory().isEmpty()) onBtnAskMeClicked();
   }
 }

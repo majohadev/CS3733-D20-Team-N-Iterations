@@ -21,7 +21,7 @@
                   <VBox fx:id="chatBox" alignment="BOTTOM_LEFT" prefWidth="410.0" />
                </content>
             </ScrollPane>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="83.0" layoutX="-1.0" layoutY="-2.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-fill: #263051;" width="426.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="83.0" layoutX="-1.0" layoutY="-2.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-fill: #4A69C6;" width="426.0" />
             <ImageView fitHeight="87.0" fitWidth="88.0" layoutX="326.0" layoutY="-4.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../images/chatbot/wwong2%20copy.png" />

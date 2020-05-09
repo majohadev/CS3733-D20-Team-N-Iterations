@@ -20,5 +20,6 @@
             <Font size="24.0" />
          </font>
       </JFXButton>
+      <fx:include fx:id="chatbotView" layoutX="1480.0" layoutY="475.0" source="chatbot/chatBox.fxml" />
    </children>
 </AnchorPane>
