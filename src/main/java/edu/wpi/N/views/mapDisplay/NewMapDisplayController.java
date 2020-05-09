@@ -302,7 +302,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
       switchGoogleView();
     }
     if (mapQRController != null && pn_iconBar.getChildren().contains(pn_qrIcon)) {
-      mapQRController.setTabFocus(building);
+      mapQRController.setTabFocus(floor, building);
     }
     if (path == null || path.size() == 0) {
       setDefaultKioskNode();

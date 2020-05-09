@@ -86,22 +86,26 @@ public class MapQRController implements Controller {
     tr.getStylesheets()
         .add(getClass().getResource("/edu/wpi/N/css/newMapDisplay.css").toExternalForm());
     tr.getStyleClass().add("tree-view");
+    tr_faulkner.getSelectionModel().select(1);
   }
 
   public void setDriveText(ArrayList<Direction> dir) {}
 
-  public void setTabFocus(String str) {
-    if (str.equals("Faulkner")) {
+  public void setTabFocus(int floor, String building) {
+    if (building.equals("Faulkner")) {
       if (tbpn_directions.getTabs().contains(tb_faulkner)) {
         tbpn_directions.getSelectionModel().select(tb_faulkner);
+        tr_faulkner.getSelectionModel().select(1);
       }
-    } else if (str.equals("Main")) {
+    } else if (building.equals("Main")) {
       if (tbpn_directions.getTabs().contains(tb_main)) {
         tbpn_directions.getSelectionModel().select(tb_main);
+        tr_main.getSelectionModel().select(1);
       }
-    } else if (str.equals("Drive")) {
+    } else if (building.equals("Drive")) {
       if (tbpn_directions.getTabs().contains(tb_drive)) {
         tbpn_directions.getSelectionModel().select(tb_drive);
+        tr_drive.getSelectionModel().select(1);
       }
     }
   }
