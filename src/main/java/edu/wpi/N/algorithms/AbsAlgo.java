@@ -34,25 +34,21 @@ public abstract class AbsAlgo implements IPathFinder {
   public static double heuristic(DbNode currNode, DbNode end) {
     return Math.abs(end.getX() - currNode.getX())
         + Math.abs(end.getY() - currNode.getY())
-        + floorChangeCost(currNode, end)
-        + buildingChangeCost(currNode, end);
+        + floorBuildingCost(currNode, end);
   }
 
-  /** Return a cost for using elevators or stairs */
-  public static double floorChangeCost(DbNode currNode, DbNode nextNode) {
-    if (currNode.getNodeType().equals("STAI") && nextNode.getNodeType().equals("STAI")) {
-      return 500;
-    } else if (currNode.getNodeType().equals("ELEV") && nextNode.getNodeType().equals("ELEV")) {
-      return 250;
-    } else return 0;
+  /**
+   * Adds an arbitrary cost of 500px to changing floors and 5000px to changing buildings
+   * @param currNode The current node
+   * @param nextNode The nextnode
+   * @return 5000 if the nodes are both exit nodes, 500 if they are on different floors, 0 otherwise.
+   */
+  public static double floorBuildingCost(DbNode currNode, DbNode nextNode) {
+    if (currNode.getNodeType().equals("EXIT") && nextNode.getNodeType().equals("EXIT")) return 5000;
+    if (currNode.getFloor() == nextNode.getFloor()) return 0;
+    return 500;
   }
 
-  /** Return a cost for changing between Faulkner and main campus */
-  public static double buildingChangeCost(DbNode currNode, DbNode nextNode) {
-    if (currNode.getBuilding().equals("Faulkner") && !(nextNode.getBuilding().equals("Faulkner"))) {
-      return 500;
-    } else return 0;
-  }
 
   /**
    * Helper function which generates Path given a Map
