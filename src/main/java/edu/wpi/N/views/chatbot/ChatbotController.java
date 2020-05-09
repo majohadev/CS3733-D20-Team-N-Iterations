@@ -1,5 +1,6 @@
 package edu.wpi.N.views.chatbot;
 
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.N.App;
 import edu.wpi.N.Main;
@@ -15,19 +16,24 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 public class ChatbotController implements Controller, Initializable {
   private StateSingleton state;
   private App mainApp;
 
+  @FXML private Pane mainPane;
   @FXML private JFXTextField textField;
   @FXML private VBox chatBox;
   @FXML private AnchorPane chatBotView;
   @FXML private AnchorPane buttonOnlyView;
   @FXML private ScrollPane scrollPane;
+  @FXML private JFXButton btnSendMessage;
 
   // Inject state singleton
   public ChatbotController(StateSingleton state) {
@@ -153,6 +159,16 @@ public class ChatbotController implements Controller, Initializable {
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
+    // on enter pressed, send message automatically
+    textField.addEventHandler(
+        KeyEvent.KEY_RELEASED,
+        keyEvent -> {
+          if (keyEvent.getCode() == KeyCode.ENTER) {
+            onBtnSendMessageClicked(); // send message
+            keyEvent.consume();
+          }
+        });
+
     // Do such that scroll pane auto-scrolls down
     scrollPane.vvalueProperty().bind(chatBox.heightProperty());
 
