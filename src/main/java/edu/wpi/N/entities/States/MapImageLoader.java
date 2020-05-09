@@ -23,6 +23,15 @@ public class MapImageLoader {
     storeImage("Main4", "edu/wpi/N/images/map/MainResizedF1.png");
     storeImage("Main5", "edu/wpi/N/images/map/MainFloor2.png");
     storeImage("Main6", "edu/wpi/N/images/map/MainFloor3.png");
+    storeIcon(Icon.RIGHT,"edu/wpi/N/images/TextDirIcons/Right_Turn.png");
+    storeIcon(Icon.LEFT, "edu/wpi/N/images/TextDirIcons/Left_Turn.png");
+    storeIcon(Icon.STAIR, "edu/wpi/N/images/TextDirIcons/Stairs.png");
+    storeIcon(Icon.ELEVATOR, "edu/wpi/N/images/TextDirIcons/Elevator.png");
+    storeIcon(Icon.EXIT, "edu/wpi/N/images/TextDirIcons/Exit.png");
+    storeIcon(Icon.ENTER, "edu/wpi/N/images/TextDirIcons/Enter.png");
+    storeIcon(Icon.CONTINUE, "edu/wpi/N/images/TextDirIcons/Continue.png");
+    storeIcon(Icon.ARRIVE, "edu/wpi/N/images/TextDirIcons/Destination.png");
+    storeIcon(Icon.FLOOR_LEVEL, "edu/wpi/N/images/TextDirIcons/Direction.png");
   }
 
   /**
@@ -37,7 +46,7 @@ public class MapImageLoader {
   }
 
   private void storeIcon(Icon i, String str) {
-
+    directionIcons.put(i, new Image(getClass().getClassLoader().getResource(str).toString()));
   }
 
   /**
