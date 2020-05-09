@@ -1,11 +1,14 @@
 package edu.wpi.N.entities.States;
 
 import java.util.HashMap;
+
+import edu.wpi.N.algorithms.Icon;
 import javafx.scene.image.Image;
 
 public class MapImageLoader {
 
   private HashMap<String, Image> floorMaps = new HashMap<>();
+  private HashMap<Icon, Image> directionIcons = new HashMap<>();
 
   /** Loads all map images of the application once */
   public MapImageLoader() {
@@ -31,6 +34,10 @@ public class MapImageLoader {
   private void storeImage(String shortName, String pathName) {
     floorMaps.put(
         shortName, new Image(getClass().getClassLoader().getResource(pathName).toString()));
+  }
+
+  private void storeIcon(Icon i, String str) {
+
   }
 
   /**

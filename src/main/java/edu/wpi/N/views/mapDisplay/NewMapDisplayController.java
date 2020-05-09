@@ -3,6 +3,7 @@ package edu.wpi.N.views.mapDisplay;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXNodesList;
 import edu.wpi.N.App;
+import edu.wpi.N.algorithms.Direction;
 import edu.wpi.N.algorithms.Directions;
 import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.database.DBException;
@@ -902,25 +903,12 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
       }
     }
 
+    ArrayList<Direction> faulknerDirections = pathFaulkner.getDirections();
+    ArrayList<Direction> mainDirections = pathMain.getDirections();
 
-    ArrayList<String> faulknerDirections = new ArrayList<>();
-    ArrayList<String> mainDirections = new ArrayList<>();
 
-    if (pathFaulkner.size() > 0) {
-      faulknerDirections = pathFaulkner.getDirections();
-      for (String s : faulknerDirections) {
-        faulknerText += s;
-        faulknerText += "\n";
-      }
-    }
 
-    if (pathMain.size() > 0) {
-      mainDirections = pathMain.getDirections();
-      for (String s : mainDirections) {
-        mainText += s;
-        mainText += "\n";
-      }
-    }
+
 
     if (!pathFaulkner.equals("")) {
       mapQRController.getTextFaulkner().setText(faulknerText);
@@ -931,25 +919,25 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
       mapQRController.getImageMain().setImage(generateImage(mainDirections, false));
     }
 
-    // For google maps
-    String googleDirections = "";
-    boolean isFirstFaulkner = this.path.get(0).getBuilding().equals("Faulkner");
-    boolean isSecondFaulkner = this.path.get(path.size() - 1).getBuilding().equals("Faulkner");
-    if (isFirstFaulkner ^ isSecondFaulkner) {
-      if (isFirstFaulkner) {
-        googleDirections = Directions.getGoogleDirections("Driving", false);
-      } else {
-        googleDirections = Directions.getGoogleDirections("Driving", true);
-      }
-    }
-
-    if (!googleDirections.equals("")) {
-      mapQRController.getTextDrive().setText(googleDirections);
-      ArrayList<String> driveDirections = new ArrayList<>();
-      driveDirections.add(googleDirections);
-
-      mapQRController.getImageDrive().setImage(generateImage(driveDirections, false));
-    }
+//    // For google maps
+//    String googleDirections = "";
+//    boolean isFirstFaulkner = this.path.get(0).getBuilding().equals("Faulkner");
+//    boolean isSecondFaulkner = this.path.get(path.size() - 1).getBuilding().equals("Faulkner");
+//    if (isFirstFaulkner ^ isSecondFaulkner) {
+//      if (isFirstFaulkner) {
+//        googleDirections = Directions.getGoogleDirections("Driving", false);
+//      } else {
+//        googleDirections = Directions.getGoogleDirections("Driving", true);
+//      }
+//    }
+//
+//    if (!googleDirections.equals("")) {
+//      mapQRController.getTextDrive().setText(googleDirections);
+//      ArrayList<String> driveDirections = new ArrayList<>();
+//      driveDirections.add(googleDirections);
+//
+//      mapQRController.getImageDrive().setImage(generateImage(driveDirections, false));
+//    }
   }
 
   /** resets the fields for textual description */
