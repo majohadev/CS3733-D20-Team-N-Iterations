@@ -3,10 +3,11 @@ package edu.wpi.N.algorithms;
 public enum Icon{
    RIGHT,
    LEFT,
-   FLOOR_CHANGE,
+   STAIR,
+    ELEVATOR,
     EXIT,
     ENTER,
     CONTINUE,
     ARRIVE,
-    HIGHER_LEVEL
+    FLOOR_LEVEL
 }

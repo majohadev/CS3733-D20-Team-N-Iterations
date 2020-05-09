@@ -169,16 +169,16 @@ public class Directions {
             message = "";
             messageCheck = true;
           }
+          if(path.get(i).getNodeType().equals("STAI")) currIcon = Icon.STAIR;
+          else if(path.get(i).getNodeType().equals("ELEV")) currIcon = Icon.ELEVATOR;
           if (stateChange && getState(i - 1).equals(CHANGING_FLOOR)) {
             if (messageCheck) {
               message = "Take " + startFloor + " to floor " + currNode.getFloor();
-              currIcon = Icon.FLOOR_CHANGE;
               directions.add(new Direction(message, STEP,currNode, currIcon ));
               message = "";
               messageCheck = false;
             } else {
               message = "Enter " + startFloor + " and go to floor " + currNode.getFloor();
-              currIcon = Icon.FLOOR_CHANGE;
               directions.add(new Direction(message, STEP,currNode, currIcon ));
               message = "";
             }
@@ -310,9 +310,9 @@ public class Directions {
 
   private void addFloorLevelDirection(int i){
     if(i==0){
-      directions.add(new Direction(getFloorString(path.get(i)), Level.FLOOR, path.get(i), Icon.HIGHER_LEVEL));
+      directions.add(new Direction(getFloorString(path.get(i)), Level.FLOOR, path.get(i), Icon.FLOOR_LEVEL));
     } else if(path.get(i-1).getFloor()!=path.get(i).getFloor()){
-      directions.add(new Direction(getFloorString(path.get(i)), Level.FLOOR, path.get(i), Icon.HIGHER_LEVEL));
+      directions.add(new Direction(getFloorString(path.get(i)), Level.FLOOR, path.get(i), Icon.FLOOR_LEVEL));
     }
   }
 
