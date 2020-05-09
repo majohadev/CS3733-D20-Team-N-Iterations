@@ -488,6 +488,7 @@ public class MapDBTest {
     assertEquals(n1, MapDB.checkHitbox(30, 30, "Faulkner", 3));
     assertEquals(n2, MapDB.checkHitbox(30, 30, "Faulkner", 4));
     assertNull(MapDB.checkHitbox(29, 29, "Faulkner", 4));
+    System.out.println(MapDB.exportHitboxes());
     MapDB.deleteNode(n1.getNodeID());
     MapDB.deleteNode(n2.getNodeID());
   }
