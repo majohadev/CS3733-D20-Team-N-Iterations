@@ -44,12 +44,12 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <Button layoutX="61.0" layoutY="403.0" mnemonicParsing="false" onMouseClicked="#onDownloadNodesClicked" style="-fx-background-color: transparent; -fx-border-width: 5; -fx-border-color: #6C5C7F; -fx-border-radius: 10;" styleClass="jfx-button-files" stylesheets="@../../css/sanitationRequestUI.css" text="Download Current Node CSV File" textFill="WHITE">
+      <Button layoutX="240.0" layoutY="403.0" mnemonicParsing="false" onMouseClicked="#onDownloadNodesClicked" style="-fx-background-color: transparent; -fx-border-width: 5; -fx-border-color: #6C5C7F; -fx-border-radius: 10;" styleClass="jfx-button-files" stylesheets="@../../css/sanitationRequestUI.css" text="Download Current Node CSV File" textFill="WHITE">
          <font>
             <Font name="Calibri" size="14.0" />
          </font>
       </Button>
-      <Button layoutX="289.0" layoutY="403.0" mnemonicParsing="false" onMouseClicked="#onDownloadEdgesClicked" style="-fx-background-color: transparent; -fx-border-width: 5; -fx-border-color: #6C5C7F; -fx-border-radius: 10;" styleClass="jfx-button-files" stylesheets="@../../css/sanitationRequestUI.css" text="Download Current Edge CSV File" textFill="WHITE">
+      <Button layoutX="460.0" layoutY="403.0" mnemonicParsing="false" onMouseClicked="#onDownloadEdgesClicked" style="-fx-background-color: transparent; -fx-border-width: 5; -fx-border-color: #6C5C7F; -fx-border-radius: 10;" styleClass="jfx-button-files" stylesheets="@../../css/sanitationRequestUI.css" text="Download Current Edge CSV File" textFill="WHITE">
          <font>
             <Font name="Calibri" size="14.0" />
          </font>
