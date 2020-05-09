@@ -13,7 +13,7 @@ import javafx.scene.web.WebView;
 public class InfoWebviewController implements Controller, Initializable {
   private App mainApp;
   private StateSingleton singleton;
-  public static String URL;
+  private static String URL;
 
   @FXML protected WebView webview;
 
@@ -24,6 +24,10 @@ public class InfoWebviewController implements Controller, Initializable {
   @Override
   public void initialize(URL url, ResourceBundle resourceBundle) {
     webview.getEngine().load(URL);
+  }
+
+  public static void setURL(String url) {
+    URL = url;
   }
 
   @Override

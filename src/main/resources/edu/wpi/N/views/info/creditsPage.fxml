@@ -21,37 +21,37 @@
             <Font size="24.0" />
          </font>
       </JFXButton>
-      <Label layoutX="70.0" layoutY="242.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="Team Name" />
-      <Label layoutX="70.0" layoutY="269.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="API Name" />
+      <Label layoutX="70.0" layoutY="242.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="Sanitation Request" />
+      <Label layoutX="70.0" layoutY="269.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="Team N (that's us!)" />
       <Label layoutX="70.0" layoutY="176.0" styleClass="label-map-display" stylesheets="@../../css/sanitationRequestUI.css" text="APIs" />
-      <Label layoutX="70.0" layoutY="312.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="Team Name" />
-      <Label layoutX="70.0" layoutY="339.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="API Name" />
+      <Label layoutX="70.0" layoutY="312.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="Food Request" />
+      <Label layoutX="70.0" layoutY="339.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="Team P" />
       <Label layoutX="960.0" layoutY="176.0" styleClass="label-map-display" stylesheets="@../../css/sanitationRequestUI.css" text="External Libraries" />
-      <Label layoutX="960.0" layoutY="242.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="Library Name" />
-      <Label layoutX="960.0" layoutY="269.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="Creator Name" />
+      <Label layoutX="960.0" layoutY="242.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="Bcrypt Java Library" />
+      <Label layoutX="960.0" layoutY="269.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="Patrick Favre-Bulle" />
       <Hyperlink layoutX="956.0" layoutY="296.0" onMouseClicked="#onLink1Clicked" styleClass="hyperlink-credits" stylesheets="@../../css/sanitationRequestUI.css" text="Home Page" />
-      <Label layoutX="960.0" layoutY="332.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="Library Name" />
-      <Label layoutX="960.0" layoutY="359.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="Creator Name" />
+      <Label layoutX="960.0" layoutY="332.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="Dialogflow" />
+      <Label layoutX="960.0" layoutY="359.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="Google" />
       <Hyperlink layoutX="956.0" layoutY="386.0" onMouseClicked="#onLink2Clicked" styleClass="hyperlink-credits" stylesheets="@../../css/sanitationRequestUI.css" text="Home Page" />
-      <Label layoutX="70.0" layoutY="382.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="Team Name" />
-      <Label layoutX="70.0" layoutY="452.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="Team Name" />
-      <Label layoutX="70.0" layoutY="522.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="Team Name" />
-      <Label layoutX="70.0" layoutY="592.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="Team Name" />
-      <Label layoutX="70.0" layoutY="662.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="Team Name" />
-      <Label layoutX="70.0" layoutY="732.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="Team Name" />
-      <Label layoutX="70.0" layoutY="802.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="Team Name" />
-      <Label layoutX="70.0" layoutY="409.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="API Name" />
-      <Label layoutX="70.0" layoutY="479.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="API Name" />
-      <Label layoutX="70.0" layoutY="549.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="API Name" />
-      <Label layoutX="70.0" layoutY="619.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="API Name" />
-      <Label layoutX="70.0" layoutY="689.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="API Name" />
-      <Label layoutX="70.0" layoutY="759.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="API Name" />
-      <Label layoutX="70.0" layoutY="829.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="API Name" />
-      <Label layoutX="960.0" layoutY="422.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="Library Name" />
-      <Label layoutX="960.0" layoutY="449.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="Creator Name" />
+      <Label layoutX="70.0" layoutY="382.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="Secure Incedent Reporting" />
+      <Label layoutX="70.0" layoutY="452.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="On-Call Beds Request" />
+      <Label layoutX="70.0" layoutY="522.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="Flower Request" />
+      <Label layoutX="70.0" layoutY="592.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="Interpreter Request" />
+      <Label layoutX="70.0" layoutY="662.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="Audio-Visual Request" />
+      <Label layoutX="70.0" layoutY="732.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="Gift Delivery Service" />
+      <Label layoutX="70.0" layoutY="802.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="API Name" />
+      <Label layoutX="70.0" layoutY="409.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="Team B" />
+      <Label layoutX="70.0" layoutY="479.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="Team E" />
+      <Label layoutX="70.0" layoutY="549.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="Team A" />
+      <Label layoutX="70.0" layoutY="619.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="Team C" />
+      <Label layoutX="70.0" layoutY="689.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="Team M" />
+      <Label layoutX="70.0" layoutY="759.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="Team L" />
+      <Label layoutX="70.0" layoutY="829.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="Team Name" />
+      <Label layoutX="960.0" layoutY="422.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="JFoenix" />
+      <Label layoutX="960.0" layoutY="449.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="The JFoenix Team" />
       <Hyperlink layoutX="956.0" layoutY="476.0" onMouseClicked="#onLink3Clicked" styleClass="hyperlink-credits" stylesheets="@../../css/sanitationRequestUI.css" text="Home Page" />
-      <Label layoutX="960.0" layoutY="512.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="Library Name" />
-      <Label layoutX="960.0" layoutY="539.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="Creator Name" />
+      <Label layoutX="960.0" layoutY="512.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="Gradle Build Tool" />
+      <Label layoutX="960.0" layoutY="539.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="Gradle, Inc." />
       <Hyperlink layoutX="956.0" layoutY="566.0" onMouseClicked="#onLink4Clicked" styleClass="hyperlink-credits" stylesheets="@../../css/sanitationRequestUI.css" text="Home Page" />
       <Label layoutX="960.0" layoutY="602.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="Library Name" />
       <Label layoutX="960.0" layoutY="629.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="Creator Name" />

@@ -26,22 +26,43 @@ public class CreditsPageController implements Controller {
     mainApp.switchScene("/edu/wpi/N/views/mapDisplay/newMapDisplay.fxml", singleton);
   }
 
-  public void onLink1Clicked() {}
+  public void onLink1Clicked() throws IOException {
+    InfoWebviewController.setURL("https://github.com/patrickfav/bcrypt/tree/v0.9.0");
+    mainApp.switchScene("/edu/wpi/N/views/info/infoWebview.fxml", singleton);
+  }
 
-  public void onLink2Clicked() {}
+  public void onLink2Clicked() throws IOException {
+    InfoWebviewController.setURL("https://dialogflow.com/");
+    mainApp.switchScene("/edu/wpi/N/views/info/infoWebview.fxml", singleton);
+  }
 
-  public void onLink3Clicked() {}
+  public void onLink3Clicked() throws IOException {
+    InfoWebviewController.setURL("http://jfoenix.com/");
+    mainApp.switchScene("/edu/wpi/N/views/info/infoWebview.fxml", singleton);
+  }
 
-  public void onLink4Clicked() {}
+  public void onLink4Clicked() throws IOException {
+    InfoWebviewController.setURL("https://gradle.org/");
+    mainApp.switchScene("/edu/wpi/N/views/info/infoWebview.fxml", singleton);
+  }
 
-  public void onLink5Clicked() {}
+  public void onLink5Clicked() throws IOException {
+    InfoWebviewController.setURL("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+    mainApp.switchScene("/edu/wpi/N/views/info/infoWebview.fxml", singleton);
+  }
 
-  public void onLink6Clicked() {}
+  public void onLink6Clicked() throws IOException {
+    InfoWebviewController.setURL("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+    mainApp.switchScene("/edu/wpi/N/views/info/infoWebview.fxml", singleton);
+  }
 
-  public void onLink7Clicked() {}
+  public void onLink7Clicked() throws IOException {
+    InfoWebviewController.setURL("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+    mainApp.switchScene("/edu/wpi/N/views/info/infoWebview.fxml", singleton);
+  }
 
   public void onLinkApacheLicenseClicked() throws IOException {
-    InfoWebviewController.URL = "https://www.apache.org/licenses/LICENSE-2.0";
+    InfoWebviewController.setURL("https://www.apache.org/licenses/LICENSE-2.0");
     mainApp.switchScene("/edu/wpi/N/views/info/infoWebview.fxml", singleton);
   }
 }
