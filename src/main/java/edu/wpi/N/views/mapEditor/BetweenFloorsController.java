@@ -79,6 +79,8 @@ public class BetweenFloorsController implements Controller, Initializable {
     JFXNodesList n3 = createButton(50, 250, 3);
     JFXNodesList n2 = createButton(50, 300, 2);
     JFXNodesList n1 = createButton(50, 350, 1);
+    text.setX(70);
+    text.setY(50);
   }
 
   public JFXButton getBtnCancel() {

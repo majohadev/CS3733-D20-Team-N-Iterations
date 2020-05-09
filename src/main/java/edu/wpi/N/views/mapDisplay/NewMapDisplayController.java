@@ -123,6 +123,8 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     initLocationSearchButton();
     initResetLocationSearch();
     initRestroomSearchButton();
+    initInfoSearchButton();
+    initExitSearchButton();
     pn_change.getChildren().add(pane);
   }
 
@@ -546,6 +548,68 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
   }
 
   /**
+   * initiates a listener for the info desk quick search on a location search
+   *
+   * @throws DBException
+   */
+  public void initInfoSearchButton() throws DBException {
+    locationSearchController
+        .getBtnInfoDesk()
+        .setOnMouseClicked(
+            e -> {
+              if (currentBuilding.equals("Faulkner")) {
+                displayErrorMessage("No information desks in this building");
+                return;
+              }
+              DbNode first = locationSearchController.getDBNodes()[0];
+              try {
+                resetTextualDirections();
+                this.path = singleton.savedAlgo.findQuickAccess(first, "INFO");
+                mapBaseController.setFloor(first.getBuilding(), first.getFloor(), path);
+                if (path.size() == 0) {
+                  displayErrorMessage("Please select the first node");
+                }
+              } catch (DBException | NullPointerException ex) {
+                displayErrorMessage("Please select the first node");
+                return;
+              }
+              disableNonPathFloors();
+              if (pathButtonList.size() > 1) {
+                pathButtonList.get(1).setStyle("-fx-background-color: #6C5C7F;");
+              }
+            });
+  }
+
+  /**
+   * initiates a listener for the exit quick search on a location search
+   *
+   * @throws DBException
+   */
+  public void initExitSearchButton() throws DBException {
+    locationSearchController
+        .getBtnQuickExit()
+        .setOnMouseClicked(
+            e -> {
+              DbNode first = locationSearchController.getDBNodes()[0];
+              try {
+                resetTextualDirections();
+                this.path = singleton.savedAlgo.findQuickAccess(first, "EXIT");
+                mapBaseController.setFloor(first.getBuilding(), first.getFloor(), path);
+                if (path.size() == 0) {
+                  displayErrorMessage("Please select the first node");
+                }
+              } catch (DBException | NullPointerException ex) {
+                displayErrorMessage("Please select the first node");
+                return;
+              }
+              disableNonPathFloors();
+              if (pathButtonList.size() > 1) {
+                pathButtonList.get(1).setStyle("-fx-background-color: #6C5C7F;");
+              }
+            });
+  }
+
+  /**
    * switches the floor to the first node of the path and initiates path finding
    *
    * @param first the first node in the path
@@ -679,6 +743,8 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
       initLocationSearchButton();
       initResetLocationSearch();
       initRestroomSearchButton();
+      initExitSearchButton();
+      initInfoSearchButton();
       setDefaultKioskNode();
       pn_change.getChildren().add(pane);
     } else if (src == pn_doctorIcon) {

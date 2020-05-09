@@ -12,6 +12,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 
 public class MapLocationSearchController implements Controller {
   App mainApp;
@@ -24,7 +25,9 @@ public class MapLocationSearchController implements Controller {
   @FXML JFXButton btn_search;
   @FXML JFXToggleButton tg_handicap;
   @FXML JFXButton btn_reset;
-  @FXML JFXButton btn_restRoom;
+  @FXML Pane btn_restRoom;
+  @FXML Pane btn_infodesk;
+  @FXML Pane btn_quickexit;
   DbNode[] nodes = new DbNode[2];
 
   @Override
@@ -101,7 +104,15 @@ public class MapLocationSearchController implements Controller {
     return this.tg_handicap;
   }
 
-  public JFXButton getBtnRestRoom() {
+  public Pane getBtnRestRoom() {
     return this.btn_restRoom;
+  }
+
+  public Pane getBtnInfoDesk() {
+    return this.btn_infodesk;
+  }
+
+  public Pane getBtnQuickExit() {
+    return this.btn_quickexit;
   }
 }
