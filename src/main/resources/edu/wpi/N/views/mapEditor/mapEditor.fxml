@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXButton?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: BLACK;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.mapEditor.MapEditorController">
    <children>
-      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" pickOnBounds="false" style="-fx-background-color: D3D3D3;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="55.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane fx:id="pn_background" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" pickOnBounds="false" style="-fx-background-color: D3D3D3;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="55.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <StackPane pickOnBounds="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
@@ -31,21 +29,11 @@
                </children>
             </StackPane>
 
-            <Pane fx:id="pn_changeFloor" layoutX="1790.0" layoutY="9.0" prefHeight="550.0" prefWidth="131.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="400.0" />
-            <Pane fx:id="pn_elev" layoutX="1790.0" layoutY="452.0" minWidth="130.0" stylesheets="@../../css/newMapDisplay.css" visible="false" AnchorPane.bottomAnchor="175.0" AnchorPane.rightAnchor="50.0" />
-            <JFXButton fx:id="btn_cancel_elev" buttonType="RAISED" disable="true" layoutX="275.0" layoutY="440.0" onMouseClicked="#onBtnCancelElevClicked" prefHeight="80.0" prefWidth="154.0" ripplerFill="#002186" style="-fx-background-color: #00339A;" styleClass="animated-option-button" stylesheets="@../../css/MapDisplayFloors.css" text="Cancel" textFill="WHITE" AnchorPane.bottomAnchor="50.0" AnchorPane.rightAnchor="50.0">
-               <font>
-                  <Font size="36.0" />
-               </font>
-            </JFXButton>
-            <JFXButton fx:id="btn_home" buttonType="RAISED" layoutX="42.0" layoutY="973.0" onMouseClicked="#onBtnHomeClicked" prefHeight="80.0" prefWidth="154.0" style="-fx-background-color: #263051;" text="Done" textFill="WHITE" AnchorPane.bottomAnchor="42.0" AnchorPane.leftAnchor="42.0">
-               <font>
-                  <Font name="Calibri Bold" size="36.0" />
-               </font>
-            </JFXButton>
-            <Pane fx:id="pn_editor" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="280.0" prefWidth="470.0" AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="30.0" />
-            <AnchorPane fx:id="pn_floors" prefHeight="55.0" prefWidth="90.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="30.0" />
-            <Label fx:id="lbl_building_floor" alignment="CENTER" layoutX="416.0" layoutY="14.0" prefHeight="55.0" prefWidth="321.0" style="-fx-background-color: #263051;" stylesheets="@../../css/newMapDisplay.css" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="30.0" />
+            <Pane fx:id="pn_changeFloor" layoutX="1790.0" layoutY="9.0" prefHeight="550.0" prefWidth="131.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" />
+            <Pane fx:id="pn_elev" layoutX="1790.0" layoutY="452.0" minWidth="130.0" stylesheets="@../../css/newMapDisplay.css" visible="false" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="500.0" />
+            <Pane fx:id="pn_editor" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="280.0" prefWidth="470.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="100.0" />
+            <AnchorPane fx:id="pn_floors" prefHeight="55.0" prefWidth="90.0" AnchorPane.leftAnchor="60.0" AnchorPane.topAnchor="30.0" />
+            <Label fx:id="lbl_building_floor" alignment="CENTER" layoutX="416.0" layoutY="14.0" prefHeight="55.0" prefWidth="321.0" style="-fx-background-color: #263051;" stylesheets="@../../css/newMapDisplay.css" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="30.0" />
          </children>
       </AnchorPane>
       <AnchorPane layoutX="10.0" layoutY="10.0" maxHeight="1080.0" maxWidth="-Infinity" minHeight="1080.0" minWidth="-Infinity" prefHeight="1080.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -89,20 +77,20 @@
                         </ImageView>
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="pn_infoIcon" disable="true" layoutY="970.0" onMouseClicked="#onIconClicked" prefHeight="55.0" prefWidth="55.0" styleClass="pane" stylesheets="@../../css/newMapDisplay.css" visible="false">
+                  <AnchorPane fx:id="pn_back" layoutY="970.0" onMouseClicked="#onBtnHomeClicked" prefHeight="55.0" prefWidth="55.0" styleClass="pane" stylesheets="@../../css/newMapDisplay.css">
                      <children>
                         <ImageView fitHeight="29.0" fitWidth="35.0" layoutX="13.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../images/mapDisplayIcons/helpButton.png" />
+                              <Image url="@../../images/adminIcons/logout-64.png" />
                            </image>
                         </ImageView>
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="pn_serviceIcon" disable="true" layoutY="915.0" onMouseClicked="#onIconClicked" prefHeight="55.0" prefWidth="55.0" styleClass="pane" stylesheets="@../../css/newMapDisplay.css" visible="false">
+                  <AnchorPane fx:id="btn_cancel_elev" layoutY="915.0" onMouseClicked="#onBtnCancelElevClicked" prefHeight="55.0" prefWidth="55.0" styleClass="pane" stylesheets="@../../css/newMapDisplay.css" visible="false">
                      <children>
                         <ImageView fitHeight="29.0" fitWidth="35.0" layoutX="13.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="13.0">
                            <image>
-                              <Image url="@../../images/mapDisplayIcons/serviceButton.png" />
+                              <Image url="@../../images/adminIcons/x-mark-3-64.png" />
                            </image>
                         </ImageView>
                      </children>
