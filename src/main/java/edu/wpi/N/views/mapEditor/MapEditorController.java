@@ -1827,7 +1827,7 @@ public class MapEditorController implements Controller {
     } catch (IOException e) {
       e.printStackTrace();
     }
-    for (DbNode c : addShaftNodeCircles) { // TODO: Null pointer when remove
+    for (DbNode c : addShaftNodeCircles) {
       controllerAddShaft.addLstAddShaftNode(c.getLongName());
       if (c.getFloor() == currentFloor) {
         nodesMap2.get(c).setFill(Color.BLACK); // null pointer here, nodesmap not set??
