@@ -499,7 +499,7 @@ public class Directions {
    *     direction
    * @return The google directions as a string
    */
-  public static String getGoogleDirections(String mode, boolean dir) {
+  public static ArrayList<String> getGoogleDirectionsStrings(String mode, boolean dir) {
     String urls;
     if (dir) {
       urls =
@@ -525,20 +525,19 @@ public class Directions {
       httpcon.setRequestMethod("GET");
       httpcon.connect();
       Scanner sc = new Scanner(url.openStream());
-      String dirs = "";
+      ArrayList<String> dirs = new ArrayList<>();
       while (sc.hasNext()) {
         String next = sc.nextLine();
         // if (next.contains("\"html_instructions\"")) System.out.println(next);
         if (next.contains("\"html_instructions\""))
-          dirs +=
+          dirs.add(
               next.substring(44)
-                      .replace("\\u003cb\\u003e", "")
-                      .replace("\\u003c/b\\u003e", "")
-                      .replace("\\u003cwbr/\\u003e", "\n")
-                      .replace("&nbsp;", " ")
-                      .replaceAll("(\\\\u003c)(.*?)(\\\\u003e)", "\n")
-                      .replace("\",", "")
-                  + "\n";
+                  .replace("\\u003cb\\u003e", "")
+                  .replace("\\u003c/b\\u003e", "")
+                  .replace("\\u003cwbr/\\u003e", "\n")
+                  .replace("&nbsp;", " ")
+                  .replaceAll("(\\\\u003c)(.*?)(\\\\u003e)", "\n")
+                  .replace("\",", ""));
         // System.out.println(sc.nextLine() + "K");
       }
       return dirs;
@@ -549,5 +548,22 @@ public class Directions {
       e.printStackTrace();
       return null;
     }
+  }
+
+  public static ArrayList<Direction> getGoogleDirections(String mode, boolean dir){
+    ArrayList<String> directions = getGoogleDirectionsStrings(mode,dir);
+    ArrayList<Direction> iconDirections = new ArrayList<>();
+    for(int i=0; i<directions.size(); i++){
+      if(i==directions.size()-1){
+        iconDirections.add(new Direction(directions.get(i), FLOOR,null,Icon.ARRIVE));
+      }else if(directions.get(i).contains("right")){
+        iconDirections.add(new Direction(directions.get(i), FLOOR,null,Icon.RIGHT));
+      }else if(directions.get(i).contains("left")){
+        iconDirections.add(new Direction(directions.get(i), FLOOR,null,Icon.LEFT));
+      }else{
+        iconDirections.add(new Direction(directions.get(i), FLOOR,null,Icon.CONTINUE));
+      }
+    }
+    return iconDirections;
   }
 }
