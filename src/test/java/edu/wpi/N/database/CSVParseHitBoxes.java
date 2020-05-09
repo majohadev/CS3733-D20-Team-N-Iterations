@@ -43,10 +43,11 @@ public class CSVParseHitBoxes {
     Assertions.assertNull(MapDB.checkHitbox(16, 16, "Shapiro", 5));
   }
 
-  @Test
-  public void testExportHitBoxesToCSV() throws DBException, IOException {
-    CSVParser.exportExistingHitBoxesToCSV();
-  }
+  // Don't uncomment the test or it can be pretty bad
+//  @Test
+//  public void testExportHitBoxesToCSV() throws DBException, IOException {
+//    CSVParser.exportExistingHitBoxesToCSV();
+//  }
 
   @AfterAll
   public static void clear() throws DBException {
