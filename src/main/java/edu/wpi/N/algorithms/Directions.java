@@ -431,7 +431,7 @@ public class Directions {
    *     direction
    * @return The google directions as a string
    */
-  public static ArrayList<String> getGoogleDirections(String mode, boolean dir) {
+  public static ArrayList<String> getGoogleDirectionsStrings(String mode, boolean dir) {
     String urls;
     if (dir) {
       urls =
@@ -481,4 +481,14 @@ public class Directions {
       return null;
     }
   }
+/*
+  public static ArrayList<Direction> getGoogleDirections(String mode, boolean dir){
+    ArrayList<String> directions = new ArrayList<>();
+    ArrayList<Direction> iconDirections = new ArrayList<>();
+    for(String dir: directions){
+      if(dir.contains("right")){
+        iconDirections.add()
+      }
+    }
+  }*/
 }
