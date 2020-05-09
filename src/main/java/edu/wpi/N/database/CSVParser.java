@@ -152,6 +152,59 @@ public class CSVParser {
   }
 
   /**
+   * Converts full String path to InputStream and
+   * calls function to Parse CSV with Hitboxes and adds them to database
+   * @param pathToFile: String full path to file
+   * @throws FileNotFoundException
+   */
+  public static void parseCSVHitBoxesFromPath(String pathToFile) throws FileNotFoundException {
+    try {
+      File initialFile = new File(pathToFile);
+      InputStream input = new FileInputStream(initialFile);
+
+      CSVParser.parseCSVEmployees(input);
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+      throw (e);
+    }
+  }
+
+
+  /**
+   * Opens and Parses CSV with hitboxes
+   * @param pathToFile: File Input Stream
+   */
+  private static void parseCSVHitBoxes(InputStream pathToFile){
+    try{
+      // create csvReader object passing
+      CSVReader csvReader = new CSVReader(new InputStreamReader(pathToFile, "UTF-8"));
+
+      // Read header
+      String[] nextLine = csvReader.readNext();
+
+      while ((nextLine = csvReader.readNext()) != null) {
+        parseHitBoxRow(nextLine);
+      }
+    } catch (Exception e){
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * Parses a given row of CSC file and adds given row's data to Data Base
+   * @param row: A given row of CSV file
+   */
+  private static void parseHitBoxRow(String[] row){
+    String xOne = row[0];
+    String yOne = row[1];
+    String xTwo = row[2];
+    String yTwo = row[3];
+    String nodeId = row[4];
+
+    // add code to actually parse the doc
+  }
+
+  /**
    * Parse Employees CSV file and add entries to Database
    *
    * @param pathToFile: path to the CSV file as an InputStream
