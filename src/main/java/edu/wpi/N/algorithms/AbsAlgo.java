@@ -21,8 +21,7 @@ public abstract class AbsAlgo implements IPathFinder {
     return Math.sqrt(
             Math.pow(nextNode.getX() - currNode.getX(), 2)
                 + Math.pow(nextNode.getY() - currNode.getY(), 2))
-        + floorChangeCost(currNode, nextNode)
-        + buildingChangeCost(currNode, nextNode);
+        + floorBuildingCost(currNode, nextNode);
   }
 
   /**
@@ -39,16 +38,17 @@ public abstract class AbsAlgo implements IPathFinder {
 
   /**
    * Adds an arbitrary cost of 500px to changing floors and 5000px to changing buildings
+   *
    * @param currNode The current node
    * @param nextNode The nextnode
-   * @return 5000 if the nodes are both exit nodes, 500 if they are on different floors, 0 otherwise.
+   * @return 5000 if the nodes are both exit nodes, 500 if they are on different floors, 0
+   *     otherwise.
    */
   public static double floorBuildingCost(DbNode currNode, DbNode nextNode) {
     if (currNode.getNodeType().equals("EXIT") && nextNode.getNodeType().equals("EXIT")) return 5000;
     if (currNode.getFloor() == nextNode.getFloor()) return 0;
     return 500;
   }
-
 
   /**
    * Helper function which generates Path given a Map
