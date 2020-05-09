@@ -7,7 +7,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #263051;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.info.InfoWebviewController">
    <children>
-      <JFXButton fx:id="btn_back" alignment="CENTER" buttonType="RAISED" layoutX="1611.0" layoutY="948.0" onMouseClicked="#onBtnBackClicked" prefHeight="52.0" prefWidth="104.0" ripplerFill="#002186" styleClass="jfx-button-regular" stylesheets="@../../css/sanitationRequestUI.css" text="Back" textFill="WHITE">
+      <JFXButton fx:id="btn_back" alignment="CENTER" buttonType="RAISED" layoutX="70.0" layoutY="948.0" onMouseClicked="#onBtnBackClicked" prefHeight="52.0" prefWidth="104.0" ripplerFill="#002186" styleClass="jfx-button-regular" stylesheets="@../../css/sanitationRequestUI.css" text="Back" textFill="WHITE">
          <font>
             <Font size="24.0" />
          </font>
