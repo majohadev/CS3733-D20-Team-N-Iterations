@@ -2,6 +2,7 @@ package edu.wpi.N.entities;
 
 import static java.lang.Math.atan2;
 
+import edu.wpi.N.algorithms.Direction;
 import edu.wpi.N.algorithms.Directions;
 import edu.wpi.N.database.DBException;
 import java.util.ArrayList;
@@ -9,7 +10,7 @@ import java.util.LinkedList;
 
 public class Path {
   private LinkedList<DbNode> path;
-  private ArrayList<String> directions;
+  private ArrayList<Direction> directions;
 
   // constructor
   public Path(LinkedList<DbNode> path) {
@@ -23,7 +24,7 @@ public class Path {
     return this.path;
   }
 
-  public ArrayList<String> getDirections() throws DBException {
+  public ArrayList<Direction> getDirections() throws DBException {
     Directions dir = new Directions(this.path);
     this.directions = dir.getDirections();
     return this.directions;
