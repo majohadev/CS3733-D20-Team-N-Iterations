@@ -78,6 +78,7 @@ public class DirectionsTest {
   //    Path path = myAStar.findPath(MapDB.getNode("NHALL00704"), MapDB.getNode("NHALL01504"),
   // false);
   //    ArrayList<String> directions = path.getDirections();
+  //
   //    //    for (String s : directions) {
   //    //      // System.out.println(s);
   //    //    }
@@ -155,31 +156,30 @@ public class DirectionsTest {
   //  //    //    }
   //  //    Assertions.assertEquals(directions, path.getDirections());
   //  //  }
-
-//  @Test
-//  public void gdir() {
-//    ArrayList<Direction> dirs =
-//            Directions.getGoogleDirections(
-//                    "https://maps.googleapis.com/maps/api/directions/json?mode="
-//                            + "walking"
-//                            + "&origin=42.335078,-71.106326"
-//                            + "&destination=42.301213,-71.127795"
-//                            + "&key=AIzaSyDx7BSweq5dRzXavs1vxuMWeR2ETMR6b3Q");
-//    for (Direction s : dirs) {
-//      System.out.println(s.direction);
-//    }
-//    System.out.println("_____________________");
-//    dirs =
-//            Directions.getGoogleDirections(
-//                    "https://maps.googleapis.com/maps/api/directions/json?mode="
-//                            + "walking"
-//                            + "&origin=75+Francis+St+Boston+MA+02115"
-//                            + "&destination=42.301213,-71.127795"
-//                            + "&key=AIzaSyDx7BSweq5dRzXavs1vxuMWeR2ETMR6b3Q");
-//    for (Direction s : dirs) {
-//      System.out.println(s.direction);
-//    }
-//  }
+  @Test
+  public void gdir() {
+    ArrayList<Direction> dirs =
+        Directions.getGoogleDirections(
+            "https://maps.googleapis.com/maps/api/directions/json?mode="
+                + "walking"
+                + "&origin=42.335078,-71.106326"
+                + "&destination=42.301213,-71.127795"
+                + "&key=AIzaSyDx7BSweq5dRzXavs1vxuMWeR2ETMR6b3Q");
+    for (Direction s : dirs) {
+      System.out.println(s.direction);
+    }
+    System.out.println("_____________________");
+    dirs =
+        Directions.getGoogleDirections(
+            "https://maps.googleapis.com/maps/api/directions/json?mode="
+                + "walking"
+                + "&origin=75+Francis+St+Boston+MA+02115"
+                + "&destination=42.301213,-71.127795"
+                + "&key=AIzaSyDx7BSweq5dRzXavs1vxuMWeR2ETMR6b3Q");
+    for (Direction s : dirs) {
+      System.out.println(s.direction);
+    }
+  }
 
   @AfterAll
   public static void clearDB() throws DBException {
