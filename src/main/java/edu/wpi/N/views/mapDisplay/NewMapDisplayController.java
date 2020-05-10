@@ -483,7 +483,6 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
                 return;
               }
               try {
-                resetTextualDirections();
                 this.path = singleton.savedAlgo.findQuickAccess(first, "INFO");
                 mapBaseController.setFloor(first.getBuilding(), first.getFloor(), path);
                 if (path.size() == 0) {
@@ -512,7 +511,6 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
             e -> {
               DbNode first = locationSearchController.getDBNodes()[0];
               try {
-                resetTextualDirections();
                 this.path = singleton.savedAlgo.findQuickAccess(first, "EXIT");
                 mapBaseController.setFloor(first.getBuilding(), first.getFloor(), path);
                 if (path.size() == 0) {
