@@ -51,10 +51,15 @@ public class MapQRController implements Controller {
     this.mapBaseController = mapBaseController;
   }
 
+
   public void setMapDisplayController(NewMapDisplayController mapDisplayController) {
     this.mapDisplayController = mapDisplayController;
   }
 
+  /**
+   * Executes when the user wishes to see the previous instruction
+   * @throws DBException
+   */
   public void onBtnPrevClicked() throws DBException {
     if (tb_faulkner.isSelected()) {
       handleBtnPrevClicked(tr_faulkner, rootFaulkner, tb_faulkner);
@@ -65,6 +70,13 @@ public class MapQRController implements Controller {
     }
   }
 
+  /**
+   * Executes when the user wishes to see the previous instruction
+   * @param tr the current tree
+   * @param root the root of the current tree
+   * @param tb the current tab
+   * @throws DBException
+   */
   public void handleBtnPrevClicked(JFXTreeView tr, TreeItem<Direction> root, Tab tb)
       throws DBException {
     if (tr.getSelectionModel().getSelectedItem() == root.getChildren().get(0)) {
@@ -89,6 +101,10 @@ public class MapQRController implements Controller {
     }
   }
 
+  /**
+   * Executes when the user wishes to see the next instruction
+   * @throws DBException
+   */
   public void onBtnNextClicked() throws DBException {
     if (tb_faulkner.isSelected()) {
       handleBtnNextClicked(tr_faulkner, rootFaulkner, tb_faulkner);
@@ -99,6 +115,13 @@ public class MapQRController implements Controller {
     }
   }
 
+  /**
+   * Executes when the user wishes to see the next instruction
+   * @param tr the current tree
+   * @param root the root of the current tree
+   * @param tb the current tab
+   * @throws DBException
+   */
   public void handleBtnNextClicked(JFXTreeView tr, TreeItem<Direction> root, Tab tb)
       throws DBException {
     tr.getSelectionModel().select(tr.getSelectionModel().getSelectedIndex() + 1);
@@ -135,8 +158,10 @@ public class MapQRController implements Controller {
     }
   }
 
-  public void initialize() {}
-
+  /**
+   * Executes when the user clicks on an item in the faulkner building tree
+   * @throws DBException
+   */
   public void onFaulknerTreeClicked() throws DBException {
     collapseMain();
     tr_main.getSelectionModel().clearSelection();
@@ -148,6 +173,9 @@ public class MapQRController implements Controller {
     }
   }
 
+  /**
+   * Executes when the user clicks on an item in the driving directions tree
+   */
   public void onDriveTreeClicked() {
     collapseAllItems();
     tr_main.getSelectionModel().clearSelection();
@@ -155,6 +183,10 @@ public class MapQRController implements Controller {
     currentDirection = (TreeItem<Direction>) tr_drive.getSelectionModel().getSelectedItem();
   }
 
+  /**
+   * Executes when the user clicks on an item in the main building tree
+   * @throws DBException
+   */
   public void onMainTreeClicked() throws DBException {
     collapseFaulkner();
     tr_drive.getSelectionModel().clearSelection();
@@ -166,6 +198,10 @@ public class MapQRController implements Controller {
     }
   }
 
+  /**
+   * Executes when the faulkner building is manually selected by the user
+   * @throws DBException
+   */
   public void onFaulknerTabSelected() throws DBException {
     tr_faulkner.getSelectionModel().select(0);
     currentDirection = (TreeItem<Direction>) tr_faulkner.getSelectionModel().getSelectedItem();
@@ -182,6 +218,10 @@ public class MapQRController implements Controller {
     }
   }
 
+  /**
+   * Executes when the main building tab is manually selected by the user
+   * @throws DBException
+   */
   public void onMainTabSelected() throws DBException {
     tr_main.getSelectionModel().select(0);
     currentDirection = (TreeItem<Direction>) tr_main.getSelectionModel().getSelectedItem();
@@ -197,6 +237,9 @@ public class MapQRController implements Controller {
     }
   }
 
+  /**
+   * Executes when the drive tab is manually selected by the user
+   */
   public void onDriveTabSelected() {
     tr_drive.getSelectionModel().select(0);
     mapDisplayController.switchGoogleView();
@@ -207,6 +250,10 @@ public class MapQRController implements Controller {
     }
   }
 
+  /**
+   * Orders the tabs based on the path
+   * @param path the path finding path
+   */
   public void setTabs(Path path) {
     String start = path.getPath().getFirst().getBuilding();
     String end = path.getPath().getLast().getBuilding();
@@ -221,6 +268,10 @@ public class MapQRController implements Controller {
     }
   }
 
+  /**
+   * adds a corresponding tab depending on the building name
+   * @param b the building name
+   */
   private void addTabs(String b) {
     if (b.equals("Faulkner")) {
       tbpn_directions.getTabs().add(tb_faulkner);
@@ -229,20 +280,38 @@ public class MapQRController implements Controller {
     }
   }
 
+  /**
+   * populates the textual directions for the faulkner building
+   * @param dirLst the textual directions for the faulkner building
+   */
   public void setFaulknerText(ArrayList<Direction> dirLst) {
     faulknerPath = dirLst;
     makeInstructions(dirLst, tr_faulkner, rootFaulkner);
   }
 
+  /**
+   * populates the textual directions for the main building
+   * @param dirLst the textual directions for the main building
+   */
   public void setMainText(ArrayList<Direction> dirLst) {
     mainPath = dirLst;
     makeInstructions(dirLst, tr_main, rootMain);
   }
 
+  /**
+   * populates the textual directions for the google maps
+   * @param dirList the textual directions for the google map
+   */
   public void setDriveText(ArrayList<Direction> dirList) {
     makeInstructions(dirList, tr_drive, rootDrive);
   }
 
+  /**
+   * initial population of textual directions
+   * @param dirLst the list of all textual directions
+   * @param tr the current tree which will be populated with the textual directions
+   * @param root the root of the current tree
+   */
   private void makeInstructions(
       ArrayList<Direction> dirLst, JFXTreeView tr, TreeItem<Direction> root) {
     TreeItem<Direction> floor = new TreeItem<>();
@@ -279,29 +348,13 @@ public class MapQRController implements Controller {
       tr_main.getSelectionModel().select(0);
       currentDirection = (TreeItem<Direction>) tr_main.getSelectionModel().getSelectedItem();
     }
-    //    makeIntructionsClickacle(tr);
   }
 
-  //  public void makeIntructionsClickacle(JFXTreeView<Direction> tr) {
-  //    tr.setCellFactory(
-  //        tv -> {
-  //          TreeCell<Direction> cell =
-  //              new TreeCell<Direction>() {
-  //                @Override
-  //                public void updateItem(Direction dir, boolean empty) {
-  //                  super.updateItem(dir, empty);
-  //                  if (empty) {
-  //                    setText(null);
-  //                  } else {
-  //                    setText(dir.toString());
-  //                  }
-  //                }
-  //              };
-  //          cell.setOnMouseClicked(e -> System.out.println("Hello"));
-  //          return cell;
-  //        });
-  //  }
-
+  /**
+   * changes the tab depending on the building
+   * @param floor the floor to be focused on
+   * @param building the building to be focused on
+   */
   public void setTabFocus(int floor, String building) {
     if (building.equals("Faulkner")) {
       if (tbpn_directions.getTabs().contains(tb_faulkner)) {
@@ -322,6 +375,12 @@ public class MapQRController implements Controller {
     }
   }
 
+  /**
+   *
+   * @param floor the floor of the current instructions
+   * @param root the root of the current treeview
+   * @param tr the current treeview
+   */
   public void setIntructionFocus(int floor, TreeItem<Direction> root, TreeView<Direction> tr) {
     collapseAllItems();
     tr_faulkner.getSelectionModel().clearSelection();
@@ -336,44 +395,29 @@ public class MapQRController implements Controller {
     }
   }
 
+  /**
+   * Collapses all entries in faulkner and main tab
+   */
   public void collapseAllItems() {
     collapseFaulkner();
     collapseMain();
   }
 
+  /**
+   * Collapses all entries in the faulkner tab
+   */
   public void collapseFaulkner() {
     for (int i = 0; i < rootFaulkner.getChildren().size(); i++) {
       rootFaulkner.getChildren().get(i).setExpanded(false);
     }
   }
 
+  /**
+   * Collapses all entries in the main tab
+   */
   public void collapseMain() {
     for (int i = 0; i < rootMain.getChildren().size(); i++) {
       rootMain.getChildren().get(i).setExpanded(false);
     }
   }
-
-  //  public TextArea getTextFaulkner() {
-  //    return this.txt_faulkner_directions;
-  //  }
-  //
-  //  public TextArea getTextMain() {
-  //    return this.txt_main_directions;
-  //  }
-  //
-  //  public TextArea getTextDrive() {
-  //    return this.txt_drive_directions;
-  //  }
-  //
-  //  public ImageView getImageFaulkner() {
-  //    return this.img_faulkner;
-  //  }
-  //
-  //  public ImageView getImageMain() {
-  //    return this.img_main;
-  //  }
-  //
-  //  public ImageView getImageDrive() {
-  //    return this.img_drive;
-  //  }
 }
