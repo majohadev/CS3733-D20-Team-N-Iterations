@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
 
 public class MapQRController implements Controller {
@@ -26,6 +27,9 @@ public class MapQRController implements Controller {
 
   ArrayList<Direction> faulknerPath = new ArrayList<>();
   ArrayList<Direction> mainPath = new ArrayList<>();
+  TreeItem<Direction> rootFaulkner = new TreeItem<>();
+  TreeItem<Direction> rootMain = new TreeItem<>();
+  TreeItem<Direction> rootDrive = new TreeItem<>();
 
   @Override
   public void setMainApp(App mainApp) {}
@@ -57,21 +61,21 @@ public class MapQRController implements Controller {
 
   public void setFaulknerText(ArrayList<Direction> dirLst) {
     faulknerPath = dirLst;
-    makeInstructions(dirLst, tr_faulkner);
+    makeInstructions(dirLst, tr_faulkner, rootFaulkner);
   }
 
   public void setMainText(ArrayList<Direction> dirLst) {
     mainPath = dirLst;
-    makeInstructions(dirLst, tr_main);
+    makeInstructions(dirLst, tr_main, rootMain);
   }
 
   public void setDriveText(ArrayList<Direction> dirList) {
     System.out.println(dirList.size());
-    makeInstructions(dirList, tr_drive);
+    makeInstructions(dirList, tr_drive, rootDrive);
   }
 
-  private void makeInstructions(ArrayList<Direction> dirLst, JFXTreeView tr) {
-    TreeItem<Direction> root = new TreeItem<>();
+  private void makeInstructions(
+      ArrayList<Direction> dirLst, JFXTreeView tr, TreeItem<Direction> root) {
     TreeItem<Direction> floor = new TreeItem<>();
     TreeItem<Direction> instruction;
     for (Direction dir : dirLst) {;
@@ -102,19 +106,19 @@ public class MapQRController implements Controller {
     tr.getStylesheets()
         .add(getClass().getResource("/edu/wpi/N/css/newMapDisplay.css").toExternalForm());
     tr.getStyleClass().add("tree-view");
-    tr.getSelectionModel().select(1);
+    tr.getSelectionModel().select(0);
   }
 
   public void setTabFocus(int floor, String building) {
     if (building.equals("Faulkner")) {
       if (tbpn_directions.getTabs().contains(tb_faulkner)) {
         tbpn_directions.getSelectionModel().select(tb_faulkner);
-        setIntructionFocus(floor, faulknerPath, tr_faulkner);
+        setIntructionFocus(floor, rootFaulkner, tr_faulkner);
       }
     } else if (building.equals("Main")) {
       if (tbpn_directions.getTabs().contains(tb_main)) {
         tbpn_directions.getSelectionModel().select(tb_main);
-        setIntructionFocus(floor, mainPath, tr_main);
+        setIntructionFocus(floor, rootMain, tr_main);
       }
     } else if (building.equals("Drive")) {
       if (tbpn_directions.getTabs().contains(tb_drive)) {
@@ -124,21 +128,24 @@ public class MapQRController implements Controller {
     }
   }
 
-  public void setIntructionFocus(int floor, ArrayList<Direction> path, JFXTreeView tr) {
-    for (int i = 0; i < path.size(); i++) {
-      if (path.get(i).getNode().getFloor() == floor) {
-        tr.getTreeItem(i).setExpanded(true);
-        tr.getSelectionModel().clearAndSelect(i + 1);
-        return;
+  public void setIntructionFocus(int floor, TreeItem<Direction> root, TreeView<Direction> tr) {
+    collapseAllItems();
+    for (int i = 0; i < root.getChildren().size(); i++) {
+      if (root.getChildren().get(i).getValue().getNode().getFloor() == floor) {
+        root.getChildren().get(i).setExpanded(true);
+        tr.getSelectionModel().clearAndSelect(i);
       }
     }
   }
 
-  //  public void collapseAllItems(ArrayList<Direction> path, JFXTreeView tr) {
-  //    for (int i = 0; i < path.size(); i++) {
-  //      tr.getTreeItem(i).setExpanded(false);
-  //    }
-  //  }
+  public void collapseAllItems() {
+    for (int i = 0; i < rootFaulkner.getChildren().size(); i++) {
+      rootFaulkner.getChildren().get(i).setExpanded(false);
+    }
+    for (int i = 0; i < rootMain.getChildren().size(); i++) {
+      rootMain.getChildren().get(i).setExpanded(false);
+    }
+  }
 
   //  public TextArea getTextFaulkner() {
   //    return this.txt_faulkner_directions;
