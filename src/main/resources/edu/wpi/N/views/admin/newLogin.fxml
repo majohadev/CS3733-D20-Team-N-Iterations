@@ -3,6 +3,7 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXPasswordField?>
 <?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
@@ -61,11 +62,17 @@
                <font>
                   <Font name="Calibri Bold" size="36.0" />
                </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
             </JFXButton>
             <JFXButton buttonType="RAISED" layoutX="259.0" layoutY="428.0" onMouseClicked="#checkUser" ripplerFill="BLACK" text="Login" textFill="WHITE">
                <font>
                   <Font name="Calibri Bold" size="36.0" />
                </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
             </JFXButton>
             <Label layoutX="49.0" layoutY="26.0" text="Employee Login" textFill="#e6ebf2">
                <font>
@@ -85,6 +92,9 @@
                <font>
                   <Font name="Calibri Bold" size="36.0" />
                </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
             </JFXButton>
          </children>
       </Pane>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -37,11 +38,17 @@
                <font>
                   <Font size="36.0" />
                </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
             </JFXButton>
             <JFXButton fx:id="btn_home" buttonType="RAISED" layoutX="42.0" layoutY="973.0" onMouseClicked="#onBtnHomeClicked" prefHeight="80.0" prefWidth="154.0" style="-fx-background-color: #263051;" text="Done" textFill="WHITE" AnchorPane.bottomAnchor="42.0" AnchorPane.leftAnchor="42.0">
                <font>
                   <Font name="Calibri Bold" size="36.0" />
                </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
             </JFXButton>
             <Pane fx:id="pn_editor" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="280.0" prefWidth="470.0" AnchorPane.bottomAnchor="30.0" AnchorPane.rightAnchor="30.0" />
             <AnchorPane fx:id="pn_floors" prefHeight="55.0" prefWidth="90.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="30.0" />

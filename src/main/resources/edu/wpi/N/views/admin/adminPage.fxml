@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Line?>
@@ -20,6 +21,9 @@
          <font>
             <Font name="Calibri" size="24.0" />
          </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
       </JFXButton>
       <Label layoutX="16.0" layoutY="147.0" styleClass="label-mid-size" stylesheets="@../../css/sanitationRequestUI.css" text="Password:" textFill="#e6ebf2">
          <font>
@@ -59,6 +63,9 @@
          <font>
             <Font name="Calibri" size="24.0" />
          </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
       </JFXButton>
       <Line endX="146.0" layoutX="174.0" layoutY="558.0" startX="-174.0" stroke="#7e9ab6" />
       <Label layoutX="48.0" layoutY="567.0" styleClass="label-admin-display" stylesheets="@../../css/sanitationRequestUI.css" text="Remove Login" textFill="#e6ebf2">
@@ -76,6 +83,9 @@
          <font>
             <Font name="Calibri" size="24.0" />
          </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
       </JFXButton>
    </children>
 </AnchorPane>

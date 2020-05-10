@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXTabPane?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TextArea?>
@@ -48,6 +49,9 @@
               </content>
             </Tab>
          </tabs>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
       </JFXTabPane>
    </children>
 </AnchorPane>
