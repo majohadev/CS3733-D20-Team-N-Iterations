@@ -3,15 +3,15 @@ package edu.wpi.N.entities.States;
 import edu.wpi.N.chatbot.Dialogflow;
 import java.io.IOException;
 import java.util.LinkedList;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 public class ChatMessagesState {
   // each HBox contains a label with a message
-  private LinkedList<HBox> messageHistory;
+  private LinkedList<VBox> messageHistory;
   public Dialogflow dialogflow;
 
   public ChatMessagesState() {
-    messageHistory = new LinkedList<HBox>();
+    messageHistory = new LinkedList<VBox>();
     try {
       dialogflow = new Dialogflow();
     } catch (Exception ex) {
@@ -19,15 +19,15 @@ public class ChatMessagesState {
     }
   }
 
-  public LinkedList<HBox> getMessageHistory() {
+  public LinkedList<VBox> getMessageHistory() {
     return messageHistory;
   }
 
-  public void setMessageHistory(LinkedList<HBox> messageHistory) {
+  public void setMessageHistory(LinkedList<VBox> messageHistory) {
     this.messageHistory = messageHistory;
   }
 
-  public void addMessageToHistory(HBox message) {
+  public void addMessageToHistory(VBox message) {
     this.messageHistory.add(message);
   }
 

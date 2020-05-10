@@ -48,7 +48,7 @@
                   <Font />
                </font></JFXButton>
             <Text fill="#c9c9c9" layoutX="195.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" text="online" />
-            <JFXTextField fx:id="textField" focusColor="#ffffff00" layoutX="36.0" layoutY="508.0" prefHeight="60.0" prefWidth="297.0" stylesheets="@../../css/chatbotTextInput.css" unFocusColor="WHITE" />
+            <JFXTextField fx:id="textField" focusColor="#26305100" labelFloat="true" layoutX="36.0" layoutY="508.0" prefHeight="60.0" prefWidth="297.0" stylesheets="@../../css/chatbotTextInput.css" unFocusColor="WHITE" />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="buttonOnlyView" layoutX="49.0" layoutY="123.0" prefHeight="464.0" prefWidth="345.0">

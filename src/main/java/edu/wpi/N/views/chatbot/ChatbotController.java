@@ -1,27 +1,36 @@
 package edu.wpi.N.views.chatbot;
 
+import com.google.cloud.dialogflow.v2.QueryResult;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.N.App;
 import edu.wpi.N.Main;
+import edu.wpi.N.chatbot.Dialogflow;
 import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.views.Controller;
 import java.io.IOException;
 import java.net.URL;
+import java.util.LinkedList;
 import java.util.ResourceBundle;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 public class ChatbotController implements Controller, Initializable {
   private StateSingleton state;
@@ -75,7 +84,7 @@ public class ChatbotController implements Controller, Initializable {
    * the left side, User messages on the right side
    */
   private void loadMessageHistory() {
-    for (HBox singleMessage : state.chatBotState.getMessageHistory()) {
+    for (VBox singleMessage : state.chatBotState.getMessageHistory()) {
       chatBox.getChildren().add(singleMessage);
     }
   }
@@ -89,14 +98,15 @@ public class ChatbotController implements Controller, Initializable {
     if (!textField.getText().equals(null) && !textField.getText().equals("")) {
 
       // Display user's message first (right side)
-      String userInput = textField.getText();
-      displayAndSaveMessage(userInput, true);
+      Label userInput = new Label(textField.getText());
+      LinkedList<Node> messageContainer = new LinkedList<Node>();
+      messageContainer.add(userInput);
+      displayAndSaveMessages(messageContainer, true);
 
       // Display chat-bots reply (left side)
       try {
-        // get chatbot's reply
-        String chatBotReply = state.chatBotState.dialogflow.replyToUserInput(userInput);
-        displayAndSaveMessage(chatBotReply, false);
+        // get chatbot's reply, display it and save in message history
+        displayAndSaveBotMessage(userInput.getText());
       } catch (Exception e) {
         e.printStackTrace();
         displayErrorMessage("Error trying to load chat-bot's reply");
@@ -105,39 +115,137 @@ public class ChatbotController implements Controller, Initializable {
   }
 
   /**
-   * Displays User's message and saves it to chat history
+   * Displays chat-bot's reply-message/messages and saves to chat-history
    *
-   * @param message: Message from either chat-bot or user
-   * @param isUserMessage: true if given message from User, false - from chat-bot
+   * @param userMessage: user's Input
    */
-  private void displayAndSaveMessage(String message, boolean isUserMessage) {
-    // Common settings for both User's and Chatbot's messages
-    Label messageAsLabel = new Label(message);
-    messageAsLabel.setMaxWidth(300);
-    messageAsLabel.setWrapText(true);
+  private void displayAndSaveBotMessage(String userMessage) {
+    try {
+      QueryResult queryResults =
+          state.chatBotState.dialogflow.detectIntentTexts(userMessage, "en-US");
 
-    HBox singleMessage = new HBox(messageAsLabel);
+      LinkedList<Node> singleMessageObject = new LinkedList<Node>();
+
+      if (queryResults
+          .getIntent()
+          .getDisplayName()
+          .equals("question-billing-how-to-pay-online-option")) {
+        // create message with links
+        Label messagePartA =
+            new Label(
+                "Great! It is the most convenient, efficient way to pay your bill. If you have a Partners Patient Gateway account, you can see the current status of all open patient balances; payments are immediately posted to your account.\n"
+                    + "\n"
+                    + "You can opt to go paperless and receive your bills online. In addition, you can now set up monthly payment plans.\n"
+                    + "\n");
+        Hyperlink loginLink = new Hyperlink("Log in to Partners Patient Gateway");
+        loginLink.setOnMouseClicked(
+            new EventHandler<MouseEvent>() {
+              @Override
+              public void handle(MouseEvent event) {
+                try {
+                  loadWebView("https://mychart.partners.org/mychart-prd/Authentication/Login?");
+                } catch (IOException e) {
+                  e.printStackTrace();
+                }
+              }
+            });
+
+        Hyperlink guestLink = new Hyperlink("Or you can quickly pay as a guest");
+        guestLink.setOnMouseClicked(
+            new EventHandler<MouseEvent>() {
+              @Override
+              public void handle(MouseEvent event) {
+                try {
+                  loadWebView(
+                      "https://mychart.partners.org/mychart-prd/billing/guestpay/payasguest");
+                } catch (IOException e) {
+                  e.printStackTrace();
+                }
+              }
+            });
+
+        // add elements to a 'Single Message'
+        singleMessageObject.add(messagePartA);
+        singleMessageObject.add(loginLink);
+        singleMessageObject.add(guestLink);
+      }
+      // If intent matches with get-weather
+      else if (queryResults.getIntent().getDisplayName().equals("get-weather")) {
+        Label message = new Label(Dialogflow.getCurrentWeatherReply());
+        singleMessageObject.add(message);
+      } else {
+        // else, use Dialogflow text
+        Label message = new Label(queryResults.getFulfillmentText());
+        singleMessageObject.add(message);
+      }
+
+      displayAndSaveMessages(singleMessageObject, false);
+
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      displayErrorMessage("Ooops... Something went wong when loading chat-bot message");
+    }
+  }
+
+  /**
+   * Displays bot's reply(s) from a LinkedList of objects such as Labels/Hyperlinks
+   *
+   * @param messages: list of objects to display Output from
+   * @param isUserMessage: boolean indicating whether the given message is user's message, true -
+   *     yes
+   */
+  private void displayAndSaveMessages(LinkedList<Node> messages, boolean isUserMessage) {
+    // Common settings for both User's and Chatbot's messages
+    VBox singleMessage = new VBox(5);
     singleMessage.setPadding(new Insets(5));
+    singleMessage.setFillWidth(false);
+
+    for (Node n : messages) {
+      singleMessage.getChildren().add(n);
+    }
 
     if (isUserMessage) {
-      messageAsLabel
-          .getStylesheets()
-          .add(Main.class.getResource("css/labelUserMessage.css").toString());
+      singleMessage.getStylesheets().add(Main.class.getResource("css/UserMessage.css").toString());
       singleMessage.setAlignment(Pos.CENTER_RIGHT);
+      textField.clear();
     } else {
-      messageAsLabel
-          .getStylesheets()
-          .add(Main.class.getResource("css/labelBotReply.css").toString());
-      singleMessage.setAlignment(Pos.CENTER_LEFT);
+      singleMessage.getStylesheets().add(Main.class.getResource("css/BotReply.css").toString());
     }
 
     // Update the chatBox (VBOX)
     chatBox.getChildren().add(singleMessage);
+
     // Save changes in Message history
     this.state.chatBotState.addMessageToHistory(singleMessage);
+  }
 
-    // Clear text field input
-    textField.clear();
+  /**
+   * Creates a new stage and Loads given link in a web-view
+   *
+   * @param url
+   */
+  private void loadWebView(String url) throws IOException {
+    Stage browserStage = new Stage();
+    browserStage.setTitle("Browser Window");
+
+    FXMLLoader loader = new FXMLLoader();
+    loader.setLocation(getClass().getResource("browserWindow.fxml"));
+    loader.setControllerFactory(
+        type -> {
+          try {
+            return new BrowserController(url);
+          } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException();
+          }
+        });
+
+    Pane pane = loader.load();
+    Scene scene = new Scene(pane);
+
+    browserStage.setScene(scene);
+    browserStage.setFullScreen(true);
+    browserStage.show();
   }
 
   /**
