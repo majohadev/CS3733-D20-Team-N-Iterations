@@ -95,9 +95,6 @@ public class MapQRController implements Controller {
         root.getChildren().add(floor);
       }
     }
-    //    if (tr != tr_drive) {
-    //      root.getChildren().removeIf(n -> n.getChildren().size() == 0);
-    //    }
     if (root.getChildren().size() > 0) {
       root.getChildren().get(0).setExpanded(true);
     }
@@ -106,7 +103,11 @@ public class MapQRController implements Controller {
     tr.getStylesheets()
         .add(getClass().getResource("/edu/wpi/N/css/newMapDisplay.css").toExternalForm());
     tr.getStyleClass().add("tree-view");
-    tr.getSelectionModel().select(0);
+    //    if (tbpn_directions.getTabs(). == "Faulkner") {
+    //      tr_faulkner.getSelectionModel().select(0);
+    //    } else {
+    //      tr_main.getSelectionModel().select(0);
+    //    }
   }
 
   public void setTabFocus(int floor, String building) {
