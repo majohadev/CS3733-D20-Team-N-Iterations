@@ -146,6 +146,33 @@
     -fx-font-size: 18px;
 }
 
+.label-name{
+    -fx-text-fill: #E6EBF2;
+    -fx-font-family: 'Karla';
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+.label-role{
+    -fx-text-fill: #E6EBF2;
+    -fx-font-family: 'Karla';
+    -fx-font-size: 18px;
+}
+
+.hyperlink-credits{
+    -fx-text-fill: #E6EBF2;
+    -fx-font-family: 'Karla';
+    -fx-font-size: 12px;
+    -fx-underline: true;
+}
+
+.hyperlink-credits-apache-license{
+    -fx-text-fill: #E6EBF2;
+    -fx-font-family: 'Karla';
+    -fx-font-size: 18px;
+    -fx-underline: true;
+}
+
 .separator *.line {
     -fx-border-style: solid;
     -fx-border-width: 3px;
@@ -188,6 +215,10 @@
     -fx-text-fill: #E6EBF2;
     -jfx-focus-color: #7E9AB6;
     -jfx-unfocus-color: #E6EBF2;
+}
+
+.jfx-imageview-about-page{
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,.8), 5, 0, 5, 5);
 }
 
 .combo-box .arrow,
