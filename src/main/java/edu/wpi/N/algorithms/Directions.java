@@ -5,13 +5,13 @@ import static edu.wpi.N.algorithms.Level.*;
 import static java.lang.Math.atan2;
 
 import edu.wpi.N.database.DBException;
-import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -42,7 +42,7 @@ public class Directions {
   }
 
   /** Generates textual directions for the given path */
-  private void generateDirections() throws DBException {
+  private void generateDirections(HashMap<String, LinkedList<DbNode>> mapDatas) throws DBException {
     DbNode currNode;
     DbNode nextNode = path.get(0);
     // DbNode endOfHallNode = null;
@@ -68,16 +68,16 @@ public class Directions {
       switch (state) {
         case STARTING:
           if (currNode.getNodeType().equals("EXIT")) {
-            message = "Enter at " + getLandmark(currNode).getLongName();
+            message = "Enter at " + getLandmark(currNode, mapDatas).getLongName();
           } else if (currNode.getNodeID().equals("NSERV00301")
               || currNode.getNodeID().equals("NSERV00103")) {
             message = "Start in the direction of the kiosk arrow ";
           } else if (!path.get(0).getNodeType().equals("HALL")) {
             message = "Exit " + path.get(0).getLongName();
-          } else if (!(getLandmark(nextNode) == null)) {
+          } else if (!(getLandmark(nextNode, mapDatas) == null)) {
             message =
                 "Start towards "
-                    + getLandmark(nextNode).getLongName()
+                    + getLandmark(nextNode, mapDatas).getLongName()
                     + " "
                     + getDistanceString(getDistance(currNode, nextNode));
           } else {
@@ -98,21 +98,21 @@ public class Directions {
           } else if (getState(i - 1).equals(CHANGING_FLOOR)) {
             message = "Exit " + currNode.getLongName();
             currIcon = Icon.EXIT;
-          } else if (stateChange || atIntersection(currNode)) {
-            if (getLandmark(nextNode) == null) {
+          } else if (stateChange || atIntersection(currNode, mapDatas)) {
+            if (getLandmark(nextNode, mapDatas) == null) {
               if (currNode.getBuilding().equals("Faulkner"))
                 message = "Continue to next intersection " + getDistanceString(distance);
 
-            } else if (getLandmark(nextNode).equals(nextNode)) {
+            } else if (getLandmark(nextNode, mapDatas).equals(nextNode)) {
               message =
                   "Go towards " // "Proceed straight towards "
-                      + getLandmark(nextNode).getLongName()
+                      + getLandmark(nextNode, mapDatas).getLongName()
                       + " "
                       + getDistanceString(distance);
             } else {
               message =
                   "Continue past "
-                      + getLandmark(nextNode).getLongName()
+                      + getLandmark(nextNode, mapDatas).getLongName()
                       + " "
                       + getDistanceString(distance);
             }
@@ -125,10 +125,10 @@ public class Directions {
               message = message + " and t" + getTurnType(angle, getAngle(i - 1));
               directions.add(new Direction(message, STEP, currNode, currIcon));
               message = "";
-            } else if (!(getLandmark(currNode) == null)) {
+            } else if (!(getLandmark(currNode, mapDatas) == null)) {
               message =
                   "Go towards straight "
-                      + getLandmark(currNode).getLongName()
+                      + getLandmark(currNode, mapDatas).getLongName()
                       + " "
                       + getDistanceString(getDistance(currNode, nextNode))
                       + " and t"
@@ -254,12 +254,13 @@ public class Directions {
     }
   }
 
-  private static DbNode findEndOfHall(int index) throws DBException {
+  private static DbNode findEndOfHall(int index, HashMap<String, LinkedList<DbNode>> mapDatas)
+      throws DBException {
     double angleChange;
     boolean endOfHall = false;
     while (getState(index).equals(CONTINUING)
         && index < path.size()) { // || (getState(index - 1).equals(CONTINUING)
-      for (DbNode adj : MapDB.getAdjacent(path.get(index).getNodeID())) {
+      for (DbNode adj : mapDatas.get(path.get(index).getNodeID())) {
         if (adj.getNodeType().equals("HALL")) {
           angleChange = getAngle(index, adj) - getAngle(index - 1);
           if (angleChange > 180) {
@@ -311,7 +312,7 @@ public class Directions {
     if (i == 0) {
       directions.add(
           new Direction(getFloorString(path.get(i)), Level.FLOOR, path.get(i), Icon.FLOOR_LEVEL));
-    } else if (path.get(i - 1).getFloor() != path.get(i).getFloor()) {
+    } else if (path.get(i - 1).getFloor() != path.get(i).getFloor() && !(path.get(i+1).getNodeType().equals("ELEV"))||path.get(i+1).getNodeType().equals("ELEV")) {
       directions.add(
           new Direction(getFloorString(path.get(i)), Level.FLOOR, path.get(i), Icon.FLOOR_LEVEL));
     }
@@ -380,9 +381,10 @@ public class Directions {
    * @param node, DbNode
    * @return String, landmark for given node
    */
-  private static DbNode getLandmark(DbNode node) throws DBException {
+  private static DbNode getLandmark(DbNode node, HashMap<String, LinkedList<DbNode>> mapDatas)
+      throws DBException {
     if (node.getNodeType().equals("HALL")) {
-      for (DbNode n : MapDB.getAdjacent(node.getNodeID())) {
+      for (DbNode n : mapDatas.get(node.getNodeID())) {
         if (!n.getNodeType().equals("HALL")
             && !n.getNodeType().equals("ELEV")
             && !n.getNodeType().equals("STAI")) {
@@ -448,10 +450,11 @@ public class Directions {
    * @param node, DbNode
    * @return true, if intersection, false otherwise
    */
-  private static boolean atIntersection(DbNode node) throws DBException {
+  private static boolean atIntersection(DbNode node, HashMap<String, LinkedList<DbNode>> mapDatas)
+      throws DBException {
     int hallNodeCount = 0;
     if (node.getNodeType().equals("HALL")) {
-      for (DbNode n : MapDB.getAdjacent(node.getNodeID())) {
+      for (DbNode n : mapDatas.get(node.getNodeID())) {
         if (n.getNodeType().equals("HALL")) {
           hallNodeCount++;
         }
@@ -482,9 +485,10 @@ public class Directions {
    *
    * @return ArrayList of strings, each String is a line of directions
    */
-  public ArrayList<Direction> getDirections() throws DBException {
+  public ArrayList<Direction> getDirections(HashMap<String, LinkedList<DbNode>> mapDatas)
+      throws DBException {
     if (!(this.path == null)) {
-      this.generateDirections();
+      this.generateDirections(mapDatas);
       return this.directions;
     } else {
       return null;

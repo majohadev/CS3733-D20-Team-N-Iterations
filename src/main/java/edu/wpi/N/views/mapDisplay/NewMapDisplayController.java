@@ -803,9 +803,13 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     }
 
     ArrayList<Direction> faulknerDirections =
-        pathFaulkner.size() > 0 ? pathFaulkner.getDirections() : new ArrayList<>();
+        pathFaulkner.size() > 0
+            ? pathFaulkner.getDirections(singleton.savedAlgo.getMapData())
+            : new ArrayList<>();
     ArrayList<Direction> mainDirections =
-        pathMain.size() > 0 ? pathMain.getDirections() : new ArrayList<>();
+        pathMain.size() > 0
+            ? pathMain.getDirections(singleton.savedAlgo.getMapData())
+            : new ArrayList<>();
 
     mapQRController.setTabs(
         path.getPath().getFirst().getBuilding(), path.getPath().getLast().getBuilding());

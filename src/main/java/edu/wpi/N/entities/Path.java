@@ -6,6 +6,7 @@ import edu.wpi.N.algorithms.Direction;
 import edu.wpi.N.algorithms.Directions;
 import edu.wpi.N.database.DBException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 public class Path {
@@ -24,9 +25,10 @@ public class Path {
     return this.path;
   }
 
-  public ArrayList<Direction> getDirections() throws DBException {
+  public ArrayList<Direction> getDirections(HashMap<String, LinkedList<DbNode>> mapDatas)
+      throws DBException {
     Directions dir = new Directions(this.path);
-    this.directions = dir.getDirections();
+    this.directions = dir.getDirections(mapDatas);
     return this.directions;
   }
 
