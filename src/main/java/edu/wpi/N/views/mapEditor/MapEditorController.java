@@ -760,7 +760,7 @@ public class MapEditorController implements Controller {
     }
   }
 
-  private void onPaneDisplayClickedAddNode(MouseEvent event) throws IOException {
+  private void onPaneDisplayClickedAddNode(MouseEvent event) throws IOException {//TODO: addnodeclicked, make button clicked and add to random chosen XY pos
     mode = Mode.ADD_NODE;
     hideEditElevButton();
     changeEditor();
