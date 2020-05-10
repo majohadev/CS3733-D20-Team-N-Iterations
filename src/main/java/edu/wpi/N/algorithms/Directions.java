@@ -42,7 +42,7 @@ public class Directions {
   }
 
   /** Generates textual directions for the given path */
-  private void generateDirections(HashMap<String, LinkedList<DbNode>> mapDatas) throws DBException {
+  private void generateDirections(HashMap<String, LinkedList<DbNode>> mapDatas, Boolean driving) throws DBException {
     DbNode currNode;
     DbNode nextNode = path.get(0);
     // DbNode endOfHallNode = null;
@@ -229,6 +229,13 @@ public class Directions {
             currIcon = Icon.ARRIVE;
             directions.add(new Direction(message, STEP, currNode, currIcon));
             message = "";
+          }
+          if(driving){
+            if(path.get(i).getBuilding().equals("Faulkner")){
+              directions.add(new Direction("Drive to Main Campus", DRIVING, currNode, Icon.DRIVING));
+            } else {
+              directions.add(new Direction("Drive to Faulkner", DRIVING, currNode, Icon.DRIVING));
+            }
           }
           break;
       }
@@ -486,10 +493,10 @@ public class Directions {
    *
    * @return ArrayList of strings, each String is a line of directions
    */
-  public ArrayList<Direction> getDirections(HashMap<String, LinkedList<DbNode>> mapDatas)
+  public ArrayList<Direction> getDirections(HashMap<String, LinkedList<DbNode>> mapDatas, Boolean driving)
       throws DBException {
     if (!(this.path == null)) {
-      this.generateDirections(mapDatas);
+      this.generateDirections(mapDatas, driving);
       return this.directions;
     } else {
       return null;

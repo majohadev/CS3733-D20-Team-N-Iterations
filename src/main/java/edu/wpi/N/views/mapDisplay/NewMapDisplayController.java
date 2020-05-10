@@ -834,6 +834,8 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     mapQRController.setDriveText(googleDirections);
   }
 
+
+
   public void disableTextDirections() {
     pn_iconBar.getChildren().remove(pn_qrIcon);
   }
