@@ -107,7 +107,7 @@ public class MapQRController implements Controller {
     //      tr_faulkner.getSelectionModel().select(0);
     //    } else {
     //      tr_main.getSelectionModel().select(0);
-    //    }
+
   }
 
   public void setTabFocus(int floor, String building) {
