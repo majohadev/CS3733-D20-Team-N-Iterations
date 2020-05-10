@@ -148,19 +148,19 @@ public class MapQRController implements Controller {
     }
   }
 
-  public void onDriveTreeClicked() throws DBException {
+  public void onDriveTreeClicked() {
     collapseAllItems();
     tr_main.getSelectionModel().clearSelection();
     tr_faulkner.getSelectionModel().clearSelection();
     currentDirection = (TreeItem<Direction>) tr_drive.getSelectionModel().getSelectedItem();
-    mapBaseController.setFloor("Main", currentDirection.getValue().getNode().getFloor(), path);
   }
 
-  public void onMainTreeClicked() {
+  public void onMainTreeClicked() throws DBException {
     collapseFaulkner();
     tr_drive.getSelectionModel().clearSelection();
     tr_faulkner.getSelectionModel().clearSelection();
     currentDirection = (TreeItem<Direction>) tr_main.getSelectionModel().getSelectedItem();
+    mapBaseController.setFloor("Main", currentDirection.getValue().getNode().getFloor(), path);
     if (currentDirection.getValue().getLevel() == Level.FLOOR) {
       tr_main.getTreeItem(tr_main.getSelectionModel().getSelectedIndex()).setExpanded(true);
     }
@@ -202,7 +202,7 @@ public class MapQRController implements Controller {
     mapDisplayController.switchGoogleView();
     try {
       onDriveTreeClicked();
-    } catch (NullPointerException | DBException e) {
+    } catch (NullPointerException e) {
       return;
     }
   }

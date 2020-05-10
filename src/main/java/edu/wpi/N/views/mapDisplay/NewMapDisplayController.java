@@ -983,7 +983,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
   }
 
   public void enableTextDirections() {
-    if (!(path.size() == 0 || path == null)) {
+    if (!(path.size() == 0 || path == null) && !pn_iconBar.getChildren().contains(pn_qrIcon)) {
       pn_iconBar.getChildren().add(pn_qrIcon);
     }
   }
