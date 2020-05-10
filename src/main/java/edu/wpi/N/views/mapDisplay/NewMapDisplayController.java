@@ -4,6 +4,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXNodesList;
 import edu.wpi.N.App;
 import edu.wpi.N.algorithms.Direction;
+import edu.wpi.N.algorithms.Directions;
 import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
@@ -810,11 +811,24 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
         pathMain.size() > 0
             ? pathMain.getDirections(singleton.savedAlgo.getMapData())
             : new ArrayList<>();
+        pathMain.size() > 0 ? pathMain.getDirections() : new ArrayList<>();
+    ArrayList<Direction> googleDirections = new ArrayList<>();
 
     mapQRController.setTabs(
         path.getPath().getFirst().getBuilding(), path.getPath().getLast().getBuilding());
     mapQRController.setFaulknerText(faulknerDirections);
     mapQRController.setMainText(mainDirections);
+
+    boolean isFirstFaulkner = this.path.get(0).getBuilding().equals("Faulkner");
+    boolean isSecondFaulkner = this.path.get(path.size() - 1).getBuilding().equals("Faulkner");
+    if (isFirstFaulkner ^ isSecondFaulkner) {
+      if (isFirstFaulkner) {
+        googleDirections = Directions.getGoogleDirections("Driving", false);
+      } else {
+        googleDirections = Directions.getGoogleDirections("Driving", true);
+      }
+    }
+    mapQRController.setDriveText(googleDirections);
   }
 
   public void disableTextDirections() {
