@@ -574,7 +574,9 @@ public class Directions {
         iconDirections.add(new Direction(directions.get(i), BUILDING, null, Icon.RIGHT));
       } else if (directions.get(i).contains("left")) {
         iconDirections.add(new Direction(directions.get(i), BUILDING, null, Icon.LEFT));
-      } else {
+      }  else if (directions.get(i).contains("circle")) {
+        iconDirections.add(new Direction(directions.get(i), BUILDING, null, Icon.CIRCLE));
+      }else {
         iconDirections.add(new Direction(directions.get(i), BUILDING, null, Icon.CONTINUE));
       }
     }

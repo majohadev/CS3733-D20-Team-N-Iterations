@@ -10,5 +10,6 @@ public enum Icon {
   CONTINUE,
   ARRIVE,
   FLOOR_LEVEL,
-  DRIVING
+  DRIVING,
+  CIRCLE
 }
