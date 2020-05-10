@@ -63,8 +63,8 @@ public class Directions {
         angle = getAngle(i);
         stateChange = !getState(i + 1).equals(state);
         totalDistance += getDistance(path.get(i), path.get(i + 1));
-        addFloorLevelDirection(i);
       }
+      if (i > 0) addFloorLevelDirection(i - 1);
       state = getState(i);
       switch (state) {
         case STARTING:
