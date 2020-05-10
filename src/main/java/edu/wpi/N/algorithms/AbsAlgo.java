@@ -65,6 +65,8 @@ public abstract class AbsAlgo implements IPathFinder {
   }
 
   /**
+   * Finds the closest node of a given type and returns a path to it
+   *
    * @param start, DbNode of starting node
    * @param nodeType, String the type of node you want (must be length 4)
    * @return Path, path from start node to closest (eucledian) end node of requested type
@@ -96,11 +98,12 @@ public abstract class AbsAlgo implements IPathFinder {
   }
 
   /**
-   * Finds the best stairs to take based on score
+   * Finds a stop node of a given type that is closest to the start node using nodes from the start and end floors
    *
    * @param startNode: Starting Node
    * @param endNode: End Node
-   * @return: Stair node and its score
+   * @param nodeType: Node type to stop at
+   * @return: DbNode to stop of the given the node type
    * @throws DBException
    */
   private static DbNode getBestStopQuickAccess(DbNode startNode, DbNode endNode, String nodeType)
