@@ -77,6 +77,7 @@ public class MapQRController implements Controller {
 
   public void handleBtnPrevClicked(JFXTreeView tr, TreeItem<Direction> root) {
     tr.getSelectionModel().select(tr.getSelectionModel().getSelectedIndex() - 1);
+
   }
 
   public void handleBtnNextClicked(JFXTreeView tr, TreeItem<Direction> root) throws DBException {
