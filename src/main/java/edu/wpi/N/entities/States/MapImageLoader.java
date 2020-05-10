@@ -31,6 +31,7 @@ public class MapImageLoader {
     storeIcon(Icon.CONTINUE, "edu/wpi/N/images/TextDirIcons/Continue.png");
     storeIcon(Icon.ARRIVE, "edu/wpi/N/images/TextDirIcons/Destination.png");
     storeIcon(Icon.FLOOR_LEVEL, "edu/wpi/N/images/TextDirIcons/Direction.png");
+    storeIcon(Icon.DRIVING, "edu/wpi/N/images/TextDirIcons/DRIVING.png");
   }
 
   /**
