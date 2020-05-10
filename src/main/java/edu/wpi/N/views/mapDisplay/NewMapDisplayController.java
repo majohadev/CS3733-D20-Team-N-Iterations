@@ -811,7 +811,9 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
         pathMain.size() > 0
             ? pathMain.getDirections(singleton.savedAlgo.getMapData())
             : new ArrayList<>();
-        pathMain.size() > 0 ? pathMain.getDirections() : new ArrayList<>();
+    if (pathMain.size() > 0) {
+      pathMain.getDirections(singleton.savedAlgo.getMapData());
+    }
     ArrayList<Direction> googleDirections = new ArrayList<>();
 
     mapQRController.setTabs(
