@@ -19,8 +19,9 @@ public abstract class AbsAlgo implements IPathFinder {
    */
   public static double cost(DbNode currNode, DbNode nextNode) {
     return Math.sqrt(
-        Math.pow(nextNode.getX() - currNode.getX(), 2)
-            + Math.pow(nextNode.getY() - currNode.getY(), 2));
+            Math.pow(nextNode.getX() - currNode.getX(), 2)
+                + Math.pow(nextNode.getY() - currNode.getY(), 2))
+        + floorBuildingCost(currNode, nextNode);
   }
 
   /**
@@ -30,7 +31,23 @@ public abstract class AbsAlgo implements IPathFinder {
    * @return Manhattan distance to the goal Node
    */
   public static double heuristic(DbNode currNode, DbNode end) {
-    return Math.abs(end.getX() - currNode.getX()) + Math.abs(end.getY() - currNode.getY());
+    return Math.abs(end.getX() - currNode.getX())
+        + Math.abs(end.getY() - currNode.getY())
+        + floorBuildingCost(currNode, end);
+  }
+
+  /**
+   * Adds an arbitrary cost of 500px to changing floors and 5000px to changing buildings
+   *
+   * @param currNode The current node
+   * @param nextNode The nextnode
+   * @return 5000 if the nodes are both exit nodes, 500 if they are on different floors, 0
+   *     otherwise.
+   */
+  public static double floorBuildingCost(DbNode currNode, DbNode nextNode) {
+    if (currNode.getNodeType().equals("EXIT") && nextNode.getNodeType().equals("EXIT")) return 5000;
+    if (currNode.getFloor() == nextNode.getFloor()) return 0;
+    return 500;
   }
 
   /**

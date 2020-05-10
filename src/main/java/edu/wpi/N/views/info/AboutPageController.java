@@ -1,14 +1,12 @@
-package edu.wpi.N.views;
+package edu.wpi.N.views.info;
 
-import com.jfoenix.controls.JFXButton;
 import edu.wpi.N.App;
 import edu.wpi.N.entities.States.StateSingleton;
+import edu.wpi.N.views.Controller;
 import java.io.IOException;
-import javafx.fxml.FXML;
 import javafx.scene.input.MouseEvent;
 
 public class AboutPageController implements Controller {
-  @FXML JFXButton btn_back;
   private App mainApp;
   private StateSingleton singleton;
 
@@ -20,8 +18,11 @@ public class AboutPageController implements Controller {
     this.mainApp = mainApp;
   }
 
-  @FXML
   public void onBtnBackClicked(MouseEvent event) throws IOException {
     mainApp.switchScene("/edu/wpi/N/views/mapDisplay/newMapDisplay.fxml", singleton);
+  }
+
+  public void onBtnCreditsClicked() throws IOException {
+    mainApp.switchScene("/edu/wpi/N/views/info/creditsPage.fxml", singleton);
   }
 }

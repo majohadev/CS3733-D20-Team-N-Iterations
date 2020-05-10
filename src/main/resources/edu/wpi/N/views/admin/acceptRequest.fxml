@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXTextArea?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -30,6 +31,9 @@
          <font>
             <Font name="Calibri" size="24.0" />
          </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
       </JFXButton>
       <JFXTextArea focusColor="#e6ebf2" layoutX="93.0" layoutY="110.0" prefHeight="202.0" prefWidth="211.0" style="-fx-text-fill: #e6ebf2;" styleClass="jfx-text-area" stylesheets="@../../css/sanitationRequestUI.css" unFocusColor="#e6ebf2">
          <font>
@@ -40,6 +44,9 @@
          <font>
             <Font size="24.0" />
          </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
       </JFXButton>
       <Label layoutX="11.0" layoutY="524.0" styleClass="label-mid-size" stylesheets="@../../css/sanitationRequestUI.css" text="Employees:" textFill="#e6ebf2">
          <font>

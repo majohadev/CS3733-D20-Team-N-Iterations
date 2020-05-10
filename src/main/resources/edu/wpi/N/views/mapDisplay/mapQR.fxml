@@ -3,6 +3,7 @@
 <?import com.jfoenix.controls.JFXScrollPane?>
 <?import com.jfoenix.controls.JFXTabPane?>
 <?import com.jfoenix.controls.JFXTreeView?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -49,6 +50,9 @@
               </content>
             </Tab>
          </tabs>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
       </JFXTabPane>
    </children>
 </AnchorPane>

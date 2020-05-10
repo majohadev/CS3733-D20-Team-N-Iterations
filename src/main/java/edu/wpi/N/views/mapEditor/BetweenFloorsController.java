@@ -79,6 +79,8 @@ public class BetweenFloorsController implements Controller, Initializable {
     JFXNodesList n3 = createButton(50, 250, 3);
     JFXNodesList n2 = createButton(50, 300, 2);
     JFXNodesList n1 = createButton(50, 350, 1);
+    text.setX(70);
+    text.setY(50);
   }
 
   public JFXButton getBtnCancel() {
@@ -187,6 +189,7 @@ public class BetweenFloorsController implements Controller, Initializable {
     button.setLayoutX(x);
     button.setLayoutY(y);
     button.toFront();
+    // styleFloorButtons(button);
     button.setVisible(false);
     JFXButton btn2 = new JFXButton();
     btn2.setVisible(false);
@@ -202,6 +205,12 @@ public class BetweenFloorsController implements Controller, Initializable {
     parent.getChildren().addAll(nodeList);
     this.nodes.put(floor, nodeList);
     return nodeList;
+  }
+
+  public void styleFloorButtons(JFXButton btn) {
+    btn.getStylesheets()
+        .add(getClass().getResource("/edu/wpi/N/css/MapDisplayFloors.css").toExternalForm());
+    btn.getStyleClass().add("choice-button");
   }
 
   public void onSaveButton() throws DBException {
