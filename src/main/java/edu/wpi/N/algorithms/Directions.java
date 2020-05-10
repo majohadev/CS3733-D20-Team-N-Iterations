@@ -427,13 +427,12 @@ public class Directions {
    * gets the google directions with the specified mode and direction
    *
    * @param mode walking, driving,, bycycling, transit; gets directions in one of those formats
-   * @param dir the direction. True = from 45 francis street to 1153 centre street, false = opposite
-   *     direction
-   * @return The google directions as a string
+   * @param dirFileName name of HTML file indicating direction
+   * @return The google directions as an ArrayList of string
    */
-  public static ArrayList<String> getGoogleDirections(String mode, boolean dir) {
+  public static ArrayList<String> getGoogleDirections(String mode, String dirFileName) {
     String urls;
-    if (dir) {
+    if (dirFileName.equals("FaulknerToMain45Francis")) {
       urls =
           "https://maps.googleapis.com/maps/api/directions/json?mode="
               + mode

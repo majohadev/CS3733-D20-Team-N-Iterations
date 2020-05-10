@@ -3,6 +3,7 @@ package edu.wpi.N.views.mapDisplay;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXNodesList;
 import edu.wpi.N.App;
+import edu.wpi.N.algorithms.Directions;
 import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
@@ -686,12 +687,6 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
           }
         }
 
-        // Testing files
-        // pathToHTML = "views/html/FaulknerToShapiroFenwood.html";
-        // pathToHTML = "views/html/FaulknerToBTMFenwood.html";
-        // pathToHTML = "views/html/FaulknerToShapiroFrancis.html";
-        // pathToHTML = "views/html/FaulknerToTower75Francis.html";
-        // pathToHTML = "views/html/FaulknerToFLEX.html";
       } else {
 
         // Default map
@@ -1061,24 +1056,48 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     }
 
     // For google maps
-    String googleDirections = "";
+    ArrayList<String> googleDirections = new ArrayList<>();
     boolean isFirstFaulkner = this.path.get(0).getBuilding().equals("Faulkner");
     boolean isSecondFaulkner = this.path.get(path.size() - 1).getBuilding().equals("Faulkner");
     if (isFirstFaulkner ^ isSecondFaulkner) {
       if (isFirstFaulkner) {
-        // googleDirections = Directions.getGoogleDirections("Driving", false);
+
+        // Default
+        String dirFileName = "FaulknerToMain45Francis";
+
+        // Identify which 'entrance' to generate text dirs for, use default if not found
+        for (DbNode node : this.path.getPath()) {
+          if (node.getNodeType().equals("EXIT")) {
+            if (node.getNodeID().equals("GEXIT001L1")) {
+              dirFileName = "FaulknerToShapiroFenwood";
+            } else if (node.getNodeID().equals("AEXIT0010G")) {
+              dirFileName = "FaulknerToBTMFenwood";
+            } else if (node.getNodeID().equals("GEXIT00101")) {
+              dirFileName = "FaulknerToShapiroFrancis";
+            } else if (node.getNodeID().equals("FEXIT00201")) {
+              dirFileName = "FaulknerToTower75Francis";
+            } else if (node.getNodeID().equals("XEXIT00202")) {
+              dirFileName = "FaulknerToFLEX";
+            }
+          }
+
+          googleDirections = Directions.getGoogleDirections("Driving", dirFileName);
+
+        }
       } else {
         // googleDirections = Directions.getGoogleDirections("Driving", true);
       }
     }
 
-    if (!googleDirections.equals("")) {
-      mapQRController.getTextDrive().setText(googleDirections);
-      ArrayList<String> driveDirections = new ArrayList<>();
-      driveDirections.add(googleDirections);
 
-      mapQRController.getImageDrive().setImage(generateImage(driveDirections, false));
-    }
+//
+//    if (!googleDirections.equals("")) {
+//      mapQRController.getTextDrive().setText(googleDirections);
+//      ArrayList<String> driveDirections = new ArrayList<>();
+//      driveDirections.add(googleDirections);
+//
+//      mapQRController.getImageDrive().setImage(generateImage(driveDirections, false));
+//    }
   }
 
   /** resets the fields for textual description */
