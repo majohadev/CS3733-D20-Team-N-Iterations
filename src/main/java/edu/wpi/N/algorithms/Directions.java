@@ -436,17 +436,21 @@ public class Directions {
       urls =
           "https://maps.googleapis.com/maps/api/directions/json?mode="
               + mode
-              + "&origin=45|Francis|Street,|Boston,|MA,"
-              + "&destination=1153|Centre|St,|Boston,|MA"
+              + "&origin=42.301213,-71.127795"
+              + "&destination=Brigham+and+Women's+Hospital:+Spiegel+Joan+H+MD,+45+Francis+St+%23+D,+Boston,+MA+02115"
               + "&key=AIzaSyDx7BSweq5dRzXavs1vxuMWeR2ETMR6b3Q";
-    } else {
+    } else if(dirFileName.equals("FaulknerToShapiroFenwood")) {
       urls =
           "https://maps.googleapis.com/maps/api/directions/json?mode="
               + mode
-              + "&origin=1153|Centre|St,|Boston,|MA"
-              + "&destination=45|Francis|Street,|Boston,|MA,"
+              + "&origin=42.301213,-71.127795"
+              + "&destination=42.335505,-71.108191"
               + "&key=AIzaSyDx7BSweq5dRzXavs1vxuMWeR2ETMR6b3Q";
+    } else {
+      urls = "";
     }
+
+
     try {
       URL url = new URL(urls);
       HttpURLConnection httpcon = (HttpURLConnection) (url.openConnection());

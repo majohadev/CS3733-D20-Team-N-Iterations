@@ -1060,10 +1060,12 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     boolean isFirstFaulkner = this.path.get(0).getBuilding().equals("Faulkner");
     boolean isSecondFaulkner = this.path.get(path.size() - 1).getBuilding().equals("Faulkner");
     if (isFirstFaulkner ^ isSecondFaulkner) {
-      if (isFirstFaulkner) {
 
+      String dirFileName;
+
+      if (isFirstFaulkner) {
         // Default
-        String dirFileName = "FaulknerToMain45Francis";
+        dirFileName = "FaulknerToMain45Francis";
 
         // Identify which 'entrance' to generate text dirs for, use default if not found
         for (DbNode node : this.path.getPath()) {
@@ -1080,13 +1082,31 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
               dirFileName = "FaulknerToFLEX";
             }
           }
-
-          googleDirections = Directions.getGoogleDirections("Driving", dirFileName);
-
         }
       } else {
-        // googleDirections = Directions.getGoogleDirections("Driving", true);
+        // Default
+        dirFileName = "Main45FrancisToFaulkner";
+
+        // Identify which 'exit' to generate text dirs for, use default if not found
+        for (DbNode node : this.path.getPath()) {
+          if (node.getNodeType().equals("EXIT")) {
+            if (node.getNodeID().equals("GEXIT001L1")) {
+              dirFileName = "ShapiroFenwoodToFaulkner";
+            } else if (node.getNodeID().equals("AEXIT0010G")) {
+              dirFileName = "BTMFenwoodToFaulkner";
+            } else if (node.getNodeID().equals("GEXIT00101")) {
+              dirFileName = "ShapiroFrancisToFaulkner";
+            } else if (node.getNodeID().equals("FEXIT00201")) {
+              dirFileName = "Tower75FrancisToFaulkner";
+            } else if (node.getNodeID().equals("XEXIT00202")) {
+              dirFileName = "FLEXToFaulkner";
+            }
+          }
+        }
       }
+
+      // Generate the text directions
+      googleDirections = Directions.getGoogleDirections("Driving", dirFileName);
     }
 
 
