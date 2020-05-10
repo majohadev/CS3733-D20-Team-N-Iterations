@@ -63,8 +63,8 @@ public class Directions {
         angle = getAngle(i);
         stateChange = !getState(i + 1).equals(state);
         totalDistance += getDistance(path.get(i), path.get(i + 1));
-        addFloorLevelDirection(i);
       }
+      if (i > 0) addFloorLevelDirection(i - 1);
       state = getState(i);
       switch (state) {
         case STARTING:
@@ -574,9 +574,9 @@ public class Directions {
         iconDirections.add(new Direction(directions.get(i), BUILDING, null, Icon.RIGHT));
       } else if (directions.get(i).contains("left")) {
         iconDirections.add(new Direction(directions.get(i), BUILDING, null, Icon.LEFT));
-      }  else if (directions.get(i).contains("circle")) {
+      } else if (directions.get(i).contains("circle")) {
         iconDirections.add(new Direction(directions.get(i), BUILDING, null, Icon.CIRCLE));
-      }else {
+      } else {
         iconDirections.add(new Direction(directions.get(i), BUILDING, null, Icon.CONTINUE));
       }
     }
