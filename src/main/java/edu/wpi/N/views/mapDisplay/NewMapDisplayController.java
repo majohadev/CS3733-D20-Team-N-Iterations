@@ -50,6 +50,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
   MapLocationSearchController locationSearchController;
   MapDoctorSearchController doctorSearchController;
   MapQRController mapQRController;
+  MapDetailSearchController detailSearchController;
 
   Path path;
   int currentFloor;
@@ -433,6 +434,23 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
             });
   }
 
+  /** initiates a listener for the search button on a directory search */
+  public void initDetailSearchButton() {
+    detailSearchController
+        .getBtn_search()
+        .setOnMouseClicked(
+            e -> {
+              try {
+                initPathfind(
+                    (detailSearchController.getDBNodes())[0],
+                    (detailSearchController.getDBNodes())[1],
+                    detailSearchController.getTg_handicap());
+              } catch (IOException | DBException ex) {
+                ex.printStackTrace();
+              }
+            });
+  }
+
   /**
    * initiates a listener for the reset button on a location search
    *
@@ -691,7 +709,10 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     } else if (src == pn_adminIcon) {
       resetMap();
       this.mainApp.switchScene("/edu/wpi/N/views/admin/newLogin.fxml", singleton);
-    }
+    } // TODO: do a onIconclicked for directory search
+    // initSearch
+    // initReset --> reloads the DetailedSearch
+    // initDoctor --> reloads the ListView with doctors,if any, associated with clicked location
   }
 
   /** changes the tabs of the textual direction page based on the current floor */

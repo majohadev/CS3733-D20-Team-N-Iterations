@@ -714,6 +714,26 @@ public class MapDB {
   }
 
   /**
+   * Gets a list of all nodes on the chosen building
+   *
+   * @param building the building from which user want to get all the Nodes.
+   * @return a LinkedList of all the noes with the chosen floor.
+   * @throws DBException
+   */
+  public static LinkedList<DbNode> DetailedSearchbyBuilding(String building) throws DBException {
+    String query = "SELECT * FROM nodes WHERE building = ?";
+    try {
+      PreparedStatement st = con.prepareStatement(query);
+
+      st.setString(1, building);
+      return getAllNodesSQL(st);
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown error: DetailedSearchbyBuilding", e);
+    }
+  }
+
+  /**
    * gets the edges from the floor specified.
    *
    * @param floor The floor we are searching

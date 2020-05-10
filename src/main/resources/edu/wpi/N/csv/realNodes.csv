@@ -97,7 +97,7 @@ FHALL03201,1758,1029,4,Tower,HALL,Tower Hallway 13,Hallway F03201,Z
 FHALL03301,2064,1262,4,Tower,HALL,Emergency Hallway,Hallway F03301,Z
 FINFO00101,1686,1217,4,Tower,INFO,75 Lobby Information Desk,Lobby Info Desk,Z
 FLABS00101,1846,1248,4,Tower,LABS,Obstetrics Admitting,Obs Admitting,Z
-FREST00101,2091,976,4,Tower,REST,Restroom,Bathroom Lobby,Z
+FREST00101,2092,974,4,Tower,REST,Restroom ,Restroom Lobby,Z
 FRETL00101,1973,844,4,Tower,RETL,Lobby Vending Machine,VM Lobby,Z
 FRETL00201,1610,1248,4,Tower,RETL,Au Bon Pain,ABP,Z
 FSERV00101,1950,871,4,Tower,SERV,Shattuck Street Lobby ATM,Lobby ATM,Z
@@ -122,9 +122,9 @@ GELEV00Q01,1651,2134,4,Shapiro,ELEV,Elevator Q,Elevator Q Floor 1,Z
 GELEV00Q02,1627,2124,5,Shapiro,ELEV,Elevator Q,Elevator Q Floor 2,Z
 GELEV00Q03,1628,2110,6,Shapiro,ELEV,Elevator Q,Elevator Q Floor 3,Z
 GELEV00QL1,1624,2120,2,Shapiro,ELEV,Elevator Q,Elevator Q L1,Z
-GELEV00QL2,1624,2124,1,Shapiro,ELEV,Elevator Q,Elevator Q L2,Z
-GEXIT00101,1730,1819,4,Shapiro,EXIT,Francis Street Exit,Francis Street Exit Floor 1,Z
-GEXIT001L1,1703,2284,2,Shapiro,EXIT,Fenwood Road,Fenwood Road EntranceExit L1,Z
+GELEV00QL2,1624,2124,1,Shapiro,ELEV,Elevator Q ,Elevator Q L2,Z
+GEXIT00101,1730,1819,4,Shapiro,EXIT,Francis Street Exit Floor 1,Francis Street Exit,Z
+GEXIT001L1,1703,2284,2,Shapiro,EXIT,Fenwood Road Entrance Exit L1,Fenwood Road,Z
 GHALL00103,1580,2151,6,Shapiro,HALL,Hallway Node 1 Floor 3,Hall,Z
 GHALL001L2,1730,1584,1,Shapiro,HALL,Hallway MapNode 1 Floor L2,Hall,Z
 GHALL00201,1750,2018,4,Shapiro,HALL,Hallway MapNode 2 Floor 1,Hall,Z
@@ -224,11 +224,11 @@ HSTAI00102,2060,880,5,Tower,STAI,Stairwell 1,Stairwell 0102,Z
 HSTAI00103,1682,1272,6,Tower,STAI,Stairwell 1,Stairwell,Z
 HSTAI00202,1696,1169,5,Tower,STAI,Stairwell 2 Tower,Stairwell 0202,Z
 HSTAI00302,1791,1234,5,Tower,STAI,Escalator 1,Escalator 1,Z
-ICONF00101,2570,673,1,45 Francis,CONF,Radiation Oncology,Radiation Oncology Conference Room,I
-ICONF00205,1491,2076,5,Shapiro,CONF,Reflection Rooms,Reflection Rooms,I
-ICONF00206,1769,739,6,Tower,CONF,Reflection,Tower Reflection Room,I
-ICONF00402,2572,869,2,45 Francis,CONF,Helen Conf,Helen Hogan Conference Room,I
-IDEPT00101,1623,2650,1,Shapiro,DEPT,MRI/CT Entrance 2,MRI/CT Scan Imaging,I
+ICONF00101,2569,673,1,45 Francis,CONF,Radiaion Oncology Conference Room,Radiation Oncology,I
+ICONF00205,1488,1987,5,Shapiro,CONF,Shapiro Reflection Rooms,Reflection Rooms,I
+ICONF00206,1767,738,6,Tower,CONF,Tower Reflection Room,Reflection Room,I
+ICONF00402,2573,868,2,45 Francis,CONF,Helen Hogan Conference Room,Helen Conf,I
+IDEPT00101,1624,2650,1,Shapiro,DEPT,MRI/CT Scan Imaging,MRI/CT Entrance 2,I
 IDEPT00103,2323,1316,6,45 Francis,DEPT,Center for Infertility and Reproductive Surgery,D1,Z
 IDEPT00203,2448,1328,6,45 Francis,DEPT,Gynecology Oncology MIGS,D2,Z
 IDEPT00303,2730,1315,6,45 Francis,DEPT,General Surgical Specialties Suite A,D3,Z
@@ -240,7 +240,7 @@ IDEPT00803,2492,887,6,45 Francis,DEPT,Fetal Med & Genetics,D8,Z
 IDEPT00903,2631,855,6,45 Francis,DEPT,Gynecology,D9,Z
 IDEPT01006,1814,1036,6,Tower,DEPT,Dialysis,Dialysis,I
 IEXIT00106,1323,643,6,Tower,EXIT,Bridge,Bridge to Dana-Farber,I
-IEXIT00205,2331,581,5,45 Francis,EXIT,Bridge,Bridge to Children's,I
+IEXIT00205,2331,581,5,45 Francis,EXIT,Bridge to Children's,Bridge to Children's,I
 IHALL00103,2266,1290,6,45 Francis,HALL,Hallway Node 1,H1,Z
 IHALL00203,2323,1290,6,45 Francis,HALL,Hallway Node 2,H2,Z
 IHALL00303,2448,1290,6,45 Francis,HALL,Hallway Node 3,H3,Z
@@ -273,17 +273,17 @@ IHALL01903,2492,855,6,45 Francis,HALL,Hallway Node 19,H19,Z
 IHALL02001,2023,1286,1,45 Francis,HALL,Hall,Hall,I
 IHALL02002,2069,1286,2,45 Francis,HALL,Hall L1,Hallway L1,I
 IHALL02003,2597,855,6,45 Francis,HALL,Hallway Node 20,H20,Z
-IHALL02101,2225,1286,1,45 Francis,HALL,Hall L2,Hallway Intersection L2,I
+IHALL02101,2225,1286,1,45 Francis,HALL,Hallway Intersection L2,Hall L2,I
 IHALL02103,1256,256,3,Faulkner,HALL,Hall,Hall,I
 IHALL02106,1781,766,6,Tower,HALL,HallF3,Hallway Floor 3,I
-IHALL02201,1737,993,1,45 Francis,HALL,Hall,Hall L2,I
+IHALL02201,1737,991,1,45 Francis,HALL,Hall L2,Hall,I
 IHALL02202,1734,1022,2,45 Francis,HALL,Hall L1,Hallway L1,I
 IHALL02203,2365,766,6,45 Francis,HALL,Hallway Node 22,H22,Z
-IHALL02301,1734,854,1,45 Francis,HALL,HallL2,Hallway Intersection L2,I
+IHALL02301,1733,855,1,45 Francis,HALL,Hallway Intersection L2,HallL2,I
 IHALL02302,1846,846,2,45 Francis,HALL,Hall L1,Hallway L1,I
 IHALL02303,1254,920,3,Faulkner,HALL,Hall,Hall,I
 IHALL02306,2144,1039,6,45 Francis,HALL,Hall,Hall,I
-IHALL02401,2218,985,1,45 Francis,HALL,Hall L2,Hallway L2,I
+IHALL02401,2218,985,1,45 Francis,HALL,Hallway L2,Hall L2,I
 IHALL02402,1983,846,2,45 Francis,HALL,Hall L1,Hallway L1,I
 IHALL02403,1208,490,3,Faulkner,HALL,Hall,Hall,I
 IHALL02406,2323,893,6,45 Francis,HALL,Hall,Hall,I
@@ -303,22 +303,22 @@ IHALL03001,2566,701,1,45 Francis,HALL,Hall L2,Hallway L2,I
 IHALL03002,2546,1039,2,45 Francis,HALL,Hall L1,Hallway L1,I
 IHALL03101,1507,854,1,45 Francis,HALL,Hallway L2,Hallway L2,I
 IHALL03102,2668,1039,2,45 Francis,HALL,Hall L1,Hallway L1,I
-IHALL03201,1622,2626,1,Shapiro,HALL,Hall L2,Hallway L2,I
+IHALL03201,1621,2626,1,Shapiro,HALL,Hallway L2,Hall L2,I
 IHALL03202,2771,1074,2,45 Francis,HALL,Hall L1,Hallway L1,I
-IHALL03301,1659,2626,1,Shapiro,HALL,Hall L2,Hallway L2,I
+IHALL03301,1658,2626,1,Shapiro,HALL,Hallway L2,Hall L2,I
 IHALL03302,2770,1286,2,45 Francis,HALL,Hall L1,Hallway L1,I
-IHALL03401,1658,2514,1,Shapiro,HALL,Hall L2,Hallway L2,I
+IHALL03401,1658,2514,1,Shapiro,HALL,Hallway L2,Hall L2,I
 IHALL03402,2187,909,2,45 Francis,HALL,Hall L1,Hallway L1,I
 IHALL03404,382,1219,4,Faulkner,HALL,Hall 35,Hall 35,I
 IHALL03502,2300,878,2,45 Francis,HALL,Hall L1,Hallway L1,I
 IHALL03504,1812,1282,4,Tower,HALL,Hall,Hall,I
-IHALL03601,1617,2435,1,Shapiro,HALL,Hall L2,Hallway L2,I
+IHALL03601,1617,2435,1,Shapiro,HALL,Hallway L2,Hall L2,I
 IHALL03602,2572,849,2,45 Francis,HALL,Hall L1,Hallway L1,I
 IHALL03604,2962,875,4,45 Francis,HALL,Hall,Hall,I
-IHALL03701,1617,2243,1,45 Francis,HALL,Hall L2,Hallway L2,I
+IHALL03701,1617,2243,1,45 Francis,HALL,Hallway L2,Hall L2,I
 IHALL03702,1624,2089,2,Shapiro,HALL,Hall,Hall,I
 IHALL03704,1620,2094,4,Shapiro,HALL,HallF1,Hallway Floor 1,I
-IHALL03801,1577,2243,1,45 Francis,HALL,Hall L2,Hallway L2,I
+IHALL03801,1576,2243,1,45 Francis,HALL,Hallway L2,Hall L2,I
 IHALL03802,2771,1125,2,45 Francis,HALL,Hall,Hall,I
 IHALL03804,1426,2663,4,BTM,HALL,Hallway,Hallway Level 1,I
 IHALL03904,1767,1248,4,Tower,HALL,HallF1,Hallway Floor 1,I
@@ -337,17 +337,17 @@ IHALL06905,2945,844,5,45 Francis,HALL,Hall F2,Hallway Floor 2,I
 IHALL07105,3147,963,5,45 Francis,HALL,Hall F2,Hallway Floor 2,I
 IHALL07205,3259,882,5,45 Francis,HALL,Hall F2,Hallway Floor 2,I
 IHALL07305,3365,861,5,15 Francis,HALL,Hall F2,Hallway Floor 2,I
-ILABS00306,2365,933,6,45 Francis,LABS,Blood Lab,OB/GYN Blood Lab,I
+ILABS00306,2365,933,6,45 Francis,LABS,OB/GYN Blood Lab,Blood Lab,I
 IREST00103,2266,1255,6,45 Francis,REST,Restroom,R1,Z
 IREST00203,2570,1257,6,45 Francis,REST,Restroom,R2,Z
 IREST00301,1114,488,1,Faulkner,REST,Restroom Female Level 1,Restroom Female Level 1,I
 IREST00303,2744,1152,6,45 Francis,REST,Restroom,R3,Z
-IREST00401,1679,2130,1,Shapiro,REST,RestL2Q,Restroom L2 Q,I
+IREST00401,1679,2130,1,Shapiro,REST,Restroom L2 Q,RestL2Q,I
 IREST00403,2303,995,6,45 Francis,REST,Restroom,R4,Z
-IREST00502,1972,786,2,45 Francis,REST,Rest L1,Day Surgery Restroom,I
+IREST00502,1972,786,2,45 Francis,REST,Day Surgery Family Waiting,Day Surgery Restroom,I
 IREST00506,1358,2739,6,BTM,REST,Rest,Restroom,I
 IREST00602,2738,1161,2,45 Francis,REST,Rest HL2,Restroom H ,I
-IREST00705,1286,1856,5,Shapiro,REST,Rest F2,Family Center Restroom,I
+IREST00705,1286,1857,5,Shapiro,REST,Shapiro Family Center,Family Center Restroom,I
 IREST00805,2623,844,5,45 Francis,REST,Restroom,Women's Restroom,I
 IRETL00405,3310,1005,5,45 Francis,RETL,Coffee Connection,Coffee Connection,I
 ISTAI00102,2795,1125,2,45 Francis,STAI,Stairs,Stairwell L1,I
@@ -528,7 +528,7 @@ PDEPT01005,1235,750,5,Faulkner,DEPT,BWH Primary Care Physicians,DEPT011,P
 PDEPT01105,1181,1109,5,Faulkner,DEPT,Nursing Staff Development,DEPT012,P
 PDEPT01205,1266,1053,5,Faulkner,DEPT,X-Ray Waiting,DEPT013,P
 PDEPT01305,1332,1212,5,Faulkner,DEPT,Oncology Clinic west,DEPT014,P
-PDEPT01405,2320,1233,5,Faulkner,DEPT,DEPT014,Oncology Clinic east,P
+PDEPT01405,2320,1233,5,Faulkner,DEPT,Oncology Clinic east,DEPT014,P
 PDEPT01505,1077,1230,5,Faulkner,DEPT,Outpatient Infusion Center,DEPT016,P
 PDEPT01605,1078,1191,5,Faulkner,DEPT,Residents,DEPT017,P
 PDEPT01705,818,1191,5,Faulkner,DEPT,HemoDialysis,DEPT018,P
@@ -632,17 +632,17 @@ WELEV00K01,2240,985,4,45 Francis,ELEV,Elevator K,Elevator K1,Z
 WELEV00K02,2211,964,5,45 Francis,ELEV,Elevator K,Elevator K2,Z
 WELEV00K03,2194,988,6,45 Francis,ELEV,Elevator K,Elevator K3,Z
 WELEV00KL1,2220,974,2,45 Francis,ELEV,Elevator K,Elevator KL1,Z
-WELEV00KL2,2191,985,1,45 Francis,ELEV,Elevator K,Elevator KL2,Z
+WELEV00KL2,2191,985,1,45 Francis,ELEV,Elevator K,Elevator K L2,Z
 WELEV00L01,1810,930,4,Tower,ELEV,Elevator L,Elevator L1,Z
 WELEV00L02,1805,923,5,Tower,ELEV,Elevator L,Elevator L2,Z
 WELEV00L03,1788,930,6,Tower,ELEV,Elevator L,Elevator L3,Z
 WELEV00LL1,1785,924,2,Tower,ELEV,Elevator L,Elevator LL1,Z
-WELEV00LL2,1788,926,1,Tower,ELEV,Elevator L,Elevator LL2,Z
+WELEV00LL2,1788,926,1,Tower,ELEV,Elevator L,Elevator L L2,Z
 WELEV00M01,1815,1323,4,Tower,ELEV,Elevator M,Elevator M1,Z
 WELEV00M02,1825,1320,5,Tower,ELEV,Elevator M,Elevator M2,Z
 WELEV00M03,1815,1320,6,Tower,ELEV,Elevator M,Elevator M3,Z
 WELEV00ML1,1819,1316,2,Tower,ELEV,Elevator M,Elevator ML1,Z
-WELEV00ML2,1822,1313,1,Tower,ELEV,Elevator M,Elevator ML2,Z
+WELEV00ML2,1822,1313,1,Tower,ELEV,Elevator M ,Elevator M L2,Z
 WHALL00102,3160,892,5,45 Francis,HALL,Hallway Connector 1 Floor 2,Hallway W0102,Z
 WHALL00103,1815,1292,6,45 Francis,HALL,Hallway Connector 1 Floor 3,Hallway W0103,Z
 WHALL001L2,1745,1525,1,Tower,HALL,Hallway Connector 1 Floor L2,Hallway W01L2,Z
@@ -711,12 +711,12 @@ AELEV00S01,1535,2784,4,BTM,ELEV,Elevator S,Elevator S 1,Z
 AELEV00S02,1532,2784,5,BTM,ELEV,Elevator S,Elevator S 2,Z
 AELEV00S03,1539,2773,6,BTM,ELEV,Elevator S,Elevator S 3,Z
 AELEV00S0G,1525,2770,3,BTM,ELEV,Elevator S,Elevator S G,Z
-AELEV00SL2,1627,2750,1,BTM,ELEV,Elevator S,Elevator S L2,Z
+AELEV00SL2,1627,2750,1,BTM,ELEV,Elevator S ,Elevator S L2,Z
 AELEV00X01,1208,414,1,Faulkner,ELEV,Elevator 1 Level 1,Elevator Intersection 1 Level 1,A
 AELEV00Y01,1181,1157,1,Faulkner,ELEV,Elevator 2 Level 1,Elevator Intersection 2 Level 2,A
 AEXIT00101,868,415,1,Faulkner,EXIT,Emergency Department Exit,Emergency Department Exit,A
 AEXIT0010G,1679,2459,3,BTM,EXIT,Fenwood Road,Fenwood Road,Z
-AEXIT001L2,1699,2797,1,BTM,EXIT,Parking Garage,Parking Garage L2,Z
+AEXIT001L2,1699,2797,1,BTM,EXIT,Parking Garage L2,Parking Garage ,Z
 AEXIT00301,2342,1136,1,Faulkner,EXIT,Stair Exit,Stair Exit,A
 AEXIT00501,1256,144,1,Faulkner,EXIT,Atrium Main Entrance,,A
 SHALL00303,1199,256,3,Faulkner,HALL,Hall,Hall,S
@@ -730,7 +730,7 @@ SHALL02203,1254,1164,3,Faulkner,HALL,Hall,Hall,S
 SHALL02603,1366,290,3,Faulkner,HALL,Hall,Hall,S
 SHALL02703,1366,436,3,Faulkner,HALL,Hall,Hall,S
 SREST00103,1457,2917,3,BTM,REST,Rest,Restroom Ground Floor,S
-SDEPT00303,1686,2924,3,BTM,DEPT,Outpatient,Outpatient Phlebotomy,S
+SDEPT00303,1686,2924,3,BTM,DEPT,Outpatient Phlebotomy,Outpatient ,S
 SDEPT00703,1576,2972,3,BTM,DEPT,Infusion,Infusion,S
 SHALL02803,1600,2972,3,BTM,HALL,Hall,Hall,S
 SHALL02903,1491,2917,3,BTM,HALL,Hall,Hall,S
@@ -868,7 +868,7 @@ CHALL006L1,2133,1286,2,Tower,HALL,Hallway 6 Floor L1,Hallway C006L1,Z
 CHALL007L1,2133,1050,2,Tower,HALL,Hallway 7 Floor L1,Hallway C007L1,Z
 CHALL007L2,1747,1043,1,Tower,HALL,Hallway 7 Floor L2,Hallway C007L2,Z
 CHALL008L1,2220,1050,2,45 Francis,HALL,Hallway 8 Floor L1,Hallway C008L1,Z
-CHALL008L2,1734,926,1,Tower,HALL,Hallway 8 Floor L2,Hallway C008L2,Z
+CHALL008L2,1733,926,1,Tower,HALL,Hallway 8 Floor L2,Hallway C008L2,Z
 CHALL009L1,2220,909,2,45 Francis,HALL,Hallway 9 Floor L1,Hallway C009L1,Z
 CHALL010L1,2265,909,2,45 Francis,HALL,Hallway 10 Floor L1,Hallway C010L1,Z
 CHALL010L2,2130,854,1,Tower,HALL,Hallway 10 Floor L2,Hallway C010L2,Z
@@ -887,7 +887,7 @@ CLABS005L1,2791,1286,2,45 Francis,LABS,CSIR MRI Lab,Lab C005L1,Z
 CREST001L1,1699,1022,2,Tower,REST,Restroom,Restroom C001L1,Z
 CREST001L2,2324,906,1,45 Francis,REST,Restroom,Restroom C001L2,Z
 CREST002L1,2068,1248,2,Tower,REST,Restroom,Restroom C002L1,Z
-CREST002L2,1918,1255,1,45 Francis,REST,Restroom,Restroom C002L2,Z
+CREST002L2,1918,1255,1,45 Francis,REST,Restroom ,Restroom C002L2,Z
 CREST003L1,2334,909,2,45 Francis,REST,Restroom,Restroom C003L1,Z
 CREST004L1,2771,1161,2,45 Francis,REST,Restroom,Restroom C004L1,Z
 CRETL001L1,2187,896,2,45 Francis,RETL,Vending Machine,Retail C001L1,Z
@@ -946,4 +946,4 @@ SHALL03905,1627,2096,5,Shapiro,HALL,Hall 3,Hall 3,S
 SHALL04205,3160,998,5,15 Francis,HALL,Hall,Hall,S
 SHALL05204,3399,861,4,45 Francis,HALL,Hall,Hall,S
 SHALL05304,3464,855,4,45 Francis,HALL,Hall,Hall,S
-SDEPT02504,3436,749,4,45 Francis,DEPT,Reflection Room,Reflection Room F1,S
+SDEPT02504,3436,749,4,45 Francis,DEPT,Reflection Room F1,Reflection Room ,S
