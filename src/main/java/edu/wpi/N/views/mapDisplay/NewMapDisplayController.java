@@ -679,6 +679,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
       Pane pane = loader.load();
       mapQRController = loader.getController();
       mapQRController.setSingleton(this.singleton);
+      mapQRController.setMapBaseController(mapBaseController);
       setTextDescription();
       setDefaultKioskNode();
       pn_change.getChildren().add(pane);
@@ -807,7 +808,6 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
   /** switches the current map view to the google map */
   public void switchGoogleView() {
     pn_mapContainer.getChildren().setAll(pn_googleMapView);
-    System.out.println("Hello");
   }
 
   /** switches the current map view to the hospital view */
@@ -902,10 +902,10 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
 
     ArrayList<Direction> googleDirections = new ArrayList<>();
 
-    mapQRController.setTabs(
-        path.getPath().getFirst().getBuilding(), path.getPath().getLast().getBuilding());
+    mapQRController.setTabs(path);
     mapQRController.setFaulknerText(faulknerDirections);
     mapQRController.setMainText(mainDirections);
+    mapQRController.setMapDisplayController(this);
 
     boolean isFirstFaulkner = this.path.get(0).getBuilding().equals("Faulkner");
     boolean isSecondFaulkner = this.path.get(path.size() - 1).getBuilding().equals("Faulkner");

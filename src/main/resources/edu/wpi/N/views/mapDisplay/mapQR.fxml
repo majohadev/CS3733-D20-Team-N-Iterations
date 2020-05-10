@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXScrollPane?>
 <?import com.jfoenix.controls.JFXTabPane?>
 <?import com.jfoenix.controls.JFXTreeView?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="1080.0" maxWidth="345.0" minHeight="1080.0" minWidth="345.0" prefHeight="1080.0" prefWidth="115.0" style="-fx-background-color: #263051;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.mapDisplay.MapQRController">
@@ -18,33 +20,29 @@
       </Label>
       <JFXTabPane fx:id="tbpn_directions" layoutY="91.0" prefWidth="345.0" styleClass="jfx-tab-pane" stylesheets="@../../css/newMapDisplay.css" AnchorPane.topAnchor="117.0">
          <tabs>
-            <Tab fx:id="tb_faulkner" styleClass="jtab" text="Faulkner">
+            <Tab fx:id="tb_faulkner" onSelectionChanged="#onFaulknerTabSelected" styleClass="jtab" text="Faulkner">
               <content>
                 <AnchorPane maxHeight="750.0" minHeight="750.0" minWidth="0.0" prefHeight="750.0" prefWidth="345.0">
                      <children>
-                        <JFXScrollPane maxHeight="750.0" minHeight="750.0" prefHeight="750.0" prefWidth="345.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <children>
-                              <JFXTreeView fx:id="tr_faulkner" maxHeight="1200.0" minHeight="1200.0" prefHeight="1200.0" prefWidth="345.0" />
-                           </children>
-                        </JFXScrollPane>
+                        <JFXTreeView fx:id="tr_faulkner" maxHeight="1200.0" minHeight="1200.0" onMouseClicked="#onFaulknerTreeClicked" prefHeight="750.0" prefWidth="345.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                      </children>
                   </AnchorPane>
               </content>
             </Tab>
-            <Tab fx:id="tb_main" styleClass="jtab" text="Main">
+            <Tab fx:id="tb_main" onSelectionChanged="#onMainTabSelected" styleClass="jtab" text="Main">
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="200.0">
                      <children>
-                        <JFXTreeView fx:id="tr_main" prefHeight="750.0" prefWidth="345.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        <JFXTreeView fx:id="tr_main" onMouseClicked="#onMainTreeClicked" prefHeight="750.0" prefWidth="345.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                      </children>
                   </AnchorPane>
               </content>
             </Tab>
-            <Tab fx:id="tb_drive" styleClass="jtab" text="Drive">
+            <Tab fx:id="tb_drive" onSelectionChanged="#onDriveTabSelected" styleClass="jtab" text="Drive">
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="200.0">
                      <children>
-                        <JFXTreeView fx:id="tr_drive" prefHeight="750.0" prefWidth="345.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        <JFXTreeView fx:id="tr_drive" onMouseClicked="#onDriveTreeClicked" prefHeight="750.0" prefWidth="345.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                      </children>
                   </AnchorPane>
               </content>
@@ -54,5 +52,21 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </JFXTabPane>
+      <Pane fx:id="btn_next" layoutX="289.0" layoutY="65.0" onMouseClicked="#onBtnNextClicked" prefHeight="39.0" prefWidth="42.0">
+         <children>
+            <ImageView fitHeight="39.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../images/mapDisplayIcons/rightDebugger.png" />
+               </image>
+            </ImageView>
+         </children></Pane>
+      <Pane fx:id="btn_prev" layoutX="19.0" layoutY="65.0" onMouseClicked="#onBtnPrevClicked" prefHeight="39.0" prefWidth="42.0">
+         <children>
+            <ImageView fitHeight="39.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../images/mapDisplayIcons/leftDebugger.png" />
+               </image>
+            </ImageView>
+         </children></Pane>
    </children>
 </AnchorPane>
