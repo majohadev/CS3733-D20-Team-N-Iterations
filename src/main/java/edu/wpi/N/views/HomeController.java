@@ -53,6 +53,6 @@ public class HomeController implements Controller {
   }
 
   public void onBtnAboutClicked() throws IOException {
-    this.mainApp.switchScene("/edu/wpi/N/views/aboutPage.fxml", singleton);
+    this.mainApp.switchScene("/edu/wpi/N/views/info/aboutPage.fxml", singleton);
   }
 }

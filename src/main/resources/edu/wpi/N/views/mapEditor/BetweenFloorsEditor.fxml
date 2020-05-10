@@ -11,7 +11,7 @@
 
 <AnchorPane fx:id="parent" accessibleText="kkm" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="500.0" minWidth="-Infinity" stylesheets="@../../css/BetweenFloorLines.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.mapEditor.BetweenFloorsController">
    <children>
-      <Text fx:id="text" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="120.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <Text fx:id="text" layoutX="42.0" layoutY="68.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="138.0" AnchorPane.leftAnchor="42.0" AnchorPane.rightAnchor="-60.0" AnchorPane.topAnchor="53.0">
          <font>
             <Font name="Calibri" size="20.0" />
          </font>

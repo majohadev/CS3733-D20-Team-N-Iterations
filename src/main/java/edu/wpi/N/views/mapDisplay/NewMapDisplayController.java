@@ -24,6 +24,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 
 public class NewMapDisplayController extends QRGenerator implements Controller {
@@ -44,6 +45,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
   @FXML Pane pn_hospitalView;
   @FXML Pane chatbotView;
   @FXML Label lbl_building_floor;
+  @FXML AnchorPane pn_background;
 
   @FXML MapBaseController mapBaseController;
 
@@ -90,6 +92,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     this.path = new Path(new LinkedList<>());
     this.currentFloor = 1;
     this.currentBuilding = "Faulkner";
+    setBackground("Faulkner");
     this.directions = new ArrayList<>();
     this.pathButtonList = new ArrayList<>();
     this.buildingButtonList = new JFXNodesList();
@@ -119,6 +122,8 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     initLocationSearchButton();
     initResetLocationSearch();
     initRestroomSearchButton();
+    initInfoSearchButton();
+    initExitSearchButton();
     pn_change.getChildren().add(pane);
   }
 
@@ -131,6 +136,19 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     btn.getStylesheets()
         .add(getClass().getResource("/edu/wpi/N/css/MapDisplayFloors.css").toExternalForm());
     btn.getStyleClass().add("header-button");
+  }
+
+  /**
+   * sets background color to match map
+   *
+   * @param building
+   */
+  public void setBackground(String building) {
+    if (building.equals("Faulkner")) {
+      pn_background.setStyle("-fx-background-color: #E6EBF2");
+    } else {
+      pn_background.setStyle("-fx-background-color: #D3D3D3");
+    }
   }
 
   /**
@@ -177,11 +195,11 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
         .getChildren()
         .addAll(
             btn_faulkner,
-            btn_faulkner1,
-            btn_faulkner2,
-            btn_faulkner3,
+            btn_faulkner5,
             btn_faulkner4,
-            btn_faulkner5);
+            btn_faulkner3,
+            btn_faulkner2,
+            btn_faulkner1);
 
     // Main Buttons
     JFXButton btn_main1 = new JFXButton("L2");
@@ -213,14 +231,14 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
 
     mainButtonList
         .getChildren()
-        .addAll(btn_main, btn_main1, btn_main2, btn_main3, btn_main4, btn_main5, btn_main6);
+        .addAll(btn_main, btn_main6, btn_main5, btn_main4, btn_main3, btn_main2, btn_main1);
     buildingButtonList.addAnimatedNode(btn_buildings);
     buildingButtonList.addAnimatedNode(faulknerButtonList);
     buildingButtonList.addAnimatedNode(mainButtonList);
     buildingButtonList.addAnimatedNode(btn_google);
 
     buildingButtonList.setSpacing(120);
-    buildingButtonList.setRotate(90);
+    buildingButtonList.setRotate(-90);
     faulknerButtonList.setSpacing(15);
     mainButtonList.setSpacing(15);
 
@@ -392,6 +410,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     mapBaseController.clearPath();
     this.currentFloor = newFloor;
     this.currentBuilding = newBuilding;
+    setBackground(newBuilding);
     setFloorBuildingText(this.currentFloor, this.currentBuilding);
     if (path != null && path.size() < 1) {
       setDefaultKioskNode();
@@ -512,6 +531,68 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
               try {
                 resetTextualDirections();
                 this.path = singleton.savedAlgo.findQuickAccess(first, "REST");
+                mapBaseController.setFloor(first.getBuilding(), first.getFloor(), path);
+                if (path.size() == 0) {
+                  displayErrorMessage("Please select the first node");
+                }
+              } catch (DBException | NullPointerException ex) {
+                displayErrorMessage("Please select the first node");
+                return;
+              }
+              disableNonPathFloors();
+              if (pathButtonList.size() > 1) {
+                pathButtonList.get(1).setStyle("-fx-background-color: #6C5C7F;");
+              }
+            });
+  }
+
+  /**
+   * initiates a listener for the info desk quick search on a location search
+   *
+   * @throws DBException
+   */
+  public void initInfoSearchButton() throws DBException {
+    locationSearchController
+        .getBtnInfoDesk()
+        .setOnMouseClicked(
+            e -> {
+              DbNode first = locationSearchController.getDBNodes()[0];
+              if (first.getBuilding().equals("Faulkner")) {
+                displayErrorMessage("No information desks in this building");
+                return;
+              }
+              try {
+                resetTextualDirections();
+                this.path = singleton.savedAlgo.findQuickAccess(first, "INFO");
+                mapBaseController.setFloor(first.getBuilding(), first.getFloor(), path);
+                if (path.size() == 0) {
+                  displayErrorMessage("Please select the first node");
+                }
+              } catch (DBException | NullPointerException ex) {
+                displayErrorMessage("Please select the first node");
+                return;
+              }
+              disableNonPathFloors();
+              if (pathButtonList.size() > 1) {
+                pathButtonList.get(1).setStyle("-fx-background-color: #6C5C7F;");
+              }
+            });
+  }
+
+  /**
+   * initiates a listener for the exit quick search on a location search
+   *
+   * @throws DBException
+   */
+  public void initExitSearchButton() throws DBException {
+    locationSearchController
+        .getBtnQuickExit()
+        .setOnMouseClicked(
+            e -> {
+              DbNode first = locationSearchController.getDBNodes()[0];
+              try {
+                resetTextualDirections();
+                this.path = singleton.savedAlgo.findQuickAccess(first, "EXIT");
                 mapBaseController.setFloor(first.getBuilding(), first.getFloor(), path);
                 if (path.size() == 0) {
                   displayErrorMessage("Please select the first node");
@@ -661,6 +742,8 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
       initLocationSearchButton();
       initResetLocationSearch();
       initRestroomSearchButton();
+      initExitSearchButton();
+      initInfoSearchButton();
       setDefaultKioskNode();
       pn_change.getChildren().add(pane);
     } else if (src == pn_doctorIcon) {
@@ -687,7 +770,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     } else if (src == pn_infoIcon) {
       resetMap();
       // TODO load info page here
-      this.mainApp.switchScene("/edu/wpi/N/views/aboutPage.fxml", singleton);
+      this.mainApp.switchScene("/edu/wpi/N/views/info/aboutPage.fxml", singleton);
     } else if (src == pn_adminIcon) {
       resetMap();
       this.mainApp.switchScene("/edu/wpi/N/views/admin/newLogin.fxml", singleton);
