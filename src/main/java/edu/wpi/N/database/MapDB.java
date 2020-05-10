@@ -172,20 +172,20 @@ public class MapDB {
   }
 
   /**
-   * Adds given data into the database
-   * @param nodeID
-   * @param field
-   * @return
-   * @throws DBException
+   * Adds the given field to the given node. Overwrites any field that was already there
+   *
+   * @param nodeID The nodeID of the given node
+   * @param field The field to be given to the node
+   * @return True on success
+   * @throws DBException on error
    */
   public static boolean addDetail(String nodeID, String field) throws DBException {
-    try{
+    try {
       String query = "INSERT INTO detail VALUES (?, ?)";
       PreparedStatement stmt = con.prepareStatement(query);
       stmt.setString(1, nodeID);
       stmt.setString(2, field);
-      stmt.executeUpdate();
-      return true;
+      return stmt.executeUpdate() > 0;
     } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Unknown error: addDetail", e);
@@ -383,6 +383,7 @@ public class MapDB {
 
   /**
    * Returns a LinkedList of nodeID that matches the given field
+   *
    * @param field field of the Node
    * @return List of nodeID
    * @throws DBException
@@ -390,12 +391,12 @@ public class MapDB {
   public static LinkedList<String> getNodeIDbyField(String field) throws DBException {
     String query = "SELECT nodeID FROM detail WHERE field = ?";
     LinkedList<String> list = new LinkedList<>();
-    try{
+    try {
       PreparedStatement stmt = con.prepareStatement(query);
       stmt.setString(1, field);
       ResultSet rs = stmt.executeQuery();
-      while(rs.next()){
-         list.add(rs.getString("nodeID"));
+      while (rs.next()) {
+        list.add(rs.getString("nodeID"));
       }
       return list;
     } catch (SQLException e) {

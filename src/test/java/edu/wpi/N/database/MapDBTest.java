@@ -506,6 +506,25 @@ public class MapDBTest {
     MapDB.deleteNode("NCONF02301");
   }
 
+  @Test
+  public void testGetNodeIDByField() throws DBException {
+    assertTrue(MapDB.addDetail("NDEPT00104", "Health"));
+    assertTrue(MapDB.addDetail("NDEPT00204", "Health"));
+    assertTrue(MapDB.addDetail("NDEPT01005", "Computer"));
+
+    LinkedList<String> result = MapDB.getNodeIDbyField("Health");
+    assertEquals(2, result.size());
+    assertTrue(result.contains("NDEPT00104"));
+    assertTrue(result.contains("NDEPT00204"));
+
+    result = MapDB.getNodeIDbyField("Computer");
+    assertEquals(1, result.size());
+    assertTrue(result.contains("NDEPT01005"));
+
+    result = MapDB.getNodeIDbyField("aaa");
+    assertTrue(result.isEmpty());
+  }
+
   @AfterAll
   public static void clearDB() throws DBException {
     MapDB.clearNodes();
