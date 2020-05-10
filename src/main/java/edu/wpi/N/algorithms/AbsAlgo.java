@@ -37,7 +37,8 @@ public abstract class AbsAlgo implements IPathFinder {
   }
 
   /**
-   * Adds an arbitrary cost of 500px to changing floors and 5000px to changing buildings
+   * Adds an arbitrary cost of 500px to exiting staircases or elevators and 5000px to changing
+   * buildings
    *
    * @param currNode The current node
    * @param nextNode The nextnode
@@ -46,8 +47,11 @@ public abstract class AbsAlgo implements IPathFinder {
    */
   public static double floorBuildingCost(DbNode currNode, DbNode nextNode) {
     if (currNode.getNodeType().equals("EXIT") && nextNode.getNodeType().equals("EXIT")) return 5000;
-    if (currNode.getFloor() == nextNode.getFloor()) return 0;
-    return 500;
+    if ((currNode.getNodeType().equals("STAI") && !nextNode.getNodeType().equals("STAI"))
+        || currNode.getNodeType().equals("ELEV") && !nextNode.getNodeType().equals("ELEV")) {
+      return 500;
+    }
+    return 0;
   }
 
   /**
