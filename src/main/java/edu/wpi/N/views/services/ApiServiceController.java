@@ -8,6 +8,7 @@ import edu.wpi.N.views.Controller;
 import edu.wpi.cs3733.d20.teamB.api.IncidentReportApplication;
 import edu.wpi.cs3733.d20.teamC.InterpreterRequest;
 import edu.wpi.cs3733.d20.teamE.onCallBeds;
+import edu.wpi.cs3733.d20.teamL.GiftServiceRequest;
 import edu.wpi.cs3733.d20.teamP.APIController;
 import edu.wpi.cs3733.d20.teamP.ServiceException;
 import flowerapi.FlowerAPI;
@@ -24,6 +25,10 @@ public class ApiServiceController implements Controller {
   private StateSingleton singleton;
   public Pane service_anchor;
   private App mainApp;
+  private InterpreterRequest interpreterRequest = new InterpreterRequest();
+  private onCallBeds oncall = new onCallBeds();
+  private GiftServiceRequest giftRequest = new GiftServiceRequest();
+  private IncidentReportApplication IncidentReport = new IncidentReportApplication();
 
   @FXML JFXButton btn_interpreter;
   @FXML JFXButton btn_onCall;
@@ -70,15 +75,13 @@ public class ApiServiceController implements Controller {
   @FXML
   public void switchToInterpreterPage() throws IOException {
 
-    InterpreterRequest interp = new InterpreterRequest();
     String css = this.getClass().getResource("default.css").toExternalForm();
-    interp.run(576, 90, 1280, 950, null, null, null);
+    interpreterRequest.run(576, 90, 1280, 950, null, null, null);
   }
 
   @FXML
   public void switchToOnCallPage() throws IOException {
 
-    onCallBeds oncall = new onCallBeds();
     String css = this.getClass().getResource("default.css").toExternalForm();
     oncall.run(576, 90, 1280, 950, css, null, null);
   }
@@ -128,9 +131,14 @@ public class ApiServiceController implements Controller {
 
   @FXML
   public void switchToSecurityPage() throws IOException {
-    IncidentReportApplication rep = new IncidentReportApplication();
     String css = this.getClass().getResource("default.css").toExternalForm();
-    rep.run(576, 90, 1280, 950, css, null, null);
+    IncidentReport.run(576, 90, 1280, 950, css, null, null);
+  }
+
+  @FXML
+  public void switchToGiftPage() throws Exception {
+    String css = this.getClass().getResource("default.css").toExternalForm();
+    giftRequest.run(576, 90, 1280, 950, css, null, null);
   }
 
   @FXML
