@@ -25,10 +25,10 @@ public class Path {
     return this.path;
   }
 
-  public ArrayList<Direction> getDirections(HashMap<String, LinkedList<DbNode>> mapDatas)
+  public ArrayList<Direction> getDirections(HashMap<String, LinkedList<DbNode>> mapDatas, Boolean driving)
       throws DBException {
     Directions dir = new Directions(this.path);
-    this.directions = dir.getDirections(mapDatas);
+    this.directions = dir.getDirections(mapDatas, driving);
     return this.directions;
   }
 
