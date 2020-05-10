@@ -1,7 +1,6 @@
 package edu.wpi.N.database;
 
 import com.opencsv.CSVReader;
-import com.opencsv.exceptions.CsvValidationException;
 import edu.wpi.N.entities.DbNode;
 import java.io.*;
 import java.util.Arrays;
@@ -44,7 +43,6 @@ public class CSVParser {
         }
       }
 
-
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -52,10 +50,11 @@ public class CSVParser {
 
   /**
    * Parse DetailCSV file and add entries to Database
+   *
    * @param pathToFile
    */
-  public static void parseDetail(InputStream pathToFile){
-    try{
+  public static void parseDetail(InputStream pathToFile) {
+    try {
       Boolean isDetailCSV = false;
 
       // create csvReader object passing
@@ -63,11 +62,10 @@ public class CSVParser {
       // Read header
       String[] nextLine = csvReader.readNext();
 
-      if(nextLine[2].equals("field"))
-        isDetailCSV = true;
+      if (nextLine[2].equals("field")) isDetailCSV = true;
 
-      if(isDetailCSV){
-        while((nextLine = csvReader.readNext()) != null){
+      if (isDetailCSV) {
+        while ((nextLine = csvReader.readNext()) != null) {
           parseDetailRow(nextLine);
         }
       }
@@ -97,8 +95,8 @@ public class CSVParser {
     }
   }
 
-  private static void parseDetailRow(String[] row){
-    try{
+  private static void parseDetailRow(String[] row) {
+    try {
       String nodeID = row[0];
       String field = row[1];
       MapDB.addDetail(nodeID, field);

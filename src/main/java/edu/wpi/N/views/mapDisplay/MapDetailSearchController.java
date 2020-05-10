@@ -18,7 +18,7 @@ import javafx.scene.input.MouseEvent;
 
 public class MapDetailSearchController implements Controller {
 
-  @FXML JFXComboBox cmb_detail;
+  @FXML JFXComboBox<String> cmb_detail;
   @FXML TextField txt_location;
   @FXML ListView lst_fuzzySearch;
   @FXML TextField activeText;
