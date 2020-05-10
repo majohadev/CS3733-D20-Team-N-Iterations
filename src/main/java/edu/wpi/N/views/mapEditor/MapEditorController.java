@@ -1433,7 +1433,8 @@ public class MapEditorController implements Controller {
     errorAlert.showAndWait();
   }
 
-  public void onBtnHomeClicked() throws IOException {
+  public void onBtnHomeClicked() throws IOException, DBException {
+    singleton.savedAlgo.uploadMapData();
     mainApp.switchScene("views/admin/adminPortal.fxml", singleton);
   }
 
