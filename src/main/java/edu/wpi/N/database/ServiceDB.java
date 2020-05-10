@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Date;
 import java.util.regex.Pattern;
+import javafx.util.Pair;
 
 public class ServiceDB {
   private static Connection con = MapDB.getCon();
@@ -2191,6 +2192,121 @@ public class ServiceDB {
       return result;
     } catch (SQLException e) {
       throw new DBException("Unknown error: getSanitationEmp", e);
+    }
+  }
+
+  /**
+   * Returns the most popular services in order of popularity as a linked list of pairs
+   *
+   * @return a linked list of Pair<String, Integer> with the serviceType = Key and Number of times =
+   *     Value
+   * @throws DBException on error
+   */
+  public static LinkedList<Pair<String, Integer>> popularServices() throws DBException {
+    String query =
+        "SELECT serviceType, count(serviceType) as numReqs FROM REQUEST GROUP BY serviceType ORDER BY numReqs DESC";
+    try {
+      PreparedStatement stmt = con.prepareStatement(query);
+      ResultSet rs = stmt.executeQuery();
+      LinkedList<Pair<String, Integer>> results = new LinkedList<>();
+      while (rs.next()) {
+        results.add(new Pair<String, Integer>(rs.getString("serviceType"), rs.getInt("numReqs")));
+      }
+      return results;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unexpected error: popular services!", e);
+    }
+  }
+
+  /**
+   * Returns a linked list of pairs for the most popular languages in order of popularity
+   *
+   * @return A linked list of pairs of the most popular languages, key = Language, Value = number of
+   *     requests
+   * @throws DBException On error
+   */
+  public static LinkedList<Pair<String, Integer>> popularLanguages() throws DBException {
+    String query =
+        "SELECT language, count(language) as numReqs FROM TREQUEST GROUP BY language ORDER BY numReqs DESC";
+    try {
+      PreparedStatement stmt = con.prepareStatement(query);
+      ResultSet rs = stmt.executeQuery();
+      LinkedList<Pair<String, Integer>> results = new LinkedList<>();
+      while (rs.next()) {
+        results.add(new Pair<String, Integer>(rs.getString("language"), rs.getInt("numReqs")));
+      }
+      return results;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unexpected error: popularLanguages!", e);
+    }
+  }
+
+  /**
+   * Returns the most popular locations in order of popularity as a linked list of pairs
+   *
+   * @return a linked list of Pair<DbNode, Integer> with the node = Key and Number of times = Value
+   * @throws DBException on error
+   */
+  public static LinkedList<Pair<DbNode, Integer>> popularReqLocations() throws DBException {
+    String query =
+        "SELECT nodeID, count(nodeID) as numReqs FROM REQUEST GROUP BY nodeID ORDER BY numReqs DESC";
+    try {
+      PreparedStatement stmt = con.prepareStatement(query);
+      ResultSet rs = stmt.executeQuery();
+      LinkedList<Pair<DbNode, Integer>> results = new LinkedList<>();
+      while (rs.next()) {
+        results.add(
+            new Pair<DbNode, Integer>(MapDB.getNode(rs.getString("nodeID")), rs.getInt("numReqs")));
+      }
+      return results;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unexpected error: popular services!", e);
+    }
+  }
+
+  /**
+   * Marks a node as being travelled to for statistics purposes
+   *
+   * @param nodeID
+   * @throws DBException on error
+   */
+  public static void travelledTo(String nodeID) throws DBException {
+    String query = "INSERT INTO visited (nodeID) VALUES (?)";
+    try {
+      PreparedStatement stmt = con.prepareStatement(query);
+      stmt.setString(1, nodeID);
+      stmt.executeUpdate();
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unexpected error: travelled to!", e);
+    }
+  }
+
+  /**
+   * Returns the most popular path locations, as marked with travelledTo, in order of popularity
+   *
+   * @return most popular path locations in the form Pair<DbNode, Integer>
+   * @throws DBException
+   */
+  public static LinkedList<Pair<DbNode, Integer>> popularPathLocations() throws DBException {
+    String query =
+        "SELECT nodeID, count(nodeID) AS numVisits FROM visited GROUP BY nodeID ORDER BY numVisits DESC";
+    try {
+      PreparedStatement stmt = con.prepareStatement(query);
+      ResultSet rs = stmt.executeQuery();
+      LinkedList<Pair<DbNode, Integer>> results = new LinkedList<>();
+      while (rs.next()) {
+        results.add(
+            new Pair<DbNode, Integer>(
+                MapDB.getNode(rs.getString("nodeID")), rs.getInt("numVisits")));
+      }
+      return results;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unexpected error: popularPathLocations!", e);
     }
   }
 }
