@@ -86,14 +86,10 @@ public class MapQRController implements Controller {
         floor = new TreeItem<>(dir);
         floor.setExpanded(false);
         root.getChildren().add(floor);
-      } else if (dir.getLevel() == Level.STEP) {
+      } else if (dir.getLevel() == Level.STEP || dir.getLevel() == Level.DRIVING) {
         instruction = new TreeItem<>(dir, img);
         floor.getChildren().add(instruction);
       } else if (dir.getLevel() == Level.BUILDING) {
-        floor = new TreeItem<>(dir, img);
-        floor.setExpanded(false);
-        root.getChildren().add(floor);
-      } else if (dir.getLevel() == Level.DRIVING) {
         floor = new TreeItem<>(dir, img);
         floor.setExpanded(false);
         root.getChildren().add(floor);
@@ -134,6 +130,9 @@ public class MapQRController implements Controller {
 
   public void setIntructionFocus(int floor, TreeItem<Direction> root, TreeView<Direction> tr) {
     collapseAllItems();
+    tr_faulkner.getSelectionModel().clearSelection();
+    tr_main.getSelectionModel().clearSelection();
+    tr_drive.getSelectionModel().clearSelection();
     for (int i = 0; i < root.getChildren().size(); i++) {
       if (root.getChildren().get(i).getValue().getNode().getFloor() == floor) {
         root.getChildren().get(i).setExpanded(true);
