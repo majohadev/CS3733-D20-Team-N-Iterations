@@ -58,6 +58,13 @@ public class MapLocationSearchController implements Controller {
       } else {
         nodes[1] = (DbNode) lst.getSelectionModel().getSelectedItem();
       }
+      if (nodes[0].getBuilding().equals("Faulkner")) {
+        btn_infodesk.setOpacity(.4);
+        btn_infodesk.setDisable(true);
+      } else {
+        btn_infodesk.setOpacity(1);
+        btn_infodesk.setDisable(false);
+      }
     } catch (NullPointerException ex) {
       return;
     }
@@ -94,6 +101,13 @@ public class MapLocationSearchController implements Controller {
 
   public void setKioskLocation(DbNode node) {
     this.nodes[0] = node;
+    if (node.getBuilding().equals("Faulkner")) {
+      btn_infodesk.setOpacity(.4);
+      btn_infodesk.setDisable(true);
+    } else {
+      btn_infodesk.setOpacity(1);
+      btn_infodesk.setDisable(false);
+    }
   }
 
   public ListView getFuzzyList() {

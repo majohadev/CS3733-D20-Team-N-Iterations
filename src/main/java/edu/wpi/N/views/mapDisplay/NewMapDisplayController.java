@@ -557,11 +557,11 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
         .getBtnInfoDesk()
         .setOnMouseClicked(
             e -> {
-              if (currentBuilding.equals("Faulkner")) {
+              DbNode first = locationSearchController.getDBNodes()[0];
+              if (first.getBuilding().equals("Faulkner")) {
                 displayErrorMessage("No information desks in this building");
                 return;
               }
-              DbNode first = locationSearchController.getDBNodes()[0];
               try {
                 resetTextualDirections();
                 this.path = singleton.savedAlgo.findQuickAccess(first, "INFO");
