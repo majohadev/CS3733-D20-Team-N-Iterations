@@ -477,6 +477,35 @@ public class MapDBTest {
     MapDB.deleteNode(n10.getNodeID());
   }
 
+  @Test
+  public void testGetNodesByFirstLetter() throws DBException {
+    MapDB.addNode(
+        "NSERV00604",
+        643,
+        1190,
+        4,
+        "Main Building",
+        "SERV",
+        "sonic the hedgehog",
+        "Chili Dogs",
+        'N');
+    MapDB.addNode("NCONF02301", 86, 3546, 1, "45 Faulkner", "CONF", "Sam Goldman", "Goldman", 'N');
+
+    LinkedList<DbNode> result = MapDB.getRoomsByFirstLetter('S');
+    assertTrue(result.contains(MapDB.getNode("NDEPT01005")));
+    assertTrue(result.contains(MapDB.getNode("NSERV00604")));
+    assertTrue(result.contains(MapDB.getNode("NCONF02301")));
+
+    result = MapDB.getRoomsByFirstLetter('c');
+    assertTrue(result.contains(MapDB.getNode("NDEPT00104")));
+
+    result = MapDB.getRoomsByFirstLetter('z');
+    assertEquals(0, result.size());
+
+    MapDB.deleteNode("NSERV00604");
+    MapDB.deleteNode("NCONF02301");
+  }
+
   @AfterAll
   public static void clearDB() throws DBException {
     MapDB.clearNodes();
