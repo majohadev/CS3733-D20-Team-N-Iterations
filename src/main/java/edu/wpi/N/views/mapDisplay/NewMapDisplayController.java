@@ -803,9 +803,12 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
       }
     }
 
+    boolean FaulknerToMain = path.get(0).equals("Faulkner") && !path.get(path.size() - 1).equals("Faulkner");
+    boolean MainToFaulkner = !path.get(0).equals("Faulkner")&& path.get(path.size() - 1).equals("Faulkner");
+
     ArrayList<Direction> faulknerDirections =
         pathFaulkner.size() > 0
-            ? pathFaulkner.getDirections(singleton.savedAlgo.getMapData())
+            ? pathFaulkner.getDirections(singleton.savedAlgo.getMapData(), FaulknerToMain)
             : new ArrayList<>();
     ArrayList<Direction> mainDirections =
         pathMain.size() > 0
