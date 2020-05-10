@@ -803,8 +803,10 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
       }
     }
 
-    boolean FaulknerToMain = path.get(0).equals("Faulkner") && !path.get(path.size() - 1).equals("Faulkner");
-    boolean MainToFaulkner = !path.get(0).equals("Faulkner")&& path.get(path.size() - 1).equals("Faulkner");
+    boolean FaulknerToMain =
+        path.get(0).equals("Faulkner") && !path.get(path.size() - 1).equals("Faulkner");
+    boolean MainToFaulkner =
+        !path.get(0).equals("Faulkner") && path.get(path.size() - 1).equals("Faulkner");
 
     ArrayList<Direction> faulknerDirections =
         pathFaulkner.size() > 0
@@ -812,7 +814,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
             : new ArrayList<>();
     ArrayList<Direction> mainDirections =
         pathMain.size() > 0
-            ? pathMain.getDirections(singleton.savedAlgo.getMapData())
+            ? pathMain.getDirections(singleton.savedAlgo.getMapData(), MainToFaulkner)
             : new ArrayList<>();
 
     ArrayList<Direction> googleDirections = new ArrayList<>();
@@ -833,8 +835,6 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     }
     mapQRController.setDriveText(googleDirections);
   }
-
-
 
   public void disableTextDirections() {
     pn_iconBar.getChildren().remove(pn_qrIcon);

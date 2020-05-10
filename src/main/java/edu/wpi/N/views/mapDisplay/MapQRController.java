@@ -93,6 +93,10 @@ public class MapQRController implements Controller {
         floor = new TreeItem<>(dir, img);
         floor.setExpanded(false);
         root.getChildren().add(floor);
+      } else if (dir.getLevel() == Level.DRIVING) {
+        floor = new TreeItem<>(dir, img);
+        floor.setExpanded(false);
+        root.getChildren().add(floor);
       }
     }
     //    if (tr != tr_drive) {
