@@ -46,8 +46,9 @@ public abstract class AbsAlgo implements IPathFinder {
    */
   public static double floorBuildingCost(DbNode currNode, DbNode nextNode) {
     if (currNode.getNodeType().equals("EXIT") && nextNode.getNodeType().equals("EXIT")) return 5000;
-    if (currNode.getFloor() == nextNode.getFloor()) return 0;
-    return 500;
+    else if (currNode.getFloor() != nextNode.getFloor()) {
+      return Math.abs(currNode.getFloor() - nextNode.getFloor()) * 500;
+    } else return 0;
   }
 
   /**
@@ -86,26 +87,53 @@ public abstract class AbsAlgo implements IPathFinder {
    *
    * @param start, DbNode of starting node
    * @param nodeType, String the type of node you want (must be length 4)
+   * @param handicap, Boolean that indicates if path should be handicap accessible (true)
    * @return Path, path from start node to closest (eucledian) end node of requested type
    */
   public Path findQuickAccess(
-      HashMap<String, LinkedList<DbNode>> mapData, DbNode start, String nodeType) {
+      HashMap<String, LinkedList<DbNode>> mapData,
+      DbNode start,
+      String nodeType,
+      boolean handicap) {
     try {
+      // Get linked list of all nodes of a given node type on the start floor
       LinkedList<DbNode> nodes =
-          MapDB.searchNode(start.getFloor(), start.getBuilding(), nodeType, "");
+          MapDB.searchVisNode(start.getFloor(), start.getBuilding(), nodeType, "");
+      // Check if the list is empty
       if (!nodes.isEmpty()) {
-        double closest = cost(start, nodes.getFirst());
-        DbNode end = nodes.getFirst();
-        for (DbNode n : nodes) {
-          double cost = cost(start, n);
-          if (cost <= closest) {
-            closest = cost;
-            end = n;
-          }
+        // If the list isn't empty, get the closest node of the given node type to the start node
+        // and return the path
+        DbNode end = getBestQuickAccess(start, nodes);
+        return findPath(mapData, start, end, handicap);
+      }
+      // If list was empty, check if the building is Faulkner
+      else if (start.getBuilding().equals("Faulkner")) {
+        // Get all nodes of the given node type in Faulkner
+        LinkedList<DbNode> allNodes = MapDB.searchVisNode(-1, start.getBuilding(), nodeType, "");
+        // Check if the list is empty
+        if (!allNodes.isEmpty()) {
+          // If the list isn't empty, get the closest node of the given node type to the start node
+          // and return the path
+          DbNode end = getBestQuickAccess(start, allNodes);
+          return findPath(mapData, start, end, handicap);
         }
-
-        return findPath(mapData, start, end, false);
-      } else {
+        // If no nodes of the given node type are in Faulkner
+        return null;
+      }
+      // Else you're on the main campus
+      else {
+        // Get all nodes of the given node type on the main campus
+        LinkedList<DbNode> allNodes = MapDB.searchVisNode(-1, "", nodeType, "");
+        // Removes all Faulkner nodes of the given node type
+        allNodes.removeIf(currNode -> currNode.getBuilding().equals("Faulkner"));
+        // Check if the list is empty
+        if (!allNodes.isEmpty()) {
+          // If the list isn't empty, get the closest node of the given node type to the start node
+          // and return the path
+          DbNode end = getBestQuickAccess(start, allNodes);
+          return findPath(mapData, start, end, handicap);
+        }
+        // If no nodes of the given node type are on the main campus
         return null;
       }
     } catch (DBException e) {
@@ -115,7 +143,29 @@ public abstract class AbsAlgo implements IPathFinder {
   }
 
   /**
-   * Finds a stop node of a given type that is closest to the start node using nodes from the start and end floors
+   * Gets the closest node in the linked list to the start node
+   *
+   * @param start: Start node
+   * @param allNodes: LinkedList of nodes of a certain node type
+   * @return: closest DbNode in the linked list to the start node
+   */
+  private static DbNode getBestQuickAccess(DbNode start, LinkedList<DbNode> allNodes) {
+    double closest = cost(start, allNodes.getFirst());
+    DbNode end = allNodes.getFirst();
+    for (DbNode n : allNodes) {
+      // TODO: Cost alone doesn't work for this (or at all)
+      double cost = cost(start, n);
+      if (cost <= closest) {
+        closest = cost;
+        end = n;
+      }
+    }
+    return end;
+  }
+
+  /**
+   * Finds a stop node of a given type that is closest to the start node using nodes from the start
+   * and end floors
    *
    * @param startNode: Starting Node
    * @param endNode: End Node
