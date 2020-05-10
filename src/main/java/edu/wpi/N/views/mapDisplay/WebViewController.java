@@ -19,7 +19,7 @@ public class WebViewController extends Application {
 
     webView
         .getEngine()
-        .load(Main.class.getResource("views/googleMapFaulknerToMain.html").toString());
+        .load(Main.class.getResource("views/FaulknerToMain45Francis.html").toString());
 
     VBox vBox = new VBox(webView);
     Scene scene = new Scene(vBox, 960, 600);
