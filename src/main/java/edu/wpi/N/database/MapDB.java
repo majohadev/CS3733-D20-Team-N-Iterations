@@ -1335,6 +1335,7 @@ public class MapDB {
    *
    * @param letter The letter that the long names start with
    * @return a LinkedList of DbNode where all of the long names have letter as their first character
+   * @throws DBException on error
    */
   public static LinkedList<DbNode> getRoomsByFirstLetter(char letter) throws DBException {
     try {
