@@ -5,9 +5,9 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXToggleButton;
 import edu.wpi.N.App;
 import edu.wpi.N.database.DBException;
-import java.io.IOException;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.views.Controller;
+import java.util.LinkedList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -15,9 +15,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import org.w3c.dom.Text;
-
-import java.util.LinkedList;
 
 public class MapDetailSearchController implements Controller {
 
@@ -33,13 +30,14 @@ public class MapDetailSearchController implements Controller {
   @Override
   public void setMainApp(App mainApp) {}
 
-  public void initialize(){
-      LinkedList<String> searchOption = new LinkedList<>();
-      searchOption.add("Building");
-      searchOption.add("Department");
-      ObservableList<String> searchList = FXCollections.observableArrayList(searchOption);
-      cmb_detail.setItems(searchList);
+  public void initialize() {
+    LinkedList<String> searchOption = new LinkedList<>();
+    searchOption.add("Building");
+    searchOption.add("Department");
+    ObservableList<String> searchList = FXCollections.observableArrayList(searchOption);
+    cmb_detail.setItems(searchList);
   }
+
   public void onSearchLocation(KeyEvent e) throws DBException {
     activeText = (TextField) e.getSource();
     if (activeText == txt_location) {
@@ -51,31 +49,27 @@ public class MapDetailSearchController implements Controller {
     NewMapDisplayController.fuzzyLocationSearch(activeText, lst_fuzzySearch);
   }
 
-  public void onSelectOption(MouseEvent e){
+  public void onSelectOption(MouseEvent e) {
     Object option = cmb_detail.getSelectionModel().getSelectedItem();
-    if(option == null){
+    if (option == null) {
       return;
     }
     String firstOption = option.toString();
-    if(firstOption.equals("Building")){
+    if (firstOption.equals("Building")) {
       onSelectBuilding(e);
-    }
-    else if(firstOption.equals("Department")){
+    } else if (firstOption.equals("Department")) {
+
+    } else {
 
     }
-    else
-
   }
 
-  public void onSelectBuilding(MouseEvent e){
+  public void onSelectBuilding(MouseEvent e) {
     activeText = (TextField) e.getSource();
-    if(activeText == txt_location){
+    if (activeText == txt_location) {
       nodes[0] = null;
-    }
-    else
-      nodes[1] = null;
+    } else nodes[1] = null;
     lst_fuzzySearch.getSelectionModel().clearSelection();
-
   }
 
   public void onItemSelected(MouseEvent e) {

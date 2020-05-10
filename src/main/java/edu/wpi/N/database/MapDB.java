@@ -1331,6 +1331,25 @@ public class MapDB {
   }
 
   /**
+   * Gets a list of DbNode whose long names start with the given letter
+   *
+   * @param letter The letter that the long names start with
+   * @return a LinkedList of DbNode where all of the long names have letter as their first character
+   */
+  public static LinkedList<DbNode> getRoomsByFirstLetter(char letter) throws DBException {
+    try {
+      String query = "SELECT * FROM nodes WHERE Upper(longName) LIKE ?";
+      PreparedStatement st = con.prepareStatement(query);
+      st.setString(1, String.valueOf(letter).toUpperCase() + "%");
+      LinkedList<DbNode> result = new LinkedList<>();
+      buildDbNodeList(result, st);
+      return result;
+    } catch (SQLException e) {
+      throw new DBException("Unknown error: getRoomsByFirstLetter", e);
+    }
+  }
+
+  /**
    * Loads all Map edges and Nodes into a Hashmap
    *
    * @return Hashmap <NodeID, list of DbNodes has edges to>
