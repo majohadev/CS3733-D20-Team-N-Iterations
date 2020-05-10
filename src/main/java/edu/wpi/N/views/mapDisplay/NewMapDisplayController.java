@@ -682,7 +682,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
       setDefaultKioskNode();
       pn_change.getChildren().add(pane);
     } else if (src == pn_serviceIcon) {
-      this.mainApp.switchScene("/edu/wpi/N/views/services/newServicesPage.fxml", singleton);
+      this.mainApp.switchScene("/edu/wpi/N/views/services/apiServicesPage.fxml", singleton);
       resetMap();
     } else if (src == pn_infoIcon) {
       resetMap();

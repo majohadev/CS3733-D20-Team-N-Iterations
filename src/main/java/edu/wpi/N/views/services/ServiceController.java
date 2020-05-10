@@ -5,7 +5,6 @@ import edu.wpi.N.App;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.views.Controller;
-import edu.wpi.cs3733.c20.teamR.AppointmentRequest;
 import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -125,10 +124,10 @@ public class ServiceController implements Controller {
 
   @FXML
   public void switchToScheduler() throws Exception {
-    AppointmentRequest apt = new AppointmentRequest();
-    // String css = this.getClass().getResource("sanitationRequestUI1.css").toExternalForm();
-    String css = this.getClass().getResource("default.css").toExternalForm();
-    AppointmentRequest.run(576, 90, 1280, 950, css, null, null);
+    //    AppointmentRequest apt = new AppointmentRequest();
+    //    // String css = this.getClass().getResource("sanitationRequestUI1.css").toExternalForm();
+    //    String css = this.getClass().getResource("default.css").toExternalForm();
+    //    AppointmentRequest.run(576, 90, 1280, 950, css, null, null);
   }
 
   public void onIconClicked(MouseEvent event) throws IOException {
