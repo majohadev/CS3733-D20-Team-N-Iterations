@@ -43,13 +43,14 @@ public class MapEditorController implements Controller {
   @FXML Pane pn_display;
   @FXML Pane pn_editor;
   @FXML Pane pn_elev;
-  @FXML Button btn_home;
   @FXML StackPane pn_stack;
   @FXML Pane pn_edges;
   @FXML Pane pn_floors;
   @FXML ImageView img_map;
-  @FXML JFXButton btn_cancel_elev;
+  @FXML AnchorPane btn_cancel_elev;
   @FXML Label lbl_building_floor;
+  @FXML AnchorPane pn_back;
+  @FXML AnchorPane pn_background;
 
   final int DEFAULT_FLOOR = 1;
   final String DEFAULT_BUILDING = "Faulkner";
@@ -194,6 +195,7 @@ public class MapEditorController implements Controller {
     HORIZONTAL_SCALE = MAP_WIDTH / IMAGE_WIDTH;
     VERTICAL_SCALE = MAP_HEIGHT / IMAGE_HEIGHT;
     numFloors = 5;
+    pn_background.setStyle("-fx-background-color: #E6EBF2");
   }
 
   private void setMainCampusDefaults() {
@@ -207,6 +209,7 @@ public class MapEditorController implements Controller {
     HORIZONTAL_SCALE = MAP_WIDTH / IMAGE_WIDTH;
     VERTICAL_SCALE = MAP_HEIGHT / IMAGE_HEIGHT;
     numFloors = 6;
+    pn_background.setStyle("-fx-background-color: #D3D3D3");
   }
 
   private void loadFloor() throws DBException, IOException {
@@ -2043,11 +2046,11 @@ public class MapEditorController implements Controller {
         .getChildren()
         .addAll(
             btn_faulkner,
-            btn_faulkner1,
-            btn_faulkner2,
-            btn_faulkner3,
+            btn_faulkner5,
             btn_faulkner4,
-            btn_faulkner5);
+            btn_faulkner3,
+            btn_faulkner2,
+            btn_faulkner1);
 
     // Main Buttons
     JFXButton btn_main1 = new JFXButton("L2");
@@ -2078,13 +2081,13 @@ public class MapEditorController implements Controller {
 
     mainButtonList
         .getChildren()
-        .addAll(btn_main, btn_main1, btn_main2, btn_main3, btn_main4, btn_main5, btn_main6);
+        .addAll(btn_main, btn_main6, btn_main5, btn_main4, btn_main3, btn_main2, btn_main1);
     buildingButtonList.addAnimatedNode(btn_buildings);
     buildingButtonList.addAnimatedNode(faulknerButtonList);
     buildingButtonList.addAnimatedNode(mainButtonList);
 
-    buildingButtonList.setSpacing(100);
-    buildingButtonList.setRotate(90);
+    buildingButtonList.setSpacing(120);
+    buildingButtonList.setRotate(-90); // TODO
     faulknerButtonList.setSpacing(15);
     mainButtonList.setSpacing(15);
 
