@@ -51,13 +51,13 @@ public class MapQRController implements Controller {
     this.mapBaseController = mapBaseController;
   }
 
-
   public void setMapDisplayController(NewMapDisplayController mapDisplayController) {
     this.mapDisplayController = mapDisplayController;
   }
 
   /**
    * Executes when the user wishes to see the previous instruction
+   *
    * @throws DBException
    */
   public void onBtnPrevClicked() throws DBException {
@@ -72,6 +72,7 @@ public class MapQRController implements Controller {
 
   /**
    * Executes when the user wishes to see the previous instruction
+   *
    * @param tr the current tree
    * @param root the root of the current tree
    * @param tb the current tab
@@ -103,6 +104,7 @@ public class MapQRController implements Controller {
 
   /**
    * Executes when the user wishes to see the next instruction
+   *
    * @throws DBException
    */
   public void onBtnNextClicked() throws DBException {
@@ -117,6 +119,7 @@ public class MapQRController implements Controller {
 
   /**
    * Executes when the user wishes to see the next instruction
+   *
    * @param tr the current tree
    * @param root the root of the current tree
    * @param tb the current tab
@@ -160,6 +163,7 @@ public class MapQRController implements Controller {
 
   /**
    * Executes when the user clicks on an item in the faulkner building tree
+   *
    * @throws DBException
    */
   public void onFaulknerTreeClicked() throws DBException {
@@ -173,9 +177,7 @@ public class MapQRController implements Controller {
     }
   }
 
-  /**
-   * Executes when the user clicks on an item in the driving directions tree
-   */
+  /** Executes when the user clicks on an item in the driving directions tree */
   public void onDriveTreeClicked() {
     collapseAllItems();
     tr_main.getSelectionModel().clearSelection();
@@ -185,6 +187,7 @@ public class MapQRController implements Controller {
 
   /**
    * Executes when the user clicks on an item in the main building tree
+   *
    * @throws DBException
    */
   public void onMainTreeClicked() throws DBException {
@@ -200,6 +203,7 @@ public class MapQRController implements Controller {
 
   /**
    * Executes when the faulkner building is manually selected by the user
+   *
    * @throws DBException
    */
   public void onFaulknerTabSelected() throws DBException {
@@ -220,6 +224,7 @@ public class MapQRController implements Controller {
 
   /**
    * Executes when the main building tab is manually selected by the user
+   *
    * @throws DBException
    */
   public void onMainTabSelected() throws DBException {
@@ -237,9 +242,7 @@ public class MapQRController implements Controller {
     }
   }
 
-  /**
-   * Executes when the drive tab is manually selected by the user
-   */
+  /** Executes when the drive tab is manually selected by the user */
   public void onDriveTabSelected() {
     tr_drive.getSelectionModel().select(0);
     mapDisplayController.switchGoogleView();
@@ -252,6 +255,7 @@ public class MapQRController implements Controller {
 
   /**
    * Orders the tabs based on the path
+   *
    * @param path the path finding path
    */
   public void setTabs(Path path) {
@@ -270,6 +274,7 @@ public class MapQRController implements Controller {
 
   /**
    * adds a corresponding tab depending on the building name
+   *
    * @param b the building name
    */
   private void addTabs(String b) {
@@ -282,6 +287,7 @@ public class MapQRController implements Controller {
 
   /**
    * populates the textual directions for the faulkner building
+   *
    * @param dirLst the textual directions for the faulkner building
    */
   public void setFaulknerText(ArrayList<Direction> dirLst) {
@@ -291,6 +297,7 @@ public class MapQRController implements Controller {
 
   /**
    * populates the textual directions for the main building
+   *
    * @param dirLst the textual directions for the main building
    */
   public void setMainText(ArrayList<Direction> dirLst) {
@@ -300,6 +307,7 @@ public class MapQRController implements Controller {
 
   /**
    * populates the textual directions for the google maps
+   *
    * @param dirList the textual directions for the google map
    */
   public void setDriveText(ArrayList<Direction> dirList) {
@@ -308,6 +316,7 @@ public class MapQRController implements Controller {
 
   /**
    * initial population of textual directions
+   *
    * @param dirLst the list of all textual directions
    * @param tr the current tree which will be populated with the textual directions
    * @param root the root of the current tree
@@ -352,6 +361,7 @@ public class MapQRController implements Controller {
 
   /**
    * changes the tab depending on the building
+   *
    * @param floor the floor to be focused on
    * @param building the building to be focused on
    */
@@ -376,7 +386,6 @@ public class MapQRController implements Controller {
   }
 
   /**
-   *
    * @param floor the floor of the current instructions
    * @param root the root of the current treeview
    * @param tr the current treeview
@@ -395,26 +404,20 @@ public class MapQRController implements Controller {
     }
   }
 
-  /**
-   * Collapses all entries in faulkner and main tab
-   */
+  /** Collapses all entries in faulkner and main tab */
   public void collapseAllItems() {
     collapseFaulkner();
     collapseMain();
   }
 
-  /**
-   * Collapses all entries in the faulkner tab
-   */
+  /** Collapses all entries in the faulkner tab */
   public void collapseFaulkner() {
     for (int i = 0; i < rootFaulkner.getChildren().size(); i++) {
       rootFaulkner.getChildren().get(i).setExpanded(false);
     }
   }
 
-  /**
-   * Collapses all entries in the main tab
-   */
+  /** Collapses all entries in the main tab */
   public void collapseMain() {
     for (int i = 0; i < rootMain.getChildren().size(); i++) {
       rootMain.getChildren().get(i).setExpanded(false);
