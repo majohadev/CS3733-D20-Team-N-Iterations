@@ -172,6 +172,27 @@ public class MapDB {
   }
 
   /**
+   * Adds given data into the database
+   * @param nodeID
+   * @param field
+   * @return
+   * @throws DBException
+   */
+  public static boolean addDetail(String nodeID, String field) throws DBException {
+    try{
+      String query = "INSERT INTO detail VALUES (?, ?)";
+      PreparedStatement stmt = con.prepareStatement(query);
+      stmt.setString(1, nodeID);
+      stmt.setString(2, field);
+      stmt.executeUpdate();
+      return true;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown error: addDetail", e);
+    }
+  }
+
+  /**
    * Modifies a node unsafely. Probably shouldn't ever use. Can mess with nodeID
    *
    * @param nodeID the nodeID of the node you want to modify
@@ -357,6 +378,29 @@ public class MapDB {
     } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Unknown error: getNode", e);
+    }
+  }
+
+  /**
+   * Returns a LinkedList of nodeID that matches the given field
+   * @param field field of the Node
+   * @return List of nodeID
+   * @throws DBException
+   */
+  public static LinkedList<String> getNodeIDbyField(String field) throws DBException {
+    String query = "SELECT nodeID FROM detail WHERE field = ?";
+    LinkedList<String> list = new LinkedList<>();
+    try{
+      PreparedStatement stmt = con.prepareStatement(query);
+      stmt.setString(1, field);
+      ResultSet rs = stmt.executeQuery();
+      while(rs.next()){
+         list.add(rs.getString("nodeID"));
+      }
+      return list;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown error: getNodeIDbyField", e);
     }
   }
 

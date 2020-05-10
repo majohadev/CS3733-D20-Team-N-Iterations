@@ -151,6 +151,8 @@ public class DataEditorController implements Controller {
     }
   }
 
+  //TODO: Do something similar to Detail
+
   /** Function removes all employees from database, including doctors */
   private void deleteAllEmployees() {
     try {

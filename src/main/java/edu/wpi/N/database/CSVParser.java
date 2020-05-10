@@ -1,6 +1,7 @@
 package edu.wpi.N.database;
 
 import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvValidationException;
 import edu.wpi.N.entities.DbNode;
 import java.io.*;
 import java.util.Arrays;
@@ -42,6 +43,36 @@ public class CSVParser {
           parseEdgesRow(nextLine);
         }
       }
+
+
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * Parse DetailCSV file and add entries to Database
+   * @param pathToFile
+   */
+  public static void parseDetail(InputStream pathToFile){
+    try{
+      Boolean isDetailCSV = false;
+
+      // create csvReader object passing
+      CSVReader csvReader = new CSVReader(new InputStreamReader(pathToFile, "UTF-8"));
+      // Read header
+      String[] nextLine = csvReader.readNext();
+
+      if(nextLine[2].equals("field"))
+        isDetailCSV = true;
+
+      if(isDetailCSV){
+        while((nextLine = csvReader.readNext()) != null){
+          parseDetailRow(nextLine);
+        }
+      }
+    } catch (UnsupportedEncodingException e) {
+      e.printStackTrace();
     } catch (Exception e) {
       e.printStackTrace();
     }
@@ -66,6 +97,16 @@ public class CSVParser {
     }
   }
 
+  private static void parseDetailRow(String[] row){
+    try{
+      String nodeID = row[0];
+      String field = row[1];
+      MapDB.addDetail(nodeID, field);
+    } catch (DBException e) {
+      System.out.println(row[0]);
+      e.printStackTrace();
+    }
+  }
   /**
    * Parse data from a given row: add Node to the database
    *
@@ -145,6 +186,18 @@ public class CSVParser {
       InputStream input = new FileInputStream(initialFile);
 
       CSVParser.parseCSVEmployees(input);
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+      throw (e);
+    }
+  }
+
+  public static void parseCSVDetailFromPath(String pathToFile) throws FileNotFoundException {
+    try {
+      File initialFile = new File(pathToFile);
+      InputStream input = new FileInputStream(initialFile);
+
+      CSVParser.parseDetail(input);
     } catch (FileNotFoundException e) {
       e.printStackTrace();
       throw (e);
