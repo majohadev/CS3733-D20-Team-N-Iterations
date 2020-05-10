@@ -959,37 +959,134 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
    * @return
    */
   private String getNecessaryGoogleRequestUrl(String mode) {
-    String urls = "";
+    String url = "";
 
     boolean isFirstFaulkner = this.path.get(0).getBuilding().equals("Faulkner");
     boolean isSecondFaulkner = this.path.get(path.size() - 1).getBuilding().equals("Faulkner");
+
     if (isFirstFaulkner ^ isSecondFaulkner) {
       if (isFirstFaulkner) {
-        // Default
-        String dirFileName = "FaulknerToMain45Francis";
+        // Default Faulkner -> Francis
+        url =
+            "https://maps.googleapis.com/maps/api/directions/json?mode="
+                + mode
+                + "&origin=42.301213,-71.127795"
+                + "&destination=Brigham+and+Women's+Hospital:+Spiegel+Joan+H+MD,+45+Francis+St+%23+D,+Boston,+MA+02115"
+                + "&key=AIzaSyDx7BSweq5dRzXavs1vxuMWeR2ETMR6b3Q";
 
         // Identify which 'entrance' to generate text dirs for, use default if not found
         for (DbNode node : this.path.getPath()) {
           if (node.getNodeType().equals("EXIT")) {
             if (node.getNodeID().equals("GEXIT001L1")) {
-              dirFileName = "FaulknerToShapiroFenwood";
+              // FaulknerToShapiroFenwood
+              url =
+                  "https://maps.googleapis.com/maps/api/directions/json?mode="
+                      + mode
+                      + "&origin=42.301213,-71.127795"
+                      + "&destination=42.335505,-71.108191"
+                      + "&key=AIzaSyDx7BSweq5dRzXavs1vxuMWeR2ETMR6b3Q";
+
             } else if (node.getNodeID().equals("AEXIT0010G")) {
-              dirFileName = "FaulknerToBTMFenwood";
+              // FaulknerToBTMFenwood
+              url =
+                  "https://maps.googleapis.com/maps/api/directions/json?mode="
+                      + mode
+                      + "&origin=42.301213,-71.127795"
+                      + "&destination=42.335425,-71.108247"
+                      + "&key=AIzaSyDx7BSweq5dRzXavs1vxuMWeR2ETMR6b3Q";
+
             } else if (node.getNodeID().equals("GEXIT00101")) {
-              dirFileName = "FaulknerToShapiroFrancis";
+              // FaulknerToShapiroFrancis
+              url =
+                  "https://maps.googleapis.com/maps/api/directions/json?mode="
+                      + mode
+                      + "&origin=42.301213,-71.127795"
+                      + "&destination=42.335863,-71.107704"
+                      + "&key=AIzaSyDx7BSweq5dRzXavs1vxuMWeR2ETMR6b3Q";
+
             } else if (node.getNodeID().equals("FEXIT00201")) {
-              dirFileName = "FaulknerToTower75Francis";
+              // FaulknerToTower75Francis
+              url =
+                  "https://maps.googleapis.com/maps/api/directions/json?mode="
+                      + mode
+                      + "&origin=42.301213,-71.127795"
+                      + "&destination=75+Francis+St+Boston+MA+02115"
+                      + "&key=AIzaSyDx7BSweq5dRzXavs1vxuMWeR2ETMR6b3Q";
+
             } else if (node.getNodeID().equals("XEXIT00202")) {
-              dirFileName = "FaulknerToFLEX";
+              // FaulknerToFLEX
+              url =
+                  "https://maps.googleapis.com/maps/api/directions/json?mode="
+                      + mode
+                      + "&origin=42.301213,-71.127795"
+                      + "&destination=42.335078,-71.106326"
+                      + "&key=AIzaSyDx7BSweq5dRzXavs1vxuMWeR2ETMR6b3Q";
             }
           }
         }
       } else {
-        //
+        // Default Francis -> Faulkner
+        url =
+            "https://maps.googleapis.com/maps/api/directions/json?mode="
+                + mode
+                + "&origin=Brigham+and+Women's+Hospital:+Spiegel+Joan+H+MD,+45+Francis+St+%23+D,+Boston,+MA+02115"
+                + "&destination=42.301213,-71.127795"
+                + "&key=AIzaSyDx7BSweq5dRzXavs1vxuMWeR2ETMR6b3Q";
+
+        // Identify which 'exit' to generate text dirs for, use default if not found
+        for (DbNode node : this.path.getPath()) {
+          if (node.getNodeType().equals("EXIT")) {
+            if (node.getNodeID().equals("GEXIT001L1")) {
+              // ShapiroFenwoodToFaulkner
+              url =
+                  "https://maps.googleapis.com/maps/api/directions/json?mode="
+                      + mode
+                      + "&origin=42.335505,-71.108191"
+                      + "&destination=42.301213,-71.127795"
+                      + "&key=AIzaSyDx7BSweq5dRzXavs1vxuMWeR2ETMR6b3Q";
+
+            } else if (node.getNodeID().equals("AEXIT0010G")) {
+              // BTMFenwoodToFaulkner
+              url =
+                  "https://maps.googleapis.com/maps/api/directions/json?mode="
+                      + mode
+                      + "&origin=42.335425,-71.108247"
+                      + "&destination=42.301213,-71.127795"
+                      + "&key=AIzaSyDx7BSweq5dRzXavs1vxuMWeR2ETMR6b3Q";
+
+            } else if (node.getNodeID().equals("GEXIT00101")) {
+              // ShapiroFrancisToFaulkner
+              url =
+                  "https://maps.googleapis.com/maps/api/directions/json?mode="
+                      + mode
+                      + "&origin=42.335863,-71.107704"
+                      + "&destination=42.301213,-71.127795"
+                      + "&key=AIzaSyDx7BSweq5dRzXavs1vxuMWeR2ETMR6b3Q";
+
+            } else if (node.getNodeID().equals("FEXIT00201")) {
+              // Tower75FrancisToFaulkner
+              url =
+                  "https://maps.googleapis.com/maps/api/directions/json?mode="
+                      + mode
+                      + "&origin=75+Francis+St+Boston+MA+02115"
+                      + "&destination=42.301213,-71.127795"
+                      + "&key=AIzaSyDx7BSweq5dRzXavs1vxuMWeR2ETMR6b3Q";
+
+            } else if (node.getNodeID().equals("XEXIT00202")) {
+              // FLEXToFaulkner
+              url =
+                  "https://maps.googleapis.com/maps/api/directions/json?mode="
+                      + mode
+                      + "&origin=42.335078,-71.106326"
+                      + "&destination=42.301213,-71.127795"
+                      + "&key=AIzaSyDx7BSweq5dRzXavs1vxuMWeR2ETMR6b3Q";
+            }
+          }
+        }
       }
     }
 
-    return urls;
+    return url;
   }
 
   public void disableTextDirections() {
