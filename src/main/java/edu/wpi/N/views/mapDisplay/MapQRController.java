@@ -91,9 +91,9 @@ public class MapQRController implements Controller {
         root.getChildren().add(floor);
       }
     }
-    if (tr != tr_drive) {
-      root.getChildren().removeIf(n -> n.getChildren().size() == 0);
-    }
+    //    if (tr != tr_drive) {
+    //      root.getChildren().removeIf(n -> n.getChildren().size() == 0);
+    //    }
     if (root.getChildren().size() > 0) {
       root.getChildren().get(0).setExpanded(true);
     }
@@ -132,7 +132,7 @@ public class MapQRController implements Controller {
       }
       if (path.get(i).getNode().getFloor() == floor) {
         tr.getTreeItem(floorStep).setExpanded(true);
-        tr.getSelectionModel().select(i - 1);
+        tr.getSelectionModel().select(i);
         System.out.println(i - 1);
         return;
       }
