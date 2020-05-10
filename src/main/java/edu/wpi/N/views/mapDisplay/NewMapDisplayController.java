@@ -37,6 +37,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
   @FXML Pane pn_qrIcon;
   @FXML Pane pn_serviceIcon;
   @FXML Pane pn_infoIcon;
+  @FXML Pane pn_directIcon;
   @FXML Pane pn_adminIcon;
   @FXML Pane pn_floors;
   @FXML Pane pn_mapContainer;
@@ -710,6 +711,16 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
       resetMap();
       this.mainApp.switchScene("/edu/wpi/N/views/admin/newLogin.fxml", singleton);
     } // TODO: do a onIconclicked for directory search
+    else if(src == pn_directIcon){
+      resetMap();
+      loader = new FXMLLoader(getClass().getResource("mapDetailSearch.fxml"));
+      Pane pane = loader.load();
+      detailSearchController = loader.getController();
+      initDetailSearchButton();
+      //initresetDetailSearch
+      setDefaultKioskNode();
+      pn_change.getChildren().add(pane);
+    }
     // initSearch
     // initReset --> reloads the DetailedSearch
     // initDoctor --> reloads the ListView with doctors,if any, associated with clicked location

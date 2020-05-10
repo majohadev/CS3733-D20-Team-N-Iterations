@@ -1318,6 +1318,16 @@ public class MapDB {
     }
   }
 
+  public static void clearDetail() throws DBException {
+    try{
+      String query = "DELETE FROM detail";
+      statement.executeUpdate(query);
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown error: clearDetail");
+    }
+  }
+
   /**
    * Gets the node currently set up as the kiosk
    *
