@@ -313,8 +313,7 @@ public class Directions {
       directions.add(
           new Direction(getFloorString(path.get(i)), Level.FLOOR, path.get(i), Icon.FLOOR_LEVEL));
     } else if (path.get(i - 1).getFloor() != path.get(i).getFloor()
-            && !(path.get(i + 1).getNodeType().equals("ELEV"))
-        || path.get(i + 1).getNodeType().equals("ELEV")) {
+        && !path.get(i + 1).getNodeType().equals(path.get(i).getNodeType())) {
       directions.add(
           new Direction(getFloorString(path.get(i)), Level.FLOOR, path.get(i), Icon.FLOOR_LEVEL));
     }
