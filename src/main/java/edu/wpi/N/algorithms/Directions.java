@@ -508,30 +508,10 @@ public class Directions {
   /**
    * gets the google directions with the specified mode and direction
    *
-   * @param mode walking, driving,, bycycling, transit; gets directions in one of those formats
-   * @param dirFileName name of HTML file indicating direction
+   * @param urls the request url
    * @return The google directions as an ArrayList of string
    */
-  public static ArrayList<String> getGoogleDirectionsStrings(String mode, String dirFileName) {
-    String urls;
-    if (dirFileName.equals("FaulknerToMain45Francis")) {
-      urls =
-          "https://maps.googleapis.com/maps/api/directions/json?mode="
-              + mode
-              + "&origin=42.301213,-71.127795"
-              + "&destination=Brigham+and+Women's+Hospital:+Spiegel+Joan+H+MD,+45+Francis+St+%23+D,+Boston,+MA+02115"
-              + "&key=AIzaSyDx7BSweq5dRzXavs1vxuMWeR2ETMR6b3Q";
-    } else if(dirFileName.equals("FaulknerToShapiroFenwood")) {
-      urls =
-          "https://maps.googleapis.com/maps/api/directions/json?mode="
-              + mode
-              + "&origin=42.301213,-71.127795"
-              + "&destination=42.335505,-71.108191"
-              + "&key=AIzaSyDx7BSweq5dRzXavs1vxuMWeR2ETMR6b3Q";
-    } else {
-      urls = "";
-    }
-
+  public static ArrayList<String> getGoogleDirectionsStrings(String urls) {
 
     try {
       URL url = new URL(urls);
@@ -567,8 +547,8 @@ public class Directions {
     }
   }
 
-  public static ArrayList<Direction> getGoogleDirections(String mode, String dirFileName) {
-    ArrayList<String> directions = getGoogleDirectionsStrings(mode, dirFileName);
+  public static ArrayList<Direction> getGoogleDirections(String url) {
+    ArrayList<String> directions = getGoogleDirectionsStrings(url);
     ArrayList<Direction> iconDirections = new ArrayList<>();
     for (int i = 0; i < directions.size(); i++) {
       if (i == directions.size() - 1) {

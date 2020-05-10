@@ -3,7 +3,6 @@ package edu.wpi.N.views.mapDisplay;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXNodesList;
 import edu.wpi.N.App;
-import edu.wpi.N.algorithms.Direction;
 import edu.wpi.N.algorithms.Directions;
 import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.database.DBException;
@@ -108,7 +107,6 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     initFloorButtons();
     initFunctionPane();
     setDefaultKioskNode();
-    disableTextDirections();
   }
 
   /**
@@ -283,57 +281,141 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
         });
   }
 
+  /**
+   * handles the event of a button click
+   *
+   * @param txt the text of the button which is clicked
+   * @throws DBException
+   */
   public void handleFloorButtonClicked(String txt) throws DBException {
+    //    collapseAllFloorButtons();
     if (txt.equals("F1")) {
-      handleFloorButtonClickedHelper(1, "Faulkner");
-    } else if (txt.equals("F2")) {
-      handleFloorButtonClickedHelper(2, "Faulkner");
-    } else if (txt.equals("F3")) {
-      handleFloorButtonClickedHelper(3, "Faulkner");
-    } else if (txt.equals("F4")) {
-      handleFloorButtonClickedHelper(4, "Faulkner");
-    } else if (txt.equals("F5")) {
-      handleFloorButtonClickedHelper(5, "Faulkner");
-    } else if (txt.equals("L2")) {
-      handleFloorButtonClickedHelper(1, "Main");
-    } else if (txt.equals("L1")) {
-      handleFloorButtonClickedHelper(2, "Main");
-    } else if (txt.equals("G")) {
-      handleFloorButtonClickedHelper(3, "Main");
-    } else if (txt.equals("1")) {
-      handleFloorButtonClickedHelper(4, "Main");
-    } else if (txt.equals("2")) {
-      handleFloorButtonClickedHelper(5, "Main");
-    } else if (txt.equals("3")) {
-      handleFloorButtonClickedHelper(6, "Main");
-    } else if (txt.equals("Street View")) {
-      handleFloorButtonClickedHelper(0, "Drive");
-    }
-  }
-
-  public void handleFloorButtonClickedHelper(int floor, String building) throws DBException {
-    if (building.equals("Faulkner") || building.equals("Main")) {
-      changeFloor(floor, building);
+      changeFloor(1, "Faulkner");
       switchHospitalView();
-    } else {
-      this.currentFloor = 0;
-      this.currentBuilding = "Drive";
+      this.currentFloor = 1;
+      this.currentBuilding = "Faulkner";
+      setDirectionsTab();
+      if (path != null && path.size() < 1) {
+        setDefaultKioskNode();
+      }
+    } else if (txt.equals("F2")) {
+      changeFloor(2, "Faulkner");
+      switchHospitalView();
+      this.currentFloor = 2;
+      this.currentBuilding = "Faulkner";
+      setDirectionsTab();
+      if (path != null && path.size() < 1) {
+        setDefaultKioskNode();
+      }
+    } else if (txt.equals("F3")) {
+      changeFloor(3, "Faulkner");
+      switchHospitalView();
+      this.currentFloor = 3;
+      this.currentBuilding = "Faulkner";
+      setDirectionsTab();
+      if (path != null && path.size() < 1) {
+        setDefaultKioskNode();
+      }
+    } else if (txt.equals("F4")) {
+      changeFloor(4, "Faulkner");
+      switchHospitalView();
+      this.currentFloor = 4;
+      this.currentBuilding = "Faulkner";
+      setDirectionsTab();
+      if (path != null && path.size() < 1) {
+        setDefaultKioskNode();
+      }
+    } else if (txt.equals("F5")) {
+      changeFloor(5, "Faulkner");
+      switchHospitalView();
+      this.currentFloor = 5;
+      this.currentBuilding = "Faulkner";
+      setDirectionsTab();
+      if (path != null && path.size() < 1) {
+        setDefaultKioskNode();
+      }
+    } else if (txt.equals("L2")) {
+      changeFloor(1, "Main");
+      switchHospitalView();
+      this.currentFloor = 1;
+      this.currentBuilding = "Main";
+      setDirectionsTab();
+      if (path != null && path.size() < 1) {
+        setDefaultKioskNode();
+      }
+    } else if (txt.equals("L1")) {
+      switchHospitalView();
+      changeFloor(2, "Main");
+      this.currentFloor = 2;
+      this.currentBuilding = "Main";
+      setDirectionsTab();
+      if (path != null && path.size() < 1) {
+        setDefaultKioskNode();
+      }
+    } else if (txt.equals("G")) {
+      switchHospitalView();
+      changeFloor(3, "Main");
+      this.currentFloor = 3;
+      this.currentBuilding = "Main";
+      setDirectionsTab();
+      if (path != null && path.size() < 1) {
+        setDefaultKioskNode();
+      }
+    } else if (txt.equals("1")) {
+      switchHospitalView();
+      changeFloor(4, "Main");
+      this.currentFloor = 4;
+      this.currentBuilding = "Main";
+      setDirectionsTab();
+      if (path != null && path.size() < 1) {
+        setDefaultKioskNode();
+      }
+    } else if (txt.equals("2")) {
+      switchHospitalView();
+      changeFloor(5, "Main");
+      this.currentFloor = 5;
+      this.currentBuilding = "Main";
+      setDirectionsTab();
+      if (path != null && path.size() < 1) {
+        setDefaultKioskNode();
+      }
+    } else if (txt.equals("3")) {
+      switchHospitalView();
+      changeFloor(6, "Main");
+      this.currentFloor = 6;
+      this.currentBuilding = "Main";
+      setDirectionsTab();
+      if (this.path.size() < 1) {
+        setDefaultKioskNode();
+      }
+    } else if (txt.equals("Street View")) {
       switchGoogleView();
-    }
-    if (mapQRController != null && pn_iconBar.getChildren().contains(pn_qrIcon)) {
-      mapQRController.setTabFocus(floor, building);
-    }
-    if (path == null || path.size() == 0) {
-      setDefaultKioskNode();
+      mainButtonList.animateList(false);
+      faulknerButtonList.animateList(false);
+      this.currentFloor = -1;
+      this.currentBuilding = "Street View";
+      setDirectionsTab();
+      setFloorBuildingText(-1, "");
+      // TODO DEFAULT GOOGLE MAP VIEW
     }
   }
 
+  /**
+   * switches the current floor displayed on the map
+   *
+   * @param newFloor the new floor
+   * @param newBuilding the new building
+   * @throws DBException
+   */
   public void changeFloor(int newFloor, String newBuilding) throws DBException {
     mapBaseController.clearPath();
     this.currentFloor = newFloor;
     this.currentBuilding = newBuilding;
     setBackground(newBuilding);
     setFloorBuildingText(this.currentFloor, this.currentBuilding);
+    if (path != null && path.size() < 1) {
+      setDefaultKioskNode();
+    }
     mapBaseController.setFloor(this.currentBuilding, this.currentFloor, this.path);
   }
 
@@ -348,7 +430,6 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
                     (locationSearchController.getDBNodes())[0],
                     (locationSearchController.getDBNodes())[1],
                     locationSearchController.getHandicap());
-                enableTextDirections();
               } catch (DBException | IOException ex) {
                 ex.printStackTrace();
               }
@@ -366,7 +447,6 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
                     (doctorSearchController.getDBNodes())[0],
                     (doctorSearchController.getDBNodes())[1],
                     doctorSearchController.getHandicap());
-                enableTextDirections();
               } catch (DBException | IOException ex) {
                 ex.printStackTrace();
               }
@@ -393,7 +473,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
               locationSearchController.getTgHandicap().setSelected(false);
               locationSearchController.clearDbNodes();
               mapBaseController.clearPath();
-              disableTextDirections();
+              resetTextualDirections();
               enableAllFloorButtons();
               mainButtonList.animateList(false);
               faulknerButtonList.animateList(false);
@@ -428,7 +508,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
               mapBaseController.clearPath();
               mainButtonList.animateList(false);
               faulknerButtonList.animateList(false);
-              disableTextDirections();
+              resetTextualDirections();
               enableAllFloorButtons();
               try {
                 setDefaultKioskNode();
@@ -450,7 +530,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
             e -> {
               DbNode first = locationSearchController.getDBNodes()[0];
               try {
-                enableTextDirections();
+                resetTextualDirections();
                 this.path = singleton.savedAlgo.findQuickAccess(first, "REST");
                 mapBaseController.setFloor(first.getBuilding(), first.getFloor(), path);
                 if (path.size() == 0) {
@@ -483,6 +563,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
                 return;
               }
               try {
+                resetTextualDirections();
                 this.path = singleton.savedAlgo.findQuickAccess(first, "INFO");
                 mapBaseController.setFloor(first.getBuilding(), first.getFloor(), path);
                 if (path.size() == 0) {
@@ -511,6 +592,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
             e -> {
               DbNode first = locationSearchController.getDBNodes()[0];
               try {
+                resetTextualDirections();
                 this.path = singleton.savedAlgo.findQuickAccess(first, "EXIT");
                 mapBaseController.setFloor(first.getBuilding(), first.getFloor(), path);
                 if (path.size() == 0) {
@@ -677,7 +759,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     mapBaseController.clearPath();
     setGoogleButtonDisable(true);
     enableAllFloorButtons();
-    disableTextDirections();
+    resetTextualDirections();
   }
 
   /**
@@ -717,8 +799,8 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
       loader = new FXMLLoader(getClass().getResource("mapQR.fxml"));
       Pane pane = loader.load();
       mapQRController = loader.getController();
-      mapQRController.setSingleton(this.singleton);
-      mapQRController.setMapBaseController(mapBaseController);
+      resetTextualDirections();
+      setDirectionsTab();
       setTextDescription();
       setDefaultKioskNode();
       pn_change.getChildren().add(pane);
@@ -733,6 +815,22 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
       resetMap();
       this.mainApp.switchScene("/edu/wpi/N/views/admin/newLogin.fxml", singleton);
     }
+  }
+
+  /** changes the tabs of the textual direction page based on the current floor */
+  public void setDirectionsTab() {
+    if (mapQRController == null) {
+      return;
+    }
+    if (pn_mapContainer.getChildren().get(0) == pn_googleMapView) {
+      mapQRController.setDirectionTab("Street View");
+      return;
+    }
+    if (this.currentBuilding.equals("Faulkner")) {
+      mapQRController.setDirectionTab("Faulkner");
+      return;
+    }
+    mapQRController.setDirectionTab("Main");
   }
 
   /**
@@ -847,6 +945,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
   /** switches the current map view to the google map */
   public void switchGoogleView() {
     pn_mapContainer.getChildren().setAll(pn_googleMapView);
+    System.out.println("Hello");
   }
 
   /** switches the current map view to the hospital view */
@@ -870,9 +969,10 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
    * @param building the current building
    */
   public void setFloorBuildingText(int floor, String building) {
-    if (floor == 0) {
+    if (floor == -1) {
       lbl_building_floor.setText("Driving Directions");
-    } else if (!building.equals("Faulkner")) {
+    }
+    if (!building.equals("Faulkner")) {
       if (floor == 1) {
         lbl_building_floor.setText(building + ", " + "L2");
       } else if (floor == 2) {
@@ -908,10 +1008,14 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
    * @throws DBException
    */
   public void setTextDescription() throws DBException {
-
     if (this.path.size() == 0 || path == null) {
       return;
     }
+
+    String faulknerText = "";
+    String mainText = "";
+    String driveText = "";
+
     Path pathFaulkner = new Path(new LinkedList<>());
     Path pathMain = new Path(new LinkedList<>());
 
@@ -923,33 +1027,41 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
       }
     }
 
-    boolean FaulknerToMain =
-        path.get(0).getBuilding().equals("Faulkner")
-            && !path.get(path.size() - 1).getBuilding().equals("Faulkner");
-    boolean MainToFaulkner =
-        !path.get(0).getBuilding().equals("Faulkner")
-            && path.get(path.size() - 1).getBuilding().equals("Faulkner");
+    ArrayList<String> faulknerDirections = new ArrayList<>();
+    ArrayList<String> mainDirections = new ArrayList<>();
 
-    ArrayList<Direction> faulknerDirections =
-        pathFaulkner.size() > 0
-            ? pathFaulkner.getDirections(singleton.savedAlgo.getMapData(), FaulknerToMain)
-            : new ArrayList<>();
-    ArrayList<Direction> mainDirections =
-        pathMain.size() > 0
-            ? pathMain.getDirections(singleton.savedAlgo.getMapData(), MainToFaulkner)
-            : new ArrayList<>();
+    if (pathFaulkner.size() > 0) {
+      faulknerDirections = pathFaulkner.getDirections();
+      for (String s : faulknerDirections) {
+        faulknerText += s;
+        faulknerText += "\n";
+      }
+    }
 
-    ArrayList<Direction> googleDirections = new ArrayList<>();
+    if (pathMain.size() > 0) {
+      mainDirections = pathMain.getDirections();
+      for (String s : mainDirections) {
+        mainText += s;
+        mainText += "\n";
+      }
+    }
 
-    mapQRController.setTabs(path);
-    mapQRController.setFaulknerText(faulknerDirections);
-    mapQRController.setMainText(mainDirections);
-    mapQRController.setMapDisplayController(this);
+    if (!pathFaulkner.equals("")) {
+      mapQRController.getTextFaulkner().setText(faulknerText);
+      mapQRController.getImageFaulkner().setImage(generateImage(faulknerDirections, false));
+    }
+    if (!pathMain.equals("")) {
+      mapQRController.getTextMain().setText(mainText);
+      mapQRController.getImageMain().setImage(generateImage(mainDirections, false));
+    }
 
+    // For google maps
+    ArrayList<String> googleDirections = new ArrayList<>();
     boolean isFirstFaulkner = this.path.get(0).getBuilding().equals("Faulkner");
     boolean isSecondFaulkner = this.path.get(path.size() - 1).getBuilding().equals("Faulkner");
     if (isFirstFaulkner ^ isSecondFaulkner) {
       if (isFirstFaulkner) {
+
         // Default
         String dirFileName = "FaulknerToMain45Francis";
 
@@ -970,21 +1082,38 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
           }
 
           googleDirections = Directions.getGoogleDirections("Driving", dirFileName);
+
         }
       } else {
-        //        googleDirections = Directions.getGoogleDirections("Driving", true);
+        // googleDirections = Directions.getGoogleDirections("Driving", true);
       }
     }
-    mapQRController.setDriveText(googleDirections);
+
+
+//
+//    if (!googleDirections.equals("")) {
+//      mapQRController.getTextDrive().setText(googleDirections);
+//      ArrayList<String> driveDirections = new ArrayList<>();
+//      driveDirections.add(googleDirections);
+//
+//      mapQRController.getImageDrive().setImage(generateImage(driveDirections, false));
+//    }
   }
 
-  public void disableTextDirections() {
-    pn_iconBar.getChildren().remove(pn_qrIcon);
-  }
-
-  public void enableTextDirections() {
-    if (!(path.size() == 0 || path == null)) {
-      pn_iconBar.getChildren().add(pn_qrIcon);
+  /** resets the fields for textual description */
+  public void resetTextualDirections() {
+    if (mapQRController == null) {
+      return;
+    }
+    mapQRController.getTextFaulkner().clear();
+    mapQRController.getTextDrive().clear();
+    mapQRController.getTextMain().clear();
+    try {
+      mapQRController.getImageFaulkner().setImage(null);
+      mapQRController.getImageMain().setImage(null);
+      mapQRController.getImageDrive().setImage(null);
+    } catch (NullPointerException e) {
+      return;
     }
   }
 }
