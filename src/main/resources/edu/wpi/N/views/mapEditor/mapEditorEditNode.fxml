@@ -13,12 +13,12 @@
             <Font name="Calibri" size="25.0" />
          </font>
       </Label>
-      <JFXTextField fx:id="txt_longName" focusColor="WHITE" layoutX="54.0" layoutY="63.0" prefHeight="25.0" prefWidth="377.0" promptText="Short Name" style="-fx-text-inner-color: WHITE; -fx-prompt-text-fill: WHITE;" text="Long Name" unFocusColor="WHITE">
+      <JFXTextField fx:id="txt_longName" focusColor="WHITE" layoutX="54.0" layoutY="63.0" prefHeight="25.0" prefWidth="377.0" style="-fx-text-inner-color: WHITE; -fx-prompt-text-fill: WHITE;" text="Long Name" unFocusColor="WHITE">
          <font>
             <Font name="Calibri" size="18.0" />
          </font>
       </JFXTextField>
-      <JFXTextField fx:id="txt_shortName" layoutX="54.0" layoutY="108.0" prefHeight="25.0" prefWidth="377.0" promptText="Long Name" style="-fx-text-inner-color: WHITE; -fx-prompt-text-fill: WHITE;" text="Short Name" unFocusColor="WHITE">
+      <JFXTextField fx:id="txt_shortName" layoutX="54.0" layoutY="108.0" prefHeight="25.0" prefWidth="377.0" style="-fx-text-inner-color: WHITE; -fx-prompt-text-fill: WHITE;" text="Short Name" unFocusColor="WHITE">
          <font>
             <Font name="Calibri" size="18.0" />
          </font>
