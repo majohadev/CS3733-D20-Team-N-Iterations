@@ -103,11 +103,11 @@ public class MapQRController implements Controller {
     tr.getStylesheets()
         .add(getClass().getResource("/edu/wpi/N/css/newMapDisplay.css").toExternalForm());
     tr.getStyleClass().add("tree-view");
-    //    if (tbpn_directions.getTabs(). == "Faulkner") {
-    //      tr_faulkner.getSelectionModel().select(0);
-    //    } else {
-    //      tr_main.getSelectionModel().select(0);
-
+    if (tbpn_directions.getTabs().get(0) == tb_faulkner) {
+      tr_faulkner.getSelectionModel().select(0);
+    } else {
+      tr_main.getSelectionModel().select(0);
+    }
   }
 
   public void setTabFocus(int floor, String building) {

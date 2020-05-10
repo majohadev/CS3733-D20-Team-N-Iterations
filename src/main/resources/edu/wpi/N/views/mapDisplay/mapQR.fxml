@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXScrollPane?>
 <?import com.jfoenix.controls.JFXTabPane?>
 <?import com.jfoenix.controls.JFXTreeView?>
 <?import javafx.scene.Cursor?>
@@ -22,11 +21,7 @@
               <content>
                 <AnchorPane maxHeight="750.0" minHeight="750.0" minWidth="0.0" prefHeight="750.0" prefWidth="345.0">
                      <children>
-                        <JFXScrollPane maxHeight="750.0" minHeight="750.0" prefHeight="750.0" prefWidth="345.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <children>
-                              <JFXTreeView fx:id="tr_faulkner" maxHeight="1200.0" minHeight="1200.0" prefHeight="1200.0" prefWidth="345.0" />
-                           </children>
-                        </JFXScrollPane>
+                        <JFXTreeView fx:id="tr_faulkner" maxHeight="1200.0" minHeight="1200.0" prefHeight="750.0" prefWidth="345.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                      </children>
                   </AnchorPane>
               </content>
