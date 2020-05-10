@@ -26,6 +26,7 @@
     -fx-min-height: 75;
     -fx-font-family: 'Karla';
     -fx-font-size: 24px;
+    -fx-cursor: hand;
 }
 
 .jfx-button-regular {
@@ -41,6 +42,7 @@
     -fx-min-height: 60;
     -fx-font-family: 'Karla';
     -fx-font-size: 24px;
+    -fx-cursor: hand;
 }
 
 .jfx-button-switch {
@@ -56,6 +58,7 @@
     -fx-min-height: 50;
     -fx-font-family: 'Karla';
     -fx-font-size: 24px;
+    -fx-cursor: hand;
 }
 
 .jfx-button-assign {
@@ -71,6 +74,7 @@
     -fx-min-height: 50;
     -fx-font-family: 'Karla';
     -fx-font-size: 24px;
+    -fx-cursor: hand;
 }
 
 .pane{

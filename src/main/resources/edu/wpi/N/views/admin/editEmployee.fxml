@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableView?>
@@ -32,6 +33,9 @@
          <font>
             <Font name="Calibri" size="24.0" />
          </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
       </JFXButton>
       <Line endX="145.0" layoutX="175.0" layoutY="315.0" startX="-174.0" stroke="#7e9ab6" />
       <Label layoutX="14.0" layoutY="333.0" styleClass="label-admin-display" stylesheets="@../../css/sanitationRequestUI.css" text="Remove Language" textFill="#e6ebf2">
@@ -43,6 +47,9 @@
          <font>
             <Font name="Calibri" size="24.0" />
          </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
       </JFXButton>
       <ChoiceBox fx:id="cb_languageRemove" layoutX="149.0" layoutY="403.0" prefWidth="150.0" stylesheets="@../../css/sanitationRequestUI.css" />
       <TableView fx:id="tb_languagesRemove" layoutX="74.0" layoutY="456.0" prefHeight="202.0" prefWidth="150.0" stylesheets="@../../css/adminTables.css" AnchorPane.leftAnchor="85.0" AnchorPane.rightAnchor="85.0" />

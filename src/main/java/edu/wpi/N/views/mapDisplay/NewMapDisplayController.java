@@ -3,7 +3,6 @@ package edu.wpi.N.views.mapDisplay;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXNodesList;
 import edu.wpi.N.App;
-import edu.wpi.N.algorithms.Directions;
 import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
@@ -939,9 +938,9 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     boolean isSecondFaulkner = this.path.get(path.size() - 1).getBuilding().equals("Faulkner");
     if (isFirstFaulkner ^ isSecondFaulkner) {
       if (isFirstFaulkner) {
-        googleDirections = Directions.getGoogleDirections("Driving", false);
+        // googleDirections = Directions.getGoogleDirections("Driving", false);
       } else {
-        googleDirections = Directions.getGoogleDirections("Driving", true);
+        // googleDirections = Directions.getGoogleDirections("Driving", true);
       }
     }
 

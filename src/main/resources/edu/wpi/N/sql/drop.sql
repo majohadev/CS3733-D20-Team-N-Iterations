@@ -28,6 +28,7 @@ DROP TABLE employees;
 DROP TABLE service;
 DROP TABLE kiosk;
 DROP TABLE shaft;
+DROP TABLE visited;
 DROP TABLE edges;
 DROP TABLE nodes;
 

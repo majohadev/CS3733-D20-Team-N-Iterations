@@ -13,6 +13,7 @@ public class setupDB {
     URL = "jdbc:derby:MapDB;create=true";
     Connection con = DriverManager.getConnection(URL);
     ScriptRunner sr = new ScriptRunner(con);
+    sr.setLogWriter(null);
     Reader reader =
         new BufferedReader(
             new InputStreamReader(Main.class.getResourceAsStream("sql/drop.sql"))); // drop tables
