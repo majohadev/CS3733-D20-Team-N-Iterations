@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -28,7 +27,6 @@
 
                </children>
             </StackPane>
-
             <Pane fx:id="pn_changeFloor" layoutX="1790.0" layoutY="9.0" prefHeight="550.0" prefWidth="131.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0" />
             <Pane fx:id="pn_elev" layoutX="1790.0" layoutY="452.0" minWidth="130.0" stylesheets="@../../css/newMapDisplay.css" visible="false" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="500.0" />
             <Pane fx:id="pn_editor" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="280.0" prefWidth="470.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="100.0" />
