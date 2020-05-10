@@ -55,41 +55,66 @@ public class MapQRController implements Controller {
     this.mapDisplayController = mapDisplayController;
   }
 
+  public void onBtnPrevClicked() throws DBException {
+    if (tb_faulkner.isSelected()) {
+      handleBtnPrevClicked(tr_faulkner, rootFaulkner, tb_faulkner);
+    } else if (tb_drive.isSelected()) {
+      handleBtnPrevClicked(tr_drive, rootDrive, tb_drive);
+    } else if (tb_main.isSelected()) {
+      handleBtnPrevClicked(tr_main, rootMain, tb_main);
+    }
+  }
+
+  public void handleBtnPrevClicked(JFXTreeView tr, TreeItem<Direction> root, Tab tb)
+      throws DBException {
+    if (tr.getSelectionModel().getSelectedItem() == root.getChildren().get(0)) {
+      if (tbpn_directions.getTabs().indexOf(tb) != 0) {
+        tbpn_directions
+            .getSelectionModel()
+            .select(
+                tbpn_directions
+                        .getTabs()
+                        .indexOf(tbpn_directions.getSelectionModel().getSelectedItem())
+                    - 1);
+        if (tbpn_directions.getSelectionModel().getSelectedItem() == tb_drive) {
+          onDriveTabSelected();
+        } else if (tbpn_directions.getSelectionModel().getSelectedItem() == tb_faulkner) {
+          onFaulknerTabSelected();
+        } else if (tbpn_directions.getSelectionModel().getSelectedItem() == tb_main) {
+          onMainTabSelected();
+        }
+      }
+    } else {
+      tr.getSelectionModel().select(tr.getSelectionModel().getSelectedIndex() - 1);
+    }
+  }
+
   public void onBtnNextClicked() throws DBException {
     if (tb_faulkner.isSelected()) {
-      handleBtnNextClicked(tr_faulkner, rootFaulkner);
+      handleBtnNextClicked(tr_faulkner, rootFaulkner, tb_faulkner);
     } else if (tb_drive.isSelected()) {
-      handleBtnNextClicked(tr_drive, rootDrive);
+      handleBtnNextClicked(tr_drive, rootDrive, tb_drive);
     } else if (tb_main.isSelected()) {
-      handleBtnNextClicked(tr_main, rootMain);
+      handleBtnNextClicked(tr_main, rootMain, tb_main);
     }
   }
 
-  public void onBtnPrevClicked() {
-    if (tb_faulkner.isSelected()) {
-      handleBtnPrevClicked(tr_faulkner, rootFaulkner);
-    } else if (tb_drive.isSelected()) {
-      handleBtnPrevClicked(tr_drive, rootDrive);
-    } else if (tb_main.isSelected()) {
-      handleBtnPrevClicked(tr_main, rootMain);
-    }
-  }
-
-  public void handleBtnPrevClicked(JFXTreeView tr, TreeItem<Direction> root) {
-    tr.getSelectionModel().select(tr.getSelectionModel().getSelectedIndex() - 1);
-
-  }
-
-  public void handleBtnNextClicked(JFXTreeView tr, TreeItem<Direction> root) throws DBException {
+  public void handleBtnNextClicked(JFXTreeView tr, TreeItem<Direction> root, Tab tb)
+      throws DBException {
     tr.getSelectionModel().select(tr.getSelectionModel().getSelectedIndex() + 1);
-    if (tr.getSelectionModel().getSelectedItem() == currentDirection) {
-      tbpn_directions
-          .getSelectionModel()
-          .select(
-              tbpn_directions
-                      .getTabs()
-                      .indexOf(tbpn_directions.getSelectionModel().getSelectedItem())
-                  + 1);
+    if (tr.getSelectionModel().getSelectedItem() == currentDirection
+        && tr.getSelectionModel().getSelectedIndex() != 1) {
+      if (tbpn_directions.getTabs().get(tbpn_directions.getTabs().size() - 1) != tb) {
+        tbpn_directions
+            .getSelectionModel()
+            .select(
+                tbpn_directions
+                        .getTabs()
+                        .indexOf(tbpn_directions.getSelectionModel().getSelectedItem())
+                    + 1);
+      } else {
+        tbpn_directions.getSelectionModel().select(0);
+      }
       if (tbpn_directions.getSelectionModel().getSelectedItem() == tb_drive) {
         onDriveTabSelected();
       } else if (tbpn_directions.getSelectionModel().getSelectedItem() == tb_faulkner) {
@@ -112,18 +137,23 @@ public class MapQRController implements Controller {
 
   public void initialize() {}
 
-  public void onFaulknerTreeClicked() {
+  public void onFaulknerTreeClicked() throws DBException {
     collapseMain();
     tr_main.getSelectionModel().clearSelection();
     tr_drive.getSelectionModel().clearSelection();
     currentDirection = (TreeItem<Direction>) tr_faulkner.getSelectionModel().getSelectedItem();
+    mapBaseController.setFloor("Faulkner", currentDirection.getValue().getNode().getFloor(), path);
+    if (currentDirection.getValue().getLevel() == Level.FLOOR) {
+      tr_faulkner.getTreeItem(tr_faulkner.getSelectionModel().getSelectedIndex()).setExpanded(true);
+    }
   }
 
-  public void onDriveTreeClicked() {
+  public void onDriveTreeClicked() throws DBException {
     collapseAllItems();
     tr_main.getSelectionModel().clearSelection();
     tr_faulkner.getSelectionModel().clearSelection();
     currentDirection = (TreeItem<Direction>) tr_drive.getSelectionModel().getSelectedItem();
+    mapBaseController.setFloor("Main", currentDirection.getValue().getNode().getFloor(), path);
   }
 
   public void onMainTreeClicked() {
@@ -131,6 +161,9 @@ public class MapQRController implements Controller {
     tr_drive.getSelectionModel().clearSelection();
     tr_faulkner.getSelectionModel().clearSelection();
     currentDirection = (TreeItem<Direction>) tr_main.getSelectionModel().getSelectedItem();
+    if (currentDirection.getValue().getLevel() == Level.FLOOR) {
+      tr_main.getTreeItem(tr_main.getSelectionModel().getSelectedIndex()).setExpanded(true);
+    }
   }
 
   public void onFaulknerTabSelected() throws DBException {
@@ -169,7 +202,7 @@ public class MapQRController implements Controller {
     mapDisplayController.switchGoogleView();
     try {
       onDriveTreeClicked();
-    } catch (NullPointerException e) {
+    } catch (NullPointerException | DBException e) {
       return;
     }
   }
@@ -246,7 +279,28 @@ public class MapQRController implements Controller {
       tr_main.getSelectionModel().select(0);
       currentDirection = (TreeItem<Direction>) tr_main.getSelectionModel().getSelectedItem();
     }
+    //    makeIntructionsClickacle(tr);
   }
+
+  //  public void makeIntructionsClickacle(JFXTreeView<Direction> tr) {
+  //    tr.setCellFactory(
+  //        tv -> {
+  //          TreeCell<Direction> cell =
+  //              new TreeCell<Direction>() {
+  //                @Override
+  //                public void updateItem(Direction dir, boolean empty) {
+  //                  super.updateItem(dir, empty);
+  //                  if (empty) {
+  //                    setText(null);
+  //                  } else {
+  //                    setText(dir.toString());
+  //                  }
+  //                }
+  //              };
+  //          cell.setOnMouseClicked(e -> System.out.println("Hello"));
+  //          return cell;
+  //        });
+  //  }
 
   public void setTabFocus(int floor, String building) {
     if (building.equals("Faulkner")) {
