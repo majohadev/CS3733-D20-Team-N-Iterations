@@ -125,30 +125,21 @@ public class MapQRController implements Controller {
   }
 
   public void setIntructionFocus(int floor, ArrayList<Direction> path, JFXTreeView tr) {
-    int floorStep = 0;
     for (int i = 0; i < path.size(); i++) {
-      if (i > 2 && (path.get(i - 1).getNode().getFloor() != path.get(i).getNode().getFloor())) {
-        floorStep++;
-      }
       if (path.get(i).getNode().getFloor() == floor) {
-        tr.getTreeItem(floorStep).setExpanded(true);
-        tr.getSelectionModel().select(i);
-        System.out.println(i - 1);
+        tr.getTreeItem(i).setExpanded(true);
+        tr.getSelectionModel().clearAndSelect(i + 1);
         return;
       }
     }
   }
 
-  public void setMainInstructionFocus(int floor) {
-    System.out.println(floor);
-    for (int i = 0; i < mainPath.size(); i++) {
-      if (mainPath.get(i).getNode().getFloor() == floor) {
-        tr_main.getSelectionModel().clearAndSelect(i + 1);
-        tr_main.getTreeItem(i).setExpanded(true);
-        return;
-      }
-    }
-  }
+  //  public void collapseAllItems(ArrayList<Direction> path, JFXTreeView tr) {
+  //    for (int i = 0; i < path.size(); i++) {
+  //      tr.getTreeItem(i).setExpanded(false);
+  //    }
+  //  }
+
   //  public TextArea getTextFaulkner() {
   //    return this.txt_faulkner_directions;
   //  }
