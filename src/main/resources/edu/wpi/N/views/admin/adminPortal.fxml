@@ -166,6 +166,19 @@
                         </JFXButton>
                      </children>
                   </Pane>
+                  <Pane prefHeight="60.0" prefWidth="104.0" style="-fx-background-color: #263051;">
+                     <children>
+                        <JFXButton fx:id="btn_submit" ellipsisString="" onMouseClicked="#switchToStats" prefHeight="51.0" prefWidth="65.0" text="   ">
+                           <graphic>
+                              <ImageView fitHeight="42.0" fitWidth="45.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../images/adminIcons/statistics-64.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </JFXButton>
+                     </children>
+                  </Pane>
                   <Pane prefHeight="140.0" prefWidth="80.0" style="-fx-background-color: #263051;" />
                   <Pane prefHeight="92.0" prefWidth="75.0" style="-fx-background-color: #263051;">
                      <children>

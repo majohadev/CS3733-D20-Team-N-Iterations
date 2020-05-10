@@ -55,6 +55,7 @@ public class NewAdminController implements Controller, Initializable {
   @FXML JFXButton btn_editEmp;
   @FXML JFXButton btn_addEmp;
   @FXML JFXButton btn_remEmp;
+  @FXML JFXButton btn_stats;
   @FXML TableView<Employee> tbl_Employees;
   @FXML ChoiceBox<Service> cb_reqFilter;
   @FXML JFXButton btn_admin;
@@ -97,6 +98,7 @@ public class NewAdminController implements Controller, Initializable {
     btn_remEmp.setTooltip(new Tooltip("Removes a Given Employee"));
     btn_upload.setTooltip(new Tooltip("File Manager"));
     btn_admin.setTooltip(new Tooltip("Adds an Admin"));
+    btn_stats.setTooltip(new Tooltip("Displays Kiosk Statistics"));
   }
 
   @FXML
@@ -104,6 +106,18 @@ public class NewAdminController implements Controller, Initializable {
     btn_submit.setVisible(true);
     cb_changeAlgo.setVisible(true);
     ap_swapPane.setVisible(false);
+  }
+
+  @FXML
+  private void switchToStats() {
+    try {
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(getClass().getResource("statistics.fxml"));
+      AnchorPane currentpane = loader.load();
+      anchorSwap.getChildren().setAll(currentpane);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   @FXML
