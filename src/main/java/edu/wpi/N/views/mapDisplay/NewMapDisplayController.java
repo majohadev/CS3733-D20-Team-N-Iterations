@@ -584,9 +584,48 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
       String pathToHTML = null;
 
       if (isFirstFaulkner) {
-        pathToHTML = "views/googleMapFaulknerToMain.html";
+
+        // Default
+        pathToHTML = "views/html/FaulknerToMain45Francis.html";
+
+        // Identify which 'entrance' to display, use default if not found
+        for (DbNode node : this.path.getPath()) {
+          if (node.getNodeType().equals("EXIT")) {
+            if (node.getNodeID().equals("GEXIT001L1")) {
+              pathToHTML = "views/html/FaulknerToShapiroFenwood.html";
+            } else if (node.getNodeID().equals("AEXIT0010G")) {
+              pathToHTML = "views/html/FaulknerToBTMFenwood.html";
+            } else if (node.getNodeID().equals("GEXIT00101")) {
+              pathToHTML = "views/html/FaulknerToShapiroFrancis.html";
+            } else if (node.getNodeID().equals("FEXIT00201")) {
+              pathToHTML = "views/html/FaulknerToTower75Francis.html";
+            } else if (node.getNodeID().equals("XEXIT00202")) {
+              pathToHTML = "views/html/FaulknerToFLEX.html";
+            }
+          }
+        }
+
       } else {
-        pathToHTML = "views/googleMapMainToFaulkner.html";
+
+        // Default map
+        pathToHTML = "views/html/Main45FrancisToFaulkner.html";
+
+        // Identify which 'exit' to display, use default if not found
+        for (DbNode node : this.path.getPath()) {
+          if (node.getNodeType().equals("EXIT")) {
+            if (node.getNodeID().equals("GEXIT001L1")) {
+              pathToHTML = "views/html/ShapiroFenwoodToFaulkner.html";
+            } else if (node.getNodeID().equals("AEXIT0010G")) {
+              pathToHTML = "views/html/BTMFenwoodToFaulkner.html";
+            } else if (node.getNodeID().equals("GEXIT00101")) {
+              pathToHTML = "views/html/ShapiroFrancisToFaulkner.html";
+            } else if (node.getNodeID().equals("FEXIT00201")) {
+              pathToHTML = "views/html/Tower75FrancisToFaulkner.html";
+            } else if (node.getNodeID().equals("XEXIT00202")) {
+              pathToHTML = "views/html/FLEXToFaulkner.html";
+            }
+          }
+        }
       }
 
       String finalPathToHTML = pathToHTML;
@@ -911,9 +950,29 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     boolean isSecondFaulkner = this.path.get(path.size() - 1).getBuilding().equals("Faulkner");
     if (isFirstFaulkner ^ isSecondFaulkner) {
       if (isFirstFaulkner) {
-        googleDirections = Directions.getGoogleDirections("Driving", false);
+        // Default
+        String dirFileName = "FaulknerToMain45Francis";
+
+        // Identify which 'entrance' to generate text dirs for, use default if not found
+        for (DbNode node : this.path.getPath()) {
+          if (node.getNodeType().equals("EXIT")) {
+            if (node.getNodeID().equals("GEXIT001L1")) {
+              dirFileName = "FaulknerToShapiroFenwood";
+            } else if (node.getNodeID().equals("AEXIT0010G")) {
+              dirFileName = "FaulknerToBTMFenwood";
+            } else if (node.getNodeID().equals("GEXIT00101")) {
+              dirFileName = "FaulknerToShapiroFrancis";
+            } else if (node.getNodeID().equals("FEXIT00201")) {
+              dirFileName = "FaulknerToTower75Francis";
+            } else if (node.getNodeID().equals("XEXIT00202")) {
+              dirFileName = "FaulknerToFLEX";
+            }
+          }
+
+          googleDirections = Directions.getGoogleDirections("Driving", dirFileName);
+        }
       } else {
-        googleDirections = Directions.getGoogleDirections("Driving", true);
+        //        googleDirections = Directions.getGoogleDirections("Driving", true);
       }
     }
     mapQRController.setDriveText(googleDirections);
