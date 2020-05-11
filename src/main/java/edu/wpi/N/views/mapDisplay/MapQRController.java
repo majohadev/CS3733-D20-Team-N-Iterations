@@ -305,6 +305,7 @@ public class MapQRController implements Controller {
       DbNode node = cell.getItem().getNode();
       try {
         controller.mapBaseController.setFloor(node.getBuilding(), node.getFloor(), controller.path);
+        controller.mapBaseController.autoFocusToNode(node);
       } catch (DBException e) {
         e.printStackTrace();
       } catch (NullPointerException e) {

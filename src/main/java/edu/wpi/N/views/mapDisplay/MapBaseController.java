@@ -477,7 +477,7 @@ public class MapBaseController implements Controller {
    *
    * @param node DbNode to get location data from
    */
-  private void autoFocusToNode(DbNode node) {
+  public void autoFocusToNode(DbNode node) {
     autoFocusToPoint(scaleX(node.getX()), scaleY(node.getY()));
   }
 
@@ -507,7 +507,7 @@ public class MapBaseController implements Controller {
    * @param x x location to go to
    * @param y y location to go to
    */
-  private void autoFocusToPoint(double x, double y) {
+  public void autoFocusToPoint(double x, double y) {
 
     System.out.println("Point X: " + x + "\nY: " + y);
     System.out.println(
