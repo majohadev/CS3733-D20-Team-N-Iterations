@@ -4,6 +4,7 @@ import com.google.common.collect.HashBiMap;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXNodesList;
 import edu.wpi.N.App;
+import edu.wpi.N.database.CSVParser;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
@@ -615,8 +616,6 @@ public class MapEditorControllerAddingNodes implements Controller {
       deleteNodeCircles.remove(circle);
       controllerDeleteNode.removeLstDeleteNode(nodesMap.get(circle).getDBNode().getNodeID());
     }
-
-    autoFocusToNodesGroup(deleteNodeCircles);
   }
 
   private void onCircleAlignNodeClicked(MouseEvent event, Circle circle) {
@@ -684,9 +683,20 @@ public class MapEditorControllerAddingNodes implements Controller {
   // Pane Display Clicked
   public void onPaneDisplayClicked(MouseEvent event) throws IOException {
     // Add Node
-    System.out.println("yo Clicked");
-    System.out.println(event.getScreenX());
+    // System.out.println("yo Clicked");
+    /*System.out.println(event.getScreenX());
     System.out.println(event.getScreenY());
+    double x = event.getX();
+    double y = event.getY();
+    int actualX = (int) scaleXDB(x);
+    int actualY = (int) scaleYDB(y);
+    try {
+      DbNode node = MapDB.checkHitbox(actualX, actualY, "Faulkner", 1);
+      System.out.println(node.getLongName());
+    } catch (DBException e) {
+      e.printStackTrace();
+    }*/
+
     if (event.getClickCount() == 2 && mode != Mode.ADD_NODE) {
       hideEditElevButton();
       onPaneDisplayClickedAddNode(event);
@@ -956,13 +966,14 @@ public class MapEditorControllerAddingNodes implements Controller {
               int y1 = xandYpos.get(1);
               int x2 = xandYpos.get(2);
               int y2 = xandYpos.get(3);
-              /*try {
-                MapDB.addHitbox(x1,y1,x2,y2,hitboxNodeId);
+              try {
+                MapDB.addHitbox(x1, y1, x2, y2, hitboxNodeId);
               } catch (DBException e) {
                 e.printStackTrace();
-              }*/
+              }
               controllerDeleteNode.lst_delete_node.getItems().clear();
               controllerDeleteNode.clearXandY();
+              pn_editor.setVisible(false);
               resetDeleteNode();
               mode = Mode.NO_STATE;
             });
@@ -1423,6 +1434,11 @@ public class MapEditorControllerAddingNodes implements Controller {
   }
 
   public void onBtnHomeClicked() throws IOException {
+    try {
+      CSVParser.exportExistingHitBoxesToCSV();
+    } catch (DBException e) {
+      e.printStackTrace();
+    }
     mainApp.switchScene("views/admin/adminPortal.fxml", singleton);
   }
 
