@@ -1,8 +1,6 @@
 package edu.wpi.N;
 
 import edu.wpi.N.database.*;
-import edu.wpi.N.entities.memento.CareTaker;
-import edu.wpi.N.entities.memento.Originator;
 import java.awt.*;
 import java.io.IOException;
 import java.sql.SQLException;
