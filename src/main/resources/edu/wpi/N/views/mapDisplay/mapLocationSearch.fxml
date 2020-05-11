@@ -34,10 +34,19 @@
             <Image url="@../../images/mapDisplayIcons/targetIcon.png" />
          </image>
       </ImageView>
-      <JFXToggleButton fx:id="tg_handicap" contentDisplay="TOP" graphicTextGap="0.0" layoutY="728.0" prefHeight="84.0" prefWidth="107.0" styleClass="toggle" stylesheets="@../../css/newMapDisplay.css" text="Handicap" textAlignment="CENTER" textFill="#e6ebf2" toggleColor="#7e9ab6" toggleLineColor="#4a69c6" unToggleColor="#7e9ab6" unToggleLineColor="#e6ebf2" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="728.0" />
-      <JFXButton fx:id="btn_reset" layoutX="128.0" layoutY="744.0" maxWidth="90.0" minWidth="90.0" prefWidth="90.0" stylesheets="@../../css/newMapDisplay.css" text="Reset" textFill="#e6ebf2" AnchorPane.leftAnchor="128.0" AnchorPane.topAnchor="744.0" />
-      <JFXButton fx:id="btn_search" layoutX="241.0" layoutY="744.0" maxWidth="90.0" minWidth="90.0" prefWidth="90.0" stylesheets="@../../css/newMapDisplay.css" text="Search" textFill="#e6ebf2" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="744.0" />
-      <HBox alignment="CENTER" layoutY="824.0" prefHeight="66.0" prefWidth="345.0" spacing="53.0">
+      <JFXToggleButton fx:id="tg_handicap" graphicTextGap="0.0" layoutX="30.0" layoutY="770.0" prefHeight="84.0" prefWidth="159.0" styleClass="toggle" stylesheets="@../../css/newMapDisplay.css" text="Handicap" textAlignment="CENTER" textFill="#e6ebf2" toggleColor="#7e9ab6" toggleLineColor="#4a69c6" unToggleColor="#7e9ab6" unToggleLineColor="#e6ebf2" AnchorPane.leftAnchor="30.0" AnchorPane.topAnchor="770.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></JFXToggleButton>
+      <JFXButton fx:id="btn_reset" layoutX="228.0" layoutY="795.0" maxWidth="90.0" minWidth="90.0" prefWidth="90.0" stylesheets="@../../css/newMapDisplay.css" text="Reset" textFill="#e6ebf2" AnchorPane.leftAnchor="228.0" AnchorPane.topAnchor="795.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></JFXButton>
+      <JFXButton fx:id="btn_search" layoutX="30.0" layoutY="734.0" maxWidth="288.0" minWidth="90.0" prefHeight="35.0" prefWidth="288.0" styleClass="searchbutton" stylesheets="@../../css/newMapDisplay.css" text="Search" textFill="#e6ebf2" AnchorPane.rightAnchor="27.0" AnchorPane.topAnchor="734.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></JFXButton>
+      <HBox alignment="CENTER" layoutX="2.0" layoutY="854.0" prefHeight="66.0" prefWidth="345.0" spacing="43.0">
          <children>
             <Pane fx:id="btn_restRoom" prefHeight="66.0" prefWidth="70.0" style="-fx-background-color: #4a69c6; -fx-background-radius: 15;">
                <children>
