@@ -1,22 +1,29 @@
 package edu.wpi.N.views.mapDisplay;
 
 import com.jfoenix.controls.JFXTabPane;
+import com.jfoenix.controls.JFXTreeCell;
 import com.jfoenix.controls.JFXTreeView;
 import edu.wpi.N.App;
 import edu.wpi.N.algorithms.Direction;
 import edu.wpi.N.algorithms.Level;
 import edu.wpi.N.database.DBException;
+import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Path;
 import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.views.Controller;
 import java.util.ArrayList;
 import java.util.LinkedList;
+
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.util.Callback;
 
 public class MapQRController implements Controller {
   private StateSingleton singleton;
@@ -314,6 +321,58 @@ public class MapQRController implements Controller {
     makeInstructions(dirList, tr_drive, rootDrive);
   }
 
+  private static class CellClicked implements EventHandler<MouseEvent> {
+    private MapQRController controller;
+    private DirectionCell cell;
+    public CellClicked(MapQRController controller, DirectionCell cell){
+      super();
+      this.controller = controller;
+      this.cell = cell;
+    }
+    @Override
+    public void handle(MouseEvent mouseEvent) {
+      controller.currentDirection = cell.getTreeItem();
+      DbNode node = cell.getItem().getNode();
+      try {
+        controller.mapBaseController.setFloor(
+                node.getBuilding(), node.getFloor(), controller.path);
+      } catch (DBException e) {
+        e.printStackTrace();
+      }
+
+    }
+  }
+
+  private static class DirectionCell extends JFXTreeCell<Direction> {
+    private StateSingleton singleton;
+
+    public DirectionCell(StateSingleton singleton) {
+      super();
+      this.singleton = singleton;
+    };
+
+    @Override
+    protected void updateItem(Direction item, boolean empty) {
+      super.updateItem(item, empty);
+      if (item == null || empty) {
+        setText("");
+        setGraphic(null);
+      } else {
+        setText(item.toString());
+        if (item.getLevel() != Level.FLOOR) {
+          ImageView img = new ImageView(singleton.mapImageLoader.getIcon(item.getIcon()));
+          img.setFitWidth(25);
+          img.setFitHeight(25);
+          setGraphic(img);
+          setPrefHeight(20 + 30 * (item.toString().length() / 30));
+        } else {
+          setGraphic(null);
+          setPrefHeight(USE_COMPUTED_SIZE);
+        }
+      }
+    }
+  }
+
   /**
    * initial population of textual directions
    *
@@ -322,22 +381,29 @@ public class MapQRController implements Controller {
    * @param root the root of the current tree
    */
   private void makeInstructions(
-      ArrayList<Direction> dirLst, JFXTreeView tr, TreeItem<Direction> root) {
+      ArrayList<Direction> dirLst, JFXTreeView<Direction> tr, TreeItem<Direction> root) {
+    tr.setCellFactory(
+        new Callback<TreeView<Direction>, TreeCell<Direction>>() {
+          @Override
+          public TreeCell<Direction> call(TreeView<Direction> item) {
+            return new DirectionCell(singleton);
+          }
+        });
     TreeItem<Direction> floor = new TreeItem<>();
     TreeItem<Direction> instruction;
     for (Direction dir : dirLst) {;
-      ImageView img = new ImageView(singleton.mapImageLoader.getIcon(dir.getIcon()));
-      img.setFitWidth(25);
-      img.setFitHeight(25);
+      //      ImageView img = new ImageView(singleton.mapImageLoader.getIcon(dir.getIcon()));
+      //      img.setFitWidth(25);
+      //      img.setFitHeight(25);
       if (dir.getLevel() == Level.FLOOR) {
         floor = new TreeItem<>(dir);
         floor.setExpanded(false);
         root.getChildren().add(floor);
       } else if (dir.getLevel() == Level.STEP || dir.getLevel() == Level.DRIVING) {
-        instruction = new TreeItem<>(dir, img);
+        instruction = new TreeItem<>(dir);
         floor.getChildren().add(instruction);
       } else if (dir.getLevel() == Level.BUILDING) {
-        floor = new TreeItem<>(dir, img);
+        floor = new TreeItem<>(dir);
         floor.setExpanded(false);
         root.getChildren().add(floor);
       }
