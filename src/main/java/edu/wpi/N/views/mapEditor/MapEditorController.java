@@ -204,16 +204,6 @@ public class MapEditorController implements Controller {
     Tooltip.install(pn_newalignnode, tooltipAlignNode);
     Tooltip.install(pn_newdeleteedge, tooltipDeleteEdge);
     Tooltip.install(pn_newmanageshaft, tooltipManageShaft);
-    /* pn_newaddnode.setTooltip(new Tooltip("Accepts a Given Request"));
-    btn_addDoc.setTooltip(new Tooltip("Adds a Doctor"));
-    btn_addEmp.setTooltip(new Tooltip("Adds an Employee"));
-    btn_arduino.setTooltip(new Tooltip("Opens Arduino Menu"));
-    btn_denyReq.setTooltip(new Tooltip("Denies a given Request"));
-    btn_editEmp.setTooltip(new Tooltip("Edits Employees"));
-    btn_editMap.setTooltip(new Tooltip("Opens Map Editor"));
-    btn_remEmp.setTooltip(new Tooltip("Removes a Given Employee"));
-    btn_upload.setTooltip(new Tooltip("File Manager"));
-    btn_admin.setTooltip(new Tooltip("Adds an Admin"));*/
   }
 
   private void setFaulknerDefaults() {
