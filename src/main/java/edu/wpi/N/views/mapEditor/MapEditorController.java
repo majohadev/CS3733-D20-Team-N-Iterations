@@ -638,13 +638,13 @@ public class MapEditorController implements Controller {
   }
 
   private void onCircleAddShaftNodeClicked(MouseEvent event, Circle circle) {
-    if (circle.getFill() == Color.CADETBLUE) { // TODO: set colors at top
-      circle.setFill(Color.BLACK);
+    if (circle.getFill() == Color.RED) { // TODO: set colors at top
+      circle.setFill(Color.GREEN);
       addShaftNodeCircles.add(nodesMap.get(circle).getDBNode());
       controllerAddShaft.addLstAddShaftNode(nodesMap.get(circle).getDBNode().getLongName());
 
-    } else if (circle.getFill() == Color.BLACK) {
-      circle.setFill(Color.CADETBLUE);
+    } else if (circle.getFill() == Color.GREEN) {
+      circle.setFill(Color.RED);
       addShaftNodeCircles.remove(nodesMap.get(circle).getDBNode());
       controllerAddShaft.removeLstAddShaftNode(nodesMap.get(circle).getDBNode().getLongName());
     }
@@ -1842,7 +1842,7 @@ public class MapEditorController implements Controller {
     onBtnCancelAddShaftClicked();
     onBtnConfirmAddShaftClicked();
     for (Circle c : editElevNodes) {
-      if (!(c.getFill() == Color.BLACK)) c.setFill(Color.CADETBLUE);
+      if (!(c.getFill() == Color.GREEN)) c.setFill(Color.RED);
     }
   }
 
