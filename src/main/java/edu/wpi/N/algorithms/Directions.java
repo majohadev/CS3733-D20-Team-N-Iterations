@@ -550,6 +550,7 @@ public class Directions {
   public static ArrayList<Direction> getGoogleDirections(String url) {
     ArrayList<String> directions = getGoogleDirectionsStrings(url);
     ArrayList<Direction> iconDirections = new ArrayList<>();
+    if (directions == null) return iconDirections;
     for (int i = 0; i < directions.size(); i++) {
       if (i == directions.size() - 1) {
         iconDirections.add(new Direction(directions.get(i), BUILDING, null, Icon.ARRIVE));
