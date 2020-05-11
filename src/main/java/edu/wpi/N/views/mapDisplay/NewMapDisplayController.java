@@ -470,7 +470,9 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
               DbNode first = locationSearchController.getDBNodes()[0];
               locationSearchController.clearSecondEntry();
               try {
-                this.path = singleton.savedAlgo.findQuickAccess(first, "REST");
+                this.path =
+                    singleton.savedAlgo.findQuickAccess(
+                        first, "REST", locationSearchController.getHandicap());
                 mapBaseController.setFloor(first.getBuilding(), first.getFloor(), path);
                 if (path.size() == 0) {
                   displayErrorMessage("Please select the first node");
@@ -510,7 +512,9 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
                 return;
               }
               try {
-                this.path = singleton.savedAlgo.findQuickAccess(first, "INFO");
+                this.path =
+                    singleton.savedAlgo.findQuickAccess(
+                        first, "INFO", locationSearchController.getHandicap());
                 mapBaseController.setFloor(first.getBuilding(), first.getFloor(), path);
                 if (path.size() == 0) {
                   displayErrorMessage("Please select the first node");
@@ -545,7 +549,9 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
               DbNode first = locationSearchController.getDBNodes()[0];
               locationSearchController.clearSecondEntry();
               try {
-                this.path = singleton.savedAlgo.findQuickAccess(first, "EXIT");
+                this.path =
+                    singleton.savedAlgo.findQuickAccess(
+                        first, "EXIT", locationSearchController.getHandicap());
                 mapBaseController.setFloor(first.getBuilding(), first.getFloor(), path);
                 if (path.size() == 0) {
                   displayErrorMessage("Please select the first node");

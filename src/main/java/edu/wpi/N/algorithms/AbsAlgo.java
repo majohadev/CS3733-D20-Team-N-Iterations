@@ -172,10 +172,6 @@ public abstract class AbsAlgo implements IPathFinder {
           closest = cost;
           end = n;
         }
-
-        return findPath(mapData, start, end, false);
-      } else {
-        return null;
       }
       return end;
     } catch (Exception e) {

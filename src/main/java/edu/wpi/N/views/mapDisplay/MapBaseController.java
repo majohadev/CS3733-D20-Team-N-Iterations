@@ -233,6 +233,16 @@ public class MapBaseController implements Controller {
       if (firstNode.getFloor() == floor
           && secondNode.getFloor() == floor
           && (drawFaulkner || drawMain)) {
+
+        Line line =
+            new Line(
+                scaleX(secondNode.getX()),
+                scaleY(secondNode.getY()),
+                scaleX(firstNode.getX()),
+                scaleY(firstNode.getY()));
+        styleLine(line);
+        pn_path.getChildren().add(line);
+
         if (i == 0) {
           startLabel.setVisible(true);
           endLabel.setVisible(true);
@@ -262,14 +272,6 @@ public class MapBaseController implements Controller {
           endLabel.setText("Enter ");
           drawCircle(secondNode, MIDDLE_NODE_COLOR, endLabel);
         }
-        Line line =
-            new Line(
-                scaleX(secondNode.getX()),
-                scaleY(secondNode.getY()),
-                scaleX(firstNode.getX()),
-                scaleY(firstNode.getY()));
-        styleLine(line);
-        pn_path.getChildren().add(line);
       }
     }
     pn_path.getChildren().addAll(startLabel, endLabel); // To make sure they render over the path
