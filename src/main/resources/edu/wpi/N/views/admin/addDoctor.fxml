@@ -3,6 +3,7 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXListView?>
 <?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Line?>
@@ -34,6 +35,9 @@
          <font>
             <Font name="Calibri" size="24.0" />
          </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
       </JFXButton>
       <Label layoutX="22.0" layoutY="252.0" styleClass="label-mid-size" stylesheets="@../../css/sanitationRequestUI.css" text="Password:" textFill="#e6ebf2">
          <font>
@@ -68,11 +72,17 @@
          <font>
             <Font name="Calibri" size="24.0" />
          </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
       </JFXButton>
       <JFXButton fx:id="btn_removeoffice" buttonType="RAISED" layoutX="171.0" layoutY="763.0" onMouseClicked="#removeOffice" styleClass="jfx-button-regular-half" stylesheets="@../../css/sanitationRequestUI.css" text="Remove" textFill="#e6ebf2">
          <font>
             <Font name="Calibri" size="24.0" />
          </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
       </JFXButton>
    </children>
 </AnchorPane>

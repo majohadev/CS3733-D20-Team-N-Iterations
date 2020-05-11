@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
@@ -13,12 +14,12 @@
             <Font name="Calibri" size="25.0" />
          </font>
       </Label>
-      <JFXTextField fx:id="txt_longName" focusColor="WHITE" layoutX="54.0" layoutY="63.0" prefHeight="25.0" prefWidth="377.0" promptText="Short Name" style="-fx-text-inner-color: WHITE; -fx-prompt-text-fill: WHITE;" text="Long Name" unFocusColor="WHITE">
+      <JFXTextField fx:id="txt_longName" focusColor="WHITE" layoutX="54.0" layoutY="63.0" prefHeight="25.0" prefWidth="377.0" style="-fx-text-inner-color: WHITE; -fx-prompt-text-fill: WHITE;" text="Long Name" unFocusColor="WHITE">
          <font>
             <Font name="Calibri" size="18.0" />
          </font>
       </JFXTextField>
-      <JFXTextField fx:id="txt_shortName" layoutX="54.0" layoutY="108.0" prefHeight="25.0" prefWidth="377.0" promptText="Long Name" style="-fx-text-inner-color: WHITE; -fx-prompt-text-fill: WHITE;" text="Short Name" unFocusColor="WHITE">
+      <JFXTextField fx:id="txt_shortName" layoutX="54.0" layoutY="108.0" prefHeight="25.0" prefWidth="377.0" style="-fx-text-inner-color: WHITE; -fx-prompt-text-fill: WHITE;" text="Short Name" unFocusColor="WHITE">
          <font>
             <Font name="Calibri" size="18.0" />
          </font>
@@ -37,11 +38,17 @@
          <font>
             <Font name="Calibri" size="16.0" />
          </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
       </JFXButton>
       <JFXButton fx:id="btn_cancel" layoutX="54.0" layoutY="221.0" prefHeight="37.0" prefWidth="92.0" text="Cancel" textFill="WHITE">
          <font>
             <Font name="Calibri" size="16.0" />
          </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
       </JFXButton>
    </children>
 </AnchorPane>

@@ -155,41 +155,14 @@ public class Dialogflow {
     // Display the query result
     QueryResult queryResult = response.getQueryResult();
 
-    System.out.println("====================");
-    System.out.format("Query Text: '%s'\n", queryResult.getQueryText());
-    System.out.format(
-        "Detected Intent: %s (confidence: %f)\n",
-        queryResult.getIntent().getDisplayName(), queryResult.getIntentDetectionConfidence());
-    System.out.format("Fulfillment Text: '%s'\n", queryResult.getFulfillmentText());
+    //    System.out.println("====================");
+    //    System.out.format("Query Text: '%s'\n", queryResult.getQueryText());
+    //    System.out.format(
+    //        "Detected Intent: %s (confidence: %f)\n",
+    //        queryResult.getIntent().getDisplayName(), queryResult.getIntentDetectionConfidence());
+    //    System.out.format("Fulfillment Text: '%s'\n", queryResult.getFulfillmentText());
 
     return queryResult;
-  }
-
-  /**
-   * Call the function to get chatbot's reply to user's input
-   *
-   * @param userText: user input
-   * @return: chatbot's reply for given user's text
-   */
-  public String replyToUserInput(String userText) throws Exception {
-    try {
-      QueryResult queryResults = detectIntentTexts(userText, "en-US");
-      String message;
-
-      // If intent matches with get-weather
-      if (queryResults.getIntent().getDisplayName().equals("get-weather")) {
-        message = getCurrentWeatherReply();
-        System.out.println(message);
-      } else {
-        // else, use Dialogflow text
-        message = queryResults.getFulfillmentText();
-      }
-
-      return message;
-    } catch (Exception e) {
-      e.printStackTrace();
-      return null;
-    }
   }
 
   /**
@@ -197,7 +170,7 @@ public class Dialogflow {
    *
    * @return
    */
-  public String getCurrentWeatherReply() {
+  public static String getCurrentWeatherReply() {
 
     // initialize and send request
     String url =
