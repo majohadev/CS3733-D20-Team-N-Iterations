@@ -47,7 +47,7 @@ public abstract class AbsAlgo implements IPathFinder {
   public static double floorBuildingCost(DbNode currNode, DbNode nextNode) {
     if (currNode.getNodeType().equals("EXIT") && nextNode.getNodeType().equals("EXIT")) return 5000;
     else if (currNode.getFloor() != nextNode.getFloor()) {
-      return Math.abs(currNode.getFloor() - nextNode.getFloor()) * 500;
+      return Math.abs(currNode.getFloor() - nextNode.getFloor()) * 250;
     } else return 0;
   }
 
@@ -117,15 +117,18 @@ public abstract class AbsAlgo implements IPathFinder {
           DbNode end = getBestQuickAccess(start, allNodes);
           return findPath(mapData, start, end, handicap);
         }
-        // If no nodes of the given node type are in Faulkner
+        // If no nodes of the given node type are in Faulkner, return null
         return null;
       }
       // Else you're on the main campus
       else {
         // Get all nodes of the given node type on the main campus
-        LinkedList<DbNode> allNodes = MapDB.searchVisNode(-1, "", nodeType, "");
+        LinkedList<DbNode> allNodes = MapDB.searchVisNode(-1, null, nodeType, "");
         // Removes all Faulkner nodes of the given node type
         allNodes.removeIf(currNode -> currNode.getBuilding().equals("Faulkner"));
+        // Remove the emergency department entrance if it was added (don't want people to use this
+        // as exit)
+        allNodes.removeIf(currNode -> currNode.getNodeID().equals("FEXIT00301"));
         // Check if the list is empty
         if (!allNodes.isEmpty()) {
           // If the list isn't empty, get the closest node of the given node type to the start node
@@ -133,7 +136,7 @@ public abstract class AbsAlgo implements IPathFinder {
           DbNode end = getBestQuickAccess(start, allNodes);
           return findPath(mapData, start, end, handicap);
         }
-        // If no nodes of the given node type are on the main campus
+        // If no nodes of the given node type are on the main campus, return null
         return null;
       }
     } catch (DBException e) {
@@ -150,17 +153,21 @@ public abstract class AbsAlgo implements IPathFinder {
    * @return: closest DbNode in the linked list to the start node
    */
   private static DbNode getBestQuickAccess(DbNode start, LinkedList<DbNode> allNodes) {
-    double closest = cost(start, allNodes.getFirst());
-    DbNode end = allNodes.getFirst();
-    for (DbNode n : allNodes) {
-      // TODO: Cost alone doesn't work for this (or at all)
-      double cost = cost(start, n);
-      if (cost <= closest) {
-        closest = cost;
-        end = n;
+    try {
+      double closest = cost(start, allNodes.getFirst());
+      DbNode end = allNodes.getFirst();
+      for (DbNode n : allNodes) {
+        double cost = cost(start, n);
+        if (cost <= closest) {
+          closest = cost;
+          end = n;
+        }
       }
+      return end;
+    } catch (Exception e) {
+      e.printStackTrace();
+      return null;
     }
-    return end;
   }
 
   /**
