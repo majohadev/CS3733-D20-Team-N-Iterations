@@ -1,17 +1,32 @@
 package edu.wpi.N;
 
 import edu.wpi.N.database.*;
-import edu.wpi.N.entities.memento.CareTaker;
-import edu.wpi.N.entities.memento.Originator;
+import edu.wpi.N.entities.memento.GlobalMouseListenerExample;
 import java.awt.*;
 import java.io.IOException;
 import java.sql.SQLException;
+import org.jnativehook.GlobalScreen;
+import org.jnativehook.NativeHookException;
 
 public class Main {
 
   public static void main(String[] args)
       throws SQLException, DBException, ClassNotFoundException, IOException {
     MapDB.initDB();
+
+    try {
+      GlobalScreen.registerNativeHook();
+    } catch (NativeHookException ex) {
+      System.err.println("There was a problem registering the native hook.");
+      System.err.println(ex.getMessage());
+
+      System.exit(1);
+    }
+    GlobalMouseListenerExample example = new GlobalMouseListenerExample();
+
+    // Add the appropriate listeners.
+    GlobalScreen.addNativeMouseListener(example);
+    GlobalScreen.addNativeMouseMotionListener(example);
     // ArduinoController periperal = new ArduinoController();
     // periperal.initialize();
     // MapDB.setKiosk("NSERV00301", 180);

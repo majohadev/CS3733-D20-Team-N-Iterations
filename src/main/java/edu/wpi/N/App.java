@@ -3,6 +3,7 @@ package edu.wpi.N;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.views.Controller;
+import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import javafx.application.Application;
@@ -10,6 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import javax.swing.*;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -37,6 +39,18 @@ public class App extends Application {
   public Stage getStage() {
     return this.masterStage;
   }
+
+  public void godPlzWork() {
+    System.out.println("we gucci my nucci");
+  }
+
+  Action doSomething =
+      new AbstractAction() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+          godPlzWork();
+        }
+      };
 
   @Override
   public void stop() {
