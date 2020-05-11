@@ -51,6 +51,9 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
 
   @FXML MapBaseController mapBaseController;
 
+  private Pane dirPane;
+  public Thread dirThread;
+
   MapLocationSearchController locationSearchController;
   MapDoctorSearchController doctorSearchController;
   MapQRController mapQRController;
@@ -386,6 +389,11 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
               if (path != null) {
                 this.path.clear();
               }
+              try {
+                resetMap();
+              } catch (DBException ex) {
+                ex.printStackTrace();
+              }
               setGoogleButtonDisable(true);
               locationSearchController.getTextFirstLocation().clear();
               locationSearchController.getTextSecondLocation().clear();
@@ -418,7 +426,13 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
               if (this.path != null) {
                 this.path.clear();
               }
+              try {
+                resetMap();
+              } catch (DBException ex) {
+                ex.printStackTrace();
+              }
               enableAllFloorButtons();
+              switchHospitalView();
               setGoogleButtonDisable(true);
               doctorSearchController.getTextLocation().clear();
               doctorSearchController.getTxtDoctor().clear();
@@ -448,9 +462,14 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
         .getBtnRestRoom()
         .setOnMouseClicked(
             e -> {
-              DbNode first = locationSearchController.getDBNodes()[0];
               try {
-                enableTextDirections();
+                resetMap();
+              } catch (DBException ex) {
+                ex.printStackTrace();
+              }
+              DbNode first = locationSearchController.getDBNodes()[0];
+              locationSearchController.clearSecondEntry();
+              try {
                 this.path = singleton.savedAlgo.findQuickAccess(first, "REST");
                 mapBaseController.setFloor(first.getBuilding(), first.getFloor(), path);
                 if (path.size() == 0) {
@@ -460,6 +479,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
                 displayErrorMessage("Please select the first node");
                 return;
               }
+              enableTextDirections();
               disableNonPathFloors();
               if (pathButtonList.size() > 1) {
                 pathButtonList.get(1).setStyle("-fx-background-color: #6C5C7F;");
@@ -477,7 +497,14 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
         .getBtnInfoDesk()
         .setOnMouseClicked(
             e -> {
+              try {
+                resetMap();
+              } catch (DBException ex) {
+                ex.printStackTrace();
+              }
               DbNode first = locationSearchController.getDBNodes()[0];
+              locationSearchController.clearSecondEntry();
+
               if (first.getBuilding().equals("Faulkner")) {
                 displayErrorMessage("No information desks in this building");
                 return;
@@ -492,6 +519,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
                 displayErrorMessage("Please select the first node");
                 return;
               }
+              enableTextDirections();
               disableNonPathFloors();
               if (pathButtonList.size() > 1) {
                 pathButtonList.get(1).setStyle("-fx-background-color: #6C5C7F;");
@@ -509,7 +537,13 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
         .getBtnQuickExit()
         .setOnMouseClicked(
             e -> {
+              try {
+                resetMap();
+              } catch (DBException ex) {
+                ex.printStackTrace();
+              }
               DbNode first = locationSearchController.getDBNodes()[0];
+              locationSearchController.clearSecondEntry();
               try {
                 this.path = singleton.savedAlgo.findQuickAccess(first, "EXIT");
                 mapBaseController.setFloor(first.getBuilding(), first.getFloor(), path);
@@ -520,6 +554,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
                 displayErrorMessage("Please select the first node");
                 return;
               }
+              enableTextDirections();
               disableNonPathFloors();
               if (pathButtonList.size() > 1) {
                 pathButtonList.get(1).setStyle("-fx-background-color: #6C5C7F;");
@@ -671,13 +706,52 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
   }
 
   /** clears necessary variables when the map is reset */
-  public void resetMap() {
+  public void resetMap() throws DBException {
+    this.currentFloor = 1;
+    this.currentBuilding = "Faulkner";
+    mapBaseController.setFloor(this.currentBuilding, this.currentFloor, null);
     this.path = new Path(new LinkedList<>());
     collapseAllFloorButtons();
     mapBaseController.clearPath();
     setGoogleButtonDisable(true);
     enableAllFloorButtons();
     disableTextDirections();
+    switchHospitalView();
+  }
+
+  public synchronized void setDirPane(Pane dirPane) {
+    this.dirPane = dirPane;
+  }
+
+  private static class SetupDirs implements Runnable {
+
+    private NewMapDisplayController con;
+
+    public SetupDirs(NewMapDisplayController con) {
+      this.con = con;
+    }
+
+    @Override
+    public void run() {
+      FXMLLoader loader = new FXMLLoader(getClass().getResource("mapQR.fxml"));
+      Pane pane;
+      try {
+        pane = loader.load();
+      } catch (IOException e) {
+        e.printStackTrace();
+        return;
+      }
+      con.mapQRController = loader.getController();
+      con.mapQRController.setSingleton(con.singleton);
+      con.mapQRController.setMapBaseController(con.mapBaseController);
+      try {
+        con.setTextDescription();
+      } catch (DBException e) {
+        e.printStackTrace();
+        return;
+      }
+      con.setDirPane(pane);
+    }
   }
 
   /**
@@ -714,14 +788,16 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
       setDefaultKioskNode();
       pn_change.getChildren().add(pane);
     } else if (src == pn_qrIcon) {
-      loader = new FXMLLoader(getClass().getResource("mapQR.fxml"));
-      Pane pane = loader.load();
-      mapQRController = loader.getController();
-      mapQRController.setSingleton(this.singleton);
-      mapQRController.setMapBaseController(mapBaseController);
-      setTextDescription();
+      if (dirThread == null) return;
+      try {
+        dirThread.join();
+      } catch (InterruptedException ex) {
+        ex.printStackTrace();
+        return;
+      }
+      if (dirPane == null) return;
       setDefaultKioskNode();
-      pn_change.getChildren().add(pane);
+      pn_change.getChildren().add(dirPane);
     } else if (src == pn_serviceIcon) {
       this.mainApp.switchScene("/edu/wpi/N/views/services/newServicesPage.fxml", singleton);
       resetMap();
@@ -752,7 +828,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
    *
    * @throws DBException
    */
-  public void setDefaultKioskNode() throws DBException {
+  public synchronized void setDefaultKioskNode() throws DBException {
     boolean noFaulknerKiosk =
         !(currentBuilding.equals("Faulkner") && (currentFloor == 1 || currentFloor == 3));
     if (noFaulknerKiosk) {
@@ -907,7 +983,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
    *
    * @throws DBException
    */
-  public void setTextDescription() throws DBException {
+  public synchronized void setTextDescription() throws DBException {
 
     if (this.path.size() == 0 || path == null) {
       return;
@@ -946,45 +1022,160 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     mapQRController.setMainText(mainDirections);
     mapQRController.setMapDisplayController(this);
 
+    // generate the text directions for google map
+    googleDirections = Directions.getGoogleDirections(getNecessaryGoogleRequestUrl("Driving"));
+    mapQRController.setDriveText(googleDirections);
+  }
+
+  /**
+   * Gets the Google API request URL for making the API call based on Starting exit and Goal
+   * Entrance
+   *
+   * @param mode
+   * @return
+   */
+  private String getNecessaryGoogleRequestUrl(String mode) {
+    String url = "";
+
     boolean isFirstFaulkner = this.path.get(0).getBuilding().equals("Faulkner");
     boolean isSecondFaulkner = this.path.get(path.size() - 1).getBuilding().equals("Faulkner");
+
     if (isFirstFaulkner ^ isSecondFaulkner) {
       if (isFirstFaulkner) {
-        // Default
-        String dirFileName = "FaulknerToMain45Francis";
+        // Default Faulkner -> Francis
+        url =
+            "https://maps.googleapis.com/maps/api/directions/json?mode="
+                + mode
+                + "&origin=42.301213,-71.127795"
+                + "&destination=Brigham+and+Women's+Hospital:+Spiegel+Joan+H+MD,+45+Francis+St+%23+D,+Boston,+MA+02115"
+                + "&key=AIzaSyDx7BSweq5dRzXavs1vxuMWeR2ETMR6b3Q";
 
         // Identify which 'entrance' to generate text dirs for, use default if not found
         for (DbNode node : this.path.getPath()) {
           if (node.getNodeType().equals("EXIT")) {
             if (node.getNodeID().equals("GEXIT001L1")) {
-              dirFileName = "FaulknerToShapiroFenwood";
+              // FaulknerToShapiroFenwood
+              url =
+                  "https://maps.googleapis.com/maps/api/directions/json?mode="
+                      + mode
+                      + "&origin=42.301213,-71.127795"
+                      + "&destination=42.335505,-71.108191"
+                      + "&key=AIzaSyDx7BSweq5dRzXavs1vxuMWeR2ETMR6b3Q";
+
             } else if (node.getNodeID().equals("AEXIT0010G")) {
-              dirFileName = "FaulknerToBTMFenwood";
+              // FaulknerToBTMFenwood
+              url =
+                  "https://maps.googleapis.com/maps/api/directions/json?mode="
+                      + mode
+                      + "&origin=42.301213,-71.127795"
+                      + "&destination=42.335425,-71.108247"
+                      + "&key=AIzaSyDx7BSweq5dRzXavs1vxuMWeR2ETMR6b3Q";
+
             } else if (node.getNodeID().equals("GEXIT00101")) {
-              dirFileName = "FaulknerToShapiroFrancis";
+              // FaulknerToShapiroFrancis
+              url =
+                  "https://maps.googleapis.com/maps/api/directions/json?mode="
+                      + mode
+                      + "&origin=42.301213,-71.127795"
+                      + "&destination=42.335863,-71.107704"
+                      + "&key=AIzaSyDx7BSweq5dRzXavs1vxuMWeR2ETMR6b3Q";
+
             } else if (node.getNodeID().equals("FEXIT00201")) {
-              dirFileName = "FaulknerToTower75Francis";
+              // FaulknerToTower75Francis
+              url =
+                  "https://maps.googleapis.com/maps/api/directions/json?mode="
+                      + mode
+                      + "&origin=42.301213,-71.127795"
+                      + "&destination=75+Francis+St+Boston+MA+02115"
+                      + "&key=AIzaSyDx7BSweq5dRzXavs1vxuMWeR2ETMR6b3Q";
+
             } else if (node.getNodeID().equals("XEXIT00202")) {
-              dirFileName = "FaulknerToFLEX";
+              // FaulknerToFLEX
+              url =
+                  "https://maps.googleapis.com/maps/api/directions/json?mode="
+                      + mode
+                      + "&origin=42.301213,-71.127795"
+                      + "&destination=42.335078,-71.106326"
+                      + "&key=AIzaSyDx7BSweq5dRzXavs1vxuMWeR2ETMR6b3Q";
             }
           }
-
-          googleDirections = Directions.getGoogleDirections("Driving", dirFileName);
         }
       } else {
-        //        googleDirections = Directions.getGoogleDirections("Driving", true);
+        // Default Francis -> Faulkner
+        url =
+            "https://maps.googleapis.com/maps/api/directions/json?mode="
+                + mode
+                + "&origin=Brigham+and+Women's+Hospital:+Spiegel+Joan+H+MD,+45+Francis+St+%23+D,+Boston,+MA+02115"
+                + "&destination=42.301213,-71.127795"
+                + "&key=AIzaSyDx7BSweq5dRzXavs1vxuMWeR2ETMR6b3Q";
+
+        // Identify which 'exit' to generate text dirs for, use default if not found
+        for (DbNode node : this.path.getPath()) {
+          if (node.getNodeType().equals("EXIT")) {
+            if (node.getNodeID().equals("GEXIT001L1")) {
+              // ShapiroFenwoodToFaulkner
+              url =
+                  "https://maps.googleapis.com/maps/api/directions/json?mode="
+                      + mode
+                      + "&origin=42.335505,-71.108191"
+                      + "&destination=42.301213,-71.127795"
+                      + "&key=AIzaSyDx7BSweq5dRzXavs1vxuMWeR2ETMR6b3Q";
+
+            } else if (node.getNodeID().equals("AEXIT0010G")) {
+              // BTMFenwoodToFaulkner
+              url =
+                  "https://maps.googleapis.com/maps/api/directions/json?mode="
+                      + mode
+                      + "&origin=42.335425,-71.108247"
+                      + "&destination=42.301213,-71.127795"
+                      + "&key=AIzaSyDx7BSweq5dRzXavs1vxuMWeR2ETMR6b3Q";
+
+            } else if (node.getNodeID().equals("GEXIT00101")) {
+              // ShapiroFrancisToFaulkner
+              url =
+                  "https://maps.googleapis.com/maps/api/directions/json?mode="
+                      + mode
+                      + "&origin=42.335863,-71.107704"
+                      + "&destination=42.301213,-71.127795"
+                      + "&key=AIzaSyDx7BSweq5dRzXavs1vxuMWeR2ETMR6b3Q";
+
+            } else if (node.getNodeID().equals("FEXIT00201")) {
+              // Tower75FrancisToFaulkner
+              url =
+                  "https://maps.googleapis.com/maps/api/directions/json?mode="
+                      + mode
+                      + "&origin=75+Francis+St+Boston+MA+02115"
+                      + "&destination=42.301213,-71.127795"
+                      + "&key=AIzaSyDx7BSweq5dRzXavs1vxuMWeR2ETMR6b3Q";
+
+            } else if (node.getNodeID().equals("XEXIT00202")) {
+              // FLEXToFaulkner
+              url =
+                  "https://maps.googleapis.com/maps/api/directions/json?mode="
+                      + mode
+                      + "&origin=42.335078,-71.106326"
+                      + "&destination=42.301213,-71.127795"
+                      + "&key=AIzaSyDx7BSweq5dRzXavs1vxuMWeR2ETMR6b3Q";
+            }
+          }
+        }
       }
     }
-    mapQRController.setDriveText(googleDirections);
+
+    return url;
   }
 
   public void disableTextDirections() {
     pn_iconBar.getChildren().remove(pn_qrIcon);
+    if (dirThread != null) dirThread.interrupt();
   }
 
   public void enableTextDirections() {
     if (!(path.size() == 0 || path == null) && !pn_iconBar.getChildren().contains(pn_qrIcon)) {
       pn_iconBar.getChildren().add(pn_qrIcon);
+      if (dirThread != null) dirThread.interrupt();
+      dirThread = new Thread(new SetupDirs(this));
+      dirThread.start();
     }
   }
 }

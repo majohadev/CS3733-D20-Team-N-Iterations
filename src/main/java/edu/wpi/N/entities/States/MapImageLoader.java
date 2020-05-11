@@ -33,6 +33,10 @@ public class MapImageLoader {
     storeIcon(Icon.FLOOR_LEVEL, "edu/wpi/N/images/TextDirIcons/Direction.png");
     storeIcon(Icon.DRIVING, "edu/wpi/N/images/TextDirIcons/DRIVING.png");
     storeIcon(Icon.CIRCLE, "edu/wpi/N/images/TextDirIcons/traffic_circle.png");
+    storeIcon(Icon.SLIGHT_LEFT, "edu/wpi/N/images/TextDirIcons/SLIGHT_LEFT.png");
+    storeIcon(Icon.SLIGHT_RIGHT, "edu/wpi/N/images/TextDirIcons/SLIGHT_RIGHT.png");
+    storeIcon(Icon.SHARP_RIGHT, "edu/wpi/N/images/TextDirIcons/SHARP_RIGHT.png");
+    storeIcon(Icon.SHARP_LEFT, "edu/wpi/N/images/TextDirIcons/SHARP_LEFT.png");
   }
 
   /**

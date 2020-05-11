@@ -31,4 +31,13 @@ public class Direction {
   public String toString() {
     return this.direction;
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (o instanceof Direction) {
+      Direction other = (Direction) o;
+      return this.direction.equals(other.direction);
+    }
+    return false;
+  }
 }
