@@ -152,6 +152,61 @@ public class CSVParser {
   }
 
   /**
+   * Converts full String path to InputStream and calls function to Parse CSV with Hitboxes and adds
+   * them to database
+   *
+   * @param pathToFile: String full path to file
+   * @throws FileNotFoundException
+   */
+  public static void parseCSVHitBoxesFromPath(String pathToFile) throws FileNotFoundException {
+    try {
+      File initialFile = new File(pathToFile);
+      InputStream input = new FileInputStream(initialFile);
+
+      CSVParser.parseCSVHitBoxes(input);
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+      throw (e);
+    }
+  }
+
+  /**
+   * Opens and Parses CSV with hitboxes
+   *
+   * @param pathToFile: File Input Stream
+   */
+  public static void parseCSVHitBoxes(InputStream pathToFile) {
+    try {
+      // create csvReader object passing
+      CSVReader csvReader = new CSVReader(new InputStreamReader(pathToFile, "UTF-8"));
+
+      // Read header
+      String[] nextLine = csvReader.readNext();
+
+      while ((nextLine = csvReader.readNext()) != null) {
+        parseHitBoxRow(nextLine);
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * Parses a given row of CSC file and adds given row's data to Data Base
+   *
+   * @param row: A given row of CSV file
+   */
+  private static void parseHitBoxRow(String[] row) throws Exception {
+    int xOne = Integer.parseInt(row[0]);
+    int yOne = Integer.parseInt(row[1]);
+    int xTwo = Integer.parseInt(row[2]);
+    int yTwo = Integer.parseInt(row[3]);
+    String nodeID = row[4];
+
+    MapDB.addHitbox(xOne, yOne, xTwo, yTwo, nodeID);
+  }
+
+  /**
    * Parse Employees CSV file and add entries to Database
    *
    * @param pathToFile: path to the CSV file as an InputStream
@@ -306,5 +361,20 @@ public class CSVParser {
     } catch (ArrayIndexOutOfBoundsException e) {
       return "Invalid";
     }
+  }
+
+  /**
+   * Exports all the HitBoxes stored in database into a CSV file called 'hitBoxes.csv' in
+   * resources/csv folder
+   */
+  public static void exportExistingHitBoxesToCSV() throws IOException, DBException {
+    String path = (new File("src/main/resources/edu/wpi/N/csv/hitBoxes.csv")).getAbsolutePath();
+
+    FileWriter fileWriter = new FileWriter(path);
+    BufferedWriter csvWriter = new BufferedWriter(fileWriter);
+    csvWriter.append(MapDB.exportHitboxes());
+
+    csvWriter.flush();
+    csvWriter.close();
   }
 }

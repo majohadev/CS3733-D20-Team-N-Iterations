@@ -1363,4 +1363,109 @@ public class MapDB {
     //    return result;
     return map;
   }
+
+  /**
+   * Inserts a new hitbox into the database
+   *
+   * @param x1 The x value of the first corner of the box
+   * @param y1 The y value of the first corner of the box
+   * @param x2 The x value of the second corner of the box
+   * @param y2 The y value of the second corner of the box
+   * @param nodeID THe nodeID of the node this hitbox references
+   * @throws DBException On error or when the nodeID isn't valid
+   */
+  public static void addHitbox(int x1, int y1, int x2, int y2, String nodeID) throws DBException {
+    String query = "INSERT INTO hitbox (X1, Y1, X2, Y2, nodeID) VALUES (?,?,?,?,?)";
+    try {
+      PreparedStatement stmt = con.prepareStatement(query);
+      stmt.setInt(1, x1);
+      stmt.setInt(2, y1);
+      stmt.setInt(3, x2);
+      stmt.setInt(4, y2);
+      stmt.setString(5, nodeID);
+      stmt.executeUpdate();
+    } catch (SQLException e) {
+      if (e.getSQLState().equals("23503"))
+        throw new DBException("That nodeID is invalid and does not exist!");
+      e.printStackTrace();
+      throw new DBException("Unexpected error: addHitbox", e);
+    }
+  }
+
+  /**
+   * Gives the nodeID that a user clicked on based on the hitboxes in the database
+   *
+   * @param x The x coordinate that the user clicked (relative to upper left corner of map)
+   * @param y The y coordinate that the user clicked (relative to upper left corner of map)
+   * @param building the building that the map is in
+   * @param floor the floor that the map is in
+   * @return The DB node for the region that the user clicked on, null if they didn't click anywhere
+   * @throws DBException on error
+   */
+  public static DbNode checkHitbox(int x, int y, String building, int floor) throws DBException {
+    String query =
+        "SELECT nodes.nodeID, xcoord, ycoord, floor, building, nodeType, longName, shortName, teamAssigned FROM"
+            + "(SELECT nodeID from hitbox WHERE x1 <= ? AND x2 >= ? AND y1 <= ? AND y2 >= ?) as hitbox,"
+            + " (SELECT * FROM nodes WHERE building = ? AND floor = ?) as nodes WHERE nodes.nodeID = hitbox.nodeID";
+    try {
+      PreparedStatement stmt = con.prepareStatement(query);
+      stmt.setInt(1, x);
+      stmt.setInt(2, x);
+      stmt.setInt(3, y);
+      stmt.setInt(4, y);
+      stmt.setString(5, building);
+      stmt.setInt(6, floor);
+      ResultSet rs = stmt.executeQuery();
+      rs.next();
+      return new DbNode(
+          rs.getString("nodeID"),
+          rs.getInt("xcoord"),
+          rs.getInt("ycoord"),
+          rs.getInt("floor"),
+          rs.getString("building"),
+          rs.getString("nodeType"),
+          rs.getString("longName"),
+          rs.getString("shortName"),
+          rs.getString("teamAssigned").charAt(0));
+    } catch (SQLException e) {
+      if (e.getSQLState().equals("24000")) {
+        return null;
+      }
+      e.printStackTrace();
+      throw new DBException("Unexpected error: checkHitbox", e);
+    }
+  }
+
+  /**
+   * Exports the hitboxes to a csv format in "x1,y1,x2,y2,nodeID format
+   *
+   * @return The exported CSV String
+   * @throws DBException on error
+   */
+  public static String exportHitboxes() throws DBException {
+    String result = "x1,y1,x2,y2,nodeID\n";
+    String query = "SELECT * FROM hitbox";
+    try {
+      PreparedStatement stmt = con.prepareStatement(query);
+      ResultSet rs = stmt.executeQuery();
+      while (rs.next()) {
+        result =
+            result
+                + rs.getInt("x1")
+                + ","
+                + rs.getInt("y1")
+                + ","
+                + rs.getInt("x2")
+                + ","
+                + rs.getInt("y2")
+                + ","
+                + rs.getString("nodeID")
+                + "\n";
+      }
+      return result;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unexpected error: exportHitboxes", e);
+    }
+  }
 }
