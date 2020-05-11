@@ -347,7 +347,7 @@ public class MapQRController implements Controller {
           img.setFitWidth(25); // get the image from the Direction and set it up
           img.setFitHeight(25);
           setGraphic(img);
-          Text reference = new Text(item.toString());
+          Text reference = new Text(getText());
           reference.setFont(this.getFont());
           setPrefHeight(
               50

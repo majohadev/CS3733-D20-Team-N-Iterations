@@ -31,4 +31,10 @@ public class Direction {
   public String toString() {
     return this.direction;
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (o instanceof Direction) ((Direction) o).getNode().equals(this.zoomNode);
+    return false;
+  }
 }
