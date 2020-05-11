@@ -5,6 +5,7 @@
 <?import com.jfoenix.controls.JFXListView?>
 <?import com.jfoenix.controls.JFXTextArea?>
 <?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableView?>
@@ -30,6 +31,9 @@
                                  <font>
                                     <Font size="24.0" />
                                  </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
                               </JFXButton>
                            </children>
                         </Pane>
@@ -39,6 +43,9 @@
                                  <font>
                                     <Font size="24.0" />
                                  </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
                               </JFXButton>
                            </children>
                         </Pane>
@@ -48,6 +55,9 @@
                                  <font>
                                     <Font size="24.0" />
                                  </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
                               </JFXButton>
                            </children>
                         </Pane>
@@ -57,6 +67,9 @@
                                  <font>
                                     <Font size="24.0" />
                                  </font>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
                               </JFXButton>
                            </children>
                         </Pane>
@@ -167,11 +180,17 @@
                         <JFXButton fx:id="btn_Accept" layoutX="821.0" layoutY="772.0" onMouseClicked="#acceptRequest" styleClass="jfx-button-regular" stylesheets="@../../css/sanitationRequestUI.css" text="Accept">
                            <font>
                               <Font name="Calibri" size="24.0" />
-                           </font></JFXButton>
+                           </font>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor></JFXButton>
                         <JFXButton fx:id="btn_Deny" layoutX="1083.0" layoutY="772.0" onMouseClicked="#acceptRequest" styleClass="jfx-button-regular" stylesheets="@../../css/sanitationRequestUI.css" text="Deny">
                            <font>
                               <Font name="Calibri" size="24.0" />
-                           </font></JFXButton>
+                           </font>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor></JFXButton>
                      </children>
                   </AnchorPane>
                </children></AnchorPane>

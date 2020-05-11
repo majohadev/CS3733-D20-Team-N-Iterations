@@ -148,9 +148,15 @@ public class DirectionsTest {
   //  }
   @Test
   public void gdir() {
-    System.out.println(Directions.getGoogleDirections("walking", true));
+    ArrayList<String> dirs = Directions.getGoogleDirections("walking", true);
+    for (String s : dirs) {
+      System.out.println(s);
+    }
     System.out.println("_____________________");
-    System.out.println(Directions.getGoogleDirections("walking", false));
+    dirs = Directions.getGoogleDirections("walking", false);
+    for (String s : dirs) {
+      System.out.println(s);
+    }
   }
 
   @AfterAll

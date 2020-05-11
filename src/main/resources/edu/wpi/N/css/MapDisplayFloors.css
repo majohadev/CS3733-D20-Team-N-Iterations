@@ -6,6 +6,7 @@
     -fx-pref-height: 50px;
     -fx-text-fill: white;
     -fx-font-size: 20;
+    -fx-cursor: hand;
 }
 
 .choice-button {
@@ -20,4 +21,5 @@
     -fx-border-color: #4A69C6;
     -fx-border-width: 4px;
     -fx-border-radius: 25px;
+    -fx-cursor: hand;
 }
