@@ -6,6 +6,7 @@ import edu.wpi.N.App;
 import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
+import edu.wpi.N.database.ServiceDB;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Path;
 import edu.wpi.N.entities.States.StateSingleton;
@@ -562,6 +563,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
       pathButtonList.get(1).setStyle("-fx-background-color: #6C5C7F;");
     }
     displayGoogleMaps(first, second);
+    ServiceDB.travelledTo(second.getNodeID());
   }
 
   /**

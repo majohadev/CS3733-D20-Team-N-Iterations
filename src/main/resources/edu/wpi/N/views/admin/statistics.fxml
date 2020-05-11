@@ -2,28 +2,42 @@
 
 <?import javafx.scene.chart.BarChart?>
 <?import javafx.scene.chart.CategoryAxis?>
-<?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
 <AnchorPane prefHeight="1080.0" prefWidth="1520.0" style="-fx-background-color: #263051;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.admin.StatisticsController">
    <children>
-      <BarChart layoutX="156.0" layoutY="324.0">
+      <BarChart fx:id="bc_ServiceData" layoutX="202.0" layoutY="518.0" AnchorPane.leftAnchor="202.0" AnchorPane.topAnchor="518.0">
         <xAxis>
-          <CategoryAxis side="BOTTOM" />
+          <CategoryAxis label="Service Type" side="BOTTOM" style="-fx-text-fill: #e6ebf2;" tickLabelFill="#e6ebf2" fx:id="xAxis" />
         </xAxis>
         <yAxis>
-          <NumberAxis side="LEFT" />
+          <NumberAxis fx:id="yAxis" side="LEFT" style="-fx-text-fill: #e6ebf2;" tickLabelFill="#e6ebf2" />
         </yAxis>
       </BarChart>
-      <LineChart layoutX="770.0" layoutY="324.0">
-        <xAxis>
-          <CategoryAxis side="BOTTOM" />
-        </xAxis>
-        <yAxis>
-          <NumberAxis side="LEFT" />
-        </yAxis>
-      </LineChart>
+      <BarChart fx:id="bc_recLocData" layoutX="771.0" layoutY="-76.0" AnchorPane.rightAnchor="202.0" AnchorPane.topAnchor="100.0">
+         <xAxis>
+            <CategoryAxis label="Service Type" side="BOTTOM" style="-fx-text-fill: #e6ebf2;" tickLabelFill="#e6ebf2" fx:id="xAxisReqLoc" />
+         </xAxis>
+         <yAxis>
+            <NumberAxis fx:id="yAxisRecLoc" side="LEFT" style="-fx-text-fill: #e6ebf2;" tickLabelFill="#e6ebf2" />
+         </yAxis>
+      </BarChart>
+      <BarChart fx:id="bc_popLangData" layoutX="156.0" layoutY="-66.0" AnchorPane.leftAnchor="202.0" AnchorPane.topAnchor="100.0">
+         <xAxis>
+            <CategoryAxis label="Service Type" side="BOTTOM" style="-fx-text-fill: #e6ebf2;" tickLabelFill="#e6ebf2" fx:id="xAxisLang" />
+         </xAxis>
+         <yAxis>
+            <NumberAxis fx:id="yAxisLang" side="LEFT" style="-fx-text-fill: #e6ebf2;" tickLabelFill="#e6ebf2" />
+         </yAxis>
+      </BarChart>
+      <BarChart fx:id="bc_pathData" layoutX="888.0" layoutY="506.0" AnchorPane.rightAnchor="202.0" AnchorPane.topAnchor="518.0">
+         <xAxis>
+            <CategoryAxis label="Service Type" side="BOTTOM" style="-fx-text-fill: #e6ebf2;" tickLabelFill="#e6ebf2" fx:id="xAxisPath" />
+         </xAxis>
+         <yAxis>
+            <NumberAxis fx:id="yAxisPath" side="LEFT" style="-fx-text-fill: #e6ebf2;" tickLabelFill="#e6ebf2" />
+         </yAxis>
+      </BarChart>
    </children>
 </AnchorPane>
