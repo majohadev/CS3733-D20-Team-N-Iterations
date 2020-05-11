@@ -50,11 +50,11 @@ public class MapQRController implements Controller {
   @Override
   public void setMainApp(App mainApp) {}
 
-  public void setSingleton(StateSingleton singleton) {
+  public synchronized void setSingleton(StateSingleton singleton) {
     this.singleton = singleton;
   }
 
-  public void setMapBaseController(MapBaseController mapBaseController) {
+  public synchronized void setMapBaseController(MapBaseController mapBaseController) {
     this.mapBaseController = mapBaseController;
   }
 

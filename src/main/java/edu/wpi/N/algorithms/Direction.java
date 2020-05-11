@@ -34,7 +34,10 @@ public class Direction {
 
   @Override
   public boolean equals(Object o) {
-    if (o instanceof Direction) ((Direction) o).getNode().equals(this.zoomNode);
+    if (o instanceof Direction) {
+      Direction other = (Direction) o;
+      return this.direction.equals(other.direction);
+    }
     return false;
   }
 }

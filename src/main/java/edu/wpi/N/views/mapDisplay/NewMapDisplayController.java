@@ -51,6 +51,9 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
 
   @FXML MapBaseController mapBaseController;
 
+  private Pane dirPane;
+  public Thread dirThread;
+
   MapLocationSearchController locationSearchController;
   MapDoctorSearchController doctorSearchController;
   MapQRController mapQRController;
@@ -714,6 +717,43 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     switchHospitalView();
   }
 
+  public synchronized void setDirPane(Pane dirPane) {
+    this.dirPane = dirPane;
+  }
+
+  private static class SetupDirs implements Runnable {
+
+    private NewMapDisplayController con;
+    private StateSingleton singleton;
+
+    public SetupDirs(NewMapDisplayController con, StateSingleton singleton) {
+      this.con = con;
+      this.singleton = singleton;
+    }
+
+    @Override
+    public void run() {
+      FXMLLoader loader = new FXMLLoader(getClass().getResource("mapQR.fxml"));
+      Pane pane;
+      try {
+        pane = loader.load();
+      } catch (IOException e) {
+        e.printStackTrace();
+        return;
+      }
+      con.mapQRController = loader.getController();
+      con.mapQRController.setSingleton(this.singleton);
+      con.mapQRController.setMapBaseController(con.mapBaseController);
+      try {
+        con.setTextDescription();
+      } catch (DBException e) {
+        e.printStackTrace();
+        return;
+      }
+      con.setDirPane(pane);
+    }
+  }
+
   /**
    * determines which icon was clicked and performs the specified function
    *
@@ -748,14 +788,16 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
       setDefaultKioskNode();
       pn_change.getChildren().add(pane);
     } else if (src == pn_qrIcon) {
-      loader = new FXMLLoader(getClass().getResource("mapQR.fxml"));
-      Pane pane = loader.load();
-      mapQRController = loader.getController();
-      mapQRController.setSingleton(this.singleton);
-      mapQRController.setMapBaseController(mapBaseController);
-      setTextDescription();
+      if (dirThread == null) return;
+      try {
+        dirThread.join();
+      } catch (InterruptedException ex) {
+        ex.printStackTrace();
+        return;
+      }
+      if (dirPane == null) return;
       setDefaultKioskNode();
-      pn_change.getChildren().add(pane);
+      pn_change.getChildren().add(dirPane);
     } else if (src == pn_serviceIcon) {
       this.mainApp.switchScene("/edu/wpi/N/views/services/newServicesPage.fxml", singleton);
       resetMap();
@@ -786,7 +828,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
    *
    * @throws DBException
    */
-  public void setDefaultKioskNode() throws DBException {
+  public synchronized void setDefaultKioskNode() throws DBException {
     boolean noFaulknerKiosk =
         !(currentBuilding.equals("Faulkner") && (currentFloor == 1 || currentFloor == 3));
     if (noFaulknerKiosk) {
@@ -941,7 +983,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
    *
    * @throws DBException
    */
-  public void setTextDescription() throws DBException {
+  public synchronized void setTextDescription() throws DBException {
 
     if (this.path.size() == 0 || path == null) {
       return;
@@ -1125,11 +1167,15 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
 
   public void disableTextDirections() {
     pn_iconBar.getChildren().remove(pn_qrIcon);
+    if (dirThread != null) dirThread.interrupt();
   }
 
   public void enableTextDirections() {
     if (!(path.size() == 0 || path == null) && !pn_iconBar.getChildren().contains(pn_qrIcon)) {
       pn_iconBar.getChildren().add(pn_qrIcon);
+      if (dirThread != null) dirThread.interrupt();
+      dirThread = new Thread(new SetupDirs(this, this.singleton));
+      dirThread.start();
     }
   }
 }
