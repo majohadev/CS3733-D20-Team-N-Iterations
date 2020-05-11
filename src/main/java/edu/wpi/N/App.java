@@ -31,8 +31,12 @@ public class App extends Application {
     this.masterStage.setTitle("Brigham and Women's Hospital Kiosk Application");
 
     StateSingleton newSingleton = StateSingleton.getInstance();
+
+    newSingleton.originator.setState("views/mapDisplay/newMapDisplay.fxml");
+    newSingleton.careTaker.add(newSingleton.originator.saveStateToMemento());
+
     switchScene("views/mapDisplay/newMapDisplay.fxml", newSingleton);
-    // switchScene("views/chatbot/chatBox.fxml", newSingleton);
+    //    switchScene("views/chatbot/chatBox.fxml", newSingleton);
     masterStage.setMaximized(true);
   }
 

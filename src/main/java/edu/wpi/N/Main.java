@@ -1,6 +1,7 @@
 package edu.wpi.N;
 
 import edu.wpi.N.database.*;
+import edu.wpi.N.entities.memento.GlobalKeyListenerExample;
 import edu.wpi.N.entities.memento.GlobalMouseListenerExample;
 import java.awt.*;
 import java.io.IOException;
@@ -27,6 +28,7 @@ public class Main {
     // Add the appropriate listeners.
     GlobalScreen.addNativeMouseListener(example);
     GlobalScreen.addNativeMouseMotionListener(example);
+    GlobalScreen.addNativeKeyListener(new GlobalKeyListenerExample());
     // ArduinoController periperal = new ArduinoController();
     // periperal.initialize();
     // MapDB.setKiosk("NSERV00301", 180);

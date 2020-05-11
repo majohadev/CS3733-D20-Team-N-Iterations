@@ -11,7 +11,9 @@ import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.GregorianCalendar;
+import java.util.Iterator;
 import java.util.LinkedList;
+import javafx.util.Pair;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -1181,6 +1183,76 @@ public class ServicesTest {
                 id, "notes")); // throws exception because not logged in as doctor
     LoginDB.verifyLogin("thedoctor", "password");
     ServiceDB.completeRequest(id, "notes");
+    MapDB.initTestDB();
+  }
+
+  @Test
+  public void testStats() throws DBException, SQLException, ClassNotFoundException {
+    MapDB.initTestDB();
+    DbNode node = MapDB.addNode(5, 5, 1, "TestBuilding", "STAI", "My test", "Short");
+    int id =
+        ServiceDB.addMedReq("Notes", node.getNodeID(), "Zolpidem Tartrate", 12, "mg", "cantsleep");
+    int idSecurityReq = ServiceDB.addSecurityReq("Vibing", node.getNodeID(), "Non-emergency");
+    int idL = ServiceDB.addLaundReq("Clean my clothes, please", node.getNodeID());
+    int idT = ServiceDB.addTransReq("Помогите!", node.getNodeID(), "Russian");
+    int idSecurityReq2 = ServiceDB.addSecurityReq("NOT VIBING", node.getNodeID(), "Emergency");
+    int idLO = ServiceDB.addLaundReq("Filthy clothes", node.getNodeID());
+    int idTO = ServiceDB.addTransReq("Помогите! Пожалуйста", node.getNodeID(), "Russian");
+    int idSecurityReq3 = ServiceDB.addSecurityReq("Vibing", node.getNodeID(), "Non-emergency");
+
+    LinkedList<Pair<String, Integer>> services = ServiceDB.popularServices();
+    assertEquals(3, services.get(0).getValue());
+    assertEquals("Security", services.get(0).getKey());
+    Iterator<Pair<String, Integer>> serviceIt = services.iterator();
+
+    LinkedList<String> langs = new LinkedList<String>();
+    langs.add("Polish");
+    langs.add("Spanish");
+    langs.add("Cantonese");
+    while (serviceIt.hasNext()) {
+      System.out.println(serviceIt.next());
+    }
+    System.out.println("________");
+
+    int idTOne = ServiceDB.addTranslator("Matt Damon", langs);
+    int idT1 = ServiceDB.addTransReq("Помогите! Пожалуйста", node.getNodeID(), "Polish");
+    int idT2 = ServiceDB.addTransReq("Помогите! Пожалуйста", node.getNodeID(), "Polish");
+    int idT3 = ServiceDB.addTransReq("Помогите! Пожалуйста", node.getNodeID(), "Polish");
+    int idT5 = ServiceDB.addTransReq("Помогите! Пожалуйста", node.getNodeID(), "Polish");
+    int idT4 = ServiceDB.addTransReq("Помогите! Пожалуйста", node.getNodeID(), "Spanish");
+
+    LinkedList<Pair<String, Integer>> languages = ServiceDB.popularLanguages();
+    Iterator<Pair<String, Integer>> languageIt = languages.iterator();
+    while (languageIt.hasNext()) {
+      System.out.println(languageIt.next());
+    }
+
+    System.out.println("________");
+
+    assertEquals(4, languages.get(0).getValue());
+    assertEquals("Polish", languages.get(0).getKey());
+
+    LinkedList<Pair<DbNode, Integer>> popReqLocs = ServiceDB.popularReqLocations();
+    Iterator<Pair<DbNode, Integer>> popReqIt = popReqLocs.iterator();
+    while (popReqIt.hasNext()) {
+      System.out.println(popReqIt.next());
+    }
+    DbNode node2 = MapDB.addNode(5, 5, 1, "TestBuilding", "STAI", "My test 2", "Short");
+
+    System.out.println("________");
+
+    ServiceDB.travelledTo(node.getNodeID());
+    ServiceDB.travelledTo(node.getNodeID());
+    ServiceDB.travelledTo(node.getNodeID());
+    ServiceDB.travelledTo(node2.getNodeID());
+    ServiceDB.travelledTo(node2.getNodeID());
+
+    LinkedList<Pair<DbNode, Integer>> popPathLocs = ServiceDB.popularPathLocations();
+    Iterator<Pair<DbNode, Integer>> popPathIt = popPathLocs.iterator();
+    while (popPathIt.hasNext()) {
+      System.out.println(popPathIt.next());
+    }
+
     MapDB.initTestDB();
   }
 

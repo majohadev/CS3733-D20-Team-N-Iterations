@@ -2,14 +2,16 @@ package edu.wpi.N.entities.States;
 
 import edu.wpi.N.chatbot.Dialogflow;
 import java.io.IOException;
+import java.util.LinkedList;
 import javafx.scene.layout.VBox;
 
 public class ChatMessagesState {
-  private VBox messageHistory;
+  // each HBox contains a label with a message
+  private LinkedList<VBox> messageHistory;
   public Dialogflow dialogflow;
 
   public ChatMessagesState() {
-    messageHistory = null;
+    messageHistory = new LinkedList<VBox>();
     try {
       dialogflow = new Dialogflow();
     } catch (Exception ex) {
@@ -17,17 +19,21 @@ public class ChatMessagesState {
     }
   }
 
-  public VBox getMessageHistory() {
+  public LinkedList<VBox> getMessageHistory() {
     return messageHistory;
   }
 
-  public void setMessageHistory(VBox messageHistory) {
+  public void setMessageHistory(LinkedList<VBox> messageHistory) {
     this.messageHistory = messageHistory;
+  }
+
+  public void addMessageToHistory(VBox message) {
+    this.messageHistory.add(message);
   }
 
   /** Delete previous chat history. Called when a User session is closed */
   public void eraseChatHistory() {
-    messageHistory = null;
+    messageHistory.clear();
   }
 
   /**
@@ -47,6 +53,6 @@ public class ChatMessagesState {
   public void closeSession() throws IOException {
     dialogflow.closeSession();
     // Reset message history
-    messageHistory = null;
+    eraseChatHistory();
   }
 }

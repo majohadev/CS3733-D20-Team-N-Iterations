@@ -13,6 +13,7 @@ public class StateSingleton {
   public ChatMessagesState chatBotState;
   public Originator originator;
   public CareTaker careTaker;
+  public int timeoutTime;
 
   private StateSingleton() throws DBException {
     savedAlgo = new Algorithm();
@@ -20,6 +21,8 @@ public class StateSingleton {
     chatBotState = new ChatMessagesState();
     originator = new Originator();
     careTaker = new CareTaker();
+    // Initialize timeout time to 15000 milliseconds (15 seconds)
+    timeoutTime = 15000;
   }
 
   public static StateSingleton getInstance() throws DBException {
