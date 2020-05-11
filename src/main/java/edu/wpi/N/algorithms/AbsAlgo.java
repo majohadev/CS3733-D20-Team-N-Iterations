@@ -97,19 +97,27 @@ public abstract class AbsAlgo implements IPathFinder {
       boolean handicap) {
     try {
       // Get linked list of all nodes of a given node type on the start floor
-      LinkedList<DbNode> nodes =
+      LinkedList<DbNode> floorNodes =
           MapDB.searchVisNode(start.getFloor(), start.getBuilding(), nodeType, "");
       // Check if the list is empty
-      if (!nodes.isEmpty()) {
+      if (!floorNodes.isEmpty()) {
+        // Remove the emergency exit on floor 1 of Faulkner if looking for an "EXIT" node
+        if (start.getBuilding().equals("Faulkner") && nodeType.equals("EXIT")) {
+          floorNodes.removeIf(currNode -> currNode.getNodeID().equals("AEXIT00301"));
+        }
         // If the list isn't empty, get the closest node of the given node type to the start node
         // and return the path
-        DbNode end = getBestQuickAccess(start, nodes);
+        DbNode end = getBestQuickAccess(start, floorNodes);
         return findPath(mapData, start, end, handicap);
       }
       // If list was empty, check if the building is Faulkner
       else if (start.getBuilding().equals("Faulkner")) {
         // Get all nodes of the given node type in Faulkner
         LinkedList<DbNode> allNodes = MapDB.searchVisNode(-1, start.getBuilding(), nodeType, "");
+        // Remove the emergency exit on floor 1 of Faulkner if looking for an "EXIT" node
+        if (nodeType.equals("EXIT")) {
+          allNodes.removeIf(currNode -> currNode.getNodeID().equals("AEXIT00301"));
+        }
         // Check if the list is empty
         if (!allNodes.isEmpty()) {
           // If the list isn't empty, get the closest node of the given node type to the start node
@@ -126,9 +134,11 @@ public abstract class AbsAlgo implements IPathFinder {
         LinkedList<DbNode> allNodes = MapDB.searchVisNode(-1, null, nodeType, "");
         // Remove all Faulkner nodes to be left with the main campus nodes of the given type
         allNodes.removeIf(currNode -> currNode.getBuilding().equals("Faulkner"));
-        // Remove the emergency department entrance if it was added (don't want people to use this
-        // as exit)
-        allNodes.removeIf(currNode -> currNode.getNodeID().equals("FEXIT00301"));
+        // Remove the emergency department entrance if looking for an "EXIT"
+        // (don't want people to use this as exit, also causes weird paths for AStar)
+        if (nodeType.equals("EXIT")) {
+          allNodes.removeIf(currNode -> currNode.getNodeID().equals("FEXIT00301"));
+        }
         // Check if the list is empty
         if (!allNodes.isEmpty()) {
           // If the list isn't empty, get the closest node of the given node type to the start node
