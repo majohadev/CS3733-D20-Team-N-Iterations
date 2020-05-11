@@ -88,7 +88,7 @@ public abstract class AbsAlgo implements IPathFinder {
    * @param start, DbNode of starting node
    * @param nodeType, String the type of node you want (must be length 4)
    * @param handicap, Boolean that indicates if path should be handicap accessible (true)
-   * @return Path, path from start node to closest (eucledian) end node of requested type
+   * @return Path, path from start node to closest (Euclidean) end node of requested type
    */
   public Path findQuickAccess(
       HashMap<String, LinkedList<DbNode>> mapData,
@@ -122,9 +122,9 @@ public abstract class AbsAlgo implements IPathFinder {
       }
       // Else you're on the main campus
       else {
-        // Get all nodes of the given node type on the main campus
+        // Get all nodes
         LinkedList<DbNode> allNodes = MapDB.searchVisNode(-1, null, nodeType, "");
-        // Removes all Faulkner nodes of the given node type
+        // Remove all Faulkner nodes to be left with the main campus nodes of the given type
         allNodes.removeIf(currNode -> currNode.getBuilding().equals("Faulkner"));
         // Remove the emergency department entrance if it was added (don't want people to use this
         // as exit)
