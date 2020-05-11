@@ -470,7 +470,6 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
               DbNode first = locationSearchController.getDBNodes()[0];
               locationSearchController.clearSecondEntry();
               try {
-                enableTextDirections();
                 this.path = singleton.savedAlgo.findQuickAccess(first, "REST");
                 mapBaseController.setFloor(first.getBuilding(), first.getFloor(), path);
                 if (path.size() == 0) {
@@ -480,6 +479,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
                 displayErrorMessage("Please select the first node");
                 return;
               }
+              enableTextDirections();
               disableNonPathFloors();
               if (pathButtonList.size() > 1) {
                 pathButtonList.get(1).setStyle("-fx-background-color: #6C5C7F;");
@@ -519,6 +519,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
                 displayErrorMessage("Please select the first node");
                 return;
               }
+              enableTextDirections();
               disableNonPathFloors();
               if (pathButtonList.size() > 1) {
                 pathButtonList.get(1).setStyle("-fx-background-color: #6C5C7F;");
@@ -553,6 +554,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
                 displayErrorMessage("Please select the first node");
                 return;
               }
+              enableTextDirections();
               disableNonPathFloors();
               if (pathButtonList.size() > 1) {
                 pathButtonList.get(1).setStyle("-fx-background-color: #6C5C7F;");
@@ -724,11 +726,9 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
   private static class SetupDirs implements Runnable {
 
     private NewMapDisplayController con;
-    private StateSingleton singleton;
 
-    public SetupDirs(NewMapDisplayController con, StateSingleton singleton) {
+    public SetupDirs(NewMapDisplayController con) {
       this.con = con;
-      this.singleton = singleton;
     }
 
     @Override
@@ -742,7 +742,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
         return;
       }
       con.mapQRController = loader.getController();
-      con.mapQRController.setSingleton(this.singleton);
+      con.mapQRController.setSingleton(con.singleton);
       con.mapQRController.setMapBaseController(con.mapBaseController);
       try {
         con.setTextDescription();
@@ -1174,7 +1174,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     if (!(path.size() == 0 || path == null) && !pn_iconBar.getChildren().contains(pn_qrIcon)) {
       pn_iconBar.getChildren().add(pn_qrIcon);
       if (dirThread != null) dirThread.interrupt();
-      dirThread = new Thread(new SetupDirs(this, this.singleton));
+      dirThread = new Thread(new SetupDirs(this));
       dirThread.start();
     }
   }
