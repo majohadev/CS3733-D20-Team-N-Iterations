@@ -70,11 +70,13 @@ public class Directions {
         case STARTING:
           if (currNode.getNodeType().equals("EXIT")) {
             message = "Enter at " + getLandmark(currNode, mapDatas).getLongName();
+            currIcon = Icon.ENTER;
           } else if (currNode.getNodeID().equals("NSERV00301")
               || currNode.getNodeID().equals("NSERV00103")) {
             message = "Start in the direction of the kiosk arrow ";
           } else if (!path.get(0).getNodeType().equals("HALL")) {
             message = "Exit " + path.get(0).getLongName();
+            currIcon = Icon.EXIT;
           } else if (!(getLandmark(nextNode, mapDatas) == null)) {
             message =
                 "Start towards "
@@ -93,7 +95,7 @@ public class Directions {
           //            endOfHallNode = findEndOfHall(i);
           //          }
           if (!message.equals("") && i == 1) {
-            currIcon = Icon.CONTINUE;
+            // currIcon = Icon.CONTINUE;
             directions.add(new Direction(message, STEP, currNode, currIcon));
             message = "";
           } else if (getState(i - 1).equals(CHANGING_FLOOR)) {
@@ -361,19 +363,19 @@ public class Directions {
     }
     // System.out.println(angleChange);
     if (angleChange <= TURN_THRESHOLD && angleChange >= SLIGHT_TURN_THRESHOLD) {
-      currIcon = Icon.RIGHT;
+      currIcon = Icon.SLIGHT_RIGHT;
       return "ake a slight right";
     } else if (angleChange > SHARP_TURN_THRESHOLD) {
-      currIcon = Icon.RIGHT;
+      currIcon = Icon.SHARP_RIGHT;
       return "ake a sharp right turn";
     } else if (angleChange >= TURN_THRESHOLD) {
       currIcon = Icon.RIGHT;
       return "urn right";
     } else if (angleChange >= -1 * TURN_THRESHOLD && angleChange <= -1 * SLIGHT_TURN_THRESHOLD) {
-      currIcon = Icon.LEFT;
+      currIcon = Icon.SLIGHT_LEFT;
       return "ake a slight left";
     } else if (angleChange <= -1 * SHARP_TURN_THRESHOLD) {
-      currIcon = Icon.LEFT;
+      currIcon = Icon.SHARP_LEFT;
       return "ake a sharp left turn";
     } else if (angleChange <= -1 * TURN_THRESHOLD) {
       currIcon = Icon.LEFT;
