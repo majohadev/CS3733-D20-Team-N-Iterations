@@ -224,7 +224,7 @@ HSTAI00102,2060,880,5,Tower,STAI,Stairwell 1,Stairwell 0102,Z
 HSTAI00103,1682,1272,6,Tower,STAI,Stairwell 1,Stairwell,Z
 HSTAI00202,1696,1169,5,Tower,STAI,Stairwell 2 Tower,Stairwell 0202,Z
 HSTAI00302,1791,1234,5,Tower,STAI,Escalator 1,Escalator 1,Z
-ICONF00101,2570,673,1,45 Francis,CONF,Radiation Oncology,Radiation Oncology Conference Room,I
+ICONF00101,2570,673,1,45 Francis,CONF,Radiaion Oncology,Radiation Oncology Conference Room,I
 ICONF00205,1491,2076,5,Shapiro,CONF,Reflection Rooms,Reflection Rooms,I
 ICONF00206,1769,739,6,Tower,CONF,Reflection,Tower Reflection Room,I
 ICONF00402,2572,869,2,45 Francis,CONF,Helen Conf,Helen Hogan Conference Room,I
@@ -505,7 +505,7 @@ NSERV01304,980,1130,4,Faulkner,SERV,Admin,SERV N1404,N
 NSERV01404,1078,1200,4,Faulkner,SERV,Social Work,SERV N0104,N
 NSERV01504,1250,1230,4,Faulkner,SERV,Administration,SERV N0204,N
 NSTAI00104,722,1240,4,Faulkner,STAI,Stair 2,STAI N0204,N
-NSTAI00204,1221,1053,4,Faulkner,STAI,Stair 3,STAI N0304,N
+NSTAI00204,1221,1053,4,Faulkner,STAI,STAI N0304,Stair 3,N
 NSTAI00304,1290,415,4,Faulkner,STAI,Stair 4,STAI N0404,N
 NSTAI00404,1782,1240,4,Faulkner,STAI,Stair 5,STAI N0504,N
 NSTAI00504,2342,1233,4,Faulkner,STAI,Stair 6,STAI N0604,N
