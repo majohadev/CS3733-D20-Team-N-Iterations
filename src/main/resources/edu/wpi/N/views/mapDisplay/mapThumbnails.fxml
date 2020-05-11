@@ -6,6 +6,6 @@
 
 <AnchorPane minHeight="-Infinity" minWidth="200.0" prefHeight="150.0" style="-fx-background-color: #263051;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.mapDisplay.MapThumbnailsController">
    <children>
-      <HBox alignment="CENTER" layoutX="-28.0" layoutY="14.0" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="20.0" />
+      <HBox fx:id="hb_layout" alignment="CENTER" layoutX="-28.0" layoutY="14.0" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="20.0" />
    </children>
 </AnchorPane>
