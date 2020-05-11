@@ -386,6 +386,11 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
               if (path != null) {
                 this.path.clear();
               }
+              try {
+                resetMap();
+              } catch (DBException ex) {
+                ex.printStackTrace();
+              }
               setGoogleButtonDisable(true);
               locationSearchController.getTextFirstLocation().clear();
               locationSearchController.getTextSecondLocation().clear();
@@ -418,7 +423,13 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
               if (this.path != null) {
                 this.path.clear();
               }
+              try {
+                resetMap();
+              } catch (DBException ex) {
+                ex.printStackTrace();
+              }
               enableAllFloorButtons();
+              switchHospitalView();
               setGoogleButtonDisable(true);
               doctorSearchController.getTextLocation().clear();
               doctorSearchController.getTxtDoctor().clear();
@@ -448,7 +459,13 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
         .getBtnRestRoom()
         .setOnMouseClicked(
             e -> {
+              try {
+                resetMap();
+              } catch (DBException ex) {
+                ex.printStackTrace();
+              }
               DbNode first = locationSearchController.getDBNodes()[0];
+              locationSearchController.clearSecondEntry();
               try {
                 enableTextDirections();
                 this.path = singleton.savedAlgo.findQuickAccess(first, "REST");
@@ -477,7 +494,14 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
         .getBtnInfoDesk()
         .setOnMouseClicked(
             e -> {
+              try {
+                resetMap();
+              } catch (DBException ex) {
+                ex.printStackTrace();
+              }
               DbNode first = locationSearchController.getDBNodes()[0];
+              locationSearchController.clearSecondEntry();
+
               if (first.getBuilding().equals("Faulkner")) {
                 displayErrorMessage("No information desks in this building");
                 return;
@@ -509,7 +533,13 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
         .getBtnQuickExit()
         .setOnMouseClicked(
             e -> {
+              try {
+                resetMap();
+              } catch (DBException ex) {
+                ex.printStackTrace();
+              }
               DbNode first = locationSearchController.getDBNodes()[0];
+              locationSearchController.clearSecondEntry();
               try {
                 this.path = singleton.savedAlgo.findQuickAccess(first, "EXIT");
                 mapBaseController.setFloor(first.getBuilding(), first.getFloor(), path);
@@ -671,13 +701,17 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
   }
 
   /** clears necessary variables when the map is reset */
-  public void resetMap() {
+  public void resetMap() throws DBException {
+    this.currentFloor = 1;
+    this.currentBuilding = "Faulkner";
+    mapBaseController.setFloor(this.currentBuilding, this.currentFloor, null);
     this.path = new Path(new LinkedList<>());
     collapseAllFloorButtons();
     mapBaseController.clearPath();
     setGoogleButtonDisable(true);
     enableAllFloorButtons();
     disableTextDirections();
+    switchHospitalView();
   }
 
   /**
