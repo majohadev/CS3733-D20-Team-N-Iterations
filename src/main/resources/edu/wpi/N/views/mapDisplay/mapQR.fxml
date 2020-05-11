@@ -2,7 +2,6 @@
 
 <?import com.jfoenix.controls.JFXTabPane?>
 <?import com.jfoenix.controls.JFXTreeView?>
-<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.image.Image?>
@@ -24,7 +23,7 @@
               <content>
                 <AnchorPane maxHeight="750.0" minHeight="750.0" minWidth="0.0" prefHeight="750.0" prefWidth="345.0">
                      <children>
-                        <JFXTreeView fx:id="tr_faulkner" maxHeight="1200.0" minHeight="1200.0" onMouseClicked="#onFaulknerTreeClicked" prefHeight="750.0" prefWidth="345.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        <JFXTreeView fx:id="tr_faulkner" maxHeight="1200.0" minHeight="1200.0" prefHeight="750.0" prefWidth="345.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                      </children>
                   </AnchorPane>
               </content>
@@ -33,7 +32,7 @@
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="200.0">
                      <children>
-                        <JFXTreeView fx:id="tr_main" onMouseClicked="#onMainTreeClicked" prefHeight="750.0" prefWidth="345.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        <JFXTreeView fx:id="tr_main" prefHeight="750.0" prefWidth="345.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                      </children>
                   </AnchorPane>
               </content>
@@ -42,15 +41,12 @@
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="200.0">
                      <children>
-                        <JFXTreeView fx:id="tr_drive" onMouseClicked="#onDriveTreeClicked" prefHeight="750.0" prefWidth="345.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        <JFXTreeView fx:id="tr_drive" prefHeight="750.0" prefWidth="345.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                      </children>
                   </AnchorPane>
               </content>
             </Tab>
          </tabs>
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor>
       </JFXTabPane>
       <Pane fx:id="btn_next" layoutX="289.0" layoutY="65.0" onMouseClicked="#onBtnNextClicked" prefHeight="39.0" prefWidth="42.0">
          <children>

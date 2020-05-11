@@ -13,17 +13,16 @@ import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.views.Controller;
 import java.util.ArrayList;
 import java.util.LinkedList;
-
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.Tab;
-import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
-import javafx.util.Callback;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 
 public class MapQRController implements Controller {
   private StateSingleton singleton;
@@ -169,46 +168,6 @@ public class MapQRController implements Controller {
   }
 
   /**
-   * Executes when the user clicks on an item in the faulkner building tree
-   *
-   * @throws DBException
-   */
-  public void onFaulknerTreeClicked() throws DBException {
-    collapseMain();
-    tr_main.getSelectionModel().clearSelection();
-    tr_drive.getSelectionModel().clearSelection();
-    currentDirection = (TreeItem<Direction>) tr_faulkner.getSelectionModel().getSelectedItem();
-    mapBaseController.setFloor("Faulkner", currentDirection.getValue().getNode().getFloor(), path);
-    if (currentDirection.getValue().getLevel() == Level.FLOOR) {
-      tr_faulkner.getTreeItem(tr_faulkner.getSelectionModel().getSelectedIndex()).setExpanded(true);
-    }
-  }
-
-  /** Executes when the user clicks on an item in the driving directions tree */
-  public void onDriveTreeClicked() {
-    collapseAllItems();
-    tr_main.getSelectionModel().clearSelection();
-    tr_faulkner.getSelectionModel().clearSelection();
-    currentDirection = (TreeItem<Direction>) tr_drive.getSelectionModel().getSelectedItem();
-  }
-
-  /**
-   * Executes when the user clicks on an item in the main building tree
-   *
-   * @throws DBException
-   */
-  public void onMainTreeClicked() throws DBException {
-    collapseFaulkner();
-    tr_drive.getSelectionModel().clearSelection();
-    tr_faulkner.getSelectionModel().clearSelection();
-    currentDirection = (TreeItem<Direction>) tr_main.getSelectionModel().getSelectedItem();
-    mapBaseController.setFloor("Main", currentDirection.getValue().getNode().getFloor(), path);
-    if (currentDirection.getValue().getLevel() == Level.FLOOR) {
-      tr_main.getTreeItem(tr_main.getSelectionModel().getSelectedIndex()).setExpanded(true);
-    }
-  }
-
-  /**
    * Executes when the faulkner building is manually selected by the user
    *
    * @throws DBException
@@ -223,7 +182,7 @@ public class MapQRController implements Controller {
     }
     try {
       tr_faulkner.getTreeItem(0).setExpanded(true);
-      onFaulknerTreeClicked();
+      // onFaulknerTreeClicked();
     } catch (NullPointerException e) {
       return;
     }
@@ -243,7 +202,7 @@ public class MapQRController implements Controller {
     }
     try {
       tr_main.getTreeItem(0).setExpanded(true);
-      onMainTreeClicked();
+      // onMainTreeClicked();
     } catch (NullPointerException e) {
       return;
     }
@@ -254,7 +213,7 @@ public class MapQRController implements Controller {
     tr_drive.getSelectionModel().select(0);
     mapDisplayController.switchGoogleView();
     try {
-      onDriveTreeClicked();
+      // onDriveTreeClicked();
     } catch (NullPointerException e) {
       return;
     }
@@ -321,34 +280,55 @@ public class MapQRController implements Controller {
     makeInstructions(dirList, tr_drive, rootDrive);
   }
 
+  /**
+   * An event handler for clicking on a cell. Switches to the map of the cell This is where you
+   * would want to put the zoom functionality
+   */
   private static class CellClicked implements EventHandler<MouseEvent> {
     private MapQRController controller;
     private DirectionCell cell;
-    public CellClicked(MapQRController controller, DirectionCell cell){
+
+    public CellClicked(MapQRController controller, DirectionCell cell) {
       super();
       this.controller = controller;
       this.cell = cell;
     }
+
     @Override
     public void handle(MouseEvent mouseEvent) {
       controller.currentDirection = cell.getTreeItem();
+      if (controller.currentDirection.getChildren().size() != 0)
+        controller.currentDirection.setExpanded(
+            !controller.currentDirection.expandedProperty().getValue());
+      if (cell.getItem().getLevel() == Level.DRIVING) return;
       DbNode node = cell.getItem().getNode();
       try {
-        controller.mapBaseController.setFloor(
-                node.getBuilding(), node.getFloor(), controller.path);
+        controller.mapBaseController.setFloor(node.getBuilding(), node.getFloor(), controller.path);
       } catch (DBException e) {
         e.printStackTrace();
       }
-
     }
   }
 
+  /**
+   * Static class for a special kind of JFXTreeCell used to show directions. Don't need to provide
+   * an image and automatically sets up on click
+   */
   private static class DirectionCell extends JFXTreeCell<Direction> {
     private StateSingleton singleton;
+    private StackPane hoverPane = new StackPane();
 
-    public DirectionCell(StateSingleton singleton) {
+    public DirectionCell(StateSingleton singleton, MapQRController controller) {
       super();
+      hoverPane.getStyleClass().add("hover-bar");
+      hoverPane.setBackground(
+          new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
+      hoverPane.setPrefWidth(3);
+      hoverPane.setMouseTransparent(true);
       this.singleton = singleton;
+      this.setOnMouseClicked(new CellClicked(controller, this));
+      this.setOnMouseEntered(mouseEvent -> hoverPane.setVisible(true));
+      this.setOnMouseExited(mouseEvent -> hoverPane.setVisible(false));
     };
 
     @Override
@@ -361,15 +341,27 @@ public class MapQRController implements Controller {
         setText(item.toString());
         if (item.getLevel() != Level.FLOOR) {
           ImageView img = new ImageView(singleton.mapImageLoader.getIcon(item.getIcon()));
-          img.setFitWidth(25);
+          img.setFitWidth(25); // get the image from the Direction and set it up
           img.setFitHeight(25);
           setGraphic(img);
-          setPrefHeight(20 + 30 * (item.toString().length() / 30));
+          setPrefHeight(
+              50 + (25 * (item.toString().length() / 30))); // calculate the height of the cell
         } else {
-          setGraphic(null);
+          setGraphic(null); // if null, just use computed size and set graphic to null
           setPrefHeight(USE_COMPUTED_SIZE);
         }
       }
+    }
+
+    /** Override layoutChildren to contain the hoverpane. */
+    @Override
+    protected void layoutChildren() {
+      super.layoutChildren();
+      if (!getChildren().contains(hoverPane)) {
+        getChildren().add(0, hoverPane);
+      }
+      hoverPane.resizeRelocate(0, 5, hoverPane.prefWidth(USE_COMPUTED_SIZE), getHeight() - 10);
+      hoverPane.setVisible(false);
     }
   }
 
@@ -382,30 +374,22 @@ public class MapQRController implements Controller {
    */
   private void makeInstructions(
       ArrayList<Direction> dirLst, JFXTreeView<Direction> tr, TreeItem<Direction> root) {
-    tr.setCellFactory(
-        new Callback<TreeView<Direction>, TreeCell<Direction>>() {
-          @Override
-          public TreeCell<Direction> call(TreeView<Direction> item) {
-            return new DirectionCell(singleton);
-          }
-        });
+    MapQRController controller = this;
+    tr.setCellFactory( // set the cellFactory to use our DirectionCells
+        item -> new DirectionCell(singleton, controller));
     TreeItem<Direction> floor = new TreeItem<>();
     TreeItem<Direction> instruction;
     for (Direction dir : dirLst) {;
       //      ImageView img = new ImageView(singleton.mapImageLoader.getIcon(dir.getIcon()));
       //      img.setFitWidth(25);
       //      img.setFitHeight(25);
-      if (dir.getLevel() == Level.FLOOR) {
+      if (dir.getLevel() == Level.FLOOR || dir.getLevel() == Level.BUILDING) {
         floor = new TreeItem<>(dir);
         floor.setExpanded(false);
         root.getChildren().add(floor);
       } else if (dir.getLevel() == Level.STEP || dir.getLevel() == Level.DRIVING) {
         instruction = new TreeItem<>(dir);
         floor.getChildren().add(instruction);
-      } else if (dir.getLevel() == Level.BUILDING) {
-        floor = new TreeItem<>(dir);
-        floor.setExpanded(false);
-        root.getChildren().add(floor);
       }
     }
     if (root.getChildren().size() > 0) {

@@ -101,9 +101,11 @@
     -fx-font-size: 15px;
     -fx-wrap-text: true;
     -fx-pref-width: 300px;
+    -fx-cursor: hand;
 }
 
 .tree-view .tree-cell .label {
     -fx-wrap-text: true;
     -fx-pref-width: 300px;
 }
+
