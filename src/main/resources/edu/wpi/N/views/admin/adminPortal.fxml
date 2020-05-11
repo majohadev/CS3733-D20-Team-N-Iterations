@@ -212,12 +212,12 @@
                         </JFXButton>
                      </children>
                   </Pane>
-                  <Pane prefHeight="140.0" prefWidth="80.0" style="-fx-background-color: #263051;" />
-                  <Pane prefHeight="92.0" prefWidth="75.0" style="-fx-background-color: #263051;">
+                  <Pane prefHeight="140.0" prefWidth="65.0" style="-fx-background-color: #263051;" />
+                  <Pane prefHeight="109.0" prefWidth="65.0" style="-fx-background-color: #263051;">
                      <children>
                         <JFXButton ellipsisString="" onMouseClicked="#logoutUser" prefHeight="72.0" prefWidth="62.0" text="    ">
                            <graphic>
-                              <ImageView fitHeight="42.0" fitWidth="51.0" mouseTransparent="true" onMouseClicked="#logoutUser" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="45.0" fitWidth="48.0" mouseTransparent="true" onMouseClicked="#logoutUser" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../../images/adminIcons/logout-64.png" />
                                  </image>

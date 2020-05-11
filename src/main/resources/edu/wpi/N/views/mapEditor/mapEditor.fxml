@@ -41,11 +41,6 @@
          <children>
             <AnchorPane fx:id="pn_iconBar" maxHeight="1080.0" maxWidth="-Infinity" minHeight="1080.0" minWidth="-Infinity" prefHeight="1080.0" prefWidth="65.0" style="-fx-background-color: #263051;" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <ImageView fitHeight="45.0" fitWidth="48.0" layoutX="10.0" layoutY="980.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../images/adminIcons/logout-64.png" />
-                     </image>
-                  </ImageView>
                   <VBox layoutX="-1.0" layoutY="197.0" prefHeight="200.0" prefWidth="65.0" spacing="11.0">
                      <children>
                         <AnchorPane fx:id="pn_newaddnode" onMouseClicked="#onPaneAddNodeClicked" prefHeight="55.0" prefWidth="55.0">
@@ -121,10 +116,17 @@
                         </AnchorPane>
                      </children>
                   </VBox>
-                  <AnchorPane fx:id="pn_back" layoutX="5.0" layoutY="975.0" onMouseClicked="#onBtnHomeClicked" prefHeight="55.0" prefWidth="55.0">
+                  <AnchorPane fx:id="pn_back" layoutX="5.0" layoutY="983.0" onMouseClicked="#onBtnHomeClicked" prefHeight="55.0" prefWidth="55.0">
                      <cursor>
                         <Cursor fx:constant="HAND" />
-                     </cursor></AnchorPane>
+                     </cursor>
+                     <children>
+                        <ImageView fitHeight="45.0" fitWidth="48.0" layoutX="3.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../images/adminIcons/logout-64.png" />
+                           </image>
+                        </ImageView>
+                     </children></AnchorPane>
                </children>
             </AnchorPane>
          </children>
