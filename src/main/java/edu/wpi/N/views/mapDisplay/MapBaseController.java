@@ -509,13 +509,6 @@ public class MapBaseController implements Controller {
    */
   public void autoFocusToPoint(double x, double y) {
 
-    System.out.println("Point X: " + x + "\nY: " + y);
-    System.out.println(
-        "Targ X: "
-            + MAX_MAP_SCALE * (MAP_WIDTH / 2 - x)
-            + "\nY: "
-            + MAX_MAP_SCALE * (MAP_HEIGHT / 2 - y));
-
     endFocusVals.add(
         new KeyValue(
             pn_movableMap.translateXProperty(),
@@ -532,6 +525,24 @@ public class MapBaseController implements Controller {
 
     autoFocus.getKeyFrames().setAll(endFrame);
     autoFocus.playFromStart();
+  }
+
+  /** Automatically pans and zoom out to reset view */
+  public void resetFocus() {
+
+    //    endFocusVals.add(new KeyValue(pn_movableMap.translateXProperty(), 0,
+    // Interpolator.LINEAR));
+    //    endFocusVals.add(new KeyValue(pn_movableMap.translateYProperty(), 0,
+    // Interpolator.LINEAR));
+    //    endFocusVals.add(new KeyValue(mapScaleAlpha, 0, Interpolator.LINEAR));
+    //
+    //    KeyFrame endFrame = new KeyFrame(Duration.millis(500), "endFocus", null, endFocusVals);
+    //
+    //    autoFocus.getKeyFrames().setAll(endFrame);
+    //    autoFocus.playFromStart();
+    pn_movableMap.setTranslateX(0);
+    pn_movableMap.setTranslateY(0);
+    mapScaleAlpha.set(0);
   }
 
   /** Called when zooming is completed */

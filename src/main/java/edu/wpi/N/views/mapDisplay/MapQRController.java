@@ -106,6 +106,11 @@ public class MapQRController implements Controller {
       }
     } else {
       tr.getSelectionModel().select(tr.getSelectionModel().getSelectedIndex() - 1);
+      currentDirection = (TreeItem<Direction>) tr.getSelectionModel().getSelectedItem();
+      DbNode node = currentDirection.getValue().getNode();
+      if (currentDirection.getValue().getLevel() != Level.BUILDING) {
+        mapBaseController.autoFocusToNode(node);
+      }
     }
   }
 
@@ -157,6 +162,10 @@ public class MapQRController implements Controller {
       }
     } else {
       currentDirection = (TreeItem<Direction>) tr.getSelectionModel().getSelectedItem();
+      if (currentDirection.getValue().getLevel() != Level.BUILDING) {
+        DbNode node = currentDirection.getValue().getNode();
+        mapBaseController.autoFocusToNode(node);
+      }
       if (currentDirection.getValue().getLevel() == Level.FLOOR) {
         int i = root.getChildren().indexOf(currentDirection);
         root.getChildren().get(i).setExpanded(true);
@@ -178,8 +187,10 @@ public class MapQRController implements Controller {
     currentDirection = (TreeItem<Direction>) tr_faulkner.getSelectionModel().getSelectedItem();
     if (currentDirection != null) {
       mapDisplayController.switchHospitalView();
-      mapBaseController.setFloor(
-          "Faulkner", currentDirection.getValue().getNode().getFloor(), path);
+      mapDisplayController.changeFloor(
+          currentDirection.getValue().getNode().getFloor(), "Faulkner");
+      //      mapBaseController.setFloor(
+      //          "Faulkner", currentDirection.getValue().getNode().getFloor(), path);
     }
     try {
       tr_faulkner.getTreeItem(0).setExpanded(true);
@@ -199,7 +210,9 @@ public class MapQRController implements Controller {
     currentDirection = (TreeItem<Direction>) tr_main.getSelectionModel().getSelectedItem();
     if (currentDirection != null) {
       mapDisplayController.switchHospitalView();
-      mapBaseController.setFloor("Main", currentDirection.getValue().getNode().getFloor(), path);
+      //      mapBaseController.setFloor("Main", currentDirection.getValue().getNode().getFloor(),
+      // path);
+      mapDisplayController.changeFloor(currentDirection.getValue().getNode().getFloor(), "Main");
     }
     try {
       tr_main.getTreeItem(0).setExpanded(true);

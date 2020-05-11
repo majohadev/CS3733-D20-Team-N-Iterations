@@ -332,6 +332,10 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
   }
 
   public void changeFloor(int newFloor, String newBuilding) throws DBException {
+    if (newFloor == this.currentFloor) {
+      return;
+    }
+    mapBaseController.resetFocus();
     mapBaseController.clearPath();
     this.currentFloor = newFloor;
     this.currentBuilding = newBuilding;
