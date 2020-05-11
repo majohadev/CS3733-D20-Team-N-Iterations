@@ -163,7 +163,7 @@ public class CSVParser {
       File initialFile = new File(pathToFile);
       InputStream input = new FileInputStream(initialFile);
 
-      CSVParser.parseCSVEmployees(input);
+      CSVParser.parseCSVHitBoxes(input);
     } catch (FileNotFoundException e) {
       e.printStackTrace();
       throw (e);
