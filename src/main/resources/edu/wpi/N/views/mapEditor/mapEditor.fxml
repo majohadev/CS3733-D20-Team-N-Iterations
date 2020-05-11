@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: BLACK;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.mapEditor.MapEditorController">
    <children>
@@ -37,63 +39,92 @@
       </AnchorPane>
       <AnchorPane layoutX="10.0" layoutY="10.0" maxHeight="1080.0" maxWidth="-Infinity" minHeight="1080.0" minWidth="-Infinity" prefHeight="1080.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <AnchorPane fx:id="pn_change" layoutX="55.0" maxHeight="1.7976931348623157E308" maxWidth="0.0" minWidth="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0" />
             <AnchorPane fx:id="pn_iconBar" maxHeight="1080.0" maxWidth="-Infinity" minHeight="1080.0" minWidth="-Infinity" prefHeight="1080.0" prefWidth="65.0" style="-fx-background-color: #263051;" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <AnchorPane fx:id="pn_locationIcon" disable="true" onMouseClicked="#onIconClicked" prefHeight="55.0" prefWidth="55.0" styleClass="pane" stylesheets="@../../css/newMapDisplay.css" visible="false">
+                  <ImageView fitHeight="45.0" fitWidth="48.0" layoutX="10.0" layoutY="980.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../images/adminIcons/logout-64.png" />
+                     </image>
+                  </ImageView>
+                  <VBox layoutX="-1.0" layoutY="197.0" prefHeight="200.0" prefWidth="65.0" spacing="11.0">
                      <children>
-                        <ImageView fitHeight="35.0" fitWidth="29.0" layoutX="13.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="13.0">
-                           <image>
-                              <Image url="@../../images/mapDisplayIcons/locationButton.png" />
-                           </image>
-                        </ImageView>
+                        <AnchorPane fx:id="pn_newaddnode" onMouseClicked="#onPaneAddNodeClicked" prefHeight="55.0" prefWidth="55.0">
+                           <children>
+                              <ImageView fitHeight="42.0" fitWidth="42.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
+                                 <image>
+                                    <Image url="@../../images/adminIcons/add_node.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </AnchorPane>
+                        <AnchorPane fx:id="pn_neweditnode" onMouseClicked="#onPaneEditNodeClicked" prefHeight="55.0" prefWidth="55.0">
+                           <children>
+                              <ImageView fitHeight="42.0" fitWidth="42.0" layoutX="13.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="13.0">
+                                 <image>
+                                    <Image url="@../../images/adminIcons/archive.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </AnchorPane>
+                        <AnchorPane fx:id="pn_newdeletenode" onMouseClicked="#onPaneDeleteNodeClicked" prefHeight="55.0" prefWidth="55.0">
+                           <children>
+                              <ImageView fitHeight="42.0" fitWidth="42.0" layoutX="8.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="13.0">
+                                 <image>
+                                    <Image url="@../../images/adminIcons/delete_node.png" />
+                                 </image></ImageView>
+                           </children>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </AnchorPane>
+                        <AnchorPane fx:id="pn_newalignnode" onMouseClicked="#onPaneAlignNodeClicked" prefHeight="55.0" prefWidth="55.0">
+                           <children>
+                              <ImageView fitHeight="42.0" fitWidth="42.0" layoutX="11.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../images/adminIcons/align_node.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </AnchorPane>
+                        <AnchorPane fx:id="pn_newdeleteedge" layoutX="10.0" layoutY="160.0" onMouseClicked="#onPaneDeleteEdgeClicked" prefHeight="55.0" prefWidth="55.0">
+                           <children>
+                              <ImageView fitHeight="42.0" fitWidth="42.0" layoutX="9.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../images/adminIcons/x-mark-3-64.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </AnchorPane>
+                        <AnchorPane fx:id="pn_newmanageshaft" layoutX="10.0" layoutY="139.0" onMouseClicked="#onPaneEditElevClicked" prefHeight="55.0" prefWidth="55.0">
+                           <children>
+                              <ImageView fitHeight="42.0" fitWidth="42.0" layoutX="9.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../images/adminIcons/Elevator.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </AnchorPane>
                      </children>
-                  </AnchorPane>
-                  <AnchorPane fx:id="pn_doctorIcon" disable="true" layoutY="55.0" onMouseClicked="#onIconClicked" prefHeight="55.0" prefWidth="55.0" styleClass="pane" stylesheets="@../../css/newMapDisplay.css" visible="false">
-                     <children>
-                        <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="10.0">
-                           <image>
-                              <Image url="@../../images/mapDisplayIcons/doctorButton.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                  </AnchorPane>
-                  <AnchorPane fx:id="pn_qrIcon" disable="true" layoutY="110.0" onMouseClicked="#onIconClicked" prefHeight="55.0" prefWidth="55.0" styleClass="pane" stylesheets="@../../css/newMapDisplay.css" visible="false">
-                     <children>
-                        <ImageView fitHeight="29.0" fitWidth="35.0" layoutX="13.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="13.0">
-                           <image>
-                              <Image url="@../../images/mapDisplayIcons/qrButton.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                  </AnchorPane>
-                  <AnchorPane fx:id="pn_adminIcon" disable="true" layoutY="1025.0" onMouseClicked="#onIconClicked" prefHeight="55.0" prefWidth="55.0" styleClass="pane" stylesheets="@../../css/newMapDisplay.css" visible="false">
-                     <children>
-                        <ImageView fitHeight="29.0" fitWidth="35.0" layoutX="13.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../images/mapDisplayIcons/adminButton.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                  </AnchorPane>
-                  <AnchorPane fx:id="pn_back" layoutY="970.0" onMouseClicked="#onBtnHomeClicked" prefHeight="55.0" prefWidth="55.0" styleClass="pane" stylesheets="@../../css/newMapDisplay.css">
-                     <children>
-                        <ImageView fitHeight="45.0" fitWidth="48.0" layoutX="5.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../images/adminIcons/logout-64.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                  </AnchorPane>
-                  <AnchorPane fx:id="btn_cancel_elev" layoutY="915.0" onMouseClicked="#onBtnCancelElevClicked" prefHeight="55.0" prefWidth="55.0" styleClass="pane" stylesheets="@../../css/newMapDisplay.css" visible="false">
-                     <children>
-                        <ImageView fitHeight="29.0" fitWidth="35.0" layoutX="13.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="13.0">
-                           <image>
-                              <Image url="@../../images/adminIcons/x-mark-3-64.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                  </AnchorPane>
+                  </VBox>
+                  <AnchorPane fx:id="pn_back" layoutX="5.0" layoutY="975.0" onMouseClicked="#onBtnHomeClicked" prefHeight="55.0" prefWidth="55.0">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor></AnchorPane>
                </children>
             </AnchorPane>
          </children>
