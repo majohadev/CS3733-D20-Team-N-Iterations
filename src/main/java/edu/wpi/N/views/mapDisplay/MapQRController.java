@@ -23,6 +23,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 
 public class MapQRController implements Controller {
   private StateSingleton singleton;
@@ -300,11 +301,13 @@ public class MapQRController implements Controller {
       if (controller.currentDirection.getChildren().size() != 0)
         controller.currentDirection.setExpanded(
             !controller.currentDirection.expandedProperty().getValue());
-      if (cell.getItem().getLevel() == Level.DRIVING) return;
+      if (cell.getItem().getLevel() == Level.BUILDING) return;
       DbNode node = cell.getItem().getNode();
       try {
         controller.mapBaseController.setFloor(node.getBuilding(), node.getFloor(), controller.path);
       } catch (DBException e) {
+        e.printStackTrace();
+      } catch (NullPointerException e) {
         e.printStackTrace();
       }
     }
@@ -344,8 +347,14 @@ public class MapQRController implements Controller {
           img.setFitWidth(25); // get the image from the Direction and set it up
           img.setFitHeight(25);
           setGraphic(img);
+          Text reference = new Text(item.toString());
+          reference.setFont(this.getFont());
           setPrefHeight(
-              50 + (25 * (item.toString().length() / 30))); // calculate the height of the cell
+              50
+                  + (25
+                      * Math.floor(
+                          reference.getBoundsInLocal().getWidth()
+                              / 300))); // calculate the height of the cell
         } else {
           setGraphic(null); // if null, just use computed size and set graphic to null
           setPrefHeight(USE_COMPUTED_SIZE);
@@ -360,7 +369,7 @@ public class MapQRController implements Controller {
       if (!getChildren().contains(hoverPane)) {
         getChildren().add(0, hoverPane);
       }
-      hoverPane.resizeRelocate(0, 5, hoverPane.prefWidth(USE_COMPUTED_SIZE), getHeight() - 10);
+      hoverPane.resizeRelocate(0, 0, hoverPane.prefWidth(USE_COMPUTED_SIZE), getHeight());
       hoverPane.setVisible(false);
     }
   }

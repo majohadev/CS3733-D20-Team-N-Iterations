@@ -533,9 +533,9 @@ public class Directions {
               next.substring(44)
                   .replace("\\u003cb\\u003e", "")
                   .replace("\\u003c/b\\u003e", "")
-                  .replace("\\u003cwbr/\\u003e", "\n")
+                  .replace("\\u003cwbr/\\u003e", " ")
                   .replace("&nbsp;", " ")
-                  .replaceAll("(\\\\u003c)(.*?)(\\\\u003e)", "\n")
+                  .replaceAll("(\\\\u003c)(.*?)(\\\\u003e)", "; ")
                   .replace("\",", ""));
         // System.out.println(sc.nextLine() + "K");
       }
