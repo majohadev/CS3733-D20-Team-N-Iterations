@@ -61,6 +61,8 @@ public class NewAdminController implements Controller, Initializable {
   @FXML JFXButton btn_admin;
   @FXML JFXComboBox cb_changeAlgo;
   @FXML JFXButton btn_submit;
+  @FXML Label lbl_algo;
+  @FXML Label lbl_changeAlgo;
   @FXML JFXButton btn_return;
   @FXML JFXButton btn_reset;
   @FXML Label lbl_req;
@@ -80,7 +82,10 @@ public class NewAdminController implements Controller, Initializable {
       populateEmployeeType();
       btn_submit.setVisible(false);
       cb_changeAlgo.setVisible(false);
+      lbl_algo.setVisible(false);
+      lbl_changeAlgo.setVisible(false);
       populateChangeAlgo();
+      lbl_algo.setText(singleton.algoState);
     } catch (DBException e) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
       errorAlert.setContentText(e.getMessage());
@@ -105,9 +110,19 @@ public class NewAdminController implements Controller, Initializable {
   }
 
   @FXML
+  private void hideAlgo() {
+    btn_submit.setVisible(false);
+    cb_changeAlgo.setVisible(false);
+    lbl_algo.setVisible(false);
+    lbl_changeAlgo.setVisible(false);
+  }
+
+  @FXML
   private void changeAlgo() {
     btn_submit.setVisible(true);
     cb_changeAlgo.setVisible(true);
+    lbl_algo.setVisible(true);
+    lbl_changeAlgo.setVisible(true);
     ap_swapPane.setVisible(false);
   }
 
@@ -155,6 +170,7 @@ public class NewAdminController implements Controller, Initializable {
       ap_swapPane.setVisible(true);
       btn_submit.setVisible(false);
       cb_changeAlgo.setVisible(false);
+      hideAlgo();
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -173,6 +189,7 @@ public class NewAdminController implements Controller, Initializable {
       ap_swapPane.setVisible(true);
       btn_submit.setVisible(false);
       cb_changeAlgo.setVisible(false);
+      hideAlgo();
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -191,6 +208,7 @@ public class NewAdminController implements Controller, Initializable {
       ap_swapPane.setVisible(true);
       btn_submit.setVisible(false);
       cb_changeAlgo.setVisible(false);
+      hideAlgo();
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -209,6 +227,7 @@ public class NewAdminController implements Controller, Initializable {
       ap_swapPane.setVisible(true);
       btn_submit.setVisible(false);
       cb_changeAlgo.setVisible(false);
+      hideAlgo();
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -227,6 +246,7 @@ public class NewAdminController implements Controller, Initializable {
       ap_swapPane.setVisible(true);
       btn_submit.setVisible(false);
       cb_changeAlgo.setVisible(false);
+      hideAlgo();
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -245,6 +265,7 @@ public class NewAdminController implements Controller, Initializable {
       ap_swapPane.setVisible(true);
       btn_submit.setVisible(false);
       cb_changeAlgo.setVisible(false);
+      hideAlgo();
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -263,6 +284,7 @@ public class NewAdminController implements Controller, Initializable {
       ap_swapPane.setVisible(true);
       btn_submit.setVisible(false);
       cb_changeAlgo.setVisible(false);
+      hideAlgo();
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -808,10 +830,6 @@ public class NewAdminController implements Controller, Initializable {
     cb_reqFilter.setItems(empTypeList);
   }
 
-  public StateSingleton getSingletion() {
-    return this.singleton;
-  }
-
   public void populateChangeAlgo() {
     LinkedList<String> algoTypes = new LinkedList<>();
     algoTypes.add("BFS");
@@ -827,18 +845,23 @@ public class NewAdminController implements Controller, Initializable {
   public void changeAlgorithm() {
     if (cb_changeAlgo.getSelectionModel().getSelectedItem().equals("BFS")) {
       singleton.savedAlgo.setPathFinder(new BFS());
-      System.out.println("here1");
+      lbl_algo.setText("BFS");
+      singleton.algoState = "BFS";
+
     } else if (cb_changeAlgo.getSelectionModel().getSelectedItem().equals("DFS")) {
       singleton.savedAlgo.setPathFinder(new DFS());
-      System.out.println("here2");
+      lbl_algo.setText("DFS");
+      singleton.algoState = "DFS";
 
     } else if (cb_changeAlgo.getSelectionModel().getSelectedItem().equals("AStar")) {
       singleton.savedAlgo.setPathFinder(new AStar());
-      System.out.println("here3");
+      lbl_algo.setText("AStar");
+      singleton.algoState = "AStar";
 
     } else if (cb_changeAlgo.getSelectionModel().getSelectedItem().equals("Dijkstra")) {
       singleton.savedAlgo.setPathFinder(new Dijkstra());
-      System.out.println("here4");
+      lbl_algo.setText("Dijkstra");
+      singleton.algoState = "Dijkstra";
     }
   }
 
@@ -849,5 +872,9 @@ public class NewAdminController implements Controller, Initializable {
     } catch (DBException e) {
       e.printStackTrace();
     }
+  }
+
+  public String getAlgoInstance() {
+    return lbl_algo.getText();
   }
 }
