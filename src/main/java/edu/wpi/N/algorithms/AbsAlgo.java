@@ -46,8 +46,9 @@ public abstract class AbsAlgo implements IPathFinder {
    */
   public static double floorBuildingCost(DbNode currNode, DbNode nextNode) {
     if (currNode.getNodeType().equals("EXIT") && nextNode.getNodeType().equals("EXIT")) return 5000;
-    else if (currNode.getFloor() != nextNode.getFloor()) {
-      return Math.abs(currNode.getFloor() - nextNode.getFloor()) * 250;
+    else if ((currNode.getNodeType().equals("STAI") || currNode.getNodeType().equals("ELEV"))
+        && !currNode.getNodeType().equals(nextNode.getNodeType())) {
+      return 500;
     } else return 0;
   }
 
