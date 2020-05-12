@@ -8,10 +8,13 @@ import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.views.Controller;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -43,12 +46,15 @@ public class MapBaseController implements Controller {
   double VERTICAL_SCALE;
 
   // Zoom constants
-  private final double MIN_MAP_SCALE = 1;
-  private final double MAX_MAP_SCALE = 3;
-  private final double ZOOM_STEP_SCROLL = 0.01;
+  private double MIN_MAP_SCALE = 1;
+  private double MAX_MAP_SCALE = 3;
+  private final double ZOOM_STEP_SCROLL = 0.005;
   private final double ZOOM_STEP_BUTTON = 0.1;
-  private double mapScaleAlpha;
+  private DoubleProperty mapScaleAlpha = new SimpleDoubleProperty(0);
   private double clickStartX, clickStartY;
+
+  private Timeline autoFocus = new Timeline();
+  private LinkedList<KeyValue> endFocusVals = new LinkedList<>();
 
   private final Color START_NODE_COLOR = Color.GREEN;
   private final Color END_NODE_COLOR = Color.RED;
@@ -109,6 +115,7 @@ public class MapBaseController implements Controller {
    */
   public void initialize() throws DBException {
 
+    initAutoFocus();
     initNodeLabels();
     initPathAnim();
     setFaulknerDefaults();
@@ -127,6 +134,7 @@ public class MapBaseController implements Controller {
     if (!building.equals("Faulkner")) {
       building = "Main";
       setMainDefaults();
+
     } else {
       setFaulknerDefaults();
     }
@@ -143,6 +151,8 @@ public class MapBaseController implements Controller {
     MAP_HEIGHT = 912;
     HORIZONTAL_SCALE = MAP_WIDTH / IMAGE_WIDTH;
     VERTICAL_SCALE = MAP_HEIGHT / IMAGE_HEIGHT;
+    MIN_MAP_SCALE = 1;
+    MAX_MAP_SCALE = 3.2;
   }
 
   public void setMainDefaults() {
@@ -152,6 +162,8 @@ public class MapBaseController implements Controller {
     MAP_HEIGHT = 1034;
     HORIZONTAL_SCALE = MAP_WIDTH / IMAGE_WIDTH;
     VERTICAL_SCALE = MAP_HEIGHT / IMAGE_HEIGHT;
+    MIN_MAP_SCALE = 1.2;
+    MAX_MAP_SCALE = 5.5;
   }
 
   /**
@@ -221,10 +233,23 @@ public class MapBaseController implements Controller {
       if (firstNode.getFloor() == floor
           && secondNode.getFloor() == floor
           && (drawFaulkner || drawMain)) {
+
+        Line line =
+            new Line(
+                scaleX(secondNode.getX()),
+                scaleY(secondNode.getY()),
+                scaleX(firstNode.getX()),
+                scaleY(firstNode.getY()));
+        styleLine(line);
+        pn_path.getChildren().add(line);
+
         if (i == 0) {
           startLabel.setVisible(true);
           endLabel.setVisible(true);
           startLabel.setText("Start at ");
+
+          autoFocusToNode(firstNode); // TODO: Place this somewhere better
+
           drawCircle(firstNode, START_NODE_COLOR, startLabel);
         } else if (i == currentPath.size() - 2) {
           startLabel.setVisible(true);
@@ -236,6 +261,9 @@ public class MapBaseController implements Controller {
           startLabel.setVisible(true);
           endLabel.setVisible(true);
           startLabel.setText("Exit from ");
+
+          autoFocusToNode(firstNode); // TODO: Place this somewhere better
+
           drawCircle(firstNode, MIDDLE_NODE_COLOR, startLabel);
         } else if (currentPath.get(i + 2).getFloor() != floor) {
           // If secondNode is last on current floor
@@ -244,14 +272,6 @@ public class MapBaseController implements Controller {
           endLabel.setText("Enter ");
           drawCircle(secondNode, MIDDLE_NODE_COLOR, endLabel);
         }
-        Line line =
-            new Line(
-                scaleX(secondNode.getX()),
-                scaleY(secondNode.getY()),
-                scaleX(firstNode.getX()),
-                scaleY(firstNode.getY()));
-        styleLine(line);
-        pn_path.getChildren().add(line);
       }
     }
     pn_path.getChildren().addAll(startLabel, endLabel); // To make sure they render over the path
@@ -362,26 +382,32 @@ public class MapBaseController implements Controller {
   private void mapScrollHandler(ScrollEvent event) throws IOException {
     if (event.getSource() == pn_movableMap) {
       double deltaY = event.getDeltaY();
-      zoom(deltaY * ZOOM_STEP_SCROLL);
+
+      // Scaling parameter (alpha) is clamped between 0 (min. scale) and 1 (max. scale)
+      double newScale = mapScaleAlpha.get() + deltaY * ZOOM_STEP_SCROLL;
+      mapScaleAlpha.set(Math.max(0, Math.min(1, newScale)));
     }
   }
 
   /**
    * zoom - Scale map pane up or down, clamping value between MIN_MAP_SCALE and MAX_MAP_SCALE
    *
-   * @param percentDelta - Signed double representing how much to zoom in/out
+   * @param alphaVal - Double representing the amount of zooming applied (0 = min, 1 = max)
    */
-  private void zoom(double percentDelta) {
+  private void zoom(double alphaVal) {
 
-    // Scaling parameter (alpha) is clamped between 0 (min. scale) and 1 (max. scale)
-    mapScaleAlpha = Math.max(0, Math.min(1, mapScaleAlpha + percentDelta));
+    // TODO: use zoom to scale line & node size
+
+    // Exponentially interpolate alpha to actual scale value
+    // Results in finer zoom up close, coarser zoom in mid range
+    double expInterpScale = MIN_MAP_SCALE * Math.pow(MAX_MAP_SCALE / MIN_MAP_SCALE, alphaVal);
 
     // Linearly interpolate (lerp) alpha to actual scale value
-    double lerpedScale = MIN_MAP_SCALE + mapScaleAlpha * (MAX_MAP_SCALE - MIN_MAP_SCALE);
+    // double lerpedScale = MIN_MAP_SCALE + alphaVal * (MAX_MAP_SCALE - MIN_MAP_SCALE);
 
     // Apply new scale and correct panning
-    pn_movableMap.setScaleX(lerpedScale);
-    pn_movableMap.setScaleY(lerpedScale);
+    pn_movableMap.setScaleX(expInterpScale);
+    pn_movableMap.setScaleY(expInterpScale);
     clampPanning(0, 0);
   }
 
@@ -435,5 +461,96 @@ public class MapBaseController implements Controller {
 
     pn_movableMap.setTranslateX(newTranslateX);
     pn_movableMap.setTranslateY(newTranslateY);
+  }
+
+  // == MAP AUTO-FOCUS ==
+
+  /** Sets up autofocus components (run in init) */
+  private void initAutoFocus() {
+    autoFocus.setCycleCount(1);
+    autoFocus.setOnFinished(event -> onAutoFocusEnd());
+    mapScaleAlpha.addListener((observable, oldValue, newValue) -> zoom(newValue.doubleValue()));
+  }
+
+  /**
+   * Automatically pans and zooms to a given node
+   *
+   * @param node DbNode to get location data from
+   */
+  public void autoFocusToNode(DbNode node) {
+    autoFocusToPoint(scaleX(node.getX()), scaleY(node.getY()));
+  }
+
+  // TODO: This implementation should be cleaner - currently uses raw circle objects
+  /**
+   * Automatically pans and zooms to the center of a group of nodes
+   *
+   * @param circles List of JavaFX Circles to get location data from
+   */
+  private void autoFocusToNodesGroup(LinkedList<Circle> circles) {
+
+    double xSum = 0;
+    double ySum = 0;
+    int nodesCount = circles.size();
+
+    for (Circle circle : circles) {
+      xSum += circle.getCenterX();
+      ySum += circle.getCenterY();
+    }
+
+    autoFocusToPoint(xSum / nodesCount, ySum / nodesCount); // Get midpoint of group
+  }
+
+  /**
+   * Automatically pans and zooms to a given node
+   *
+   * @param x x location to go to
+   * @param y y location to go to
+   */
+  public void autoFocusToPoint(double x, double y) {
+
+    endFocusVals.add(
+        new KeyValue(
+            pn_movableMap.translateXProperty(),
+            MAX_MAP_SCALE * (MAP_WIDTH / 2 - x),
+            Interpolator.LINEAR));
+    endFocusVals.add(
+        new KeyValue(
+            pn_movableMap.translateYProperty(),
+            MAX_MAP_SCALE * (MAP_HEIGHT / 2 - y),
+            Interpolator.LINEAR));
+    endFocusVals.add(new KeyValue(mapScaleAlpha, 1, Interpolator.LINEAR));
+
+    KeyFrame endFrame = new KeyFrame(Duration.millis(500), "endFocus", null, endFocusVals);
+
+    autoFocus.getKeyFrames().setAll(endFrame);
+    autoFocus.playFromStart();
+  }
+
+  /** Automatically pans and zoom out to reset view */
+  public void resetFocus() {
+
+    //    endFocusVals.add(new KeyValue(pn_movableMap.translateXProperty(), 0,
+    // Interpolator.LINEAR));
+    //    endFocusVals.add(new KeyValue(pn_movableMap.translateYProperty(), 0,
+    // Interpolator.LINEAR));
+    //    endFocusVals.add(new KeyValue(mapScaleAlpha, 0, Interpolator.LINEAR));
+    //
+    //    KeyFrame endFrame = new KeyFrame(Duration.millis(500), "endFocus", null, endFocusVals);
+    //
+    //    autoFocus.getKeyFrames().setAll(endFrame);
+    //    autoFocus.playFromStart();
+    pn_movableMap.setTranslateX(0);
+    pn_movableMap.setTranslateY(0);
+    mapScaleAlpha.set(0);
+  }
+
+  /** Called when zooming is completed */
+  private void onAutoFocusEnd() {
+    autoFocus.stop();
+    autoFocus.getKeyFrames().clear();
+    endFocusVals.clear();
+    System.out.println(
+        "X: " + pn_movableMap.getTranslateX() + "\nY: " + pn_movableMap.getTranslateY());
   }
 }

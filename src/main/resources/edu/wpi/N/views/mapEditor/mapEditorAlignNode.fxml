@@ -5,6 +5,7 @@
 <?import com.jfoenix.controls.JFXRadioButton?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -45,11 +46,17 @@
             <font>
                 <Font name="Calibri" size="16.0" />
             </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
         </JFXButton>
         <JFXButton fx:id="btn_confirm" layoutX="364.0" layoutY="229.0" prefHeight="37.0" prefWidth="92.0" text="Confirm" textFill="WHITE">
             <font>
                 <Font name="Calibri" size="16.0" />
             </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
         </JFXButton>
       <JFXTextField fx:id="txt_Pos" focusColor="#fdfdff" layoutX="125.0" layoutY="230.0" promptText="Position" stylesheets="@../../css/sanitationRequestUI.css" unFocusColor="WHITE" />
     </children>
