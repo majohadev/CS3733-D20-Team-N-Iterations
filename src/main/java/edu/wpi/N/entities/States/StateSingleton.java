@@ -70,6 +70,11 @@ public class StateSingleton {
     this.mainApp = mainApp;
   }
 
+  public void setTimeoutTime(int newTimeoutTime) {
+      timeoutTime = newTimeoutTime;
+      update();
+  }
+
   public void switchTheScene(String path) throws IOException {
     timer.cancel();
     timer.purge();
@@ -83,11 +88,10 @@ public class StateSingleton {
     return _instance;
   }
 
-  public void update() throws DBException {
-    StateSingleton singleton = StateSingleton.getInstance();
-    singleton.timer.purge();
-    singleton.timer.cancel();
-    singleton.timer = new Timer();
+  public void update() {
+    timer.purge();
+    timer.cancel();
+    timer = new Timer();
     TimerTask timerTask =
         new TimerTask() {
           @Override
@@ -97,8 +101,8 @@ public class StateSingleton {
                   System.out.println("Timer Ended!");
                   System.out.println("Reset Kiosk!");
                   try {
-                    singleton.originator.getStateFromMemento(singleton.careTaker.get(0));
-                    String path = singleton.originator.getState();
+                    originator.getStateFromMemento(careTaker.get(0));
+                    String path = originator.getState();
                     switchTheScene(path);
                   } catch (Exception e) {
                     e.printStackTrace();
@@ -108,6 +112,6 @@ public class StateSingleton {
           }
         };
 
-    singleton.timer.schedule(timerTask, singleton.timeoutTime);
+    timer.schedule(timerTask, timeoutTime);
   }
 }
