@@ -174,6 +174,8 @@ public class ChatbotController implements Controller, Initializable {
 
         // Enter respective location in Map Editor Controller.MapLocationSearchController
         // Select the 'best' suggested location from drop-down
+        mapController.resetMap();
+        mapController.setToLocationSearch();
         mapController.locationSearchController.searchStartOrEndLocationForBot(startLocation, true);
         mapController.locationSearchController.searchStartOrEndLocationForBot(goalLocation, false);
 

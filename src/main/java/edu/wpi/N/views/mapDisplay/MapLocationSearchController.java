@@ -7,6 +7,7 @@ import edu.wpi.N.database.DBException;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.views.Controller;
+import java.io.IOException;
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
@@ -40,6 +41,8 @@ public class MapLocationSearchController implements Controller {
 
   DbNode[] nodes = new DbNode[2];
 
+  private NewMapDisplayController con;
+
   /** Function displays lines indicating the way-finding feature for 10 seconds */
   public void showGuideLines() {
     lineSearchOne.setVisible(true);
@@ -58,6 +61,10 @@ public class MapLocationSearchController implements Controller {
         });
 
     delay.play();
+  }
+
+  public void setCon(NewMapDisplayController con) {
+    this.con = con;
   }
 
   @Override
@@ -134,37 +141,49 @@ public class MapLocationSearchController implements Controller {
       ex.printStackTrace();
     }
 
-    selectBestSuggestionFromDropDown();
-  }
-
-  /**
-   * Selects the best suggestion from the drop down menu after entering location (either first or
-   * second)
-   */
-  private void selectBestSuggestionFromDropDown() {
-    try {
-      lst_fuzzySearch.getSelectionModel().selectFirst();
-      activeText.setText(
-          lst_fuzzySearch.getSelectionModel().getSelectedItem().toString()
-              + ", "
-              + ((DbNode) lst_fuzzySearch.getSelectionModel().getSelectedItem()).getBuilding());
-      if (activeText == txt_firstLocation) {
-        nodes[0] = (DbNode) lst_fuzzySearch.getSelectionModel().getSelectedItem();
-      } else {
-        nodes[1] = (DbNode) lst_fuzzySearch.getSelectionModel().getSelectedItem();
+    lst_fuzzySearch.getSelectionModel().selectFirst();
+    if (isFirstLocation) {
+      nodes[0] = (DbNode) lst_fuzzySearch.getSelectionModel().getSelectedItem();
+    } else {
+      nodes[1] = (DbNode) lst_fuzzySearch.getSelectionModel().getSelectedItem();
+      try {
+        con.initPathfind(nodes[0], nodes[1], false);
+        con.enableTextDirections();
+      } catch (DBException | IOException e) {
+        e.printStackTrace();
       }
-      if (nodes[0].getBuilding().equals("Faulkner")) {
-        btn_infodesk.setOpacity(.4);
-        btn_infodesk.setDisable(true);
-      } else {
-        btn_infodesk.setOpacity(1);
-        btn_infodesk.setDisable(false);
-      }
-    } catch (NullPointerException ex) {
-      ex.printStackTrace();
-      return;
     }
   }
+
+  //  /**
+  //   * Selects the best suggestion from the drop down menu after entering location (either first
+  // or
+  //   * second)
+  //   */
+  //  private void selectBestSuggestionFromDropDown() {
+  //    try {
+  //      lst_fuzzySearch.getSelectionModel().selectFirst();
+  //      activeText.setText(
+  //          lst_fuzzySearch.getSelectionModel().getSelectedItem().toString()
+  //              + ", "
+  //              + ((DbNode) lst_fuzzySearch.getSelectionModel().getSelectedItem()).getBuilding());
+  //      if (activeText == txt_firstLocation) {
+  //        nodes[0] = (DbNode) lst_fuzzySearch.getSelectionModel().getSelectedItem();
+  //      } else {
+  //        nodes[1] = (DbNode) lst_fuzzySearch.getSelectionModel().getSelectedItem();
+  //      }
+  //      if (nodes[0].getBuilding().equals("Faulkner")) {
+  //        btn_infodesk.setOpacity(.4);
+  //        btn_infodesk.setDisable(true);
+  //      } else {
+  //        btn_infodesk.setOpacity(1);
+  //        btn_infodesk.setDisable(false);
+  //      }
+  //    } catch (NullPointerException ex) {
+  //      ex.printStackTrace();
+  //      return;
+  //    }
+  //  }
 
   public JFXButton getSearchButton() {
     return this.btn_search;

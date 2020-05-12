@@ -151,6 +151,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     initRestroomSearchButton();
     initInfoSearchButton();
     initExitSearchButton();
+    locationSearchController.setCon(this);
     pn_change.getChildren().add(pane);
   }
 
@@ -754,6 +755,20 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     }
   }
 
+  public void setToLocationSearch() throws DBException, IOException {
+    FXMLLoader loader;
+    loader = new FXMLLoader(getClass().getResource("mapLocationSearch.fxml"));
+    Pane pane = loader.load();
+    locationSearchController = loader.getController();
+    initLocationSearchButton();
+    initResetLocationSearch();
+    initRestroomSearchButton();
+    initInfoSearchButton();
+    initExitSearchButton();
+    locationSearchController.setCon(this);
+    pn_change.getChildren().add(pane);
+  }
+
   public synchronized void setDirPane(Pane dirPane) {
     this.dirPane = dirPane;
   }
@@ -811,6 +826,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
       initRestroomSearchButton();
       initExitSearchButton();
       initInfoSearchButton();
+      locationSearchController.setCon(this);
       setDefaultKioskNode();
       pn_change.getChildren().add(pane);
     } else if (src == pn_doctorIcon) {
