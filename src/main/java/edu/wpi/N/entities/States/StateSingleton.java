@@ -9,6 +9,8 @@ public class StateSingleton {
   public Algorithm savedAlgo;
   public MapImageLoader mapImageLoader;
   public ChatMessagesState chatBotState;
+  public boolean isMapDisplayActive;
+  public boolean isServicesPageActive;
 
   private StateSingleton() throws DBException {
     savedAlgo = new Algorithm();

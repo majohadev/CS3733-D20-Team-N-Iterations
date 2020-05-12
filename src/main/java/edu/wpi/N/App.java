@@ -3,6 +3,7 @@ package edu.wpi.N;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.views.Controller;
+import edu.wpi.N.views.chatbot.ChatbotController;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import javafx.application.Application;
@@ -47,10 +48,21 @@ public class App extends Application {
     FXMLLoader loader = new FXMLLoader();
     loader.setLocation(getClass().getResource(path));
 
+    // Check if Map Display is currently active
+    if (path.contains("newMapDisplay.fxml")) {
+      singleton.isMapDisplayActive = true;
+    } else {
+      singleton.isMapDisplayActive = false;
+    }
+
     // Inject Singleton object into classes with Constructors that take StateSingleton
     loader.setControllerFactory(
         type -> {
           try {
+            if (type.equals(ChatbotController.class)) {
+              return new ChatbotController(singleton, this);
+            }
+
             // look for constructor taking StateSingleton as a parameter
             for (Constructor<?> c : type.getConstructors()) {
               if (c.getParameterCount() == 1) {
@@ -69,6 +81,7 @@ public class App extends Application {
     Pane pane = loader.load();
     Controller controller = loader.getController();
     controller.setMainApp(this);
+
     Scene scene = new Scene(pane);
     masterStage.setScene(scene);
     // masterStage.setMaximized(true);

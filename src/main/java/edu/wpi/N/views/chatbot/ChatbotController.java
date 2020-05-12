@@ -6,8 +6,11 @@ import com.jfoenix.controls.JFXTextField;
 import edu.wpi.N.App;
 import edu.wpi.N.Main;
 import edu.wpi.N.chatbot.Dialogflow;
+import edu.wpi.N.database.MapDB;
+import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.views.Controller;
+import edu.wpi.N.views.mapDisplay.NewMapDisplayController;
 import java.io.IOException;
 import java.net.URL;
 import java.util.LinkedList;
@@ -35,6 +38,11 @@ import javafx.stage.Stage;
 public class ChatbotController implements Controller, Initializable {
   private StateSingleton state;
   private App mainApp;
+  private NewMapDisplayController mapController;
+
+  // Nodes
+  public DbNode startNode;
+  public DbNode endNode;
 
   @FXML private Pane mainPane;
   @FXML private JFXTextField textField;
@@ -45,8 +53,9 @@ public class ChatbotController implements Controller, Initializable {
   @FXML private JFXButton btnSendMessage;
 
   // Inject state singleton
-  public ChatbotController(StateSingleton state) {
+  public ChatbotController(StateSingleton state, App mainApp) {
     this.state = state;
+    this.mainApp = mainApp;
   }
 
   /** Opens up the Chat-bot window */
@@ -106,7 +115,7 @@ public class ChatbotController implements Controller, Initializable {
       // Display chat-bots reply (left side)
       try {
         // get chatbot's reply, display it and save in message history
-        displayAndSaveBotMessage(userInput.getText());
+        displayAndSaveBotMessage(userInput.getText(), state.chatBotState.prevQueryResult);
       } catch (Exception e) {
         e.printStackTrace();
         displayErrorMessage("Error trying to load chat-bot's reply");
@@ -119,72 +128,146 @@ public class ChatbotController implements Controller, Initializable {
    *
    * @param userMessage: user's Input
    */
-  private void displayAndSaveBotMessage(String userMessage) {
+  private void displayAndSaveBotMessage(String userMessage, QueryResult prevQueryResult) {
     try {
-      QueryResult queryResults =
-          state.chatBotState.dialogflow.detectIntentTexts(userMessage, "en-US");
+
+      QueryResult queryResults;
+
+      if (prevQueryResult != null) {
+        queryResults = prevQueryResult;
+      } else {
+        queryResults = state.chatBotState.dialogflow.detectIntentTexts(userMessage, "en-US");
+      }
 
       LinkedList<Node> singleMessageObject = new LinkedList<Node>();
+      String intent = queryResults.getIntent().getDisplayName();
 
-      if (queryResults
-          .getIntent()
-          .getDisplayName()
-          .equals("question-billing-how-to-pay-online-option")) {
-        // create message with links
-        Label messagePartA =
-            new Label(
-                "Great! It is the most convenient, efficient way to pay your bill. If you have a Partners Patient Gateway account, you can see the current status of all open patient balances; payments are immediately posted to your account.\n"
-                    + "\n"
-                    + "You can opt to go paperless and receive your bills online. In addition, you can now set up monthly payment plans.\n"
-                    + "\n");
-        Hyperlink loginLink = new Hyperlink("Log in to Partners Patient Gateway");
-        loginLink.setOnMouseClicked(
-            new EventHandler<MouseEvent>() {
-              @Override
-              public void handle(MouseEvent event) {
-                try {
-                  loadWebView("https://mychart.partners.org/mychart-prd/Authentication/Login?");
-                } catch (IOException e) {
-                  e.printStackTrace();
-                }
-              }
-            });
-
-        Hyperlink guestLink = new Hyperlink("Or you can quickly pay as a guest");
-        guestLink.setOnMouseClicked(
-            new EventHandler<MouseEvent>() {
-              @Override
-              public void handle(MouseEvent event) {
-                try {
-                  loadWebView(
-                      "https://mychart.partners.org/mychart-prd/billing/guestpay/payasguest");
-                } catch (IOException e) {
-                  e.printStackTrace();
-                }
-              }
-            });
+      if (intent.equals("question-billing-how-to-pay-online-option")) {
 
         // add elements to a 'Single Message'
-        singleMessageObject.add(messagePartA);
-        singleMessageObject.add(loginLink);
-        singleMessageObject.add(guestLink);
+        singleMessageObject.addAll(getAnswerToPayingOnlineOption());
       }
       // If intent matches with get-weather
-      else if (queryResults.getIntent().getDisplayName().equals("get-weather")) {
+      else if (intent.equals("get-weather")) {
         Label message = new Label(Dialogflow.getCurrentWeatherReply());
         singleMessageObject.add(message);
+      } else if (intent.equals("kiosk-help-get-directions-from-to")
+          || intent.equals("questions-kiosk-location-search-from-to")
+          || intent.equals("questions-kiosk-location-search-where-is-goal-location")) {
+        // Get Parameters
+        String startLocation =
+            queryResults.getParameters().getFieldsMap().get("hospital-location1").getStringValue();
+        String goalLocation =
+            queryResults.getParameters().getFieldsMap().get("hospital-location2").getStringValue();
+
+        System.out.println(startLocation);
+        System.out.println(goalLocation);
+
+        // Check if current scene is Map
+        if (!state.isMapDisplayActive) {
+          state.chatBotState.prevQueryResult = queryResults;
+          state.chatBotState.startNodePrevSession = MapDB.getNode("GDEPT03502");
+          state.chatBotState.endNodePrevSession = MapDB.getNode("FSERV00101");
+          mainApp.switchScene("views/mapDisplay/newMapDisplay.fxml", state);
+          return;
+        }
+
+        // Enter respective location in Map Editor Controller.MapLocationSearchController
+        // Select the 'best' suggested location from drop-down
+        mapController.locationSearchController.searchStartOrEndLocationForBot(startLocation, true);
+        mapController.locationSearchController.searchStartOrEndLocationForBot(goalLocation, false);
+
+        startNode = mapController.locationSearchController.getDBNodes()[0];
+        endNode = mapController.locationSearchController.getDBNodes()[1];
+
+        //                startNode = MapDB.getNode("FSERV00101");
+        //                endNode = MapDB.getNode("GDEPT03502");
+
+        // Generate path on the Screen
+        //        mapController.initPathfind(
+        //            mapController.locationSearchController.getDBNodes()[0],
+        //            mapController.locationSearchController.getDBNodes()[1],
+        //            false);
+
+        // Display the fulfilment text
+        Label reply = new Label(queryResults.getFulfillmentText());
+        singleMessageObject.add(reply);
+
+      } else if (intent.equals("kiosk-help-get-directions-from-to-wrong-locations")
+          || intent.equals("questions-kiosk-location-search-from-to - no")
+          || intent.equals("questions-kiosk-location-search-where-is-goal-location - no")) {
+
+        // Reset everything
+        if (mapController != null) {
+          mapController.resetMap(); // if it's null, than we're in a different scene
+        }
+
+        // Display the fulfilment text
+        Label reply = new Label(queryResults.getFulfillmentText());
+        singleMessageObject.add(reply);
+
+        // Display animation how to use 'way-finding feature'
+
       } else {
         // else, use Dialogflow text
         Label message = new Label(queryResults.getFulfillmentText());
         singleMessageObject.add(message);
       }
 
+      state.chatBotState.prevQueryResult = null; // Set to null
       displayAndSaveMessages(singleMessageObject, false);
 
     } catch (Exception ex) {
       ex.printStackTrace();
       displayErrorMessage("Ooops... Something went wong when loading chat-bot message");
     }
+  }
+
+  /**
+   * Create a single message consisting of 'Nodes' in the order, which is needed
+   *
+   * @return list of Nodes, which represent a message. Every node is a separate chat-bot's message
+   */
+  private LinkedList<Node> getAnswerToPayingOnlineOption() {
+    LinkedList<Node> ans = new LinkedList<Node>();
+
+    Label messagePartA =
+        new Label(
+            "Great! It is the most convenient, efficient way to pay your bill. If you have a Partners Patient Gateway account, you can see the current status of all open patient balances; payments are immediately posted to your account.\n"
+                + "\n"
+                + "You can opt to go paperless and receive your bills online. In addition, you can now set up monthly payment plans.\n"
+                + "\n");
+    Hyperlink loginLink = new Hyperlink("Log in to Partners Patient Gateway");
+    loginLink.setOnMouseClicked(
+        new EventHandler<MouseEvent>() {
+          @Override
+          public void handle(MouseEvent event) {
+            try {
+              loadWebView("https://mychart.partners.org/mychart-prd/Authentication/Login?");
+            } catch (IOException e) {
+              e.printStackTrace();
+            }
+          }
+        });
+
+    Hyperlink guestLink = new Hyperlink("Or you can quickly pay as a guest");
+    guestLink.setOnMouseClicked(
+        new EventHandler<MouseEvent>() {
+          @Override
+          public void handle(MouseEvent event) {
+            try {
+              loadWebView("https://mychart.partners.org/mychart-prd/billing/guestpay/payasguest");
+            } catch (IOException e) {
+              e.printStackTrace();
+            }
+          }
+        });
+
+    ans.add(messagePartA);
+    ans.add(loginLink);
+    ans.add(guestLink);
+
+    return ans;
   }
 
   /**
@@ -260,9 +343,21 @@ public class ChatbotController implements Controller, Initializable {
     errorAlert.showAndWait();
   }
 
+  /** Checks if previous action was not finished because of switching to a new screen */
+  public void performPrevioslyPlannedAction() {
+    // Check if previously planned action needs to be finished
+    if (state.chatBotState.prevQueryResult != null) {
+      displayAndSaveBotMessage(null, state.chatBotState.prevQueryResult);
+    }
+  }
+
   @Override
   public void setMainApp(App mainApp) {
     this.mainApp = mainApp;
+  }
+
+  public void setMapController(NewMapDisplayController mapController) {
+    this.mapController = mapController;
   }
 
   @Override
@@ -282,5 +377,16 @@ public class ChatbotController implements Controller, Initializable {
 
     // If message history still persists, open the dialog window right away
     if (!state.chatBotState.getMessageHistory().isEmpty()) onBtnAskMeClicked();
+  }
+
+  public LinkedList<DbNode> getNodes() {
+    if (startNode != null && endNode != null) {
+      LinkedList<DbNode> nodes = new LinkedList<DbNode>();
+      nodes.add(startNode);
+      nodes.add(endNode);
+      return nodes;
+    } else {
+      return new LinkedList<DbNode>();
+    }
   }
 }

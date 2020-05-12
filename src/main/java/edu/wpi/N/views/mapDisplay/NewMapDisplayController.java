@@ -12,6 +12,7 @@ import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.entities.employees.Doctor;
 import edu.wpi.N.qrcontrol.QRGenerator;
 import edu.wpi.N.views.Controller;
+import edu.wpi.N.views.chatbot.ChatbotController;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -48,9 +49,10 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
   @FXML AnchorPane pn_background;
 
   @FXML MapBaseController mapBaseController;
+  @FXML ChatbotController chatBotController; // reference to the chat-bot
 
-  MapLocationSearchController locationSearchController;
-  MapDoctorSearchController doctorSearchController;
+  public MapLocationSearchController locationSearchController;
+  public MapDoctorSearchController doctorSearchController;
   MapQRController mapQRController;
 
   Path path;
@@ -106,6 +108,25 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     initFloorButtons();
     initFunctionPane();
     setDefaultKioskNode();
+
+    chatBotController.setMapController(this); // pass the reference to the chat-bot
+    checkChatbot();
+  }
+
+  private void checkChatbot() {
+    try {
+
+      DbNode nodeStart = singleton.chatBotState.startNodePrevSession;
+      DbNode nodeEnd = singleton.chatBotState.endNodePrevSession;
+
+      if (nodeStart != null && nodeEnd != null) {
+
+        initPathfind(nodeStart, nodeEnd, false);
+      }
+    } catch (Exception ex) {
+      displayErrorMessage("Error when checking chat-bot path");
+      ex.printStackTrace();
+    }
   }
 
   /**
@@ -726,6 +747,11 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     setGoogleButtonDisable(true);
     enableAllFloorButtons();
     resetTextualDirections();
+
+    if (locationSearchController != null) {
+      locationSearchController.getTextFirstLocation().clear();
+      locationSearchController.getTextSecondLocation().clear();
+    }
   }
 
   /**

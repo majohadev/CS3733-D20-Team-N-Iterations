@@ -70,6 +70,72 @@ public class MapLocationSearchController implements Controller {
     }
   }
 
+  /**
+   * Function select the Start Location field and enters the given long Name. Then populates the
+   * fuzzy search list with suggestions and selects the first item
+   *
+   * @param locationName long name of the start location
+   * @param isFirstLocation true if selecting start location, false if selecting end location
+   */
+  public void searchStartOrEndLocationForBot(String locationName, boolean isFirstLocation) {
+
+    if (isFirstLocation) {
+      // clear previous entry
+      nodes[0] = null;
+
+      // set text
+      txt_firstLocation.setText(locationName);
+      activeText = txt_firstLocation;
+    } else {
+      // clear previous entry
+      nodes[1] = null;
+
+      // set text
+      txt_secondLocation.setText(locationName);
+      activeText = txt_secondLocation;
+    }
+
+    lst_fuzzySearch.getSelectionModel().clearSelection();
+
+    try {
+      // populate list of suggestions
+      NewMapDisplayController.fuzzyLocationSearch(activeText, lst_fuzzySearch);
+    } catch (DBException ex) {
+      ex.printStackTrace();
+    }
+
+    selectBestSuggestionFromDropDown();
+  }
+
+  /**
+   * Selects the best suggestion from the drop down menu after entering location (either first or
+   * second)
+   */
+  private void selectBestSuggestionFromDropDown() {
+    try {
+      lst_fuzzySearch.getSelectionModel().selectFirst();
+      activeText.setText(
+          lst_fuzzySearch.getSelectionModel().getSelectedItem().toString()
+              + ", "
+              + ((DbNode) lst_fuzzySearch.getSelectionModel().getSelectedItem()).getBuilding());
+      if (activeText == txt_firstLocation) {
+        nodes[0] = (DbNode) lst_fuzzySearch.getSelectionModel().getSelectedItem();
+      } else {
+        nodes[1] = (DbNode) lst_fuzzySearch.getSelectionModel().getSelectedItem();
+      }
+      if (nodes[0].getBuilding().equals("Faulkner")) {
+        btn_infodesk.setOpacity(.4);
+        btn_infodesk.setDisable(true);
+      } else {
+        btn_infodesk.setOpacity(1);
+        btn_infodesk.setDisable(false);
+      }
+    } catch (NullPointerException ex) {
+      ex.printStackTrace();
+      return;
+    }
+  }
+
   public JFXButton getSearchButton() {
     return this.btn_search;
   }

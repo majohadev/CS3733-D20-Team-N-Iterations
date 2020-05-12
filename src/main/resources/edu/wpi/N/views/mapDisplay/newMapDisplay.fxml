@@ -112,6 +112,6 @@
          </children></AnchorPane>
       <AnchorPane fx:id="pn_floors" layoutX="1737.0" layoutY="22.0" prefHeight="55.0" prefWidth="90.0" AnchorPane.leftAnchor="450.0" AnchorPane.topAnchor="30.0" />
       <Label fx:id="lbl_building_floor" alignment="CENTER" layoutX="416.0" layoutY="25.0" prefHeight="50.0" prefWidth="320.0" style="-fx-background-color: #263051;" stylesheets="@../../css/newMapDisplay.css" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="30.0" />
-      <fx:include fx:id="chatbotView" layoutX="1480.0" layoutY="475.0" source="../chatbot/chatBox.fxml" />
+      <fx:include fx:id="chatBot" source="../chatbot/chatBox.fxml" layoutX="1480.0" layoutY="475.0" />
    </children>
 </AnchorPane>

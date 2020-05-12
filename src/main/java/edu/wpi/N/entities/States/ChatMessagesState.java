@@ -1,6 +1,8 @@
 package edu.wpi.N.entities.States;
 
+import com.google.cloud.dialogflow.v2.QueryResult;
 import edu.wpi.N.chatbot.Dialogflow;
+import edu.wpi.N.entities.DbNode;
 import java.io.IOException;
 import java.util.LinkedList;
 import javafx.scene.layout.VBox;
@@ -9,9 +11,13 @@ public class ChatMessagesState {
   // each HBox contains a label with a message
   private LinkedList<VBox> messageHistory;
   public Dialogflow dialogflow;
+  public QueryResult prevQueryResult;
+  public DbNode startNodePrevSession;
+  public DbNode endNodePrevSession;
 
   public ChatMessagesState() {
     messageHistory = new LinkedList<VBox>();
+    prevQueryResult = null;
     try {
       dialogflow = new Dialogflow();
     } catch (Exception ex) {
