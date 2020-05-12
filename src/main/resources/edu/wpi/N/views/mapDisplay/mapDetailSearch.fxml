@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="1080.0" maxWidth="345.0" minHeight="1080.0" minWidth="345.0" prefHeight="1080.0" prefWidth="345.0" style="-fx-background-color: #263051;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.mapDisplay.MapDoctorSearchController">
+<AnchorPane maxHeight="1080.0" maxWidth="345.0" minHeight="1080.0" minWidth="345.0" prefHeight="1080.0" prefWidth="345.0" style="-fx-background-color: #263051;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.mapDisplay.MapDetailSearchController">
    <children>
       <Label layoutX="39.0" layoutY="24.0" prefHeight="50.0" prefWidth="255.0" text="Directory Search" textFill="#e6ebf2" AnchorPane.leftAnchor="40.0" AnchorPane.topAnchor="25.0">
          <font>
@@ -28,11 +28,12 @@
       <JFXButton fx:id="btn_search" layoutX="230.0" layoutY="750.0" maxWidth="90.0" minWidth="90.0" prefHeight="39.0" prefWidth="90.0" stylesheets="@../../css/newMapDisplay.css" text="Search" textFill="#e6ebf2" AnchorPane.leftAnchor="230.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="750.0" />
       <JFXToggleButton fx:id="tg_handicap" layoutX="2.0" layoutY="789.0" prefHeight="62.0" prefWidth="160.0" styleClass="toggle" stylesheets="@../../css/newMapDisplay.css" text="Handicap" textFill="#e6ebf2" toggleColor="#4a69c6" toggleLineColor="#6c5c7f" unToggleColor="#4a69c6" unToggleLineColor="#e6ebf2" />
       <JFXButton fx:id="btn_reset" layoutX="20.0" layoutY="750.0" maxWidth="90.0" minWidth="90.0" prefWidth="90.0" stylesheets="@../../css/newMapDisplay.css" text="Reset" textFill="#e6ebf2" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="750.0" />
-      <JFXComboBox layoutX="83.0" layoutY="169.0" prefHeight="39.0" prefWidth="219.0" promptText="Search Options" />
+      <JFXComboBox fx:id="cmb_detail" layoutX="83.0" layoutY="169.0" onMouseClicked="#onSelectOption" onMouseDragEntered="#onSelectOption" prefHeight="39.0" prefWidth="219.0" promptText="Search Options" />
       <ImageView fitHeight="39.0" fitWidth="41.0" layoutX="20.0" layoutY="169.0">
          <image>
             <Image url="@../../../../../../../../../../16772596991553230897-256.png" />
          </image>
       </ImageView>
+      <JFXButton fx:id="btn_doctor" layoutX="123.0" layoutY="750.0" maxWidth="90.0" minWidth="90.0" prefWidth="90.0" stylesheets="@../../css/newMapDisplay.css" text="Doctor" textFill="#e6ebf2" />
    </children>
 </AnchorPane>

@@ -1319,7 +1319,7 @@ public class MapDB {
   }
 
   public static void clearDetail() throws DBException {
-    try{
+    try {
       String query = "DELETE FROM detail";
       statement.executeUpdate(query);
     } catch (SQLException e) {

@@ -74,7 +74,7 @@
                         </ImageView>
                      </children>
                   </AnchorPane>
-                  <AnchorPane fx:id="pn_directIcon" layoutY="165.0" prefHeight="55.0" prefWidth="55.0">
+                  <AnchorPane fx:id="pn_directIcon" layoutY="165.0" onMouseClicked="#onIconClicked" prefHeight="55.0" prefWidth="55.0">
                      <children>
                         <ImageView fitHeight="42.0" fitWidth="42.0" layoutX="7.0" layoutY="7.0">
                            <image>

@@ -68,7 +68,7 @@ public class DataEditorController implements Controller {
   }
 
   @FXML
-  public void onSelectDetailClicked(MouseEvent e){
+  public void onSelectDetailClicked(MouseEvent e) {
     FileChooser fc = new FileChooser();
     fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
     File selectedFile = fc.showOpenDialog(null);
@@ -168,7 +168,7 @@ public class DataEditorController implements Controller {
     }
   }
 
-  public void onUploadDetailClicked(){
+  public void onUploadDetailClicked() {
     try {
       // Clear previous employees
       MapDB.clearDetail();
@@ -190,7 +190,7 @@ public class DataEditorController implements Controller {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
       errorAlert.setHeaderText("Oops... Something went Wong");
       errorAlert.setContentText(
-              "Couldn't load directory file. Make sure to select correct file. Make sure to uploaded Nodes first");
+          "Couldn't load directory file. Make sure to select correct file. Make sure to uploaded Nodes first");
       errorAlert.showAndWait();
     }
   }
