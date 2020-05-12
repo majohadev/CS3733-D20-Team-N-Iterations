@@ -328,7 +328,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
   }
 
   public void changeFloor(int newFloor, String newBuilding) throws DBException {
-    if (newFloor == this.currentFloor) {
+    if (newFloor == this.currentFloor && !changedBuilding(this.currentBuilding, newBuilding)) {
       return;
     }
     mapBaseController.resetFocus();
@@ -338,6 +338,12 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     setBackground(newBuilding);
     setFloorBuildingText(this.currentFloor, this.currentBuilding);
     mapBaseController.setFloor(this.currentBuilding, this.currentFloor, this.path);
+  }
+
+  public boolean changedBuilding(String str1, String str2) {
+    boolean isFirstFaulkner = str1.equals("Faulkner");
+    boolean isSecondFaulkner = str2.equals("Faulkner");
+    return isFirstFaulkner ^ isSecondFaulkner;
   }
 
   /** initiates a listener for the search button on location search */
