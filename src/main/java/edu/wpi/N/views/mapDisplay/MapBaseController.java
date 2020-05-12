@@ -289,8 +289,8 @@ public class MapBaseController implements Controller {
                 }
                 try {
                   setFloor(prev.getBuilding(), prev.getFloor(), currentPath);
-                  newMapDisplayController.currentFloor = prev.getFloor();
-                  newMapDisplayController.currentBuilding = prev.getBuilding();
+                  newMapDisplayController.setCurrentFloor(prev.getFloor());
+                  newMapDisplayController.setCurrentBuilding(prev.getBuilding());
                   if (mapQRController != null) {
                     if (!prev.getBuilding().equals("Faulkner")) {
                       mapQRController.setTabFocus(prev.getFloor(), "Main");
