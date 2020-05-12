@@ -71,6 +71,7 @@ public class MapDB {
   public static void initTestDB() throws SQLException, ClassNotFoundException {
     if (con != null) {
       ScriptRunner sr = new ScriptRunner(con);
+      sr.setLogWriter(null);
       Reader reader =
           new BufferedReader(
               new InputStreamReader(Main.class.getResourceAsStream("sql/drop.sql"))); // drop tables
@@ -83,6 +84,7 @@ public class MapDB {
       statement = con.createStatement();
     }
     ScriptRunner sr = new ScriptRunner(con);
+    sr.setLogWriter(null);
     Reader reader =
         new BufferedReader(new InputStreamReader(Main.class.getResourceAsStream("sql/setup.sql")));
     sr.runScript(reader);

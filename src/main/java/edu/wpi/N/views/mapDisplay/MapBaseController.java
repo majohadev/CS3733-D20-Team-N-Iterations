@@ -127,6 +127,7 @@ public class MapBaseController implements Controller {
     if (!building.equals("Faulkner")) {
       building = "Main";
       setMainDefaults();
+
     } else {
       setFaulknerDefaults();
     }
