@@ -148,6 +148,9 @@ public class MapBaseController implements Controller {
     } else {
       setFaulknerDefaults();
     }
+    if (newMapDisplayController != null) {
+      newMapDisplayController.setFloorBuildingText(floor, building);
+    }
     img_map.setImage(singleton.mapImageLoader.getMap(building, floor));
     // resetFocus();
     if (!(currentPath == null || currentPath.isEmpty())) {
@@ -315,9 +318,8 @@ public class MapBaseController implements Controller {
                 }
                 try {
                   setFloor(next.getBuilding(), next.getFloor(), currentPath);
-                  newMapDisplayController.currentFloor = next.getFloor();
-                  //                  System.out.println(newMapDisplayController.currentFloor);
-                  newMapDisplayController.currentBuilding = next.getBuilding();
+                  newMapDisplayController.setCurrentFloor(next.getFloor());
+                  newMapDisplayController.setCurrentBuilding(next.getBuilding());
                   if (mapQRController != null) {
                     if (!next.getBuilding().equals("Faulkner")) {
                       mapQRController.setTabFocus(next.getFloor(), "Main");

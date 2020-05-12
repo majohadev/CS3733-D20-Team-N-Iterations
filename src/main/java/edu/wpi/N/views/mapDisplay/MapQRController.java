@@ -234,6 +234,7 @@ public class MapQRController implements Controller {
   public void onDriveTabSelected() {
     tr_drive.getSelectionModel().select(0);
     mapDisplayController.switchGoogleView();
+    mapDisplayController.setFloorBuildingText(0, "Drive");
     try {
       // onDriveTreeClicked();
     } catch (NullPointerException e) {

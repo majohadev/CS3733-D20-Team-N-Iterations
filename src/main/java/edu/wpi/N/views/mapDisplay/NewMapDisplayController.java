@@ -104,8 +104,8 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     this.faulknerButtonList = new JFXNodesList();
     this.mainButtonList = new JFXNodesList();
     this.pn_hospitalView = mapBaseController.getAnchorPane();
-    mapBaseController.setFloor(this.currentBuilding, this.currentFloor, this.path);
     mapBaseController.setNewMapDisplayController(this);
+    mapBaseController.setFloor(this.currentBuilding, this.currentFloor, this.path);
     setFloorBuildingText(this.currentFloor, this.currentBuilding);
     pn_mapContainer.getChildren().setAll(pn_hospitalView);
     pn_iconBar.getChildren().get(0).setStyle("-fx-background-color: #4A69C6;");
@@ -333,9 +333,9 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
   }
 
   public void changeFloor(int newFloor, String newBuilding) throws DBException {
-    if (newFloor == this.currentFloor) {
-      return;
-    }
+    //    if (newFloor == this.currentFloor) {
+    //      return;
+    //    }
     mapBaseController.resetFocus();
     mapBaseController.clearPath();
     this.currentFloor = newFloor;
@@ -1200,5 +1200,13 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
       dirThread = new Thread(new SetupDirs(this));
       dirThread.start();
     }
+  }
+
+  public void setCurrentBuilding(String currentBuilding) {
+    this.currentBuilding = currentBuilding;
+  }
+
+  public void setCurrentFloor(int currentFloor) {
+    this.currentFloor = currentFloor;
   }
 }
