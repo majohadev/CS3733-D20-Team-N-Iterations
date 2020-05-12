@@ -54,7 +54,9 @@ public class MapDetailSearchController implements Controller {
               FXCollections.observableArrayList(MapDB.searchVisNode(-1, newVal, null, null));
           lst_fuzzySearch.setItems(nodes);
           lst_selection.setVisible(false);
+          lst_selection.setMouseTransparent(true);
           lst_fuzzySearch.setVisible(true);
+          lst_fuzzySearch.setMouseTransparent(false);
           lst_selection.getSelectionModel().selectedItemProperty().removeListener(this);
           cmb_detail.getSelectionModel().clearSelection();
         } catch (DBException e) {
@@ -77,7 +79,9 @@ public class MapDetailSearchController implements Controller {
               FXCollections.observableArrayList(MapDB.getRoomsByFirstLetter(newVal.charAt(0)));
           lst_fuzzySearch.setItems(nodes);
           lst_selection.setVisible(false);
+          lst_selection.setMouseTransparent(true);
           lst_fuzzySearch.setVisible(true);
+          lst_fuzzySearch.setMouseTransparent(false);
           lst_selection.getSelectionModel().selectedItemProperty().removeListener(this);
           cmb_detail.getSelectionModel().clearSelection();
         } catch (DBException e) {
@@ -99,7 +103,9 @@ public class MapDetailSearchController implements Controller {
             FXCollections.observableArrayList(MapDB.getNodesbyField(newVal));
         lst_fuzzySearch.setItems(nodes);
         lst_selection.setVisible(false);
+        lst_selection.setMouseTransparent(true);
         lst_fuzzySearch.setVisible(true);
+        lst_fuzzySearch.setMouseTransparent(false);
         lst_selection.getSelectionModel().selectedItemProperty().removeListener(this);
         cmb_detail.getSelectionModel().clearSelection();
       } catch (DBException e) {
@@ -134,7 +140,9 @@ public class MapDetailSearchController implements Controller {
             (obs, old, newval) -> {
               if (newval != null) {
                 lst_fuzzySearch.setVisible(false);
+                lst_fuzzySearch.setMouseTransparent(true);
                 lst_selection.setVisible(true);
+                lst_selection.setMouseTransparent(false);
                 if (newval.equals("Building")) {
                   populateChangeBuilding();
                   lst_selection
@@ -178,6 +186,7 @@ public class MapDetailSearchController implements Controller {
               }
             });
     lst_fuzzySearch.setVisible(false);
+    lst_fuzzySearch.setMouseTransparent(true);
     lst_fuzzySearch.getSelectionModel().selectedItemProperty().addListener(new nodeClicked());
     populateChangeOption();
   }

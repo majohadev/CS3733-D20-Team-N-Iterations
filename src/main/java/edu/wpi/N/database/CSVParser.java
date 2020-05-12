@@ -62,7 +62,7 @@ public class CSVParser {
       // Read header
       String[] nextLine = csvReader.readNext();
 
-      if (nextLine[2].equals("field")) isDetailCSV = true;
+      if (nextLine[1].equals("field")) isDetailCSV = true;
 
       if (isDetailCSV) {
         while ((nextLine = csvReader.readNext()) != null) {

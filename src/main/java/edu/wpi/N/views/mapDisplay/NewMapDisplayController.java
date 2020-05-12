@@ -21,14 +21,15 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.TextAlignment;
 
 public class NewMapDisplayController extends QRGenerator implements Controller {
   private App mainApp = null;
@@ -456,7 +457,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
               mapBaseController.clearPath();
               mainButtonList.animateList(false);
               faulknerButtonList.animateList(false);
-              resetTextualDirections();
+              // resetTextualDirections();
               enableAllFloorButtons();
               try {
                 setDefaultKioskNode();
@@ -882,6 +883,14 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     // initDoctor --> reloads the ListView with doctors,if any, associated with clicked location
   }
 
+  /**
+   * Zooms in to a node from the directory. Has to cheat and trick the pane into having the label,
+   * if it's causing problems that's probably why
+   *
+   * @param node The node to zoom in to
+   * @throws DBException On error
+   * @throws IOException On error
+   */
   public void nodeFromDirectory(DbNode node) throws DBException, IOException {
     resetMap();
     FXMLLoader loader = new FXMLLoader(getClass().getResource("mapLocationSearch.fxml"));
@@ -892,9 +901,23 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     initRestroomSearchButton();
     setDefaultKioskNode();
     locationSearchController.nodes[0] = node;
-    locationSearchController.txt_firstLocation.setText(node.getLongName());
-    mapBaseController.drawCircle(node, Color.GREEN, null);
+    LinkedList<DbNode> nlist = new LinkedList<DbNode>();
+    nlist.add(node);
     mapBaseController.setFloor(node.getBuilding(), node.getFloor(), null);
+    locationSearchController.txt_firstLocation.setText(
+        node.getLongName() + "," + node.getBuilding());
+    Label label = new Label();
+    label.setTextAlignment(TextAlignment.CENTER);
+    label.setAlignment(Pos.CENTER);
+    label.setMouseTransparent(true);
+    label.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
+    label.setBorder(
+        new Border(
+            new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, null, BorderWidths.DEFAULT)));
+    mapBaseController.drawCircle(node, Color.GREEN, label);
+    locationSearchController.lst_fuzzySearch.setItems(FXCollections.observableList(nlist));
+    mapBaseController.pn_path.getChildren().add(label); // lmao
+    mapBaseController.autoFocusToNode(node);
     pn_change.getChildren().add(pane);
   }
 
