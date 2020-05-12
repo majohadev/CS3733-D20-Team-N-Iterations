@@ -1417,6 +1417,7 @@ public class MapDB {
       stmt.setInt(6, floor);
       ResultSet rs = stmt.executeQuery();
       rs.next();
+      System.out.println(rs.getString("nodeID"));
       return new DbNode(
           rs.getString("nodeID"),
           rs.getInt("xcoord"),

@@ -10,7 +10,7 @@
 
 <AnchorPane fx:id="controllerAnchorPane" maxWidth="1520.0" minWidth="1520.0" prefWidth="1520.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.mapDisplay.MapBaseController">
     <children>
-        <StackPane fx:id="pn_movableMap" maxWidth="1520.0" minHeight="0.0" minWidth="1520.0" onMouseDragged="#mapDragHandler" onMousePressed="#mapPressHandler" onMouseReleased="#mapReleaseHandler" onScroll="#mapScrollHandler" prefWidth="1520.0">
+        <StackPane fx:id="pn_movableMap" maxWidth="1520.0" minHeight="0.0" minWidth="1520.0" onMouseClicked="#sendHitboxData" onMouseDragged="#mapDragHandler" onMousePressed="#mapPressHandler" onMouseReleased="#mapReleaseHandler" onScroll="#mapScrollHandler" prefWidth="1520.0">
             <children>
                   <Pane fx:id="pn_routeNodes" maxHeight="1.7976931348623157E308" maxWidth="1520.0" minHeight="0.0" minWidth="1520.0" prefWidth="1520.0">
                <children>

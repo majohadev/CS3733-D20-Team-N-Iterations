@@ -2,6 +2,7 @@ package edu.wpi.N.views.mapDisplay;
 
 import edu.wpi.N.App;
 import edu.wpi.N.database.DBException;
+import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Path;
 import edu.wpi.N.entities.States.StateSingleton;
@@ -45,6 +46,13 @@ public class MapBaseController implements Controller {
   double HORIZONTAL_SCALE;
   double VERTICAL_SCALE;
 
+  double IMAGE_WIDTH1;
+  double IMAGE_HEIGHT1;
+  double MAP_WIDTH1;
+  double MAP_HEIGHT1;
+  double HORIZONTAL_SCALE1;
+  double VERTICAL_SCALE1;
+
   // Zoom constants
   private double MIN_MAP_SCALE = 1;
   private double MAX_MAP_SCALE = 3;
@@ -81,6 +89,10 @@ public class MapBaseController implements Controller {
   private ArrayList<KeyValue> keyStartVals, keyEndVals;
   private Label startLabel, endLabel;
   private final int NODE_LABEL_PADDING = 35;
+
+  // Hitbox Needed Data
+  String building;
+  int floor;
 
   // FXML Item IDs
   @FXML StackPane pn_movableMap;
@@ -134,7 +146,6 @@ public class MapBaseController implements Controller {
     if (!building.equals("Faulkner")) {
       building = "Main";
       setMainDefaults();
-
     } else {
       setFaulknerDefaults();
     }
@@ -142,9 +153,11 @@ public class MapBaseController implements Controller {
     if (!(currentPath == null || currentPath.isEmpty())) {
       drawPath(currentPath, floor, building);
     }
+    this.floor = floor;
   }
 
   public void setFaulknerDefaults() {
+    this.building = "Faulkner";
     IMAGE_WIDTH = 2475;
     IMAGE_HEIGHT = 1485;
     MAP_WIDTH = 1520;
@@ -153,9 +166,17 @@ public class MapBaseController implements Controller {
     VERTICAL_SCALE = MAP_HEIGHT / IMAGE_HEIGHT;
     MIN_MAP_SCALE = 1;
     MAX_MAP_SCALE = 3.2;
+
+    IMAGE_WIDTH1 = 2475;
+    IMAGE_HEIGHT1 = 1485;
+    MAP_WIDTH1 = 1520;
+    MAP_HEIGHT1 = 912;
+    HORIZONTAL_SCALE1 = MAP_WIDTH1 / IMAGE_WIDTH1;
+    VERTICAL_SCALE1 = MAP_HEIGHT1 / IMAGE_HEIGHT1;
   }
 
   public void setMainDefaults() {
+    this.building = "Main";
     IMAGE_WIDTH = 5000;
     IMAGE_HEIGHT = 3400;
     MAP_WIDTH = 1520;
@@ -164,6 +185,13 @@ public class MapBaseController implements Controller {
     VERTICAL_SCALE = MAP_HEIGHT / IMAGE_HEIGHT;
     MIN_MAP_SCALE = 1.2;
     MAX_MAP_SCALE = 5.5;
+
+    IMAGE_WIDTH1 = 5000;
+    IMAGE_HEIGHT1 = 3400;
+    MAP_WIDTH1 = 1465;
+    MAP_HEIGHT1 = 994;
+    HORIZONTAL_SCALE1 = MAP_WIDTH1 / IMAGE_WIDTH1;
+    VERTICAL_SCALE1 = MAP_HEIGHT1 / IMAGE_HEIGHT1;
   }
 
   /**
@@ -438,6 +466,24 @@ public class MapBaseController implements Controller {
     }
   }
 
+  @FXML
+  private void sendHitboxData(MouseEvent e) {
+    double x = e.getX();
+    double y = e.getY();
+    int actualX = (int) scaleXDB(x);
+    int actualY = (int) scaleYDB(y);
+    System.out.println("Horz Scale: " + HORIZONTAL_SCALE);
+    System.out.println("Vert Scale: " + VERTICAL_SCALE);
+    try {
+      System.out.println(x + " Scaled: " + actualX);
+      System.out.println(y + " Scaled: " + actualY);
+      DbNode node = MapDB.checkHitbox(actualX, actualY, this.building, this.floor);
+      if (node != null) System.out.println(node.getLongName());
+    } catch (DBException event) {
+      event.printStackTrace();
+    }
+  }
+
   // User ends drag
   @FXML
   private void mapReleaseHandler(MouseEvent event) throws IOException {
@@ -552,5 +598,23 @@ public class MapBaseController implements Controller {
     endFocusVals.clear();
     System.out.println(
         "X: " + pn_movableMap.getTranslateX() + "\nY: " + pn_movableMap.getTranslateY());
+  }
+
+  private double scaleXDB(double x) {
+    System.out.print(this.building);
+    System.out.print(this.floor);
+    return x / HORIZONTAL_SCALE;
+  }
+
+  private double scaleYDB(double y) {
+    return y / VERTICAL_SCALE;
+  }
+
+  private double unscaleXDB(double x) {
+    return x * HORIZONTAL_SCALE;
+  }
+
+  private double unscaleYDB(double y) {
+    return y * VERTICAL_SCALE;
   }
 }
