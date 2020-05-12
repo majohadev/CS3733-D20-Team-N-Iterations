@@ -77,6 +77,7 @@ public class ChatbotController implements Controller, Initializable {
 
     buttonOnlyView.setVisible(false);
     chatBotView.setVisible(true);
+    chatBotView.setMouseTransparent(false);
   }
 
   /** When user closes chat-dialog, close the Dialogflow Client Session and clear message history */
@@ -85,6 +86,7 @@ public class ChatbotController implements Controller, Initializable {
     state.chatBotState.closeSession();
     chatBotView.setVisible(false);
     buttonOnlyView.setVisible(true);
+    chatBotView.setMouseTransparent(true);
     chatBox.getChildren().clear();
   }
 
@@ -372,6 +374,8 @@ public class ChatbotController implements Controller, Initializable {
             keyEvent.consume();
           }
         });
+
+    chatBotView.setMouseTransparent(true);
 
     // Do such that scroll pane auto-scrolls down
     scrollPane.vvalueProperty().bind(chatBox.heightProperty());
