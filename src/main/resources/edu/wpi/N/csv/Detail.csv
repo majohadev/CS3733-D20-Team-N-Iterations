@@ -1,0 +1,234 @@
+nodeID,field
+DINFO00202,Information and Service
+DLABS00102,Radiology
+DRETL00102,Amenities
+EDEPT00101,Lobbies
+EDEPT00201,Clinics and Department
+EDEPT00301,Clinics and Department
+EDEPT00401,Clinics and Department
+EINFO00101,Information and Service
+ELABS00101,Labs
+ELABS00201,Radiology
+FDEPT00101,Clinics and Department
+FDEPT00201,Lobbies
+FDEPT00301,Relaxation and Spiritual Care
+FDEPT00401,Clinics and Department
+FDEPT00501,Clinics and Department
+FDEPT00601,Clinics and Department
+FINFO00101,Information and Service
+FLABS00101,Labs
+FRETL00101,Amenities
+FRETL00201,Amenities
+FSERV00101,Information and Service
+FSERV00201,Information and Service
+FSERV00301,Information and Service
+FSERV00401,Relaxation and Spiritual Care
+FSERV00501,Information and Service
+GCONF02001,Conference
+GDEPT00403,Clinics and Department
+GDEPT00702,Lobbies
+GDEPT01403,Clinics and Department
+GDEPT01901,Clinics and Department
+GDEPT02402,Clinics and Department
+GDEPT03502,Clinics and Department
+GINFO01902,Information and Service
+GLABS003L2,Labs
+GLABS014L2,Labs
+GLABS015L2,Labs
+GSERV01603,Information and Service
+GSERV02301,Information and Service
+HDEPT00102,Clinics and Department
+HDEPT00103,Patient Room
+HDEPT00203,Patient Room
+HLABS00103,Labs
+HRETL00102,Amenities
+HRETL00202,Amenities
+HRETL00302,Amenities
+HSERV00103,Information and Service
+ICONF00101,Clinics and Department
+ICONF00205,Lobbies
+ICONF00206,Lobbies
+ICONF00402,Conference
+IDEPT00101,Radiology
+IDEPT00103,Clinics and Department
+IDEPT00203,Clinics and Department
+IDEPT00303,Clinics and Department
+IDEPT00403,Clinics and Department
+IDEPT00503,Clinics and Department
+IDEPT00603,Clinics and Department
+IDEPT00703,Clinics and Department
+IDEPT00803,Clinics and Department
+IDEPT00903,Clinics and Department
+IDEPT01006,Clinics and Department
+LDEPT00102,Clinics and Department
+LDEPT00202,Clinics and Department
+LDEPT00302,Clinics and Department
+LDEPT00402,Clinics and Department
+LDEPT00502,Pharmacy
+LDEPT00602,Clinics and Department
+LDEPT00702,Clinics and Department
+LDEPT00802,Clinics and Department
+LDEPT00902,Clinics and Department
+LRETL00202,Amenities
+LSERV00102,Information and Service
+LSERV00202,Information and Service
+LSERV00302,Information and Service
+LSERV00402,Information and Service
+LSERV00502,Information and Service
+LSERV00602,Information and Service
+MDEPT00103,Lobbies
+MDEPT00203,Clinics and Department
+MDEPT00403,Clinics and Department
+MDEPT00503,Clinics and Department
+MDEPT00603,Clinics and Department
+MRETL00103,Amenities
+MRETL00203,Amenities
+MRETL00403,Amenities
+MRETL00503,Amenities
+MSERV00203,Information and Service
+MSERV00403,Information and Service
+MSERV00503,Lobbies
+MSERV00603,Information and Service
+MSERV00703,Information and Service
+MSERV00803,Information and Service
+MSERV01003,Information and Service
+NCONF00104,Conference
+NCONF00304,Conference
+NDEPT00104,Clinics and Department
+NDEPT00204,Clinics and Department
+NDEPT00304,Clinics and Department
+NDEPT00904,Clinics and Department
+NDEPT01004,Clinics and Department
+NDEPT01104,Clinics and Department
+NDEPT01204,Clinics and Department
+NDEPT01304,Clinics and Department
+NDEPT01404,Clinics and Department
+NDEPT01504,Clinics and Department
+NDEPT01604,Clinics and Department
+NDEPT01704,Clinics and Department
+NDEPT01804,Clinics and Department
+NDEPT01904,Clinics and Department
+NDEPT02004,Clinics and Department
+NDEPT02204,Clinics and Department
+NLABS00104,Labs
+NLABS00304,Lobbies
+NRETL00201,Amenities
+NSERV00103,Information and Service
+NSERV00204,Lobbies
+NSERV00301,Information and Service
+NSERV00304,Lobbies
+NSERV00404,Information and Service
+NSERV00504,Information and Service
+NSERV00604,Information and Service
+NSERV00704,Information and Service
+NSERV00804,Information and Service
+NSERV00904,Information and Service
+NSERV01004,Patient Room
+NSERV01104,Information and Service
+NSERV01204,Information and Service
+NSERV01304,Information and Service
+NSERV01404,Information and Service
+NSERV01504,Information and Service
+PCONF00105,Conference
+PCONF00205,Conference
+PCONF00305,Conference
+PCONF00405,Conference
+PCONF00605,Conference
+PDEPT00105,Clinics and Department
+PDEPT00205,Clinics and Department
+PDEPT00305,Clinics and Department
+PDEPT00405,Clinics and Department
+PDEPT00505,Clinics and Department
+PDEPT00605,Clinics and Department
+PDEPT00705,Clinics and Department
+PDEPT00805,Clinics and Department
+PDEPT00905,Clinics and Department
+PDEPT01005,Clinics and Department
+PDEPT01105,Clinics and Department
+PDEPT01205,Patient Rooom
+PDEPT01305,Clinics and Department
+PDEPT01405,Clinics and Department
+PDEPT01505,Clinics and Department
+PDEPT01605,Clinics and Department
+PDEPT01705,Clinics and Department
+PDEPT01805,Clinics and Department
+PDEPT01905,Clinics and Department
+PDEPT02105,Clinics and Department
+PLABS00205,Radiology
+IDEPT00201,Clinics and Department
+IDEPT00301,Clinics and Department
+IDEPT01301,Clinics and Department
+IDEPT01501,Radiology
+ACONF00103,Clinics and Department
+ACONF0010G,Lobbies
+ADEPT00101,Lobbies
+ADEPT00102,Clinics and Department
+ADEPT0010G,Lobbies
+ADEPT00201,Lobbies
+ADEPT0020G,Clinics and Department
+ADEPT00301,Lobbies
+ADEPT00401,Clinics and Department
+ADEPT00501,Clinics and Department
+ADEPT00701,Clinics and Department
+ADEPT00801,Radiology
+ADEPT00901,Clinics and Department
+ADEPT01001,Clinics and Department
+ADEPT01101,Clinics and Department
+ADEPT01201,Clinics and Department
+ADEPT01401,Clinics and Department
+SDEPT00303,Clinics and Department
+SDEPT00703,Clinics and Department
+SDEPT00601,Clinics and Department
+SDEPT00804,Clinics and Department
+SDEPT00704,Clinics and Department
+SDEPT02104,Clinics and Department
+SDEPT02304,Clinics and Department
+SDEPT02404,Clinics and Department
+AINFO0010G,Information and Service
+AINFO001L2,Information and Service
+AINFO0020G,Information and Service
+ALABS00101,Labs
+ALABS00103,Labs
+ALABS001L2,Radiology
+ALABS00201,Labs
+ALABS00203,Labs
+ALABS00301,Labs
+ALABS00401,Labs
+ALABS00601,Labs
+ARETL00101,Amenities
+ASERV00201,Information and Service
+BDEPT00102,Clinics and Department
+BDEPT00202,Clinics and Department
+BDEPT00302,Clinics and Department
+BDEPT00402,Clinics and Department
+BDEPT00502,Clinics and Department
+BDEPT00702,Clinics and Department
+BDEPT00802,Pharmacy
+BDEPT00902,Clinics and Department
+BINFO00102,Information and Service
+BINFO00202,Information and Service
+BLABS00102,Labs
+BLABS00202,Labs
+BSERV00102,Information and Service
+CCONF001L1,Conference
+CCONF002L1,Conference
+CCONF003L1,Conference
+CDEPT002L1,Lobbies
+CDEPT003L1,Lobbies
+CDEPT004L1,Information and Service
+CLABS001L1,Labs
+CLABS001L2,Radiology
+CLABS002L1,Labs
+CLABS002L2,Radiology
+CLABS003L1,Labs
+CLABS004L1,Labs
+CLABS005L1,Radiology
+CSERV001L1,Information and Service
+CSERV001L2,Information and Service
+DCONF00102,Conference
+DDEPT00102,Clinics and Department
+DDEPT00202,Clinics and Department
+DDEPT00302,Clinics and Department
+DDEPT00402,Lobbies
+DINFO00102,Information and Service
+SDEPT02504,Lobbies

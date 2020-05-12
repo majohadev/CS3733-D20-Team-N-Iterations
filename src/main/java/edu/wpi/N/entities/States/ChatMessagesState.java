@@ -14,6 +14,7 @@ public class ChatMessagesState {
   public QueryResult prevQueryResult;
   public DbNode startNodePrevSession;
   public DbNode endNodePrevSession;
+  public DbNode whereIsNode;
 
   public ChatMessagesState() {
     messageHistory = new LinkedList<VBox>();

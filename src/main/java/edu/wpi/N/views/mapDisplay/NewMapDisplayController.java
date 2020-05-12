@@ -22,13 +22,15 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.text.TextAlignment;
 
 public class NewMapDisplayController extends QRGenerator implements Controller {
   private App mainApp = null;
@@ -41,6 +43,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
   @FXML Pane pn_qrIcon;
   @FXML Pane pn_serviceIcon;
   @FXML Pane pn_infoIcon;
+  @FXML Pane pn_directIcon;
   @FXML Pane pn_adminIcon;
   @FXML Pane pn_floors;
   @FXML Pane pn_mapContainer;
@@ -59,6 +62,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
   public Thread dirThread;
 
   MapQRController mapQRController;
+  MapDetailSearchController detailSearchController;
 
   Path path;
   int currentFloor;
@@ -119,6 +123,31 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     checkChatbot();
   }
 
+  /** Highlights the region around Search by location */
+  public void displayGuideForSearchLocation() throws DBException, IOException {
+
+    pn_iconBar.getChildren().forEach(n -> n.setStyle("-fx-background-color: #263051;"));
+    pn_locationIcon.setStyle("-fx-background-color: #4A69C6;");
+
+    FXMLLoader loader;
+
+    resetMap();
+    loader = new FXMLLoader(getClass().getResource("mapLocationSearch.fxml"));
+    Pane pane = loader.load();
+    locationSearchController = loader.getController();
+    initLocationSearchButton();
+    initResetLocationSearch();
+    initRestroomSearchButton();
+    initExitSearchButton();
+    initInfoSearchButton();
+    locationSearchController.setCon(this);
+    setDefaultKioskNode();
+    pn_change.getChildren().add(pane);
+
+    // Display the box with guidelines itself
+    locationSearchController.showGuideLines();
+  }
+
   private void checkChatbot() {
     try {
 
@@ -128,6 +157,15 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
       if (nodeStart != null && nodeEnd != null) {
 
         initPathfind(nodeStart, nodeEnd, false);
+        singleton.chatBotState.startNodePrevSession = null;
+        singleton.chatBotState.endNodePrevSession = null;
+        singleton.chatBotState.prevQueryResult = null;
+        enableTextDirections();
+      }
+
+      if (singleton.chatBotState.whereIsNode != null) {
+        this.resetMap();
+        this.nodeFromDirectory(singleton.chatBotState.whereIsNode);
       }
     } catch (Exception ex) {
       displayErrorMessage("Error when checking chat-bot path");
@@ -151,6 +189,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     initRestroomSearchButton();
     initInfoSearchButton();
     initExitSearchButton();
+    locationSearchController.setCon(this);
     pn_change.getChildren().add(pane);
   }
 
@@ -401,6 +440,23 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
             });
   }
 
+  /** initiates a listener for the search button on a directory search */
+  public void initDetailSearchButton() {
+    detailSearchController
+        .getBtn_search()
+        .setOnMouseClicked(
+            e -> {
+              try {
+                initPathfind(
+                    (detailSearchController.getDBNodes())[0],
+                    (detailSearchController.getDBNodes())[1],
+                    detailSearchController.getTg_handicap());
+              } catch (IOException | DBException ex) {
+                ex.printStackTrace();
+              }
+            });
+  }
+
   /**
    * initiates a listener for the reset button on a location search
    *
@@ -438,6 +494,34 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
             });
   }
 
+  public void initResetDetailSearch() {
+    detailSearchController
+        .getBtn_reset()
+        .setOnMouseClicked(
+            e -> {
+              if (this.path != null) {
+                this.path.clear();
+              }
+              enableAllFloorButtons();
+              setGoogleButtonDisable(true);
+              detailSearchController.getTxt_location().clear();
+              detailSearchController.getLst_selection().getItems().clear();
+              detailSearchController.lst_fuzzySearch.getItems().clear();
+              // detailSearchController.getCmb_detail().getItems().clear();
+              detailSearchController.getHandicap().setSelected(false);
+              doctorSearchController.clearDbNodes();
+              mapBaseController.clearPath();
+              mainButtonList.animateList(false);
+              faulknerButtonList.animateList(false);
+              // resetTextualDirections();
+              enableAllFloorButtons();
+              try {
+                setDefaultKioskNode();
+              } catch (DBException ex) {
+                ex.printStackTrace();
+              }
+            });
+  }
   /**
    * initiates a listener for the reset button on a doctor search
    *
@@ -617,11 +701,19 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     this.currentBuilding = first.getBuilding();
     this.currentFloor = first.getFloor();
     if (first.getBuilding().equals("Faulkner")) {
-      faulknerButtonList.animateList(true);
-      mainButtonList.animateList(false);
+      try {
+        faulknerButtonList.animateList(true);
+        mainButtonList.animateList(false);
+      } catch (NullPointerException e) {
+
+      }
     } else {
-      faulknerButtonList.animateList(false);
-      mainButtonList.animateList(true);
+      try {
+        faulknerButtonList.animateList(false);
+        mainButtonList.animateList(true);
+      } catch (NullPointerException e) {
+
+      }
     }
     disableNonPathFloors();
     if (pathButtonList.size() > 1) {
@@ -754,6 +846,20 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     }
   }
 
+  public void setToLocationSearch() throws DBException, IOException {
+    FXMLLoader loader;
+    loader = new FXMLLoader(getClass().getResource("mapLocationSearch.fxml"));
+    Pane pane = loader.load();
+    locationSearchController = loader.getController();
+    initLocationSearchButton();
+    initResetLocationSearch();
+    initRestroomSearchButton();
+    initInfoSearchButton();
+    initExitSearchButton();
+    locationSearchController.setCon(this);
+    pn_change.getChildren().add(pane);
+  }
+
   public synchronized void setDirPane(Pane dirPane) {
     this.dirPane = dirPane;
   }
@@ -811,6 +917,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
       initRestroomSearchButton();
       initExitSearchButton();
       initInfoSearchButton();
+      locationSearchController.setCon(this);
       setDefaultKioskNode();
       pn_change.getChildren().add(pane);
     } else if (src == pn_doctorIcon) {
@@ -843,7 +950,58 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     } else if (src == pn_adminIcon) {
       resetMap();
       this.mainApp.switchScene("/edu/wpi/N/views/admin/newLogin.fxml", singleton);
+    } else if (src == pn_directIcon) {
+      resetMap();
+      loader = new FXMLLoader(getClass().getResource("mapDetailSearch.fxml"));
+      loader.setControllerFactory((obj) -> new MapDetailSearchController(this.singleton, this));
+      Pane pane = loader.load();
+      detailSearchController = loader.getController();
+      initDetailSearchButton();
+      initResetDetailSearch();
+      setDefaultKioskNode();
+      pn_change.getChildren().add(pane);
     }
+    // initSearch
+    // initReset --> reloads the DetailedSearch
+    // initDoctor --> reloads the ListView with doctors,if any, associated with clicked location
+  }
+
+  /**
+   * Zooms in to a node from the directory. Has to cheat and trick the pane into having the label,
+   * if it's causing problems that's probably why
+   *
+   * @param node The node to zoom in to
+   * @throws DBException On error
+   * @throws IOException On error
+   */
+  public void nodeFromDirectory(DbNode node) throws DBException, IOException {
+    resetMap();
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("mapLocationSearch.fxml"));
+    Pane pane = loader.load();
+    locationSearchController = loader.getController();
+    initLocationSearchButton();
+    initResetLocationSearch();
+    initRestroomSearchButton();
+    setDefaultKioskNode();
+    locationSearchController.nodes[0] = node;
+    LinkedList<DbNode> nlist = new LinkedList<DbNode>();
+    nlist.add(node);
+    mapBaseController.setFloor(node.getBuilding(), node.getFloor(), null);
+    locationSearchController.txt_firstLocation.setText(
+        node.getLongName() + "," + node.getBuilding());
+    Label label = new Label();
+    label.setTextAlignment(TextAlignment.CENTER);
+    label.setAlignment(Pos.CENTER);
+    label.setMouseTransparent(true);
+    label.setBackground(new Background(new BackgroundFill(Color.WHITE, null, null)));
+    label.setBorder(
+        new Border(
+            new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, null, BorderWidths.DEFAULT)));
+    mapBaseController.drawCircle(node, Color.GREEN, label);
+    locationSearchController.lst_fuzzySearch.setItems(FXCollections.observableList(nlist));
+    mapBaseController.pn_path.getChildren().add(label); // lmao
+    mapBaseController.autoFocusToNode(node);
+    pn_change.getChildren().add(pane);
   }
 
   /**
