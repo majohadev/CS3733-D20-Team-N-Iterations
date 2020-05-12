@@ -171,21 +171,28 @@ public class ChatbotController implements Controller, Initializable {
 
         // Check if current scene is Map
         if (!state.isMapDisplayActive) {
-          state.chatBotState.prevQueryResult = queryResults;
           LinkedList<DbNode> nodes1 = FuzzySearchAlgorithm.suggestLocations(startLocation);
           LinkedList<DbNode> nodes2 = FuzzySearchAlgorithm.suggestLocations(goalLocation);
           if (nodes1.size() == 0) {
-            singleMessageObject.add(
-                new Label("Sorry! I wasn't able to find " + startLocation + "!"));
+            singleMessageObject.add(new Label("Sorry! I wasn't able to find Start location!"));
+
+            // display and rest the message
+            state.chatBotState.resetPreviouslyPlannedActions();
+            displayAndSaveMessages(singleMessageObject, false);
+            mainApp.switchScene("views/mapDisplay/newMapDisplay.fxml", state);
             return;
           }
           if (nodes2.size() == 0) {
-            singleMessageObject.add(
-                new Label("Sorry! I wasn't able to find " + goalLocation + "!"));
+            singleMessageObject.add(new Label("Sorry! I wasn't able to find Goal location!"));
+
+            // display and reset the message
+            state.chatBotState.resetPreviouslyPlannedActions();
+            displayAndSaveMessages(singleMessageObject, false);
+            mainApp.switchScene("views/mapDisplay/newMapDisplay.fxml", state);
             return;
           }
-          state.chatBotState.startNodePrevSession = nodes1.getFirst();
-          state.chatBotState.endNodePrevSession = nodes2.getFirst();
+          state.chatBotState.startNode = nodes1.getFirst();
+          state.chatBotState.endNode = nodes2.getFirst();
           Label reply = new Label(queryResults.getFulfillmentText());
           singleMessageObject.add(reply);
           displayAndSaveMessages(singleMessageObject, false);

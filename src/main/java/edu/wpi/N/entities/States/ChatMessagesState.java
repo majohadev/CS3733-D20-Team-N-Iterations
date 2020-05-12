@@ -14,8 +14,8 @@ public class ChatMessagesState {
   public QueryResult prevQueryResult;
 
   // For displaying path
-  public DbNode startNodePrevSession;
-  public DbNode endNodePrevSession;
+  public DbNode startNode;
+  public DbNode endNode;
 
   // For showing just the given node
   public DbNode whereIsNode;
@@ -84,8 +84,8 @@ public class ChatMessagesState {
   /** Resets all previously planned actions. String and Structs to Null Boolean values to false */
   public void resetPreviouslyPlannedActions() {
     prevQueryResult = null;
-    startNodePrevSession = null;
-    endNodePrevSession = null;
+    startNode = null;
+    endNode = null;
     whereIsNode = null;
     showDoctorSearchGuide = false;
     showTranslator = false;

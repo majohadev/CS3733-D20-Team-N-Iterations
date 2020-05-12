@@ -174,14 +174,20 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
   private void checkChatbot() {
     try {
 
-      DbNode nodeStart = singleton.chatBotState.startNodePrevSession;
-      DbNode nodeEnd = singleton.chatBotState.endNodePrevSession;
+      DbNode nodeStart = singleton.chatBotState.startNode;
+      DbNode nodeEnd = singleton.chatBotState.endNode;
 
       if (nodeStart != null && nodeEnd != null) {
+        locationSearchController
+            .getTextFirstLocation()
+            .setText(nodeStart.getLongName() + ", " + nodeStart.getBuilding());
+        locationSearchController
+            .getTextSecondLocation()
+            .setText(nodeEnd.getLongName() + ", " + nodeEnd.getBuilding());
 
         initPathfind(nodeStart, nodeEnd, false);
-        singleton.chatBotState.startNodePrevSession = null;
-        singleton.chatBotState.endNodePrevSession = null;
+        singleton.chatBotState.startNode = null;
+        singleton.chatBotState.endNode = null;
         singleton.chatBotState.prevQueryResult = null;
         enableTextDirections();
       }
