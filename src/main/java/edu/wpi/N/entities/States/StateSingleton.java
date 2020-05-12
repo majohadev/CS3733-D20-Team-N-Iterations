@@ -61,26 +61,33 @@ public class StateSingleton {
     timer.schedule(timerTask, 1000000);
   }
 
-  /**
-   * provides reference to the main application class
-   *
-   * @param mainApp the main class of the application
-   */
   public void setMainApp(App mainApp) {
     this.mainApp = mainApp;
   }
 
   public void setTimeoutTime(int newTimeoutTime) {
-      timeoutTime = newTimeoutTime;
-      update();
+    timeoutTime = newTimeoutTime;
+    update();
   }
 
+  /**
+   * Function that switches the scene back to map display on timeout
+   *
+   * @param path: String that is the path a the .fxml file
+   * @throws IOException
+   */
   public void switchTheScene(String path) throws IOException {
     timer.cancel();
     timer.purge();
     mainApp.switchScene(path, this);
   }
 
+  /**
+   * Either creates the initial instance of the singleton or returns the singleton
+   *
+   * @return: Singleton
+   * @throws DBException
+   */
   public static StateSingleton getInstance() throws DBException {
     if (_instance == null) {
       _instance = new StateSingleton();
@@ -88,6 +95,7 @@ public class StateSingleton {
     return _instance;
   }
 
+  /** Update/Reset the timer in the singleton */
   public void update() {
     timer.purge();
     timer.cancel();

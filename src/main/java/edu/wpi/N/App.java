@@ -36,10 +36,6 @@ public class App extends Application {
     GlobalMouseListener mouseListener = new GlobalMouseListener();
     GlobalKeyListener keyListener = new GlobalKeyListener();
 
-    // Set the main app
-    mouseListener.setMainApp(this);
-    keyListener.setMainApp(this);
-
     // Add the appropriate listeners
     GlobalScreen.addNativeMouseListener(mouseListener);
     GlobalScreen.addNativeMouseMotionListener(mouseListener);
