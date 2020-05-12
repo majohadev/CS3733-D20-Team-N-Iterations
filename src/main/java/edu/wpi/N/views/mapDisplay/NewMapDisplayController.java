@@ -110,6 +110,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     this.mainButtonList = new JFXNodesList();
     this.pn_hospitalView = mapBaseController.getAnchorPane();
     mapBaseController.setFloor(this.currentBuilding, this.currentFloor, this.path);
+    mapBaseController.setNewMapDisplayController(this);
     setFloorBuildingText(this.currentFloor, this.currentBuilding);
     pn_mapContainer.getChildren().setAll(pn_hospitalView);
     pn_iconBar.getChildren().get(0).setStyle("-fx-background-color: #4A69C6;");
@@ -360,6 +361,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
                     (locationSearchController.getDBNodes())[0],
                     (locationSearchController.getDBNodes())[1],
                     locationSearchController.getHandicap());
+                disableTextDirections();
                 enableTextDirections();
               } catch (DBException | IOException ex) {
                 ex.printStackTrace();
@@ -431,6 +433,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
               enableAllFloorButtons();
               mainButtonList.animateList(false);
               faulknerButtonList.animateList(false);
+              mapBaseController.resetFocus(); // TODO: new
               try {
                 setDefaultKioskNode();
               } catch (DBException ex) {
@@ -771,6 +774,8 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
   public void resetMap() throws DBException {
     this.currentFloor = 1;
     this.currentBuilding = "Faulkner";
+    setBackground("Faulkner");
+    mapBaseController.resetFocus();
     mapBaseController.setFloor(this.currentBuilding, this.currentFloor, null);
     this.path = new Path(new LinkedList<>());
     collapseAllFloorButtons();
@@ -830,6 +835,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     FXMLLoader loader;
     if (src == pn_locationIcon) {
       resetMap();
+      // mapBaseController.resetFocus();
       loader = new FXMLLoader(getClass().getResource("mapLocationSearch.fxml"));
       Pane pane = loader.load();
       locationSearchController = loader.getController();
@@ -858,14 +864,21 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
         return;
       }
       if (dirPane == null) return;
+      mapBaseController.setMapQRController(mapQRController);
       setDefaultKioskNode();
-      pn_change.getChildren().add(dirPane);
+      if (!pn_change.getChildren().contains(dirPane)) {
+        pn_change.getChildren().add(dirPane);
+      }
+      if (!this.currentBuilding.equals("Faulkner") && !this.currentBuilding.equals("Drive")) {
+        mapQRController.setTabFocus(this.currentFloor, "Main");
+      } else {
+        mapQRController.setTabFocus(this.currentFloor, this.currentBuilding);
+      }
     } else if (src == pn_serviceIcon) {
       this.mainApp.switchScene("/edu/wpi/N/views/services/newServicesPage.fxml", singleton);
       resetMap();
     } else if (src == pn_infoIcon) {
       resetMap();
-      // TODO load info page here
       this.mainApp.switchScene("/edu/wpi/N/views/info/aboutPage.fxml", singleton);
     } else if (src == pn_adminIcon) {
       resetMap();
