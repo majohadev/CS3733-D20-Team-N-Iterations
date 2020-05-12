@@ -207,6 +207,7 @@ public class ChatbotController implements Controller, Initializable {
         singleMessageObject.add(reply);
 
         // Display animation how to use 'way-finding feature'
+        mapController.locationSearchController.showGuideLines();
 
       } else {
         // else, use Dialogflow text

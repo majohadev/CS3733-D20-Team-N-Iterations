@@ -7,12 +7,15 @@ import edu.wpi.N.database.DBException;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.views.Controller;
+import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Line;
+import javafx.util.Duration;
 
 public class MapLocationSearchController implements Controller {
   App mainApp;
@@ -28,7 +31,34 @@ public class MapLocationSearchController implements Controller {
   @FXML Pane btn_restRoom;
   @FXML Pane btn_infodesk;
   @FXML Pane btn_quickexit;
+
+  // Guides for map location search
+  @FXML Line lineSearchOne;
+  @FXML Line lineSearchTwo;
+  @FXML Line lineSearchThree;
+  @FXML Line lineSearchFour;
+
   DbNode[] nodes = new DbNode[2];
+
+  /** Function displays lines indicating the way-finding feature for 10 seconds */
+  public void showGuideLines() {
+    lineSearchOne.setVisible(true);
+    lineSearchTwo.setVisible(true);
+    lineSearchThree.setVisible(true);
+    lineSearchFour.setVisible(true);
+
+    PauseTransition delay = new PauseTransition(Duration.seconds(10));
+
+    delay.setOnFinished(
+        event -> {
+          lineSearchOne.setVisible(false);
+          lineSearchTwo.setVisible(false);
+          lineSearchThree.setVisible(false);
+          lineSearchFour.setVisible(false);
+        });
+
+    delay.play();
+  }
 
   @Override
   public void setMainApp(App mainApp) {

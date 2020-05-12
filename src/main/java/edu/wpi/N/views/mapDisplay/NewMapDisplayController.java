@@ -51,14 +51,13 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
   @FXML AnchorPane pn_background;
 
   @FXML MapBaseController mapBaseController;
+  @FXML ChatbotController chatBotController;
 
   public MapLocationSearchController locationSearchController;
   public MapDoctorSearchController doctorSearchController;
   private Pane dirPane;
   public Thread dirThread;
 
-  MapLocationSearchController locationSearchController;
-  MapDoctorSearchController doctorSearchController;
   MapQRController mapQRController;
 
   Path path;
@@ -749,6 +748,10 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     enableAllFloorButtons();
     disableTextDirections();
     switchHospitalView();
+    if (locationSearchController != null) {
+      locationSearchController.getTextFirstLocation().clear();
+      locationSearchController.getTextSecondLocation().clear();
+    }
   }
 
   public synchronized void setDirPane(Pane dirPane) {
@@ -783,12 +786,6 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
         return;
       }
       con.setDirPane(pane);
-    }
-    resetTextualDirections();
-
-    if (locationSearchController != null) {
-      locationSearchController.getTextFirstLocation().clear();
-      locationSearchController.getTextSecondLocation().clear();
     }
   }
 
