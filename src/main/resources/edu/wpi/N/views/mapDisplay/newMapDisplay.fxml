@@ -10,7 +10,7 @@
 
 <AnchorPane fx:id="pn_background" maxHeight="1080.0" maxWidth="1920.0" minHeight="1080.0" minWidth="1920.0" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #E6EBF2;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.mapDisplay.NewMapDisplayController">
    <children>
-      <StackPane fx:id="pn_mapContainer" layoutX="400.0" layoutY="75.0" pickOnBounds="false" prefHeight="1005.0" prefWidth="1425.0">
+      <StackPane fx:id="pn_mapContainer" layoutX="400.0" layoutY="75.0" pickOnBounds="false" prefHeight="1005.0" prefWidth="1425.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <fx:include fx:id="mapBase" source="mapBase.fxml" />
             <Pane fx:id="pn_display" pickOnBounds="false" prefHeight="1005.0" prefWidth="1515.0" />
@@ -108,6 +108,14 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </AnchorPane>
+                  <AnchorPane fx:id="pn_directIcon" layoutY="165.0" onMouseClicked="#onIconClicked" prefHeight="55.0" prefWidth="55.0">
+                     <children>
+                        <ImageView fitHeight="42.0" fitWidth="42.0" layoutX="7.0" layoutY="7.0">
+                           <image>
+                              <Image url="@../../../../../../../../../../16772596991553230897-256.png" />
+                           </image>
+                        </ImageView>
+                     </children></AnchorPane>
                </children></AnchorPane>
          </children></AnchorPane>
       <AnchorPane fx:id="pn_floors" layoutX="1737.0" layoutY="22.0" prefHeight="55.0" prefWidth="90.0" AnchorPane.leftAnchor="450.0" AnchorPane.topAnchor="30.0" />

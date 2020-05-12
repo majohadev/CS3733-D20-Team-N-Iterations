@@ -38,7 +38,6 @@ dependencies {
             'com.squareup.okhttp3:okhttp:4.6.0',
             [group: 'edu.wpi.cs3733.c20.teamR', name: 'AppointmentRequest', version:'5.0.0']
 
-
     )
 
     compile group: 'com.google.guava', name: 'guava', version: '23.5-jre', 'org.mybatis:mybatis:3.5.4', 'org.apache.httpcomponents:httpclient:4.5.12'
@@ -110,6 +109,9 @@ def codeCoverageExcludes = [
         'edu.wpi.N.database.setupDB',
         'edu.wpi.N.chatbot.*',
         'edu.wpi.N.algorithms.AbsAlgo.FloorSortNodes',
+        'edu.wpi.N.algorithms.Directions',
+        'edu.wpi.N.algorithms.Direction',
+        'edu.wpi.N.algorithms.Directions.State',
         'org.jnativehook.*',
         'edu.wpi.N.App.*'
 ]

@@ -17,7 +17,7 @@
         </Label>
         <Pane fx:id="pn_listClipper" layoutX="20.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
             <children>
-                <JFXListView fx:id="lst_add_shaft_node" prefHeight="159.0" prefWidth="430.0" style="-fx-background-radius: 10; -fx-border-radius: 10;" />
+                <JFXListView fx:id="lst_add_shaft_node" prefHeight="159.0" prefWidth="430.0" />
             </children>
         </Pane>
         <JFXButton fx:id="btn_cancel" layoutX="14.0" layoutY="229.0" prefHeight="37.0" prefWidth="92.0" text="Cancel" textFill="WHITE">

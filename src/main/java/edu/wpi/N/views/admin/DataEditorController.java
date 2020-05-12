@@ -31,13 +31,19 @@ public class DataEditorController implements Controller {
   @FXML Label lbl_filePath;
   @FXML Label lbl_filePath_edges;
   @FXML Label lbl_filePath_employees;
+  // @FXML Label lbl_filePath_detail;
+  @FXML Label lbl_filePath_hitbox;
 
-  final String DEFAULT_NODES = "csv/newNodes.csv";
-  final String DEFAULT_PATHS = "csv/newEdges.csv";
-  final String DEFAULT_EMPLOYEES = "csv/Employees.csv";
+  final String DEFAULT_NODES = "edu/wpi/N/csv/newNodes.csv";
+  final String DEFAULT_PATHS = "edu/wpi/N/csv/newEdges.csv";
+  final String DEFAULT_EMPLOYEES = "edu/wpi/N/csv/Employees.csv";
+  final String DEFAULT_DETAIL = "edu/wpi/N/csv/Detail.csv";
+  final String DEFAULT_HITBOXES = "edu/wpi/N/csv/hitBoxesCompleteBuilding.csv";
   final InputStream INPUT_NODES_DEFAULT = Main.class.getResourceAsStream(DEFAULT_NODES);
   final InputStream INPUT_EDGES_DEFAULT = Main.class.getResourceAsStream(DEFAULT_PATHS);
   final InputStream INPUT_EMPLOYEES_DEFAULT = Main.class.getResourceAsStream(DEFAULT_EMPLOYEES);
+  final InputStream INPUT_HITBOXES_DEFAULT = Main.class.getResourceAsStream(DEFAULT_HITBOXES);
+  final InputStream INPUT_DETAIL_DEFAULT = Main.class.getResourceAsStream(DEFAULT_DETAIL);
 
   // Inject singleton
   public DataEditorController(StateSingleton singleton) {
@@ -48,6 +54,8 @@ public class DataEditorController implements Controller {
     lbl_filePath.setText(DEFAULT_NODES);
     lbl_filePath_edges.setText(DEFAULT_PATHS);
     lbl_filePath_employees.setText(DEFAULT_EMPLOYEES);
+    // lbl_filePath_detail.setText(DEFAULT_DETAIL);
+    // onUploadDetailClicked();
   }
 
   @FXML
@@ -58,6 +66,19 @@ public class DataEditorController implements Controller {
     if (selectedFile != null) {
       lbl_filePath.setText(selectedFile.getAbsolutePath());
       lbl_filePath.setDisable(false);
+    } else {
+      System.out.println("The file is invalid");
+    }
+  }
+
+  @FXML
+  public void onSelectDetailClicked(MouseEvent e) {
+    FileChooser fc = new FileChooser();
+    fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+    File selectedFile = fc.showOpenDialog(null);
+    if (selectedFile != null) {
+      // lbl_filePath_detail.setText(selectedFile.getAbsolutePath());
+      // lbl_filePath_detail.setDisable(false);
     } else {
       System.out.println("The file is invalid");
     }
@@ -86,6 +107,47 @@ public class DataEditorController implements Controller {
       lbl_filePath_employees.setDisable(false);
     } else {
       System.out.println("The file is invalid");
+    }
+  }
+
+  @FXML
+  public void onSelectHitboxesClicked(MouseEvent event) {
+    FileChooser fc = new FileChooser();
+    fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+    File selectedFile = fc.showOpenDialog(null);
+    if (selectedFile != null) {
+      lbl_filePath_hitbox.setText(selectedFile.getAbsolutePath());
+      lbl_filePath_hitbox.setDisable(false);
+    } else {
+      System.out.println("The file is invalid");
+    }
+  }
+
+  /** Loads selected hitbox csv */
+  @FXML
+  public void onUploadHitboxClicked() {
+    try {
+      // Upload Hitboxes
+      String path = lbl_filePath_hitbox.getText();
+      if (path.equals(DEFAULT_HITBOXES)) {
+        CSVParser.parseCSVHitBoxes(INPUT_HITBOXES_DEFAULT);
+        Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmAlert.setContentText("Your Hitbox CSV File Has Been Successfully Uploaded");
+        confirmAlert.show();
+      } else {
+        Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmAlert.setContentText("Your Hitbox CSV File Has Been Successfully Uploaded");
+        confirmAlert.show();
+        CSVParser.parseCSVDetailFromPath(path);
+        // CSVParser.parseCSVHitBoxesFromPath(path);
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setHeaderText("Oops... Something went Wong");
+      errorAlert.setContentText(
+          "Couldn't load hitbox file. Make sure to select correct file. Make sure to uploaded Nodes first");
+      errorAlert.showAndWait();
     }
   }
 
@@ -147,6 +209,34 @@ public class DataEditorController implements Controller {
       errorAlert.setHeaderText("Oops... Something went Wong");
       errorAlert.setContentText(
           "Couldn't load employee file. Make sure to select correct file. Make sure to uploaded Nodes first");
+      errorAlert.showAndWait();
+    }
+  }
+
+  public void onUploadDetailClicked() {
+    try {
+      // Clear previous employees
+      MapDB.clearDetail();
+      // Upload employees
+      // String path = lbl_filePath_detail.getText();
+      String path = DEFAULT_DETAIL;
+      if (path.equals(DEFAULT_DETAIL)) {
+        CSVParser.parseDetail(INPUT_DETAIL_DEFAULT);
+        Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmAlert.setContentText("Your Directory CSV File Has Been Successfully Uploaded");
+        confirmAlert.show();
+      } else {
+        Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmAlert.setContentText("Your Directory CSV File Has Been Successfully Uploaded");
+        confirmAlert.show();
+        CSVParser.parseCSVDetailFromPath(path);
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setHeaderText("Oops... Something went Wong");
+      errorAlert.setContentText(
+          "Couldn't load directory file. Make sure to select correct file. Make sure to uploaded Nodes first");
       errorAlert.showAndWait();
     }
   }
@@ -298,5 +388,15 @@ public class DataEditorController implements Controller {
   @FXML
   private void onDefaultEmployeesClicked(MouseEvent event) {
     lbl_filePath_employees.setText(DEFAULT_EMPLOYEES);
+  }
+
+  /**
+   * Function loads and displays default path to hitBoxesCompleteBuilding.csv
+   *
+   * @param event
+   */
+  @FXML
+  private void onDefaultHitboxesClicked(MouseEvent event) {
+    lbl_filePath_hitbox.setText(DEFAULT_HITBOXES);
   }
 }

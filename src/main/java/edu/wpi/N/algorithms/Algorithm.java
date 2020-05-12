@@ -57,9 +57,10 @@ public class Algorithm {
    * @return Path, path from start node to closest (euclidean) end node of requested type
    * @throws DBException
    */
-  public Path findQuickAccess(DbNode startNode, String nodeType) throws DBException {
+  public Path findQuickAccess(DbNode startNode, String nodeType, boolean handicap)
+      throws DBException {
     try {
-      return pathFinder.findQuickAccess(mapData, startNode, nodeType);
+      return pathFinder.findQuickAccess(mapData, startNode, nodeType, handicap);
     } catch (DBException e) {
       e.printStackTrace();
       throw e;

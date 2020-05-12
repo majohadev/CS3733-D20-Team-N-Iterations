@@ -16,6 +16,7 @@ public class StateSingleton {
   public Algorithm savedAlgo;
   public MapImageLoader mapImageLoader;
   public ChatMessagesState chatBotState;
+  public String algoState;
   public Originator originator;
   public CareTaker careTaker;
   public int timeoutTime;
@@ -27,6 +28,7 @@ public class StateSingleton {
     savedAlgo = new Algorithm();
     mapImageLoader = new MapImageLoader();
     chatBotState = new ChatMessagesState();
+    algoState = "AStar";
     originator = new Originator();
     careTaker = new CareTaker();
 
