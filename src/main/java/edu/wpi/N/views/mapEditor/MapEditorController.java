@@ -20,6 +20,8 @@ import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
@@ -57,6 +59,7 @@ public class MapEditorController implements Controller {
   @FXML AnchorPane pn_newalignnode;
   @FXML AnchorPane pn_newdeleteedge;
   @FXML AnchorPane pn_newmanageshaft;
+  @FXML AnchorPane btn_cancel_elev;
 
   final int DEFAULT_FLOOR = 1;
   final String DEFAULT_BUILDING = "Faulkner";
@@ -83,12 +86,18 @@ public class MapEditorController implements Controller {
   int numFloors;
 
   // Zoom constants
-  private final double MIN_MAP_SCALE = 0.8;
-  private final double MAX_MAP_SCALE = 4;
+  private double MIN_MAP_SCALE = 0.8;
+  private double MAX_MAP_SCALE = 4;
   private final double ZOOM_STEP_SCROLL = 0.01;
   private final double ZOOM_STEP_BUTTON = 0.1;
   private DoubleProperty mapScaleAlpha = new SimpleDoubleProperty(0);
   private double clickStartX, clickStartY;
+  private double MIN_CIRCLE_RADIUS = 3;
+  private double MAX_CIRCLE_RADIUS = 7;
+  private double MIN_LINE_WIDTH = 2;
+  private double MAX_LINE_WIDTH = 4;
+  private double MIN_OPACITY = 0.4;
+  private double MAX_OPACITY = 0.85;
 
   private Timeline autoFocus = new Timeline();
   private LinkedList<KeyValue> endFocusVals = new LinkedList<>();
@@ -163,8 +172,8 @@ public class MapEditorController implements Controller {
     // initializeMainCampusFloorButtons();
     // setFloorButtonColors();
     editElevNodes = new LinkedList<>();
-    // btn_cancel_elev.setDisable(true);
-    // btn_cancel_elev.setVisible(false);
+    btn_cancel_elev.setDisable(true);
+    btn_cancel_elev.setVisible(false);
     nodesMap = HashBiMap.create();
     edgesMap = HashBiMap.create();
     mode = Mode.NO_STATE;
@@ -174,6 +183,7 @@ public class MapEditorController implements Controller {
     deleteNodeCircles = new LinkedList<>();
     alignNodeCircles = new LinkedList<>();
     addShaftNodeCircles = new LinkedList<>();
+    originalShaftNodes = new LinkedList<>();
 
     editNodeCircle = null;
     addEdgeLine = new Line();
@@ -207,6 +217,12 @@ public class MapEditorController implements Controller {
   }
 
   private void setFaulknerDefaults() {
+    MIN_CIRCLE_RADIUS = 5.3;
+    MAX_CIRCLE_RADIUS = 8;
+    MIN_LINE_WIDTH = 3.3;
+    MAX_LINE_WIDTH = 5;
+    MIN_OPACITY = .6;
+    MAX_OPACITY = .8;
     DEFAULT_CIRCLE_OPACITY = .75;
     DEFAULT_LINE_WIDTH = 4;
     DEFAULT_CIRCLE_RADIUS = 7;
@@ -216,11 +232,19 @@ public class MapEditorController implements Controller {
     MAP_HEIGHT = 997;
     HORIZONTAL_SCALE = MAP_WIDTH / IMAGE_WIDTH;
     VERTICAL_SCALE = MAP_HEIGHT / IMAGE_HEIGHT;
+    MIN_MAP_SCALE = 1;
+    MAX_MAP_SCALE = 3.2;
     numFloors = 5;
     pn_background.setStyle("-fx-background-color: #E6EBF2");
   }
 
   private void setMainCampusDefaults() {
+    MIN_CIRCLE_RADIUS = 2.5;
+    MAX_CIRCLE_RADIUS = 3.5;
+    MIN_LINE_WIDTH = 1.5;
+    MAX_LINE_WIDTH = 2.3;
+    MIN_OPACITY = .5;
+    MAX_OPACITY = .85;
     DEFAULT_CIRCLE_OPACITY = .85;
     DEFAULT_LINE_WIDTH = 2;
     DEFAULT_CIRCLE_RADIUS = 3;
@@ -230,6 +254,8 @@ public class MapEditorController implements Controller {
     MAP_HEIGHT = 994;
     HORIZONTAL_SCALE = MAP_WIDTH / IMAGE_WIDTH;
     VERTICAL_SCALE = MAP_HEIGHT / IMAGE_HEIGHT;
+    MIN_MAP_SCALE = 1.2;
+    MAX_MAP_SCALE = 5.5;
     numFloors = 6;
     pn_background.setStyle("-fx-background-color: #D3D3D3");
   }
@@ -296,6 +322,39 @@ public class MapEditorController implements Controller {
     HashMap<String, UINode> conversion = new HashMap<>();
     for (DbNode DBnode : nodes) {
       Circle circle = createCircle(scaleX(DBnode.getX()), scaleY(DBnode.getY()), c);
+      circle
+          .hoverProperty()
+          .addListener(
+              new ChangeListener<Boolean>() {
+
+                @Override
+                public void changed(
+                    ObservableValue<? extends Boolean> observable,
+                    Boolean oldValue,
+                    Boolean newValue) {
+                  if (mode == Mode.EDIT_NODE
+                      || mode == Mode.DELETE_NODE
+                      || mode == Mode.ALIGN_NODE) {
+                    if (newValue) {
+                      circle.setRadius(circle.getRadius() * 1.25);
+                      circle.setOpacity(.95);
+                    } else {
+                      circle.setRadius(DEFAULT_CIRCLE_RADIUS);
+                      circle.setOpacity(DEFAULT_CIRCLE_OPACITY);
+                    }
+                  } else if (mode == Mode.EDIT_ELEV || mode == Mode.ADD_SHAFT) {
+                    if (editElevNodes.contains(circle)) {
+                      if (newValue) {
+                        circle.setRadius(circle.getRadius() * 1.25);
+                        circle.setOpacity(.95);
+                      } else {
+                        circle.setRadius(DEFAULT_CIRCLE_RADIUS);
+                        circle.setOpacity(DEFAULT_CIRCLE_OPACITY);
+                      }
+                    }
+                  }
+                }
+              });
       UINode UInode = new UINode(circle, DBnode);
       nodesMap.put(circle, UInode);
       nodesMap2.put(DBnode, circle);
@@ -412,6 +471,9 @@ public class MapEditorController implements Controller {
       controllerEditElev.setMainApp(mainApp);
     }
     if (mode == Mode.EDIT_ELEV) {
+
+      btn_cancel_elev.setDisable(false);
+      btn_cancel_elev.setVisible(true);
       pn_elev.getChildren().add(pane);
       pn_elev.setVisible(true);
       controllerEditElev.setFloor(currentFloor, currentBuilding);
@@ -424,11 +486,6 @@ public class MapEditorController implements Controller {
     }
   }
 
-  @FXML
-  private void onIconClicked(MouseEvent event) {
-    // Nothing yet
-  }
-
   private void handleCircleDragEvents(MouseEvent event, Circle circle) {
     isDraggingNode = true;
     circle.setCursor(Cursor.CLOSED_HAND);
@@ -436,8 +493,6 @@ public class MapEditorController implements Controller {
       onCircleAddNodeDragged(event, circle);
     }
     if (mode == Mode.EDIT_NODE) {
-      //      onBtnCancelEditNodeClicked();
-      //      onBtnConfirmEditNodeClicked();
       onTxtPosEditNodeTextChanged(circle);
       onCircleEditNodeDragged(event, circle);
     }
@@ -539,7 +594,7 @@ public class MapEditorController implements Controller {
     }
     if (mode == Mode.EDIT_ELEV && editElevNodes.contains(circle)) {
 
-      //      onBtnSaveEditElevClicked();
+      onBtnSaveEditElevClicked();
 
       onBtnCancelEditElevClicked();
       onBtnAddShaftClicked();
@@ -838,8 +893,8 @@ public class MapEditorController implements Controller {
 
   private void handleEditElevRightClick() throws IOException {
     mode = Mode.EDIT_ELEV;
-    // elev.setDisable(false);
-    // btn_cancel_elev.setVisible(true);
+    btn_cancel_elev.setDisable(false);
+    btn_cancel_elev.setVisible(true);
     changeEditor();
     for (Circle circle : editElevNodes) {
       circle.setFill(EDIT_ELEV_COLOR);
@@ -1428,7 +1483,7 @@ public class MapEditorController implements Controller {
             e -> {
               elevCircle.setFill(EDIT_ELEV_COLOR);
               elevCircle = null;
-              pn_elev.setVisible(false);
+              // pn_elev.setVisible(false);
             });
   }
 
@@ -1455,8 +1510,8 @@ public class MapEditorController implements Controller {
   }
 
   private void resetEditElev() {
-    //    btn_cancel_elev.setDisable(true);
-    //    btn_cancel_elev.setVisible(false);
+    btn_cancel_elev.setDisable(true);
+    btn_cancel_elev.setVisible(false);
 
     for (Circle circle : editElevNodes) {
       circle.setFill(DEFAULT_CIRCLE_COLOR);
@@ -1481,7 +1536,7 @@ public class MapEditorController implements Controller {
 
   private void resetAddShaft() {
     controllerEditElev.setFloor(currentFloor, currentBuilding);
-    controllerAddShaft.clearAllFields();
+    // controllerAddShaft.clearAllFields();
     addShaftNodeCircles.clear();
     originalShaftNodes.clear();
   }
@@ -1907,13 +1962,13 @@ public class MapEditorController implements Controller {
   public void onBtnCancelElevClicked() {
     resetEditElev();
     mode = Mode.NO_STATE;
-    // btn_cancel_elev.setDisable(true);
-    // btn_cancel_elev.setVisible(false);
+    btn_cancel_elev.setDisable(true);
+    btn_cancel_elev.setVisible(false);
   }
 
   public void hideEditElevButton() {
-    // btn_cancel_elev.setDisable(true);
-    // btn_cancel_elev.setVisible(false);
+    btn_cancel_elev.setDisable(true);
+    btn_cancel_elev.setVisible(false);
   }
 
   public void reloadAddShaft() throws DBException {
@@ -1955,31 +2010,39 @@ public class MapEditorController implements Controller {
   private void mapScrollHandler(ScrollEvent event) throws IOException {
     if (event.getSource() == pn_stack) {
       double deltaY = event.getDeltaY();
-      zoom(deltaY * ZOOM_STEP_SCROLL);
+
+      // Scaling parameter (alpha) is clamped between 0 (min. scale) and 1 (max. scale)
+      double newScale = mapScaleAlpha.get() + deltaY * ZOOM_STEP_SCROLL;
+      mapScaleAlpha.set(Math.max(0, Math.min(1, newScale)));
     }
   }
 
   /**
    * zoom - Scale map pane up or down, clamping value between MIN_MAP_SCALE and MAX_MAP_SCALE
    *
-   * @param percentDelta - Signed double representing how much to zoom in/out
+   * @param alphaVal - Signed double representing how much to zoom in/out
    */
-  private void zoom(double percentDelta) {
+  private void zoom(double alphaVal) {
 
     // Scaling parameter (alpha) is clamped between 0 (min. scale) and 1 (max. scale)
-    mapScaleAlpha.set(
-        Math.max(
-            0,
-            Math.min(
-                1,
-                mapScaleAlpha.get() + percentDelta))); // TODO: use zoom to scale line & node size
+    double expInterpScale = MIN_MAP_SCALE * Math.pow(MAX_MAP_SCALE / MIN_MAP_SCALE, alphaVal);
 
-    // Linearly interpolate (lerp) alpha to actual scale value
-    double lerpedScale = MIN_MAP_SCALE + mapScaleAlpha.get() * (MAX_MAP_SCALE - MIN_MAP_SCALE);
-
+    double circleRadius =
+        MAX_CIRCLE_RADIUS * Math.pow(MIN_CIRCLE_RADIUS / MAX_CIRCLE_RADIUS, alphaVal);
+    double lineWidth = MAX_LINE_WIDTH * Math.pow(MIN_LINE_WIDTH / MAX_LINE_WIDTH, alphaVal);
+    double opacity = MIN_OPACITY * Math.pow(MAX_OPACITY / MIN_OPACITY, alphaVal);
+    DEFAULT_LINE_WIDTH = lineWidth;
+    DEFAULT_CIRCLE_RADIUS = circleRadius;
+    for (Line l : edgesMap.keySet()) {
+      l.setStrokeWidth(DEFAULT_LINE_WIDTH);
+    }
+    for (Circle c : nodesMap.keySet()) {
+      c.setRadius(DEFAULT_CIRCLE_RADIUS);
+      c.setOpacity(opacity);
+    }
     // Apply new scale and correct panning
-    pn_stack.setScaleX(lerpedScale);
-    pn_stack.setScaleY(lerpedScale);
+    pn_stack.setScaleX(expInterpScale);
+    pn_stack.setScaleY(expInterpScale);
     clampPanning(0, 0);
   }
 
@@ -2036,6 +2099,7 @@ public class MapEditorController implements Controller {
   private void initAutoFocus() {
     autoFocus.setCycleCount(1);
     autoFocus.setOnFinished(event -> onAutoFocusEnd());
+    mapScaleAlpha.addListener((observable, oldValue, newValue) -> zoom(newValue.doubleValue()));
   }
 
   private void autoFocusToNode(DbNode node) {
@@ -2056,10 +2120,14 @@ public class MapEditorController implements Controller {
     autoFocusToPoint(xSum / nodesCount, ySum / nodesCount);
   }
 
-  private void autoFocusToPoint(double x, double y) {
+  /**
+   * Automatically pans and zooms to a given node
+   *
+   * @param x x location to go to
+   * @param y y location to go to
+   */
+  public void autoFocusToPoint(double x, double y) {
 
-    endFocusVals.add(new KeyValue(pn_stack.scaleXProperty(), MAX_MAP_SCALE, Interpolator.LINEAR));
-    endFocusVals.add(new KeyValue(pn_stack.scaleYProperty(), MAX_MAP_SCALE, Interpolator.LINEAR));
     endFocusVals.add(
         new KeyValue(
             pn_stack.translateXProperty(),
