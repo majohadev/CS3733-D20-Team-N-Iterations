@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import javafx.scene.chart.BarChart?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.NumberAxis?>
@@ -7,37 +8,53 @@
 
 <AnchorPane prefHeight="1080.0" prefWidth="1520.0" style="-fx-background-color: #263051;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.admin.StatisticsController">
    <children>
-      <BarChart fx:id="bc_ServiceData" layoutX="202.0" layoutY="518.0" AnchorPane.leftAnchor="202.0" AnchorPane.topAnchor="518.0">
+      <BarChart fx:id="bc_ServiceData" horizontalGridLinesVisible="false" layoutX="202.0" layoutY="518.0" stylesheets="@../../css/sanitationRequestUI.css" verticalGridLinesVisible="false" AnchorPane.leftAnchor="202.0" AnchorPane.topAnchor="518.0">
         <xAxis>
-          <CategoryAxis label="Service Type" side="BOTTOM" style="-fx-text-fill: #e6ebf2;" tickLabelFill="#e6ebf2" fx:id="xAxis" />
+          <CategoryAxis label="Service Type" side="BOTTOM" style="-fx-tick-label-fill: #e6ebf2;" styleClass="CategoryAxis" stylesheets="@../../css/sanitationRequestUI.css" tickLabelFill="#e6ebf2" fx:id="xAxis" />
         </xAxis>
         <yAxis>
-          <NumberAxis fx:id="yAxis" side="LEFT" style="-fx-text-fill: #e6ebf2;" tickLabelFill="#e6ebf2" />
+          <NumberAxis fx:id="yAxis" side="LEFT" style="-fx-text-fill: #e6ebf2;" styleClass="NumberAxis" tickLabelFill="#e6ebf2" />
         </yAxis>
+         <styleClass>
+            <String fx:value="chart-title" />
+            <String fx:value="chart-bar" />
+         </styleClass>
       </BarChart>
-      <BarChart fx:id="bc_recLocData" layoutX="771.0" layoutY="-76.0" AnchorPane.rightAnchor="202.0" AnchorPane.topAnchor="100.0">
+      <BarChart fx:id="bc_recLocData" horizontalGridLinesVisible="false" layoutX="771.0" layoutY="-76.0" stylesheets="@../../css/sanitationRequestUI.css" verticalGridLinesVisible="false" AnchorPane.rightAnchor="202.0" AnchorPane.topAnchor="100.0">
          <xAxis>
             <CategoryAxis label="Service Type" side="BOTTOM" style="-fx-text-fill: #e6ebf2;" tickLabelFill="#e6ebf2" fx:id="xAxisReqLoc" />
          </xAxis>
          <yAxis>
             <NumberAxis fx:id="yAxisRecLoc" side="LEFT" style="-fx-text-fill: #e6ebf2;" tickLabelFill="#e6ebf2" />
          </yAxis>
+         <styleClass>
+            <String fx:value="chart-title" />
+            <String fx:value="chart-bar" />
+         </styleClass>
       </BarChart>
-      <BarChart fx:id="bc_popLangData" layoutX="156.0" layoutY="-66.0" AnchorPane.leftAnchor="202.0" AnchorPane.topAnchor="100.0">
+      <BarChart fx:id="bc_popLangData" horizontalGridLinesVisible="false" layoutX="156.0" layoutY="-66.0" stylesheets="@../../css/sanitationRequestUI.css" verticalGridLinesVisible="false" AnchorPane.leftAnchor="202.0" AnchorPane.topAnchor="100.0">
          <xAxis>
             <CategoryAxis label="Service Type" side="BOTTOM" style="-fx-text-fill: #e6ebf2;" tickLabelFill="#e6ebf2" fx:id="xAxisLang" />
          </xAxis>
          <yAxis>
             <NumberAxis fx:id="yAxisLang" side="LEFT" style="-fx-text-fill: #e6ebf2;" tickLabelFill="#e6ebf2" />
          </yAxis>
+         <styleClass>
+            <String fx:value="chart-title" />
+            <String fx:value="chart-bar" />
+         </styleClass>
       </BarChart>
-      <BarChart fx:id="bc_pathData" layoutX="888.0" layoutY="506.0" AnchorPane.rightAnchor="202.0" AnchorPane.topAnchor="518.0">
+      <BarChart fx:id="bc_pathData" horizontalGridLinesVisible="false" layoutX="888.0" layoutY="506.0" stylesheets="@../../css/sanitationRequestUI.css" verticalGridLinesVisible="false" AnchorPane.rightAnchor="202.0" AnchorPane.topAnchor="518.0">
          <xAxis>
             <CategoryAxis label="Service Type" side="BOTTOM" style="-fx-text-fill: #e6ebf2;" tickLabelFill="#e6ebf2" fx:id="xAxisPath" />
          </xAxis>
          <yAxis>
             <NumberAxis fx:id="yAxisPath" side="LEFT" style="-fx-text-fill: #e6ebf2;" tickLabelFill="#e6ebf2" />
          </yAxis>
+         <styleClass>
+            <String fx:value="chart-title" />
+            <String fx:value="chart-bar" />
+         </styleClass>
       </BarChart>
    </children>
 </AnchorPane>

@@ -1,10 +1,7 @@
 package edu.wpi.N.views.admin;
 
 import edu.wpi.N.database.DBException;
-import edu.wpi.N.database.MapDB;
 import edu.wpi.N.database.ServiceDB;
-import edu.wpi.N.entities.DbNode;
-import edu.wpi.N.entities.Service;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -13,7 +10,6 @@ import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.util.Pair;
 
 public class StatisticsController implements Initializable {
 
@@ -46,7 +42,6 @@ public class StatisticsController implements Initializable {
       popFromDBPath();
       popFromDBPopularLang();
       popFromDBReqLoc();
-      printPopLocations();
     } catch (DBException e) {
       e.printStackTrace();
     }
@@ -56,7 +51,8 @@ public class StatisticsController implements Initializable {
     bc_ServiceData.setTitle("Number of Service Requests");
     xAxis.setLabel("Service Type");
     yAxis.setLabel("Number of Requests");
-    xAxis.setStyle("-fx-text-fill: #e6ebf2");
+    // xAxis.setStyle("-fx-text-fill: #e6ebf2");
+    bc_ServiceData.setLegendVisible(false);
   }
 
   public void initPathData() {
@@ -64,80 +60,99 @@ public class StatisticsController implements Initializable {
     xAxisPath.setLabel("Path");
     yAxisPath.setLabel("Times Visited");
     xAxis.setStyle("-fx-text-fill: #e6ebf2");
+    bc_pathData.setLegendVisible(false);
   }
 
   public void initLocData() {
     bc_recLocData.setTitle("Most Used Request Locations");
     xAxisReqLoc.setLabel("Location");
     yAxisRecLoc.setLabel("Times Used");
-    xAxis.setStyle("-fx-text-fill: #e6ebf2");
+    bc_recLocData.setLegendVisible(false);
   }
 
   public void initRecLang() {
     bc_popLangData.setTitle("Most Requested Languages");
     xAxisLang.setLabel("Language");
     yAxisLang.setLabel("Times Requested");
-    xAxis.setStyle("-fx-text-fill: #e6ebf2");
+    bc_popLangData.setLegendVisible(false);
   }
 
   public void popFromDBServices() throws DBException {
-    for (Service service : ServiceDB.getServices()) {
-      for (Pair<String, Integer> val : ServiceDB.popularServices()) {
-        if (service.getServiceType().equals(val.getKey())) {
-          for (int i = 0; i < 5; i++) { // Only adds the top 5
-            requestData.getData().add(new XYChart.Data<>(service.getServiceType(), val.getValue()));
-          }
-        }
-      }
+    bc_ServiceData.getData().clear();
+    int n = ServiceDB.popularServices().size();
+
+    if (n > 5) {
+      n = 5;
     }
+
+    for (int i = 0; i < n; i++) {
+      requestData
+          .getData()
+          .add(
+              new XYChart.Data<>(
+                  ServiceDB.popularServices().get(i).getKey(),
+                  ServiceDB.popularServices().get(i).getValue()));
+    }
+
     bc_ServiceData.getData().addAll(requestData);
   }
 
   public void popFromDBPath() throws DBException {
-    for (DbNode node : MapDB.allNodes()) {
-      // System.out.println("Here");
-      for (Pair<DbNode, Integer> val : ServiceDB.popularPathLocations()) {
-        System.out.println("In Second Loop");
-        System.out.println("Value: " + val.getValue() + " Key: " + val.getKey());
-        if (node.equals(val.getKey())) {
-          System.out.println("Added");
-          pathData.getData().add(new XYChart.Data<>(node.getLongName(), val.getValue()));
-        }
-      }
+    bc_pathData.getData().clear();
+    int n = ServiceDB.popularPathLocations().size();
+    if (n > 5) {
+      n = 5;
+    }
+
+    for (int i = 0; i < n; i++) {
+      pathData
+          .getData()
+          .add(
+              new XYChart.Data<>(
+                  ServiceDB.popularPathLocations().get(i).getKey().getLongName(),
+                  ServiceDB.popularPathLocations().get(i).getValue()));
     }
     bc_pathData.getData().addAll(pathData);
   }
 
-  public void printPopLocations() throws DBException {
-    for (Pair<DbNode, Integer> val : ServiceDB.popularPathLocations()) {
-      System.out.println(val.getKey().getLongName());
-    }
-  }
-
   public void popFromDBReqLoc() throws DBException {
-    for (DbNode node : MapDB.allNodes()) {
-      for (Pair<DbNode, Integer> val : ServiceDB.popularReqLocations()) {
-        for (int i = 0; i < 5; i++) {
-          if (node.equals(val.getKey())) {
-            requestLocation.getData().add(new XYChart.Data<>(node.getLongName(), val.getValue()));
-          }
-        }
-      }
-      bc_recLocData.getData().addAll(requestLocation);
+    bc_recLocData.getData().clear();
+
+    int n = ServiceDB.popularReqLocations().size();
+
+    if (n > 5) {
+      n = 5;
     }
+
+    for (int i = 0; i < n; i++) {
+      requestLocation
+          .getData()
+          .add(
+              new XYChart.Data<>(
+                  ServiceDB.popularReqLocations().get(i).getKey().getLongName(),
+                  ServiceDB.popularReqLocations().get(i).getValue()));
+    }
+    bc_recLocData.getData().addAll(requestLocation);
   }
 
-  // Works
   public void popFromDBPopularLang() throws DBException {
-    for (int i = 0; i < 5; i++) {
-      for (String lang : ServiceDB.getLanguages()) {
-        for (Pair<String, Integer> val : ServiceDB.popularLanguages()) {
-          if (lang.equals(val.getKey())) {
-            languageData.getData().add(new XYChart.Data<>(lang, val.getValue()));
-          }
-        }
-        bc_popLangData.getData().addAll(languageData);
-      }
+    bc_popLangData.getData().clear();
+
+    int n = ServiceDB.popularLanguages().size();
+
+    if (n > 5) {
+      n = 5;
     }
+
+    for (int i = 0; i < n; i++) {
+      languageData
+          .getData()
+          .add(
+              new XYChart.Data<>(
+                  ServiceDB.popularLanguages().get(i).getKey(),
+                  ServiceDB.popularLanguages().get(i).getValue()));
+    }
+
+    bc_popLangData.getData().addAll(languageData);
   }
 }

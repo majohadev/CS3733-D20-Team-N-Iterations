@@ -591,6 +591,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     this.path = singleton.savedAlgo.findPath(first, second, isSelected);
     if (path == null) {
       displayErrorMessage("No path can be found");
+      return;
     }
     switchHospitalView();
     mapBaseController.setFloor(first.getBuilding(), first.getFloor(), path);
