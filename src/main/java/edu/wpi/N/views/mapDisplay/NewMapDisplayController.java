@@ -410,6 +410,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
               enableAllFloorButtons();
               mainButtonList.animateList(false);
               faulknerButtonList.animateList(false);
+              mapBaseController.resetFocus(); // TODO: new
               try {
                 setDefaultKioskNode();
               } catch (DBException ex) {
@@ -720,6 +721,8 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
   public void resetMap() throws DBException {
     this.currentFloor = 1;
     this.currentBuilding = "Faulkner";
+    setBackground("Faulkner");
+    mapBaseController.resetFocus();
     mapBaseController.setFloor(this.currentBuilding, this.currentFloor, null);
     this.path = new Path(new LinkedList<>());
     collapseAllFloorButtons();
@@ -779,6 +782,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     FXMLLoader loader;
     if (src == pn_locationIcon) {
       resetMap();
+      // mapBaseController.resetFocus();
       loader = new FXMLLoader(getClass().getResource("mapLocationSearch.fxml"));
       Pane pane = loader.load();
       locationSearchController = loader.getController();

@@ -149,6 +149,7 @@ public class MapBaseController implements Controller {
       setFaulknerDefaults();
     }
     img_map.setImage(singleton.mapImageLoader.getMap(building, floor));
+    // resetFocus();
     if (!(currentPath == null || currentPath.isEmpty())) {
       drawPath(currentPath, floor, building);
     }
