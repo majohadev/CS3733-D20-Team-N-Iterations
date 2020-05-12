@@ -114,7 +114,8 @@ public class MapQRController implements Controller {
       if (currentNode.getFloor() != prevNode.getFloor() || changedBuilding(prevNode, currentNode)) {
         mapDisplayController.changeFloor(currentNode.getFloor(), currentNode.getBuilding());
       }
-      if (currentDirection.getValue().getLevel() != Level.BUILDING) {
+      if (currentDirection.getValue().getLevel() != Level.BUILDING
+          && currentDirection.getValue().getLevel() != Level.FLOOR) {
         mapBaseController.autoFocusToNode(node);
       }
     }
@@ -204,7 +205,10 @@ public class MapQRController implements Controller {
    * @throws DBException
    */
   public void onFaulknerTabSelected() throws DBException {
-    System.out.println("Hello1");
+    if (tbpn_directions.getSelectionModel().getSelectedItem() != tb_faulkner) {
+      return;
+    }
+    System.out.println("Faulkner");
     tr_faulkner.getSelectionModel().select(0);
     currentDirection = (TreeItem<Direction>) tr_faulkner.getSelectionModel().getSelectedItem();
     if (currentDirection != null) {
@@ -227,7 +231,10 @@ public class MapQRController implements Controller {
    * @throws DBException
    */
   public void onMainTabSelected() throws DBException {
-    System.out.println("Hello2");
+    if (tbpn_directions.getSelectionModel().getSelectedItem() != tb_main) {
+      return;
+    }
+    System.out.println("Main");
     tr_main.getSelectionModel().select(0);
     currentDirection = (TreeItem<Direction>) tr_main.getSelectionModel().getSelectedItem();
     if (currentDirection != null) {
@@ -247,7 +254,10 @@ public class MapQRController implements Controller {
 
   /** Executes when the drive tab is manually selected by the user */
   public void onDriveTabSelected() {
-    System.out.println("Hello3");
+    if (tbpn_directions.getSelectionModel().getSelectedItem() != tb_drive) {
+      return;
+    }
+    System.out.println("Drive");
     tr_drive.getSelectionModel().select(0);
     mapDisplayController.switchGoogleView();
     mapDisplayController.setFloorBuildingText(0, "Drive");

@@ -277,7 +277,7 @@ public class MapBaseController implements Controller {
           startLabel.setVisible(true);
           endLabel.setVisible(true);
           startLabel.setText("Start at ");
-          // autoFocusToNode(firstNode); // TODO: Place this somewhere better
+          autoFocusToNode(firstNode); // TODO: Place this somewhere better
           // autoFocusToNodesGroup(pathCircles, 0);
           drawCircle(firstNode, START_NODE_COLOR, startLabel);
         } else if (i == currentPath.size() - 2) {
