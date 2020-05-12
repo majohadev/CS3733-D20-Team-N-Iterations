@@ -1,0 +1,12 @@
+.jfx-button-submit {
+    -jfx-button-type: RAISED;
+    -jfx-rippler-fill: #6C5C7F;
+    -fx-background-color: #4a69c6;
+    -fx-border-color: #E6EBF2;
+    -fx-border-width: 5px;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-text-fill: #E6EBF2;
+    -fx-font-family: 'Karla';
+    -fx-font-size: 24px;
+}

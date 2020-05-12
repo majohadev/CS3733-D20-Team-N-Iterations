@@ -33,8 +33,8 @@ public class BetweenFloorsController implements Controller, Initializable {
   @FXML private Text text;
 
   final Color DEFAULT_CIRCLE_COLOR = Color.web("#002186");
-  final String DEFAULT_BUTTON_COLOR = "-fx-background-color: #4A69C6";
-  final String INACTIVE_BUTTON_COLOR = "-fx-background-color: #E6EBF2";
+  final String DEFAULT_BUTTON_COLOR = "-fx-background-color: #263051";
+  final String INACTIVE_BUTTON_COLOR = "-fx-background-color: #7e9ab6";
   final String PLUS_BUTTON_COLOR = "-fx-background-color: #6C5C7F";
   final String DISCONNECTED = "DISCONNECTED";
   final String CONNECTED = "CONNECTED";
@@ -64,6 +64,9 @@ public class BetweenFloorsController implements Controller, Initializable {
     numFloors = 6;
     this.nodes = new HashMap<Integer, JFXNodesList>();
     this.nodeStatus = new HashMap<Integer, Pair<DbNode, String>>();
+    btn_manage.setStyle(DEFAULT_BUTTON_COLOR);
+    btn_cancel.setStyle(DEFAULT_BUTTON_COLOR);
+    btn_save.setStyle(DEFAULT_BUTTON_COLOR);
     DbNode node =
         new DbNode("NHALL00104", 1250, 850, 1, "MainBuil", "ELEV", "Hall 1", "Hall 1", 'N');
 
@@ -79,6 +82,8 @@ public class BetweenFloorsController implements Controller, Initializable {
     JFXNodesList n3 = createButton(50, 250, 3);
     JFXNodesList n2 = createButton(50, 300, 2);
     JFXNodesList n1 = createButton(50, 350, 1);
+    text.setX(70);
+    text.setY(50);
   }
 
   public JFXButton getBtnCancel() {
@@ -187,6 +192,7 @@ public class BetweenFloorsController implements Controller, Initializable {
     button.setLayoutX(x);
     button.setLayoutY(y);
     button.toFront();
+    // styleFloorButtons(button);
     button.setVisible(false);
     JFXButton btn2 = new JFXButton();
     btn2.setVisible(false);
@@ -202,6 +208,12 @@ public class BetweenFloorsController implements Controller, Initializable {
     parent.getChildren().addAll(nodeList);
     this.nodes.put(floor, nodeList);
     return nodeList;
+  }
+
+  public void styleFloorButtons(JFXButton btn) {
+    btn.getStylesheets()
+        .add(getClass().getResource("/edu/wpi/N/css/MapDisplayFloors.css").toExternalForm());
+    btn.getStyleClass().add("choice-button");
   }
 
   public void onSaveButton() throws DBException {

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -7,9 +8,9 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 
-<AnchorPane maxHeight="1080.0" maxWidth="1920.0" minHeight="1080.0" minWidth="1920.0" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #E6EBF2;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.mapDisplay.NewMapDisplayController">
+<AnchorPane fx:id="pn_background" maxHeight="1080.0" maxWidth="1920.0" minHeight="1080.0" minWidth="1920.0" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #E6EBF2;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.mapDisplay.NewMapDisplayController">
    <children>
-      <StackPane fx:id="pn_mapContainer" layoutX="400.0" layoutY="75.0" pickOnBounds="false" prefHeight="1005.0" prefWidth="1425.0">
+      <StackPane fx:id="pn_mapContainer" layoutX="400.0" layoutY="75.0" pickOnBounds="false" prefHeight="1005.0" prefWidth="1425.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <fx:include fx:id="mapBase" source="mapBase.fxml" />
             <Pane fx:id="pn_display" pickOnBounds="false" prefHeight="1005.0" prefWidth="1515.0" />
@@ -26,8 +27,14 @@
                            <image>
                               <Image url="@../../images/mapDisplayIcons/locationButton.png" />
                            </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
                         </ImageView>
                      </children>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
                   </AnchorPane>
                   <AnchorPane fx:id="pn_doctorIcon" layoutY="55.0" onMouseClicked="#onIconClicked" prefHeight="55.0" prefWidth="55.0" styleClass="pane" stylesheets="@../../css/newMapDisplay.css">
                      <children>
@@ -35,8 +42,14 @@
                            <image>
                               <Image url="@../../images/mapDisplayIcons/stethoscope_files/stethoscope-xl.png" />
                            </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
                         </ImageView>
                      </children>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
                   </AnchorPane>
                   <AnchorPane fx:id="pn_qrIcon" layoutY="110.0" onMouseClicked="#onIconClicked" prefHeight="55.0" prefWidth="55.0" styleClass="pane" stylesheets="@../../css/newMapDisplay.css">
                      <children>
@@ -44,10 +57,16 @@
                            <image>
                               <Image url="@../../images/mapDisplayIcons/qrButton.png" />
                            </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
                         </ImageView>
                      </children>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
                   </AnchorPane>
-                  <AnchorPane fx:id="pn_adminIcon" layoutY="926.0" onMouseClicked="#onIconClicked" prefHeight="55.0" prefWidth="55.0" styleClass="pane" stylesheets="@../../css/newMapDisplay.css">
+                  <AnchorPane fx:id="pn_adminIcon" layoutY="981.0" onMouseClicked="#onIconClicked" prefHeight="55.0" prefWidth="55.0" styleClass="pane" stylesheets="@../../css/newMapDisplay.css">
                      <children>
                         <ImageView fitHeight="29.0" fitWidth="35.0" layoutX="13.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -55,24 +74,39 @@
                            </image>
                         </ImageView>
                      </children>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
                   </AnchorPane>
-                  <AnchorPane fx:id="pn_infoIcon" layoutY="871.0" onMouseClicked="#onIconClicked" prefHeight="55.0" prefWidth="55.0" styleClass="pane" stylesheets="@../../css/newMapDisplay.css">
+                  <AnchorPane fx:id="pn_infoIcon" layoutY="926.0" onMouseClicked="#onIconClicked" prefHeight="55.0" prefWidth="55.0" styleClass="pane" stylesheets="@../../css/newMapDisplay.css">
                      <children>
                         <ImageView fitHeight="29.0" fitWidth="35.0" layoutX="13.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../images/mapDisplayIcons/helpButton.png" />
                            </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
                         </ImageView>
                      </children>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
                   </AnchorPane>
-                  <AnchorPane fx:id="pn_serviceIcon" layoutY="816.0" onMouseClicked="#onIconClicked" prefHeight="55.0" prefWidth="55.0" styleClass="pane" stylesheets="@../../css/newMapDisplay.css">
+                  <AnchorPane fx:id="pn_serviceIcon" layoutY="871.0" onMouseClicked="#onIconClicked" prefHeight="55.0" prefWidth="55.0" styleClass="pane" stylesheets="@../../css/newMapDisplay.css">
                      <children>
                         <ImageView fitHeight="29.0" fitWidth="35.0" layoutX="13.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true" AnchorPane.topAnchor="13.0">
                            <image>
                               <Image url="@../../images/mapDisplayIcons/serviceButton.png" />
                            </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
                         </ImageView>
                      </children>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
                   </AnchorPane>
                   <AnchorPane fx:id="pn_directIcon" layoutY="165.0" onMouseClicked="#onIconClicked" prefHeight="55.0" prefWidth="55.0">
                      <children>
@@ -84,8 +118,8 @@
                      </children></AnchorPane>
                </children></AnchorPane>
          </children></AnchorPane>
-      <AnchorPane fx:id="pn_floors" layoutX="1737.0" layoutY="22.0" prefHeight="55.0" prefWidth="90.0" />
-      <Label fx:id="lbl_building_floor" alignment="CENTER" layoutX="416.0" layoutY="25.0" prefHeight="50.0" prefWidth="320.0" style="-fx-background-color: #263051;" stylesheets="@../../css/newMapDisplay.css" />
+      <AnchorPane fx:id="pn_floors" layoutX="1737.0" layoutY="22.0" prefHeight="55.0" prefWidth="90.0" AnchorPane.leftAnchor="450.0" AnchorPane.topAnchor="30.0" />
+      <Label fx:id="lbl_building_floor" alignment="CENTER" layoutX="416.0" layoutY="25.0" prefHeight="50.0" prefWidth="320.0" style="-fx-background-color: #263051;" stylesheets="@../../css/newMapDisplay.css" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="30.0" />
       <fx:include fx:id="chatbotView" layoutX="1480.0" layoutY="475.0" source="../chatbot/chatBox.fxml" />
    </children>
 </AnchorPane>
