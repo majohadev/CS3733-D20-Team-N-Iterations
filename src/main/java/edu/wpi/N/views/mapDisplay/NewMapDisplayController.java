@@ -15,6 +15,7 @@ import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.entities.employees.Doctor;
 import edu.wpi.N.qrcontrol.QRGenerator;
 import edu.wpi.N.views.Controller;
+import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -327,9 +328,9 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
   }
 
   public void changeFloor(int newFloor, String newBuilding) throws DBException {
-    //    if (newFloor == this.currentFloor) {
-    //      return;
-    //    }
+    if (newFloor == this.currentFloor) {
+      return;
+    }
     mapBaseController.resetFocus();
     mapBaseController.clearPath();
     this.currentFloor = newFloor;
@@ -408,6 +409,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
               }
               try {
                 resetMap();
+                mapBaseController.resetFocus();
               } catch (DBException ex) {
                 ex.printStackTrace();
               }
@@ -743,7 +745,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     this.currentFloor = 1;
     this.currentBuilding = "Faulkner";
     setBackground("Faulkner");
-    mapBaseController.resetFocus();
+    // mapBaseController.resetFocus();
     mapBaseController.setFloor(this.currentBuilding, this.currentFloor, null);
     this.path = new Path(new LinkedList<>());
     collapseAllFloorButtons();
@@ -802,7 +804,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     FXMLLoader loader;
     if (src == pn_locationIcon) {
       resetMap();
-      // mapBaseController.resetFocus();
+      mapBaseController.resetFocus();
       loader = new FXMLLoader(getClass().getResource("mapLocationSearch.fxml"));
       Pane pane = loader.load();
       locationSearchController = loader.getController();
@@ -815,6 +817,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
       pn_change.getChildren().add(pane);
     } else if (src == pn_doctorIcon) {
       resetMap();
+      mapBaseController.resetFocus();
       loader = new FXMLLoader(getClass().getResource("mapDoctorSearch.fxml"));
       Pane pane = loader.load();
       doctorSearchController = loader.getController();
@@ -850,20 +853,19 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     } else if (src == pn_adminIcon) {
       resetMap();
       this.mainApp.switchScene("/edu/wpi/N/views/admin/newLogin.fxml", singleton);
-    } else if (src == pn_directIcon) {
-      resetMap();
-      loader = new FXMLLoader(getClass().getResource("mapDetailSearch.fxml"));
-      loader.setControllerFactory((obj) -> new MapDetailSearchController(this.singleton, this));
-      Pane pane = loader.load();
-      detailSearchController = loader.getController();
-      initDetailSearchButton();
-      initResetDetailSearch();
-      setDefaultKioskNode();
-      pn_change.getChildren().add(pane);
     }
-    // initSearch
-    // initReset --> reloads the DetailedSearch
-    // initDoctor --> reloads the ListView with doctors,if any, associated with clicked location
+  }
+
+  /**
+   * displays an error message if something does wrong
+   *
+   * @param str the message to be displayed if something goes wrong
+   */
+  public void displayErrorMessage(String str) {
+    Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+    errorAlert.setHeaderText("Something went wong...");
+    errorAlert.setContentText(str);
+    errorAlert.showAndWait();
   }
 
   /**
@@ -902,18 +904,6 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     mapBaseController.pn_path.getChildren().add(label); // lmao
     mapBaseController.autoFocusToNode(node);
     pn_change.getChildren().add(pane);
-  }
-
-  /**
-   * displays an error message if something does wrong
-   *
-   * @param str the message to be displayed if something goes wrong
-   */
-  public void displayErrorMessage(String str) {
-    Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-    errorAlert.setHeaderText("Something went wong...");
-    errorAlert.setContentText(str);
-    errorAlert.showAndWait();
   }
 
   /**

@@ -108,13 +108,12 @@ public class MapQRController implements Controller {
       tr.getSelectionModel().select(tr.getSelectionModel().getSelectedIndex() - 1);
       DbNode prevNode = currentDirection.getValue().getNode();
       currentDirection = (TreeItem<Direction>) tr.getSelectionModel().getSelectedItem();
-      DbNode currentNode = currentDirection.getValue().getNode();
-      if (currentNode.getFloor() != prevNode.getFloor() || changedBuilding(prevNode, currentNode)) {
-        mapDisplayController.changeFloor(currentNode.getFloor(), currentNode.getBuilding());
-      }
-
+      System.out.println(currentDirection.getValue().toString());
+      System.out.println(currentDirection.getValue().getNode().getFloor());
+      DbNode node = currentDirection.getValue().getNode();
+      mapDisplayController.changeFloor(node.getFloor(), node.getBuilding());
       if (currentDirection.getValue().getLevel() != Level.BUILDING) {
-        mapBaseController.autoFocusToNode(currentNode);
+        mapBaseController.autoFocusToNode(node);
       }
     }
   }
@@ -179,9 +178,12 @@ public class MapQRController implements Controller {
       }
     } else {
       currentDirection = (TreeItem<Direction>) tr.getSelectionModel().getSelectedItem();
-      if (currentDirection.getValue().getLevel() != Level.BUILDING) {
+      if (currentDirection.getValue().getLevel() != Level.BUILDING
+          && currentDirection.getValue().getLevel() != Level.FLOOR) {
         DbNode node = currentDirection.getValue().getNode();
         mapBaseController.autoFocusToNode(node);
+      } else {
+        mapBaseController.autoFocusToNodesGroup();
       }
       if (currentDirection.getValue().getLevel() == Level.FLOOR) {
         int i = root.getChildren().indexOf(currentDirection);
@@ -334,7 +336,11 @@ public class MapQRController implements Controller {
       DbNode node = cell.getItem().getNode();
       try {
         controller.mapBaseController.setFloor(node.getBuilding(), node.getFloor(), controller.path);
-        controller.mapBaseController.autoFocusToNode(node);
+        if (cell.getItem().getLevel() != Level.BUILDING && cell.getItem().getLevel() != Level.FLOOR)
+          controller.mapBaseController.autoFocusToNode(node);
+        else {
+          controller.mapBaseController.autoFocusToNodesGroup();
+        }
       } catch (DBException e) {
         e.printStackTrace();
       } catch (NullPointerException e) {
