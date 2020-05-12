@@ -15,5 +15,6 @@ public enum Icon {
   SLIGHT_LEFT,
   SLIGHT_RIGHT,
   SHARP_LEFT,
-  SHARP_RIGHT
+  SHARP_RIGHT,
+  PATH_WHITE
 }

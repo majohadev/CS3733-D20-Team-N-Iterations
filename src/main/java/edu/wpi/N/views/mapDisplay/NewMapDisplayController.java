@@ -344,6 +344,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     if (newFloor == this.currentFloor) {
       return;
     }
+
     mapBaseController.resetFocus();
     mapBaseController.clearPath();
     this.currentFloor = newFloor;

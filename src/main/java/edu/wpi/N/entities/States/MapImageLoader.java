@@ -37,6 +37,7 @@ public class MapImageLoader {
     storeIcon(Icon.SLIGHT_RIGHT, "edu/wpi/N/images/TextDirIcons/SLIGHT_RIGHT.png");
     storeIcon(Icon.SHARP_RIGHT, "edu/wpi/N/images/TextDirIcons/SHARP_RIGHT.png");
     storeIcon(Icon.SHARP_LEFT, "edu/wpi/N/images/TextDirIcons/SHARP_LEFT.png");
+    storeIcon(Icon.PATH_WHITE, "edu/wpi/N/images/adminIcons/WHITEvector-path-icon-6.png");
   }
 
   /**
