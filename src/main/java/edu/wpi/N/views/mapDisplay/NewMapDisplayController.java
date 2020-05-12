@@ -105,6 +105,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     this.mainButtonList = new JFXNodesList();
     this.pn_hospitalView = mapBaseController.getAnchorPane();
     mapBaseController.setFloor(this.currentBuilding, this.currentFloor, this.path);
+    mapBaseController.setNewMapDisplayController(this);
     setFloorBuildingText(this.currentFloor, this.currentBuilding);
     pn_mapContainer.getChildren().setAll(pn_hospitalView);
     pn_iconBar.getChildren().get(0).setStyle("-fx-background-color: #4A69C6;");
@@ -806,14 +807,19 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
         return;
       }
       if (dirPane == null) return;
+      mapBaseController.setMapQRController(mapQRController);
       setDefaultKioskNode();
       pn_change.getChildren().add(dirPane);
+      if (!this.currentBuilding.equals("Faulkner") && !this.currentBuilding.equals("Drive")) {
+        mapQRController.setTabFocus(this.currentFloor, "Main");
+      } else {
+        mapQRController.setTabFocus(this.currentFloor, this.currentBuilding);
+      }
     } else if (src == pn_serviceIcon) {
       this.mainApp.switchScene("/edu/wpi/N/views/services/newServicesPage.fxml", singleton);
       resetMap();
     } else if (src == pn_infoIcon) {
       resetMap();
-      // TODO load info page here
       this.mainApp.switchScene("/edu/wpi/N/views/info/aboutPage.fxml", singleton);
     } else if (src == pn_adminIcon) {
       resetMap();

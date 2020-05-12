@@ -1,5 +1,6 @@
 package edu.wpi.N.views.mapDisplay;
 
+import edu.wpi.N.algorithms.Direction;
 import edu.wpi.N.qrcontrol.QRGenerator;
 import java.util.ArrayList;
 import javafx.fxml.FXML;
@@ -13,7 +14,7 @@ public class QrPopUpController extends QRGenerator {
    *
    * @param directions
    */
-  public void displayQrCode(ArrayList<String> directions) {
+  public void displayQrCode(ArrayList<Direction> directions) {
     qrCode.setImage(generateImage(directions, false));
   }
 }
