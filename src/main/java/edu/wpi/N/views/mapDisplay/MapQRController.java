@@ -108,10 +108,12 @@ public class MapQRController implements Controller {
       tr.getSelectionModel().select(tr.getSelectionModel().getSelectedIndex() - 1);
       DbNode prevNode = currentDirection.getValue().getNode();
       currentDirection = (TreeItem<Direction>) tr.getSelectionModel().getSelectedItem();
-      System.out.println(currentDirection.getValue().toString());
-      System.out.println(currentDirection.getValue().getNode().getFloor());
       DbNode node = currentDirection.getValue().getNode();
-      mapDisplayController.changeFloor(node.getFloor(), node.getBuilding());
+      //      if (node.getFloor() != prevNode.getFloor() && )
+      DbNode currentNode = currentDirection.getValue().getNode();
+      if (currentNode.getFloor() != prevNode.getFloor() || changedBuilding(prevNode, currentNode)) {
+        mapDisplayController.changeFloor(currentNode.getFloor(), currentNode.getBuilding());
+      }
       if (currentDirection.getValue().getLevel() != Level.BUILDING) {
         mapBaseController.autoFocusToNode(node);
       }
@@ -188,10 +190,9 @@ public class MapQRController implements Controller {
       if (currentDirection.getValue().getLevel() == Level.FLOOR) {
         int i = root.getChildren().indexOf(currentDirection);
         root.getChildren().get(i).setExpanded(true);
-        mapBaseController.setFloor(
-            currentDirection.getValue().getNode().getBuilding(),
+        mapDisplayController.changeFloor(
             currentDirection.getValue().getNode().getFloor(),
-            path);
+            currentDirection.getValue().getNode().getBuilding());
       }
     }
   }
@@ -202,6 +203,7 @@ public class MapQRController implements Controller {
    * @throws DBException
    */
   public void onFaulknerTabSelected() throws DBException {
+    System.out.println("Hello1");
     tr_faulkner.getSelectionModel().select(0);
     currentDirection = (TreeItem<Direction>) tr_faulkner.getSelectionModel().getSelectedItem();
     if (currentDirection != null) {
@@ -223,6 +225,7 @@ public class MapQRController implements Controller {
    * @throws DBException
    */
   public void onMainTabSelected() throws DBException {
+    System.out.println("Hello2");
     tr_main.getSelectionModel().select(0);
     currentDirection = (TreeItem<Direction>) tr_main.getSelectionModel().getSelectedItem();
     if (currentDirection != null) {
@@ -241,6 +244,7 @@ public class MapQRController implements Controller {
 
   /** Executes when the drive tab is manually selected by the user */
   public void onDriveTabSelected() {
+    System.out.println("Hello3");
     tr_drive.getSelectionModel().select(0);
     mapDisplayController.switchGoogleView();
     mapDisplayController.setFloorBuildingText(0, "Drive");
@@ -335,7 +339,7 @@ public class MapQRController implements Controller {
       if (cell.getItem().getLevel() == Level.BUILDING) return;
       DbNode node = cell.getItem().getNode();
       try {
-        controller.mapBaseController.setFloor(node.getBuilding(), node.getFloor(), controller.path);
+        controller.mapDisplayController.changeFloor(node.getFloor(), node.getBuilding());
         if (cell.getItem().getLevel() != Level.BUILDING && cell.getItem().getLevel() != Level.FLOOR)
           controller.mapBaseController.autoFocusToNode(node);
         else {
