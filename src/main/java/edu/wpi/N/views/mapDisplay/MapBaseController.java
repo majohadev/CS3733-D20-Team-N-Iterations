@@ -270,6 +270,9 @@ public class MapBaseController implements Controller {
               e -> {
                 LinkedList<DbNode> path = currentPath.getPath();
                 DbNode prev = path.get(path.indexOf(finalFirstNode) - 1);
+                while (prev.getNodeType().equals("STAI") || prev.getNodeType().equals("ELEV")) {
+                  prev = path.get(path.indexOf(prev) - 1);
+                }
                 try {
                   setFloor(prev.getBuilding(), prev.getFloor(), currentPath);
                 } catch (DBException ex) {
@@ -281,7 +284,21 @@ public class MapBaseController implements Controller {
           startLabel.setVisible(true);
           endLabel.setVisible(true);
           endLabel.setText("Enter ");
-          drawCircle(secondNode, MIDDLE_NODE_COLOR, endLabel);
+          Circle circle = drawCircle(secondNode, MIDDLE_NODE_COLOR, endLabel);
+          DbNode finalSecondNode = secondNode;
+          circle.setOnMouseClicked(
+              e -> {
+                LinkedList<DbNode> path = currentPath.getPath();
+                DbNode next = path.get(path.indexOf(finalSecondNode) + 1);
+                while (next.getNodeType().equals("STAI") || next.getNodeType().equals("ELEV")) {
+                  next = path.get(path.indexOf(next) + 1);
+                }
+                try {
+                  setFloor(next.getBuilding(), next.getFloor(), currentPath);
+                } catch (DBException ex) {
+                  ex.printStackTrace();
+                }
+              });
         }
       }
     }
