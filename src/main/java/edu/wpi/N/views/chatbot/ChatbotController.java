@@ -155,14 +155,12 @@ public class ChatbotController implements Controller, Initializable {
         singleMessageObject.add(message);
       } else if (intent.equals("kiosk-help-get-directions-from-to")
           || intent.equals("questions-kiosk-location-search-from-to")) {
+
         // Get Parameters
         String startLocation =
             queryResults.getParameters().getFieldsMap().get("hospital-location1").getStringValue();
         String goalLocation =
             queryResults.getParameters().getFieldsMap().get("hospital-location2").getStringValue();
-
-        System.out.println(startLocation);
-        System.out.println(goalLocation);
 
         // Check if current scene is Map
         if (!state.isMapDisplayActive) {
@@ -202,6 +200,22 @@ public class ChatbotController implements Controller, Initializable {
         Label reply = new Label(queryResults.getFulfillmentText());
         singleMessageObject.add(reply);
 
+      } else if (intent.equals("questions-kiosk-doctor-search")) {
+
+        // Check if current scene is Map
+        if (!state.isMapDisplayActive) {
+          state.chatBotState.prevQueryResult = queryResults;
+          state.chatBotState.showDoctorSearchGuide = true;
+          Label reply = new Label(queryResults.getFulfillmentText());
+          singleMessageObject.add(reply);
+          displayAndSaveMessages(singleMessageObject, false);
+          mainApp.switchScene("views/mapDisplay/newMapDisplay.fxml", state);
+          return;
+        }
+
+        Label reply = new Label(queryResults.getFulfillmentText());
+        singleMessageObject.add(reply);
+        mapController.displayGuideForDoctorSearch();
       } else if (intent.equals("questions-kiosk-location-search-where-is")) {
         String location =
             queryResults.getParameters().getFieldsMap().get("hospital-location1").getStringValue();

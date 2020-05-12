@@ -146,6 +146,29 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
 
     // Display the box with guidelines itself
     locationSearchController.showGuideLines();
+    singleton.chatBotState.prevQueryResult = null;
+  }
+
+  /** Opens up the necessary tab and highlights the region around search by location */
+  public void displayGuideForDoctorSearch() throws DBException, IOException {
+
+    // Open the tab
+    FXMLLoader loader;
+    resetMap();
+    loader = new FXMLLoader(getClass().getResource("mapDoctorSearch.fxml"));
+    Pane pane = loader.load();
+    doctorSearchController = loader.getController();
+    initDoctorSearchButton();
+    initResetDoctorSearch();
+    setDefaultKioskNode();
+    pn_change.getChildren().add(pane);
+
+    // Change the tab color
+    pn_iconBar.getChildren().forEach(n -> n.setStyle("-fx-background-color: #263051;"));
+    pn_doctorIcon.setStyle("-fx-background-color: #4A69C6;");
+
+    doctorSearchController.showGuideLines();
+    singleton.chatBotState.prevQueryResult = null;
   }
 
   private void checkChatbot() {
@@ -166,6 +189,10 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
       if (singleton.chatBotState.whereIsNode != null) {
         this.resetMap();
         this.nodeFromDirectory(singleton.chatBotState.whereIsNode);
+      }
+
+      if (singleton.chatBotState.showDoctorSearchGuide) {
+        displayGuideForDoctorSearch();
       }
     } catch (Exception ex) {
       displayErrorMessage("Error when checking chat-bot path");
