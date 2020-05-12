@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -36,6 +37,9 @@
          <font>
             <Font size="24.0" />
          </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
       </JFXButton>
       <ChoiceBox fx:id="cb_employeeTypes" layoutX="156.0" layoutY="282.0" prefWidth="150.0" stylesheets="@../../css/sanitationRequestUI.css" />
       <Label fx:id="lbl_languages1" layoutX="16.0" layoutY="277.0" styleClass="label-mid-size" stylesheets="@../../css/sanitationRequestUI.css" text="Department:" textFill="#e6ebf2">

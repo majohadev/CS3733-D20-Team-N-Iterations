@@ -3,6 +3,7 @@
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXCheckBox?>
 <?import com.jfoenix.controls.JFXComboBox?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableView?>
@@ -30,6 +31,9 @@
                                  </image>
                               </ImageView>
                            </graphic>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
                         </JFXButton>
                      </children>
                   </Pane>
@@ -44,6 +48,9 @@
                                  </image>
                               </ImageView>
                            </graphic>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
                         </JFXButton>
                      </children>
                   </Pane>
@@ -58,6 +65,9 @@
                                  </image>
                               </ImageView>
                            </graphic>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
                         </JFXButton>
                      </children>
                   </Pane>
@@ -72,6 +82,9 @@
                                  </image>
                               </ImageView>
                            </graphic>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
                         </JFXButton>
                      </children>
                   </Pane>
@@ -85,13 +98,19 @@
                                  </image>
                               </ImageView>
                            </graphic>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
                         </JFXButton>
                      </children>
                   </Pane>
                   <Pane prefHeight="117.5" prefWidth="80.0" style="-fx-background-color: #263051;" />
                   <Pane prefHeight="50.0" prefWidth="75.0" style="-fx-background-color: #263051;">
                      <children>
-                        <JFXButton fx:id="btn_acceptReq" ellipsisString="" onMouseClicked="#assignReq" prefHeight="50.0" prefWidth="66.0" text="    " />
+                        <JFXButton fx:id="btn_acceptReq" ellipsisString="" onMouseClicked="#assignReq" prefHeight="50.0" prefWidth="66.0" text="    ">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor></JFXButton>
                         <ImageView fitHeight="42.0" fitWidth="43.0" layoutX="10.0" layoutY="-6.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../images/adminIcons/ok-64.png" />
@@ -110,6 +129,9 @@
                                  </image>
                               </ImageView>
                            </graphic>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
                         </JFXButton>
                      </children>
                   </Pane>
@@ -122,8 +144,14 @@
                                  <image>
                                     <Image url="@../../images/adminIcons/upload-2-64.png" />
                                  </image>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
                               </ImageView>
                            </graphic>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
                         </JFXButton>
                      </children>
                   </Pane>
@@ -135,8 +163,14 @@
                                  <image>
                                     <Image url="@../../images/adminIcons/map-3-64(1).png" />
                                  </image>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
                               </ImageView>
                            </graphic>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
                         </JFXButton>
                      </children>
                   </Pane>
@@ -148,8 +182,14 @@
                                  <image>
                                     <Image url="@../../images/adminIcons/gear-64.png" />
                                  </image>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
                               </ImageView>
                            </graphic>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
                         </JFXButton>
                      </children>
                   </Pane>
@@ -161,8 +201,14 @@
                                  <image>
                                     <Image url="@../../images/adminIcons/WHITEvector-path-icon-6.png" />
                                  </image>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
                               </ImageView>
                            </graphic>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
                         </JFXButton>
                      </children>
                   </Pane>
@@ -194,15 +240,20 @@
                   </Pane>
                   <Pane prefHeight="140.0" prefWidth="80.0" style="-fx-background-color: #263051;" />
                   <Pane prefHeight="92.0" prefWidth="75.0" style="-fx-background-color: #263051;">
+                  <Pane prefHeight="140.0" prefWidth="65.0" style="-fx-background-color: #263051;" />
+                  <Pane prefHeight="109.0" prefWidth="65.0" style="-fx-background-color: #263051;">
                      <children>
                         <JFXButton ellipsisString="" onMouseClicked="#logoutUser" prefHeight="72.0" prefWidth="62.0" text="    ">
                            <graphic>
-                              <ImageView fitHeight="42.0" fitWidth="51.0" mouseTransparent="true" onMouseClicked="#logoutUser" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="45.0" fitWidth="48.0" mouseTransparent="true" onMouseClicked="#logoutUser" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../../images/adminIcons/logout-64.png" />
                                  </image>
                               </ImageView>
                            </graphic>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
                         </JFXButton>
                      </children>
                   </Pane>
@@ -235,6 +286,28 @@
             </JFXButton>
          </children>
       </AnchorPane>
+      <AnchorPane fx:id="anchorSwap" layoutX="186.0" layoutY="96.0" prefHeight="1080.0" prefWidth="1552.0" style="-fx-background-color: #263051;" AnchorPane.leftAnchor="380.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <TableView fx:id="tb_RequestTable" layoutX="52.0" layoutY="245.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="429.0" prefWidth="975.0" stylesheets="@../../css/adminTables.css" AnchorPane.bottomAnchor="296.0" AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="245.0" />
+            <TableView fx:id="tbl_Employees" layoutX="1060.0" layoutY="245.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" stylesheets="@../../css/adminTables.css" AnchorPane.bottomAnchor="296.0" AnchorPane.topAnchor="245.0" />
+            <JFXCheckBox fx:id="ch_requestFilter" checkedColor="#5a69c6" layoutX="50.0" layoutY="789.0" styleClass="label-mid-size" stylesheets="@../../css/sanitationRequestUI.css" text="Filter to Open Requests" textFill="#e6ebf2" AnchorPane.leftAnchor="50.0">
+               <font>
+                  <Font size="24.0" />
+               </font></JFXCheckBox>
+            <ChoiceBox fx:id="cb_reqFilter" layoutX="610.0" layoutY="794.0" prefWidth="150.0" stylesheets="@../../css/sanitationRequestUI.css" />
+            <Label layoutX="369.0" layoutY="789.0" styleClass="label-mid-size" stylesheets="@../../css/sanitationRequestUI.css" text="Filter by request type:" textFill="#e6ebf2">
+               <font>
+                  <Font size="24.0" />
+               </font></Label>
+            <JFXButton layoutX="797.0" layoutY="789.0" onMouseClicked="#resetTable" text="Reset" textFill="#e6ebf2">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </JFXButton>
+         </children></AnchorPane>
       <AnchorPane fx:id="anchorSwap" layoutX="186.0" layoutY="96.0" prefHeight="1080.0" prefWidth="1552.0" style="-fx-background-color: #263051;" AnchorPane.leftAnchor="380.0" AnchorPane.topAnchor="0.0" />
       <TableView fx:id="tb_RequestTable" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="429.0" prefWidth="975.0" stylesheets="@../../css/adminTables.css" AnchorPane.bottomAnchor="296.0" AnchorPane.leftAnchor="450.0" AnchorPane.topAnchor="245.0" />
       <TableView fx:id="tbl_Employees" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" stylesheets="@../../css/adminTables.css" AnchorPane.bottomAnchor="296.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="245.0" />

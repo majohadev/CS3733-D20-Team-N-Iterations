@@ -46,6 +46,16 @@
     -fx-font-size: 18;
 }
 
+.searchbutton {
+    -fx-font-family: 'Karla';
+    -fx-background-color: #4A69C6;
+    -fx-background-radius: 25px;
+    -fx-text-fill: #E6EBF2;
+    -fx-pref-width: 300px;
+    -fx-pref-height: 25px;
+    -fx-font-size: 18;
+}
+
 .toggle {
     -fx-font-family: 'Karla';
     -fx-text-fill: #e6ebf2;
@@ -74,23 +84,38 @@
 }
 
 .jfx-tab-pane .tab-selected-line {
-    -fx-background-color: transparent;
+    -fx-background-color: #E6EBF2;
 }
 
 .jfx-tab-pane .tab-header-background {
-    -fx-background-color: #6C5C7F;
+    -fx-background-color: #263051;
+    -fx-pref-height: 50px;
+    -fx-effect: drop-shadow(20px 0px 30px #000000);
 }
 
 
 .jfx-tab-pane .tab {
-    -fx-pref-width: 110px;
-    -fx-pref-height: 41px;
-}
-
-.jfx-tab-pane .tab:hover {
-    -fx-background-color: #7E9AB6;
+    -fx-pref-width: 90px;
+    -fx-pref-height: 50px;
 }
 
 .jfx-tab-pane .tab:selected {
     -fx-background-color: #4A69C6;
 }
+
+.tree-view .scroll-bar:horizontal{
+    -fx-vbar-policy: NEVER;
+}
+
+.tree-view .tree-cell {
+    -fx-font-size: 15px;
+    -fx-wrap-text: true;
+    -fx-pref-width: 300px;
+    -fx-cursor: hand;
+}
+
+.tree-view .tree-cell .label {
+    -fx-wrap-text: true;
+    -fx-pref-width: 300px;
+}
+

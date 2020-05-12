@@ -477,6 +477,21 @@ public class MapDBTest {
     MapDB.deleteNode(n10.getNodeID());
   }
 
+  @Test
+  public void testHitboxes() throws DBException, SQLException, ClassNotFoundException {
+    // MapDB.initTestDB();
+    DbNode n1 = MapDB.addNode(2, 1, 3, "Faulkner", "ELEV", "Elevator X3", "n1");
+    DbNode n2 = MapDB.addNode(2, 1, 4, "Faulkner", "ELEV", "Elevator X4", "n2");
+    MapDB.addHitbox(20, 20, 50, 50, n1.getNodeID());
+    MapDB.addHitbox(30, 30, 60, 60, n2.getNodeID());
+    assertNull(MapDB.checkHitbox(51, 51, "Faulkner", 3));
+    assertEquals(n1, MapDB.checkHitbox(30, 30, "Faulkner", 3));
+    assertEquals(n2, MapDB.checkHitbox(30, 30, "Faulkner", 4));
+    assertNull(MapDB.checkHitbox(29, 29, "Faulkner", 4));
+    MapDB.deleteNode(n1.getNodeID());
+    MapDB.deleteNode(n2.getNodeID());
+  }
+
   @AfterAll
   public static void clearDB() throws DBException {
     MapDB.clearNodes();

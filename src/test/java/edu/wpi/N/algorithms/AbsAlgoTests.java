@@ -31,14 +31,14 @@ public class AbsAlgoTests {
   /** Tests that findQuickAccess chooses finds the path to the closest node of the given nodeType */
   @Test
   public void findQuickAccessTester1() throws DBException {
-    Path path = algorithm.findQuickAccess(MapDB.getNode("H200000000"), "REST");
+    Path path = algorithm.findQuickAccess(MapDB.getNode("H200000000"), "REST", false);
     Assertions.assertEquals(path.getPath().getLast(), MapDB.getNode("AAAAAAAAAA"));
   }
 
   /** Tests that findQuickAccess chooses finds the path to the closest node of the given nodeType */
   @Test
   public void findQuickAccessTester2() throws DBException {
-    Path path = algorithm.findQuickAccess(MapDB.getNode("H700000000"), "LABS");
+    Path path = algorithm.findQuickAccess(MapDB.getNode("H700000000"), "LABS", false);
     Assertions.assertEquals(path.getPath().getLast(), MapDB.getNode("BBBBBBBBBB"));
   }
 
@@ -47,7 +47,7 @@ public class AbsAlgoTests {
    */
   @Test
   public void findQuickAccessNullTester() throws DBException {
-    Assertions.assertNull(algorithm.findQuickAccess(MapDB.getNode("H700000000"), "ELEV"));
+    Assertions.assertNull(algorithm.findQuickAccess(MapDB.getNode("H700000000"), "ELEV", false));
   }
 
   /**
@@ -57,7 +57,7 @@ public class AbsAlgoTests {
   @Test
   public void findQuickAccessNoPathTester() throws DBException {
     MapDB.addNode("NHALL00104", 1250, 850, 1, "MainBuil", "ELEV", "Hall 1", "Hall 1", 'N');
-    Assertions.assertNull(algorithm.findQuickAccess(MapDB.getNode("H700000000"), "ELEV"));
+    Assertions.assertNull(algorithm.findQuickAccess(MapDB.getNode("H700000000"), "ELEV", false));
     MapDB.deleteNode("NHALL00104");
   }
 
