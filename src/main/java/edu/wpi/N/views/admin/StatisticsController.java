@@ -80,12 +80,13 @@ public class StatisticsController implements Initializable {
     xAxis.setStyle("-fx-text-fill: #e6ebf2");
   }
 
-  // Works
   public void popFromDBServices() throws DBException {
     for (Service service : ServiceDB.getServices()) {
       for (Pair<String, Integer> val : ServiceDB.popularServices()) {
         if (service.getServiceType().equals(val.getKey())) {
-          requestData.getData().add(new XYChart.Data<>(service.getServiceType(), val.getValue()));
+          for (int i = 0; i < 5; i++) { // Only adds the top 5
+            requestData.getData().add(new XYChart.Data<>(service.getServiceType(), val.getValue()));
+          }
         }
       }
     }
@@ -115,28 +116,28 @@ public class StatisticsController implements Initializable {
 
   public void popFromDBReqLoc() throws DBException {
     for (DbNode node : MapDB.allNodes()) {
-      // System.out.println("Node: " + node.getLongName());
       for (Pair<DbNode, Integer> val : ServiceDB.popularReqLocations()) {
-        // System.out.println("Value: " + val.getValue() + " Key: " + val.getKey());
-        if (node.equals(val.getKey())) {
-          // System.out.println("In If Statement");
-          requestLocation.getData().add(new XYChart.Data<>(node.getLongName(), val.getValue()));
-          // System.out.println("Location Added");
+        for (int i = 0; i < 5; i++) {
+          if (node.equals(val.getKey())) {
+            requestLocation.getData().add(new XYChart.Data<>(node.getLongName(), val.getValue()));
+          }
         }
       }
+      bc_recLocData.getData().addAll(requestLocation);
     }
-    bc_recLocData.getData().addAll(requestLocation);
   }
 
   // Works
   public void popFromDBPopularLang() throws DBException {
-    for (String lang : ServiceDB.getLanguages()) {
-      for (Pair<String, Integer> val : ServiceDB.popularLanguages()) {
-        if (lang.equals(val.getKey())) {
-          languageData.getData().add(new XYChart.Data<>(lang, val.getValue()));
+    for (int i = 0; i < 5; i++) {
+      for (String lang : ServiceDB.getLanguages()) {
+        for (Pair<String, Integer> val : ServiceDB.popularLanguages()) {
+          if (lang.equals(val.getKey())) {
+            languageData.getData().add(new XYChart.Data<>(lang, val.getValue()));
+          }
         }
+        bc_popLangData.getData().addAll(languageData);
       }
     }
-    bc_popLangData.getData().addAll(languageData);
   }
 }
