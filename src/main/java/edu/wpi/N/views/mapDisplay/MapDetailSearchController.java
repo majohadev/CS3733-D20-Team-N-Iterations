@@ -9,6 +9,7 @@ import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.views.Controller;
+import java.io.IOException;
 import java.util.LinkedList;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -42,9 +43,7 @@ public class MapDetailSearchController implements Controller {
 
   private class BuildingClicked implements ChangeListener<String> {
 
-    public BuildingClicked() {
-      super();
-    }
+    public BuildingClicked() {}
 
     @Override
     public void changed(
@@ -56,7 +55,8 @@ public class MapDetailSearchController implements Controller {
           lst_fuzzySearch.setItems(nodes);
           lst_selection.setVisible(false);
           lst_fuzzySearch.setVisible(true);
-          cmb_detail.getSelectionModel().select(-1);
+          lst_selection.getSelectionModel().selectedItemProperty().removeListener(this);
+          cmb_detail.getSelectionModel().clearSelection();
         } catch (DBException e) {
           e.printStackTrace();
         }
@@ -66,31 +66,59 @@ public class MapDetailSearchController implements Controller {
 
   private class AlphabetClicked implements ChangeListener<String> {
 
-    public AlphabetClicked() {
-      super();
-    }
+    public AlphabetClicked() {}
 
     @Override
     public void changed(
-        ObservableValue<? extends String> observable, String oldVal, String newVal) {}
+        ObservableValue<? extends String> observable, String oldVal, String newVal) {
+      if (newVal != null) {
+        try {
+          ObservableList<DbNode> nodes =
+              FXCollections.observableArrayList(MapDB.getRoomsByFirstLetter(newVal.charAt(0)));
+          lst_fuzzySearch.setItems(nodes);
+          lst_selection.setVisible(false);
+          lst_fuzzySearch.setVisible(true);
+          lst_selection.getSelectionModel().selectedItemProperty().removeListener(this);
+          cmb_detail.getSelectionModel().clearSelection();
+        } catch (DBException e) {
+          e.printStackTrace();
+        }
+      }
+    }
   }
 
   private class DepartmentClicked implements ChangeListener<String> {
 
-    public DepartmentClicked() {
-      super();
-    }
+    public DepartmentClicked() {}
 
     @Override
     public void changed(
-        ObservableValue<? extends String> observable, String oldVal, String newVal) {}
+        ObservableValue<? extends String> observable, String oldVal, String newVal) {
+      try {
+        ObservableList<DbNode> nodes =
+            FXCollections.observableArrayList(MapDB.getNodesbyField(newVal));
+        lst_fuzzySearch.setItems(nodes);
+        lst_selection.setVisible(false);
+        lst_fuzzySearch.setVisible(true);
+        lst_selection.getSelectionModel().selectedItemProperty().removeListener(this);
+        cmb_detail.getSelectionModel().clearSelection();
+      } catch (DBException e) {
+        e.printStackTrace();
+      }
+    }
   }
 
   private class nodeClicked implements ChangeListener<DbNode> {
 
     @Override
     public void changed(
-        ObservableValue<? extends DbNode> observable, DbNode oldVal, DbNode newVal) {}
+        ObservableValue<? extends DbNode> observable, DbNode oldVal, DbNode newVal) {
+      try {
+        con.nodeFromDirectory((newVal));
+      } catch (DBException | IOException e) {
+        e.printStackTrace();
+      }
+    }
   }
 
   public MapDetailSearchController(StateSingleton singleton, NewMapDisplayController con) {
@@ -99,7 +127,6 @@ public class MapDetailSearchController implements Controller {
   }
 
   public void initialize() {
-    System.out.println("Initialize");
     cmb_detail
         .getSelectionModel()
         .selectedItemProperty()
@@ -123,6 +150,7 @@ public class MapDetailSearchController implements Controller {
                       .selectedItemProperty()
                       .addListener(buildHandler);
                 } else if (newval.equals("Alphabetical")) {
+                  populateChangeAlphabetical();
                   lst_selection
                       .getSelectionModel()
                       .selectedItemProperty()
@@ -136,6 +164,7 @@ public class MapDetailSearchController implements Controller {
                       .selectedItemProperty()
                       .removeListener(buildHandler);
                 } else if (newval.equals("Department")) {
+                  populateChangeDepartment();
                   lst_selection.getSelectionModel().selectedItemProperty().addListener(deptHandler);
                   lst_selection
                       .getSelectionModel()
@@ -159,32 +188,22 @@ public class MapDetailSearchController implements Controller {
     NewMapDisplayController.fuzzyLocationSearch(activeText, lst_fuzzySearch);
   }
 
-  public static void BuildingSearch(String option, ListView lst) throws DBException {
-    ObservableList<DbNode> list;
-    LinkedList<DbNode> buildings = new LinkedList<>();
-    buildings = MapDB.searchVisNode(-1, option, null, null);
-    list = FXCollections.observableList(buildings);
-    lst.setItems(list);
-  }
-
-  public static void AlphabeticalSearch(String option, ListView lst) throws DBException {
-    ObservableList<DbNode> list;
-    LinkedList<DbNode> alphabet;
-    alphabet = MapDB.getRoomsByFirstLetter(option.charAt(0));
-    list = FXCollections.observableList(alphabet);
-    lst.setItems(list);
-  }
-
-  public static void DepartmentSearch(String option, ListView lst) throws DBException {
-    ObservableList<DbNode> list;
-    LinkedList<DbNode> depart = new LinkedList<>();
-    LinkedList<String> lst_nodeID = new LinkedList<>();
-    lst_nodeID = MapDB.getNodeIDbyField(option);
-    for (String s : lst_nodeID) {
-      depart.add(MapDB.getNode(s));
+  public void populateChangeDepartment() {
+    try {
+      lst_selection.setItems(FXCollections.observableList(MapDB.getFields()));
+    } catch (DBException e) {
+      e.printStackTrace();
     }
-    list = FXCollections.observableList(depart);
-    lst.setItems(list);
+  }
+
+  public void populateChangeAlphabetical() {
+    LinkedList<String> alphabet = new LinkedList<>();
+    char c = 'A';
+    while (c <= 'Z') {
+      alphabet.add(String.valueOf(c));
+      c++;
+    }
+    lst_selection.setItems(FXCollections.observableList(alphabet));
   }
 
   public void populateChangeOption() {
@@ -198,17 +217,11 @@ public class MapDetailSearchController implements Controller {
   }
 
   public void populateChangeBuilding() {
-    LinkedList<String> buildingTypes = new LinkedList<>();
-    buildingTypes.add("Faulkner");
-    buildingTypes.add("45 Francis");
-    buildingTypes.add("15 Francis");
-    buildingTypes.add("BTM");
-    buildingTypes.add("Shapiro");
-    buildingTypes.add("Tower");
-    buildingTypes.add("FLEX");
-    ObservableList<String> direct;
-    direct = FXCollections.observableList(buildingTypes);
-    lst_selection.setItems(direct);
+    try {
+      lst_selection.setItems(FXCollections.observableList(MapDB.getBuildings()));
+    } catch (DBException e) {
+      e.printStackTrace();
+    }
   }
 
   public void clearDbNodes() {

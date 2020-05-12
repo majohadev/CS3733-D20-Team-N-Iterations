@@ -25,6 +25,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 
 public class NewMapDisplayController extends QRGenerator implements Controller {
   private App mainApp = null;
@@ -752,6 +753,22 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     // initSearch
     // initReset --> reloads the DetailedSearch
     // initDoctor --> reloads the ListView with doctors,if any, associated with clicked location
+  }
+
+  public void nodeFromDirectory(DbNode node) throws DBException, IOException {
+    resetMap();
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("mapLocationSearch.fxml"));
+    Pane pane = loader.load();
+    locationSearchController = loader.getController();
+    initLocationSearchButton();
+    initResetLocationSearch();
+    initRestroomSearchButton();
+    setDefaultKioskNode();
+    locationSearchController.nodes[0] = node;
+    locationSearchController.txt_firstLocation.setText(node.getLongName());
+    mapBaseController.drawCircle(node, Color.GREEN, null);
+    mapBaseController.setFloor(node.getBuilding(), node.getFloor(), null);
+    pn_change.getChildren().add(pane);
   }
 
   /** changes the tabs of the textual direction page based on the current floor */

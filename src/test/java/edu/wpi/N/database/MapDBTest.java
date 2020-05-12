@@ -512,16 +512,16 @@ public class MapDBTest {
     assertTrue(MapDB.addDetail("NDEPT00204", "Health"));
     assertTrue(MapDB.addDetail("NDEPT01005", "Computer"));
 
-    LinkedList<String> result = MapDB.getNodeIDbyField("Health");
+    LinkedList<String> result = MapDB.getNodesbyField("Health");
     assertEquals(2, result.size());
     assertTrue(result.contains("NDEPT00104"));
     assertTrue(result.contains("NDEPT00204"));
 
-    result = MapDB.getNodeIDbyField("Computer");
+    result = MapDB.getNodesbyField("Computer");
     assertEquals(1, result.size());
     assertTrue(result.contains("NDEPT01005"));
 
-    result = MapDB.getNodeIDbyField("aaa");
+    result = MapDB.getNodesbyField("aaa");
     assertTrue(result.isEmpty());
   }
 

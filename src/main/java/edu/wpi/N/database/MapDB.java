@@ -388,20 +388,41 @@ public class MapDB {
    * @return List of nodeID
    * @throws DBException
    */
-  public static LinkedList<String> getNodeIDbyField(String field) throws DBException {
+  public static LinkedList<DbNode> getNodesbyField(String field) throws DBException {
     String query = "SELECT nodeID FROM detail WHERE field = ?";
-    LinkedList<String> list = new LinkedList<>();
+    LinkedList<DbNode> list = new LinkedList<>();
     try {
       PreparedStatement stmt = con.prepareStatement(query);
       stmt.setString(1, field);
       ResultSet rs = stmt.executeQuery();
       while (rs.next()) {
-        list.add(rs.getString("nodeID"));
+        list.add(getNode(rs.getString("nodeID")));
       }
       return list;
     } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Unknown error: getNodeIDbyField", e);
+    }
+  }
+
+  /**
+   * Returns all the fields in the database
+   *
+   * @return A linked list of strings representing all the fields in the database
+   * @throws DBException On error
+   */
+  public static LinkedList<String> getFields() throws DBException {
+    String query = "SELECT DISTINCT field FROM detail";
+    try {
+      PreparedStatement stmt = con.prepareStatement(query);
+      ResultSet rs = stmt.executeQuery();
+      LinkedList<String> fields = new LinkedList<>();
+      while (rs.next()) {
+        fields.add(rs.getString(1));
+      }
+      return fields;
+    } catch (SQLException e) {
+      throw new DBException("Unknown error: getFields", e);
     }
   }
 
@@ -1457,5 +1478,20 @@ public class MapDB {
     //    }
     //    return result;
     return map;
+  }
+
+  public static LinkedList<String> getBuildings() throws DBException {
+    String query = "SELECT DISTINCT building FROM nodes";
+    try {
+      PreparedStatement stmt = con.prepareStatement(query);
+      ResultSet rs = stmt.executeQuery();
+      LinkedList<String> buildings = new LinkedList<>();
+      while (rs.next()) {
+        buildings.add(rs.getString(1));
+      }
+      return buildings;
+    } catch (SQLException e) {
+      throw new DBException("Unexpected error: getBuildings", e);
+    }
   }
 }
