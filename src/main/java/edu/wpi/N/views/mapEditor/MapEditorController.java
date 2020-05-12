@@ -896,13 +896,14 @@ public class MapEditorController implements Controller {
     hideEditElevButton();
     changeEditor();
     addNodeCircle = createCircle(500, 500, ADD_NODE_COLOR);
+    addNodeCircle.setOpacity(.85);
     addNodeCircle.setCursor(Cursor.HAND);
     pn_display.getChildren().add(addNodeCircle);
-    controllerAddNode.setPos(500, 500);
+    controllerAddNode.setPos(300, 500);
     onTxtPosAddNodeTextChanged(addNodeCircle);
     onBtnConfirmAddNodeClicked(addNodeCircle);
     onBtnCancelAddNodeClicked();
-    autoFocusToPoint(500, 500);
+    // autoFocusToPoint(500, 500);
   }
 
   private void handleEditElevRightClick() throws IOException {
@@ -920,6 +921,7 @@ public class MapEditorController implements Controller {
     hideEditElevButton();
     changeEditor();
     addNodeCircle = createCircle(event.getX(), event.getY(), ADD_NODE_COLOR);
+    addNodeCircle.setOpacity(.85);
     addNodeCircle.setCursor(Cursor.HAND);
     pn_display.getChildren().add(addNodeCircle);
     controllerAddNode.setPos(event.getX(), event.getY());
