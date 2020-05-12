@@ -5,6 +5,7 @@ import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
+import edu.wpi.N.algorithms.Direction;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -36,15 +37,15 @@ public abstract class QRGenerator {
 
   // Generate QR code as JavaFX Image using concatenated list of strings, optionally storing the
   // result
-  public Image generateImage(ArrayList<String> linesToEncode, boolean storeImage) {
+  public Image generateImage(ArrayList<Direction> linesToEncode, boolean storeImage) {
 
     if (linesToEncode != null) {
 
       StringBuilder sb = new StringBuilder();
 
-      for (String s : linesToEncode) {
+      for (Direction s : linesToEncode) {
         if (s != null) {
-          sb.append(s);
+          sb.append(s.toString());
           sb.append("\n");
         }
       }
