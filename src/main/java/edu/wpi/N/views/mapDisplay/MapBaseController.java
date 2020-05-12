@@ -561,7 +561,6 @@ public class MapBaseController implements Controller {
       xSum += scaleX(n.getX());
       ySum += scaleX(n.getY());
     }
-
     autoFocusToPoint(xSum / nodesCount, ySum / nodesCount, 0); // Get midpoint of group
   }
 

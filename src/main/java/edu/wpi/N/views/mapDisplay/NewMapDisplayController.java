@@ -632,6 +632,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     }
     displayGoogleMaps(first, second);
     ServiceDB.travelledTo(second.getNodeID());
+    // mapBaseController.autoFocusToNodesGroup();
   }
 
   /**
@@ -853,6 +854,16 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     } else if (src == pn_adminIcon) {
       resetMap();
       this.mainApp.switchScene("/edu/wpi/N/views/admin/newLogin.fxml", singleton);
+    } else if (src == pn_directIcon) {
+      resetMap();
+      loader = new FXMLLoader(getClass().getResource("mapDetailSearch.fxml"));
+      loader.setControllerFactory((obj) -> new MapDetailSearchController(this.singleton, this));
+      Pane pane = loader.load();
+      detailSearchController = loader.getController();
+      initDetailSearchButton();
+      initResetDetailSearch();
+      setDefaultKioskNode();
+      pn_change.getChildren().add(pane);
     }
   }
 
