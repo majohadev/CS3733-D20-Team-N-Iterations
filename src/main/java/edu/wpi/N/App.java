@@ -2,8 +2,9 @@ package edu.wpi.N;
 
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.entities.States.StateSingleton;
+import edu.wpi.N.entities.memento.GlobalKeyListener;
+import edu.wpi.N.entities.memento.GlobalMouseListener;
 import edu.wpi.N.views.Controller;
-import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import javafx.application.Application;
@@ -13,6 +14,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javax.swing.*;
 import lombok.extern.slf4j.Slf4j;
+import org.jnativehook.GlobalScreen;
 
 @Slf4j
 public class App extends Application {
@@ -30,8 +32,24 @@ public class App extends Application {
     this.masterStage = primaryStage;
     this.masterStage.setTitle("Brigham and Women's Hospital Kiosk Application");
 
-    StateSingleton newSingleton = StateSingleton.getInstance();
+    // Make mouse and keyboard listeners
+    GlobalMouseListener mouseListener = new GlobalMouseListener();
+    GlobalKeyListener keyListener = new GlobalKeyListener();
 
+    // Set the main app
+    mouseListener.setMainApp(this);
+    keyListener.setMainApp(this);
+
+    // Add the appropriate listeners
+    GlobalScreen.addNativeMouseListener(mouseListener);
+    GlobalScreen.addNativeMouseMotionListener(mouseListener);
+    GlobalScreen.addNativeKeyListener(keyListener);
+
+    // Set up singleton and set its main app
+    StateSingleton newSingleton = StateSingleton.getInstance();
+    newSingleton.setMainApp(this);
+
+    // Set up memento pattern
     newSingleton.originator.setState("views/mapDisplay/newMapDisplay.fxml");
     newSingleton.careTaker.add(newSingleton.originator.saveStateToMemento());
 
@@ -43,18 +61,6 @@ public class App extends Application {
   public Stage getStage() {
     return this.masterStage;
   }
-
-  public void godPlzWork() {
-    System.out.println("we gucci my nucci");
-  }
-
-  Action doSomething =
-      new AbstractAction() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-          godPlzWork();
-        }
-      };
 
   @Override
   public void stop() {
