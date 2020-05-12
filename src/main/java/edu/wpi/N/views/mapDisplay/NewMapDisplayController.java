@@ -132,6 +132,9 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
       if (nodeStart != null && nodeEnd != null) {
 
         initPathfind(nodeStart, nodeEnd, false);
+        singleton.chatBotState.startNodePrevSession = null;
+        singleton.chatBotState.endNodePrevSession = null;
+        enableTextDirections();
       }
     } catch (Exception ex) {
       displayErrorMessage("Error when checking chat-bot path");
@@ -667,11 +670,19 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     this.currentBuilding = first.getBuilding();
     this.currentFloor = first.getFloor();
     if (first.getBuilding().equals("Faulkner")) {
-      faulknerButtonList.animateList(true);
-      mainButtonList.animateList(false);
+      try {
+        faulknerButtonList.animateList(true);
+        mainButtonList.animateList(false);
+      } catch (NullPointerException e) {
+
+      }
     } else {
-      faulknerButtonList.animateList(false);
-      mainButtonList.animateList(true);
+      try {
+        faulknerButtonList.animateList(false);
+        mainButtonList.animateList(true);
+      } catch (NullPointerException e) {
+
+      }
     }
     disableNonPathFloors();
     if (pathButtonList.size() > 1) {

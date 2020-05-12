@@ -5,8 +5,8 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import edu.wpi.N.App;
 import edu.wpi.N.Main;
+import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.chatbot.Dialogflow;
-import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.views.Controller;
@@ -152,8 +152,7 @@ public class ChatbotController implements Controller, Initializable {
         Label message = new Label(Dialogflow.getCurrentWeatherReply());
         singleMessageObject.add(message);
       } else if (intent.equals("kiosk-help-get-directions-from-to")
-          || intent.equals("questions-kiosk-location-search-from-to")
-          || intent.equals("questions-kiosk-location-search-where-is-goal-location")) {
+          || intent.equals("questions-kiosk-location-search-from-to")) {
         // Get Parameters
         String startLocation =
             queryResults.getParameters().getFieldsMap().get("hospital-location1").getStringValue();
@@ -166,9 +165,23 @@ public class ChatbotController implements Controller, Initializable {
         // Check if current scene is Map
         if (!state.isMapDisplayActive) {
           state.chatBotState.prevQueryResult = queryResults;
-          state.chatBotState.startNodePrevSession = MapDB.getNode("GDEPT03502");
-          state.chatBotState.endNodePrevSession = MapDB.getNode("FSERV00101");
+          LinkedList<DbNode> nodes1 = FuzzySearchAlgorithm.suggestLocations(startLocation);
+          LinkedList<DbNode> nodes2 = FuzzySearchAlgorithm.suggestLocations(goalLocation);
+          if (nodes1.size() == 0) {
+            singleMessageObject.add(
+                new Label("Sorry! I wasn't able to find " + startLocation + "!"));
+            return;
+          }
+          if (nodes2.size() == 0) {
+            singleMessageObject.add(
+                new Label("Sorry! I wasn't able to find " + goalLocation + "!"));
+            return;
+          }
+          state.chatBotState.startNodePrevSession = nodes1.getFirst();
+          state.chatBotState.endNodePrevSession = nodes2.getFirst();
           mainApp.switchScene("views/mapDisplay/newMapDisplay.fxml", state);
+          Label reply = new Label(queryResults.getFulfillmentText());
+          singleMessageObject.add(reply);
           return;
         }
 
@@ -195,6 +208,23 @@ public class ChatbotController implements Controller, Initializable {
         Label reply = new Label(queryResults.getFulfillmentText());
         singleMessageObject.add(reply);
 
+      } else if (intent.equals("questions-kiosk-location-search-where-is")) {
+        System.out.println("WHEREIS");
+        String location =
+            queryResults.getParameters().getFieldsMap().get("hospital-location1").getStringValue();
+        LinkedList<DbNode> locations = FuzzySearchAlgorithm.suggestLocations(location);
+        if (locations.size() == 0) {
+          System.out.println("not exist" + location);
+          Label reply = new Label("Sorry! I wasn't able to find " + location + "!");
+          singleMessageObject.add(reply);
+          return;
+        }
+        System.out.println("Exist");
+        mapController.resetMap();
+        DbNode node = locations.getFirst();
+        mapController.nodeFromDirectory(node);
+        Label reply = new Label(queryResults.getFulfillmentText());
+        singleMessageObject.add(reply);
       } else if (intent.equals("kiosk-help-get-directions-from-to-wrong-locations")
           || intent.equals("questions-kiosk-location-search-from-to - no")
           || intent.equals("questions-kiosk-location-search-where-is-goal-location - no")) {
