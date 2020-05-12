@@ -438,7 +438,6 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
               if (this.path != null) {
                 this.path.clear();
               }
-              enableAllFloorButtons();
               setGoogleButtonDisable(true);
               detailSearchController.getTxt_location().clear();
               detailSearchController.getLst_selection().getItems().clear();
@@ -450,7 +449,6 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
               mainButtonList.animateList(false);
               faulknerButtonList.animateList(false);
               // resetTextualDirections();
-              enableAllFloorButtons();
               try {
                 setDefaultKioskNode();
               } catch (DBException ex) {
