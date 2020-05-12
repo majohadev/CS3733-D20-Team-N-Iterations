@@ -106,6 +106,7 @@ public class MapQRController implements Controller {
       }
     } else {
       tr.getSelectionModel().select(tr.getSelectionModel().getSelectedIndex() - 1);
+      DbNode prevNode = currentDirection.getValue().getNode();
       currentDirection = (TreeItem<Direction>) tr.getSelectionModel().getSelectedItem();
       System.out.println(currentDirection.getValue().toString());
       System.out.println(currentDirection.getValue().getNode().getFloor());
@@ -117,6 +118,11 @@ public class MapQRController implements Controller {
     }
   }
 
+  public boolean changedBuilding(DbNode n, DbNode m) {
+    boolean isFirstFaulkner = n.getBuilding().equals("Faulkner");
+    boolean isSecondFaulkner = m.getBuilding().equals("Faulkner");
+    return isFirstFaulkner ^ isSecondFaulkner;
+  }
   /**
    * Executes when the user wishes to see the next instruction
    *
@@ -172,9 +178,12 @@ public class MapQRController implements Controller {
       }
     } else {
       currentDirection = (TreeItem<Direction>) tr.getSelectionModel().getSelectedItem();
-      if (currentDirection.getValue().getLevel() != Level.BUILDING) {
+      if (currentDirection.getValue().getLevel() != Level.BUILDING
+          && currentDirection.getValue().getLevel() != Level.FLOOR) {
         DbNode node = currentDirection.getValue().getNode();
         mapBaseController.autoFocusToNode(node);
+      } else {
+        mapBaseController.autoFocusToNodesGroup();
       }
       if (currentDirection.getValue().getLevel() == Level.FLOOR) {
         int i = root.getChildren().indexOf(currentDirection);
@@ -234,6 +243,7 @@ public class MapQRController implements Controller {
   public void onDriveTabSelected() {
     tr_drive.getSelectionModel().select(0);
     mapDisplayController.switchGoogleView();
+    mapDisplayController.setFloorBuildingText(0, "Drive");
     try {
       // onDriveTreeClicked();
     } catch (NullPointerException e) {
@@ -326,7 +336,11 @@ public class MapQRController implements Controller {
       DbNode node = cell.getItem().getNode();
       try {
         controller.mapBaseController.setFloor(node.getBuilding(), node.getFloor(), controller.path);
-        controller.mapBaseController.autoFocusToNode(node);
+        if (cell.getItem().getLevel() != Level.BUILDING && cell.getItem().getLevel() != Level.FLOOR)
+          controller.mapBaseController.autoFocusToNode(node);
+        else {
+          controller.mapBaseController.autoFocusToNodesGroup();
+        }
       } catch (DBException e) {
         e.printStackTrace();
       } catch (NullPointerException e) {
