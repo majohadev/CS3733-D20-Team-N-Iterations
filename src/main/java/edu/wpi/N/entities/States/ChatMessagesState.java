@@ -82,7 +82,7 @@ public class ChatMessagesState {
   }
 
   /** Resets all previously planned actions. String and Structs to Null Boolean values to false */
-  public void resetPreviouslyPlannedActions() {
+  public void resetPlannedActions() {
     prevQueryResult = null;
     startNode = null;
     endNode = null;

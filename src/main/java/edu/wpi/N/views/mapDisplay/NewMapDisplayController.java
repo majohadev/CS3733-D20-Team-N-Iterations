@@ -146,7 +146,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
 
     // Display the box with guidelines itself
     locationSearchController.showGuideLines();
-    singleton.chatBotState.prevQueryResult = null;
+    singleton.chatBotState.resetPlannedActions();
   }
 
   /** Opens up the necessary tab and highlights the region around search by location */
@@ -168,10 +168,13 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     pn_doctorIcon.setStyle("-fx-background-color: #4A69C6;");
 
     doctorSearchController.showGuideLines();
-    singleton.chatBotState.prevQueryResult = null;
   }
 
-  private void checkChatbot() {
+  /**
+   * Function which checks which action planned by chat-bot controller needs to take place There
+   * exists only one action at a time
+   */
+  public void checkChatbot() {
     try {
 
       DbNode nodeStart = singleton.chatBotState.startNode;
@@ -200,6 +203,8 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
       if (singleton.chatBotState.showDoctorSearchGuide) {
         displayGuideForDoctorSearch();
       }
+
+      singleton.chatBotState.resetPlannedActions();
     } catch (Exception ex) {
       displayErrorMessage("Error when checking chat-bot path");
       ex.printStackTrace();

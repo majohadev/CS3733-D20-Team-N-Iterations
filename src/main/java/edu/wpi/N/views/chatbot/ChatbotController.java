@@ -163,56 +163,45 @@ public class ChatbotController implements Controller, Initializable {
             queryResults.getParameters().getFieldsMap().get("hospital-location1").getStringValue();
         String goalLocation =
             queryResults.getParameters().getFieldsMap().get("hospital-location2").getStringValue();
+        // Identify the nodes
+        LinkedList<DbNode> nodes1 = FuzzySearchAlgorithm.suggestLocations(startLocation);
+        LinkedList<DbNode> nodes2 = FuzzySearchAlgorithm.suggestLocations(goalLocation);
 
-        //        if(startLocation.equals(goalLocation)){
-        //          Label error = new Label("You might have misspelled either Start or Goal
-        // location. Please try again or use Way-finding feature.");
-        //        }
+        if (nodes1.size() == 0) {
+          singleMessageObject.add(new Label("Sorry! I wasn't able to find Start location!"));
 
-        // Check if current scene is Map
-        if (!state.isMapDisplayActive) {
-          LinkedList<DbNode> nodes1 = FuzzySearchAlgorithm.suggestLocations(startLocation);
-          LinkedList<DbNode> nodes2 = FuzzySearchAlgorithm.suggestLocations(goalLocation);
-          if (nodes1.size() == 0) {
-            singleMessageObject.add(new Label("Sorry! I wasn't able to find Start location!"));
+          // display and rest the message
+          state.chatBotState.resetPlannedActions();
+          displayAndSaveMessages(singleMessageObject, false);
+          mainApp.switchScene("views/mapDisplay/newMapDisplay.fxml", state);
+          return;
+        }
+        if (nodes2.size() == 0) {
+          singleMessageObject.add(new Label("Sorry! I wasn't able to find Goal location!"));
 
-            // display and rest the message
-            state.chatBotState.resetPreviouslyPlannedActions();
-            displayAndSaveMessages(singleMessageObject, false);
-            mainApp.switchScene("views/mapDisplay/newMapDisplay.fxml", state);
-            return;
-          }
-          if (nodes2.size() == 0) {
-            singleMessageObject.add(new Label("Sorry! I wasn't able to find Goal location!"));
-
-            // display and reset the message
-            state.chatBotState.resetPreviouslyPlannedActions();
-            displayAndSaveMessages(singleMessageObject, false);
-            mainApp.switchScene("views/mapDisplay/newMapDisplay.fxml", state);
-            return;
-          }
-          state.chatBotState.startNode = nodes1.getFirst();
-          state.chatBotState.endNode = nodes2.getFirst();
-          Label reply = new Label(queryResults.getFulfillmentText());
-          singleMessageObject.add(reply);
+          // display and reset the message
+          state.chatBotState.resetPlannedActions();
           displayAndSaveMessages(singleMessageObject, false);
           mainApp.switchScene("views/mapDisplay/newMapDisplay.fxml", state);
           return;
         }
 
-        // Enter respective location in Map Editor Controller.MapLocationSearchController
-        // Select the 'best' suggested location from drop-down
-        mapController.resetMap();
-        mapController.setToLocationSearch();
-        mapController.locationSearchController.searchStartOrEndLocationForBot(startLocation, true);
-        mapController.locationSearchController.searchStartOrEndLocationForBot(goalLocation, false);
-
-        startNode = mapController.locationSearchController.getDBNodes()[0];
-        endNode = mapController.locationSearchController.getDBNodes()[1];
-
-        // Display the fulfilment text
+        state.chatBotState.startNode = nodes1.getFirst();
+        state.chatBotState.endNode = nodes2.getFirst();
         Label reply = new Label(queryResults.getFulfillmentText());
         singleMessageObject.add(reply);
+        displayAndSaveMessages(singleMessageObject, false);
+
+        // Check if current scene is Map
+        if (!state.isMapDisplayActive) {
+          mainApp.switchScene("views/mapDisplay/newMapDisplay.fxml", state);
+          return;
+        } else {
+          //          mapController.resetMap();
+          //          mapController.setToLocationSearch();
+          mapController.checkChatbot();
+          return;
+        }
 
       } else if (intent.equals("questions-kiosk-doctor-search")) {
 
@@ -303,7 +292,7 @@ public class ChatbotController implements Controller, Initializable {
         singleMessageObject.add(message);
       }
 
-      state.chatBotState.resetPreviouslyPlannedActions();
+      state.chatBotState.resetPlannedActions();
 
       displayAndSaveMessages(singleMessageObject, false);
 
@@ -376,7 +365,7 @@ public class ChatbotController implements Controller, Initializable {
 
     Label reply = new Label(queryResults.getFulfillmentText());
     singleMessageObject.add(reply);
-    state.chatBotState.resetPreviouslyPlannedActions();
+    state.chatBotState.resetPlannedActions();
     displayAndSaveMessages(singleMessageObject, false);
   }
 

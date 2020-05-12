@@ -101,7 +101,7 @@ public class ServiceController implements Controller {
       switchToEmotionalPage();
     }
     // Reset all the chat messages state
-    singleton.chatBotState.resetPreviouslyPlannedActions();
+    singleton.chatBotState.resetPlannedActions();
   }
 
   @FXML
