@@ -51,8 +51,15 @@ public class App extends Application {
     // Check if Map Display is currently active
     if (path.contains("newMapDisplay.fxml")) {
       singleton.isMapDisplayActive = true;
+      singleton.isServicesPageActive = false;
+    }
+    // check if services page is active
+    else if (path.contains("newServicesPage")) {
+      singleton.isServicesPageActive = true;
+      singleton.isMapDisplayActive = false;
     } else {
       singleton.isMapDisplayActive = false;
+      singleton.isServicesPageActive = false;
     }
 
     // Inject Singleton object into classes with Constructors that take StateSingleton

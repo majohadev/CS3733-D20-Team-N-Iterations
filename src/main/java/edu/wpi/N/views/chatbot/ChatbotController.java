@@ -11,6 +11,7 @@ import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.views.Controller;
 import edu.wpi.N.views.mapDisplay.NewMapDisplayController;
+import edu.wpi.N.views.services.ServiceController;
 import java.io.IOException;
 import java.net.URL;
 import java.util.LinkedList;
@@ -39,6 +40,7 @@ public class ChatbotController implements Controller, Initializable {
   private StateSingleton state;
   private App mainApp;
   private NewMapDisplayController mapController;
+  private ServiceController serviceController;
 
   // Nodes
   public DbNode startNode;
@@ -162,6 +164,11 @@ public class ChatbotController implements Controller, Initializable {
         String goalLocation =
             queryResults.getParameters().getFieldsMap().get("hospital-location2").getStringValue();
 
+        //        if(startLocation.equals(goalLocation)){
+        //          Label error = new Label("You might have misspelled either Start or Goal
+        // location. Please try again or use Way-finding feature.");
+        //        }
+
         // Check if current scene is Map
         if (!state.isMapDisplayActive) {
           state.chatBotState.prevQueryResult = queryResults;
@@ -216,6 +223,25 @@ public class ChatbotController implements Controller, Initializable {
         Label reply = new Label(queryResults.getFulfillmentText());
         singleMessageObject.add(reply);
         mapController.displayGuideForDoctorSearch();
+      } else if (intent.equals("questions-kiosk-services")) {
+
+        // check if current scene is Services page
+        if (!state.isServicesPageActive) {
+          state.chatBotState.prevQueryResult = null; // Set to null
+          Label reply = new Label(queryResults.getFulfillmentText());
+          singleMessageObject.add(reply);
+          displayAndSaveMessages(singleMessageObject, false);
+          mainApp.switchScene("views/services/newServicesPage.fxml", state);
+          return;
+        }
+
+        // Currently on that page
+        Label reply = new Label("The list of available services is in front of you (:");
+        singleMessageObject.add(reply);
+
+      } else if (intent.contains("questions-kiosk-single-request")) {
+        handleSpecificServiceRequest(intent, queryResults);
+        return;
       } else if (intent.equals("questions-kiosk-location-search-where-is")) {
         String location =
             queryResults.getParameters().getFieldsMap().get("hospital-location1").getStringValue();
@@ -270,7 +296,7 @@ public class ChatbotController implements Controller, Initializable {
         singleMessageObject.add(message);
       }
 
-      state.chatBotState.prevQueryResult = null; // Set to null
+      state.chatBotState.resetPreviouslyPlannedActions();
 
       displayAndSaveMessages(singleMessageObject, false);
 
@@ -278,6 +304,73 @@ public class ChatbotController implements Controller, Initializable {
       ex.printStackTrace();
       displayErrorMessage("Ooops... Something went wong when loading chat-bot message");
     }
+  }
+
+  /**
+   * Creates a message consisting on Nodes in order, that needs to be displayed Called if user would
+   * like to make a specific service request
+   *
+   * @param intent user's intent
+   */
+  private void handleSpecificServiceRequest(String intent, QueryResult queryResults)
+      throws IOException {
+    LinkedList<Node> singleMessageObject = new LinkedList<Node>();
+
+    // If currently not on services page
+    if (!state.isServicesPageActive) {
+      // Schedule task
+
+      if (intent.equals("questions-kiosk-single-request-translator")) {
+        state.chatBotState.showTranslator = true;
+      } else if (intent.equals("questions-kiosk-single-request-wheelchair")) {
+        state.chatBotState.showWheelChair = true;
+      } else if (intent.equals("questions-kiosk-single-request-security")) {
+        state.chatBotState.showSecurity = true;
+      } else if (intent.equals("questions-kiosk-single-request-sanitation")) {
+        state.chatBotState.showSanitation = true;
+      } else if (intent.equals("questions-kiosk-single-request-laundry")) {
+        state.chatBotState.showLaundry = true;
+      } else if (intent.equals("questions-kiosk-single-request-it")) {
+        state.chatBotState.showITService = true;
+      } else if (intent.equals("questions-kiosk-single-request-internal-transport")) {
+        state.chatBotState.showInternalTransport = true;
+      } else if (intent.equals("questions-kiosk-single-request-floral")) {
+        state.chatBotState.showFlower = true;
+      } else if (intent.equals("questions-kiosk-single-request-emotional")) {
+        state.chatBotState.showEmotional = true;
+      }
+
+      Label reply = new Label(queryResults.getFulfillmentText());
+      singleMessageObject.add(reply);
+      displayAndSaveMessages(singleMessageObject, false);
+      mainApp.switchScene("views/services/newServicesPage.fxml", state);
+      return;
+    }
+
+    if (intent.equals("questions-kiosk-single-request-translator")) {
+      serviceController.switchToTranslatorPage();
+    } else if (intent.equals("questions-kiosk-single-request-wheelchair")) {
+      serviceController.switchToWheelchairPage();
+    } else if (intent.equals("questions-kiosk-single-request-security")) {
+      serviceController.switchToSecurityPage();
+    } else if (intent.equals("questions-kiosk-single-request-sanitation")) {
+      serviceController.switchToSanitationPage();
+    } else if (intent.equals("questions-kiosk-single-request-laundry")) {
+      serviceController.switchToLaundryPage();
+    } else if (intent.equals("questions-kiosk-single-request-it")) {
+      serviceController.switchToITServicePage();
+    } else if (intent.equals("questions-kiosk-single-request-internal-transport")) {
+      serviceController.switchToTransportPage();
+    } else if (intent.equals("questions-kiosk-single-request-floral")) {
+      serviceController.switchToFloralPage();
+    } else if (intent.equals("questions-kiosk-single-request-emotional")) {
+      serviceController.switchToEmotionalPage();
+    }
+
+    Label reply = new Label(queryResults.getFulfillmentText());
+    singleMessageObject.add(reply);
+    state.chatBotState.resetPreviouslyPlannedActions();
+    displayAndSaveMessages(singleMessageObject, false);
   }
 
   /**
@@ -411,6 +504,10 @@ public class ChatbotController implements Controller, Initializable {
   @Override
   public void setMainApp(App mainApp) {
     this.mainApp = mainApp;
+  }
+
+  public void setServiceController(ServiceController serviceController) {
+    this.serviceController = serviceController;
   }
 
   public void setMapController(NewMapDisplayController mapController) {

@@ -12,10 +12,27 @@ public class ChatMessagesState {
   private LinkedList<VBox> messageHistory;
   public Dialogflow dialogflow;
   public QueryResult prevQueryResult;
+
+  // For displaying path
   public DbNode startNodePrevSession;
   public DbNode endNodePrevSession;
+
+  // For showing just the given node
   public DbNode whereIsNode;
+
+  // If need to display guide for doctor's search
   public boolean showDoctorSearchGuide = false;
+
+  // if need to display one of the separate requests upon loading services page
+  public boolean showTranslator = false;
+  public boolean showWheelChair = false;
+  public boolean showSecurity = false;
+  public boolean showSanitation = false;
+  public boolean showLaundry = false;
+  public boolean showITService = false;
+  public boolean showInternalTransport = false;
+  public boolean showFlower = false;
+  public boolean showEmotional = false;
 
   public ChatMessagesState() {
     messageHistory = new LinkedList<VBox>();
@@ -62,5 +79,23 @@ public class ChatMessagesState {
     dialogflow.closeSession();
     // Reset message history
     eraseChatHistory();
+  }
+
+  /** Resets all previously planned actions. String and Structs to Null Boolean values to false */
+  public void resetPreviouslyPlannedActions() {
+    prevQueryResult = null;
+    startNodePrevSession = null;
+    endNodePrevSession = null;
+    whereIsNode = null;
+    showDoctorSearchGuide = false;
+    showTranslator = false;
+    showWheelChair = false;
+    showSecurity = false;
+    showSanitation = false;
+    showLaundry = false;
+    showITService = false;
+    showInternalTransport = false;
+    showFlower = false;
+    showEmotional = false;
   }
 }
