@@ -356,6 +356,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
                     (locationSearchController.getDBNodes())[0],
                     (locationSearchController.getDBNodes())[1],
                     locationSearchController.getHandicap());
+                disableTextDirections();
                 enableTextDirections();
               } catch (DBException | IOException ex) {
                 ex.printStackTrace();
@@ -809,7 +810,9 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
       if (dirPane == null) return;
       mapBaseController.setMapQRController(mapQRController);
       setDefaultKioskNode();
-      pn_change.getChildren().add(dirPane);
+      if (!pn_change.getChildren().contains(dirPane)) {
+        pn_change.getChildren().add(dirPane);
+      }
       if (!this.currentBuilding.equals("Faulkner") && !this.currentBuilding.equals("Drive")) {
         mapQRController.setTabFocus(this.currentFloor, "Main");
       } else {
