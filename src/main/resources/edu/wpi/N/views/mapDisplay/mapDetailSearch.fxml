@@ -24,16 +24,17 @@
             <Image url="@../../images/mapDisplayIcons/pinIcon.png" />
          </image>
       </ImageView>
-      <ListView fx:id="lst_fuzzySearch" layoutX="24.0" layoutY="238.0" onMouseClicked="#onItemSelected" prefHeight="481.0" prefWidth="296.0" styleClass="list-cell" stylesheets="@../../css/newMapDisplay.css" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="235.0" />
+      <ListView fx:id="lst_selection" layoutX="24.0" layoutY="238.0" prefHeight="481.0" prefWidth="296.0" styleClass="list-cell" stylesheets="@../../css/newMapDisplay.css" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="235.0" />
       <JFXButton fx:id="btn_search" layoutX="230.0" layoutY="750.0" maxWidth="90.0" minWidth="90.0" prefHeight="39.0" prefWidth="90.0" stylesheets="@../../css/newMapDisplay.css" text="Search" textFill="#e6ebf2" AnchorPane.leftAnchor="230.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="750.0" />
       <JFXToggleButton fx:id="tg_handicap" layoutX="2.0" layoutY="789.0" prefHeight="62.0" prefWidth="160.0" styleClass="toggle" stylesheets="@../../css/newMapDisplay.css" text="Handicap" textFill="#e6ebf2" toggleColor="#4a69c6" toggleLineColor="#6c5c7f" unToggleColor="#4a69c6" unToggleLineColor="#e6ebf2" />
       <JFXButton fx:id="btn_reset" layoutX="20.0" layoutY="750.0" maxWidth="90.0" minWidth="90.0" prefWidth="90.0" stylesheets="@../../css/newMapDisplay.css" text="Reset" textFill="#e6ebf2" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="750.0" />
-      <JFXComboBox fx:id="cmb_detail" layoutX="83.0" layoutY="169.0" onMouseClicked="#onSelectOption" onMouseDragEntered="#onSelectOption" prefHeight="39.0" prefWidth="219.0" promptText="Search Options" />
+      <JFXComboBox fx:id="cmb_detail" layoutX="83.0" layoutY="169.0" prefHeight="39.0" prefWidth="219.0" promptText="Search Options" />
       <ImageView fitHeight="39.0" fitWidth="41.0" layoutX="20.0" layoutY="169.0">
          <image>
             <Image url="@../../../../../../../../../../16772596991553230897-256.png" />
          </image>
       </ImageView>
       <JFXButton fx:id="btn_doctor" layoutX="123.0" layoutY="750.0" maxWidth="90.0" minWidth="90.0" prefWidth="90.0" stylesheets="@../../css/newMapDisplay.css" text="Doctor" textFill="#e6ebf2" />
+      <ListView fx:id="lst_fuzzySearch" layoutX="35.0" layoutY="245.0" prefHeight="481.0" prefWidth="296.0" styleClass="list-cell" stylesheets="@../../css/newMapDisplay.css" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="235.0" />
    </children>
 </AnchorPane>

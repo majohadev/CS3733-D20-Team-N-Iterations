@@ -495,8 +495,9 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
               enableAllFloorButtons();
               setGoogleButtonDisable(true);
               detailSearchController.getTxt_location().clear();
-              detailSearchController.getLst_fuzzySearch().getItems().clear();
-              detailSearchController.getCmb_detail().getItems().clear();
+              detailSearchController.getLst_selection().getItems().clear();
+              detailSearchController.lst_fuzzySearch.getItems().clear();
+              // detailSearchController.getCmb_detail().getItems().clear();
               detailSearchController.getHandicap().setSelected(false);
               doctorSearchController.clearDbNodes();
               mapBaseController.clearPath();
@@ -677,34 +678,6 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     lst.setItems(fuzzyList);
   }
 
-  public static void BuildingSearch(String option, ListView lst) throws DBException {
-    ObservableList<DbNode> list;
-    LinkedList<DbNode> buildings = new LinkedList<>();
-    buildings = MapDB.searchVisNode(-1, option, null, null);
-    list = FXCollections.observableList(buildings);
-    lst.setItems(list);
-  }
-
-  public static void AlphabeticalSearch(String option, ListView lst) throws DBException {
-    ObservableList<DbNode> list;
-    LinkedList<DbNode> alphabet;
-    alphabet = MapDB.getRoomsByFirstLetter(option.charAt(0));
-    list = FXCollections.observableList(alphabet);
-    lst.setItems(list);
-  }
-
-  public static void DepartmentSearch(String option, ListView lst) throws DBException {
-    ObservableList<DbNode> list;
-    LinkedList<DbNode> depart = new LinkedList<>();
-    LinkedList<String> lst_nodeID = new LinkedList<>();
-    lst_nodeID = MapDB.getNodeIDbyField(option);
-    for (String s : lst_nodeID) {
-      depart.add(MapDB.getNode(s));
-    }
-    list = FXCollections.observableList(depart);
-    lst.setItems(list);
-  }
-
   /** clears necessary variables when the map is reset */
   public void resetMap() {
     this.path = new Path(new LinkedList<>());
@@ -768,6 +741,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     } else if (src == pn_directIcon) {
       resetMap();
       loader = new FXMLLoader(getClass().getResource("mapDetailSearch.fxml"));
+      loader.setControllerFactory((obj) -> new MapDetailSearchController(this.singleton, this));
       Pane pane = loader.load();
       detailSearchController = loader.getController();
       initDetailSearchButton();
