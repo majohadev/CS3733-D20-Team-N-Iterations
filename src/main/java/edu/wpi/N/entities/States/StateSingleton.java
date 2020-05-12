@@ -51,14 +51,14 @@ public class StateSingleton {
                     switchTheScene(path);
                   } catch (Exception e) {
                     e.printStackTrace();
-                    System.out.println("Why u no work?");
+                    System.out.println("Why u no work? - Singleton constructor");
                   }
                 });
           }
         };
 
-    // Schedule the task with the delay
-    timer.schedule(timerTask, timeoutTime);
+    // Schedule the task with large delay on start up
+    timer.schedule(timerTask, 1000000);
   }
 
   /**
@@ -81,5 +81,33 @@ public class StateSingleton {
       _instance = new StateSingleton();
     }
     return _instance;
+  }
+
+  public void update() throws DBException {
+    StateSingleton singleton = StateSingleton.getInstance();
+    singleton.timer.purge();
+    singleton.timer.cancel();
+    singleton.timer = new Timer();
+    TimerTask timerTask =
+        new TimerTask() {
+          @Override
+          public void run() {
+            Platform.runLater(
+                () -> {
+                  System.out.println("Timer Ended!");
+                  System.out.println("Reset Kiosk!");
+                  try {
+                    singleton.originator.getStateFromMemento(singleton.careTaker.get(0));
+                    String path = singleton.originator.getState();
+                    switchTheScene(path);
+                  } catch (Exception e) {
+                    e.printStackTrace();
+                    System.out.println("Why u no work? - update()");
+                  }
+                });
+          }
+        };
+
+    singleton.timer.schedule(timerTask, singleton.timeoutTime);
   }
 }
