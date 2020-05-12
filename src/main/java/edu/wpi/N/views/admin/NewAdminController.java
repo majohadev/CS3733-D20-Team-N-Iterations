@@ -55,11 +55,15 @@ public class NewAdminController implements Controller, Initializable {
   @FXML JFXButton btn_editEmp;
   @FXML JFXButton btn_addEmp;
   @FXML JFXButton btn_remEmp;
+  @FXML JFXButton btn_stats;
   @FXML TableView<Employee> tbl_Employees;
   @FXML ChoiceBox<Service> cb_reqFilter;
   @FXML JFXButton btn_admin;
   @FXML JFXComboBox cb_changeAlgo;
   @FXML JFXButton btn_submit;
+  @FXML JFXButton btn_return;
+  @FXML JFXButton btn_reset;
+  @FXML Label lbl_req;
 
   private ObservableList<Request> tableData = FXCollections.observableArrayList();
   private ObservableList<Employee> emps = FXCollections.observableArrayList();
@@ -97,6 +101,7 @@ public class NewAdminController implements Controller, Initializable {
     btn_remEmp.setTooltip(new Tooltip("Removes a Given Employee"));
     btn_upload.setTooltip(new Tooltip("File Manager"));
     btn_admin.setTooltip(new Tooltip("Adds an Admin"));
+    btn_stats.setTooltip(new Tooltip("Displays Kiosk Statistics"));
   }
 
   @FXML
@@ -104,6 +109,38 @@ public class NewAdminController implements Controller, Initializable {
     btn_submit.setVisible(true);
     cb_changeAlgo.setVisible(true);
     ap_swapPane.setVisible(false);
+  }
+
+  @FXML
+  private void returnToHome() {
+    cb_reqFilter.setVisible(true);
+    ch_requestFilter.setVisible(true);
+    tb_RequestTable.setVisible(true);
+    tbl_Employees.setVisible(true);
+    btn_reset.setVisible(true);
+    lbl_req.setVisible(true);
+    anchorSwap.setVisible(false);
+  }
+
+  @FXML
+  private void switchToStats() {
+    try {
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(getClass().getResource("statistics.fxml"));
+      AnchorPane currentpane = loader.load();
+      anchorSwap.getChildren().setAll(currentpane);
+
+      cb_reqFilter.setVisible(false);
+      ch_requestFilter.setVisible(false);
+      tb_RequestTable.setVisible(false);
+      tbl_Employees.setVisible(false);
+      btn_reset.setVisible(false);
+      lbl_req.setVisible(false);
+      anchorSwap.setVisible(true);
+
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   @FXML

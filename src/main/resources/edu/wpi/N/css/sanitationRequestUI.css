@@ -307,3 +307,21 @@
 .toggle-button {
     -fx-font-family: 'Karla';
 }
+
+.axis-label{
+    -fx-text-fill: #E6EBF2;
+}
+
+.chart-title {
+    -fx-text-fill: #E6EBF2;
+}
+
+.chart-bar {
+    -fx-bar-fill: #E6EBF2;
+    -fx-background-color: #7E9AB6;
+}
+
+
+
+
+
