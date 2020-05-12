@@ -324,6 +324,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     }
     if (mapQRController != null && pn_iconBar.getChildren().contains(pn_qrIcon)) {
       mapQRController.setTabFocus(floor, building);
+      changeFloor(floor, building);
     }
     if (path == null || path.size() == 0) {
       setDefaultKioskNode();

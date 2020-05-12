@@ -177,6 +177,7 @@ public class MapThumbnailsController implements Controller {
       thumbImgView.setPreserveRatio(true);
       thumbImgView.setSmooth(true);
       thumbImgView.setCache(true);
+      thumbImgView.setPickOnBounds(true);
       thumbImgView.setOnMouseClicked(
           e -> {
             try {
