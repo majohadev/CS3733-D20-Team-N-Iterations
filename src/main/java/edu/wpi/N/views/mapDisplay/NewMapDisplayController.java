@@ -336,7 +336,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     if (newFloor == this.currentFloor) {
       return;
     }
-    mapBaseController.resetFocus();
+    // mapBaseController.resetFocus();
     mapBaseController.clearPath();
     this.currentFloor = newFloor;
     this.currentBuilding = newBuilding;
@@ -397,6 +397,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
               }
               try {
                 resetMap();
+                mapBaseController.resetFocus();
               } catch (DBException ex) {
                 ex.printStackTrace();
               }
@@ -411,7 +412,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
               enableAllFloorButtons();
               mainButtonList.animateList(false);
               faulknerButtonList.animateList(false);
-              mapBaseController.resetFocus(); // TODO: new
+              mapBaseController.resetFocus();
               try {
                 setDefaultKioskNode();
               } catch (DBException ex) {
@@ -723,7 +724,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     this.currentFloor = 1;
     this.currentBuilding = "Faulkner";
     setBackground("Faulkner");
-    mapBaseController.resetFocus();
+    // mapBaseController.resetFocus();
     mapBaseController.setFloor(this.currentBuilding, this.currentFloor, null);
     this.path = new Path(new LinkedList<>());
     collapseAllFloorButtons();
@@ -783,7 +784,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     FXMLLoader loader;
     if (src == pn_locationIcon) {
       resetMap();
-      // mapBaseController.resetFocus();
+      mapBaseController.resetFocus();
       loader = new FXMLLoader(getClass().getResource("mapLocationSearch.fxml"));
       Pane pane = loader.load();
       locationSearchController = loader.getController();
@@ -796,6 +797,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
       pn_change.getChildren().add(pane);
     } else if (src == pn_doctorIcon) {
       resetMap();
+      mapBaseController.resetFocus();
       loader = new FXMLLoader(getClass().getResource("mapDoctorSearch.fxml"));
       Pane pane = loader.load();
       doctorSearchController = loader.getController();
