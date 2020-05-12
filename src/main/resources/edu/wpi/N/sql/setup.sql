@@ -95,6 +95,11 @@ CREATE TABLE flower(
     price INT NOT NULL
 );
 
+CREATE TABLE detail (
+    nodeID CHAR(10) NOT NULL PRIMARY KEY REFERENCES nodes(nodeID) ON DELETE CASCADE,
+    field VARCHAR(25) NOT NULL
+);
+
 /*TODO add the employees table */
 
 CREATE TABLE wheelchairEmployee(
