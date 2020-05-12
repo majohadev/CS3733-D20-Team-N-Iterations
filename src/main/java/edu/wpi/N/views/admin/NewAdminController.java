@@ -61,6 +61,7 @@ public class NewAdminController implements Controller, Initializable {
   @FXML JFXComboBox cb_changeAlgo;
   @FXML JFXButton btn_submit;
   @FXML Label lbl_algo;
+  @FXML Label lbl_changeAlgo;
 
   private ObservableList<Request> tableData = FXCollections.observableArrayList();
   private ObservableList<Employee> emps = FXCollections.observableArrayList();
@@ -78,6 +79,7 @@ public class NewAdminController implements Controller, Initializable {
       btn_submit.setVisible(false);
       cb_changeAlgo.setVisible(false);
       lbl_algo.setVisible(false);
+      lbl_changeAlgo.setVisible(false);
       populateChangeAlgo();
       lbl_algo.setText(singleton.algoState);
     } catch (DBException e) {
@@ -103,10 +105,19 @@ public class NewAdminController implements Controller, Initializable {
   }
 
   @FXML
+  private void hideAlgo() {
+    btn_submit.setVisible(false);
+    cb_changeAlgo.setVisible(false);
+    lbl_algo.setVisible(false);
+    lbl_changeAlgo.setVisible(false);
+  }
+
+  @FXML
   private void changeAlgo() {
     btn_submit.setVisible(true);
     cb_changeAlgo.setVisible(true);
     lbl_algo.setVisible(true);
+    lbl_changeAlgo.setVisible(true);
     ap_swapPane.setVisible(false);
   }
 
@@ -122,6 +133,7 @@ public class NewAdminController implements Controller, Initializable {
       ap_swapPane.setVisible(true);
       btn_submit.setVisible(false);
       cb_changeAlgo.setVisible(false);
+      hideAlgo();
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -140,6 +152,7 @@ public class NewAdminController implements Controller, Initializable {
       ap_swapPane.setVisible(true);
       btn_submit.setVisible(false);
       cb_changeAlgo.setVisible(false);
+      hideAlgo();
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -158,6 +171,7 @@ public class NewAdminController implements Controller, Initializable {
       ap_swapPane.setVisible(true);
       btn_submit.setVisible(false);
       cb_changeAlgo.setVisible(false);
+      hideAlgo();
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -176,6 +190,7 @@ public class NewAdminController implements Controller, Initializable {
       ap_swapPane.setVisible(true);
       btn_submit.setVisible(false);
       cb_changeAlgo.setVisible(false);
+      hideAlgo();
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -194,6 +209,7 @@ public class NewAdminController implements Controller, Initializable {
       ap_swapPane.setVisible(true);
       btn_submit.setVisible(false);
       cb_changeAlgo.setVisible(false);
+      hideAlgo();
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -212,6 +228,7 @@ public class NewAdminController implements Controller, Initializable {
       ap_swapPane.setVisible(true);
       btn_submit.setVisible(false);
       cb_changeAlgo.setVisible(false);
+      hideAlgo();
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -230,6 +247,7 @@ public class NewAdminController implements Controller, Initializable {
       ap_swapPane.setVisible(true);
       btn_submit.setVisible(false);
       cb_changeAlgo.setVisible(false);
+      hideAlgo();
     } catch (IOException e) {
       e.printStackTrace();
     }
