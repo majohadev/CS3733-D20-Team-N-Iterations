@@ -48,6 +48,8 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
   @FXML AnchorPane pn_background;
 
   @FXML MapBaseController mapBaseController;
+  @FXML MapThumbnailsController mapThumbnailsController;
+  @FXML Pane pn_thumbsWrapper;
 
   MapLocationSearchController locationSearchController;
   MapDoctorSearchController doctorSearchController;
@@ -103,6 +105,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     setFloorBuildingText(this.currentFloor, this.currentBuilding);
     pn_mapContainer.getChildren().setAll(pn_hospitalView);
     pn_iconBar.getChildren().get(0).setStyle("-fx-background-color: #4A69C6;");
+    mapThumbnailsController.setMapDisplay(this);
     initFloorButtons();
     initFunctionPane();
     setDefaultKioskNode();
@@ -634,6 +637,8 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
       displayErrorMessage("No path can be found");
     }
     switchHospitalView();
+    pn_thumbsWrapper.setVisible(true);
+    mapThumbnailsController.setThumbs(path);
     mapBaseController.setFloor(first.getBuilding(), first.getFloor(), path);
     this.currentBuilding = first.getBuilding();
     this.currentFloor = first.getFloor();
@@ -722,6 +727,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
   public void resetMap() {
     this.path = new Path(new LinkedList<>());
     collapseAllFloorButtons();
+    pn_thumbsWrapper.setVisible(false);
     mapBaseController.clearPath();
     setGoogleButtonDisable(true);
     enableAllFloorButtons();
