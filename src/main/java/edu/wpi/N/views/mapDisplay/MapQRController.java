@@ -109,8 +109,7 @@ public class MapQRController implements Controller {
       DbNode prevNode = currentDirection.getValue().getNode();
       currentDirection = (TreeItem<Direction>) tr.getSelectionModel().getSelectedItem();
       DbNode currentNode = currentDirection.getValue().getNode();
-      if (currentNode.getFloor() != prevNode.getFloor()
-          || !currentNode.getBuilding().equals(prevNode.getBuilding())) {
+      if (currentNode.getFloor() != prevNode.getFloor() || changedBuilding(prevNode, currentNode)) {
         mapDisplayController.changeFloor(currentNode.getFloor(), currentNode.getBuilding());
       }
 
@@ -120,6 +119,11 @@ public class MapQRController implements Controller {
     }
   }
 
+  public boolean changedBuilding(DbNode n, DbNode m) {
+    boolean isFirstFaulkner = n.getBuilding().equals("Faulkner");
+    boolean isSecondFaulkner = m.getBuilding().equals("Faulkner");
+    return isFirstFaulkner ^ isSecondFaulkner;
+  }
   /**
    * Executes when the user wishes to see the next instruction
    *
