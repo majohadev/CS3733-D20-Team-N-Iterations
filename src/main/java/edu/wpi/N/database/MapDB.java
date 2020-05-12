@@ -172,6 +172,27 @@ public class MapDB {
   }
 
   /**
+   * Adds the given field to the given node. Overwrites any field that was already there
+   *
+   * @param nodeID The nodeID of the given node
+   * @param field The field to be given to the node
+   * @return True on success
+   * @throws DBException on error
+   */
+  public static boolean addDetail(String nodeID, String field) throws DBException {
+    try {
+      String query = "INSERT INTO detail VALUES (?, ?)";
+      PreparedStatement stmt = con.prepareStatement(query);
+      stmt.setString(1, nodeID);
+      stmt.setString(2, field);
+      return stmt.executeUpdate() > 0;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown error: addDetail", e);
+    }
+  }
+
+  /**
    * Modifies a node unsafely. Probably shouldn't ever use. Can mess with nodeID
    *
    * @param nodeID the nodeID of the node you want to modify
@@ -357,6 +378,51 @@ public class MapDB {
     } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Unknown error: getNode", e);
+    }
+  }
+
+  /**
+   * Returns a LinkedList of nodeID that matches the given field
+   *
+   * @param field field of the Node
+   * @return List of nodeID
+   * @throws DBException
+   */
+  public static LinkedList<DbNode> getNodesbyField(String field) throws DBException {
+    String query = "SELECT nodeID FROM detail WHERE field = ?";
+    LinkedList<DbNode> list = new LinkedList<>();
+    try {
+      PreparedStatement stmt = con.prepareStatement(query);
+      stmt.setString(1, field);
+      ResultSet rs = stmt.executeQuery();
+      while (rs.next()) {
+        list.add(getNode(rs.getString("nodeID")));
+      }
+      return list;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown error: getNodeIDbyField", e);
+    }
+  }
+
+  /**
+   * Returns all the fields in the database
+   *
+   * @return A linked list of strings representing all the fields in the database
+   * @throws DBException On error
+   */
+  public static LinkedList<String> getFields() throws DBException {
+    String query = "SELECT DISTINCT field FROM detail";
+    try {
+      PreparedStatement stmt = con.prepareStatement(query);
+      ResultSet rs = stmt.executeQuery();
+      LinkedList<String> fields = new LinkedList<>();
+      while (rs.next()) {
+        fields.add(rs.getString(1));
+      }
+      return fields;
+    } catch (SQLException e) {
+      throw new DBException("Unknown error: getFields", e);
     }
   }
 
@@ -710,6 +776,26 @@ public class MapDB {
     } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Unknown error: NobuildingfloorNodes", e);
+    }
+  }
+
+  /**
+   * Gets a list of all nodes on the chosen building
+   *
+   * @param building the building from which user want to get all the Nodes.
+   * @return a LinkedList of all the noes with the chosen floor.
+   * @throws DBException
+   */
+  public static LinkedList<DbNode> DetailedSearchbyBuilding(String building) throws DBException {
+    String query = "SELECT * FROM nodes WHERE building = ?";
+    try {
+      PreparedStatement st = con.prepareStatement(query);
+
+      st.setString(1, building);
+      return getAllNodesSQL(st);
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown error: DetailedSearchbyBuilding", e);
     }
   }
 
@@ -1253,6 +1339,16 @@ public class MapDB {
     }
   }
 
+  public static void clearDetail() throws DBException {
+    try {
+      String query = "DELETE FROM detail";
+      statement.executeUpdate(query);
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown error: clearDetail");
+    }
+  }
+
   /**
    * Gets the node currently set up as the kiosk
    *
@@ -1327,6 +1423,26 @@ public class MapDB {
         e.printStackTrace();
         throw new DBException("Unknown error: setKiosk: " + nodeID + " " + angle, e);
       }
+    }
+  }
+
+  /**
+   * Gets a list of DbNode whose long names start with the given letter
+   *
+   * @param letter The letter that the long names start with
+   * @return a LinkedList of DbNode where all of the long names have letter as their first character
+   * @throws DBException on error
+   */
+  public static LinkedList<DbNode> getRoomsByFirstLetter(char letter) throws DBException {
+    try {
+      String query = "SELECT * FROM nodes WHERE Upper(longName) LIKE ?";
+      PreparedStatement st = con.prepareStatement(query);
+      st.setString(1, String.valueOf(letter).toUpperCase() + "%");
+      LinkedList<DbNode> result = new LinkedList<>();
+      buildDbNodeList(result, st);
+      return result;
+    } catch (SQLException e) {
+      throw new DBException("Unknown error: getRoomsByFirstLetter", e);
     }
   }
 
@@ -1466,6 +1582,21 @@ public class MapDB {
     } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Unexpected error: exportHitboxes", e);
+    }
+  }
+
+  public static LinkedList<String> getBuildings() throws DBException {
+    String query = "SELECT DISTINCT building FROM nodes";
+    try {
+      PreparedStatement stmt = con.prepareStatement(query);
+      ResultSet rs = stmt.executeQuery();
+      LinkedList<String> buildings = new LinkedList<>();
+      while (rs.next()) {
+        buildings.add(rs.getString(1));
+      }
+      return buildings;
+    } catch (SQLException e) {
+      throw new DBException("Unexpected error: getBuildings", e);
     }
   }
 }
