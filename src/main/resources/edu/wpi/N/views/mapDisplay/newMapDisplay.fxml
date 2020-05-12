@@ -108,6 +108,14 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </AnchorPane>
+                  <AnchorPane fx:id="pn_directIcon" layoutY="165.0" onMouseClicked="#onIconClicked" prefHeight="55.0" prefWidth="55.0">
+                     <children>
+                        <ImageView fitHeight="42.0" fitWidth="42.0" layoutX="7.0" layoutY="7.0">
+                           <image>
+                              <Image url="@../../../../../../../../../../16772596991553230897-256.png" />
+                           </image>
+                        </ImageView>
+                     </children></AnchorPane>
                </children></AnchorPane>
          </children></AnchorPane>
       <AnchorPane fx:id="pn_floors" layoutX="1737.0" layoutY="22.0" prefHeight="55.0" prefWidth="90.0" AnchorPane.leftAnchor="450.0" AnchorPane.topAnchor="30.0" />

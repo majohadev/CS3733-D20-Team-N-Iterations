@@ -478,6 +478,54 @@ public class MapDBTest {
   }
 
   @Test
+  public void testGetNodesByFirstLetter() throws DBException {
+    MapDB.addNode(
+        "NSERV00604",
+        643,
+        1190,
+        4,
+        "Main Building",
+        "SERV",
+        "sonic the hedgehog",
+        "Chili Dogs",
+        'N');
+    MapDB.addNode("NCONF02301", 86, 3546, 1, "45 Faulkner", "CONF", "Sam Goldman", "Goldman", 'N');
+
+    LinkedList<DbNode> result = MapDB.getRoomsByFirstLetter('S');
+    assertTrue(result.contains(MapDB.getNode("NDEPT01005")));
+    assertTrue(result.contains(MapDB.getNode("NSERV00604")));
+    assertTrue(result.contains(MapDB.getNode("NCONF02301")));
+
+    result = MapDB.getRoomsByFirstLetter('c');
+    assertTrue(result.contains(MapDB.getNode("NDEPT00104")));
+
+    result = MapDB.getRoomsByFirstLetter('z');
+    assertEquals(0, result.size());
+
+    MapDB.deleteNode("NSERV00604");
+    MapDB.deleteNode("NCONF02301");
+  }
+
+  @Test
+  public void testGetNodeIDByField() throws DBException {
+    assertTrue(MapDB.addDetail("NDEPT00104", "Health"));
+    assertTrue(MapDB.addDetail("NDEPT00204", "Health"));
+    assertTrue(MapDB.addDetail("NDEPT01005", "Computer"));
+
+    // LinkedList<String> result = MapDB.getNodesbyField("Health");
+    // assertEquals(2, result.size());
+    // assertTrue(result.contains("NDEPT00104"));
+    // assertTrue(result.contains("NDEPT00204"));
+
+    // result = MapDB.getNodesbyField("Computer");
+    // assertEquals(1, result.size());
+    // assertTrue(result.contains("NDEPT01005"));
+
+    // result = MapDB.getNodesbyField("aaa");
+    // assertTrue(result.isEmpty());
+  }
+
+  @Test
   public void testHitboxes() throws DBException, SQLException, ClassNotFoundException {
     // MapDB.initTestDB();
     DbNode n1 = MapDB.addNode(2, 1, 3, "Faulkner", "ELEV", "Elevator X3", "n1");

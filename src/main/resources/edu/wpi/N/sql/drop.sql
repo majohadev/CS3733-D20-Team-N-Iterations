@@ -12,6 +12,7 @@ DROP TABLE secrequest;
 DROP TABLE request;
 DROP TABLE location;
 DROP TABLE internalTransportationEmployee;
+DROP TABLE detail;
 DROP TABLE doctors;
 DROP TABLE credential;
 DROP TABLE sanitation;
