@@ -1,18 +1,21 @@
 package edu.wpi.N.entities.memento;
 
-import lombok.SneakyThrows;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
 
 public class GlobalKeyListenerExample implements NativeKeyListener {
-  @SneakyThrows
+
   public void nativeKeyPressed(NativeKeyEvent e) {
     System.out.println("Key Pressed: " + NativeKeyEvent.getKeyText(e.getKeyCode()));
 
     if (e.getKeyCode() == NativeKeyEvent.VC_ESCAPE) {
-      GlobalScreen.unregisterNativeHook();
+      try {
+        GlobalScreen.unregisterNativeHook();
+      } catch (NativeHookException ex) {
+        ex.printStackTrace();
+      }
     }
   }
 
