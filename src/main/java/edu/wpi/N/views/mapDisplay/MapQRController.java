@@ -190,6 +190,7 @@ public class MapQRController implements Controller {
       if (currentDirection.getValue().getLevel() == Level.FLOOR) {
         int i = root.getChildren().indexOf(currentDirection);
         root.getChildren().get(i).setExpanded(true);
+        mapBaseController.resetFocus();
         mapDisplayController.changeFloor(
             currentDirection.getValue().getNode().getFloor(),
             currentDirection.getValue().getNode().getBuilding());
@@ -208,6 +209,7 @@ public class MapQRController implements Controller {
     currentDirection = (TreeItem<Direction>) tr_faulkner.getSelectionModel().getSelectedItem();
     if (currentDirection != null) {
       mapDisplayController.switchHospitalView();
+      mapBaseController.resetFocus();
       mapDisplayController.changeFloor(
           currentDirection.getValue().getNode().getFloor(), "Faulkner");
     }
@@ -232,6 +234,7 @@ public class MapQRController implements Controller {
       mapDisplayController.switchHospitalView();
       //      mapBaseController.setFloor("Main", currentDirection.getValue().getNode().getFloor(),
       // path);
+      mapBaseController.resetFocus();
       mapDisplayController.changeFloor(currentDirection.getValue().getNode().getFloor(), "Main");
     }
     try {
