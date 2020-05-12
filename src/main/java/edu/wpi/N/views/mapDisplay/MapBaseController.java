@@ -264,7 +264,18 @@ public class MapBaseController implements Controller {
 
           autoFocusToNode(firstNode); // TODO: Place this somewhere better
 
-          drawCircle(firstNode, MIDDLE_NODE_COLOR, startLabel);
+          Circle circle = drawCircle(firstNode, MIDDLE_NODE_COLOR, startLabel);
+          DbNode finalFirstNode = firstNode;
+          circle.setOnMouseClicked(
+              e -> {
+                LinkedList<DbNode> path = currentPath.getPath();
+                DbNode prev = path.get(path.indexOf(finalFirstNode) - 1);
+                try {
+                  setFloor(prev.getBuilding(), prev.getFloor(), currentPath);
+                } catch (DBException ex) {
+                  ex.printStackTrace();
+                }
+              });
         } else if (currentPath.get(i + 2).getFloor() != floor) {
           // If secondNode is last on current floor
           startLabel.setVisible(true);
@@ -327,7 +338,7 @@ public class MapBaseController implements Controller {
    * @param node the DbNode to be displayed on the map
    * @param c the color of the circle
    */
-  public void drawCircle(DbNode node, Color c, Label label) {
+  public Circle drawCircle(DbNode node, Color c, Label label) {
     Circle circle = new Circle();
     circle.setRadius(5);
     circle.setCenterX(scaleX(node.getX()));
@@ -342,6 +353,7 @@ public class MapBaseController implements Controller {
           scaleX(node.getX()) - label.prefWidth(-1) / 2, scaleY(node.getY()) - NODE_LABEL_PADDING);
       pn_path.getChildren().remove(label); // Gets added back after all lines are drawn
     }
+    return circle;
   }
 
   public double scaleX(double x) {
