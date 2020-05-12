@@ -288,9 +288,9 @@ public class MapBaseController implements Controller {
                   prev = path.get(path.indexOf(prev) - 1);
                 }
                 try {
-                  setFloor(prev.getBuilding(), prev.getFloor(), currentPath);
                   newMapDisplayController.setCurrentFloor(prev.getFloor());
                   newMapDisplayController.setCurrentBuilding(prev.getBuilding());
+                  setFloor(prev.getBuilding(), prev.getFloor(), currentPath);
                   if (mapQRController != null) {
                     if (!prev.getBuilding().equals("Faulkner")) {
                       mapQRController.setTabFocus(prev.getFloor(), "Main");
@@ -317,9 +317,9 @@ public class MapBaseController implements Controller {
                   next = path.get(path.indexOf(next) + 1);
                 }
                 try {
-                  setFloor(next.getBuilding(), next.getFloor(), currentPath);
                   newMapDisplayController.setCurrentFloor(next.getFloor());
                   newMapDisplayController.setCurrentBuilding(next.getBuilding());
+                  setFloor(next.getBuilding(), next.getFloor(), currentPath);
                   if (mapQRController != null) {
                     if (!next.getBuilding().equals("Faulkner")) {
                       mapQRController.setTabFocus(next.getFloor(), "Main");

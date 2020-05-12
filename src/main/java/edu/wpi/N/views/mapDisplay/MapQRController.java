@@ -106,13 +106,16 @@ public class MapQRController implements Controller {
       }
     } else {
       tr.getSelectionModel().select(tr.getSelectionModel().getSelectedIndex() - 1);
+      DbNode prevNode = currentDirection.getValue().getNode();
       currentDirection = (TreeItem<Direction>) tr.getSelectionModel().getSelectedItem();
-      System.out.println(currentDirection.getValue().toString());
-      System.out.println(currentDirection.getValue().getNode().getFloor());
-      DbNode node = currentDirection.getValue().getNode();
-      mapDisplayController.changeFloor(node.getFloor(), node.getBuilding());
+      DbNode currentNode = currentDirection.getValue().getNode();
+      if (currentNode.getFloor() != prevNode.getFloor()
+          || !currentNode.getBuilding().equals(prevNode.getBuilding())) {
+        mapDisplayController.changeFloor(currentNode.getFloor(), currentNode.getBuilding());
+      }
+
       if (currentDirection.getValue().getLevel() != Level.BUILDING) {
-        mapBaseController.autoFocusToNode(node);
+        mapBaseController.autoFocusToNode(currentNode);
       }
     }
   }
