@@ -59,6 +59,7 @@ public class App extends Application {
   @Override
   public void stop() {
     log.info("Shutting Down");
+    System.exit(0);
   }
 
   public void switchScene(String path, StateSingleton singleton) throws IOException {

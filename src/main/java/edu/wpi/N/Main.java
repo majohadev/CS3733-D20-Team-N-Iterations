@@ -6,6 +6,8 @@ import edu.wpi.N.entities.memento.GlobalMouseListenerExample;
 import java.awt.*;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 
@@ -15,6 +17,13 @@ public class Main {
       throws SQLException, DBException, ClassNotFoundException, IOException {
     MapDB.initDB();
 
+    // Get the logger for "org.jnativehook" and set the level to warning.
+    Logger logger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
+    logger.setLevel(Level.WARNING);
+
+    // Don't forget to disable the parent handlers.
+    logger.setUseParentHandlers(false);
+
     try {
       GlobalScreen.registerNativeHook();
     } catch (NativeHookException ex) {
@@ -23,12 +32,13 @@ public class Main {
 
       System.exit(1);
     }
-    GlobalMouseListenerExample example = new GlobalMouseListenerExample();
 
+    GlobalMouseListenerExample example = new GlobalMouseListenerExample();
     // Add the appropriate listeners.
     GlobalScreen.addNativeMouseListener(example);
     GlobalScreen.addNativeMouseMotionListener(example);
     GlobalScreen.addNativeKeyListener(new GlobalKeyListenerExample());
+
     // ArduinoController periperal = new ArduinoController();
     // periperal.initialize();
     // MapDB.setKiosk("NSERV00301", 180);
