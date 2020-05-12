@@ -47,10 +47,16 @@ public class MapEditorController implements Controller {
   @FXML Pane pn_edges;
   @FXML Pane pn_floors;
   @FXML ImageView img_map;
-  @FXML AnchorPane btn_cancel_elev;
   @FXML Label lbl_building_floor;
   @FXML AnchorPane pn_back;
   @FXML AnchorPane pn_background;
+
+  @FXML AnchorPane pn_newaddnode;
+  @FXML AnchorPane pn_neweditnode;
+  @FXML AnchorPane pn_newdeletenode;
+  @FXML AnchorPane pn_newalignnode;
+  @FXML AnchorPane pn_newdeleteedge;
+  @FXML AnchorPane pn_newmanageshaft;
 
   final int DEFAULT_FLOOR = 1;
   final String DEFAULT_BUILDING = "Faulkner";
@@ -158,7 +164,7 @@ public class MapEditorController implements Controller {
     // setFloorButtonColors();
     editElevNodes = new LinkedList<>();
     // btn_cancel_elev.setDisable(true);
-    btn_cancel_elev.setVisible(false);
+    // btn_cancel_elev.setVisible(false);
     nodesMap = HashBiMap.create();
     edgesMap = HashBiMap.create();
     mode = Mode.NO_STATE;
@@ -179,9 +185,25 @@ public class MapEditorController implements Controller {
     this.buildingButtonList = new JFXNodesList();
     this.faulknerButtonList = new JFXNodesList();
     this.mainButtonList = new JFXNodesList();
-
+    initTooltips();
     initFloorButtons();
     initAutoFocus();
+  }
+
+  @FXML
+  private void initTooltips() {
+    Tooltip tooltipAddNode = new Tooltip("Add Node");
+    Tooltip tooltipEditNode = new Tooltip("Edit Node");
+    Tooltip tooltipDeleteNode = new Tooltip("Delete Node");
+    Tooltip tooltipAlignNode = new Tooltip("Align Node");
+    Tooltip tooltipDeleteEdge = new Tooltip("Delete Edge");
+    Tooltip tooltipManageShaft = new Tooltip("Manage Shafts");
+    Tooltip.install(pn_newaddnode, tooltipAddNode);
+    Tooltip.install(pn_neweditnode, tooltipEditNode);
+    Tooltip.install(pn_newdeletenode, tooltipDeleteNode);
+    Tooltip.install(pn_newalignnode, tooltipAlignNode);
+    Tooltip.install(pn_newdeleteedge, tooltipDeleteEdge);
+    Tooltip.install(pn_newmanageshaft, tooltipManageShaft);
   }
 
   private void setFaulknerDefaults() {
@@ -638,13 +660,13 @@ public class MapEditorController implements Controller {
   }
 
   private void onCircleAddShaftNodeClicked(MouseEvent event, Circle circle) {
-    if (circle.getFill() == Color.CADETBLUE) { // TODO: set colors at top
-      circle.setFill(Color.BLACK);
+    if (circle.getFill() == Color.RED) { // TODO: set colors at top
+      circle.setFill(Color.GREEN);
       addShaftNodeCircles.add(nodesMap.get(circle).getDBNode());
       controllerAddShaft.addLstAddShaftNode(nodesMap.get(circle).getDBNode().getLongName());
 
-    } else if (circle.getFill() == Color.BLACK) {
-      circle.setFill(Color.CADETBLUE);
+    } else if (circle.getFill() == Color.GREEN) {
+      circle.setFill(Color.RED);
       addShaftNodeCircles.remove(nodesMap.get(circle).getDBNode());
       controllerAddShaft.removeLstAddShaftNode(nodesMap.get(circle).getDBNode().getLongName());
     }
@@ -698,7 +720,7 @@ public class MapEditorController implements Controller {
       MenuItem editNode = new MenuItem("Edit Node");
       MenuItem alignNode = new MenuItem("Align Nodes");
       MenuItem deleteEdge = new MenuItem("Delete Edge");
-      MenuItem editElev = new MenuItem("Edit Elevator/Stair Edges");
+      MenuItem editElev = new MenuItem("Manage Elevator/Stairs");
 
       deleteNode.setOnAction(
           e -> {
@@ -750,17 +772,83 @@ public class MapEditorController implements Controller {
     }
   }
 
+  @FXML
+  private void onPaneEditNodeClicked(MouseEvent event) {
+    try {
+      handleEditNodeRightClick();
+    } catch (IOException ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  @FXML
+  private void onPaneDeleteNodeClicked(MouseEvent event) {
+    try {
+      //  resetAll();
+      handleDeleteNodeRightClick();
+    } catch (IOException | DBException ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  @FXML
+  private void onPaneAlignNodeClicked(MouseEvent event) {
+    try {
+      // resetAll();
+      handleAlignNodeRightClick();
+    } catch (IOException | DBException ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  @FXML
+  private void onPaneDeleteEdgeClicked(MouseEvent event) {
+    try {
+      // resetAll();
+      handleDeleteEdgeRightClick();
+    } catch (IOException ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  @FXML
+  private void onPaneEditElevClicked(MouseEvent event) {
+    try {
+      // resetAll();
+      handleEditElevRightClick();
+    } catch (IOException ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  @FXML
+  private void onPaneAddNodeClicked(MouseEvent event) throws IOException {
+    mode = Mode.ADD_NODE;
+    hideEditElevButton();
+    changeEditor();
+    addNodeCircle = createCircle(500, 500, ADD_NODE_COLOR);
+    addNodeCircle.setCursor(Cursor.HAND);
+    pn_display.getChildren().add(addNodeCircle);
+    controllerAddNode.setPos(500, 500);
+    onTxtPosAddNodeTextChanged(addNodeCircle);
+    onBtnConfirmAddNodeClicked(addNodeCircle);
+    onBtnCancelAddNodeClicked();
+    autoFocusToPoint(500, 500);
+  }
+
   private void handleEditElevRightClick() throws IOException {
     mode = Mode.EDIT_ELEV;
-    btn_cancel_elev.setDisable(false);
-    btn_cancel_elev.setVisible(true);
+    // elev.setDisable(false);
+    // btn_cancel_elev.setVisible(true);
     changeEditor();
     for (Circle circle : editElevNodes) {
       circle.setFill(EDIT_ELEV_COLOR);
     }
   }
 
-  private void onPaneDisplayClickedAddNode(MouseEvent event) throws IOException {
+  private void onPaneDisplayClickedAddNode(MouseEvent event)
+      throws
+          IOException { // TODO: addnodeclicked, make button clicked and add to random chosen XY pos
     mode = Mode.ADD_NODE;
     hideEditElevButton();
     changeEditor();
@@ -1036,7 +1124,7 @@ public class MapEditorController implements Controller {
                       controllerAddShaft.addLstAddShaftNode(c.getLongName());
                     addShaftNodeCircles.add(c);
                     if (c.getFloor() == currentFloor) {
-                      nodesMap2.get(c).setFill(Color.BLACK);
+                      nodesMap2.get(c).setFill(Color.GREEN);
                     }
                   }
                 }
@@ -1329,6 +1417,7 @@ public class MapEditorController implements Controller {
               elevCircle.setFill(EDIT_ELEV_COLOR);
               elevCircle = null;
               pn_elev.setVisible(true);
+              resetAddShaft();
             });
   }
 
@@ -1391,7 +1480,10 @@ public class MapEditorController implements Controller {
   }
 
   private void resetAddShaft() {
+    controllerEditElev.setFloor(currentFloor, currentBuilding);
+    controllerAddShaft.clearAllFields();
     addShaftNodeCircles.clear();
+    originalShaftNodes.clear();
   }
 
   private void resetAlignNode() {
@@ -1816,12 +1908,12 @@ public class MapEditorController implements Controller {
     resetEditElev();
     mode = Mode.NO_STATE;
     // btn_cancel_elev.setDisable(true);
-    btn_cancel_elev.setVisible(false);
+    // btn_cancel_elev.setVisible(false);
   }
 
   public void hideEditElevButton() {
     // btn_cancel_elev.setDisable(true);
-    btn_cancel_elev.setVisible(false);
+    // btn_cancel_elev.setVisible(false);
   }
 
   public void reloadAddShaft() throws DBException {
@@ -1831,10 +1923,10 @@ public class MapEditorController implements Controller {
     } catch (IOException e) {
       e.printStackTrace();
     }
-    for (DbNode c : addShaftNodeCircles) { // TODO: Null pointer when remove
+    for (DbNode c : addShaftNodeCircles) {
       controllerAddShaft.addLstAddShaftNode(c.getLongName());
       if (c.getFloor() == currentFloor) {
-        nodesMap2.get(c).setFill(Color.BLACK); // null pointer here, nodesmap not set??
+        nodesMap2.get(c).setFill(Color.GREEN);
       }
     }
     pn_editor.setVisible(true);
@@ -1842,7 +1934,7 @@ public class MapEditorController implements Controller {
     onBtnCancelAddShaftClicked();
     onBtnConfirmAddShaftClicked();
     for (Circle c : editElevNodes) {
-      if (!(c.getFill() == Color.BLACK)) c.setFill(Color.CADETBLUE);
+      if (!(c.getFill() == Color.GREEN)) c.setFill(Color.RED);
     }
   }
 

@@ -33,8 +33,8 @@ public class BetweenFloorsController implements Controller, Initializable {
   @FXML private Text text;
 
   final Color DEFAULT_CIRCLE_COLOR = Color.web("#002186");
-  final String DEFAULT_BUTTON_COLOR = "-fx-background-color: #4A69C6";
-  final String INACTIVE_BUTTON_COLOR = "-fx-background-color: #E6EBF2";
+  final String DEFAULT_BUTTON_COLOR = "-fx-background-color: #263051";
+  final String INACTIVE_BUTTON_COLOR = "-fx-background-color: #7e9ab6";
   final String PLUS_BUTTON_COLOR = "-fx-background-color: #6C5C7F";
   final String DISCONNECTED = "DISCONNECTED";
   final String CONNECTED = "CONNECTED";
@@ -64,6 +64,9 @@ public class BetweenFloorsController implements Controller, Initializable {
     numFloors = 6;
     this.nodes = new HashMap<Integer, JFXNodesList>();
     this.nodeStatus = new HashMap<Integer, Pair<DbNode, String>>();
+    btn_manage.setStyle(DEFAULT_BUTTON_COLOR);
+    btn_cancel.setStyle(DEFAULT_BUTTON_COLOR);
+    btn_save.setStyle(DEFAULT_BUTTON_COLOR);
     DbNode node =
         new DbNode("NHALL00104", 1250, 850, 1, "MainBuil", "ELEV", "Hall 1", "Hall 1", 'N');
 

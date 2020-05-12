@@ -195,4 +195,9 @@ public class MapLocationSearchController implements Controller {
   public Pane getBtnQuickExit() {
     return this.btn_quickexit;
   }
+
+  public void clearSecondEntry() {
+    this.txt_secondLocation.clear();
+    this.nodes[1] = null;
+  }
 }
