@@ -1,7 +1,6 @@
 package edu.wpi.N.views.mapEditor;
 
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXNodesList;
 import edu.wpi.N.App;
 import edu.wpi.N.algorithms.AbsAlgo;
 import edu.wpi.N.database.DBException;
@@ -13,11 +12,11 @@ import java.net.URL;
 import java.util.*;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.NodeOrientation;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.util.Pair;
@@ -31,11 +30,12 @@ public class BetweenFloorsController implements Controller, Initializable {
   @FXML private JFXButton btn_cancel;
   @FXML private JFXButton btn_manage;
   @FXML private Text text;
+  @FXML private VBox vbox_shaft;
+  @FXML private AnchorPane background;
 
   final Color DEFAULT_CIRCLE_COLOR = Color.web("#002186");
-  final String DEFAULT_BUTTON_COLOR = "-fx-background-color: #263051";
-  final String INACTIVE_BUTTON_COLOR = "-fx-background-color: #7e9ab6";
-  final String PLUS_BUTTON_COLOR = "-fx-background-color: #6C5C7F";
+  final String DEFAULT_BUTTON_COLOR = "-fx-background-color: #4a69c6";
+  final String INACTIVE_BUTTON_COLOR = "-fx-background-color: #515678";
   final String DISCONNECTED = "DISCONNECTED";
   final String CONNECTED = "CONNECTED";
   final String EMPTY = "EMPTY";
@@ -47,7 +47,7 @@ public class BetweenFloorsController implements Controller, Initializable {
   final int TEXT_OFFSETX = -6;
   final int TEXT_OFFSETY = 6;
 
-  HashMap<Integer, JFXNodesList> nodes;
+  HashMap<Integer, JFXButton> nodes;
   HashMap<Integer, Pair<DbNode, String>> nodeStatus;
   LinkedList<Integer> floors;
   LinkedList<DbNode> originalEdges;
@@ -56,13 +56,14 @@ public class BetweenFloorsController implements Controller, Initializable {
   LinkedList<Integer> addShaftButtons;
   DbNode currentNode;
   String currentBuilding;
+  MapEditorController mapEditorController;
 
   int numFloors;
 
   @FXML
   public void initialize(URL url, ResourceBundle rb) {
     numFloors = 6;
-    this.nodes = new HashMap<Integer, JFXNodesList>();
+    this.nodes = new HashMap<Integer, JFXButton>();
     this.nodeStatus = new HashMap<Integer, Pair<DbNode, String>>();
     btn_manage.setStyle(DEFAULT_BUTTON_COLOR);
     btn_cancel.setStyle(DEFAULT_BUTTON_COLOR);
@@ -70,20 +71,13 @@ public class BetweenFloorsController implements Controller, Initializable {
     DbNode node =
         new DbNode("NHALL00104", 1250, 850, 1, "MainBuil", "ELEV", "Hall 1", "Hall 1", 'N');
 
-    for (int i = 1; i <= numFloors; i++) {
+    for (int i = numFloors; i >= 1; i--) {
       nodeStatus.put(i, new Pair<>(node, EMPTY));
+      createButton(1, 1, i);
     }
     this.floors = new LinkedList<Integer>();
     this.originalEdges = new LinkedList<DbNode>();
     this.addShaftButtons = new LinkedList<Integer>();
-    JFXNodesList n6 = createButton(50, 100, 6);
-    JFXNodesList n5 = createButton(50, 150, 5);
-    JFXNodesList n4 = createButton(50, 200, 4);
-    JFXNodesList n3 = createButton(50, 250, 3);
-    JFXNodesList n2 = createButton(50, 300, 2);
-    JFXNodesList n1 = createButton(50, 350, 1);
-    text.setX(70);
-    text.setY(50);
   }
 
   public JFXButton getBtnCancel() {
@@ -102,8 +96,18 @@ public class BetweenFloorsController implements Controller, Initializable {
   public void setFloor(int floor, String building) {
     if (building.equals("Faulkner")) {
       numFloors = 5;
+      for (int i = 1; i <= 5; i++) {
+        // nodes.get(i).setText(i + "");
+        nodes.get(i).setGraphic(new Group(new Label(i + "")));
+      }
     } else {
       numFloors = 6;
+      nodes.get(1).setGraphic(new Group(new Label("L2")));
+      nodes.get(2).setGraphic(new Group(new Label("L1")));
+      nodes.get(3).setGraphic(new Group(new Label("G")));
+      nodes.get(4).setGraphic(new Group(new Label("1")));
+      nodes.get(5).setGraphic(new Group(new Label("2")));
+      nodes.get(6).setGraphic(new Group(new Label("3")));
     }
     currentBuilding = building;
     btn_save.setVisible(false);
@@ -116,15 +120,11 @@ public class BetweenFloorsController implements Controller, Initializable {
     btn_manage.setVisible(true);
     DbNode node =
         new DbNode("NHALL00104", 1250, 850, 1, "MainBuil", "ELEV", "Hall 1", "Hall 1", 'N');
-
     for (int i = 1; i <= numFloors; i++) {
-      // JFXButton circle = (JFXButton) nodes.get(i).getChildren().get(0);
       setEmpty(nodes.get(i), i);
       nodeStatus.put(i, new Pair<DbNode, String>(node, EMPTY));
       this.floors.add(i);
     }
-    // nodes.get(floor).getChildren().get(0).setStyle(DEFAULT_BUTTON_COLOR);
-    // nodes.get(floor).getChildren().get(0).setVisible(true);
   }
 
   public LinkedList<DbNode> getNodesInShaft() throws DBException {
@@ -157,7 +157,7 @@ public class BetweenFloorsController implements Controller, Initializable {
         setDisconnected(nodes.get(n.getFloor()), n.getFloor());
         // this.floors.add(n.getFloor());
         nodes.get(n.getFloor()).setVisible(true);
-        nodes.get(n.getFloor()).getChildren().get(0).setVisible(true);
+        nodes.get(n.getFloor()).setVisible(true);
         // nodes.get(n.getFloor()).setVisible(true);
         nodeStatus.put(n.getFloor(), new Pair<>(n, DISCONNECTED));
         LinkedList<DbNode> connectedNodes = AbsAlgo.searchAccessible(n);
@@ -166,11 +166,11 @@ public class BetweenFloorsController implements Controller, Initializable {
     } catch (DBException e) {
       nodesAvailable = null;
     }
-    nodes.get(node.getFloor()).getChildren().get(0).setStyle(INACTIVE_BUTTON_COLOR);
+    nodes.get(node.getFloor()).setStyle(INACTIVE_BUTTON_COLOR);
 
     for (DbNode n : originalEdges) {
       nodeStatus.put(n.getFloor(), new Pair<>(n, CONNECTED));
-      nodes.get(n.getFloor()).getChildren().get(0).setStyle(DEFAULT_BUTTON_COLOR);
+      nodes.get(n.getFloor()).setStyle(DEFAULT_BUTTON_COLOR);
       setConnected(nodes.get(n.getFloor()), n.getFloor());
       // nodes.get(n.getFloor()).setVisible(true);
     }
@@ -187,27 +187,16 @@ public class BetweenFloorsController implements Controller, Initializable {
     this.singleton = singleton;
   }
 
-  private JFXNodesList createButton(double x, double y, int floor) {
+  private JFXButton createButton(double x, double y, int floor) {
     JFXButton button = new JFXButton();
-    button.setLayoutX(x);
-    button.setLayoutY(y);
+    // button.setText(floor + "");
+    button.setGraphic(new Group(new Label(floor + "")));
     button.toFront();
-    // styleFloorButtons(button);
     button.setVisible(false);
-    JFXButton btn2 = new JFXButton();
-    btn2.setVisible(false);
-    JFXNodesList nodeList = new JFXNodesList();
-    nodeList.addAnimatedNode(button);
-    nodeList.addAnimatedNode(btn2);
-    nodeList.setSpacing(10);
-    nodeList.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
-    nodeList.setRotate(-90);
-    nodeList.setLayoutX(x);
-    nodeList.setLayoutY(y);
-    nodeList = setEmpty(nodeList, floor);
-    parent.getChildren().addAll(nodeList);
-    this.nodes.put(floor, nodeList);
-    return nodeList;
+    setEmpty(button, floor);
+    vbox_shaft.getChildren().add(button);
+    this.nodes.put(floor, button);
+    return button;
   }
 
   public void styleFloorButtons(JFXButton btn) {
@@ -235,9 +224,8 @@ public class BetweenFloorsController implements Controller, Initializable {
     }
     text.setVisible(false);
     for (int i = 1; i <= numFloors; i++) {
-      JFXButton circle = (JFXButton) nodes.get(i).getChildren().get(0);
-      JFXButton circle2 = (JFXButton) nodes.get(i).getChildren().get(0);
-      // circle.setStyle(INACTIVE_BUTTON_COLOR);
+      JFXButton circle = (JFXButton) nodes.get(i);
+      JFXButton circle2 = (JFXButton) nodes.get(i);
       circle.setVisible(false);
       circle2.setVisible(false);
     }
@@ -249,52 +237,28 @@ public class BetweenFloorsController implements Controller, Initializable {
   public void onCancelButton() {
     text.setVisible(false);
     for (int i = 1; i <= numFloors; i++) {
-      JFXButton circle = (JFXButton) nodes.get(i).getChildren().get(0);
-      JFXButton circle2 = (JFXButton) nodes.get(i).getChildren().get(1);
-      // circle.setStyle(INACTIVE_BUTTON_COLOR);
+      JFXButton circle = nodes.get(i);
       circle.setVisible(false);
-      circle2.setVisible(false);
     }
     btn_save.setVisible(false);
     btn_cancel.setVisible(false);
-    // setFloor(this.floor);
   }
 
-  public JFXNodesList setEmpty(JFXNodesList nodeList, int floor) {
-    nodeStatus.put(floor, new Pair<>(nodeStatus.get(floor).getKey(), EMPTY)); // Null pointer
-    JFXButton button1 = (JFXButton) nodeList.getChildren().get(0);
-    JFXButton button2 = (JFXButton) nodeList.getChildren().get(1);
-    button2.setVisible(false);
+  public JFXButton setEmpty(JFXButton nodeList, int floor) {
+    nodeStatus.put(floor, new Pair<>(nodeStatus.get(floor).getKey(), EMPTY));
+    JFXButton button1 = nodeList;
     button1.setVisible(false);
-    button1.setStyle(PLUS_BUTTON_COLOR);
-    for (int i = 0; i < addShaftButtons.size(); i++) {
-      if (addShaftButtons.get(i) == floor) {
-        addShaftButtons.remove(i);
-      }
-    }
-    addShaftButtons.add(floor);
-    Label label = new Label("+");
-    label.setRotate(180);
-    button1.setGraphic(new Group(label));
     this.nodes.put(floor, nodeList);
     return nodeList;
   }
 
-  public JFXNodesList setConnected(JFXNodesList nodeList, int floor) {
+  public JFXButton setConnected(JFXButton nodeList, int floor) {
     nodeStatus.put(floor, new Pair<>(nodeStatus.get(floor).getKey(), CONNECTED));
-    for (int i = 0; i < addShaftButtons.size(); i++) {
-      if (addShaftButtons.get(i) == floor) {
-        addShaftButtons.remove(i);
-      }
-    }
-    JFXButton button1 = (JFXButton) nodeList.getChildren().get(0);
-    JFXButton button2 = (JFXButton) nodeList.getChildren().get(1);
+    JFXButton button1 = nodeList;
     button1.setVisible(true);
-    button2.setVisible(false);
     button1.setStyle(DEFAULT_BUTTON_COLOR);
-    Label label = new Label(floor + "");
-    label.setRotate(180);
-    button1.setGraphic(new Group(label));
+    // Label label = new Label(floor + "");
+    // button1.setGraphic(new Group(label));
     button1.setOnMouseClicked(
         (event -> {
           if (event.getButton() == MouseButton.PRIMARY) {
@@ -311,42 +275,26 @@ public class BetweenFloorsController implements Controller, Initializable {
     return nodeList;
   }
 
-  public JFXNodesList setDisconnected(JFXNodesList nodeList, int floor) throws DBException {
+  public JFXButton setDisconnected(JFXButton nodeList, int floor) throws DBException {
     nodeStatus.put(floor, new Pair<>(nodeStatus.get(floor).getKey(), DISCONNECTED));
     for (int i = 0; i < addShaftButtons.size(); i++) {
       if (addShaftButtons.get(i) == floor) {
         addShaftButtons.remove(i);
       }
     }
-    JFXButton button1 = (JFXButton) nodeList.getChildren().get(0);
-    JFXButton button2 = (JFXButton) nodeList.getChildren().get(1);
+    JFXButton button1 = nodeList;
     button1.setVisible(true);
-    button2.setVisible(false);
     button1.setStyle(INACTIVE_BUTTON_COLOR);
-    Label label = new Label(floor + "");
-    label.setRotate(180);
-    button1.setGraphic(new Group(label));
-    button2.setStyle(PLUS_BUTTON_COLOR);
-    Label label2 = new Label("-");
-    label2.setRotate(180);
-    button2.setGraphic(new Group(label2));
+    // label = new Label(floor + "");
+    // button1.setGraphic(new Group(label));
     button1.setOnMouseClicked(
         (event -> {
           if (event.getButton() == MouseButton.PRIMARY) {
-
-            // then switch
             setConnected(nodeList, floor);
             return;
           }
         }));
 
-    button2.setOnMouseClicked(
-        (event -> {
-          if (event.getButton() == MouseButton.PRIMARY) {
-            setEmpty(nodeList, floor);
-            return;
-          }
-        }));
     this.nodes.put(floor, nodeList);
     return nodeList;
   }
