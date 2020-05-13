@@ -150,6 +150,7 @@ public class MapBaseController implements Controller {
    * @throws DBException
    */
   public void setFloor(String building, int floor, Path currentPath) throws DBException {
+    System.out.println(floor);
     clearPath();
     if (!building.equals("Faulkner")) {
       building = "Main";
@@ -242,14 +243,14 @@ public class MapBaseController implements Controller {
    */
   public void drawPath(Path currentPath, int floor, String building) {
     clearPath();
-    pathCircles.clear();
+    //    pathCircles.clear();
     DbNode firstNode, secondNode;
-    if (currentPath.size() > 1) {
-      pathCircles.add(currentPath.get(0));
-      pathCircles.add(currentPath.get(currentPath.size() - 1));
-    } else {
-      pathCircles.add(currentPath.get(0));
-    }
+    //    if (currentPath.size() > 1) {
+    //      pathCircles.add(currentPath.get(0));
+    //      pathCircles.add(currentPath.get(currentPath.size() - 1));
+    //    } else {
+    //      pathCircles.add(currentPath.get(0));
+    //    }
     //    startLabel.setText("Start: ");
     //    endLabel.setText("Destination: ");
     //    if (currentPath.get(0).getFloor() == floor) {
@@ -257,7 +258,7 @@ public class MapBaseController implements Controller {
     //    } else if (currentPath.get(currentPath.size() - 1).getFloor() == floor) {
     //      drawCircle(currentPath.get(currentPath.size() - 1), END_NODE_COLOR, endLabel);
     //    }
-    boolean first = true;
+    //    boolean first = true;
 
     for (int i = 0; i < currentPath.size() - 1; i++) {
       firstNode = currentPath.get(i);
@@ -279,8 +280,8 @@ public class MapBaseController implements Controller {
         styleLine(line);
         pn_path.getChildren().add(line);
 
-        if (first) {
-          first = false;
+        if (firstNode == currentPath.get(0)) {
+          //          first = false;
           startLabel.setVisible(true);
           endLabel.setVisible(true);
           startLabel.setText("Start at ");
@@ -313,6 +314,8 @@ public class MapBaseController implements Controller {
                 try {
                   newMapDisplayController.setCurrentFloor(prev.getFloor());
                   newMapDisplayController.setCurrentBuilding(prev.getBuilding());
+                  //                  newMapDisplayController.changeFloor(prev.getFloor(),
+                  // prev.getBuilding());
                   setFloor(prev.getBuilding(), prev.getFloor(), currentPath);
                   if (mapQRController != null) {
                     if (!prev.getBuilding().equals("Faulkner")) {
