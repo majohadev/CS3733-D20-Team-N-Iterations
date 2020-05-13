@@ -1519,20 +1519,29 @@ public class MapDB {
    * @throws DBException on error
    */
   public static DbNode checkHitbox(int x, int y, String building, int floor) throws DBException {
-    String query =
-        "SELECT nodes.nodeID, xcoord, ycoord, floor, building, nodeType, longName, shortName, teamAssigned FROM"
-            + "(SELECT nodeID from hitbox WHERE x1 <= ? AND x2 >= ? AND y1 <= ? AND y2 >= ?) as hitbox,"
-            + " (SELECT * FROM nodes WHERE building = ? AND floor = ?) as nodes WHERE nodes.nodeID = hitbox.nodeID";
+    String query = "";
+    if (building.equals("Faulkner")) {
+      query =
+          "SELECT nodes.nodeID, xcoord, ycoord, floor, building, nodeType, longName, shortName, teamAssigned FROM"
+              + "(SELECT nodeID from hitbox WHERE x1 <= ? AND x2 >= ? AND y1 <= ? AND y2 >= ?) as hitbox,"
+              + " (SELECT * FROM nodes WHERE building = ? AND floor = ?) as nodes WHERE nodes.nodeID = hitbox.nodeID";
+    } else {
+      query =
+          "SELECT nodes.nodeID, xcoord, ycoord, floor, building, nodeType, longName, shortName, teamAssigned FROM"
+              + "(SELECT nodeID from hitbox WHERE x1 <= ? AND x2 >= ? AND y1 <= ? AND y2 >= ?) as hitbox,"
+              + " (SELECT * FROM nodes WHERE building <> ? AND floor = ?) as nodes WHERE nodes.nodeID = hitbox.nodeID";
+    }
     try {
       PreparedStatement stmt = con.prepareStatement(query);
       stmt.setInt(1, x);
       stmt.setInt(2, x);
       stmt.setInt(3, y);
       stmt.setInt(4, y);
-      stmt.setString(5, building);
+      stmt.setString(5, "Faulkner");
       stmt.setInt(6, floor);
       ResultSet rs = stmt.executeQuery();
       rs.next();
+      System.out.println(rs.getString("nodeID"));
       return new DbNode(
           rs.getString("nodeID"),
           rs.getInt("xcoord"),

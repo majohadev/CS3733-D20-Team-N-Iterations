@@ -30,6 +30,7 @@ public class App extends Application {
   public void start(Stage primaryStage) throws IOException, DBException {
     // Configure the primary Stage
 
+    System.out.println("started");
     this.masterStage = primaryStage;
     this.masterStage.setTitle("Brigham and Women's Hospital Kiosk Application");
 
@@ -45,6 +46,10 @@ public class App extends Application {
     GlobalScreen.addNativeMouseListener(mouseListener);
     GlobalScreen.addNativeMouseMotionListener(mouseListener);
     GlobalScreen.addNativeKeyListener(keyListener);
+
+    // Set up memento pattern
+    newSingleton.originator.setState("views/mapDisplay/newMapDisplay.fxml");
+    newSingleton.careTaker.add(newSingleton.originator.saveStateToMemento());
 
     switchScene("views/mapDisplay/newMapDisplay.fxml", newSingleton);
     // switchScene("views/chatbot/chatBox.fxml", newSingleton);
