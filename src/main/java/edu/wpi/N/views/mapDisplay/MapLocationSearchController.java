@@ -42,7 +42,6 @@ public class MapLocationSearchController implements Controller {
   @FXML Line lineSearchThree;
   @FXML Line lineSearchFour;
 
-
   private NewMapDisplayController con;
 
   /** Function displays lines indicating the way-finding feature for 10 seconds */

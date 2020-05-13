@@ -47,7 +47,6 @@ public class App extends Application {
     GlobalScreen.addNativeMouseMotionListener(mouseListener);
     GlobalScreen.addNativeKeyListener(keyListener);
 
-
     // Set up memento pattern
     newSingleton.originator.setState("views/mapDisplay/newMapDisplay.fxml");
     newSingleton.careTaker.add(newSingleton.originator.saveStateToMemento());

@@ -71,11 +71,15 @@ public class ServiceController implements Controller {
     chatBotController.setServiceController(this);
 
     // Check if there is any previously planned action
-    checkChatBot();
+    try {
+      checkChatBot();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
   /** Checks to see which action needs to be taken upon loading the page */
-  private void checkChatBot() throws IOException {
+  private void checkChatBot() throws Exception {
     if (singleton.chatBotState.showTranslator) {
       // show translator
       switchToTranslatorPage();
