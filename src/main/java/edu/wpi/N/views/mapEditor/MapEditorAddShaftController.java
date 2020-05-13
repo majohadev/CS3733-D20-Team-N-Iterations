@@ -17,6 +17,7 @@ public class MapEditorAddShaftController {
 
   public void initialize() throws DBException, IOException {
     clipList();
+    clearAllFields();
   }
 
   private void clipList() {
@@ -54,6 +55,7 @@ public class MapEditorAddShaftController {
   }
 
   public void clearAllFields() {
-    lst_add_shaft_node.getItems().removeAll(lst_add_shaft_node.getItems());
+    if (!lst_add_shaft_node.getItems().isEmpty() || !(lst_add_shaft_node == null))
+      lst_add_shaft_node.getItems().removeAll(lst_add_shaft_node.getItems());
   }
 }

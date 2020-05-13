@@ -51,6 +51,7 @@ public class Directions {
     boolean stateChange = true;
     double angle = 0;
     String startFloor = "";
+    DbNode startFloorNode = path.get(0);
     String message = "";
     boolean messageCheck = false;
     double totalDistance = 0;
@@ -164,10 +165,11 @@ public class Directions {
           totalTime += 37; // add 37 sec for average floor change time
           if (!getState(i - 1).equals(CHANGING_FLOOR)) {
             startFloor = currNode.getLongName();
+            startFloorNode = currNode;
           }
           if (!message.equals("")) {
             message = message + " and enter " + currNode.getLongName();
-            directions.add(new Direction(message, STEP, currNode, currIcon));
+            directions.add(new Direction(message, STEP, startFloorNode, currIcon));
             message = "";
             messageCheck = true;
           }
@@ -176,12 +178,12 @@ public class Directions {
           if (stateChange && getState(i - 1).equals(CHANGING_FLOOR)) {
             if (messageCheck) {
               message = "Take " + startFloor + " to floor " + currNode.getFloor();
-              directions.add(new Direction(message, STEP, currNode, currIcon));
+              directions.add(new Direction(message, STEP, startFloorNode, currIcon));
               message = "";
               messageCheck = false;
             } else {
               message = "Enter " + startFloor + " and go to floor " + currNode.getFloor();
-              directions.add(new Direction(message, STEP, currNode, currIcon));
+              directions.add(new Direction(message, STEP, startFloorNode, currIcon));
               message = "";
             }
           }

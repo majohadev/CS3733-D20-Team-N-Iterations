@@ -16,9 +16,6 @@ public class DenyRequestController {
 
   @FXML
   public void denyRequest() throws DBException {
-    if (txtf_compNotes.getText().equals("")) {
-      newAdminController.denyRow("");
-    }
     String compNotes = txtf_compNotes.getText();
     newAdminController.denyRow(compNotes);
     newAdminController.populateRequestTable();
