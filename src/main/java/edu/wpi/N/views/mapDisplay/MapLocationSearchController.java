@@ -22,8 +22,8 @@ public class MapLocationSearchController implements Controller {
   App mainApp;
   private StateSingleton singleton;
 
-  @FXML TextField txt_firstLocation;
-  @FXML TextField txt_secondLocation;
+  @FXML public TextField txt_firstLocation;
+  @FXML public TextField txt_secondLocation;
   @FXML ListView lst_fuzzySearch;
   @FXML TextField activeText;
   @FXML JFXButton btn_search;
@@ -33,13 +33,14 @@ public class MapLocationSearchController implements Controller {
   @FXML Pane btn_infodesk;
   @FXML Pane btn_quickexit;
 
+  public static DbNode[] nodes = new DbNode[2];
+  public static String nodeName;
+
   // Guides for map location search
   @FXML Line lineSearchOne;
   @FXML Line lineSearchTwo;
   @FXML Line lineSearchThree;
   @FXML Line lineSearchFour;
-
-  DbNode[] nodes = new DbNode[2];
 
   private NewMapDisplayController con;
 
@@ -198,6 +199,10 @@ public class MapLocationSearchController implements Controller {
     this.nodes[1] = null;
   }
 
+  public void setDBNode(int index, DbNode node) {
+    this.nodes[index] = node;
+  }
+
   public boolean getHandicap() {
     return this.tg_handicap.isSelected();
   }
@@ -243,6 +248,23 @@ public class MapLocationSearchController implements Controller {
 
   public Pane getBtnQuickExit() {
     return this.btn_quickexit;
+  }
+
+  public static void setHitboxSearchNodes(DbNode node, String textField) {
+
+    if (textField.equals("Start")) {
+      nodes[0] = node;
+      nodeName = node.getLongName();
+    }
+
+    if (textField.equals("Destination")) {
+      nodes[1] = node;
+      nodeName = node.getLongName();
+    }
+  }
+
+  public void setNodeName() {
+    this.txt_firstLocation.setText(nodeName);
   }
 
   public void clearSecondEntry() {

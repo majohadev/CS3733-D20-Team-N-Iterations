@@ -2,6 +2,7 @@ package edu.wpi.N.views.mapDisplay;
 
 import edu.wpi.N.App;
 import edu.wpi.N.database.DBException;
+import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Path;
 import edu.wpi.N.entities.States.StateSingleton;
@@ -16,6 +17,7 @@ import javafx.animation.Timeline;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
@@ -44,6 +46,13 @@ public class MapBaseController implements Controller {
   double MAP_HEIGHT;
   double HORIZONTAL_SCALE;
   double VERTICAL_SCALE;
+
+  double IMAGE_WIDTH1;
+  double IMAGE_HEIGHT1;
+  double MAP_WIDTH1;
+  double MAP_HEIGHT1;
+  double HORIZONTAL_SCALE1;
+  double VERTICAL_SCALE1;
 
   // Zoom constants
   private double MIN_MAP_SCALE = 1;
@@ -87,12 +96,17 @@ public class MapBaseController implements Controller {
 
   LinkedList<DbNode> pathCircles;
 
+  // Hitbox Needed Data
+  String building;
+  int floor;
+
   // FXML Item IDs
   @FXML StackPane pn_movableMap;
   @FXML Pane pn_path;
   @FXML ImageView img_map;
   @FXML Button btn_zoomIn, btn_zoomOut;
   @FXML AnchorPane controllerAnchorPane;
+  @FXML Pane pn_hitboxMenu;
   @FXML Pane pn_routeNodes;
 
   MapQRController mapQRController;
@@ -135,10 +149,6 @@ public class MapBaseController implements Controller {
     initNodeLabels();
     initPathAnim();
     setFaulknerDefaults();
-    pn_routeNodes.layoutXProperty().addListener((nval) -> System.out.println("layout X " + nval));
-    pn_routeNodes.layoutYProperty().addListener((nval) -> System.out.println("layout Y " + nval));
-    pn_movableMap.layoutXProperty().addListener((nval) -> System.out.println("layout X m" + nval));
-    pn_movableMap.layoutYProperty().addListener((nval) -> System.out.println("layout Y m" + nval));
   }
 
   /**
@@ -150,11 +160,11 @@ public class MapBaseController implements Controller {
    * @throws DBException
    */
   public void setFloor(String building, int floor, Path currentPath) throws DBException {
+    System.out.println(floor);
     clearPath();
     if (!building.equals("Faulkner")) {
       building = "Main";
       setMainDefaults();
-
     } else {
       setFaulknerDefaults();
     }
@@ -166,9 +176,11 @@ public class MapBaseController implements Controller {
     if (!(currentPath == null || currentPath.isEmpty())) {
       drawPath(currentPath, floor, building);
     }
+    this.floor = floor;
   }
 
   public void setFaulknerDefaults() {
+    this.building = "Faulkner";
     IMAGE_WIDTH = 2475;
     IMAGE_HEIGHT = 1485;
     MAP_WIDTH = 1520;
@@ -177,11 +189,13 @@ public class MapBaseController implements Controller {
     VERTICAL_SCALE = MAP_HEIGHT / IMAGE_HEIGHT;
     MIN_MAP_SCALE = 1;
     MAX_MAP_SCALE = 3.2;
+
     DEFAULT_TRANSLATEX = 0;
     DEFAULT_TRANSLATEY = 100;
   }
 
   public void setMainDefaults() {
+    this.building = "Main";
     IMAGE_WIDTH = 5000;
     IMAGE_HEIGHT = 3400;
     MAP_WIDTH = 1520;
@@ -190,6 +204,7 @@ public class MapBaseController implements Controller {
     VERTICAL_SCALE = MAP_HEIGHT / IMAGE_HEIGHT;
     MIN_MAP_SCALE = 1.2;
     MAX_MAP_SCALE = 5.5;
+
     DEFAULT_TRANSLATEX = 0;
     DEFAULT_TRANSLATEY = 0;
   }
@@ -242,14 +257,14 @@ public class MapBaseController implements Controller {
    */
   public void drawPath(Path currentPath, int floor, String building) {
     clearPath();
-    pathCircles.clear();
+    //    pathCircles.clear();
     DbNode firstNode, secondNode;
-    if (currentPath.size() > 1) {
-      pathCircles.add(currentPath.get(0));
-      pathCircles.add(currentPath.get(currentPath.size() - 1));
-    } else {
-      pathCircles.add(currentPath.get(0));
-    }
+    //    if (currentPath.size() > 1) {
+    //      pathCircles.add(currentPath.get(0));
+    //      pathCircles.add(currentPath.get(currentPath.size() - 1));
+    //    } else {
+    //      pathCircles.add(currentPath.get(0));
+    //    }
     //    startLabel.setText("Start: ");
     //    endLabel.setText("Destination: ");
     //    if (currentPath.get(0).getFloor() == floor) {
@@ -257,7 +272,7 @@ public class MapBaseController implements Controller {
     //    } else if (currentPath.get(currentPath.size() - 1).getFloor() == floor) {
     //      drawCircle(currentPath.get(currentPath.size() - 1), END_NODE_COLOR, endLabel);
     //    }
-    boolean first = true;
+    //    boolean first = true;
 
     for (int i = 0; i < currentPath.size() - 1; i++) {
       firstNode = currentPath.get(i);
@@ -279,8 +294,8 @@ public class MapBaseController implements Controller {
         styleLine(line);
         pn_path.getChildren().add(line);
 
-        if (first) {
-          first = false;
+        if (firstNode == currentPath.get(0)) {
+          //          first = false;
           startLabel.setVisible(true);
           endLabel.setVisible(true);
           startLabel.setText("Start at ");
@@ -313,6 +328,8 @@ public class MapBaseController implements Controller {
                 try {
                   newMapDisplayController.setCurrentFloor(prev.getFloor());
                   newMapDisplayController.setCurrentBuilding(prev.getBuilding());
+                  //                  newMapDisplayController.changeFloor(prev.getFloor(),
+                  // prev.getBuilding());
                   setFloor(prev.getBuilding(), prev.getFloor(), currentPath);
                   if (mapQRController != null) {
                     if (!prev.getBuilding().equals("Faulkner")) {
@@ -513,6 +530,41 @@ public class MapBaseController implements Controller {
     }
   }
 
+  @FXML
+  private void sendHitboxData(MouseEvent e) {
+
+    System.out.println("did I fuk it");
+    if (e.getClickCount() == 2) {
+      double x = e.getX();
+      double y = e.getY();
+      int actualX = (int) scaleXDB(x);
+      int actualY = (int) scaleYDB(y);
+      System.out.println("Horz Scale: " + HORIZONTAL_SCALE);
+      System.out.println("Vert Scale: " + VERTICAL_SCALE);
+      try {
+        System.out.println(x + " Scaled: " + actualX);
+        System.out.println(y + " Scaled: " + actualY);
+        DbNode node = MapDB.checkHitbox(actualX, actualY, this.building, this.floor);
+        if (node != null) {
+          System.out.println(node.getLongName());
+          HitboxPanel.setHitboxNode(node, newMapDisplayController);
+          AnchorPane anc = FXMLLoader.load(getClass().getResource("hitboxPanel.fxml"));
+          pn_hitboxMenu.getChildren().setAll(anc);
+          pn_hitboxMenu.setMouseTransparent(false);
+          pn_hitboxMenu.setVisible(true);
+          pn_hitboxMenu.setLayoutX(x - 118);
+          pn_hitboxMenu.setLayoutY(y - 64);
+          pn_hitboxMenu.toFront();
+        }
+      } catch (DBException | IOException event) {
+        event.printStackTrace();
+      }
+    } else {
+      pn_hitboxMenu.setMouseTransparent(true);
+      pn_hitboxMenu.setVisible(false);
+    }
+  }
+
   // User ends drag
   @FXML
   private void mapReleaseHandler(MouseEvent event) throws IOException {
@@ -651,5 +703,23 @@ public class MapBaseController implements Controller {
     endFocusVals.clear();
     System.out.println(
         "X: " + pn_movableMap.getTranslateX() + "\nY: " + pn_movableMap.getTranslateY());
+  }
+
+  private double scaleXDB(double x) {
+    System.out.print(this.building);
+    System.out.print(this.floor);
+    return x / HORIZONTAL_SCALE;
+  }
+
+  private double scaleYDB(double y) {
+    return y / VERTICAL_SCALE;
+  }
+
+  private double unscaleXDB(double x) {
+    return x * HORIZONTAL_SCALE;
+  }
+
+  private double unscaleYDB(double y) {
+    return y * VERTICAL_SCALE;
   }
 }

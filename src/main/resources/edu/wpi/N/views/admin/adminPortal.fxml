@@ -238,7 +238,7 @@
                         </JFXButton>
                      </children>
                   </Pane>
-                  <Pane prefHeight="140.0" prefWidth="65.0" style="-fx-background-color: #263051;" />
+                  <Pane prefHeight="40.0" prefWidth="65.0" style="-fx-background-color: #263051;" />
                   <Pane prefHeight="109.0" prefWidth="65.0" style="-fx-background-color: #263051;">
                      <children>
                         <JFXButton ellipsisString="" onMouseClicked="#logoutUser" prefHeight="72.0" prefWidth="62.0" text="    ">

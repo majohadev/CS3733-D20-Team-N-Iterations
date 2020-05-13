@@ -162,7 +162,6 @@ public class ChatbotController implements Controller, Initializable {
         Label message = new Label(Dialogflow.getCurrentWeatherReply());
         singleMessageObject.add(message);
       } else if (intent.equals("directions-to-location")) {
-        // CAN"T GET IT TO WORK
         // use default node
 
         // get Goal Node
@@ -173,7 +172,7 @@ public class ChatbotController implements Controller, Initializable {
 
         // Didn't find anything
         if (nodes.size() == 0) {
-          singleMessageObject.add(new Label("Sorry! I wasn't able to find Start location!"));
+          singleMessageObject.add(new Label("Sorry! I wasn't able to find the location :("));
           // display and rest the message
           state.chatBotState.resetPlannedActions();
           displayAndSaveMessages(singleMessageObject, false);
@@ -415,7 +414,7 @@ public class ChatbotController implements Controller, Initializable {
    * @param intent user's intent
    */
   private void handleSpecificServiceRequest(String intent, QueryResult queryResults)
-      throws IOException {
+      throws Exception {
     LinkedList<Node> singleMessageObject = new LinkedList<Node>();
 
     // If currently not on services page
