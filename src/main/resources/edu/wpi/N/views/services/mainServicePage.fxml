@@ -13,7 +13,7 @@
          <children>
             <ImageView fitHeight="374.0" fitWidth="390.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../images/homeScreenImages/ServiceBellIcon.png" />
+                  <Image url="@../../images/HomeScreenImages/ServiceBellIcon.png" />
                </image>
             </ImageView>
          </children>
