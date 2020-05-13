@@ -1435,7 +1435,7 @@ public class MapDB {
    */
   public static LinkedList<DbNode> getRoomsByFirstLetter(char letter) throws DBException {
     try {
-      String query = "SELECT * FROM nodes WHERE Upper(longName) LIKE ?";
+      String query = "SELECT * FROM nodes WHERE Upper(longName) LIKE ? AND NOT nodeType = 'HALL'";
       PreparedStatement st = con.prepareStatement(query);
       st.setString(1, String.valueOf(letter).toUpperCase() + "%");
       LinkedList<DbNode> result = new LinkedList<>();

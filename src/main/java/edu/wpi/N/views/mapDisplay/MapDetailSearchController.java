@@ -20,7 +20,6 @@ import javafx.scene.input.KeyEvent;
 public class MapDetailSearchController implements Controller {
 
   @FXML JFXComboBox<String> cmb_detail;
-  @FXML TextField txt_location;
   @FXML ListView<String> lst_selection;
   @FXML ListView<DbNode> lst_fuzzySearch;
   @FXML TextField activeText;
@@ -235,10 +234,6 @@ public class MapDetailSearchController implements Controller {
 
   public JFXComboBox getCmb_detail() {
     return cmb_detail;
-  }
-
-  public TextField getTxt_location() {
-    return txt_location;
   }
 
   public ListView getLst_selection() {

@@ -1036,6 +1036,8 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     initRestroomSearchButton();
     setDefaultKioskNode();
     locationSearchController.nodes[1] = node;
+    pn_iconBar.getChildren().forEach(n -> n.setStyle("-fx-background-color: #263051;"));
+    pn_locationIcon.setStyle("-fx-background-color: #4A69C6;");
     LinkedList<DbNode> nlist = new LinkedList<DbNode>();
     nlist.add(node);
     mapBaseController.setFloor(node.getBuilding(), node.getFloor(), null);
