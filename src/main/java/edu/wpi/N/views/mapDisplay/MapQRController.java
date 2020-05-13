@@ -279,8 +279,6 @@ public class MapQRController implements Controller {
     currentDirection = (TreeItem<Direction>) tr_main.getSelectionModel().getSelectedItem();
     if (currentDirection != null) {
       mapDisplayController.switchHospitalView();
-      //      mapBaseController.setFloor("Main", currentDirection.getValue().getNode().getFloor(),
-      // path);
       mapBaseController.resetFocus();
       mapDisplayController.changeFloor(currentDirection.getValue().getNode().getFloor(), "Main");
     }
@@ -516,16 +514,18 @@ public class MapQRController implements Controller {
    * @param floor the floor to be focused on
    * @param building the building to be focused on
    */
-  public void setTabFocus(int floor, String building) {
+  public void setTabFocus(int floor, String building) throws DBException {
     if (building.equals("Faulkner")) {
       if (tbpn_directions.getTabs().contains(tb_faulkner)) {
         tbpn_directions.getSelectionModel().select(tb_faulkner);
         setIntructionFocus(floor, rootFaulkner, tr_faulkner);
+        mapBaseController.setFloor("Faulkner", floor, path);
       }
     } else if (building.equals("Main")) {
       if (tbpn_directions.getTabs().contains(tb_main)) {
         tbpn_directions.getSelectionModel().select(tb_main);
         setIntructionFocus(floor, rootMain, tr_main);
+        mapBaseController.setFloor("Main", floor, path);
       }
     } else if (building.equals("Drive")) {
       if (tbpn_directions.getTabs().contains(tb_drive)) {
