@@ -48,27 +48,7 @@
          <children>
             <VBox alignment="CENTER" minHeight="200.0" prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <Label fx:id="txt_onCall" alignment="CENTER" contentDisplay="CENTER" prefHeight="70.0" prefWidth="127.0" styleClass="label-buttons" text="On Call Beds" textAlignment="CENTER" wrapText="true" />
-                  <JFXButton fx:id="btn_onCall" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" minHeight="95.0" minWidth="72.0" onMouseClicked="#switchToOnCallPage" onMouseEntered="#showLabel" onMouseExited="#hideLabel" prefHeight="95.0" prefWidth="125.0" styleClass="jfx-button-service" text="Internal Transport" textAlignment="CENTER" textFill="WHITE" wrapText="true">
-                     <graphic>
-                        <ImageView fitHeight="90.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../images/serviceIcons/LaundryWhite.png" />
-                           </image>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </ImageView>
-                     </graphic>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </JFXButton>
-               </children>
-            </VBox>
-            <VBox alignment="CENTER" minHeight="200.0" prefHeight="200.0" prefWidth="100.0">
-               <children>
-                  <Label fx:id="txt_interpreter" alignment="CENTER" contentDisplay="CENTER" prefHeight="70.0" prefWidth="127.0" styleClass="label-buttons" text="Interpreter" textAlignment="CENTER" wrapText="true" />
+                  <Label fx:id="txt_interpreter" alignment="CENTER" contentDisplay="CENTER" prefHeight="70.0" prefWidth="127.0" styleClass="label-buttons" text="Translator&#10;Team C" textAlignment="CENTER" wrapText="true" />
                   <JFXButton fx:id="btn_interpreter" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" minHeight="95.0" minWidth="72.0" onMouseClicked="#switchToInterpreterPage" onMouseEntered="#showLabel" onMouseExited="#hideLabel" prefHeight="95.0" prefWidth="125.0" styleClass="jfx-button-service" text="Internal Transport" textAlignment="CENTER" textFill="WHITE" wrapText="true">
                      <graphic>
                         <ImageView fitHeight="90.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
@@ -85,12 +65,12 @@
             </VBox>
             <VBox alignment="CENTER" minHeight="200.0" prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <Label fx:id="txt_gift" alignment="CENTER" contentDisplay="CENTER" prefHeight="70.0" prefWidth="127.0" styleClass="label-buttons" text="Gift Delivery" textAlignment="CENTER" wrapText="true" />
+                  <Label fx:id="txt_gift" alignment="CENTER" contentDisplay="CENTER" prefHeight="70.0" prefWidth="127.0" styleClass="label-buttons" text="Gift Delivery&#10;Team L" textAlignment="CENTER" wrapText="true" />
                   <JFXButton fx:id="btn_gift" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" minHeight="95.0" minWidth="72.0" onMouseClicked="#switchToGiftPage" onMouseEntered="#showLabel" onMouseExited="#hideLabel" prefHeight="95.0" prefWidth="125.0" styleClass="jfx-button-service" text="Internal Transport" textAlignment="CENTER" textFill="WHITE" wrapText="true">
                      <graphic>
-                        <ImageView fitHeight="90.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="77.0" fitWidth="71.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../images/serviceIcons/PatientTransportationIconWhite.png" />
+                              <Image url="@../../images/serviceIcons/giftIcon.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -102,35 +82,18 @@
             </VBox>
             <VBox alignment="CENTER" minHeight="200.0" prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <Label fx:id="txt_maintenance" alignment="CENTER" contentDisplay="CENTER" prefHeight="70.0" prefWidth="127.0" styleClass="label-buttons" text="Maintenance Request" textAlignment="CENTER" wrapText="true" />
+                  <Label fx:id="txt_maintenance" alignment="CENTER" contentDisplay="CENTER" prefHeight="70.0" prefWidth="127.0" styleClass="label-buttons" text="Return To Main Service Page" textAlignment="CENTER" wrapText="true" />
                   <JFXButton fx:id="btn_maintenance" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" minHeight="95.0" minWidth="72.0" onMouseClicked="#switchToMaintenancePage" onMouseEntered="#showLabel" onMouseExited="#hideLabel" prefHeight="95.0" prefWidth="125.0" styleClass="jfx-button-service" text="Internal Transport" textAlignment="CENTER" textFill="WHITE" wrapText="true">
                      <graphic>
-                        <ImageView fitHeight="90.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="68.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../images/serviceIcons/SanitationIconWhite.png" />
+                              <Image url="@../../images/adminIcons/back.png" />
                            </image>
                         </ImageView>
                      </graphic>
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor>
-                  </JFXButton>
-               </children>
-            </VBox>
-            <VBox alignment="CENTER" minHeight="200.0" prefHeight="200.0" prefWidth="100.0">
-               <children>
-                  <Label fx:id="txt_schedule" alignment="CENTER" contentDisplay="CENTER" prefHeight="70.0" prefWidth="127.0" styleClass="label-buttons" text="Schedule Appointment" textAlignment="CENTER" wrapText="true" />
-                  <JFXButton fx:id="btn_schedule" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" minHeight="95.0" minWidth="72.0" onMouseClicked="#switchToScheduler" onMouseEntered="#showLabel" onMouseExited="#hideLabel" prefHeight="95.0" prefWidth="125.0" styleClass="jfx-button-service" text="Internal Transport" textAlignment="CENTER" textFill="WHITE" wrapText="true">
-                     <graphic>
-                        <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../images/serviceIcons/appointment-scheduler-white.png" />
-                           </image>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </ImageView>
-                     </graphic>
                   </JFXButton>
                </children>
             </VBox>
@@ -140,7 +103,7 @@
          <children>
             <VBox alignment="CENTER" minHeight="200.0" prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <Label fx:id="txt_flower" alignment="CENTER" contentDisplay="CENTER" prefHeight="70.0" prefWidth="127.0" styleClass="label-buttons" text="Flower Delivery" textAlignment="CENTER" wrapText="true" />
+                  <Label fx:id="txt_flower" alignment="CENTER" contentDisplay="CENTER" prefHeight="70.0" prefWidth="127.0" styleClass="label-buttons" text="Flower Delivery&#10;Team A" textAlignment="CENTER" wrapText="true" />
                   <JFXButton fx:id="btn_flower" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" minHeight="95.0" minWidth="72.0" onMouseClicked="#switchToFloralPage" onMouseEntered="#showLabel" onMouseExited="#hideLabel" prefHeight="95.0" prefWidth="125.0" styleClass="jfx-button-service" text="Internal Transport" textAlignment="CENTER" textFill="WHITE" wrapText="true">
                      <graphic>
                         <ImageView fitHeight="90.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
@@ -157,7 +120,7 @@
             </VBox>
             <VBox alignment="CENTER" minHeight="200.0" prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <Label fx:id="txt_security" alignment="CENTER" contentDisplay="CENTER" prefHeight="70.0" prefWidth="127.0" styleClass="label-buttons" text="Secure Incident Reporting" textAlignment="CENTER" wrapText="true" />
+                  <Label fx:id="txt_security" alignment="CENTER" contentDisplay="CENTER" prefHeight="70.0" prefWidth="127.0" styleClass="label-buttons" text="Secure Incident Reporting&#10;Team B" textAlignment="CENTER" wrapText="true" />
                   <JFXButton fx:id="btn_security" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" minHeight="95.0" minWidth="72.0" onMouseClicked="#switchToSecurityPage" onMouseEntered="#showLabel" onMouseExited="#hideLabel" prefHeight="95.0" prefWidth="125.0" styleClass="jfx-button-service" text="Internal Transport" textAlignment="CENTER" textFill="WHITE" wrapText="true">
                      <graphic>
                         <ImageView fitHeight="90.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
@@ -174,12 +137,12 @@
             </VBox>
             <VBox alignment="CENTER" minHeight="200.0" prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <Label fx:id="txt_food" alignment="CENTER" contentDisplay="CENTER" prefHeight="70.0" prefWidth="127.0" styleClass="label-buttons" text="Food Request" textAlignment="CENTER" wrapText="true" />
+                  <Label fx:id="txt_food" alignment="CENTER" contentDisplay="CENTER" prefHeight="70.0" prefWidth="127.0" styleClass="label-buttons" text="Food Request&#10;Team P" textAlignment="CENTER" wrapText="true" />
                   <JFXButton fx:id="btn_food" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" minHeight="95.0" minWidth="72.0" onMouseClicked="#switchToFoodPage" onMouseEntered="#showLabel" onMouseExited="#hideLabel" prefHeight="95.0" prefWidth="125.0" styleClass="jfx-button-service" text="Internal Transport" textAlignment="CENTER" textFill="WHITE" wrapText="true">
                      <graphic>
-                        <ImageView fitHeight="90.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="70.0" fitWidth="76.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../images/serviceIcons/ITservicesWhite.png" />
+                              <Image url="@../../images/mapIcons/CafeteriaWhite.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -189,24 +152,6 @@
                   </JFXButton>
                </children>
             </VBox>
-            <VBox alignment="CENTER" minHeight="200.0" prefHeight="200.0" prefWidth="100.0">
-               <children>
-                  <Label fx:id="txt_wheelchair" alignment="CENTER" contentDisplay="CENTER" prefHeight="70.0" prefWidth="127.0" styleClass="label-buttons" text="Wheelchair" textAlignment="CENTER" wrapText="true" />
-                  <JFXButton fx:id="btn_wheelchair" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" minHeight="95.0" minWidth="72.0" onMouseClicked="#switchToWheelchairPage" onMouseEntered="#showLabel" onMouseExited="#hideLabel" prefHeight="95.0" prefWidth="125.0" styleClass="jfx-button-service" text="Internal Transport" textAlignment="CENTER" textFill="WHITE" wrapText="true">
-                     <graphic>
-                        <ImageView fitHeight="90.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../images/serviceIcons/WheelchairWhite.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </JFXButton>
-               </children>
-            </VBox>
-            <VBox alignment="CENTER" minHeight="200.0" prefHeight="200.0" prefWidth="100.0" />
          </children>
       </VBox>
       <Separator layoutX="52.0" orientation="VERTICAL" prefHeight="1080.0" />

@@ -206,7 +206,19 @@
                   </JFXButton>
                </children>
             </VBox>
-            <VBox alignment="CENTER" minHeight="200.0" prefHeight="200.0" prefWidth="100.0" />
+            <Label fx:id="txt_api" alignment="CENTER" contentDisplay="CENTER" prefHeight="70.0" prefWidth="127.0" styleClass="label-buttons" text="Additonal API Services" textAlignment="CENTER" wrapText="true" />
+            <JFXButton fx:id="btn_apis" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" minHeight="95.0" minWidth="72.0" onMouseClicked="#switchToAPIS" onMouseEntered="#showLabel" onMouseExited="#hideLabel" prefHeight="95.0" prefWidth="125.0" styleClass="jfx-button-service" text="Internal Transport" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+               <graphic>
+                  <ImageView fitHeight="80.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../images/serviceIcons/apiIcon.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ImageView>
+               </graphic>
+            </JFXButton>
          </children>
       </VBox>
       <Separator layoutX="52.0" orientation="VERTICAL" prefHeight="1080.0" />

@@ -57,15 +57,12 @@ public class ApiServiceController implements Controller {
   }
 
   public void initialize() throws DBException, IOException {
-    AnchorPane currentPane = FXMLLoader.load(getClass().getResource("mainServicePage.fxml"));
+    AnchorPane currentPane = FXMLLoader.load(getClass().getResource("apiMainServicePage.fxml"));
     service_anchor.getChildren().setAll(currentPane);
     txt_flower.setVisible(false);
-    txt_onCall.setVisible(false);
     txt_interpreter.setVisible(false);
     txt_maintenance.setVisible(false);
-    txt_schedule.setVisible(false);
     txt_security.setVisible(false);
-    txt_wheelchair.setVisible(false);
     txt_gift.setVisible(false);
     txt_food.setVisible(false);
   }
@@ -87,11 +84,8 @@ public class ApiServiceController implements Controller {
   }
 
   @FXML
-  public void switchToMaintenancePage() {
-    //      throws IOException, edu.wpi.cs3733.d20.teamF.ModelClasses.ServiceException {
-    //    MaintenanceRequestLaunch requestLaunch = new MaintenanceRequestLaunch();
-    //    String css = this.getClass().getResource("default.css").toExternalForm();
-    //    requestLaunch.run(576, 90, 1280, 950, css, null, null);
+  public void switchToMaintenancePage() throws IOException {
+    mainApp.switchScene("views/services/newServicesPage.fxml", singleton);
   }
 
   @FXML
@@ -152,11 +146,8 @@ public class ApiServiceController implements Controller {
     if (e.getSource() == btn_flower) txt_flower.setVisible(true);
     if (e.getSource() == btn_interpreter) txt_interpreter.setVisible(true);
     if (e.getSource() == btn_maintenance) txt_maintenance.setVisible(true);
-    if (e.getSource() == btn_schedule) txt_schedule.setVisible(true);
     if (e.getSource() == btn_security) txt_security.setVisible(true);
     if (e.getSource() == btn_food) txt_food.setVisible(true);
-    if (e.getSource() == btn_onCall) txt_onCall.setVisible(true);
-    if (e.getSource() == btn_wheelchair) txt_wheelchair.setVisible(true);
     if (e.getSource() == btn_gift) txt_gift.setVisible(true);
   }
 
@@ -166,11 +157,8 @@ public class ApiServiceController implements Controller {
     if (e.getSource() == btn_flower) txt_flower.setVisible(false);
     if (e.getSource() == btn_interpreter) txt_interpreter.setVisible(false);
     if (e.getSource() == btn_maintenance) txt_maintenance.setVisible(false);
-    if (e.getSource() == btn_schedule) txt_schedule.setVisible(false);
     if (e.getSource() == btn_security) txt_security.setVisible(false);
     if (e.getSource() == btn_food) txt_food.setVisible(false);
-    if (e.getSource() == btn_onCall) txt_onCall.setVisible(false);
-    if (e.getSource() == btn_wheelchair) txt_wheelchair.setVisible(false);
     if (e.getSource() == btn_gift) txt_gift.setVisible(false);
   }
 }

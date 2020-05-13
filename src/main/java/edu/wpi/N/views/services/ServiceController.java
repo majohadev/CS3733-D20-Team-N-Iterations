@@ -30,6 +30,7 @@ public class ServiceController implements Controller {
   @FXML JFXButton btn_wheelchair;
   @FXML JFXButton btn_sanitation;
   @FXML JFXButton btn_transport;
+  @FXML JFXButton btn_apis;
 
   @FXML Label txt_translator;
   @FXML Label txt_laundry;
@@ -40,6 +41,7 @@ public class ServiceController implements Controller {
   @FXML Label txt_wheelchair;
   @FXML Label txt_sanitation;
   @FXML Label txt_transport;
+  @FXML Label txt_api;
 
   public ServiceController(StateSingleton singleton) {
     this.singleton = singleton;
@@ -61,6 +63,7 @@ public class ServiceController implements Controller {
     txt_wheelchair.setVisible(false);
     txt_transport.setVisible(false);
     txt_translator.setVisible(false);
+    txt_api.setVisible(false);
   }
 
   @FXML
@@ -78,9 +81,8 @@ public class ServiceController implements Controller {
   }
 
   @FXML
-  public void switchToEmotionalPage() throws IOException {
-    AnchorPane currentPane = FXMLLoader.load(getClass().getResource("emotionalSupportReq.fxml"));
-    service_anchor.getChildren().setAll(currentPane);
+  public void switchToAPIS() throws IOException {
+    mainApp.switchScene("views/services/apiServicesPage.fxml", singleton);
   }
 
   @FXML
@@ -130,10 +132,8 @@ public class ServiceController implements Controller {
 
   @FXML
   public void switchToScheduler() throws Exception {
-    //    AppointmentRequest apt = new AppointmentRequest();
-    //    // String css = this.getClass().getResource("sanitationRequestUI1.css").toExternalForm();
-    //    String css = this.getClass().getResource("default.css").toExternalForm();
-    //    AppointmentRequest.run(576, 90, 1280, 950, css, null, null);
+    AnchorPane currentPane = FXMLLoader.load(getClass().getResource("emotionalSupportReq.fxml"));
+    service_anchor.getChildren().setAll(currentPane);
   }
 
   public void onIconClicked(MouseEvent event) throws IOException {
@@ -151,6 +151,7 @@ public class ServiceController implements Controller {
     if (e.getSource() == btn_laundry) txt_laundry.setVisible(true);
     if (e.getSource() == btn_wheelchair) txt_wheelchair.setVisible(true);
     if (e.getSource() == btn_transport) txt_transport.setVisible(true);
+    if (e.getSource() == btn_apis) txt_api.setVisible(true);
   }
 
   @FXML
@@ -165,5 +166,6 @@ public class ServiceController implements Controller {
     if (e.getSource() == btn_laundry) txt_laundry.setVisible(false);
     if (e.getSource() == btn_wheelchair) txt_wheelchair.setVisible(false);
     if (e.getSource() == btn_transport) txt_transport.setVisible(false);
+    if (e.getSource() == btn_apis) txt_api.setVisible(false);
   }
 }
