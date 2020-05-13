@@ -392,12 +392,50 @@ public class NewAdminController implements Controller, Initializable {
         .addListener(
             (ov, old, val) -> {
               try {
-                if (val) {
-                  LinkedList<Request> rqs = ServiceDB.getOpenRequests();
-                  tableData.setAll(rqs);
+                if (cb_reqFilter.getSelectionModel().getSelectedItem() == null) {
+                  if (val) {
+                    System.out.println("Broke 1");
+                    LinkedList<Request> rqs = ServiceDB.getOpenRequests();
+                    tableData.setAll(rqs);
+                    // tb_RequestTable.getItems().clear();
+                    tb_RequestTable.setItems(tableData);
+                  } else {
+                    System.out.println("Broke 2");
+                    LinkedList<Request> rqs = ServiceDB.getRequests();
+                    tableData.setAll(rqs);
+                    // tb_RequestTable.getItems().clear();
+                    tb_RequestTable.setItems(tableData);
+                  }
                 } else {
-                  LinkedList<Request> rqs = ServiceDB.getRequests();
-                  tableData.setAll(rqs);
+
+                  ObservableList<Request> reqs1 = FXCollections.observableArrayList();
+
+                  if (ch_requestFilter.isSelected() == true) {
+                    for (Request req : ServiceDB.getOpenRequests()) {
+                      if (req.getServiceType()
+                          .equals(
+                              cb_reqFilter
+                                  .getSelectionModel()
+                                  .getSelectedItem()
+                                  .getServiceType())) {
+                        reqs1.add(req);
+                      }
+                    }
+                  } else {
+                    for (Request req : ServiceDB.getRequests()) {
+                      if (req.getServiceType()
+                          .equals(
+                              cb_reqFilter
+                                  .getSelectionModel()
+                                  .getSelectedItem()
+                                  .getServiceType())) {
+                        reqs1.add(req);
+                      }
+                    }
+                  }
+
+                  tb_RequestTable.getItems().clear();
+                  tb_RequestTable.setItems(reqs1);
                 }
               } catch (DBException e) {
                 Alert errorAlert = new Alert(Alert.AlertType.ERROR);
@@ -405,7 +443,9 @@ public class NewAdminController implements Controller, Initializable {
                 errorAlert.show();
               }
             });
+    System.out.println("Broke 3");
     tb_RequestTable.setItems(tableData);
+    System.out.println("Broke 4");
   }
 
   private void initializeTable() {
@@ -552,12 +592,18 @@ public class NewAdminController implements Controller, Initializable {
       acceptReq.setContentText("Request Accepted");
       acceptReq.show();
 
-      if (ch_requestFilter.isSelected()) {
-        tb_RequestTable.getItems().removeAll(tb_RequestTable.getSelectionModel().getSelectedItem());
+      ObservableList<Request> reqs = FXCollections.observableArrayList();
+
+      if (ch_requestFilter.isSelected() == true) {
+        for (Request req : ServiceDB.getOpenRequests()) {
+          if (req.getServiceType()
+              .equals(tb_RequestTable.getSelectionModel().getSelectedItem().getServiceType())) {
+            System.out.println(
+                tb_RequestTable.getSelectionModel().getSelectedItem().getServiceType());
+            reqs.add(req);
+          }
+        }
       } else {
-
-        ObservableList<Request> reqs = FXCollections.observableArrayList();
-
         for (Request req : ServiceDB.getRequests()) {
           if (req.getServiceType()
               .equals(tb_RequestTable.getSelectionModel().getSelectedItem().getServiceType())) {
@@ -566,10 +612,10 @@ public class NewAdminController implements Controller, Initializable {
             reqs.add(req);
           }
         }
-
-        tb_RequestTable.getItems().clear();
-        tb_RequestTable.setItems(reqs);
       }
+
+      tb_RequestTable.getItems().clear();
+      tb_RequestTable.setItems(reqs);
     } catch (DBException ex) {
       ex.printStackTrace();
     }
@@ -599,12 +645,37 @@ public class NewAdminController implements Controller, Initializable {
           employee.getID(), tb_RequestTable.getSelectionModel().getSelectedItem().getRequestID());
       confAlert.setContentText(employee.getName() + " was assigned to the request");
       confAlert.show();
+
+      ObservableList<Request> reqs = FXCollections.observableArrayList();
+
+      if (ch_requestFilter.isSelected() == true) {
+        for (Request req : ServiceDB.getOpenRequests()) {
+          if (req.getServiceType()
+              .equals(tb_RequestTable.getSelectionModel().getSelectedItem().getServiceType())) {
+            System.out.println(
+                tb_RequestTable.getSelectionModel().getSelectedItem().getServiceType());
+            reqs.add(req);
+          }
+        }
+      } else {
+        for (Request req : ServiceDB.getRequests()) {
+          if (req.getServiceType()
+              .equals(tb_RequestTable.getSelectionModel().getSelectedItem().getServiceType())) {
+            System.out.println(
+                tb_RequestTable.getSelectionModel().getSelectedItem().getServiceType());
+            reqs.add(req);
+          }
+        }
+      }
+
+      tb_RequestTable.getItems().clear();
+      tb_RequestTable.setItems(reqs);
+
     } catch (DBException e) {
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
       errorAlert.setContentText(e.getMessage());
       errorAlert.show();
     }
-    repopulateByType(tb_RequestTable.getSelectionModel().getSelectedItem().getServiceType());
   }
 
   /**
@@ -643,25 +714,34 @@ public class NewAdminController implements Controller, Initializable {
         denyReq.setContentText("Request Denied");
         denyReq.show();
 
-        return;
-      }
-
-      if (ch_requestFilter.isSelected()) {
-        tb_RequestTable.getItems().removeAll(tb_RequestTable.getSelectionModel().getSelectedItem());
-      } else {
         ObservableList<Request> reqs = FXCollections.observableArrayList();
-        for (Request req : ServiceDB.getRequests()) {
-          System.out.println("Selected Type 1: " + selectedType);
-          if (req.getServiceType().equals(selectedType)) {
-            System.out.println(
-                tb_RequestTable.getSelectionModel().getSelectedItem().getServiceType());
-            reqs.add(req);
-          }
-        }
-        tb_RequestTable.getItems().clear();
-        tb_RequestTable.setItems(reqs);
-      }
 
+        /*
+        if (ch_requestFilter.isSelected() == true) {
+          for (Request req : ServiceDB.getOpenRequests()) {
+            if (req.getServiceType()
+                .equals(tb_RequestTable.getSelectionModel().getSelectedItem().getServiceType())) {
+              System.out.println(
+                  tb_RequestTable.getSelectionModel().getSelectedItem().getServiceType());
+              reqs.add(req);
+            }
+          }
+          tb_RequestTable.setItems(reqs);
+        } else {
+          for (Request req : ServiceDB.getRequests()) {
+            if (req.getServiceType()
+                .equals(tb_RequestTable.getSelectionModel().getSelectedItem().getServiceType())) {
+              System.out.println(
+                  tb_RequestTable.getSelectionModel().getSelectedItem().getServiceType());
+              reqs.add(req);
+            }
+          }
+          tb_RequestTable.setItems(reqs);
+        }
+         */
+        filterByType(tb_RequestTable.getSelectionModel().getSelectedItem().getServiceType());
+        // tb_RequestTable.getItems().clear();
+      }
     } catch (DBException e) {
       e.printStackTrace();
     }
