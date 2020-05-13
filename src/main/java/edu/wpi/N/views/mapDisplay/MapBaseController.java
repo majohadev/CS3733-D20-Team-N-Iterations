@@ -160,7 +160,7 @@ public class MapBaseController implements Controller {
    * @throws DBException
    */
   public void setFloor(String building, int floor, Path currentPath) throws DBException {
-    System.out.println(floor);
+    // System.out.println(floor);
     clearPath();
     if (!building.equals("Faulkner")) {
       building = "Main";
@@ -533,20 +533,20 @@ public class MapBaseController implements Controller {
   @FXML
   private void sendHitboxData(MouseEvent e) {
 
-    System.out.println("did I fuk it");
+    // System.out.println("did I fuk it");
     if (e.getClickCount() == 2) {
       double x = e.getX();
       double y = e.getY();
       int actualX = (int) scaleXDB(x);
       int actualY = (int) scaleYDB(y);
-      System.out.println("Horz Scale: " + HORIZONTAL_SCALE);
-      System.out.println("Vert Scale: " + VERTICAL_SCALE);
+      // System.out.println("Horz Scale: " + HORIZONTAL_SCALE);
+      // System.out.println("Vert Scale: " + VERTICAL_SCALE);
       try {
-        System.out.println(x + " Scaled: " + actualX);
-        System.out.println(y + " Scaled: " + actualY);
+        // System.out.println(x + " Scaled: " + actualX);
+        // System.out.println(y + " Scaled: " + actualY);
         DbNode node = MapDB.checkHitbox(actualX, actualY, this.building, this.floor);
         if (node != null) {
-          System.out.println(node.getLongName());
+          // System.out.println(node.getLongName());
           HitboxPanel.setHitboxNode(node, newMapDisplayController);
           AnchorPane anc = FXMLLoader.load(getClass().getResource("hitboxPanel.fxml"));
           pn_hitboxMenu.getChildren().setAll(anc);
@@ -701,8 +701,11 @@ public class MapBaseController implements Controller {
     autoFocus.stop();
     autoFocus.getKeyFrames().clear();
     endFocusVals.clear();
+    /*
     System.out.println(
         "X: " + pn_movableMap.getTranslateX() + "\nY: " + pn_movableMap.getTranslateY());
+
+     */
   }
 
   private double scaleXDB(double x) {

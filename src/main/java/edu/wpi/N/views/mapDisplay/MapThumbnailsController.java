@@ -13,6 +13,7 @@ import java.util.LinkedList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -183,6 +184,7 @@ public class MapThumbnailsController implements Controller {
       thumbImgView.setSmooth(true);
       thumbImgView.setCache(true);
       thumbImgView.setPickOnBounds(true);
+      thumbImgView.setCursor(Cursor.HAND);
       thumbImgView.setOnMouseClicked(
           e -> {
             try {
@@ -242,7 +244,7 @@ public class MapThumbnailsController implements Controller {
     if (vBoxes.get(key) != null) {
       highlightBox(vBoxes.get(key));
     } else {
-      System.out.println("Couldn't find " + key);
+      // System.out.println("Couldn't find " + key);
     }
   }
 }
