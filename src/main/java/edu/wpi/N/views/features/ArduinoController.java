@@ -196,7 +196,7 @@ public class ArduinoController implements Controller {
       singleton.setTimeoutTime(newTime);
 
       Alert confAlert = new Alert(Alert.AlertType.CONFIRMATION);
-      confAlert.setContentText("Set Timeout to " + newTime/1000 + " seconds");
+      confAlert.setContentText("Set Timeout to " + newTime / 1000 + " seconds");
       confAlert.show();
 
       txtf_newTime.clear();
