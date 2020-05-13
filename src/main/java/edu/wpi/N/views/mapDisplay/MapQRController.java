@@ -107,7 +107,10 @@ public class MapQRController implements Controller {
     } else {
       tr.getSelectionModel().select(tr.getSelectionModel().getSelectedIndex() - 1);
       currentDirection = (TreeItem<Direction>) tr.getSelectionModel().getSelectedItem();
+      System.out.println(currentDirection.getValue().toString());
+      System.out.println(currentDirection.getValue().getNode().getFloor());
       DbNode node = currentDirection.getValue().getNode();
+      mapDisplayController.changeFloor(node.getFloor(), node.getBuilding());
       if (currentDirection.getValue().getLevel() != Level.BUILDING) {
         mapBaseController.autoFocusToNode(node);
       }
@@ -139,10 +142,14 @@ public class MapQRController implements Controller {
    */
   public void handleBtnNextClicked(JFXTreeView tr, TreeItem<Direction> root, Tab tb)
       throws DBException {
-    tr.getSelectionModel().select(tr.getSelectionModel().getSelectedIndex() + 1);
-    if (tr.getSelectionModel().getSelectedItem() == currentDirection
-        && tr.getSelectionModel().getSelectedIndex() != 1) {
-      if (tbpn_directions.getTabs().get(tbpn_directions.getTabs().size() - 1) != tb) {
+    TreeItem<Direction> oldDirection = currentDirection; // the previous direction
+    int oldIndex = tr.getSelectionModel().getSelectedIndex(); // the index of the previous direction
+    tr.getSelectionModel().select(oldIndex + 1); // select the next instruction
+    currentDirection =
+        (TreeItem<Direction>) tr.getSelectionModel().getSelectedItem(); // the new direction
+    if (currentDirection == oldDirection) { // if we have reached the bottom of the tree
+      if (tbpn_directions.getTabs().get(tbpn_directions.getTabs().size() - 1)
+          != tb) { // and we have not reached the bottom of the
         tbpn_directions
             .getSelectionModel()
             .select(
@@ -152,6 +159,9 @@ public class MapQRController implements Controller {
                     + 1);
       } else {
         tbpn_directions.getSelectionModel().select(0);
+        mapDisplayController.changeFloor(
+            currentDirection.getValue().getNode().getFloor(),
+            currentDirection.getValue().getNode().getBuilding());
       }
       if (tbpn_directions.getSelectionModel().getSelectedItem() == tb_drive) {
         onDriveTabSelected();
@@ -189,8 +199,6 @@ public class MapQRController implements Controller {
       mapDisplayController.switchHospitalView();
       mapDisplayController.changeFloor(
           currentDirection.getValue().getNode().getFloor(), "Faulkner");
-      //      mapBaseController.setFloor(
-      //          "Faulkner", currentDirection.getValue().getNode().getFloor(), path);
     }
     try {
       tr_faulkner.getTreeItem(0).setExpanded(true);

@@ -89,6 +89,9 @@ public class MapBaseController implements Controller {
   @FXML Button btn_zoomIn, btn_zoomOut;
   @FXML AnchorPane controllerAnchorPane;
 
+  MapQRController mapQRController;
+  NewMapDisplayController newMapDisplayController;
+
   /**
    * the constructor of MapBaseController
    *
@@ -108,6 +111,13 @@ public class MapBaseController implements Controller {
     this.mainApp = mainApp;
   }
 
+  public void setMapQRController(MapQRController mapQRController) {
+    this.mapQRController = mapQRController;
+  }
+
+  public void setNewMapDisplayController(NewMapDisplayController newMapDisplayController) {
+    this.newMapDisplayController = newMapDisplayController;
+  }
   /**
    * initializes the MapBase Controller
    *
@@ -139,6 +149,7 @@ public class MapBaseController implements Controller {
       setFaulknerDefaults();
     }
     img_map.setImage(singleton.mapImageLoader.getMap(building, floor));
+    // resetFocus();
     if (!(currentPath == null || currentPath.isEmpty())) {
       drawPath(currentPath, floor, building);
     }
@@ -264,13 +275,60 @@ public class MapBaseController implements Controller {
 
           autoFocusToNode(firstNode); // TODO: Place this somewhere better
 
-          drawCircle(firstNode, MIDDLE_NODE_COLOR, startLabel);
+          Circle circle = drawCircle(firstNode, MIDDLE_NODE_COLOR, startLabel);
+          DbNode finalFirstNode = firstNode;
+          circle.setOnMouseClicked(
+              e -> {
+                LinkedList<DbNode> path = currentPath.getPath();
+                DbNode prev = path.get(path.indexOf(finalFirstNode) - 1);
+                while (prev.getNodeType().equals("STAI") || prev.getNodeType().equals("ELEV")) {
+                  prev = path.get(path.indexOf(prev) - 1);
+                }
+                try {
+                  setFloor(prev.getBuilding(), prev.getFloor(), currentPath);
+                  newMapDisplayController.currentFloor = prev.getFloor();
+                  newMapDisplayController.currentBuilding = prev.getBuilding();
+                  if (mapQRController != null) {
+                    if (!prev.getBuilding().equals("Faulkner")) {
+                      mapQRController.setTabFocus(prev.getFloor(), "Main");
+                    } else {
+                      mapQRController.setTabFocus(prev.getFloor(), prev.getBuilding());
+                    }
+                  }
+                } catch (DBException ex) {
+                  ex.printStackTrace();
+                }
+              });
         } else if (currentPath.get(i + 2).getFloor() != floor) {
           // If secondNode is last on current floor
           startLabel.setVisible(true);
           endLabel.setVisible(true);
           endLabel.setText("Enter ");
-          drawCircle(secondNode, MIDDLE_NODE_COLOR, endLabel);
+          Circle circle = drawCircle(secondNode, MIDDLE_NODE_COLOR, endLabel);
+          DbNode finalSecondNode = secondNode;
+          circle.setOnMouseClicked(
+              e -> {
+                LinkedList<DbNode> path = currentPath.getPath();
+                DbNode next = path.get(path.indexOf(finalSecondNode) + 1);
+                while (next.getNodeType().equals("STAI") || next.getNodeType().equals("ELEV")) {
+                  next = path.get(path.indexOf(next) + 1);
+                }
+                try {
+                  setFloor(next.getBuilding(), next.getFloor(), currentPath);
+                  newMapDisplayController.currentFloor = next.getFloor();
+                  //                  System.out.println(newMapDisplayController.currentFloor);
+                  newMapDisplayController.currentBuilding = next.getBuilding();
+                  if (mapQRController != null) {
+                    if (!next.getBuilding().equals("Faulkner")) {
+                      mapQRController.setTabFocus(next.getFloor(), "Main");
+                    } else {
+                      mapQRController.setTabFocus(next.getFloor(), next.getBuilding());
+                    }
+                  }
+                } catch (DBException ex) {
+                  ex.printStackTrace();
+                }
+              });
         }
       }
     }
@@ -327,7 +385,7 @@ public class MapBaseController implements Controller {
    * @param node the DbNode to be displayed on the map
    * @param c the color of the circle
    */
-  public void drawCircle(DbNode node, Color c, Label label) {
+  public Circle drawCircle(DbNode node, Color c, Label label) {
     Circle circle = new Circle();
     circle.setRadius(5);
     circle.setCenterX(scaleX(node.getX()));
@@ -342,6 +400,7 @@ public class MapBaseController implements Controller {
           scaleX(node.getX()) - label.prefWidth(-1) / 2, scaleY(node.getY()) - NODE_LABEL_PADDING);
       pn_path.getChildren().remove(label); // Gets added back after all lines are drawn
     }
+    return circle;
   }
 
   public double scaleX(double x) {

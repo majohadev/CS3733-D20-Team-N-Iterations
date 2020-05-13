@@ -484,7 +484,7 @@
 //      root = loader.load();
 //      Scene scene = new Scene(root);
 //      stage.setScene(scene);
-//
+////
 //      QrPopUpController controller = (QrPopUpController) loader.getController();
 //      controller.displayQrCode(directions);
 //

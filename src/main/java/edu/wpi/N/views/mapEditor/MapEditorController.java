@@ -20,6 +20,8 @@ import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
@@ -57,6 +59,7 @@ public class MapEditorController implements Controller {
   @FXML AnchorPane pn_newalignnode;
   @FXML AnchorPane pn_newdeleteedge;
   @FXML AnchorPane pn_newmanageshaft;
+  @FXML AnchorPane btn_cancel_elev;
 
   final int DEFAULT_FLOOR = 1;
   final String DEFAULT_BUILDING = "Faulkner";
@@ -83,12 +86,18 @@ public class MapEditorController implements Controller {
   int numFloors;
 
   // Zoom constants
-  private final double MIN_MAP_SCALE = 0.8;
-  private final double MAX_MAP_SCALE = 4;
+  private double MIN_MAP_SCALE = 0.8;
+  private double MAX_MAP_SCALE = 4;
   private final double ZOOM_STEP_SCROLL = 0.01;
   private final double ZOOM_STEP_BUTTON = 0.1;
   private DoubleProperty mapScaleAlpha = new SimpleDoubleProperty(0);
   private double clickStartX, clickStartY;
+  private double MIN_CIRCLE_RADIUS = 3;
+  private double MAX_CIRCLE_RADIUS = 7;
+  private double MIN_LINE_WIDTH = 2;
+  private double MAX_LINE_WIDTH = 4;
+  private double MIN_OPACITY = 0.4;
+  private double MAX_OPACITY = 0.85;
 
   private Timeline autoFocus = new Timeline();
   private LinkedList<KeyValue> endFocusVals = new LinkedList<>();
@@ -163,8 +172,8 @@ public class MapEditorController implements Controller {
     // initializeMainCampusFloorButtons();
     // setFloorButtonColors();
     editElevNodes = new LinkedList<>();
-    // btn_cancel_elev.setDisable(true);
-    // btn_cancel_elev.setVisible(false);
+    btn_cancel_elev.setDisable(true);
+    btn_cancel_elev.setVisible(false);
     nodesMap = HashBiMap.create();
     edgesMap = HashBiMap.create();
     mode = Mode.NO_STATE;
@@ -174,6 +183,7 @@ public class MapEditorController implements Controller {
     deleteNodeCircles = new LinkedList<>();
     alignNodeCircles = new LinkedList<>();
     addShaftNodeCircles = new LinkedList<>();
+    originalShaftNodes = new LinkedList<>();
 
     editNodeCircle = null;
     addEdgeLine = new Line();
@@ -207,6 +217,12 @@ public class MapEditorController implements Controller {
   }
 
   private void setFaulknerDefaults() {
+    MIN_CIRCLE_RADIUS = 5.3;
+    MAX_CIRCLE_RADIUS = 8;
+    MIN_LINE_WIDTH = 3.3;
+    MAX_LINE_WIDTH = 5;
+    MIN_OPACITY = .6;
+    MAX_OPACITY = .8;
     DEFAULT_CIRCLE_OPACITY = .75;
     DEFAULT_LINE_WIDTH = 4;
     DEFAULT_CIRCLE_RADIUS = 7;
@@ -216,11 +232,19 @@ public class MapEditorController implements Controller {
     MAP_HEIGHT = 997;
     HORIZONTAL_SCALE = MAP_WIDTH / IMAGE_WIDTH;
     VERTICAL_SCALE = MAP_HEIGHT / IMAGE_HEIGHT;
+    MIN_MAP_SCALE = 1;
+    MAX_MAP_SCALE = 3.2;
     numFloors = 5;
     pn_background.setStyle("-fx-background-color: #E6EBF2");
   }
 
   private void setMainCampusDefaults() {
+    MIN_CIRCLE_RADIUS = 2.5;
+    MAX_CIRCLE_RADIUS = 3.5;
+    MIN_LINE_WIDTH = 1.5;
+    MAX_LINE_WIDTH = 2.3;
+    MIN_OPACITY = .5;
+    MAX_OPACITY = .85;
     DEFAULT_CIRCLE_OPACITY = .85;
     DEFAULT_LINE_WIDTH = 2;
     DEFAULT_CIRCLE_RADIUS = 3;
@@ -230,6 +254,8 @@ public class MapEditorController implements Controller {
     MAP_HEIGHT = 994;
     HORIZONTAL_SCALE = MAP_WIDTH / IMAGE_WIDTH;
     VERTICAL_SCALE = MAP_HEIGHT / IMAGE_HEIGHT;
+    MIN_MAP_SCALE = 1.2;
+    MAX_MAP_SCALE = 5.5;
     numFloors = 6;
     pn_background.setStyle("-fx-background-color: #D3D3D3");
   }
@@ -296,6 +322,39 @@ public class MapEditorController implements Controller {
     HashMap<String, UINode> conversion = new HashMap<>();
     for (DbNode DBnode : nodes) {
       Circle circle = createCircle(scaleX(DBnode.getX()), scaleY(DBnode.getY()), c);
+      circle
+          .hoverProperty()
+          .addListener(
+              new ChangeListener<Boolean>() {
+
+                @Override
+                public void changed(
+                    ObservableValue<? extends Boolean> observable,
+                    Boolean oldValue,
+                    Boolean newValue) {
+                  if (mode == Mode.EDIT_NODE
+                      || mode == Mode.DELETE_NODE
+                      || mode == Mode.ALIGN_NODE) {
+                    if (newValue) {
+                      circle.setRadius(circle.getRadius() * 1.25);
+                      circle.setOpacity(.95);
+                    } else {
+                      circle.setRadius(DEFAULT_CIRCLE_RADIUS);
+                      circle.setOpacity(DEFAULT_CIRCLE_OPACITY);
+                    }
+                  } else if (mode == Mode.EDIT_ELEV || mode == Mode.ADD_SHAFT) {
+                    if (editElevNodes.contains(circle)) {
+                      if (newValue) {
+                        circle.setRadius(circle.getRadius() * 1.25);
+                        circle.setOpacity(.95);
+                      } else {
+                        circle.setRadius(DEFAULT_CIRCLE_RADIUS);
+                        circle.setOpacity(DEFAULT_CIRCLE_OPACITY);
+                      }
+                    }
+                  }
+                }
+              });
       UINode UInode = new UINode(circle, DBnode);
       nodesMap.put(circle, UInode);
       nodesMap2.put(DBnode, circle);
@@ -412,6 +471,9 @@ public class MapEditorController implements Controller {
       controllerEditElev.setMainApp(mainApp);
     }
     if (mode == Mode.EDIT_ELEV) {
+
+      btn_cancel_elev.setDisable(false);
+      btn_cancel_elev.setVisible(true);
       pn_elev.getChildren().add(pane);
       pn_elev.setVisible(true);
       controllerEditElev.setFloor(currentFloor, currentBuilding);
@@ -424,11 +486,6 @@ public class MapEditorController implements Controller {
     }
   }
 
-  @FXML
-  private void onIconClicked(MouseEvent event) {
-    // Nothing yet
-  }
-
   private void handleCircleDragEvents(MouseEvent event, Circle circle) {
     isDraggingNode = true;
     circle.setCursor(Cursor.CLOSED_HAND);
@@ -436,8 +493,6 @@ public class MapEditorController implements Controller {
       onCircleAddNodeDragged(event, circle);
     }
     if (mode == Mode.EDIT_NODE) {
-      //      onBtnCancelEditNodeClicked();
-      //      onBtnConfirmEditNodeClicked();
       onTxtPosEditNodeTextChanged(circle);
       onCircleEditNodeDragged(event, circle);
     }
@@ -456,6 +511,17 @@ public class MapEditorController implements Controller {
   private void onLineDeleteEdgeClicked(MouseEvent event, Line line) {
     if (line.getStroke() == DEFAULT_LINE_COLOR) {
       line.setStroke(DELETE_EDGE_COLOR);
+      // autofocus
+      double xcoord;
+      double ycoord;
+      if (line.getEndX() > line.getStartX())
+        xcoord = line.getStartX() + (line.getEndX() - line.getStartX()) / 2;
+      else xcoord = line.getEndX() + (line.getStartX() - line.getEndX()) / 2;
+      if (line.getEndY() > line.getStartY())
+        ycoord = line.getStartY() + (line.getEndY() - line.getStartY()) / 2;
+      else ycoord = line.getEndY() + (line.getStartY() - line.getEndY()) / 2;
+      autoFocusToPoint(xcoord, ycoord);
+
       DbNode[] edge = edgesMap.get(line).getDBNodes();
       deleteEdgeLines.add(line);
       controllerDeleteEdge.addLstDeleteNode(edge[0].getShortName() + ", " + edge[1].getShortName());
@@ -539,8 +605,7 @@ public class MapEditorController implements Controller {
     }
     if (mode == Mode.EDIT_ELEV && editElevNodes.contains(circle)) {
 
-      //      onBtnSaveEditElevClicked();
-
+      onBtnSaveEditElevClicked();
       onBtnCancelEditElevClicked();
       onBtnAddShaftClicked();
       if (elevCircle != null && elevCircle != circle) {
@@ -549,6 +614,7 @@ public class MapEditorController implements Controller {
       }
       elevCircle = circle;
       elevCircle.setFill(EDIT_ELEV_SELECTED_COLOR);
+      autoFocusToPoint(circle.getCenterX(), circle.getCenterY());
       controllerEditElev.setFloor(
           nodesMap.get(circle).getDBNode().getFloor(),
           nodesMap.get(circle).getDBNode().getBuilding());
@@ -571,11 +637,13 @@ public class MapEditorController implements Controller {
     controllerEditNode.setShortName(node.getShortName());
     controllerEditNode.setLongName(node.getLongName());
     controllerEditNode.setPos(circle.getCenterX(), circle.getCenterY());
+    autoFocusToPoint(event.getX(), event.getY());
 
     // autoFocusToNode(node);
   }
 
   private void onCircleEditNodeDragged(MouseEvent event, Circle circle) {
+
     if (editNodeCircle != null && editNodeCircle != circle) {
       DbNode node = nodesMap.get(editNodeCircle).getDBNode();
       editNodeCircle.setCenterX(scaleX(node.getX()));
@@ -588,6 +656,7 @@ public class MapEditorController implements Controller {
     controllerEditNode.setPos(event.getX(), event.getY());
     circle.setCenterX(event.getX());
     circle.setCenterY(event.getY());
+
     DbNode node = nodesMap.get(circle).getDBNode();
     controllerEditNode.setShortName(node.getShortName());
     controllerEditNode.setLongName(node.getLongName());
@@ -660,7 +729,7 @@ public class MapEditorController implements Controller {
   }
 
   private void onCircleAddShaftNodeClicked(MouseEvent event, Circle circle) {
-    if (circle.getFill() == Color.RED) { // TODO: set colors at top
+    if (circle.getFill() == Color.RED) {
       circle.setFill(Color.GREEN);
       addShaftNodeCircles.add(nodesMap.get(circle).getDBNode());
       controllerAddShaft.addLstAddShaftNode(nodesMap.get(circle).getDBNode().getLongName());
@@ -827,32 +896,32 @@ public class MapEditorController implements Controller {
     hideEditElevButton();
     changeEditor();
     addNodeCircle = createCircle(500, 500, ADD_NODE_COLOR);
+    addNodeCircle.setOpacity(.85);
     addNodeCircle.setCursor(Cursor.HAND);
     pn_display.getChildren().add(addNodeCircle);
-    controllerAddNode.setPos(500, 500);
+    controllerAddNode.setPos(300, 500);
     onTxtPosAddNodeTextChanged(addNodeCircle);
     onBtnConfirmAddNodeClicked(addNodeCircle);
     onBtnCancelAddNodeClicked();
-    autoFocusToPoint(500, 500);
+    // autoFocusToPoint(500, 500);
   }
 
   private void handleEditElevRightClick() throws IOException {
     mode = Mode.EDIT_ELEV;
-    // elev.setDisable(false);
-    // btn_cancel_elev.setVisible(true);
+    btn_cancel_elev.setDisable(false);
+    btn_cancel_elev.setVisible(true);
     changeEditor();
     for (Circle circle : editElevNodes) {
       circle.setFill(EDIT_ELEV_COLOR);
     }
   }
 
-  private void onPaneDisplayClickedAddNode(MouseEvent event)
-      throws
-          IOException { // TODO: addnodeclicked, make button clicked and add to random chosen XY pos
+  private void onPaneDisplayClickedAddNode(MouseEvent event) throws IOException {
     mode = Mode.ADD_NODE;
     hideEditElevButton();
     changeEditor();
     addNodeCircle = createCircle(event.getX(), event.getY(), ADD_NODE_COLOR);
+    addNodeCircle.setOpacity(.85);
     addNodeCircle.setCursor(Cursor.HAND);
     pn_display.getChildren().add(addNodeCircle);
     controllerAddNode.setPos(event.getX(), event.getY());
@@ -1141,6 +1210,7 @@ public class MapEditorController implements Controller {
         .setOnMouseClicked(
             event -> {
               mode = Mode.NO_STATE;
+              collapseAllFloorButtons();
               // Check valid input
               if (addShaftNodeCircles.isEmpty()) {
                 displayErrorMessage("Must select nodes");
@@ -1358,6 +1428,8 @@ public class MapEditorController implements Controller {
         .getBtnCancel()
         .setOnMouseClicked(
             event -> {
+              mode = Mode.NO_STATE;
+              collapseAllFloorButtons();
               controllerAddShaft.clearAllFields();
               pn_editor.setVisible(false);
               pn_elev.setDisable(false);
@@ -1369,6 +1441,7 @@ public class MapEditorController implements Controller {
   }
 
   private void cancelAddShaft() {
+
     controllerAddShaft.clearAllFields();
     pn_editor.setVisible(false);
     pn_elev.setDisable(false);
@@ -1428,7 +1501,7 @@ public class MapEditorController implements Controller {
             e -> {
               elevCircle.setFill(EDIT_ELEV_COLOR);
               elevCircle = null;
-              pn_elev.setVisible(false);
+              // pn_elev.setVisible(false);
             });
   }
 
@@ -1455,8 +1528,8 @@ public class MapEditorController implements Controller {
   }
 
   private void resetEditElev() {
-    //    btn_cancel_elev.setDisable(true);
-    //    btn_cancel_elev.setVisible(false);
+    btn_cancel_elev.setDisable(true);
+    btn_cancel_elev.setVisible(false);
 
     for (Circle circle : editElevNodes) {
       circle.setFill(DEFAULT_CIRCLE_COLOR);
@@ -1481,7 +1554,7 @@ public class MapEditorController implements Controller {
 
   private void resetAddShaft() {
     controllerEditElev.setFloor(currentFloor, currentBuilding);
-    controllerAddShaft.clearAllFields();
+    // controllerAddShaft.clearAllFields();
     addShaftNodeCircles.clear();
     originalShaftNodes.clear();
   }
@@ -1597,301 +1670,6 @@ public class MapEditorController implements Controller {
     }
   }
 
-  /*
-  public void initializeChangeFloorButtons() {
-    btn_floors = new JFXButton("Floors");
-    btn_floor1 = new JFXButton("1");
-    btn_floor2 = new JFXButton("2");
-    btn_floor3 = new JFXButton("3");
-    btn_floor4 = new JFXButton("4");
-    btn_floor5 = new JFXButton("5");
-    btn_floor6 = new JFXButton("Switch");
-    btn_floors.setButtonType(JFXButton.ButtonType.RAISED);
-    btn_floor1.setButtonType(JFXButton.ButtonType.RAISED);
-    btn_floor2.setButtonType(JFXButton.ButtonType.RAISED);
-    btn_floor3.setButtonType(JFXButton.ButtonType.RAISED);
-    btn_floor4.setButtonType(JFXButton.ButtonType.RAISED);
-    btn_floor5.setButtonType(JFXButton.ButtonType.RAISED);
-    btn_floor6.setButtonType(JFXButton.ButtonType.RAISED);
-    nodesListF = new JFXNodesList();
-    nodesListF.addAnimatedNode(btn_floors);
-    nodesListF.addAnimatedNode(btn_floor5);
-    nodesListF.addAnimatedNode(btn_floor4);
-    nodesListF.addAnimatedNode(btn_floor3);
-    nodesListF.addAnimatedNode(btn_floor2);
-    nodesListF.addAnimatedNode(btn_floor1);
-    nodesListF.addAnimatedNode(btn_floor6);
-
-    nodesListF.setSpacing(10);
-    pn_changeFloor.getChildren().add(nodesListF);
-    btn_floors
-        .getStylesheets()
-        .addAll(getClass().getResource("/edu/wpi/N/css/MapDisplayFloors.css").toExternalForm());
-    btn_floors.getStyleClass().addAll("animated-option-button", "animated-option-sub-button");
-    btn_floor1
-        .getStylesheets()
-        .addAll(getClass().getResource("/edu/wpi/N/css/MapDisplayFloors.css").toExternalForm());
-    btn_floor1.getStyleClass().addAll("animated-option-button", "animated-option-sub-button");
-    btn_floor1.setOnMouseClicked(
-        e -> {
-          currentFloor = 1;
-          setFloorImg("/edu/wpi/N/images/map/Floor1Reclor.png");
-          setFloorButtonColors();
-        });
-    btn_floor2
-        .getStylesheets()
-        .addAll(getClass().getResource("/edu/wpi/N/css/MapDisplayFloors.css").toExternalForm());
-    btn_floor2.getStyleClass().addAll("animated-option-button", "animated-option-sub-button");
-    btn_floor2.setOnMouseClicked(
-        e -> {
-          currentFloor = 2;
-          setFloorImg("/edu/wpi/N/images/map/Floor2TeamN.png");
-          setFloorButtonColors();
-        });
-    btn_floor3
-        .getStylesheets()
-        .addAll(getClass().getResource("/edu/wpi/N/css/MapDisplayFloors.css").toExternalForm());
-    btn_floor3.getStyleClass().addAll("animated-option-button", "animated-option-sub-button");
-    btn_floor3.setOnMouseClicked(
-        e -> {
-          currentFloor = 3;
-          setFloorImg("/edu/wpi/N/images/map/Floor3TeamN.png");
-          setFloorButtonColors();
-        });
-    btn_floor4
-        .getStylesheets()
-        .addAll(getClass().getResource("/edu/wpi/N/css/MapDisplayFloors.css").toExternalForm());
-    btn_floor4.getStyleClass().addAll("animated-option-button", "animated-option-sub-button");
-    btn_floor4.setOnMouseClicked(
-        e -> {
-          currentFloor = 4;
-          setFloorImg("/edu/wpi/N/images/map/Floor4SolidBackground.png");
-          setFloorButtonColors();
-        });
-    btn_floor5
-        .getStylesheets()
-        .addAll(getClass().getResource("/edu/wpi/N/css/MapDisplayFloors.css").toExternalForm());
-    btn_floor5.getStyleClass().addAll("animated-option-button", "animated-option-sub-button");
-    btn_floor5.setOnMouseClicked(
-        e -> {
-          currentFloor = 5;
-          setFloorImg("/edu/wpi/N/images/map/Floor5TeamN.png");
-          setFloorButtonColors();
-        });
-    btn_floor6
-        .getStylesheets()
-        .addAll(getClass().getResource("/edu/wpi/N/css/MapDisplayFloors.css").toExternalForm());
-    btn_floor6.getStyleClass().addAll("animated-option-button", "animated-option-sub-button");
-    btn_floor6.setOnMouseClicked(
-        e -> {
-          currentFloor = 1;
-          currentBuilding = "main";
-          setMainCampusDefaults();
-          setFloorImg("/edu/wpi/N/images/map/MainL2.png");
-          setFloorButtonColorsM();
-          nodesListF.setVisible(false);
-          nodesListM.setVisible(true);
-        });
-  }
-   */
-
-  /*
-  public void initializeMainCampusFloorButtons() {
-    btn_floorsM = new JFXButton("Floors");
-    btn_floor1M = new JFXButton("L2");
-    btn_floor2M = new JFXButton("L1");
-    btn_floor3M = new JFXButton("G");
-    btn_floor4M = new JFXButton("1");
-    btn_floor5M = new JFXButton("2");
-    btn_floor6M = new JFXButton("3");
-
-    btn_floor7M = new JFXButton("Switch");
-    btn_floorsM.setButtonType(JFXButton.ButtonType.RAISED);
-    btn_floor1M.setButtonType(JFXButton.ButtonType.RAISED);
-    btn_floor2M.setButtonType(JFXButton.ButtonType.RAISED);
-    btn_floor3M.setButtonType(JFXButton.ButtonType.RAISED);
-    btn_floor4M.setButtonType(JFXButton.ButtonType.RAISED);
-    btn_floor5M.setButtonType(JFXButton.ButtonType.RAISED);
-    btn_floor6M.setButtonType(JFXButton.ButtonType.RAISED);
-    btn_floor7M.setButtonType(JFXButton.ButtonType.RAISED);
-    nodesListM = new JFXNodesList();
-    nodesListM.addAnimatedNode(btn_floorsM);
-    nodesListM.addAnimatedNode(btn_floor6M);
-    nodesListM.addAnimatedNode(btn_floor5M);
-    nodesListM.addAnimatedNode(btn_floor4M);
-    nodesListM.addAnimatedNode(btn_floor3M);
-    nodesListM.addAnimatedNode(btn_floor2M);
-    nodesListM.addAnimatedNode(btn_floor1M);
-    nodesListM.addAnimatedNode(btn_floor7M);
-
-    nodesListM.setSpacing(10);
-    pn_changeFloor.getChildren().add(nodesListM);
-    nodesListM.setVisible(false);
-    btn_floorsM
-        .getStylesheets()
-        .addAll(getClass().getResource("/edu/wpi/N/css/MapDisplayFloors.css").toExternalForm());
-    btn_floorsM.getStyleClass().addAll("animated-option-button", "animated-option-sub-button");
-    btn_floor1M
-        .getStylesheets()
-        .addAll(getClass().getResource("/edu/wpi/N/css/MapDisplayFloors.css").toExternalForm());
-    btn_floor1M.getStyleClass().addAll("animated-option-button", "animated-option-sub-button");
-    btn_floor1M.setOnMouseClicked(
-        e -> {
-          currentFloor = 1;
-          setFloorImg("/edu/wpi/N/images/map/MainL2.png");
-          setFloorButtonColorsM();
-        });
-    btn_floor2M
-        .getStylesheets()
-        .addAll(getClass().getResource("/edu/wpi/N/css/MapDisplayFloors.css").toExternalForm());
-    btn_floor2M.getStyleClass().addAll("animated-option-button", "animated-option-sub-button");
-    btn_floor2M.setOnMouseClicked(
-        e -> {
-          currentFloor = 2;
-          setFloorImg("/edu/wpi/N/images/map/MainL1.png");
-          setFloorButtonColorsM();
-        });
-    btn_floor3M
-        .getStylesheets()
-        .addAll(getClass().getResource("/edu/wpi/N/css/MapDisplayFloors.css").toExternalForm());
-    btn_floor3M.getStyleClass().addAll("animated-option-button", "animated-option-sub-button");
-    btn_floor3M.setOnMouseClicked(
-        e -> {
-          currentFloor = 3;
-          setFloorImg("/edu/wpi/N/images/map/MainGround.png");
-          setFloorButtonColorsM();
-        });
-    btn_floor4M
-        .getStylesheets()
-        .addAll(getClass().getResource("/edu/wpi/N/css/MapDisplayFloors.css").toExternalForm());
-    btn_floor4M.getStyleClass().addAll("animated-option-button", "animated-option-sub-button");
-    btn_floor4M.setOnMouseClicked(
-        e -> {
-          currentFloor = 4;
-          setFloorImg("/edu/wpi/N/images/map/MainResizedF1.png");
-          setFloorButtonColorsM();
-        });
-    btn_floor5M
-        .getStylesheets()
-        .addAll(getClass().getResource("/edu/wpi/N/css/MapDisplayFloors.css").toExternalForm());
-    btn_floor5M.getStyleClass().addAll("animated-option-button", "animated-option-sub-button");
-    btn_floor5M.setOnMouseClicked(
-        e -> {
-          currentFloor = 5;
-          setFloorImg("/edu/wpi/N/images/map/MainFloor2.png");
-          setFloorButtonColorsM();
-        });
-    btn_floor6M
-        .getStylesheets()
-        .addAll(getClass().getResource("/edu/wpi/N/css/MapDisplayFloors.css").toExternalForm());
-    btn_floor6M.getStyleClass().addAll("animated-option-button", "animated-option-sub-button");
-    btn_floor6M.setOnMouseClicked(
-        e -> {
-          currentFloor = 6;
-          setFloorImg("/edu/wpi/N/images/map/MainFloor3.png");
-          setFloorButtonColorsM();
-        });
-    btn_floor7M
-        .getStylesheets()
-        .addAll(getClass().getResource("/edu/wpi/N/css/MapDisplayFloors.css").toExternalForm());
-    btn_floor7M.getStyleClass().addAll("animated-option-button", "animated-option-sub-button");
-    btn_floor7M.setOnMouseClicked(
-        e -> {
-          currentFloor = 1;
-          currentBuilding = "Faulkner";
-          setFaulknerDefaults();
-          nodesListM.setVisible(false);
-          nodesListF.setVisible(true);
-          setFloorImg("/edu/wpi/N/images/map/Floor1Reclor.png");
-          setFloorButtonColors();
-        });
-  }
-
-   */
-
-  /*
-  private void setFloorButtonColorsM() {
-    if (currentFloor == 1) {
-      btn_floor1M.setStyle("-fx-background-color: #F7B80F");
-      btn_floor2M.setStyle("-fx-background-color: #002186");
-      btn_floor3M.setStyle("-fx-background-color: #002186");
-      btn_floor4M.setStyle("-fx-background-color: #002186");
-      btn_floor5M.setStyle("-fx-background-color: #002186");
-      btn_floor6M.setStyle("-fx-background-color: #002186");
-    } else if (currentFloor == 2) {
-      btn_floor1M.setStyle("-fx-background-color: #002186");
-      btn_floor2M.setStyle("-fx-background-color: #F7B80F");
-      btn_floor3M.setStyle("-fx-background-color: #002186");
-      btn_floor4M.setStyle("-fx-background-color: #002186");
-      btn_floor5M.setStyle("-fx-background-color: #002186");
-      btn_floor6M.setStyle("-fx-background-color: #002186");
-    } else if (currentFloor == 3) {
-      btn_floor1M.setStyle("-fx-background-color: #002186");
-      btn_floor2M.setStyle("-fx-background-color: #002186");
-      btn_floor3M.setStyle("-fx-background-color: #F7B80F");
-      btn_floor4M.setStyle("-fx-background-color: #002186");
-      btn_floor5M.setStyle("-fx-background-color: #002186");
-      btn_floor6M.setStyle("-fx-background-color: #002186");
-    } else if (currentFloor == 4) {
-      btn_floor1M.setStyle("-fx-background-color: #002186");
-      btn_floor2M.setStyle("-fx-background-color: #002186");
-      btn_floor3M.setStyle("-fx-background-color: #002186");
-      btn_floor4M.setStyle("-fx-background-color: #F7B80F");
-      btn_floor5M.setStyle("-fx-background-color: #002186");
-      btn_floor6M.setStyle("-fx-background-color: #002186");
-    } else if (currentFloor == 5) {
-      btn_floor1M.setStyle("-fx-background-color: #002186");
-      btn_floor2M.setStyle("-fx-background-color: #002186");
-      btn_floor3M.setStyle("-fx-background-color: #002186");
-      btn_floor4M.setStyle("-fx-background-color: #002186");
-      btn_floor5M.setStyle("-fx-background-color: #F7B80F");
-      btn_floor6M.setStyle("-fx-background-color: #002186");
-    } else if (currentFloor == 6) {
-      btn_floor1M.setStyle("-fx-background-color: #002186");
-      btn_floor2M.setStyle("-fx-background-color: #002186");
-      btn_floor3M.setStyle("-fx-background-color: #002186");
-      btn_floor4M.setStyle("-fx-background-color: #002186");
-      btn_floor5M.setStyle("-fx-background-color: #002186");
-      btn_floor6M.setStyle("-fx-background-color: #F7B80F");
-    }
-  }
-
-  private void setFloorButtonColors() {
-    if (currentFloor == 1) {
-      btn_floor1.setStyle("-fx-background-color: #F7B80F");
-      btn_floor2.setStyle("-fx-background-color: #002186");
-      btn_floor3.setStyle("-fx-background-color: #002186");
-      btn_floor4.setStyle("-fx-background-color: #002186");
-      btn_floor5.setStyle("-fx-background-color: #002186");
-    } else if (currentFloor == 2) {
-      btn_floor1.setStyle("-fx-background-color: #002186");
-      btn_floor2.setStyle("-fx-background-color: #F7B80F");
-      btn_floor3.setStyle("-fx-background-color: #002186");
-      btn_floor4.setStyle("-fx-background-color: #002186");
-      btn_floor5.setStyle("-fx-background-color: #002186");
-    } else if (currentFloor == 3) {
-      btn_floor1.setStyle("-fx-background-color: #002186");
-      btn_floor2.setStyle("-fx-background-color: #002186");
-      btn_floor3.setStyle("-fx-background-color: #F7B80F");
-      btn_floor4.setStyle("-fx-background-color: #002186");
-      btn_floor5.setStyle("-fx-background-color: #002186");
-    } else if (currentFloor == 4) {
-      btn_floor1.setStyle("-fx-background-color: #002186");
-      btn_floor2.setStyle("-fx-background-color: #002186");
-      btn_floor3.setStyle("-fx-background-color: #002186");
-      btn_floor4.setStyle("-fx-background-color: #F7B80F");
-      btn_floor5.setStyle("-fx-background-color: #002186");
-    } else if (currentFloor == 5) {
-      btn_floor1.setStyle("-fx-background-color: #002186");
-      btn_floor2.setStyle("-fx-background-color: #002186");
-      btn_floor3.setStyle("-fx-background-color: #002186");
-      btn_floor4.setStyle("-fx-background-color: #002186");
-      btn_floor5.setStyle("-fx-background-color: #F7B80F");
-    }
-  }
-
-   */
-
   private void setFloorImg(String path) {
     resetAllExceptShafts();
     hideEditElevButton();
@@ -1907,13 +1685,13 @@ public class MapEditorController implements Controller {
   public void onBtnCancelElevClicked() {
     resetEditElev();
     mode = Mode.NO_STATE;
-    // btn_cancel_elev.setDisable(true);
-    // btn_cancel_elev.setVisible(false);
+    btn_cancel_elev.setDisable(true);
+    btn_cancel_elev.setVisible(false);
   }
 
   public void hideEditElevButton() {
-    // btn_cancel_elev.setDisable(true);
-    // btn_cancel_elev.setVisible(false);
+    btn_cancel_elev.setDisable(true);
+    btn_cancel_elev.setVisible(false);
   }
 
   public void reloadAddShaft() throws DBException {
@@ -1955,31 +1733,39 @@ public class MapEditorController implements Controller {
   private void mapScrollHandler(ScrollEvent event) throws IOException {
     if (event.getSource() == pn_stack) {
       double deltaY = event.getDeltaY();
-      zoom(deltaY * ZOOM_STEP_SCROLL);
+
+      // Scaling parameter (alpha) is clamped between 0 (min. scale) and 1 (max. scale)
+      double newScale = mapScaleAlpha.get() + deltaY * ZOOM_STEP_SCROLL;
+      mapScaleAlpha.set(Math.max(0, Math.min(1, newScale)));
     }
   }
 
   /**
    * zoom - Scale map pane up or down, clamping value between MIN_MAP_SCALE and MAX_MAP_SCALE
    *
-   * @param percentDelta - Signed double representing how much to zoom in/out
+   * @param alphaVal - Signed double representing how much to zoom in/out
    */
-  private void zoom(double percentDelta) {
+  private void zoom(double alphaVal) {
 
     // Scaling parameter (alpha) is clamped between 0 (min. scale) and 1 (max. scale)
-    mapScaleAlpha.set(
-        Math.max(
-            0,
-            Math.min(
-                1,
-                mapScaleAlpha.get() + percentDelta))); // TODO: use zoom to scale line & node size
+    double expInterpScale = MIN_MAP_SCALE * Math.pow(MAX_MAP_SCALE / MIN_MAP_SCALE, alphaVal);
 
-    // Linearly interpolate (lerp) alpha to actual scale value
-    double lerpedScale = MIN_MAP_SCALE + mapScaleAlpha.get() * (MAX_MAP_SCALE - MIN_MAP_SCALE);
-
+    double circleRadius =
+        MAX_CIRCLE_RADIUS * Math.pow(MIN_CIRCLE_RADIUS / MAX_CIRCLE_RADIUS, alphaVal);
+    double lineWidth = MAX_LINE_WIDTH * Math.pow(MIN_LINE_WIDTH / MAX_LINE_WIDTH, alphaVal);
+    double opacity = MIN_OPACITY * Math.pow(MAX_OPACITY / MIN_OPACITY, alphaVal);
+    DEFAULT_LINE_WIDTH = lineWidth;
+    DEFAULT_CIRCLE_RADIUS = circleRadius;
+    for (Line l : edgesMap.keySet()) {
+      l.setStrokeWidth(DEFAULT_LINE_WIDTH);
+    }
+    for (Circle c : nodesMap.keySet()) {
+      c.setRadius(DEFAULT_CIRCLE_RADIUS);
+      c.setOpacity(opacity);
+    }
     // Apply new scale and correct panning
-    pn_stack.setScaleX(lerpedScale);
-    pn_stack.setScaleY(lerpedScale);
+    pn_stack.setScaleX(expInterpScale);
+    pn_stack.setScaleY(expInterpScale);
     clampPanning(0, 0);
   }
 
@@ -2036,6 +1822,7 @@ public class MapEditorController implements Controller {
   private void initAutoFocus() {
     autoFocus.setCycleCount(1);
     autoFocus.setOnFinished(event -> onAutoFocusEnd());
+    mapScaleAlpha.addListener((observable, oldValue, newValue) -> zoom(newValue.doubleValue()));
   }
 
   private void autoFocusToNode(DbNode node) {
@@ -2056,10 +1843,14 @@ public class MapEditorController implements Controller {
     autoFocusToPoint(xSum / nodesCount, ySum / nodesCount);
   }
 
-  private void autoFocusToPoint(double x, double y) {
+  /**
+   * Automatically pans and zooms to a given node
+   *
+   * @param x x location to go to
+   * @param y y location to go to
+   */
+  public void autoFocusToPoint(double x, double y) {
 
-    endFocusVals.add(new KeyValue(pn_stack.scaleXProperty(), MAX_MAP_SCALE, Interpolator.LINEAR));
-    endFocusVals.add(new KeyValue(pn_stack.scaleYProperty(), MAX_MAP_SCALE, Interpolator.LINEAR));
     endFocusVals.add(
         new KeyValue(
             pn_stack.translateXProperty(),
@@ -2179,7 +1970,7 @@ public class MapEditorController implements Controller {
     buildingButtonList.addAnimatedNode(mainButtonList);
 
     buildingButtonList.setSpacing(120);
-    buildingButtonList.setRotate(-90); // TODO
+    buildingButtonList.setRotate(-90);
     faulknerButtonList.setSpacing(15);
     mainButtonList.setSpacing(15);
 
@@ -2198,6 +1989,7 @@ public class MapEditorController implements Controller {
         e -> {
           try {
             handleFloorButtonClicked(txt);
+            if (!(mode == Mode.ADD_SHAFT)) mapScaleAlpha.set(0); // TODO:new
           } catch (DBException ex) {
             ex.printStackTrace();
           }
@@ -2211,7 +2003,7 @@ public class MapEditorController implements Controller {
    * @throws DBException
    */
   public void handleFloorButtonClicked(String txt) throws DBException {
-    collapseAllFloorButtons();
+    if (!(mode == Mode.ADD_SHAFT)) collapseAllFloorButtons();
     if (txt.equals("F1")) {
       changeFloor(1, "Faulkner");
       this.currentFloor = 1;

@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.admin.NewAdminController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #263051;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.admin.NewAdminController">
    <children>
     <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="1080.0" prefWidth="400.0" style="-fx-background-color: #263051;" AnchorPane.topAnchor="0.0">
          <children>
@@ -119,7 +119,7 @@
                      </children>
                   </Pane>
                   <Pane prefHeight="10.0" prefWidth="75.0" style="-fx-background-color: #263051;" />
-                  <Pane prefHeight="60.0" prefWidth="104.0" style="-fx-background-color: #263051;">
+                  <Pane prefHeight="67.0" prefWidth="65.0" style="-fx-background-color: #263051;">
                      <children>
                         <JFXButton fx:id="btn_denyReq" ellipsisString="" onMouseClicked="#denyReq" prefHeight="49.0" prefWidth="63.0" text="    ">
                            <graphic>
@@ -135,7 +135,7 @@
                         </JFXButton>
                      </children>
                   </Pane>
-                  <Pane prefHeight="117.5" prefWidth="80.0" style="-fx-background-color: #263051;" />
+                  <Pane prefHeight="63.0" prefWidth="65.0" style="-fx-background-color: #263051;" />
                   <Pane prefHeight="60.0" prefWidth="104.0" style="-fx-background-color: #263051;">
                      <children>
                         <JFXButton fx:id="btn_upload" ellipsisString="" onMouseClicked="#popUpFileManager" prefHeight="53.0" prefWidth="67.0" text="    ">
@@ -212,6 +212,32 @@
                         </JFXButton>
                      </children>
                   </Pane>
+                  <Pane prefHeight="60.0" prefWidth="104.0" style="-fx-background-color: #263051;">
+                     <children>
+                        <JFXButton fx:id="btn_stats" ellipsisString="" onMouseClicked="#switchToStats" prefHeight="51.0" prefWidth="65.0" text="   ">
+                           <graphic>
+                              <ImageView fitHeight="42.0" fitWidth="45.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../images/adminIcons/statistics-64.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </JFXButton>
+                     </children>
+                  </Pane>
+                  <Pane prefHeight="66.0" prefWidth="65.0" style="-fx-background-color: #263051;">
+                     <children>
+                        <JFXButton fx:id="btn_return" ellipsisString="" onMouseClicked="#returnToHome" prefHeight="51.0" prefWidth="65.0" text="   ">
+                           <graphic>
+                              <ImageView fitHeight="42.0" fitWidth="45.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../../images/adminIcons/report-3-64.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </JFXButton>
+                     </children>
+                  </Pane>
                   <Pane prefHeight="140.0" prefWidth="65.0" style="-fx-background-color: #263051;" />
                   <Pane prefHeight="109.0" prefWidth="65.0" style="-fx-background-color: #263051;">
                      <children>
@@ -250,35 +276,37 @@
                   </Label>
                </children>
             </Pane>
+            <Label fx:id="lbl_changeAlgo" layoutX="120.0" layoutY="180.0" styleClass="label-file-size" stylesheets="@../../css/sanitationRequestUI.css" text="Current Algorithm:" visible="false" />
             <JFXComboBox fx:id="cb_changeAlgo" focusColor="#e6ebf2" layoutX="120.0" layoutY="200.0" prefHeight="39.0" prefWidth="200.0" promptText="Change Algorithm" style="-fx-prompt-text-fill: #e6ebf2; fx-text-inner-fill: #e6ebf2; -fx-font-size: 18px;" styleClass="cell" stylesheets="@../../css/adminTables.css" unFocusColor="#e6ebf2" visible="false" />
             <JFXButton fx:id="btn_submit" layoutX="160.0" layoutY="260.0" onMouseClicked="#changeAlgorithm" prefWidth="100.0" styleClass="jfx-button-regular-arduino" stylesheets="@../../css/sanitationRequestUI.css" text="Submit" textFill="#e6ebf2" visible="false">
                <font>
                   <Font size="18.0" />
                </font>
             </JFXButton>
+            <Label fx:id="lbl_algo" layoutX="280.0" layoutY="180.0" styleClass="label-file-size" stylesheets="@../../css/sanitationRequestUI.css" text="AStar" visible="false" />
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="anchorSwap" layoutX="186.0" layoutY="96.0" prefHeight="1080.0" prefWidth="1552.0" style="-fx-background-color: #263051;" AnchorPane.leftAnchor="380.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <TableView fx:id="tb_RequestTable" layoutX="57.0" layoutY="245.0" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="429.0" stylesheets="@../../css/adminTables.css" AnchorPane.bottomAnchor="296.0" AnchorPane.leftAnchor="57.0" AnchorPane.topAnchor="245.0" />
-            <TableView fx:id="tbl_Employees" layoutX="1060.0" layoutY="245.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" stylesheets="@../../css/adminTables.css" AnchorPane.bottomAnchor="296.0" AnchorPane.topAnchor="245.0" />
-            <JFXCheckBox fx:id="ch_requestFilter" checkedColor="#5a69c6" layoutX="50.0" layoutY="789.0" styleClass="label-mid-size" stylesheets="@../../css/sanitationRequestUI.css" text="Filter to Open Requests" textFill="#e6ebf2" AnchorPane.leftAnchor="50.0">
-               <font>
-                  <Font size="24.0" />
-               </font></JFXCheckBox>
-            <ChoiceBox fx:id="cb_reqFilter" layoutX="610.0" layoutY="794.0" prefWidth="150.0" stylesheets="@../../css/sanitationRequestUI.css" />
-            <Label layoutX="369.0" layoutY="789.0" styleClass="label-mid-size" stylesheets="@../../css/sanitationRequestUI.css" text="Filter by request type:" textFill="#e6ebf2">
-               <font>
-                  <Font size="24.0" />
-               </font></Label>
-            <JFXButton layoutX="797.0" layoutY="789.0" onMouseClicked="#resetTable" text="Reset" textFill="#e6ebf2">
-               <font>
-                  <Font size="18.0" />
-               </font>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </JFXButton>
-         </children></AnchorPane>
+      <AnchorPane fx:id="anchorSwap" layoutX="186.0" layoutY="96.0" prefHeight="1080.0" prefWidth="1552.0" style="-fx-background-color: #263051;" AnchorPane.leftAnchor="380.0" AnchorPane.topAnchor="0.0" />
+      <TableView fx:id="tb_RequestTable" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="429.0" prefWidth="975.0" stylesheets="@../../css/adminTables.css" AnchorPane.bottomAnchor="296.0" AnchorPane.leftAnchor="450.0" AnchorPane.topAnchor="245.0" />
+      <TableView fx:id="tbl_Employees" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" stylesheets="@../../css/adminTables.css" AnchorPane.bottomAnchor="296.0" AnchorPane.leftAnchor="1475.0" AnchorPane.topAnchor="245.0" />
+      <JFXCheckBox fx:id="ch_requestFilter" checkedColor="#5a69c6" styleClass="label-mid-size" stylesheets="@../../css/sanitationRequestUI.css" text="Filter to Open Requests" textFill="#e6ebf2" AnchorPane.leftAnchor="450.0" AnchorPane.topAnchor="790.0">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </JFXCheckBox>
+      <ChoiceBox fx:id="cb_reqFilter" prefWidth="150.0" stylesheets="@../../css/sanitationRequestUI.css" AnchorPane.leftAnchor="1000.0" AnchorPane.topAnchor="795.0" />
+      <Label fx:id="lbl_req" styleClass="label-mid-size" stylesheets="@../../css/sanitationRequestUI.css" text="Filter by request type:" textFill="#e6ebf2" AnchorPane.leftAnchor="750.0" AnchorPane.topAnchor="790.0">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <JFXButton fx:id="btn_reset" onMouseClicked="#resetTable" styleClass="jfx-button-regular-half" stylesheets="@../../css/sanitationRequestUI.css" text="Reset" textFill="#e6ebf2" AnchorPane.leftAnchor="1175.0" AnchorPane.topAnchor="790.0">
+         <font>
+            <Font size="18.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </JFXButton>
    </children>
 </AnchorPane>
