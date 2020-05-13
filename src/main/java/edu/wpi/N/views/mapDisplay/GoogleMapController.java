@@ -1,7 +1,7 @@
 package edu.wpi.N.views.mapDisplay;
 
-import edu.wpi.N.App;
-import edu.wpi.N.Main;
+import edu.wpi.N.AppClass;
+import edu.wpi.N.MainClass;
 import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.views.Controller;
 import java.net.URL;
@@ -13,7 +13,7 @@ import javafx.scene.web.WebView;
 public class GoogleMapController implements Controller, Initializable {
 
   private StateSingleton singleton;
-  private App mainApp;
+  private AppClass mainApp;
   private String pathToHTML;
 
   @FXML protected WebView webView;
@@ -25,7 +25,7 @@ public class GoogleMapController implements Controller, Initializable {
 
   @Override
   public void initialize(URL url, ResourceBundle rb) {
-    webView.getEngine().load(Main.class.getResource(pathToHTML).toString());
+    webView.getEngine().load(MainClass.class.getResource(pathToHTML).toString());
   }
 
   public void setSingleton(StateSingleton singleton) {
@@ -33,7 +33,7 @@ public class GoogleMapController implements Controller, Initializable {
   }
 
   @Override
-  public void setMainApp(App mainApp) {
+  public void setMainApp(AppClass mainApp) {
     this.mainApp = mainApp;
   }
 }

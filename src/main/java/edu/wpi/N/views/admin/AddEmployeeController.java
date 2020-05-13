@@ -1,7 +1,7 @@
 package edu.wpi.N.views.admin;
 
 import com.jfoenix.controls.JFXTextField;
-import edu.wpi.N.App;
+import edu.wpi.N.AppClass;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.ServiceDB;
 import edu.wpi.N.entities.Service;
@@ -243,5 +243,5 @@ public class AddEmployeeController implements Initializable, Controller {
   }
 
   @Override
-  public void setMainApp(App mainApp) {}
+  public void setMainApp(AppClass mainApp) {}
 }

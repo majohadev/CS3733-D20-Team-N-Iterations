@@ -101,7 +101,6 @@ modules.xml
 .mtj.tmp/
 
 # Package Files #
-*.jar
 *.war
 *.nar
 *.ear
@@ -161,6 +160,19 @@ gradle-app.setting
 
 /myDB/
 /MapDB/
+/BWDatabase/
+/EdbAPI/
+/edu.wpi.cs3733.d20.teamP/
+/incident_report_backups/
+/SIR-DB/
+/interpreterCDB/
+/NSanitationDB/
+
 # End of https://www.gitignore.io/api/java,macos,gradle,intellij+all
 
 
+/interpreterCDB/
+/incident_report_backups/
+/edu.wpi.cs3733.d20.teamP/
+/EdbAPI/
+/BWDatabase/

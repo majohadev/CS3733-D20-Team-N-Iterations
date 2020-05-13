@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" style="-fx-background-color: #263051;" stylesheets="@../../css/sanitationRequestUI.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.info.AboutPageController">
+   <children>
+      <Label layoutX="70.0" layoutY="60.0" styleClass="label-header" stylesheets="@../../css/sanitationRequestUI.css" text="About" />
+      <Separator layoutX="70.0" layoutY="138.0" prefHeight="7.0" prefWidth="501.0" stylesheets="@../../css/sanitationRequestUI.css" />
+      <Label alignment="TOP_LEFT" layoutX="70.0" layoutY="170.0" prefHeight="696.0" prefWidth="501.0" styleClass="label-mid-size" stylesheets="@../../css/sanitationRequestUI.css" text="This application was made by a team of students as part of the CS3733-D20 Software Engineering course provided by the Worcester Polytechnic Institute Computer Science Department. To the right are the names and positions of all of the people who worked on the development of this application.&#10;&#10;We would also like to thank Brigham and Women's Hospital, their representative Andrew Shinn, and Faulkner Hospital for the time and input they gave during the development of this application.&#10;&#10;The Brigham and Women’s Hospital maps and data used in this application are copyrighted and provided for the sole use of educational purposes." textFill="WHITE" wrapText="true">
+         <font>
+            <Font name="Calibri" size="24.0" />
+         </font>
+      </Label>
+      <JFXButton fx:id="btn_back" alignment="CENTER" buttonType="RAISED" layoutX="70.0" layoutY="948.0" onMouseClicked="#onBtnBackClicked" prefHeight="52.0" prefWidth="104.0" ripplerFill="#002186" styleClass="jfx-button-regular" stylesheets="@../../css/sanitationRequestUI.css" text="Back" textFill="WHITE">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </JFXButton>
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="1150.0" layoutY="216.0" pickOnBounds="true" preserveRatio="true" styleClass="jfx-imageview-about-page">
+         <image>
+            <Image url="@../team%20pictures/Ivan%20Eroshenko.jpg" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="1630.0" layoutY="216.0" pickOnBounds="true" preserveRatio="true" styleClass="jfx-imageview-about-page">
+         <image>
+            <Image url="@../team%20pictures/Chris%20Lee.jpg" />
+         </image></ImageView>
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="910.0" layoutY="589.0" pickOnBounds="true" preserveRatio="true" styleClass="jfx-imageview-about-page">
+         <image>
+            <Image url="@../team%20pictures/Evan%20Llewellyn.jpg" />
+         </image></ImageView>
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="670.0" layoutY="589.0" pickOnBounds="true" preserveRatio="true" styleClass="jfx-imageview-about-page">
+         <image>
+            <Image url="@../team%20pictures/Kaitlyn%20Fichtner.png" />
+         </image></ImageView>
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="1150.0" layoutY="589.0" pickOnBounds="true" preserveRatio="true" styleClass="jfx-imageview-about-page">
+         <image>
+            <Image url="@../team%20pictures/Matt%20Johannesen.png" />
+         </image></ImageView>
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="1390.0" layoutY="216.0" pickOnBounds="true" preserveRatio="true" styleClass="jfx-imageview-about-page">
+         <image>
+            <Image url="@../team%20pictures/Michael%20Laks.jpg" />
+         </image></ImageView>
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="1390.0" layoutY="589.0" pickOnBounds="true" preserveRatio="true" styleClass="jfx-imageview-about-page">
+         <image>
+            <Image url="@../team%20pictures/Nick%20Pelletier.png" />
+         </image></ImageView>
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="1630.0" layoutY="589.0" pickOnBounds="true" preserveRatio="true" styleClass="jfx-imageview-about-page">
+         <image>
+            <Image url="@../team%20pictures/Nick%20Wood.jpg" />
+         </image></ImageView>
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="910.0" layoutY="216.0" pickOnBounds="true" preserveRatio="true" styleClass="jfx-imageview-about-page">
+         <image>
+            <Image url="@../team%20pictures/Noah%20Preston%20Capucilli-Shatan.jpg" />
+         </image></ImageView>
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="670.0" layoutY="216.0" pickOnBounds="true" preserveRatio="true" styleClass="jfx-imageview-about-page">
+         <image>
+            <Image url="@../team%20pictures/Tian%20Yu%20Fan.png" />
+         </image></ImageView>
+      <Label alignment="TOP_CENTER" layoutX="670.0" layoutY="453.0" prefHeight="88.0" prefWidth="150.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="Lead Software Engineer&#10;(User Interface)" textAlignment="CENTER" wrapText="true" />
+      <Label alignment="TOP_CENTER" layoutX="910.0" layoutY="393.0" prefHeight="60.0" prefWidth="150.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="Noah Preston Capucilli-Shatan" textAlignment="CENTER" wrapText="true" />
+      <Label alignment="TOP_CENTER" layoutX="910.0" layoutY="453.0" prefHeight="88.0" prefWidth="150.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="Assistant Lead Software Engineer (Database)" textAlignment="CENTER" wrapText="true" />
+      <Label alignment="TOP_CENTER" layoutX="1150.0" layoutY="393.0" prefHeight="60.0" prefWidth="150.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="Ivan Eroshenko" textAlignment="CENTER" wrapText="true" />
+      <Label alignment="TOP_CENTER" layoutX="1150.0" layoutY="453.0" prefHeight="88.0" prefWidth="150.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="Assistant Lead Software Engineer (Algorithms)" textAlignment="CENTER" wrapText="true" />
+      <Label alignment="TOP_CENTER" layoutX="1390.0" layoutY="393.0" prefHeight="60.0" prefWidth="150.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="Michael Laks" textAlignment="CENTER" wrapText="true" />
+      <Label alignment="TOP_CENTER" layoutX="1390.0" layoutY="453.0" prefHeight="88.0" prefWidth="150.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="Project Manager (User Interface)" textAlignment="CENTER" wrapText="true" />
+      <Label alignment="TOP_CENTER" layoutX="1630.0" layoutY="393.0" prefHeight="60.0" prefWidth="150.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="Chris Lee" textAlignment="CENTER" wrapText="true" />
+      <Label alignment="TOP_CENTER" layoutX="1630.0" layoutY="453.0" prefHeight="88.0" prefWidth="150.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="Scrum Master (Database)" textAlignment="CENTER" wrapText="true" />
+      <Label alignment="TOP_CENTER" layoutX="670.0" layoutY="766.0" prefHeight="60.0" prefWidth="150.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="Kaitlyn Fichtner" textAlignment="CENTER" wrapText="true" />
+      <Label alignment="TOP_CENTER" layoutX="670.0" layoutY="826.0" prefHeight="88.0" prefWidth="150.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="Documentation Analyst (Algorithms)" textAlignment="CENTER" wrapText="true" />
+      <Label alignment="TOP_CENTER" layoutX="670.0" layoutY="393.0" prefHeight="60.0" prefWidth="150.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="Tian Yu Fan" textAlignment="CENTER" wrapText="true" />
+      <Label alignment="TOP_CENTER" layoutX="910.0" layoutY="766.0" prefHeight="60.0" prefWidth="150.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="Evan Llewellyn" textAlignment="CENTER" wrapText="true" />
+      <Label alignment="TOP_CENTER" layoutX="910.0" layoutY="826.0" prefHeight="88.0" prefWidth="150.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="Software Engineer (Algorithms)" textAlignment="CENTER" wrapText="true" />
+      <Label alignment="TOP_CENTER" layoutX="1150.0" layoutY="766.0" prefHeight="60.0" prefWidth="150.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="Matt Johannesen" textAlignment="CENTER" wrapText="true" />
+      <Label alignment="TOP_CENTER" layoutX="1150.0" layoutY="826.0" prefHeight="88.0" prefWidth="150.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="Software Engineer (User Interface)" textAlignment="CENTER" wrapText="true" />
+      <Label alignment="TOP_CENTER" layoutX="1390.0" layoutY="766.0" prefHeight="60.0" prefWidth="150.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="Nick Pelletier" textAlignment="CENTER" wrapText="true" />
+      <Label alignment="TOP_CENTER" layoutX="1390.0" layoutY="826.0" prefHeight="88.0" prefWidth="150.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="Software Engineer (Database)" textAlignment="CENTER" wrapText="true" />
+      <Label alignment="TOP_CENTER" layoutX="1630.0" layoutY="766.0" prefHeight="60.0" prefWidth="150.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="Nick Wood" textAlignment="CENTER" wrapText="true" />
+      <Label alignment="TOP_CENTER" layoutX="1630.0" layoutY="826.0" prefHeight="88.0" prefWidth="150.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="Software Engineer (User Interface)" textAlignment="CENTER" wrapText="true" />
+      <JFXButton fx:id="btn_credits" alignment="CENTER" buttonType="RAISED" layoutX="346.0" layoutY="948.0" onMouseClicked="#onBtnCreditsClicked" prefHeight="52.0" prefWidth="104.0" ripplerFill="#002186" styleClass="jfx-button-regular" stylesheets="@../../css/sanitationRequestUI.css" text="Credits" textFill="WHITE">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </JFXButton>
+   </children>
+</AnchorPane>

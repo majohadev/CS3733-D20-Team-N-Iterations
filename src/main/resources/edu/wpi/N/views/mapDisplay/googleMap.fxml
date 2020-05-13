@@ -3,8 +3,8 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.web.WebView?>
 
-<AnchorPane id="AnchorPane" fx:id="currentPane" prefHeight="1994.0" prefWidth="2000.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.mapDisplay.GoogleMapController">
+<AnchorPane id="AnchorPane" fx:id="currentPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1005.0" prefWidth="1425.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.mapDisplay.GoogleMapController">
     <children>
-      <WebView fx:id="webView" layoutX="-74.0" layoutY="-116.0" prefHeight="2110.0" prefWidth="2000.0" />
+      <WebView fx:id="webView" layoutX="-192.0" layoutY="-142.0" prefHeight="1250.0" prefWidth="1626.0" />
     </children>
 </AnchorPane>

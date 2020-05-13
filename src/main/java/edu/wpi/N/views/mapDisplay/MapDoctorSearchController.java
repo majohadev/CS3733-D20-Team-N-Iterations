@@ -2,20 +2,23 @@ package edu.wpi.N.views.mapDisplay;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXToggleButton;
-import edu.wpi.N.App;
+import edu.wpi.N.AppClass;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.entities.employees.Doctor;
 import edu.wpi.N.views.Controller;
+import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.shape.Line;
+import javafx.util.Duration;
 
 public class MapDoctorSearchController implements Controller {
-  App mainApp;
+  AppClass mainApp;
   private StateSingleton singleton;
 
   @FXML TextField txt_doctor;
@@ -26,7 +29,33 @@ public class MapDoctorSearchController implements Controller {
   @FXML JFXToggleButton tg_handicap;
   @FXML JFXButton btn_reset;
 
+  // Guides for map location search
+  @FXML Line lineSearchOne;
+  @FXML Line lineSearchTwo;
+  @FXML Line lineSearchThree;
+  @FXML Line lineSearchFour;
+
   DbNode[] nodes = new DbNode[2];
+
+  /** Function displays lines indicating the way-finding feature for 10 seconds */
+  public void showGuideLines() {
+    lineSearchOne.setVisible(true);
+    lineSearchTwo.setVisible(true);
+    lineSearchThree.setVisible(true);
+    lineSearchFour.setVisible(true);
+
+    PauseTransition delay = new PauseTransition(Duration.seconds(10));
+
+    delay.setOnFinished(
+        event -> {
+          lineSearchOne.setVisible(false);
+          lineSearchTwo.setVisible(false);
+          lineSearchThree.setVisible(false);
+          lineSearchFour.setVisible(false);
+        });
+
+    delay.play();
+  }
 
   public void onSearchLocation(KeyEvent e) throws DBException {
     activeText = (TextField) e.getSource();
@@ -123,7 +152,7 @@ public class MapDoctorSearchController implements Controller {
   }
 
   @Override
-  public void setMainApp(App mainApp) {
+  public void setMainApp(AppClass mainApp) {
     this.mainApp = mainApp;
   }
 }

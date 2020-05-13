@@ -320,10 +320,10 @@
 ////
 ////        if (first.getBuilding().equals("Faulkner")) {
 ////          // go from Falkner to Main
-////          pathToHTML = "views/googleMapFaulknerToMain.html";
+////          pathToHTML = "views/FaulknerToMain45Francis.html";
 ////        } else {
 ////          // going from Main to Falkner
-////          pathToHTML = "views/googleMapMainToFaulkner.html";
+////          pathToHTML = "views/Main45FrancisToFaulkner.html";
 ////        }
 ////
 ////        // inject the path to html file to the GoogleMapController
@@ -484,7 +484,7 @@
 //      root = loader.load();
 //      Scene scene = new Scene(root);
 //      stage.setScene(scene);
-//
+////
 //      QrPopUpController controller = (QrPopUpController) loader.getController();
 //      controller.displayQrCode(directions);
 //

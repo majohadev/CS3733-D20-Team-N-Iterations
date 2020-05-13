@@ -1,12 +1,12 @@
 package edu.wpi.N.views;
 
-import edu.wpi.N.App;
+import edu.wpi.N.AppClass;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.entities.States.StateSingleton;
 import java.io.IOException;
 
 public class HomeController implements Controller {
-  private App mainApp;
+  private AppClass mainApp;
 
   private StateSingleton singleton;
 
@@ -15,7 +15,7 @@ public class HomeController implements Controller {
     this.singleton = singleton;
   }
 
-  public void setMainApp(App mainApp) {
+  public void setMainApp(AppClass mainApp) {
     this.mainApp = mainApp;
   }
 
@@ -53,6 +53,6 @@ public class HomeController implements Controller {
   }
 
   public void onBtnAboutClicked() throws IOException {
-    this.mainApp.switchScene("/edu/wpi/N/views/aboutPage.fxml", singleton);
+    this.mainApp.switchScene("/edu/wpi/N/views/info/aboutPage.fxml", singleton);
   }
 }

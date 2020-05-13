@@ -2,7 +2,7 @@ package edu.wpi.N.views.services;
 
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
-import edu.wpi.N.App;
+import edu.wpi.N.AppClass;
 import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
@@ -24,7 +24,7 @@ public class LaundryRequestController implements Controller {
 
   private StateSingleton singleton;
 
-  private App mainApp;
+  private AppClass mainApp;
 
   // Add FXML Tags Here
   @FXML JFXComboBox<String> cmbo_text;
@@ -46,7 +46,7 @@ public class LaundryRequestController implements Controller {
 
   public LaundryRequestController() throws DBException {}
 
-  public void setMainApp(App mainApp) {
+  public void setMainApp(AppClass mainApp) {
     this.mainApp = mainApp;
   }
 

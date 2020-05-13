@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXToggleButton?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
@@ -32,8 +33,22 @@
       </ImageView>
       <Line endX="-100.00001525878906" endY="40.19999694824219" layoutX="139.0" layoutY="125.39999389648438" startX="-100.00001525878906" startY="16.600006103515625" stroke="#e6ebf2" strokeMiterLimit="2.0" strokeWidth="2.0" style="-fx-stroke-dash-array: 8;" AnchorPane.topAnchor="141.0" />
       <ListView fx:id="lst_fuzzySearch" layoutX="24.0" layoutY="238.0" onMouseClicked="#onItemSelected" prefHeight="481.0" prefWidth="296.0" styleClass="list-cell" stylesheets="@../../css/newMapDisplay.css" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="235.0" />
-      <JFXButton fx:id="btn_search" layoutX="230.0" layoutY="750.0" maxWidth="90.0" minWidth="90.0" prefHeight="39.0" prefWidth="90.0" stylesheets="@../../css/newMapDisplay.css" text="Search" textFill="#e6ebf2" AnchorPane.leftAnchor="230.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="750.0" />
-      <JFXToggleButton fx:id="tg_handicap" layoutX="2.0" layoutY="789.0" prefHeight="62.0" prefWidth="160.0" styleClass="toggle" stylesheets="@../../css/newMapDisplay.css" text="Handicap" textFill="#e6ebf2" toggleColor="#4a69c6" toggleLineColor="#6c5c7f" unToggleColor="#4a69c6" unToggleLineColor="#e6ebf2" />
-      <JFXButton fx:id="btn_reset" layoutX="20.0" layoutY="750.0" maxWidth="90.0" minWidth="90.0" prefWidth="90.0" stylesheets="@../../css/newMapDisplay.css" text="Reset" textFill="#e6ebf2" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="750.0" />
+
+      <JFXButton fx:id="btn_search" layoutX="30.0" layoutY="734.0" maxWidth="-Infinity" minWidth="90.0" prefHeight="34.0" prefWidth="295.0" styleClass="searchbutton" stylesheets="@../../css/newMapDisplay.css" text="Search" textFill="#e6ebf2" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="734.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></JFXButton>
+      <JFXToggleButton fx:id="tg_handicap" graphicTextGap="0.0" layoutX="93.0" layoutY="823.0" prefHeight="84.0" prefWidth="159.0" styleClass="toggle" stylesheets="@../../css/newMapDisplay.css" text="Handicap" textFill="#e6ebf2" toggleColor="#7e9ab6" toggleLineColor="#4a69c6" unToggleColor="#7e9ab6" unToggleLineColor="#e6ebf2" AnchorPane.leftAnchor="93.0" AnchorPane.topAnchor="823.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></JFXToggleButton>
+      <JFXButton fx:id="btn_reset" layoutX="227.0" layoutY="792.0" maxWidth="90.0" minWidth="90.0" stylesheets="@../../css/newMapDisplay.css" text="Reset" textFill="#e6ebf2" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="789.0">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor></JFXButton>
+      <Line fx:id="lineSearchThree" endX="215.0" layoutX="115.0" layoutY="86.0" startX="-100.0" stroke="#ff8d0b" strokeWidth="7.0" visible="false" />
+      <Line fx:id="lineSearchTwo" endX="-100.0" endY="809.5" layoutX="115.0" layoutY="92.0" startX="-100.0" stroke="#ff8d0b" strokeWidth="7.0" visible="false" />
+      <Line fx:id="lineSearchOne" endX="212.0" layoutX="117.0" layoutY="905.0" startX="-102.0" stroke="#ff8d0b" strokeWidth="7.0" visible="false" />
+      <Line fx:id="lineSearchFour" endX="-97.5" endY="813.0" layoutX="430.0" layoutY="92.0" startX="-100.0" startY="-3.0" stroke="#ff8d0b" strokeWidth="7.0" visible="false" />
    </children>
 </AnchorPane>

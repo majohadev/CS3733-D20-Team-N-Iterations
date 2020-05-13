@@ -1,6 +1,6 @@
 package edu.wpi.N.database;
 
-import edu.wpi.N.Main;
+import edu.wpi.N.MainClass;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.views.features.ArduinoController;
 import java.io.BufferedReader;
@@ -71,9 +71,11 @@ public class MapDB {
   public static void initTestDB() throws SQLException, ClassNotFoundException {
     if (con != null) {
       ScriptRunner sr = new ScriptRunner(con);
+      sr.setLogWriter(null);
       Reader reader =
           new BufferedReader(
-              new InputStreamReader(Main.class.getResourceAsStream("sql/drop.sql"))); // drop tables
+              new InputStreamReader(
+                  MainClass.class.getResourceAsStream("sql/drop.sql"))); // drop tables
       sr.runScript(reader);
     } else {
       Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
@@ -83,8 +85,10 @@ public class MapDB {
       statement = con.createStatement();
     }
     ScriptRunner sr = new ScriptRunner(con);
+    sr.setLogWriter(null);
     Reader reader =
-        new BufferedReader(new InputStreamReader(Main.class.getResourceAsStream("sql/setup.sql")));
+        new BufferedReader(
+            new InputStreamReader(MainClass.class.getResourceAsStream("sql/setup.sql")));
     sr.runScript(reader);
 
     addHardCodedLogins();
@@ -166,6 +170,27 @@ public class MapDB {
     } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Unknown error: addNode", e);
+    }
+  }
+
+  /**
+   * Adds the given field to the given node. Overwrites any field that was already there
+   *
+   * @param nodeID The nodeID of the given node
+   * @param field The field to be given to the node
+   * @return True on success
+   * @throws DBException on error
+   */
+  public static boolean addDetail(String nodeID, String field) throws DBException {
+    try {
+      String query = "INSERT INTO detail VALUES (?, ?)";
+      PreparedStatement stmt = con.prepareStatement(query);
+      stmt.setString(1, nodeID);
+      stmt.setString(2, field);
+      return stmt.executeUpdate() > 0;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown error: addDetail", e);
     }
   }
 
@@ -355,6 +380,51 @@ public class MapDB {
     } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Unknown error: getNode", e);
+    }
+  }
+
+  /**
+   * Returns a LinkedList of nodeID that matches the given field
+   *
+   * @param field field of the Node
+   * @return List of nodeID
+   * @throws DBException
+   */
+  public static LinkedList<DbNode> getNodesbyField(String field) throws DBException {
+    String query = "SELECT nodeID FROM detail WHERE field = ?";
+    LinkedList<DbNode> list = new LinkedList<>();
+    try {
+      PreparedStatement stmt = con.prepareStatement(query);
+      stmt.setString(1, field);
+      ResultSet rs = stmt.executeQuery();
+      while (rs.next()) {
+        list.add(getNode(rs.getString("nodeID")));
+      }
+      return list;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown error: getNodeIDbyField", e);
+    }
+  }
+
+  /**
+   * Returns all the fields in the database
+   *
+   * @return A linked list of strings representing all the fields in the database
+   * @throws DBException On error
+   */
+  public static LinkedList<String> getFields() throws DBException {
+    String query = "SELECT DISTINCT field FROM detail";
+    try {
+      PreparedStatement stmt = con.prepareStatement(query);
+      ResultSet rs = stmt.executeQuery();
+      LinkedList<String> fields = new LinkedList<>();
+      while (rs.next()) {
+        fields.add(rs.getString(1));
+      }
+      return fields;
+    } catch (SQLException e) {
+      throw new DBException("Unknown error: getFields", e);
     }
   }
 
@@ -708,6 +778,26 @@ public class MapDB {
     } catch (SQLException e) {
       e.printStackTrace();
       throw new DBException("Unknown error: NobuildingfloorNodes", e);
+    }
+  }
+
+  /**
+   * Gets a list of all nodes on the chosen building
+   *
+   * @param building the building from which user want to get all the Nodes.
+   * @return a LinkedList of all the noes with the chosen floor.
+   * @throws DBException
+   */
+  public static LinkedList<DbNode> DetailedSearchbyBuilding(String building) throws DBException {
+    String query = "SELECT * FROM nodes WHERE building = ?";
+    try {
+      PreparedStatement st = con.prepareStatement(query);
+
+      st.setString(1, building);
+      return getAllNodesSQL(st);
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown error: DetailedSearchbyBuilding", e);
     }
   }
 
@@ -1251,6 +1341,16 @@ public class MapDB {
     }
   }
 
+  public static void clearDetail() throws DBException {
+    try {
+      String query = "DELETE FROM detail";
+      statement.executeUpdate(query);
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unknown error: clearDetail");
+    }
+  }
+
   /**
    * Gets the node currently set up as the kiosk
    *
@@ -1329,6 +1429,26 @@ public class MapDB {
   }
 
   /**
+   * Gets a list of DbNode whose long names start with the given letter
+   *
+   * @param letter The letter that the long names start with
+   * @return a LinkedList of DbNode where all of the long names have letter as their first character
+   * @throws DBException on error
+   */
+  public static LinkedList<DbNode> getRoomsByFirstLetter(char letter) throws DBException {
+    try {
+      String query = "SELECT * FROM nodes WHERE Upper(longName) LIKE ? AND NOT nodeType = 'HALL'";
+      PreparedStatement st = con.prepareStatement(query);
+      st.setString(1, String.valueOf(letter).toUpperCase() + "%");
+      LinkedList<DbNode> result = new LinkedList<>();
+      buildDbNodeList(result, st);
+      return result;
+    } catch (SQLException e) {
+      throw new DBException("Unknown error: getRoomsByFirstLetter", e);
+    }
+  }
+
+  /**
    * Loads all Map edges and Nodes into a Hashmap
    *
    * @return Hashmap <NodeID, list of DbNodes has edges to>
@@ -1360,5 +1480,134 @@ public class MapDB {
     //    }
     //    return result;
     return map;
+  }
+
+  /**
+   * Inserts a new hitbox into the database
+   *
+   * @param x1 The x value of the first corner of the box
+   * @param y1 The y value of the first corner of the box
+   * @param x2 The x value of the second corner of the box
+   * @param y2 The y value of the second corner of the box
+   * @param nodeID THe nodeID of the node this hitbox references
+   * @throws DBException On error or when the nodeID isn't valid
+   */
+  public static void addHitbox(int x1, int y1, int x2, int y2, String nodeID) throws DBException {
+    String query = "INSERT INTO hitbox (X1, Y1, X2, Y2, nodeID) VALUES (?,?,?,?,?)";
+    try {
+      PreparedStatement stmt = con.prepareStatement(query);
+      stmt.setInt(1, x1);
+      stmt.setInt(2, y1);
+      stmt.setInt(3, x2);
+      stmt.setInt(4, y2);
+      stmt.setString(5, nodeID);
+      stmt.executeUpdate();
+    } catch (SQLException e) {
+      if (e.getSQLState().equals("23503"))
+        throw new DBException("That nodeID is invalid and does not exist!");
+      e.printStackTrace();
+      throw new DBException("Unexpected error: addHitbox", e);
+    }
+  }
+
+  /**
+   * Gives the nodeID that a user clicked on based on the hitboxes in the database
+   *
+   * @param x The x coordinate that the user clicked (relative to upper left corner of map)
+   * @param y The y coordinate that the user clicked (relative to upper left corner of map)
+   * @param building the building that the map is in
+   * @param floor the floor that the map is in
+   * @return The DB node for the region that the user clicked on, null if they didn't click anywhere
+   * @throws DBException on error
+   */
+  public static DbNode checkHitbox(int x, int y, String building, int floor) throws DBException {
+    String query = "";
+    if (building.equals("Faulkner")) {
+      query =
+          "SELECT nodes.nodeID, xcoord, ycoord, floor, building, nodeType, longName, shortName, teamAssigned FROM"
+              + "(SELECT nodeID from hitbox WHERE x1 <= ? AND x2 >= ? AND y1 <= ? AND y2 >= ?) as hitbox,"
+              + " (SELECT * FROM nodes WHERE building = ? AND floor = ?) as nodes WHERE nodes.nodeID = hitbox.nodeID";
+    } else {
+      query =
+          "SELECT nodes.nodeID, xcoord, ycoord, floor, building, nodeType, longName, shortName, teamAssigned FROM"
+              + "(SELECT nodeID from hitbox WHERE x1 <= ? AND x2 >= ? AND y1 <= ? AND y2 >= ?) as hitbox,"
+              + " (SELECT * FROM nodes WHERE building <> ? AND floor = ?) as nodes WHERE nodes.nodeID = hitbox.nodeID";
+    }
+    try {
+      PreparedStatement stmt = con.prepareStatement(query);
+      stmt.setInt(1, x);
+      stmt.setInt(2, x);
+      stmt.setInt(3, y);
+      stmt.setInt(4, y);
+      stmt.setString(5, "Faulkner");
+      stmt.setInt(6, floor);
+      ResultSet rs = stmt.executeQuery();
+      rs.next();
+      System.out.println(rs.getString("nodeID"));
+      return new DbNode(
+          rs.getString("nodeID"),
+          rs.getInt("xcoord"),
+          rs.getInt("ycoord"),
+          rs.getInt("floor"),
+          rs.getString("building"),
+          rs.getString("nodeType"),
+          rs.getString("longName"),
+          rs.getString("shortName"),
+          rs.getString("teamAssigned").charAt(0));
+    } catch (SQLException e) {
+      if (e.getSQLState().equals("24000")) {
+        return null;
+      }
+      e.printStackTrace();
+      throw new DBException("Unexpected error: checkHitbox", e);
+    }
+  }
+
+  /**
+   * Exports the hitboxes to a csv format in "x1,y1,x2,y2,nodeID format
+   *
+   * @return The exported CSV String
+   * @throws DBException on error
+   */
+  public static String exportHitboxes() throws DBException {
+    String result = "x1,y1,x2,y2,nodeID\n";
+    String query = "SELECT * FROM hitbox";
+    try {
+      PreparedStatement stmt = con.prepareStatement(query);
+      ResultSet rs = stmt.executeQuery();
+      while (rs.next()) {
+        result =
+            result
+                + rs.getInt("x1")
+                + ","
+                + rs.getInt("y1")
+                + ","
+                + rs.getInt("x2")
+                + ","
+                + rs.getInt("y2")
+                + ","
+                + rs.getString("nodeID")
+                + "\n";
+      }
+      return result;
+    } catch (SQLException e) {
+      e.printStackTrace();
+      throw new DBException("Unexpected error: exportHitboxes", e);
+    }
+  }
+
+  public static LinkedList<String> getBuildings() throws DBException {
+    String query = "SELECT DISTINCT building FROM nodes";
+    try {
+      PreparedStatement stmt = con.prepareStatement(query);
+      ResultSet rs = stmt.executeQuery();
+      LinkedList<String> buildings = new LinkedList<>();
+      while (rs.next()) {
+        buildings.add(rs.getString(1));
+      }
+      return buildings;
+    } catch (SQLException e) {
+      throw new DBException("Unexpected error: getBuildings", e);
+    }
   }
 }

@@ -4,6 +4,7 @@
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXTextArea?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -35,7 +36,7 @@
          <children>
             <VBox alignment="CENTER" maxHeight="509.0" maxWidth="500.0" minWidth="500.0" prefHeight="509.0" prefWidth="500.0" spacing="30.0">
                <children>
-                  <Label styleClass="label-mid-size" stylesheets="@../../css/sanitationRequestUI.css" text="Enter A Location where a wheelchair is needed">
+                  <Label styleClass="label-mid-size" stylesheets="@../../css/sanitationRequestUI.css" text="Please select a location">
                      <font>
                         <Font name="Calibri" size="24.0" />
                      </font>
@@ -80,6 +81,9 @@
                </image>
             </ImageView>
          </graphic>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
       </JFXButton>
    </children>
 </AnchorPane>

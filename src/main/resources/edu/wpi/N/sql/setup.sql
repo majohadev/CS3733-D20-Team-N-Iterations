@@ -21,6 +21,19 @@ CREATE TABLE nodes (
   CONSTRAINT shaft_PK PRIMARY KEY (nodeID)
   );
 
+    CREATE TABLE hitbox (
+    X1 INT NOT NULL,
+    Y1 INT NOT NULL,
+    X2 INT NOT NULL,
+    Y2 INT NOT NULL,
+    nodeID CHAR(10) NOT NULL REFERENCES nodes(nodeID) ON DELETE CASCADE,
+    CONSTRAINT hitbox_PK PRIMARY KEY (X1, Y1, X2, Y2, nodeID)
+    );
+
+CREATE TABLE visited (
+    visitedID INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    nodeID char(10) NOT NULL REFERENCES nodes(nodeID) ON DELETE CASCADE
+);
 
 CREATE TABLE edges (
    edgeID CHAR(21) NOT NULL PRIMARY KEY,
@@ -80,6 +93,11 @@ CREATE TABLE doctors (
 CREATE TABLE flower(
     flowerName VARCHAR(255) PRIMARY KEY,
     price INT NOT NULL
+);
+
+CREATE TABLE detail (
+    nodeID CHAR(10) NOT NULL PRIMARY KEY REFERENCES nodes(nodeID) ON DELETE CASCADE,
+    field VARCHAR(255) NOT NULL
 );
 
 /*TODO add the employees table */

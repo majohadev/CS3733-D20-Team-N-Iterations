@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.Cursor?>
+<?import javafx.scene.Group?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -10,17 +12,26 @@
 
 <AnchorPane fx:id="controllerAnchorPane" maxWidth="1520.0" minWidth="1520.0" prefWidth="1520.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.mapDisplay.MapBaseController">
     <children>
-        <StackPane fx:id="pn_movableMap" maxWidth="1520.0" minHeight="0.0" minWidth="1520.0" onMouseDragged="#mapDragHandler" onMousePressed="#mapPressHandler" onMouseReleased="#mapReleaseHandler" onScroll="#mapScrollHandler" prefWidth="1520.0">
+      <Pane fx:id="pn_hitboxMenu" mouseTransparent="true" prefHeight="200.0" prefWidth="200.0" />
+        <StackPane fx:id="pn_movableMap" maxHeight="1033.0" maxWidth="1520.0" minHeight="0.0" minWidth="1520.0" onMouseClicked="#sendHitboxData" onMouseDragged="#mapDragHandler" onMousePressed="#mapPressHandler" onMouseReleased="#mapReleaseHandler" onScroll="#mapScrollHandler" prefHeight="1033.0" prefWidth="1520.0">
             <children>
-                  <Pane fx:id="pn_routeNodes" maxHeight="1.7976931348623157E308" maxWidth="1520.0" minHeight="0.0" minWidth="1520.0" prefWidth="1520.0">
+            <AnchorPane>
                <children>
-                      <ImageView fx:id="img_map" fitHeight="1034.0" fitWidth="1520.0" pickOnBounds="true" preserveRatio="true">
-                          <image>
-                              <Image url="@../../images/map/MainL2.png" />
-                          </image>
-                      </ImageView>
-                      <Pane fx:id="pn_path" maxHeight="1.7976931348623157E308" maxWidth="1520.0" minHeight="0.0" minWidth="1520.0" prefWidth="1520.0" />
-               </children></Pane>
+                  <Group>
+                     <children>
+                            <ImageView fx:id="img_map" fitHeight="1033.0" fitWidth="1520.0" pickOnBounds="true" preserveRatio="true">
+                                <image>
+                                    <Image url="@../../images/map/MainL2.png" />
+                                </image>
+                           <viewport>
+                              <Rectangle2D />
+                           </viewport>
+                            </ImageView>
+                            <Pane fx:id="pn_path" maxWidth="1520.0" minHeight="0.0" minWidth="1520.0" prefWidth="1520.0" />
+                     </children>
+                  </Group>
+               </children>
+            </AnchorPane>
             </children>
             <cursor>
                 <Cursor fx:constant="OPEN_HAND" />
