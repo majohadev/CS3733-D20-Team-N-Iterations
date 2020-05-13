@@ -15,6 +15,7 @@ import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.entities.employees.Doctor;
 import edu.wpi.N.qrcontrol.QRGenerator;
 import edu.wpi.N.views.Controller;
+import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -71,7 +72,6 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
   JFXNodesList faulknerButtonList;
   JFXNodesList mainButtonList;
   JFXButton btn_google;
-  ArrayList<JFXButton> pathButtonList;
 
   /**
    * provides reference to the main application class
@@ -99,18 +99,20 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
    * @throws IOException
    */
   public void initialize() throws DBException, IOException {
+    System.out.println("ligma nutz");
     this.path = new Path(new LinkedList<>());
     this.currentFloor = 1;
     this.currentBuilding = "Faulkner";
     setBackground("Faulkner");
     this.directions = new ArrayList<>();
-    this.pathButtonList = new ArrayList<>();
     this.buildingButtonList = new JFXNodesList();
     this.faulknerButtonList = new JFXNodesList();
     this.mainButtonList = new JFXNodesList();
     this.pn_hospitalView = mapBaseController.getAnchorPane();
-    mapBaseController.setFloor(this.currentBuilding, this.currentFloor, this.path);
+
+    System.out.println("gagnon som");
     mapBaseController.setNewMapDisplayController(this);
+    mapBaseController.setFloor(this.currentBuilding, this.currentFloor, this.path);
     setFloorBuildingText(this.currentFloor, this.currentBuilding);
     pn_mapContainer.getChildren().setAll(pn_hospitalView);
     pn_iconBar.getChildren().get(0).setStyle("-fx-background-color: #4A69C6;");
@@ -277,15 +279,6 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
         e -> {
           try {
             handleFloorButtonClicked(txt);
-            if (this.path != null && this.path.size() > 0 && btn != btn_google) {
-              for (int i = 0; i < pathButtonList.size(); i++) {
-                pathButtonList.get(i).setStyle("-fx-background-color: #4A69C6");
-                if (pathButtonList.get(i) == btn && i < pathButtonList.size() - 1) {
-                  pathButtonList.get(i + 1).setStyle("-fx-background-color: #6C5C7F");
-                  i++;
-                }
-              }
-            }
           } catch (DBException ex) {
             ex.printStackTrace();
           }
@@ -331,6 +324,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     }
     if (mapQRController != null && pn_iconBar.getChildren().contains(pn_qrIcon)) {
       mapQRController.setTabFocus(floor, building);
+      changeFloor(floor, building);
     }
     if (path == null || path.size() == 0) {
       setDefaultKioskNode();
@@ -338,7 +332,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
   }
 
   public void changeFloor(int newFloor, String newBuilding) throws DBException {
-    if (newFloor == this.currentFloor) {
+    if (newFloor == this.currentFloor && !changedBuilding(this.currentBuilding, newBuilding)) {
       return;
     }
     mapBaseController.resetFocus();
@@ -348,6 +342,12 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     setBackground(newBuilding);
     setFloorBuildingText(this.currentFloor, this.currentBuilding);
     mapBaseController.setFloor(this.currentBuilding, this.currentFloor, this.path);
+  }
+
+  public boolean changedBuilding(String str1, String str2) {
+    boolean isFirstFaulkner = str1.equals("Faulkner");
+    boolean isSecondFaulkner = str2.equals("Faulkner");
+    return isFirstFaulkner ^ isSecondFaulkner;
   }
 
   /** initiates a listener for the search button on location search */
@@ -363,6 +363,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
                     locationSearchController.getHandicap());
                 disableTextDirections();
                 enableTextDirections();
+                mapBaseController.resetFocus();
               } catch (DBException | IOException ex) {
                 ex.printStackTrace();
               }
@@ -380,6 +381,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
                     (doctorSearchController.getDBNodes())[0],
                     (doctorSearchController.getDBNodes())[1],
                     doctorSearchController.getHandicap());
+                mapBaseController.resetFocus();
                 enableTextDirections();
               } catch (DBException | IOException ex) {
                 ex.printStackTrace();
@@ -419,6 +421,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
               }
               try {
                 resetMap();
+                mapBaseController.resetFocus();
               } catch (DBException ex) {
                 ex.printStackTrace();
               }
@@ -430,7 +433,6 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
               locationSearchController.clearDbNodes();
               mapBaseController.clearPath();
               disableTextDirections();
-              enableAllFloorButtons();
               mainButtonList.animateList(false);
               faulknerButtonList.animateList(false);
               mapBaseController.resetFocus(); // TODO: new
@@ -450,7 +452,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
               if (this.path != null) {
                 this.path.clear();
               }
-              enableAllFloorButtons();
+              mapBaseController.resetFocus();
               setGoogleButtonDisable(true);
               detailSearchController.getTxt_location().clear();
               detailSearchController.getLst_selection().getItems().clear();
@@ -462,7 +464,6 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
               mainButtonList.animateList(false);
               faulknerButtonList.animateList(false);
               // resetTextualDirections();
-              enableAllFloorButtons();
               try {
                 setDefaultKioskNode();
               } catch (DBException ex) {
@@ -488,9 +489,9 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
               } catch (DBException ex) {
                 ex.printStackTrace();
               }
-              enableAllFloorButtons();
               switchHospitalView();
               setGoogleButtonDisable(true);
+              mapBaseController.resetFocus();
               doctorSearchController.getTextLocation().clear();
               doctorSearchController.getTxtDoctor().clear();
               doctorSearchController.getFuzzyList().getItems().clear();
@@ -500,7 +501,6 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
               mainButtonList.animateList(false);
               faulknerButtonList.animateList(false);
               disableTextDirections();
-              enableAllFloorButtons();
               try {
                 setDefaultKioskNode();
               } catch (DBException ex) {
@@ -524,6 +524,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
               } catch (DBException ex) {
                 ex.printStackTrace();
               }
+              mapBaseController.resetFocus();
               DbNode first = locationSearchController.getDBNodes()[0];
               locationSearchController.clearSecondEntry();
               try {
@@ -539,10 +540,6 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
                 return;
               }
               enableTextDirections();
-              disableNonPathFloors();
-              if (pathButtonList.size() > 1) {
-                pathButtonList.get(1).setStyle("-fx-background-color: #6C5C7F;");
-              }
             });
   }
 
@@ -561,6 +558,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
               } catch (DBException ex) {
                 ex.printStackTrace();
               }
+              mapBaseController.resetFocus();
               DbNode first = locationSearchController.getDBNodes()[0];
               locationSearchController.clearSecondEntry();
 
@@ -581,10 +579,6 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
                 return;
               }
               enableTextDirections();
-              disableNonPathFloors();
-              if (pathButtonList.size() > 1) {
-                pathButtonList.get(1).setStyle("-fx-background-color: #6C5C7F;");
-              }
             });
   }
 
@@ -603,6 +597,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
               } catch (DBException ex) {
                 ex.printStackTrace();
               }
+              mapBaseController.resetFocus();
               DbNode first = locationSearchController.getDBNodes()[0];
               locationSearchController.clearSecondEntry();
               try {
@@ -618,10 +613,6 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
                 return;
               }
               enableTextDirections();
-              disableNonPathFloors();
-              if (pathButtonList.size() > 1) {
-                pathButtonList.get(1).setStyle("-fx-background-color: #6C5C7F;");
-              }
             });
   }
 
@@ -656,12 +647,9 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
       faulknerButtonList.animateList(false);
       mainButtonList.animateList(true);
     }
-    disableNonPathFloors();
-    if (pathButtonList.size() > 1) {
-      pathButtonList.get(1).setStyle("-fx-background-color: #6C5C7F;");
-    }
     displayGoogleMaps(first, second);
     ServiceDB.travelledTo(second.getNodeID());
+    // mapBaseController.autoFocusToNodesGroup();
   }
 
   /**
@@ -775,13 +763,12 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     this.currentFloor = 1;
     this.currentBuilding = "Faulkner";
     setBackground("Faulkner");
-    mapBaseController.resetFocus();
+    // mapBaseController.resetFocus();
     mapBaseController.setFloor(this.currentBuilding, this.currentFloor, null);
     this.path = new Path(new LinkedList<>());
     collapseAllFloorButtons();
     mapBaseController.clearPath();
     setGoogleButtonDisable(true);
-    enableAllFloorButtons();
     disableTextDirections();
     switchHospitalView();
   }
@@ -835,7 +822,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     FXMLLoader loader;
     if (src == pn_locationIcon) {
       resetMap();
-      // mapBaseController.resetFocus();
+      mapBaseController.resetFocus();
       loader = new FXMLLoader(getClass().getResource("mapLocationSearch.fxml"));
       Pane pane = loader.load();
       locationSearchController = loader.getController();
@@ -848,6 +835,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
       pn_change.getChildren().add(pane);
     } else if (src == pn_doctorIcon) {
       resetMap();
+      mapBaseController.resetFocus();
       loader = new FXMLLoader(getClass().getResource("mapDoctorSearch.fxml"));
       Pane pane = loader.load();
       doctorSearchController = loader.getController();
@@ -894,9 +882,18 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
       setDefaultKioskNode();
       pn_change.getChildren().add(pane);
     }
-    // initSearch
-    // initReset --> reloads the DetailedSearch
-    // initDoctor --> reloads the ListView with doctors,if any, associated with clicked location
+  }
+
+  /**
+   * displays an error message if something does wrong
+   *
+   * @param str the message to be displayed if something goes wrong
+   */
+  public void displayErrorMessage(String str) {
+    Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+    errorAlert.setHeaderText("Something went wong...");
+    errorAlert.setContentText(str);
+    errorAlert.showAndWait();
   }
 
   /**
@@ -935,18 +932,6 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     mapBaseController.pn_path.getChildren().add(label); // lmao
     mapBaseController.autoFocusToNode(node);
     pn_change.getChildren().add(pane);
-  }
-
-  /**
-   * displays an error message if something does wrong
-   *
-   * @param str the message to be displayed if something goes wrong
-   */
-  public void displayErrorMessage(String str) {
-    Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-    errorAlert.setHeaderText("Something went wong...");
-    errorAlert.setContentText(str);
-    errorAlert.showAndWait();
   }
 
   /**
@@ -1002,48 +987,6 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     } catch (NullPointerException e) {
       displayErrorMessage("The kiosk node does not exist in the database!");
     }
-  }
-
-  /** disables all floor buttons which do not partake in the path */
-  public void disableNonPathFloors() {
-    //    faulknerButtonList.getChildren().forEach(e -> e.setDisable(true));
-    //    faulknerButtonList.getChildren().get(0).setDisable(false);
-    //    mainButtonList.getChildren().forEach(e -> e.setDisable(true));
-    //    mainButtonList.getChildren().get(0).setDisable(false);
-    if (path == null) {
-      return;
-    }
-    faulknerButtonList.getChildren().forEach(n -> n.setStyle("-fx-background-color: #263051;"));
-    mainButtonList.getChildren().forEach(n -> n.setStyle("-fx-background-color: #263051;"));
-    pathButtonList.clear();
-    for (int i = 0; i < path.size(); i++) {
-      DbNode node = path.get(i);
-      if (!(node.getNodeType().equals("ELEV") || node.getNodeType().equals("STAI"))) {
-        if (node.getBuilding().equals("Faulkner")) {
-          JFXButton btn = (JFXButton) faulknerButtonList.getChildren().get(node.getFloor());
-          //          btn.setDisable(false);
-          btn.setStyle("-fx-background-color: #4A69C6");
-          if (!pathButtonList.contains(btn)) {
-            pathButtonList.add(btn);
-          }
-        } else {
-          JFXButton btn = (JFXButton) mainButtonList.getChildren().get(node.getFloor());
-          //          btn.setDisable(false);
-          btn.setStyle("-fx-background-color: #4A69C6");
-          if (!pathButtonList.contains(btn)) {
-            pathButtonList.add(btn);
-          }
-        }
-      }
-    }
-  }
-
-  /** enables all floor buttons */
-  public void enableAllFloorButtons() {
-    faulknerButtonList.getChildren().forEach(e -> e.setDisable(false));
-    mainButtonList.getChildren().forEach(e -> e.setDisable(false));
-    pathButtonList.forEach(n -> n.setStyle("-fx-background-color: #263051;"));
-    pathButtonList = new ArrayList<>();
   }
 
   /** switches the current map view to the google map */
@@ -1315,5 +1258,13 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
       TextField txts = locationSearchController.getTextSecondLocation();
       txts.setText(node.getLongName());
     }
+  }
+
+  public void setCurrentBuilding(String currentBuilding) {
+    this.currentBuilding = currentBuilding;
+  }
+
+  public void setCurrentFloor(int currentFloor) {
+    this.currentFloor = currentFloor;
   }
 }

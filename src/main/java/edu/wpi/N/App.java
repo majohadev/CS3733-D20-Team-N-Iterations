@@ -29,6 +29,7 @@ public class App extends Application {
   public void start(Stage primaryStage) throws IOException, DBException {
     // Configure the primary Stage
 
+    System.out.println("started");
     this.masterStage = primaryStage;
     this.masterStage.setTitle("Brigham and Women's Hospital Kiosk Application");
 
@@ -49,6 +50,7 @@ public class App extends Application {
     newSingleton.originator.setState("views/mapDisplay/newMapDisplay.fxml");
     newSingleton.careTaker.add(newSingleton.originator.saveStateToMemento());
 
+    System.out.println("prolly gonna go fuckshit right here");
     switchScene("views/mapDisplay/newMapDisplay.fxml", newSingleton);
     //    switchScene("views/chatbot/chatBox.fxml", newSingleton);
     masterStage.setMaximized(true);
