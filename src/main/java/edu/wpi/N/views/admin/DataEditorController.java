@@ -51,6 +51,7 @@ public class DataEditorController implements Controller {
     lbl_filePath.setText(DEFAULT_NODES);
     lbl_filePath_edges.setText(DEFAULT_PATHS);
     lbl_filePath_employees.setText(DEFAULT_EMPLOYEES);
+    lbl_filePath_hitbox.setText(DEFAULT_HITBOXES);
   }
 
   @FXML

@@ -1404,17 +1404,16 @@ public class MapDB {
    */
   public static DbNode checkHitbox(int x, int y, String building, int floor) throws DBException {
     String query = "";
-    if(building.equals("Faulkner")) {
+    if (building.equals("Faulkner")) {
       query =
-              "SELECT nodes.nodeID, xcoord, ycoord, floor, building, nodeType, longName, shortName, teamAssigned FROM"
-                      + "(SELECT nodeID from hitbox WHERE x1 <= ? AND x2 >= ? AND y1 <= ? AND y2 >= ?) as hitbox,"
-                      + " (SELECT * FROM nodes WHERE building = ? AND floor = ?) as nodes WHERE nodes.nodeID = hitbox.nodeID";
-    }
-    else{
+          "SELECT nodes.nodeID, xcoord, ycoord, floor, building, nodeType, longName, shortName, teamAssigned FROM"
+              + "(SELECT nodeID from hitbox WHERE x1 <= ? AND x2 >= ? AND y1 <= ? AND y2 >= ?) as hitbox,"
+              + " (SELECT * FROM nodes WHERE building = ? AND floor = ?) as nodes WHERE nodes.nodeID = hitbox.nodeID";
+    } else {
       query =
-              "SELECT nodes.nodeID, xcoord, ycoord, floor, building, nodeType, longName, shortName, teamAssigned FROM"
-                      + "(SELECT nodeID from hitbox WHERE x1 <= ? AND x2 >= ? AND y1 <= ? AND y2 >= ?) as hitbox,"
-                      + " (SELECT * FROM nodes WHERE building <> ? AND floor = ?) as nodes WHERE nodes.nodeID = hitbox.nodeID";
+          "SELECT nodes.nodeID, xcoord, ycoord, floor, building, nodeType, longName, shortName, teamAssigned FROM"
+              + "(SELECT nodeID from hitbox WHERE x1 <= ? AND x2 >= ? AND y1 <= ? AND y2 >= ?) as hitbox,"
+              + " (SELECT * FROM nodes WHERE building <> ? AND floor = ?) as nodes WHERE nodes.nodeID = hitbox.nodeID";
     }
     try {
       PreparedStatement stmt = con.prepareStatement(query);
