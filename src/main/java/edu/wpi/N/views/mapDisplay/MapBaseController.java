@@ -93,6 +93,7 @@ public class MapBaseController implements Controller {
   @FXML ImageView img_map;
   @FXML Button btn_zoomIn, btn_zoomOut;
   @FXML AnchorPane controllerAnchorPane;
+  @FXML Pane pn_routeNodes;
 
   MapQRController mapQRController;
   NewMapDisplayController newMapDisplayController;
@@ -134,6 +135,10 @@ public class MapBaseController implements Controller {
     initNodeLabels();
     initPathAnim();
     setFaulknerDefaults();
+    pn_routeNodes.layoutXProperty().addListener((nval) -> System.out.println("layout X " + nval));
+    pn_routeNodes.layoutYProperty().addListener((nval) -> System.out.println("layout Y " + nval));
+    pn_movableMap.layoutXProperty().addListener((nval) -> System.out.println("layout X m" + nval));
+    pn_movableMap.layoutYProperty().addListener((nval) -> System.out.println("layout Y m" + nval));
   }
 
   /**
@@ -157,7 +162,7 @@ public class MapBaseController implements Controller {
       newMapDisplayController.setFloorBuildingText(floor, building);
     }
     img_map.setImage(singleton.mapImageLoader.getMap(building, floor));
-    // resetFocus();
+    resetFocus();
     if (!(currentPath == null || currentPath.isEmpty())) {
       drawPath(currentPath, floor, building);
     }
@@ -245,13 +250,14 @@ public class MapBaseController implements Controller {
     } else {
       pathCircles.add(currentPath.get(0));
     }
-    startLabel.setText("Start: ");
-    endLabel.setText("Destination: ");
-    if (currentPath.get(0).getFloor() == floor) {
-      drawCircle(currentPath.get(0), START_NODE_COLOR, startLabel);
-    } else if (currentPath.get(currentPath.size() - 1).getFloor() == floor) {
-      drawCircle(currentPath.get(currentPath.size() - 1), END_NODE_COLOR, endLabel);
-    }
+    //    startLabel.setText("Start: ");
+    //    endLabel.setText("Destination: ");
+    //    if (currentPath.get(0).getFloor() == floor) {
+    //      // drawCircle(currentPath.get(0), START_NODE_COLOR, startLabel);
+    //    } else if (currentPath.get(currentPath.size() - 1).getFloor() == floor) {
+    //      drawCircle(currentPath.get(currentPath.size() - 1), END_NODE_COLOR, endLabel);
+    //    }
+    boolean first = true;
 
     for (int i = 0; i < currentPath.size() - 1; i++) {
       firstNode = currentPath.get(i);
@@ -273,17 +279,18 @@ public class MapBaseController implements Controller {
         styleLine(line);
         pn_path.getChildren().add(line);
 
-        if (i == 0) {
+        if (first) {
+          first = false;
           startLabel.setVisible(true);
           endLabel.setVisible(true);
           startLabel.setText("Start at ");
-          // autoFocusToNode(firstNode); // TODO: Place this somewhere better
+          autoFocusToNode(firstNode); // TODO: Place this somewhere better
           // autoFocusToNodesGroup(pathCircles, 0);
           drawCircle(firstNode, START_NODE_COLOR, startLabel);
         } else if (i == currentPath.size() - 2) {
           startLabel.setVisible(true);
           endLabel.setVisible(true);
-          endLabel.setText("End at ");
+          endLabel.setText("Destination: ");
           drawCircle(secondNode, END_NODE_COLOR, endLabel);
         } else if (currentPath.get(i - 1).getFloor() != floor) {
           // If firstNode is first on current floor
@@ -389,7 +396,7 @@ public class MapBaseController implements Controller {
     keyEnd = new KeyFrame(Duration.millis(PATH_ANIM_LENGTH), "keyEnd", null, keyEndVals);
 
     // Apply new frames
-    pathAnimTimeline.getKeyFrames().addAll(keyStart, keyEnd);
+    pathAnimTimeline.getKeyFrames().setAll(keyStart, keyEnd);
 
     if (!(keyStartVals.isEmpty() || keyEndVals.isEmpty())) {
       // Play anim

@@ -110,6 +110,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     this.faulknerButtonList = new JFXNodesList();
     this.mainButtonList = new JFXNodesList();
     this.pn_hospitalView = mapBaseController.getAnchorPane();
+
     mapBaseController.setNewMapDisplayController(this);
     mapBaseController.setFloor(this.currentBuilding, this.currentFloor, this.path);
     setFloorBuildingText(this.currentFloor, this.currentBuilding);
@@ -364,6 +365,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
                     locationSearchController.getHandicap());
                 disableTextDirections();
                 enableTextDirections();
+                mapBaseController.resetFocus();
               } catch (DBException | IOException ex) {
                 ex.printStackTrace();
               }
@@ -381,6 +383,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
                     (doctorSearchController.getDBNodes())[0],
                     (doctorSearchController.getDBNodes())[1],
                     doctorSearchController.getHandicap());
+                mapBaseController.resetFocus();
                 enableTextDirections();
               } catch (DBException | IOException ex) {
                 ex.printStackTrace();
@@ -451,6 +454,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
               if (this.path != null) {
                 this.path.clear();
               }
+              mapBaseController.resetFocus();
               setGoogleButtonDisable(true);
               detailSearchController.getTxt_location().clear();
               detailSearchController.getLst_selection().getItems().clear();
@@ -489,6 +493,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
               }
               switchHospitalView();
               setGoogleButtonDisable(true);
+              mapBaseController.resetFocus();
               doctorSearchController.getTextLocation().clear();
               doctorSearchController.getTxtDoctor().clear();
               doctorSearchController.getFuzzyList().getItems().clear();
@@ -521,6 +526,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
               } catch (DBException ex) {
                 ex.printStackTrace();
               }
+              mapBaseController.resetFocus();
               DbNode first = locationSearchController.getDBNodes()[0];
               locationSearchController.clearSecondEntry();
               try {
@@ -554,6 +560,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
               } catch (DBException ex) {
                 ex.printStackTrace();
               }
+              mapBaseController.resetFocus();
               DbNode first = locationSearchController.getDBNodes()[0];
               locationSearchController.clearSecondEntry();
 
@@ -592,6 +599,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
               } catch (DBException ex) {
                 ex.printStackTrace();
               }
+              mapBaseController.resetFocus();
               DbNode first = locationSearchController.getDBNodes()[0];
               locationSearchController.clearSecondEntry();
               try {
