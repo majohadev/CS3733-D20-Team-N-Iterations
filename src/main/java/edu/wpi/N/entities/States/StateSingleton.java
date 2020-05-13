@@ -112,6 +112,7 @@ public class StateSingleton {
                   System.out.println("Reset Kiosk!");
                   try {
                     originator.getStateFromMemento(careTaker.get(0));
+                    System.out.println(careTaker.get(0).getState());
                     String path = originator.getState();
                     switchTheScene(path);
                   } catch (Exception e) {

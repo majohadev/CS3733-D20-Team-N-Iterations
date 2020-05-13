@@ -66,6 +66,7 @@ public class NewAdminController implements Controller, Initializable {
   @FXML JFXButton btn_return;
   @FXML JFXButton btn_reset;
   @FXML Label lbl_req;
+  @FXML JFXTextField txtf_newTime;
 
   private ObservableList<Request> tableData = FXCollections.observableArrayList();
   private ObservableList<Employee> emps = FXCollections.observableArrayList();
