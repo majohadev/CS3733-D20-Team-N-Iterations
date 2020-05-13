@@ -21,7 +21,6 @@ public class StateSingleton {
   public CareTaker careTaker;
   public int timeoutTime;
   public Timer timer;
-  public TimerTask timerTask;
   private App mainApp = null;
 
   private StateSingleton() throws DBException {
@@ -32,35 +31,12 @@ public class StateSingleton {
     originator = new Originator();
     careTaker = new CareTaker();
 
+    // Set up memento pattern
+    originator.setState("views/mapDisplay/newMapDisplay.fxml");
+    careTaker.add(originator.saveStateToMemento());
+
     // Initialize timeout time to 15000 milliseconds (15 seconds)
     timeoutTime = 15000;
-
-    // Initialize timer
-    timer = new Timer();
-
-    // Initialize timer task that will reset application
-    timerTask =
-        new TimerTask() {
-          @Override
-          public void run() {
-            Platform.runLater(
-                () -> {
-                  System.out.println("Timer Ended!");
-                  System.out.println("Reset Kiosk!");
-                  try {
-                    originator.getStateFromMemento(careTaker.get(0));
-                    String path = originator.getState();
-                    switchTheScene(path);
-                  } catch (Exception e) {
-                    e.printStackTrace();
-                    System.out.println("Why u no work? - Singleton constructor");
-                  }
-                });
-          }
-        };
-
-    // Schedule the task with large delay on start up
-    timer.schedule(timerTask, 1000000);
   }
 
   public void setMainApp(App mainApp) {
@@ -81,6 +57,11 @@ public class StateSingleton {
   public void switchTheScene(String path) throws IOException {
     timer.cancel();
     timer.purge();
+    try {
+      chatBotState.closeSession();
+    } catch (NullPointerException ex) {
+      System.out.println("Chatbot isn't open, don't need to close it");
+    }
     mainApp.switchScene(path, this);
   }
 
@@ -99,8 +80,10 @@ public class StateSingleton {
 
   /** Update/Reset the timer in the singleton */
   public void update() {
-    timer.purge();
-    timer.cancel();
+    if (this.timer != null) {
+      timer.purge();
+      timer.cancel();
+    }
     timer = new Timer();
     TimerTask timerTask =
         new TimerTask() {
@@ -112,7 +95,6 @@ public class StateSingleton {
                   System.out.println("Reset Kiosk!");
                   try {
                     originator.getStateFromMemento(careTaker.get(0));
-                    System.out.println(careTaker.get(0).getState());
                     String path = originator.getState();
                     switchTheScene(path);
                   } catch (Exception e) {
