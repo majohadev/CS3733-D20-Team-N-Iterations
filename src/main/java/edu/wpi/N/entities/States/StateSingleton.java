@@ -1,6 +1,6 @@
 package edu.wpi.N.entities.States;
 
-import edu.wpi.N.App;
+import edu.wpi.N.AppClass;
 import edu.wpi.N.algorithms.Algorithm;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.entities.memento.CareTaker;
@@ -26,7 +26,7 @@ public class StateSingleton {
   public CareTaker careTaker;
   public int timeoutTime;
   public Timer timer;
-  private App mainApp = null;
+  private AppClass mainApp = null;
 
   private StateSingleton() throws DBException {
     savedAlgo = new Algorithm();
@@ -44,7 +44,7 @@ public class StateSingleton {
     timeoutTime = 15000;
   }
 
-  public void setMainApp(App mainApp) {
+  public void setMainApp(AppClass mainApp) {
     this.mainApp = mainApp;
   }
 

@@ -1,6 +1,6 @@
 package edu.wpi.N.views.mapDisplay;
 
-import edu.wpi.N.App;
+import edu.wpi.N.AppClass;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
@@ -36,7 +36,7 @@ import javafx.util.Duration;
 public class MapBaseController implements Controller {
 
   // ApplicationStates
-  private App mainApp;
+  private AppClass mainApp;
   private StateSingleton singleton;
 
   // Screen Constants
@@ -127,7 +127,7 @@ public class MapBaseController implements Controller {
    * @param mainApp the main application class of this program
    */
   @Override
-  public void setMainApp(App mainApp) {
+  public void setMainApp(AppClass mainApp) {
     this.mainApp = mainApp;
   }
 

@@ -1,6 +1,6 @@
 package edu.wpi.N.views.outdated;
 
-import edu.wpi.N.App;
+import edu.wpi.N.AppClass;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.database.ServiceDB;
@@ -25,7 +25,7 @@ import javafx.util.Callback;
 
 public class AdminControllerOUTDATED implements Initializable, Controller {
 
-  private App mainApp;
+  private AppClass mainApp;
 
   @FXML Button btn_logout;
   @FXML Button btn_Accept;
@@ -170,7 +170,7 @@ public class AdminControllerOUTDATED implements Initializable, Controller {
   }
 
   @Override
-  public void setMainApp(App mainApp) {
+  public void setMainApp(AppClass mainApp) {
     this.mainApp = mainApp;
   }
 

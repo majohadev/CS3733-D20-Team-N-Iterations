@@ -1,6 +1,6 @@
 package edu.wpi.N.database;
 
-import edu.wpi.N.Main;
+import edu.wpi.N.MainClass;
 import java.io.*;
 import java.sql.*;
 import org.apache.ibatis.jdbc.ScriptRunner;
@@ -16,12 +16,13 @@ public class setupDB {
     sr.setLogWriter(null);
     Reader reader =
         new BufferedReader(
-            new InputStreamReader(Main.class.getResourceAsStream("sql/drop.sql"))); // drop tables
+            new InputStreamReader(
+                MainClass.class.getResourceAsStream("sql/drop.sql"))); // drop tables
     sr.runScript(reader);
     reader =
         new BufferedReader(
             new InputStreamReader(
-                Main.class.getResourceAsStream("sql/setup.sql"))); // create tables
+                MainClass.class.getResourceAsStream("sql/setup.sql"))); // create tables
     sr.runScript(reader);
   }
 }

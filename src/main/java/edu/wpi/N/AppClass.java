@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.jnativehook.GlobalScreen;
 
 @Slf4j
-public class App extends Application {
+public class AppClass extends Application {
   private Stage masterStage;
 
   @Override

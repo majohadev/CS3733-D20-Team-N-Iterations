@@ -1,6 +1,6 @@
 package edu.wpi.N.database;
 
-import edu.wpi.N.Main;
+import edu.wpi.N.MainClass;
 import edu.wpi.N.entities.DbNode;
 import java.io.InputStream;
 import java.sql.SQLException;
@@ -15,8 +15,8 @@ public class CSVParseHitBoxes {
   public static void initialize() throws SQLException, ClassNotFoundException {
     MapDB.initTestDB();
 
-    InputStream inputNodes = Main.class.getResourceAsStream("csv/newNodes.csv");
-    InputStream inputHitboxes = Main.class.getResourceAsStream("csv/testHitBoxes.csv");
+    InputStream inputNodes = MainClass.class.getResourceAsStream("csv/newNodes.csv");
+    InputStream inputHitboxes = MainClass.class.getResourceAsStream("csv/testHitBoxes.csv");
     CSVParser.parseCSV(inputNodes);
     CSVParser.parseCSVHitBoxes(inputHitboxes);
   }

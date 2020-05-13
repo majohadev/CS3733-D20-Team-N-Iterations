@@ -4,7 +4,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
-import edu.wpi.N.App;
+import edu.wpi.N.AppClass;
 import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.database.*;
 import edu.wpi.N.entities.DbNode;
@@ -31,7 +31,7 @@ public class MedicineRequestController implements Controller, Initializable {
 
   private StateSingleton singleton;
 
-  private App mainApp;
+  private AppClass mainApp;
 
   private LinkedList<DbNode> fuzzySearchPatientLocation = new LinkedList<>();
   private ObservableList<String> fuzzySearchTextListPatientLocations =
@@ -61,7 +61,7 @@ public class MedicineRequestController implements Controller, Initializable {
   }
 
   @Override
-  public void setMainApp(App mainApp) {
+  public void setMainApp(AppClass mainApp) {
     this.mainApp = mainApp;
   }
 

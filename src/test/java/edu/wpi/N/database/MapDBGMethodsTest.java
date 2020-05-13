@@ -1,6 +1,6 @@
 package edu.wpi.N.database;
 
-import edu.wpi.N.Main;
+import edu.wpi.N.MainClass;
 import java.io.InputStream;
 import org.junit.jupiter.api.*;
 
@@ -9,8 +9,8 @@ public class MapDBGMethodsTest {
   @BeforeAll
   public static void initializeTest() throws Exception {
     MapDB.initTestDB();
-    InputStream inputNodes = Main.class.getResourceAsStream("csv/TestNodes.csv");
-    InputStream inputEdges = Main.class.getResourceAsStream("csv/TestEdges.csv");
+    InputStream inputNodes = MainClass.class.getResourceAsStream("csv/TestNodes.csv");
+    InputStream inputEdges = MainClass.class.getResourceAsStream("csv/TestEdges.csv");
     CSVParser.parseCSV(inputNodes);
     CSVParser.parseCSV(inputEdges);
   }

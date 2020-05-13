@@ -7,7 +7,7 @@ plugins {
     id "io.freefair.lombok" version "5.0.0-rc6"
 }
 
-mainClassName = 'edu.wpi.N.Main'
+mainClassName = 'edu.wpi.N.MainClass'
 
 repositories {
     mavenCentral()
@@ -113,8 +113,8 @@ jar {
 }
 
 def codeCoverageExcludes = [
-        'edu.wpi.N.App',
-        'edu.wpi.N.Main',
+        'edu.wpi.N.AppClass',
+        'edu.wpi.N.MainClass',
         'edu.wpi.N.entities.*',
         'edu.wpi.N.views.*',
         'edu.wpi.N.qrcontrol.*',

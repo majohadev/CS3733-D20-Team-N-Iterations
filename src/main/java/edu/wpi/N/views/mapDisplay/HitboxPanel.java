@@ -1,7 +1,7 @@
 package edu.wpi.N.views.mapDisplay;
 
 import com.jfoenix.controls.JFXButton;
-import edu.wpi.N.App;
+import edu.wpi.N.AppClass;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.views.Controller;
 import javafx.fxml.FXML;
@@ -14,10 +14,10 @@ public class HitboxPanel implements Controller {
   @FXML AnchorPane pn_menu;
   public static DbNode hitboxNode;
   public static NewMapDisplayController cont;
-  private App mainApp;
+  private AppClass mainApp;
 
   @Override
-  public void setMainApp(App mainApp) {
+  public void setMainApp(AppClass mainApp) {
     this.mainApp = mainApp;
   }
 

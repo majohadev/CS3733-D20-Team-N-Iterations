@@ -3,7 +3,7 @@ package edu.wpi.N.views.outdated;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXTreeTableView;
-import edu.wpi.N.App;
+import edu.wpi.N.AppClass;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.database.ServiceDB;
@@ -28,7 +28,7 @@ import javafx.util.Callback;
 
 public class ViewRequestControllerOUTDATED implements Controller, Initializable {
 
-  private App mainApp = null;
+  private AppClass mainApp = null;
   private StateSingleton singleton;
 
   @FXML TableView<Request> tb_RequestTable = new TableView<Request>();
@@ -48,7 +48,7 @@ public class ViewRequestControllerOUTDATED implements Controller, Initializable 
   TreeItem<String> lang;
 
   @Override
-  public void setMainApp(App mainApp) {}
+  public void setMainApp(AppClass mainApp) {}
 
   public void setSingleton(StateSingleton singleton) {
     this.singleton = singleton;

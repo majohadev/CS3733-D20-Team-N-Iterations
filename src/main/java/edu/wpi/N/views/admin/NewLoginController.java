@@ -2,7 +2,7 @@ package edu.wpi.N.views.admin;
 
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
-import edu.wpi.N.App;
+import edu.wpi.N.AppClass;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.LoginDB;
 import edu.wpi.N.entities.States.StateSingleton;
@@ -18,7 +18,7 @@ public class NewLoginController implements Controller, Initializable {
 
   private StateSingleton singleton;
 
-  private App mainApp = null;
+  private AppClass mainApp = null;
 
   @FXML JFXPasswordField pwf_password;
   @FXML JFXTextField txtf_username;
@@ -73,7 +73,7 @@ public class NewLoginController implements Controller, Initializable {
   }
 
   @Override
-  public void setMainApp(App mainApp) {
+  public void setMainApp(AppClass mainApp) {
     this.mainApp = mainApp;
   }
 

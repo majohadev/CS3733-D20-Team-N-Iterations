@@ -1,6 +1,6 @@
 package edu.wpi.N.views.mapDisplay;
 
-import edu.wpi.N.Main;
+import edu.wpi.N.MainClass;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
@@ -19,7 +19,7 @@ public class WebViewController extends Application {
 
     webView
         .getEngine()
-        .load(Main.class.getResource("views/FaulknerToMain45Francis.html").toString());
+        .load(MainClass.class.getResource("views/FaulknerToMain45Francis.html").toString());
 
     VBox vBox = new VBox(webView);
     Scene scene = new Scene(vBox, 960, 600);

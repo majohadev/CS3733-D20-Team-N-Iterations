@@ -1,7 +1,7 @@
 package edu.wpi.N.views.admin;
 
 import com.jfoenix.controls.*;
-import edu.wpi.N.App;
+import edu.wpi.N.AppClass;
 import edu.wpi.N.algorithms.AStar;
 import edu.wpi.N.algorithms.BFS;
 import edu.wpi.N.algorithms.DFS;
@@ -33,7 +33,7 @@ import javafx.stage.Stage;
 
 public class NewAdminController implements Controller, Initializable {
 
-  private App mainApp = null;
+  private AppClass mainApp = null;
   DeleteEmployeeController deleteEmployeeController;
   private StateSingleton singleton;
 
@@ -346,7 +346,7 @@ public class NewAdminController implements Controller, Initializable {
   }
 
   @Override
-  public void setMainApp(App mainApp) {
+  public void setMainApp(AppClass mainApp) {
     this.mainApp = mainApp;
   }
 

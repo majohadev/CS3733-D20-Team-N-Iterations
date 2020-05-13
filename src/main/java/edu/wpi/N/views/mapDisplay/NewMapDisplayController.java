@@ -2,7 +2,7 @@ package edu.wpi.N.views.mapDisplay;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXNodesList;
-import edu.wpi.N.App;
+import edu.wpi.N.AppClass;
 import edu.wpi.N.algorithms.Direction;
 import edu.wpi.N.algorithms.Directions;
 import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
@@ -34,7 +34,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 
 public class NewMapDisplayController extends QRGenerator implements Controller {
-  private App mainApp = null;
+  private AppClass mainApp = null;
   private StateSingleton singleton;
 
   @FXML Pane pn_change;
@@ -82,7 +82,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
    * @param mainApp the main class of the application
    */
   @Override
-  public void setMainApp(App mainApp) {
+  public void setMainApp(AppClass mainApp) {
     this.mainApp = mainApp;
   }
 
@@ -785,7 +785,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     if (isFirstFaulkner ^ isSecondFaulkner) {
       setGoogleButtonDisable(false);
       FXMLLoader loader = new FXMLLoader();
-      loader.setLocation(App.class.getResource("views/mapDisplay/googleMap.fxml"));
+      loader.setLocation(AppClass.class.getResource("views/mapDisplay/googleMap.fxml"));
 
       String pathToHTML = null;
 
