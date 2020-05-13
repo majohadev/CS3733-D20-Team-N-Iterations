@@ -1,6 +1,6 @@
 package edu.wpi.N.views.outdated;
 
-import edu.wpi.N.App;
+import edu.wpi.N.AppClass;
 import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.qrcontrol.QRReader;
 import edu.wpi.N.views.Controller;
@@ -23,7 +23,7 @@ import javafx.stage.Stage;
 import javax.swing.*;
 
 public class LoginControllerOUTDATED extends QRReader implements Controller {
-  private App mainApp;
+  private AppClass mainApp;
   private static LoginControllerOUTDATED controller;
   public AdminControllerOUTDATED adminController;
   private StateSingleton singleton;
@@ -36,7 +36,7 @@ public class LoginControllerOUTDATED extends QRReader implements Controller {
   private final String DELIM = "\\$"; // QR code string delimiter - just pulls out a "$"
 
   @Override
-  public void setMainApp(App mainApp) {
+  public void setMainApp(AppClass mainApp) {
     this.mainApp = mainApp;
   }
 

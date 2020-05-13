@@ -3,7 +3,7 @@ package edu.wpi.N.views.mapDisplay;
 import com.jfoenix.controls.JFXTabPane;
 import com.jfoenix.controls.JFXTreeCell;
 import com.jfoenix.controls.JFXTreeView;
-import edu.wpi.N.App;
+import edu.wpi.N.AppClass;
 import edu.wpi.N.algorithms.Direction;
 import edu.wpi.N.algorithms.Directions;
 import edu.wpi.N.algorithms.Level;
@@ -58,7 +58,7 @@ public class MapQRController implements Controller {
   Path path = new Path(new LinkedList<>());
 
   @Override
-  public void setMainApp(App mainApp) {}
+  public void setMainApp(AppClass mainApp) {}
 
   public synchronized void setSingleton(StateSingleton singleton) {
     this.singleton = singleton;

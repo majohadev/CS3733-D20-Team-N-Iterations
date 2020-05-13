@@ -3,7 +3,7 @@ package edu.wpi.N.views.outdated;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextField;
-import edu.wpi.N.App;
+import edu.wpi.N.AppClass;
 import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.DoctorDB;
@@ -74,7 +74,7 @@ public class EmployeeHandleControllerOUTDATED implements Controller, Initializab
   }
 
   @Override
-  public void setMainApp(App mainApp) {}
+  public void setMainApp(AppClass mainApp) {}
 
   public void setSingleton(StateSingleton singleton) {}
 

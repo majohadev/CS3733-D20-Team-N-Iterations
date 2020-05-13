@@ -1,7 +1,7 @@
 package edu.wpi.N.views.services;
 
 import com.jfoenix.controls.JFXButton;
-import edu.wpi.N.App;
+import edu.wpi.N.AppClass;
 import edu.wpi.N.SanitationRequest;
 import edu.wpi.N.ServiceException;
 import edu.wpi.N.database.DBException;
@@ -20,7 +20,7 @@ public class ServiceController implements Controller {
 
   private StateSingleton singleton;
   public Pane service_anchor;
-  private App mainApp;
+  private AppClass mainApp;
 
   @FXML JFXButton btn_translator;
   @FXML JFXButton btn_laundry;
@@ -50,7 +50,7 @@ public class ServiceController implements Controller {
     this.singleton = singleton;
   }
 
-  public void setMainApp(App mainApp) {
+  public void setMainApp(AppClass mainApp) {
     this.mainApp = mainApp;
   }
 

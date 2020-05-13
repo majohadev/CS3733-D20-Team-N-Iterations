@@ -7,7 +7,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXToggleButton;
-import edu.wpi.N.App;
+import edu.wpi.N.AppClass;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.States.StateSingleton;
@@ -26,7 +26,7 @@ public class ArduinoController implements Controller {
   private StateSingleton singleton;
   NewAdminController newAdminController;
 
-  private App mainApp;
+  private AppClass mainApp;
 
   @FXML JFXButton btn_com;
   @FXML JFXButton btn_sendmsg;
@@ -54,7 +54,7 @@ public class ArduinoController implements Controller {
     this.newAdminController = adminController;
   }
 
-  public void setMainApp(App mainApp) {
+  public void setMainApp(AppClass mainApp) {
     this.mainApp = mainApp;
   }
 

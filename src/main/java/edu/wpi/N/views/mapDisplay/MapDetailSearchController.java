@@ -1,7 +1,7 @@
 package edu.wpi.N.views.mapDisplay;
 
 import com.jfoenix.controls.JFXComboBox;
-import edu.wpi.N.App;
+import edu.wpi.N.AppClass;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
 import edu.wpi.N.entities.DbNode;
@@ -33,7 +33,7 @@ public class MapDetailSearchController implements Controller {
   private AlphabetClicked alphaHandler = new AlphabetClicked();
 
   @Override
-  public void setMainApp(App mainApp) {}
+  public void setMainApp(AppClass mainApp) {}
 
   private class BuildingClicked implements ChangeListener<String> {
 

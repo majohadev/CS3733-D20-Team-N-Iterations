@@ -3,7 +3,7 @@ package edu.wpi.N.views.services;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
-import edu.wpi.N.App;
+import edu.wpi.N.AppClass;
 import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
@@ -26,7 +26,7 @@ public class FlowerRequestController implements Controller {
 
   private StateSingleton singleton;
 
-  private App mainApp;
+  private AppClass mainApp;
 
   // Add FXML Tags Here
   @FXML JFXTextField txt_visitorName;
@@ -53,7 +53,7 @@ public class FlowerRequestController implements Controller {
 
   public FlowerRequestController() throws DBException {}
 
-  public void setMainApp(App mainApp) {
+  public void setMainApp(AppClass mainApp) {
     this.mainApp = mainApp;
   }
 

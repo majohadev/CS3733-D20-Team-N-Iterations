@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
 
-public class Main {
+public class MainClass {
 
   public static void main(String[] args)
       throws SQLException, DBException, ClassNotFoundException, IOException {
@@ -41,6 +41,6 @@ public class Main {
     CSVParser.parseCSV(INPUT_NODES_DEFAULT);
     CSVParser.parseCSV(INPUT_EDGES_DEFAULT);*/
 
-    App.launch(App.class, args);
+    AppClass.launch(AppClass.class, args);
   }
 }

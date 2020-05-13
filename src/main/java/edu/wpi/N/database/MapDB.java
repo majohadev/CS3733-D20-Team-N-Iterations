@@ -1,6 +1,6 @@
 package edu.wpi.N.database;
 
-import edu.wpi.N.Main;
+import edu.wpi.N.MainClass;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.views.features.ArduinoController;
 import java.io.BufferedReader;
@@ -74,7 +74,8 @@ public class MapDB {
       sr.setLogWriter(null);
       Reader reader =
           new BufferedReader(
-              new InputStreamReader(Main.class.getResourceAsStream("sql/drop.sql"))); // drop tables
+              new InputStreamReader(
+                  MainClass.class.getResourceAsStream("sql/drop.sql"))); // drop tables
       sr.runScript(reader);
     } else {
       Class.forName("org.apache.derby.jdbc.EmbeddedDriver");
@@ -86,7 +87,8 @@ public class MapDB {
     ScriptRunner sr = new ScriptRunner(con);
     sr.setLogWriter(null);
     Reader reader =
-        new BufferedReader(new InputStreamReader(Main.class.getResourceAsStream("sql/setup.sql")));
+        new BufferedReader(
+            new InputStreamReader(MainClass.class.getResourceAsStream("sql/setup.sql")));
     sr.runScript(reader);
 
     addHardCodedLogins();

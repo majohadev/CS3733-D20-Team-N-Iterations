@@ -1,7 +1,7 @@
 package edu.wpi.N.views.admin;
 
-import edu.wpi.N.App;
-import edu.wpi.N.Main;
+import edu.wpi.N.AppClass;
+import edu.wpi.N.MainClass;
 import edu.wpi.N.database.*;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.States.StateSingleton;
@@ -19,10 +19,10 @@ import javafx.stage.FileChooser;
 public class DataEditorController implements Controller {
   private StateSingleton singleton;
 
-  App mainApp = null;
+  AppClass mainApp = null;
 
   @Override
-  public void setMainApp(App mainApp) {
+  public void setMainApp(AppClass mainApp) {
     this.mainApp = mainApp;
   }
 
@@ -39,11 +39,12 @@ public class DataEditorController implements Controller {
   final String DEFAULT_EMPLOYEES = "/edu/wpi/N/csv/Employees.csv";
   final String DEFAULT_DETAIL = "/edu/wpi/N/csv/Detail.csv";
   final String DEFAULT_HITBOXES = "/edu/wpi/N/csv/hitBoxesCompleteBuilding.csv";
-  final InputStream INPUT_NODES_DEFAULT = Main.class.getResourceAsStream(DEFAULT_NODES);
-  final InputStream INPUT_EDGES_DEFAULT = Main.class.getResourceAsStream(DEFAULT_PATHS);
-  final InputStream INPUT_EMPLOYEES_DEFAULT = Main.class.getResourceAsStream(DEFAULT_EMPLOYEES);
-  final InputStream INPUT_HITBOXES_DEFAULT = Main.class.getResourceAsStream(DEFAULT_HITBOXES);
-  final InputStream INPUT_DETAIL_DEFAULT = Main.class.getResourceAsStream(DEFAULT_DETAIL);
+  final InputStream INPUT_NODES_DEFAULT = MainClass.class.getResourceAsStream(DEFAULT_NODES);
+  final InputStream INPUT_EDGES_DEFAULT = MainClass.class.getResourceAsStream(DEFAULT_PATHS);
+  final InputStream INPUT_EMPLOYEES_DEFAULT =
+      MainClass.class.getResourceAsStream(DEFAULT_EMPLOYEES);
+  final InputStream INPUT_HITBOXES_DEFAULT = MainClass.class.getResourceAsStream(DEFAULT_HITBOXES);
+  final InputStream INPUT_DETAIL_DEFAULT = MainClass.class.getResourceAsStream(DEFAULT_DETAIL);
 
   // Inject singleton
   public DataEditorController(StateSingleton singleton) {

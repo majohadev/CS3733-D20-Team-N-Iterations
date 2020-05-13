@@ -1,6 +1,6 @@
 package edu.wpi.N.views.info;
 
-import edu.wpi.N.App;
+import edu.wpi.N.AppClass;
 import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.views.Controller;
 import java.io.IOException;
@@ -11,7 +11,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.web.WebView;
 
 public class InfoWebviewController implements Controller, Initializable {
-  private App mainApp;
+  private AppClass mainApp;
   private StateSingleton singleton;
   private static String URL;
 
@@ -31,7 +31,7 @@ public class InfoWebviewController implements Controller, Initializable {
   }
 
   @Override
-  public void setMainApp(App mainApp) {
+  public void setMainApp(AppClass mainApp) {
     this.mainApp = mainApp;
   }
 

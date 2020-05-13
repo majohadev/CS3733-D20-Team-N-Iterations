@@ -3,8 +3,8 @@ package edu.wpi.N.views.chatbot;
 import com.google.cloud.dialogflow.v2.QueryResult;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
-import edu.wpi.N.App;
-import edu.wpi.N.Main;
+import edu.wpi.N.AppClass;
+import edu.wpi.N.MainClass;
 import edu.wpi.N.algorithms.FuzzySearchAlgorithm;
 import edu.wpi.N.chatbot.Dialogflow;
 import edu.wpi.N.entities.DbNode;
@@ -38,7 +38,7 @@ import javafx.stage.Stage;
 
 public class ChatbotController implements Controller, Initializable {
   private StateSingleton state;
-  private App mainApp;
+  private AppClass mainApp;
   private NewMapDisplayController mapController;
   private ServiceController serviceController;
 
@@ -56,7 +56,7 @@ public class ChatbotController implements Controller, Initializable {
   @FXML private JFXButton btnAskMe;
 
   // Inject state singleton
-  public ChatbotController(StateSingleton state, App mainApp) {
+  public ChatbotController(StateSingleton state, AppClass mainApp) {
     this.state = state;
     this.mainApp = mainApp;
   }
@@ -539,11 +539,15 @@ public class ChatbotController implements Controller, Initializable {
     }
 
     if (isUserMessage) {
-      singleMessage.getStylesheets().add(Main.class.getResource("css/UserMessage.css").toString());
+      singleMessage
+          .getStylesheets()
+          .add(MainClass.class.getResource("css/UserMessage.css").toString());
       singleMessage.setAlignment(Pos.CENTER_RIGHT);
       textField.clear();
     } else {
-      singleMessage.getStylesheets().add(Main.class.getResource("css/BotReply.css").toString());
+      singleMessage
+          .getStylesheets()
+          .add(MainClass.class.getResource("css/BotReply.css").toString());
     }
 
     // Update the chatBox (VBOX)
@@ -603,7 +607,7 @@ public class ChatbotController implements Controller, Initializable {
   }
 
   @Override
-  public void setMainApp(App mainApp) {
+  public void setMainApp(AppClass mainApp) {
     this.mainApp = mainApp;
   }
 

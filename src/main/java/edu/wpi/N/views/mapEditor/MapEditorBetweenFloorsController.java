@@ -1,7 +1,7 @@
 package edu.wpi.N.views.mapEditor;
 
 import com.jfoenix.controls.JFXButton;
-import edu.wpi.N.App;
+import edu.wpi.N.AppClass;
 import edu.wpi.N.algorithms.AbsAlgo;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
@@ -22,7 +22,7 @@ import javafx.scene.text.TextAlignment;
 import javafx.util.Pair;
 
 public class MapEditorBetweenFloorsController implements Controller, Initializable {
-  App mainApp;
+  AppClass mainApp;
   private StateSingleton singleton;
 
   @FXML private AnchorPane parent;
@@ -123,7 +123,7 @@ public class MapEditorBetweenFloorsController implements Controller, Initializab
   }
 
   @Override
-  public void setMainApp(App mainApp) {
+  public void setMainApp(AppClass mainApp) {
     this.mainApp = mainApp;
   }
 

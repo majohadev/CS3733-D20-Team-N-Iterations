@@ -1,7 +1,7 @@
 package edu.wpi.N.views.services;
 
 import com.jfoenix.controls.JFXButton;
-import edu.wpi.N.App;
+import edu.wpi.N.AppClass;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.views.Controller;
@@ -23,7 +23,7 @@ public class ApiServiceController implements Controller {
 
   private StateSingleton singleton;
   public Pane service_anchor;
-  private App mainApp;
+  private AppClass mainApp;
   private InterpreterRequest interpreterRequest = new InterpreterRequest();
   private GiftServiceRequest giftRequest = new GiftServiceRequest();
   private IncidentReportApplication IncidentReport = new IncidentReportApplication();
@@ -52,7 +52,7 @@ public class ApiServiceController implements Controller {
     this.singleton = singleton;
   }
 
-  public void setMainApp(App mainApp) {
+  public void setMainApp(AppClass mainApp) {
     this.mainApp = mainApp;
   }
 

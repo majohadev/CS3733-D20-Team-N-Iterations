@@ -1,6 +1,6 @@
 package edu.wpi.N.views;
 
-import edu.wpi.N.App;
+import edu.wpi.N.AppClass;
 import edu.wpi.N.algorithms.AStarTests;
 import edu.wpi.N.database.CSVParser;
 import edu.wpi.N.database.DBException;
@@ -38,7 +38,7 @@ public class EmotionalRequestControllerTest extends ApplicationTest {
     CSVParser.parseCSV(inputNodes);
 
     AnchorPane pane =
-        (AnchorPane) FXMLLoader.load(App.class.getResource("views/emotionalSupportReq.fxml"));
+        (AnchorPane) FXMLLoader.load(AppClass.class.getResource("views/emotionalSupportReq.fxml"));
     Scene scene = new Scene(pane);
 
     primaryStage.setScene(scene);
