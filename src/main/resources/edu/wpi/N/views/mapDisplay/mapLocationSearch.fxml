@@ -87,6 +87,10 @@
          </children>
       </HBox>
       <Line endX="-100.00001525878906" endY="40.19999694824219" layoutX="139.0" layoutY="125.39999389648438" startX="-100.00001525878906" startY="16.600006103515625" stroke="#e6ebf2" strokeMiterLimit="2.0" strokeWidth="2.0" style="-fx-stroke-dash-array: 8;" />
+      <Line fx:id="lineSearchThree" endX="215.0" layoutX="115.0" layoutY="86.0" startX="-100.0" stroke="#ff8d0b" strokeWidth="7.0" visible="false" />
+      <Line fx:id="lineSearchTwo" endX="-100.0" endY="916.0" layoutX="115.0" layoutY="92.0" startX="-100.0" stroke="#ff8d0b" strokeWidth="7.0" visible="false" />
+      <Line fx:id="lineSearchOne" endX="212.0" layoutX="117.0" layoutY="1008.0" startX="-100.0" stroke="#ff8d0b" strokeWidth="7.0" visible="false" />
+      <Line fx:id="lineSearchFour" endX="-100.0" endY="916.0" layoutX="430.0" layoutY="92.0" startX="-100.0" startY="-3.0" stroke="#ff8d0b" strokeWidth="7.0" visible="false" />
 
    </children>
 </AnchorPane>
