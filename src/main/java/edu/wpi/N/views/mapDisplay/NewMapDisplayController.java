@@ -1240,7 +1240,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
   }
 
   public void enableTextDirections() {
-    if (!(path.size() == 0 || path == null) && !pn_iconBar.getChildren().contains(pn_qrIcon)) {
+    if (!(path == null || path.size() == 0) && !pn_iconBar.getChildren().contains(pn_qrIcon)) {
       pn_iconBar.getChildren().add(pn_qrIcon);
       if (dirThread != null) dirThread.interrupt();
       dirThread = new Thread(new SetupDirs(this));

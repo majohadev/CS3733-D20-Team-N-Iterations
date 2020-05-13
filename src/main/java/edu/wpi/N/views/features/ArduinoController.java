@@ -15,6 +15,8 @@ import edu.wpi.N.views.Controller;
 import edu.wpi.N.views.admin.NewAdminController;
 import java.io.*;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 
 public class ArduinoController implements Controller {
 
@@ -37,6 +39,8 @@ public class ArduinoController implements Controller {
   @FXML JFXTextField txtf_angle;
   @FXML JFXToggleButton tog_serial;
   @FXML JFXComboBox cb_changeAlgo;
+  @FXML JFXTextField txtf_newTime;
+  @FXML Label lbl_currentTime;
 
   private int kioskAngle;
 
@@ -55,6 +59,11 @@ public class ArduinoController implements Controller {
   }
 
   public void initialize() {
+    try {
+      setCurrentTime();
+    } catch (DBException e) {
+      e.printStackTrace();
+    }
     arduinoPort.setBaudRate(9600);
     arduinoPort.setComPortTimeouts(SerialPort.TIMEOUT_READ_SEMI_BLOCKING, 200, 200);
     /*try {
@@ -168,5 +177,37 @@ public class ArduinoController implements Controller {
       e.printStackTrace();
     }
     setUpArrow(arrowAngle);
+  }
+
+  @FXML
+  public void changeTime() {
+    try {
+      if (Integer.parseInt(txtf_newTime.getText()) <= 0) {
+
+        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+        errorAlert.setContentText("Cannot have a value of zero or less seconds.");
+        errorAlert.show();
+
+        return;
+      }
+
+      singleton = singleton.getInstance();
+      int newTime = Integer.parseInt(txtf_newTime.getText()) * 1000;
+      singleton.setTimeoutTime(newTime);
+
+      Alert confAlert = new Alert(Alert.AlertType.CONFIRMATION);
+      confAlert.setContentText("Set Timeout to " + newTime / 1000 + " seconds");
+      confAlert.show();
+
+      txtf_newTime.clear();
+      setCurrentTime();
+    } catch (NumberFormatException | DBException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public void setCurrentTime() throws DBException {
+    singleton = singleton.getInstance();
+    lbl_currentTime.setText(Integer.toString(singleton.timeoutTime / 1000) + " Seconds");
   }
 }
