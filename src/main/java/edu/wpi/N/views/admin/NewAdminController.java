@@ -404,7 +404,6 @@ public class NewAdminController implements Controller, Initializable {
                 errorAlert.show();
               }
             });
-
     tb_RequestTable.setItems(tableData);
   }
 
@@ -707,7 +706,7 @@ public class NewAdminController implements Controller, Initializable {
                   }
                   tb_RequestTable.getItems().clear();
                   tb_RequestTable.setItems(reqs);
-                  System.out.println("here");
+                  filterByType("Laundry");
                 } catch (DBException e) {
                   e.printStackTrace();
                 }
@@ -734,7 +733,7 @@ public class NewAdminController implements Controller, Initializable {
                   }
                   tb_RequestTable.getItems().clear();
                   tb_RequestTable.setItems(reqs);
-                  System.out.println("here");
+                  filterByType("Translator");
                 } catch (DBException e) {
                   e.printStackTrace();
                 }
@@ -761,7 +760,7 @@ public class NewAdminController implements Controller, Initializable {
                   }
                   tb_RequestTable.getItems().clear();
                   tb_RequestTable.setItems(reqs);
-                  System.out.println("here");
+                  filterByType("Wheelchair");
                 } catch (DBException e) {
                   e.printStackTrace();
                 }
@@ -793,7 +792,7 @@ public class NewAdminController implements Controller, Initializable {
                   }
                   tb_RequestTable.getItems().clear();
                   tb_RequestTable.setItems(reqs);
-                  System.out.println("here");
+                  filterByType("IT");
                 } catch (DBException e) {
                   e.printStackTrace();
                 }
@@ -820,7 +819,7 @@ public class NewAdminController implements Controller, Initializable {
                   }
                   tb_RequestTable.getItems().clear();
                   tb_RequestTable.setItems(reqs);
-                  System.out.println("here");
+                  filterByType("Security");
                 } catch (DBException e) {
                   e.printStackTrace();
                 }
@@ -861,7 +860,7 @@ public class NewAdminController implements Controller, Initializable {
                   }
                   tb_RequestTable.getItems().clear();
                   tb_RequestTable.setItems(reqs);
-                  System.out.println("here");
+                  filterByType("Flower");
                 } catch (DBException e) {
                   e.printStackTrace();
                 }
@@ -903,7 +902,7 @@ public class NewAdminController implements Controller, Initializable {
                   }
                   tb_RequestTable.getItems().clear();
                   tb_RequestTable.setItems(reqs);
-                  System.out.println("here");
+                  filterByType("Internal Transportation");
                 } catch (DBException e) {
                   e.printStackTrace();
                 }
@@ -930,7 +929,7 @@ public class NewAdminController implements Controller, Initializable {
                   }
                   tb_RequestTable.getItems().clear();
                   tb_RequestTable.setItems(reqs);
-                  System.out.println("here");
+                  filterByType("Emotional Support");
                 } catch (DBException e) {
                   e.printStackTrace();
                 }
@@ -967,7 +966,7 @@ public class NewAdminController implements Controller, Initializable {
                   }
                   tb_RequestTable.getItems().clear();
                   tb_RequestTable.setItems(reqs);
-                  System.out.println("here");
+                  filterByType("Sanitation");
                 } catch (DBException e) {
                   e.printStackTrace();
                 }
@@ -1178,5 +1177,65 @@ public class NewAdminController implements Controller, Initializable {
           break;
         }
     }
+  }
+
+  public void filterByType(String type) {
+    ObservableList<Request> reqList = FXCollections.observableArrayList();
+
+    if (ch_requestFilter.isSelected() == false) {
+      try {
+        for (Request request : ServiceDB.getRequests()) {
+          if (request.getServiceType().equals(type)) {
+            reqList.add(request);
+          }
+        }
+      } catch (DBException e) {
+        e.printStackTrace();
+      }
+    } else if (ch_requestFilter.isSelected() == true) {
+      try {
+        for (Request request : ServiceDB.getOpenRequests()) {
+          if (request.getServiceType().equals(type)) {
+            reqList.add(request);
+          }
+        }
+      } catch (DBException e) {
+        e.printStackTrace();
+      }
+    }
+
+    ch_requestFilter
+        .selectedProperty()
+        .addListener(
+            (ob, old, newVal) -> {
+              if (newVal) {
+                try {
+                  reqList.clear();
+                  LinkedList<Request> req = new LinkedList<>();
+                  for (Request request : ServiceDB.getOpenRequests()) {
+                    if (request.getServiceType().equals(type)) {
+                      req.add(request);
+                    }
+                  }
+                  reqList.addAll(req);
+                } catch (DBException e) {
+                  e.printStackTrace();
+                }
+              } else {
+                try {
+                  reqList.clear();
+                  LinkedList<Request> reqs = new LinkedList<>();
+                  for (Request req : ServiceDB.getRequests()) {
+                    if (req.getServiceType().equals(type)) {
+                      reqs.add(req);
+                    }
+                  }
+                  reqList.addAll(reqs);
+                } catch (DBException a) {
+                  a.printStackTrace();
+                }
+              }
+            });
+    tb_RequestTable.setItems(reqList);
   }
 }
