@@ -237,7 +237,7 @@
     -fx-font-family: 'Karla';
     -fx-font-size: 18px;
     -fx-min-height: 50;
-    -fx-pref-height: 65;
+    -fx-pref-height: 150;
 }
 
 .jfx-radio-button {

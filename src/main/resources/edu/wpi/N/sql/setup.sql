@@ -97,7 +97,7 @@ CREATE TABLE flower(
 
 CREATE TABLE detail (
     nodeID CHAR(10) NOT NULL PRIMARY KEY REFERENCES nodes(nodeID) ON DELETE CASCADE,
-    field VARCHAR(25) NOT NULL
+    field VARCHAR(255) NOT NULL
 );
 
 /*TODO add the employees table */

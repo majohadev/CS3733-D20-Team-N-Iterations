@@ -79,12 +79,12 @@
             <Font size="30.0" />
          </font>
       </Text>
-      <Label layoutX="323.0" layoutY="355.0" prefHeight="26.0" prefWidth="207.0" styleClass="label-file-size" stylesheets="@../../css/sanitationRequestUI.css" text="Import Employees CSV">
+      <Label layoutX="320.0" layoutY="323.0" prefHeight="26.0" prefWidth="207.0" styleClass="label-file-size" stylesheets="@../../css/sanitationRequestUI.css" text="Import Employees CSV">
          <font>
             <Font name="Calibri" size="14.0" />
          </font>
       </Label>
-      <Button layoutX="46.0" layoutY="382.0" mnemonicParsing="false" onMouseClicked="#onSelectEmployeesClicked" prefHeight="28.0" prefWidth="132.0" style="-fx-background-color: transparent; -fx-border-width: 5; -fx-border-color: #6C5C7F; -fx-border-radius: 10;" styleClass="jfx-button-files" stylesheets="@../../css/sanitationRequestUI.css" text="Select File" textFill="WHITE">
+      <Button layoutX="46.0" layoutY="343.0" mnemonicParsing="false" onMouseClicked="#onSelectEmployeesClicked" prefHeight="28.0" prefWidth="132.0" style="-fx-background-color: transparent; -fx-border-width: 5; -fx-border-color: #6C5C7F; -fx-border-radius: 10;" styleClass="jfx-button-files" stylesheets="@../../css/sanitationRequestUI.css" text="Select File" textFill="WHITE">
          <font>
             <Font name="Calibri" size="14.0" />
          </font>
@@ -92,8 +92,8 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <Label fx:id="lbl_filePath_employees" disable="true" layoutX="219.0" layoutY="389.0" prefHeight="25.0" prefWidth="436.0" style="-fx-border-color: #E6EBF2;" text="File Path" textFill="WHITE" />
-      <Button layoutX="486.0" layoutY="425.0" mnemonicParsing="false" onMouseClicked="#onUploadEmployeesClicked" prefHeight="28.0" prefWidth="156.0" style="-fx-background-color: transparent; -fx-border-width: 5; -fx-border-color: #6C5C7F; -fx-border-radius: 10;" styleClass="jfx-button-files" stylesheets="@../../css/sanitationRequestUI.css" text="Upload CSV" textFill="WHITE">
+      <Label fx:id="lbl_filePath_employees" disable="true" layoutX="218.0" layoutY="350.0" prefHeight="25.0" prefWidth="436.0" style="-fx-border-color: #E6EBF2;" text="File Path" textFill="WHITE" />
+      <Button layoutX="491.0" layoutY="383.0" mnemonicParsing="false" onMouseClicked="#onUploadEmployeesClicked" prefHeight="28.0" prefWidth="156.0" style="-fx-background-color: transparent; -fx-border-width: 5; -fx-border-color: #6C5C7F; -fx-border-radius: 10;" styleClass="jfx-button-files" stylesheets="@../../css/sanitationRequestUI.css" text="Upload CSV" textFill="WHITE">
          <font>
             <Font name="Calibri" size="14.0" />
          </font>
@@ -101,7 +101,7 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <Button layoutX="293.0" layoutY="425.0" mnemonicParsing="false" onMouseClicked="#onDefaultEmployeesClicked" prefHeight="28.0" prefWidth="156.0" style="-fx-background-color: transparent; -fx-border-width: 5; -fx-border-color: #6C5C7F; -fx-border-radius: 10;" styleClass="jfx-button-files" stylesheets="@../../css/sanitationRequestUI.css" text="Reset Path To Default" textFill="WHITE">
+      <Button layoutX="296.0" layoutY="383.0" mnemonicParsing="false" onMouseClicked="#onDefaultEmployeesClicked" prefHeight="28.0" prefWidth="156.0" style="-fx-background-color: transparent; -fx-border-width: 5; -fx-border-color: #6C5C7F; -fx-border-radius: 10;" styleClass="jfx-button-files" stylesheets="@../../css/sanitationRequestUI.css" text="Reset Path To Default" textFill="WHITE">
          <font>
             <Font name="Calibri" size="14.0" />
          </font>
@@ -110,12 +110,12 @@
          </cursor>
       </Button>
       <Separator layoutX="14.0" layoutY="71.0" prefHeight="2.0" prefWidth="290.0" />
-      <Label layoutX="332.0" layoutY="501.0" prefHeight="26.0" prefWidth="207.0" styleClass="label-file-size" stylesheets="@../../css/sanitationRequestUI.css" text="Import Hitbox CSV">
+      <Label layoutX="333.0" layoutY="433.0" prefHeight="26.0" prefWidth="207.0" styleClass="label-file-size" stylesheets="@../../css/sanitationRequestUI.css" text="Import Hitbox CSV">
          <font>
             <Font name="Calibri" size="14.0" />
          </font>
       </Label>
-      <Button layoutX="46.0" layoutY="528.0" mnemonicParsing="false" onMouseClicked="#onSelectHitboxesClicked" prefHeight="28.0" prefWidth="132.0" style="-fx-background-color: transparent; -fx-border-width: 5; -fx-border-color: #6C5C7F; -fx-border-radius: 10;" styleClass="jfx-button-files" stylesheets="@../../css/sanitationRequestUI.css" text="Select File" textFill="WHITE">
+      <Button layoutX="46.0" layoutY="453.0" mnemonicParsing="false" onMouseClicked="#onSelectHitboxesClicked" prefHeight="28.0" prefWidth="132.0" style="-fx-background-color: transparent; -fx-border-width: 5; -fx-border-color: #6C5C7F; -fx-border-radius: 10;" styleClass="jfx-button-files" stylesheets="@../../css/sanitationRequestUI.css" text="Select File" textFill="WHITE">
          <font>
             <Font name="Calibri" size="14.0" />
          </font>
@@ -123,8 +123,8 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <Label fx:id="lbl_filePath_hitbox" disable="true" layoutX="228.0" layoutY="535.0" prefHeight="25.0" prefWidth="436.0" style="-fx-border-color: #E6EBF2;" text="File Path" textFill="WHITE" />
-      <Button layoutX="495.0" layoutY="571.0" mnemonicParsing="false" onMouseClicked="#onUploadHitboxClicked" prefHeight="28.0" prefWidth="156.0" style="-fx-background-color: transparent; -fx-border-width: 5; -fx-border-color: #6C5C7F; -fx-border-radius: 10;" styleClass="jfx-button-files" stylesheets="@../../css/sanitationRequestUI.css" text="Upload CSV" textFill="WHITE">
+      <Label fx:id="lbl_filePath_hitbox" disable="true" layoutX="227.0" layoutY="460.0" prefHeight="25.0" prefWidth="436.0" style="-fx-border-color: #E6EBF2;" text="File Path" textFill="WHITE" />
+      <Button layoutX="491.0" layoutY="493.0" mnemonicParsing="false" onMouseClicked="#onUploadHitboxClicked" prefHeight="28.0" prefWidth="156.0" style="-fx-background-color: transparent; -fx-border-width: 5; -fx-border-color: #6C5C7F; -fx-border-radius: 10;" styleClass="jfx-button-files" stylesheets="@../../css/sanitationRequestUI.css" text="Upload CSV" textFill="WHITE">
          <font>
             <Font name="Calibri" size="14.0" />
          </font>
@@ -132,7 +132,7 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <Button layoutX="302.0" layoutY="571.0" mnemonicParsing="false" onMouseClicked="#onDefaultHitboxesClicked" prefHeight="28.0" prefWidth="156.0" style="-fx-background-color: transparent; -fx-border-width: 5; -fx-border-color: #6C5C7F; -fx-border-radius: 10;" styleClass="jfx-button-files" stylesheets="@../../css/sanitationRequestUI.css" text="Reset Path To Default" textFill="WHITE">
+      <Button layoutX="296.0" layoutY="493.0" mnemonicParsing="false" onMouseClicked="#onDefaultHitboxesClicked" prefHeight="28.0" prefWidth="156.0" style="-fx-background-color: transparent; -fx-border-width: 5; -fx-border-color: #6C5C7F; -fx-border-radius: 10;" styleClass="jfx-button-files" stylesheets="@../../css/sanitationRequestUI.css" text="Reset Path To Default" textFill="WHITE">
          <font>
             <Font name="Calibri" size="14.0" />
          </font>
@@ -140,6 +140,36 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <Separator layoutX="1.0" layoutY="339.0" prefHeight="6.0" prefWidth="760.0" />
+      <Separator layoutY="310.0" prefHeight="6.0" prefWidth="760.0" />
+      <Button layoutX="46.0" layoutY="568.0" mnemonicParsing="false" onMouseClicked="#onSelectDirectoryClicked" prefHeight="28.0" prefWidth="132.0" style="-fx-background-color: transparent; -fx-border-width: 5; -fx-border-color: #6C5C7F; -fx-border-radius: 10;" styleClass="jfx-button-files" stylesheets="@../../css/sanitationRequestUI.css" text="Select File" textFill="WHITE">
+         <font>
+            <Font name="Calibri" size="14.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Label layoutX="332.0" layoutY="548.0" prefHeight="26.0" prefWidth="207.0" styleClass="label-file-size" stylesheets="@../../css/sanitationRequestUI.css" text="Import Department CSV">
+         <font>
+            <Font name="Calibri" size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="lbl_filePath_detail" disable="true" layoutX="227.0" layoutY="575.0" prefHeight="25.0" prefWidth="436.0" style="-fx-border-color: #E6EBF2;" text="File Path" textFill="WHITE" />
+      <Button layoutX="495.0" layoutY="608.0" mnemonicParsing="false" onMouseClicked="#onUploadDetailClicked" prefHeight="28.0" prefWidth="156.0" style="-fx-background-color: transparent; -fx-border-width: 5; -fx-border-color: #6C5C7F; -fx-border-radius: 10;" styleClass="jfx-button-files" stylesheets="@../../css/sanitationRequestUI.css" text="Upload CSV" textFill="WHITE">
+         <font>
+            <Font name="Calibri" size="14.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Button layoutX="302.0" layoutY="608.0" mnemonicParsing="false" onMouseClicked="#onDefaultDepartmentClicked" prefHeight="28.0" prefWidth="156.0" style="-fx-background-color: transparent; -fx-border-width: 5; -fx-border-color: #6C5C7F; -fx-border-radius: 10;" styleClass="jfx-button-files" stylesheets="@../../css/sanitationRequestUI.css" text="Reset Path To Default" textFill="WHITE">
+         <font>
+            <Font name="Calibri" size="14.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
    </children>
 </AnchorPane>
