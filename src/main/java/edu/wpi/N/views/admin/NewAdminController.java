@@ -74,6 +74,7 @@ public class NewAdminController implements Controller, Initializable {
       populateTable();
       populateByType();
       populateEmployeeType();
+      dynamicTable();
       btn_submit.setVisible(false);
       cb_changeAlgo.setVisible(false);
       populateChangeAlgo();
@@ -376,15 +377,15 @@ public class NewAdminController implements Controller, Initializable {
     status.setMinWidth(100);
     status.setCellValueFactory(new PropertyValueFactory<Request, String>("status"));
 
-    TableColumn<Request, String> attr1 = new TableColumn<>("Attribute 1");
-    attr1.setMaxWidth(100);
-    attr1.setMinWidth(100);
-    attr1.setCellValueFactory(new PropertyValueFactory<Request, String>("Atr1"));
-
     TableColumn<Request, String> service = new TableColumn<>("Service");
     service.setMaxWidth(75);
     service.setMinWidth(75);
     service.setCellValueFactory(new PropertyValueFactory<Request, String>("serviceType"));
+
+    TableColumn<Request, String> attr1 = new TableColumn<>("Attribute 1");
+    attr1.setMaxWidth(100);
+    attr1.setMinWidth(100);
+    attr1.setCellValueFactory(new PropertyValueFactory<Request, String>("Atr1"));
 
     TableColumn<Request, String> attr2 = new TableColumn<>("Attribute 2");
     attr2.setMaxWidth(100);
@@ -401,10 +402,7 @@ public class NewAdminController implements Controller, Initializable {
     attr4.setMinWidth(100);
     attr4.setCellValueFactory(new PropertyValueFactory<Request, String>("Atr4"));
 
-    tb_RequestTable
-        .getColumns()
-        .addAll(
-            requestID, service, emp_assigned, notes, nodeID, status, attr1, attr2, attr3, attr4);
+    tb_RequestTable.getColumns().addAll(requestID, service, emp_assigned, notes, nodeID, status);
   }
 
   public void populateTable() throws DBException {
@@ -705,12 +703,12 @@ public class NewAdminController implements Controller, Initializable {
                 } catch (DBException e) {
                   e.printStackTrace();
                 }
-              } else if (newVal.getServiceType().equals("Internal Transport")) {
+              } else if (newVal.getServiceType().equals("Internal Transportation")) {
                 ObservableList<Request> reqs = FXCollections.observableArrayList();
 
                 try {
                   for (Request req : ServiceDB.getRequests()) {
-                    if (req.getServiceType().equals("Internal Transport")) {
+                    if (req.getServiceType().equals("Internal Transportation")) {
                       reqs.add(req);
                     }
                   }
@@ -806,11 +804,284 @@ public class NewAdminController implements Controller, Initializable {
   }
 
   public void resetTable() {
+    tb_RequestTable.getColumns().clear();
     tb_RequestTable.getItems().clear();
     try {
+      initializeTable();
       populateRequestTable();
     } catch (DBException e) {
       e.printStackTrace();
     }
+  }
+
+  public void dynamicTable() {
+    tb_RequestTable
+        .getSelectionModel()
+        .selectedItemProperty()
+        .addListener(
+            (ob, ov, newVal) -> {
+              if (newVal.getServiceType().equals("Laundry")) {
+
+                tb_RequestTable.getColumns().clear();
+                initializeTable();
+
+                ObservableList<Request> reqs = FXCollections.observableArrayList();
+
+                try {
+                  for (Request req : ServiceDB.getRequests()) {
+                    if (req.getServiceType().equals("Laundry")) {
+                      reqs.add(req);
+                    }
+                  }
+
+                  tb_RequestTable.setItems(reqs);
+                } catch (DBException e) {
+                  e.printStackTrace();
+                }
+
+              } else if (newVal.getServiceType().equals("Translator")) {
+
+                TableColumn<Request, String> attr1 = new TableColumn<>("Language");
+                attr1.setMaxWidth(100);
+                attr1.setMinWidth(100);
+                attr1.setCellValueFactory(new PropertyValueFactory<Request, String>("Atr1"));
+
+                tb_RequestTable.getColumns().add(attr1);
+
+                ObservableList<Request> reqs = FXCollections.observableArrayList();
+
+                try {
+                  for (Request req : ServiceDB.getRequests()) {
+                    if (req.getServiceType().equals("Translator")) {
+                      reqs.add(req);
+                    }
+                  }
+
+                  tb_RequestTable.setItems(reqs);
+                } catch (DBException e) {
+                  e.printStackTrace();
+                }
+
+              } else if (newVal.getServiceType().equals("IT")) {
+
+                tb_RequestTable.getColumns().clear();
+
+                TableColumn<Request, String> attr1 = new TableColumn<>("Device");
+                attr1.setMaxWidth(100);
+                attr1.setMinWidth(100);
+                attr1.setCellValueFactory(new PropertyValueFactory<Request, String>("Atr1"));
+
+                TableColumn<Request, String> attr2 = new TableColumn<>("Issues");
+                attr2.setMaxWidth(100);
+                attr2.setMinWidth(100);
+                attr2.setCellValueFactory(new PropertyValueFactory<Request, String>("Atr2"));
+
+                initializeTable();
+                tb_RequestTable.getColumns().addAll(attr1, attr2);
+
+                ObservableList<Request> reqs = FXCollections.observableArrayList();
+
+                try {
+                  for (Request req : ServiceDB.getRequests()) {
+                    if (req.getServiceType().equals("IT")) {
+                      reqs.add(req);
+                    }
+                  }
+
+                  tb_RequestTable.setItems(reqs);
+                } catch (DBException e) {
+                  e.printStackTrace();
+                }
+
+              } else if (newVal.getServiceType().equals("Sanitation")) {
+
+                tb_RequestTable.getColumns().clear();
+
+                TableColumn<Request, String> attr1 = new TableColumn<>("Type");
+                attr1.setMaxWidth(100);
+                attr1.setMinWidth(100);
+                attr1.setCellValueFactory(new PropertyValueFactory<Request, String>("Atr1"));
+
+                TableColumn<Request, String> attr2 = new TableColumn<>("Size");
+                attr2.setMaxWidth(100);
+                attr2.setMinWidth(100);
+                attr2.setCellValueFactory(new PropertyValueFactory<Request, String>("Atr2"));
+
+                TableColumn<Request, String> attr3 = new TableColumn<>("Priority");
+                attr3.setMaxWidth(100);
+                attr3.setMinWidth(100);
+                attr3.setCellValueFactory(new PropertyValueFactory<Request, String>("Atr2"));
+
+                initializeTable();
+                tb_RequestTable.getColumns().addAll(attr1, attr2);
+
+                ObservableList<Request> reqs = FXCollections.observableArrayList();
+
+                try {
+                  for (Request req : ServiceDB.getRequests()) {
+                    if (req.getServiceType().equals("Sanitation")) {
+                      reqs.add(req);
+                    }
+                  }
+
+                  tb_RequestTable.setItems(reqs);
+                } catch (DBException e) {
+                  e.printStackTrace();
+                }
+
+              } else if (newVal.getServiceType().equals("Flower")) {
+
+                tb_RequestTable.getColumns().clear();
+
+                TableColumn<Request, String> attr1 = new TableColumn<>("To");
+                attr1.setMaxWidth(100);
+                attr1.setMinWidth(100);
+                attr1.setCellValueFactory(new PropertyValueFactory<Request, String>("Atr1"));
+
+                TableColumn<Request, String> attr2 = new TableColumn<>("From");
+                attr2.setMaxWidth(100);
+                attr2.setMinWidth(100);
+                attr2.setCellValueFactory(new PropertyValueFactory<Request, String>("Atr2"));
+
+                TableColumn<Request, String> attr3 = new TableColumn<>("Credit Card");
+                attr3.setMaxWidth(100);
+                attr3.setMinWidth(100);
+                attr3.setCellValueFactory(new PropertyValueFactory<Request, String>("Atr3"));
+
+                TableColumn<Request, String> attr4 = new TableColumn<>("Flower Type");
+                attr4.setMaxWidth(100);
+                attr4.setMinWidth(100);
+                attr4.setCellValueFactory(new PropertyValueFactory<Request, String>("Atr4"));
+
+                initializeTable();
+                tb_RequestTable.getColumns().addAll(attr1, attr2, attr3, attr4);
+
+                ObservableList<Request> reqs = FXCollections.observableArrayList();
+
+                try {
+                  for (Request req : ServiceDB.getRequests()) {
+                    if (req.getServiceType().equals("Flower")) {
+                      reqs.add(req);
+                    }
+                  }
+
+                  tb_RequestTable.setItems(reqs);
+                } catch (DBException e) {
+                  e.printStackTrace();
+                }
+
+              } else if (newVal.getServiceType().equals("Wheelchair")) {
+
+                tb_RequestTable.getColumns().clear();
+
+                TableColumn<Request, String> attr1 = new TableColumn<>("Assistance");
+                attr1.setMaxWidth(100);
+                attr1.setMinWidth(100);
+                attr1.setCellValueFactory(new PropertyValueFactory<Request, String>("Atr1"));
+
+                ObservableList<Request> reqs = FXCollections.observableArrayList();
+
+                try {
+                  for (Request req : ServiceDB.getRequests()) {
+                    if (req.getServiceType().equals("Wheelchair")) {
+                      reqs.add(req);
+                    }
+                  }
+
+                  tb_RequestTable.setItems(reqs);
+                } catch (DBException e) {
+                  e.printStackTrace();
+                }
+
+                initializeTable();
+                tb_RequestTable.getColumns().add(attr1);
+
+              } else if (newVal.getServiceType().equals("Internal Transportation")) {
+
+                System.out.println("In internal transport");
+
+                tb_RequestTable.getColumns().clear();
+
+                TableColumn<Request, String> attr1 = new TableColumn<>("Type");
+                attr1.setMaxWidth(100);
+                attr1.setMinWidth(100);
+                attr1.setCellValueFactory(new PropertyValueFactory<Request, String>("Atr1"));
+
+                TableColumn<Request, String> attr2 = new TableColumn<>("Time");
+                attr2.setMaxWidth(100);
+                attr2.setMinWidth(100);
+                attr2.setCellValueFactory(new PropertyValueFactory<Request, String>("Atr2"));
+
+                TableColumn<Request, String> attr3 = new TableColumn<>("Pickup");
+                attr3.setMaxWidth(100);
+                attr3.setMinWidth(100);
+                attr3.setCellValueFactory(new ViewRequestControllerOUTDATED.nodeLongName());
+
+                TableColumn<Request, String> attr4 = new TableColumn<>("Dropoff");
+                attr4.setMaxWidth(100);
+                attr4.setMinWidth(100);
+                attr4.setCellValueFactory(new ViewRequestControllerOUTDATED.nodeLongName());
+
+                ObservableList<Request> reqs = FXCollections.observableArrayList();
+
+                initializeTable();
+                tb_RequestTable.getColumns().addAll(attr1, attr2, attr3, attr4);
+
+                try {
+                  for (Request req : ServiceDB.getRequests()) {
+                    if (req.getServiceType().equals("Internal Transportation")) {
+                      reqs.add(req);
+                    }
+                  }
+
+                  tb_RequestTable.setItems(reqs);
+                } catch (DBException e) {
+                  e.printStackTrace();
+                }
+
+              } else if (newVal.getServiceType().equals("Emotional Support")) {
+
+                ObservableList<Request> reqs = FXCollections.observableArrayList();
+
+                try {
+                  for (Request req : ServiceDB.getRequests()) {
+                    if (req.getServiceType().equals("Emotional Support")) {
+                      reqs.add(req);
+                    }
+                  }
+
+                  tb_RequestTable.setItems(reqs);
+                } catch (DBException e) {
+                  e.printStackTrace();
+                }
+
+              } else if (newVal.getServiceType().equals("Security")) {
+
+                tb_RequestTable.getColumns().clear();
+
+                TableColumn<Request, String> attr1 = new TableColumn<>("Urgent");
+                attr1.setMaxWidth(100);
+                attr1.setMinWidth(100);
+                attr1.setCellValueFactory(new PropertyValueFactory<Request, String>("Atr1"));
+
+                initializeTable();
+                tb_RequestTable.getColumns().addAll(attr1);
+
+                ObservableList<Request> reqs = FXCollections.observableArrayList();
+
+                try {
+                  for (Request req : ServiceDB.getRequests()) {
+                    if (req.getServiceType().equals("Security")) {
+                      reqs.add(req);
+                    }
+                  }
+
+                  tb_RequestTable.setItems(reqs);
+                } catch (DBException e) {
+                  e.printStackTrace();
+                }
+              }
+              System.out.println("Service: " + newVal.getServiceType());
+            });
   }
 }
