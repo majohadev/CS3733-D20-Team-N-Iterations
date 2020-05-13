@@ -5,6 +5,12 @@ import edu.wpi.N.App;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.views.Controller;
+import edu.wpi.cs3733.d20.teamB.api.IncidentReportApplication;
+import edu.wpi.cs3733.d20.teamC.InterpreterRequest;
+import edu.wpi.cs3733.d20.teamL.GiftServiceRequest;
+import edu.wpi.cs3733.d20.teamP.APIController;
+import edu.wpi.cs3733.d20.teamP.ServiceException;
+import flowerapi.FlowerAPI;
 import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,33 +19,36 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 
-public class ServiceController implements Controller {
+public class ApiServiceController implements Controller {
 
   private StateSingleton singleton;
   public Pane service_anchor;
   private App mainApp;
+  private InterpreterRequest interpreterRequest = new InterpreterRequest();
+  private GiftServiceRequest giftRequest = new GiftServiceRequest();
+  private IncidentReportApplication IncidentReport = new IncidentReportApplication();
 
-  @FXML JFXButton btn_translator;
-  @FXML JFXButton btn_laundry;
-  @FXML JFXButton btn_it;
+  @FXML JFXButton btn_interpreter;
+  @FXML JFXButton btn_onCall;
+  @FXML JFXButton btn_food;
   @FXML JFXButton btn_flower;
   @FXML JFXButton btn_schedule;
   @FXML JFXButton btn_security;
   @FXML JFXButton btn_wheelchair;
-  @FXML JFXButton btn_sanitation;
-  @FXML JFXButton btn_transport;
+  @FXML JFXButton btn_maintenance;
+  @FXML JFXButton btn_gift;
 
-  @FXML Label txt_translator;
-  @FXML Label txt_laundry;
-  @FXML Label txt_it;
+  @FXML Label txt_interpreter;
+  @FXML Label txt_onCall;
+  @FXML Label txt_food;
   @FXML Label txt_flower;
   @FXML Label txt_schedule;
   @FXML Label txt_security;
   @FXML Label txt_wheelchair;
-  @FXML Label txt_sanitation;
-  @FXML Label txt_transport;
+  @FXML Label txt_maintenance;
+  @FXML Label txt_gift;
 
-  public ServiceController(StateSingleton singleton) {
+  public ApiServiceController(StateSingleton singleton) {
     this.singleton = singleton;
   }
 
@@ -51,29 +60,25 @@ public class ServiceController implements Controller {
     AnchorPane currentPane = FXMLLoader.load(getClass().getResource("mainServicePage.fxml"));
     service_anchor.getChildren().setAll(currentPane);
     txt_flower.setVisible(false);
-    txt_it.setVisible(false);
-    txt_laundry.setVisible(false);
-    txt_sanitation.setVisible(false);
+    txt_onCall.setVisible(false);
+    txt_interpreter.setVisible(false);
+    txt_maintenance.setVisible(false);
     txt_schedule.setVisible(false);
     txt_security.setVisible(false);
     txt_wheelchair.setVisible(false);
-    txt_transport.setVisible(false);
-    txt_translator.setVisible(false);
+    txt_gift.setVisible(false);
+    txt_food.setVisible(false);
   }
 
   @FXML
-  public void switchToTranslatorPage() throws IOException {
+  public void switchToInterpreterPage() throws IOException {
 
-    AnchorPane currentPane = FXMLLoader.load(getClass().getResource("serviceTemplate.fxml"));
-    service_anchor.getChildren().setAll(currentPane);
+    String css = this.getClass().getResource("sanitationRequestUI2.css").toExternalForm();
+    interpreterRequest.run(576, 90, 1280, 950, null, null, null);
   }
 
   @FXML
-  public void switchToLaundryPage() throws IOException {
-
-    AnchorPane currentPane = FXMLLoader.load(getClass().getResource("laundryPage.fxml"));
-    service_anchor.getChildren().setAll(currentPane);
-  }
+  public void switchToOnCallPage() throws IOException {}
 
   @FXML
   public void switchToEmotionalPage() throws IOException {
@@ -82,21 +87,23 @@ public class ServiceController implements Controller {
   }
 
   @FXML
-  public void switchToSanitationPage() throws IOException {
-    AnchorPane currentPane = FXMLLoader.load(getClass().getResource("sanitationRequestPage.fxml"));
-    service_anchor.getChildren().setAll(currentPane);
+  public void switchToMaintenancePage() {
+    //      throws IOException, edu.wpi.cs3733.d20.teamF.ModelClasses.ServiceException {
+    //    MaintenanceRequestLaunch requestLaunch = new MaintenanceRequestLaunch();
+    //    String css = this.getClass().getResource("default.css").toExternalForm();
+    //    requestLaunch.run(576, 90, 1280, 950, css, null, null);
   }
 
   @FXML
-  public void switchToITServicePage() throws IOException {
-    AnchorPane currentPane = FXMLLoader.load(getClass().getResource("itService.fxml"));
-    service_anchor.getChildren().setAll(currentPane);
+  public void switchToFoodPage() throws IOException, ServiceException {
+    // String css = this.getClass().getResource("default.css").toExternalForm();
+    APIController.run(576, 90, 1280, 950, null, null, null);
   }
 
   @FXML
-  public void switchToFloralPage() throws IOException {
-    AnchorPane currentPane = FXMLLoader.load(getClass().getResource("flowerDeliveryReq.fxml"));
-    service_anchor.getChildren().setAll(currentPane);
+  public void switchToFloralPage() throws IOException, flowerapi.ServiceException {
+    String css = this.getClass().getResource("sanitationRequestUI2.css").toExternalForm();
+    FlowerAPI.run(576, 90, 1280, 950, css, null, null);
   }
 
   @FXML
@@ -118,8 +125,14 @@ public class ServiceController implements Controller {
 
   @FXML
   public void switchToSecurityPage() throws IOException {
-    AnchorPane currentPane = FXMLLoader.load(getClass().getResource("securityRequest.fxml"));
-    service_anchor.getChildren().setAll(currentPane);
+    String css = this.getClass().getResource("sanitationRequestUI2.css").toExternalForm();
+    IncidentReport.run(576, 90, 1280, 950, css, null, null);
+  }
+
+  @FXML
+  public void switchToGiftPage() throws Exception {
+    String css = this.getClass().getResource("sanitationRequestUI2.css").toExternalForm();
+    giftRequest.run(576, 90, 1280, 950, css, null, null);
   }
 
   @FXML
@@ -137,27 +150,27 @@ public class ServiceController implements Controller {
   @FXML
   public void showLabel(MouseEvent e) {
     if (e.getSource() == btn_flower) txt_flower.setVisible(true);
-    if (e.getSource() == btn_translator) txt_translator.setVisible(true);
-    if (e.getSource() == btn_sanitation) txt_sanitation.setVisible(true);
+    if (e.getSource() == btn_interpreter) txt_interpreter.setVisible(true);
+    if (e.getSource() == btn_maintenance) txt_maintenance.setVisible(true);
     if (e.getSource() == btn_schedule) txt_schedule.setVisible(true);
     if (e.getSource() == btn_security) txt_security.setVisible(true);
-    if (e.getSource() == btn_it) txt_it.setVisible(true);
-    if (e.getSource() == btn_laundry) txt_laundry.setVisible(true);
+    if (e.getSource() == btn_food) txt_food.setVisible(true);
+    if (e.getSource() == btn_onCall) txt_onCall.setVisible(true);
     if (e.getSource() == btn_wheelchair) txt_wheelchair.setVisible(true);
-    if (e.getSource() == btn_transport) txt_transport.setVisible(true);
+    if (e.getSource() == btn_gift) txt_gift.setVisible(true);
   }
 
   @FXML
   public void hideLabel(MouseEvent e) {
 
     if (e.getSource() == btn_flower) txt_flower.setVisible(false);
-    if (e.getSource() == btn_translator) txt_translator.setVisible(false);
-    if (e.getSource() == btn_sanitation) txt_sanitation.setVisible(false);
+    if (e.getSource() == btn_interpreter) txt_interpreter.setVisible(false);
+    if (e.getSource() == btn_maintenance) txt_maintenance.setVisible(false);
     if (e.getSource() == btn_schedule) txt_schedule.setVisible(false);
     if (e.getSource() == btn_security) txt_security.setVisible(false);
-    if (e.getSource() == btn_it) txt_it.setVisible(false);
-    if (e.getSource() == btn_laundry) txt_laundry.setVisible(false);
+    if (e.getSource() == btn_food) txt_food.setVisible(false);
+    if (e.getSource() == btn_onCall) txt_onCall.setVisible(false);
     if (e.getSource() == btn_wheelchair) txt_wheelchair.setVisible(false);
-    if (e.getSource() == btn_transport) txt_transport.setVisible(false);
+    if (e.getSource() == btn_gift) txt_gift.setVisible(false);
   }
 }
