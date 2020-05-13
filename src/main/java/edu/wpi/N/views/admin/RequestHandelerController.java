@@ -66,8 +66,6 @@ public class RequestHandelerController implements Initializable {
   }
 
   public void acceptRequest() throws DBException {
-    Employee emp = cb_Employees.getSelectionModel().getSelectedItem();
     newAdminController.acceptRow();
-    newAdminController.populateRequestTable();
   }
 }

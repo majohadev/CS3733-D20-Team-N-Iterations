@@ -3,8 +3,6 @@ package edu.wpi.N.views.outdated;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXTreeTableView;
-import com.jfoenix.controls.RecursiveTreeItem;
-import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import edu.wpi.N.App;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
@@ -45,8 +43,8 @@ public class ViewRequestControllerOUTDATED implements Controller, Initializable 
   ObservableList<Request> tableData = FXCollections.observableArrayList();
   ObservableList<String> languageData = FXCollections.observableArrayList();
   ObservableList<Request> newTableData = FXCollections.observableArrayList();
-  TreeItem<Request> root =
-      new RecursiveTreeItem<Request>(newTableData, RecursiveTreeObject::getChildren);
+  // TreeItem<Request> root =
+  // new RecursiveTreeItem<Request>(newTableData, RecursiveTreeObject::getChildren);
   TreeItem<String> lang;
 
   @Override
@@ -74,13 +72,22 @@ public class ViewRequestControllerOUTDATED implements Controller, Initializable 
 
   public static class nodeLongName
       implements Callback<TableColumn.CellDataFeatures<Request, String>, ObservableValue<String>> {
+    private boolean transReqAtr3;
 
-    public nodeLongName() {}
+    public nodeLongName() {
+      this.transReqAtr3 = false;
+    }
+
+    public nodeLongName(boolean transReqAtr3) {
+      this.transReqAtr3 = transReqAtr3;
+    }
 
     @Override
     public ObservableValue<String> call(TableColumn.CellDataFeatures<Request, String> param) {
       try {
-        DbNode node = MapDB.getNode(param.getValue().getNodeID());
+        DbNode node;
+        if (transReqAtr3) node = MapDB.getNode(param.getValue().getAtr3());
+        else node = MapDB.getNode(param.getValue().getNodeID());
         if (node == null) {
           return new ReadOnlyObjectWrapper<>("Invalid Location");
         }
