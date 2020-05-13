@@ -218,8 +218,12 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
             .setText(nodeStart.getLongName() + ", " + nodeStart.getBuilding());
         locationSearchController.getTextSecondLocation().clear();
 
+        mapBaseController.resetFocus();
+        locationSearchController.clearSecondEntry();
         try {
-          this.path = singleton.savedAlgo.findQuickAccess(nodeStart, "REST", false);
+          this.path =
+              singleton.savedAlgo.findQuickAccess(
+                  nodeStart, "REST", locationSearchController.getHandicap());
           mapBaseController.setFloor(nodeStart.getBuilding(), nodeStart.getFloor(), path);
           if (path.size() == 0) {
             displayErrorMessage("Please select the first node");
@@ -229,10 +233,6 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
           return;
         }
         enableTextDirections();
-        disableNonPathFloors();
-        if (pathButtonList.size() > 1) {
-          pathButtonList.get(1).setStyle("-fx-background-color: #6C5C7F;");
-        }
       }
 
       if (singleton.chatBotState.whereIsNode != null) {
@@ -782,11 +782,19 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     this.currentBuilding = first.getBuilding();
     this.currentFloor = first.getFloor();
     if (first.getBuilding().equals("Faulkner")) {
-      faulknerButtonList.animateList(true);
-      mainButtonList.animateList(false);
+      try {
+        faulknerButtonList.animateList(true);
+        mainButtonList.animateList(false);
+      } catch (Exception ex) {
+        // BAD SOLUTION
+      }
     } else {
-      faulknerButtonList.animateList(false);
-      mainButtonList.animateList(true);
+      try {
+        faulknerButtonList.animateList(false);
+        mainButtonList.animateList(true);
+      } catch (Exception ex) {
+        ex.printStackTrace();
+      }
     }
     displayGoogleMaps(first, second);
     ServiceDB.travelledTo(second.getNodeID());

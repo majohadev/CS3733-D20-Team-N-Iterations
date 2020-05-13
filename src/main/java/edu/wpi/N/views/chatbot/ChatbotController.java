@@ -53,6 +53,7 @@ public class ChatbotController implements Controller, Initializable {
   @FXML private AnchorPane buttonOnlyView;
   @FXML private ScrollPane scrollPane;
   @FXML private JFXButton btnSendMessage;
+  @FXML private JFXButton btnAskMe;
 
   // Inject state singleton
   public ChatbotController(StateSingleton state, App mainApp) {
@@ -63,6 +64,9 @@ public class ChatbotController implements Controller, Initializable {
   /** Opens up the Chat-bot window */
   @FXML
   private void onBtnAskMeClicked() {
+
+    mainPane.setMaxHeight(587);
+    mainPane.setMaxWidth(425);
 
     // If message history is empty
     if (state.chatBotState.getMessageHistory().isEmpty()) {
@@ -90,6 +94,9 @@ public class ChatbotController implements Controller, Initializable {
     buttonOnlyView.setVisible(true);
     chatBotView.setMouseTransparent(true);
     chatBox.getChildren().clear();
+
+    mainPane.setPrefHeight(250);
+    mainPane.setPrefWidth(250);
   }
 
   /**
@@ -611,7 +618,8 @@ public class ChatbotController implements Controller, Initializable {
           }
         });
 
-    chatBotView.setMouseTransparent(true);
+    mainPane.setPrefHeight(250);
+    mainPane.setPrefWidth(250);
 
     // Do such that scroll pane auto-scrolls down
     scrollPane.vvalueProperty().bind(chatBox.heightProperty());
