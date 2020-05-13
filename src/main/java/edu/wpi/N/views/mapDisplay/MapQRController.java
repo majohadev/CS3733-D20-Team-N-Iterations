@@ -13,6 +13,8 @@ import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.views.Controller;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -199,6 +201,37 @@ public class MapQRController implements Controller {
     }
   }
 
+  public void onChangeTab() {
+    tbpn_directions
+        .getSelectionModel()
+        .selectedItemProperty()
+        .addListener(
+            new ChangeListener<Tab>() {
+              @Override
+              public void changed(ObservableValue<? extends Tab> ov, Tab t, Tab t1) {
+                if (t1 == tb_faulkner) {
+                  try {
+                    onFaulknerTabSelected();
+                  } catch (DBException e) {
+                    e.printStackTrace();
+                  }
+                } else if (t1 == tb_main) {
+                  try {
+                    onMainTabSelected();
+                  } catch (DBException e) {
+                    e.printStackTrace();
+                  }
+                } else if (t1 == tb_drive) {
+                  onDriveTabSelected();
+                }
+              }
+            });
+  }
+
+  public void initialize() {
+    onChangeTab();
+  }
+
   /**
    * Executes when the faulkner building is manually selected by the user
    *
@@ -208,7 +241,6 @@ public class MapQRController implements Controller {
     if (tbpn_directions.getSelectionModel().getSelectedItem() != tb_faulkner) {
       return;
     }
-    System.out.println("Faulkner");
     tr_faulkner.getSelectionModel().select(0);
     currentDirection = (TreeItem<Direction>) tr_faulkner.getSelectionModel().getSelectedItem();
     if (currentDirection != null) {
@@ -234,7 +266,7 @@ public class MapQRController implements Controller {
     if (tbpn_directions.getSelectionModel().getSelectedItem() != tb_main) {
       return;
     }
-    System.out.println("Main");
+
     tr_main.getSelectionModel().select(0);
     currentDirection = (TreeItem<Direction>) tr_main.getSelectionModel().getSelectedItem();
     if (currentDirection != null) {
@@ -257,7 +289,6 @@ public class MapQRController implements Controller {
     if (tbpn_directions.getSelectionModel().getSelectedItem() != tb_drive) {
       return;
     }
-    System.out.println("Drive");
     tr_drive.getSelectionModel().select(0);
     mapDisplayController.switchGoogleView();
     mapDisplayController.setFloorBuildingText(0, "Drive");

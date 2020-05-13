@@ -19,7 +19,7 @@
       </Label>
       <JFXTabPane fx:id="tbpn_directions" layoutY="91.0" prefWidth="345.0" styleClass="jfx-tab-pane" stylesheets="@../../css/newMapDisplay.css" AnchorPane.topAnchor="117.0">
          <tabs>
-            <Tab fx:id="tb_faulkner" onSelectionChanged="#onFaulknerTabSelected" styleClass="jtab" text="Faulkner">
+            <Tab fx:id="tb_faulkner" styleClass="jtab" text="Faulkner">
               <content>
                 <AnchorPane maxHeight="750.0" minHeight="750.0" minWidth="0.0" prefHeight="750.0" prefWidth="345.0">
                      <children>
@@ -28,7 +28,7 @@
                   </AnchorPane>
               </content>
             </Tab>
-            <Tab fx:id="tb_main" onSelectionChanged="#onMainTabSelected" styleClass="jtab" text="Main">
+            <Tab fx:id="tb_main" styleClass="jtab" text="Main">
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="200.0">
                      <children>
@@ -37,7 +37,7 @@
                   </AnchorPane>
               </content>
             </Tab>
-            <Tab fx:id="tb_drive" onSelectionChanged="#onDriveTabSelected" styleClass="jtab" text="Drive">
+            <Tab fx:id="tb_drive" styleClass="jtab" text="Drive">
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="200.0">
                      <children>

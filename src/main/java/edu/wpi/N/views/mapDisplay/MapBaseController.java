@@ -157,7 +157,7 @@ public class MapBaseController implements Controller {
       newMapDisplayController.setFloorBuildingText(floor, building);
     }
     img_map.setImage(singleton.mapImageLoader.getMap(building, floor));
-    // resetFocus();
+    resetFocus();
     if (!(currentPath == null || currentPath.isEmpty())) {
       drawPath(currentPath, floor, building);
     }
