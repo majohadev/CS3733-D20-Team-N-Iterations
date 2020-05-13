@@ -5,17 +5,23 @@ import com.jfoenix.controls.JFXTreeCell;
 import com.jfoenix.controls.JFXTreeView;
 import edu.wpi.N.App;
 import edu.wpi.N.algorithms.Direction;
+import edu.wpi.N.algorithms.Directions;
 import edu.wpi.N.algorithms.Level;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.entities.DbNode;
 import edu.wpi.N.entities.Path;
 import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.views.Controller;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -24,6 +30,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 public class MapQRController implements Controller {
   private StateSingleton singleton;
@@ -503,5 +511,203 @@ public class MapQRController implements Controller {
     for (int i = 0; i < rootMain.getChildren().size(); i++) {
       rootMain.getChildren().get(i).setExpanded(false);
     }
+  }
+
+  /** Function displays a pop-up window with user's directions */
+  @FXML
+  private void displayQRCode() throws IOException {
+    try {
+      Stage stage = new Stage();
+      Parent root;
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(getClass().getResource("qrPopUp.fxml"));
+      root = loader.load();
+      Scene scene = new Scene(root);
+      stage.setScene(scene);
+
+      // Creates a QR code for the directions in the current tab
+      QrPopUpController controller = (QrPopUpController) loader.getController();
+      ArrayList<Direction> directions;
+      if (tbpn_directions.getSelectionModel().getSelectedItem().equals(tb_faulkner)) {
+        directions = faulknerPath;
+      } else if (tbpn_directions.getSelectionModel().getSelectedItem().equals(tb_main)) {
+        directions = mainPath;
+      } else {
+        directions = Directions.getGoogleDirections(getNecessaryGoogleRequestUrl("Driving"));
+      }
+
+      // Attempts to merge all of the directions together into one QR code, but
+      // the text tends to be way too big for a single QR code
+      //      String start = path.getPath().getFirst().getBuilding();
+      //      String end = path.getPath().getLast().getBuilding();
+      //      ArrayList<Direction> drivePath =
+      //          Directions.getGoogleDirections(getNecessaryGoogleRequestUrl("Driving"));
+      //      if (start.equals(end)) {
+      //        if (start.equals("Faulkner")) {
+      //          directions = faulknerPath;
+      //        } else {
+      //          directions = mainPath;
+      //        }
+      //      } else {
+      //        if (start.equals("Faulkner")) {
+      //          directions = faulknerPath;
+      //          directions.addAll(drivePath);
+      //          directions.addAll(mainPath);
+      //        } else {
+      //          directions = mainPath;
+      //          directions.addAll(drivePath);
+      //          directions.addAll(faulknerPath);
+      //        }
+      //      }
+
+      controller.displayQrCode(directions);
+
+      stage.initModality(Modality.APPLICATION_MODAL);
+      stage.show();
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+      errorAlert.setHeaderText("Oops... Something went Wong");
+      errorAlert.setContentText("QR code with directions could not be generated");
+      errorAlert.showAndWait();
+    }
+  }
+
+  /**
+   * Gets the Google API request URL for making the API call based on Starting exit and Goal
+   * Entrance
+   *
+   * @param mode
+   * @return
+   */
+  private String getNecessaryGoogleRequestUrl(String mode) {
+    String url = "";
+
+    boolean isFirstFaulkner = this.path.get(0).getBuilding().equals("Faulkner");
+    boolean isSecondFaulkner = this.path.get(path.size() - 1).getBuilding().equals("Faulkner");
+
+    if (isFirstFaulkner ^ isSecondFaulkner) {
+      if (isFirstFaulkner) {
+        // Default Faulkner -> Francis
+        url =
+            "https://maps.googleapis.com/maps/api/directions/json?mode="
+                + mode
+                + "&origin=42.301213,-71.127795"
+                + "&destination=Brigham+and+Women's+Hospital:+Spiegel+Joan+H+MD,+45+Francis+St+%23+D,+Boston,+MA+02115"
+                + "&key=AIzaSyDx7BSweq5dRzXavs1vxuMWeR2ETMR6b3Q";
+
+        // Identify which 'entrance' to generate text dirs for, use default if not found
+        for (DbNode node : this.path.getPath()) {
+          if (node.getNodeType().equals("EXIT")) {
+            if (node.getNodeID().equals("GEXIT001L1")) {
+              // FaulknerToShapiroFenwood
+              url =
+                  "https://maps.googleapis.com/maps/api/directions/json?mode="
+                      + mode
+                      + "&origin=42.301213,-71.127795"
+                      + "&destination=42.335505,-71.108191"
+                      + "&key=AIzaSyDx7BSweq5dRzXavs1vxuMWeR2ETMR6b3Q";
+
+            } else if (node.getNodeID().equals("AEXIT0010G")) {
+              // FaulknerToBTMFenwood
+              url =
+                  "https://maps.googleapis.com/maps/api/directions/json?mode="
+                      + mode
+                      + "&origin=42.301213,-71.127795"
+                      + "&destination=42.335425,-71.108247"
+                      + "&key=AIzaSyDx7BSweq5dRzXavs1vxuMWeR2ETMR6b3Q";
+
+            } else if (node.getNodeID().equals("GEXIT00101")) {
+              // FaulknerToShapiroFrancis
+              url =
+                  "https://maps.googleapis.com/maps/api/directions/json?mode="
+                      + mode
+                      + "&origin=42.301213,-71.127795"
+                      + "&destination=42.335863,-71.107704"
+                      + "&key=AIzaSyDx7BSweq5dRzXavs1vxuMWeR2ETMR6b3Q";
+
+            } else if (node.getNodeID().equals("FEXIT00201")) {
+              // FaulknerToTower75Francis
+              url =
+                  "https://maps.googleapis.com/maps/api/directions/json?mode="
+                      + mode
+                      + "&origin=42.301213,-71.127795"
+                      + "&destination=75+Francis+St+Boston+MA+02115"
+                      + "&key=AIzaSyDx7BSweq5dRzXavs1vxuMWeR2ETMR6b3Q";
+
+            } else if (node.getNodeID().equals("XEXIT00202")) {
+              // FaulknerToFLEX
+              url =
+                  "https://maps.googleapis.com/maps/api/directions/json?mode="
+                      + mode
+                      + "&origin=42.301213,-71.127795"
+                      + "&destination=42.335078,-71.106326"
+                      + "&key=AIzaSyDx7BSweq5dRzXavs1vxuMWeR2ETMR6b3Q";
+            }
+          }
+        }
+      } else {
+        // Default Francis -> Faulkner
+        url =
+            "https://maps.googleapis.com/maps/api/directions/json?mode="
+                + mode
+                + "&origin=Brigham+and+Women's+Hospital:+Spiegel+Joan+H+MD,+45+Francis+St+%23+D,+Boston,+MA+02115"
+                + "&destination=42.301213,-71.127795"
+                + "&key=AIzaSyDx7BSweq5dRzXavs1vxuMWeR2ETMR6b3Q";
+
+        // Identify which 'exit' to generate text dirs for, use default if not found
+        for (DbNode node : this.path.getPath()) {
+          if (node.getNodeType().equals("EXIT")) {
+            if (node.getNodeID().equals("GEXIT001L1")) {
+              // ShapiroFenwoodToFaulkner
+              url =
+                  "https://maps.googleapis.com/maps/api/directions/json?mode="
+                      + mode
+                      + "&origin=42.335505,-71.108191"
+                      + "&destination=42.301213,-71.127795"
+                      + "&key=AIzaSyDx7BSweq5dRzXavs1vxuMWeR2ETMR6b3Q";
+
+            } else if (node.getNodeID().equals("AEXIT0010G")) {
+              // BTMFenwoodToFaulkner
+              url =
+                  "https://maps.googleapis.com/maps/api/directions/json?mode="
+                      + mode
+                      + "&origin=42.335425,-71.108247"
+                      + "&destination=42.301213,-71.127795"
+                      + "&key=AIzaSyDx7BSweq5dRzXavs1vxuMWeR2ETMR6b3Q";
+
+            } else if (node.getNodeID().equals("GEXIT00101")) {
+              // ShapiroFrancisToFaulkner
+              url =
+                  "https://maps.googleapis.com/maps/api/directions/json?mode="
+                      + mode
+                      + "&origin=42.335863,-71.107704"
+                      + "&destination=42.301213,-71.127795"
+                      + "&key=AIzaSyDx7BSweq5dRzXavs1vxuMWeR2ETMR6b3Q";
+
+            } else if (node.getNodeID().equals("FEXIT00201")) {
+              // Tower75FrancisToFaulkner
+              url =
+                  "https://maps.googleapis.com/maps/api/directions/json?mode="
+                      + mode
+                      + "&origin=75+Francis+St+Boston+MA+02115"
+                      + "&destination=42.301213,-71.127795"
+                      + "&key=AIzaSyDx7BSweq5dRzXavs1vxuMWeR2ETMR6b3Q";
+
+            } else if (node.getNodeID().equals("XEXIT00202")) {
+              // FLEXToFaulkner
+              url =
+                  "https://maps.googleapis.com/maps/api/directions/json?mode="
+                      + mode
+                      + "&origin=42.335078,-71.106326"
+                      + "&destination=42.301213,-71.127795"
+                      + "&key=AIzaSyDx7BSweq5dRzXavs1vxuMWeR2ETMR6b3Q";
+            }
+          }
+        }
+      }
+    }
+
+    return url;
   }
 }
