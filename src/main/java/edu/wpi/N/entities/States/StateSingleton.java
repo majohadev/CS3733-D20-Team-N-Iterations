@@ -16,8 +16,11 @@ public class StateSingleton {
   public Algorithm savedAlgo;
   public MapImageLoader mapImageLoader;
   public ChatMessagesState chatBotState;
-  public boolean isMapDisplayActive;
-  public boolean isServicesPageActive;
+
+  public boolean isMapDisplayActive = false;
+  public boolean isServicesPageActive = false;
+  public boolean isAdminLoggedIn = false;
+
   public String algoState;
   public Originator originator;
   public CareTaker careTaker;

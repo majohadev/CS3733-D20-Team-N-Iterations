@@ -382,6 +382,17 @@ public class ChatbotController implements Controller, Initializable {
         // Display animation how to use 'way-finding feature'
         mapController.displayGuideForSearchLocation();
 
+      } else if (intent.contains("kiosk-help-admin-question")) {
+
+        if (state.isAdminLoggedIn) {
+          // Display the fulfilment text
+          Label reply = new Label(queryResults.getFulfillmentText());
+          singleMessageObject.add(reply);
+        } else {
+          singleMessageObject.add(
+              new Label(
+                  "I'm sorry, but you need to log in first to get the necessary instructions."));
+        }
       } else {
         // else, use Dialogflow text
         Label message = new Label(queryResults.getFulfillmentText());
@@ -389,7 +400,6 @@ public class ChatbotController implements Controller, Initializable {
       }
 
       state.chatBotState.resetPlannedActions();
-
       displayAndSaveMessages(singleMessageObject, false);
 
     } catch (Exception ex) {

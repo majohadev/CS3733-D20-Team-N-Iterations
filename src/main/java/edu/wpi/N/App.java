@@ -69,11 +69,17 @@ public class App extends Application {
     if (path.contains("newMapDisplay.fxml")) {
       singleton.isMapDisplayActive = true;
       singleton.isServicesPageActive = false;
+      singleton.isAdminLoggedIn = false;
     }
     // check if services page is active
     else if (path.contains("newServicesPage")) {
       singleton.isServicesPageActive = true;
       singleton.isMapDisplayActive = false;
+      singleton.isAdminLoggedIn = false;
+    } else if (path.contains("adminPortal.fxml")) {
+      singleton.isServicesPageActive = false;
+      singleton.isMapDisplayActive = false;
+      singleton.isAdminLoggedIn = true;
     } else {
       singleton.isMapDisplayActive = false;
       singleton.isServicesPageActive = false;
