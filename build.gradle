@@ -35,15 +35,28 @@ dependencies {
             'com.google.zxing:javase:3.4.0',
             'com.google.cloud:google-cloud-dialogflow:1.0.0',
             'com.google.cloud:google-cloud-storage:1.107.0',
+            'com.google.cloud:google-cloud-translate:1.94.5',
+            'com.google.cloud:google-cloud-texttospeech:1.0.2',
+            'com.google.cloud:google-cloud-speech:1.22.6',
+            'com.google.inject:guice:4.2.3',
             'com.squareup.okhttp3:okhttp:4.6.0',
-            [group: 'edu.wpi.cs3733.c20.teamR', name: 'AppointmentRequest', version:'5.0.0']
-
+            [group: 'edu.wpi.cs3733.d20.teamC', name: 'InterpreterRequest', version:'1.0.1'],
+            [group: 'edu.wpi.cs3733.d20.teamE', name: 'onCallBedsAPI', version:'1.0.1'],
+            [group: 'edu.wpi.cs3733.d20.teamP', name: 'FoodRequest', version:'1.1.0'],
+            [group: 'edu.wpi.cs3733.d20.teamA', name: 'TeamAFlowerRequest', version:'1.1.2'],
+            [group: 'edu.wpi.cs3733.d20.teamB', name: 'IncidentReporting', version:'1.0.0'],
+            [group: 'edu.wpi.cs3733.d20.teamL', name: 'GiftDeliveryServiceRequest', version:'1.0.0'],
+            [group: 'edu.wpi.cs3733.d20.teamN', name: 'sanitation', version:'1.8.4']
     )
 
     compile group: 'com.google.guava', name: 'guava', version: '23.5-jre', 'org.mybatis:mybatis:3.5.4', 'org.apache.httpcomponents:httpclient:4.5.12'
     compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.0.1'
     compile files('src/main/resources/edu/wpi/N/jnativehook-2.1.0.jar')
+    compile 'org.controlsfx:controlsfx:9.0.0'
+    compile group: 'commons-io', name: 'commons-io', version: '2.6'
+    compile group: 'com.calendarfx', name: 'view', version: '8.4.2'
+
 
     implementation group: 'at.favre.lib', name: 'bcrypt', version: '0.9.0'
 

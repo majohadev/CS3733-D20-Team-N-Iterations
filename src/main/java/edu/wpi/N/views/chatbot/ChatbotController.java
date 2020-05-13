@@ -405,7 +405,7 @@ public class ChatbotController implements Controller, Initializable {
    * @param intent user's intent
    */
   private void handleSpecificServiceRequest(String intent, QueryResult queryResults)
-      throws IOException {
+      throws Exception {
     LinkedList<Node> singleMessageObject = new LinkedList<Node>();
 
     // If currently not on services page
