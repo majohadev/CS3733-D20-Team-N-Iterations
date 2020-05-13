@@ -55,6 +55,7 @@ public class DataEditorController implements Controller {
     lbl_filePath_edges.setText(DEFAULT_PATHS);
     lbl_filePath_employees.setText(DEFAULT_EMPLOYEES);
     lbl_filePath_detail.setText(DEFAULT_DETAIL);
+    lbl_filePath_hitbox.setText(DEFAULT_HITBOXES);
     // onUploadDetailClicked();
   }
 
@@ -136,8 +137,8 @@ public class DataEditorController implements Controller {
         Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
         confirmAlert.setContentText("Your Hitbox CSV File Has Been Successfully Uploaded");
         confirmAlert.show();
-        CSVParser.parseCSVDetailFromPath(path);
-        // CSVParser.parseCSVHitBoxesFromPath(path);
+        // CSVParser.parseCSVDetailFromPath(path);
+        CSVParser.parseCSVHitBoxesFromPath(path);
       }
     } catch (Exception e) {
       e.printStackTrace();

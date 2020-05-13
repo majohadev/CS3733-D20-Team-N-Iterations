@@ -100,6 +100,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
    * @throws IOException
    */
   public void initialize() throws DBException, IOException {
+    System.out.println("ligma nutz");
     this.path = new Path(new LinkedList<>());
     this.currentFloor = 1;
     this.currentBuilding = "Faulkner";
@@ -110,6 +111,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     this.mainButtonList = new JFXNodesList();
     this.pn_hospitalView = mapBaseController.getAnchorPane();
 
+    System.out.println("gagnon som");
     mapBaseController.setNewMapDisplayController(this);
     mapBaseController.setFloor(this.currentBuilding, this.currentFloor, this.path);
     setFloorBuildingText(this.currentFloor, this.currentBuilding);
@@ -1369,6 +1371,18 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
       if (dirThread != null) dirThread.interrupt();
       dirThread = new Thread(new SetupDirs(this));
       dirThread.start();
+    }
+  }
+
+  public void setSearchNodesHitboxClicks(DbNode node, String textField) {
+    MapLocationSearchController.setHitboxSearchNodes(node, textField);
+    if (textField.equals("Start")) {
+      TextField txts = locationSearchController.getTextFirstLocation();
+      txts.setText(node.getLongName());
+    }
+    if (textField.equals("Destination")) {
+      TextField txts = locationSearchController.getTextSecondLocation();
+      txts.setText(node.getLongName());
     }
   }
 
