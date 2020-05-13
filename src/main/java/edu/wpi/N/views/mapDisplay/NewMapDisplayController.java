@@ -15,7 +15,7 @@ import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.entities.employees.Doctor;
 import edu.wpi.N.qrcontrol.QRGenerator;
 import edu.wpi.N.views.Controller;
-import java.awt.*;
+import edu.wpi.N.views.chatbot.ChatbotController;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -55,12 +55,13 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
   @FXML AnchorPane pn_background;
 
   @FXML MapBaseController mapBaseController;
+  @FXML ChatbotController chatBotController;
 
+  public MapLocationSearchController locationSearchController;
+  public MapDoctorSearchController doctorSearchController;
   private Pane dirPane;
   public Thread dirThread;
 
-  MapLocationSearchController locationSearchController;
-  MapDoctorSearchController doctorSearchController;
   MapQRController mapQRController;
   MapDetailSearchController detailSearchController;
 
@@ -118,6 +119,147 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     initFunctionPane();
     setDefaultKioskNode();
     disableTextDirections();
+
+    chatBotController.setMapController(this); // pass the reference to the chat-bot
+    checkChatbot();
+  }
+
+  /** Highlights the region around Search by location */
+  public void displayGuideForSearchLocation() throws DBException, IOException {
+
+    pn_iconBar.getChildren().forEach(n -> n.setStyle("-fx-background-color: #263051;"));
+    pn_locationIcon.setStyle("-fx-background-color: #4A69C6;");
+
+    FXMLLoader loader;
+
+    resetMap();
+    loader = new FXMLLoader(getClass().getResource("mapLocationSearch.fxml"));
+    Pane pane = loader.load();
+    locationSearchController = loader.getController();
+    initLocationSearchButton();
+    initResetLocationSearch();
+    initRestroomSearchButton();
+    initExitSearchButton();
+    initInfoSearchButton();
+    locationSearchController.setCon(this);
+    setDefaultKioskNode();
+    pn_change.getChildren().add(pane);
+
+    // Display the box with guidelines itself
+    locationSearchController.showGuideLines();
+    singleton.chatBotState.resetPlannedActions();
+  }
+
+  /** Opens up the necessary tab and highlights the region around search by location */
+  public void displayGuideForDoctorSearch() throws DBException, IOException {
+
+    // Open the tab
+    FXMLLoader loader;
+    resetMap();
+    loader = new FXMLLoader(getClass().getResource("mapDoctorSearch.fxml"));
+    Pane pane = loader.load();
+    doctorSearchController = loader.getController();
+    initDoctorSearchButton();
+    initResetDoctorSearch();
+    setDefaultKioskNode();
+    pn_change.getChildren().add(pane);
+
+    // Change the tab color
+    pn_iconBar.getChildren().forEach(n -> n.setStyle("-fx-background-color: #263051;"));
+    pn_doctorIcon.setStyle("-fx-background-color: #4A69C6;");
+
+    doctorSearchController.showGuideLines();
+  }
+
+  /**
+   * Function which checks which action planned by chat-bot controller needs to take place There
+   * exists only one action at a time
+   */
+  public void checkChatbot() {
+    try {
+
+      DbNode nodeStart = singleton.chatBotState.startNode;
+      DbNode nodeEnd = singleton.chatBotState.endNode;
+
+      if (nodeStart != null && nodeEnd != null) {
+        locationSearchController
+            .getTextFirstLocation()
+            .setText(nodeStart.getLongName() + ", " + nodeStart.getBuilding());
+        locationSearchController
+            .getTextSecondLocation()
+            .setText(nodeEnd.getLongName() + ", " + nodeEnd.getBuilding());
+
+        initPathfind(nodeStart, nodeEnd, false);
+        singleton.chatBotState.resetPlannedActions();
+        enableTextDirections();
+      }
+
+      // Check if we wanna use Kiosk as default node
+      if (nodeEnd != null && singleton.chatBotState.useDefault) {
+        nodeStart = locationSearchController.getDBNodes()[0];
+        locationSearchController
+            .getTextFirstLocation()
+            .setText(nodeStart.getLongName() + ", " + nodeStart.getBuilding());
+        locationSearchController
+            .getTextSecondLocation()
+            .setText(nodeEnd.getLongName() + ", " + nodeEnd.getBuilding());
+
+        initPathfind(nodeStart, nodeEnd, false);
+        singleton.chatBotState.resetPlannedActions();
+        enableTextDirections();
+      }
+
+      // Check if need to do a quick search to bathroom
+      if (nodeStart != null && singleton.chatBotState.quickSearchBathroom) {
+
+        // Set the necessary search fields
+        locationSearchController
+            .getTextFirstLocation()
+            .setText(nodeStart.getLongName() + ", " + nodeStart.getBuilding());
+        locationSearchController.getTextSecondLocation().clear();
+
+        mapBaseController.resetFocus();
+        locationSearchController.clearSecondEntry();
+        try {
+          this.path =
+              singleton.savedAlgo.findQuickAccess(
+                  nodeStart, "REST", locationSearchController.getHandicap());
+          mapBaseController.setFloor(nodeStart.getBuilding(), nodeStart.getFloor(), path);
+          if (path.size() == 0) {
+            displayErrorMessage("Please select the first node");
+          }
+        } catch (DBException | NullPointerException ex) {
+          displayErrorMessage("Please select the first node");
+          return;
+        }
+        enableTextDirections();
+      }
+
+      if (singleton.chatBotState.whereIsNode != null) {
+        this.resetMap();
+        this.nodeFromDirectory(singleton.chatBotState.whereIsNode);
+
+        // add necessary selection to the search bar
+        locationSearchController
+            .getTextSecondLocation()
+            .setText(
+                singleton.chatBotState.whereIsNode.getLongName()
+                    + ", "
+                    + singleton.chatBotState.whereIsNode.getBuilding());
+
+        // clear start node selection
+        locationSearchController.getTextFirstLocation().clear();
+      }
+
+      if (singleton.chatBotState.showDoctorSearchGuide) {
+        displayGuideForDoctorSearch();
+      }
+
+      singleton.chatBotState.resetPlannedActions();
+    } catch (Exception ex) {
+      displayErrorMessage("Error when checking chat-bot path");
+      ex.printStackTrace();
+    }
   }
 
   /**
@@ -136,6 +278,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     initRestroomSearchButton();
     initInfoSearchButton();
     initExitSearchButton();
+    locationSearchController.setCon(this);
     pn_change.getChildren().add(pane);
   }
 
@@ -639,11 +782,19 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     this.currentBuilding = first.getBuilding();
     this.currentFloor = first.getFloor();
     if (first.getBuilding().equals("Faulkner")) {
-      faulknerButtonList.animateList(true);
-      mainButtonList.animateList(false);
+      try {
+        faulknerButtonList.animateList(true);
+        mainButtonList.animateList(false);
+      } catch (Exception ex) {
+        // BAD SOLUTION
+      }
     } else {
-      faulknerButtonList.animateList(false);
-      mainButtonList.animateList(true);
+      try {
+        faulknerButtonList.animateList(false);
+        mainButtonList.animateList(true);
+      } catch (Exception ex) {
+        ex.printStackTrace();
+      }
     }
     displayGoogleMaps(first, second);
     ServiceDB.travelledTo(second.getNodeID());
@@ -769,6 +920,24 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     setGoogleButtonDisable(true);
     disableTextDirections();
     switchHospitalView();
+    if (locationSearchController != null) {
+      locationSearchController.getTextFirstLocation().clear();
+      locationSearchController.getTextSecondLocation().clear();
+    }
+  }
+
+  public void setToLocationSearch() throws DBException, IOException {
+    FXMLLoader loader;
+    loader = new FXMLLoader(getClass().getResource("mapLocationSearch.fxml"));
+    Pane pane = loader.load();
+    locationSearchController = loader.getController();
+    initLocationSearchButton();
+    initResetLocationSearch();
+    initRestroomSearchButton();
+    initInfoSearchButton();
+    initExitSearchButton();
+    locationSearchController.setCon(this);
+    pn_change.getChildren().add(pane);
   }
 
   public synchronized void setDirPane(Pane dirPane) {
@@ -829,6 +998,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
       initRestroomSearchButton();
       initExitSearchButton();
       initInfoSearchButton();
+      locationSearchController.setCon(this);
       setDefaultKioskNode();
       pn_change.getChildren().add(pane);
     } else if (src == pn_doctorIcon) {
