@@ -66,6 +66,7 @@ public class NewAdminController implements Controller, Initializable {
   @FXML JFXButton btn_return;
   @FXML JFXButton btn_reset;
   @FXML Label lbl_req;
+  @FXML JFXTextField txtf_newTime;
 
   private ObservableList<Request> tableData = FXCollections.observableArrayList();
   private ObservableList<Employee> emps = FXCollections.observableArrayList();
@@ -404,7 +405,6 @@ public class NewAdminController implements Controller, Initializable {
                 errorAlert.show();
               }
             });
-
     tb_RequestTable.setItems(tableData);
   }
 
@@ -441,6 +441,7 @@ public class NewAdminController implements Controller, Initializable {
     service.setMinWidth(75);
     service.setCellValueFactory(new PropertyValueFactory<Request, String>("serviceType"));
 
+    tb_RequestTable.setPrefWidth(575);
     tb_RequestTable.getColumns().addAll(requestID, service, emp_assigned, notes, nodeID, status);
   }
 
@@ -707,7 +708,9 @@ public class NewAdminController implements Controller, Initializable {
                   }
                   tb_RequestTable.getItems().clear();
                   tb_RequestTable.setItems(reqs);
-                  System.out.println("here");
+                  filterByType("Laundry");
+                  tb_RequestTable.setPrefWidth(575);
+
                 } catch (DBException e) {
                   e.printStackTrace();
                 }
@@ -734,7 +737,9 @@ public class NewAdminController implements Controller, Initializable {
                   }
                   tb_RequestTable.getItems().clear();
                   tb_RequestTable.setItems(reqs);
-                  System.out.println("here");
+                  filterByType("Translator");
+                  tb_RequestTable.setPrefWidth(675);
+
                 } catch (DBException e) {
                   e.printStackTrace();
                 }
@@ -761,7 +766,9 @@ public class NewAdminController implements Controller, Initializable {
                   }
                   tb_RequestTable.getItems().clear();
                   tb_RequestTable.setItems(reqs);
-                  System.out.println("here");
+                  tb_RequestTable.setPrefWidth(675);
+
+                  filterByType("Wheelchair");
                 } catch (DBException e) {
                   e.printStackTrace();
                 }
@@ -793,7 +800,9 @@ public class NewAdminController implements Controller, Initializable {
                   }
                   tb_RequestTable.getItems().clear();
                   tb_RequestTable.setItems(reqs);
-                  System.out.println("here");
+                  tb_RequestTable.setPrefWidth(775);
+
+                  filterByType("IT");
                 } catch (DBException e) {
                   e.printStackTrace();
                 }
@@ -809,6 +818,7 @@ public class NewAdminController implements Controller, Initializable {
 
                 initializeTable();
                 tb_RequestTable.getColumns().addAll(attr1);
+                tb_RequestTable.setPrefWidth(675);
 
                 ObservableList<Request> reqs = FXCollections.observableArrayList();
 
@@ -820,7 +830,7 @@ public class NewAdminController implements Controller, Initializable {
                   }
                   tb_RequestTable.getItems().clear();
                   tb_RequestTable.setItems(reqs);
-                  System.out.println("here");
+                  filterByType("Security");
                 } catch (DBException e) {
                   e.printStackTrace();
                 }
@@ -850,6 +860,7 @@ public class NewAdminController implements Controller, Initializable {
 
                 initializeTable();
                 tb_RequestTable.getColumns().addAll(attr1, attr2, attr3, attr4);
+                tb_RequestTable.setPrefWidth(975);
 
                 ObservableList<Request> reqs = FXCollections.observableArrayList();
 
@@ -861,7 +872,7 @@ public class NewAdminController implements Controller, Initializable {
                   }
                   tb_RequestTable.getItems().clear();
                   tb_RequestTable.setItems(reqs);
-                  System.out.println("here");
+                  filterByType("Flower");
                 } catch (DBException e) {
                   e.printStackTrace();
                 }
@@ -892,6 +903,7 @@ public class NewAdminController implements Controller, Initializable {
 
                 initializeTable();
                 tb_RequestTable.getColumns().addAll(attr1, attr2, attr3, attr22);
+                tb_RequestTable.setPrefWidth(975);
 
                 ObservableList<Request> reqs = FXCollections.observableArrayList();
 
@@ -903,7 +915,7 @@ public class NewAdminController implements Controller, Initializable {
                   }
                   tb_RequestTable.getItems().clear();
                   tb_RequestTable.setItems(reqs);
-                  System.out.println("here");
+                  filterByType("Internal Transportation");
                 } catch (DBException e) {
                   e.printStackTrace();
                 }
@@ -919,6 +931,7 @@ public class NewAdminController implements Controller, Initializable {
 
                 initializeTable();
                 tb_RequestTable.getColumns().addAll(attr1);
+                tb_RequestTable.setPrefWidth(675);
 
                 ObservableList<Request> reqs = FXCollections.observableArrayList();
 
@@ -930,7 +943,7 @@ public class NewAdminController implements Controller, Initializable {
                   }
                   tb_RequestTable.getItems().clear();
                   tb_RequestTable.setItems(reqs);
-                  System.out.println("here");
+                  filterByType("Emotional Support");
                 } catch (DBException e) {
                   e.printStackTrace();
                 }
@@ -952,10 +965,11 @@ public class NewAdminController implements Controller, Initializable {
                 TableColumn<Request, String> attr3 = new TableColumn<>("Priority");
                 attr3.setMaxWidth(100);
                 attr3.setMinWidth(100);
-                attr3.setCellValueFactory(new PropertyValueFactory<Request, String>("Atr2"));
+                attr3.setCellValueFactory(new PropertyValueFactory<Request, String>("Atr3"));
 
                 initializeTable();
-                tb_RequestTable.getColumns().addAll(attr1, attr2);
+                tb_RequestTable.getColumns().addAll(attr1, attr2, attr3);
+                tb_RequestTable.setPrefWidth(875);
 
                 ObservableList<Request> reqs = FXCollections.observableArrayList();
 
@@ -967,7 +981,7 @@ public class NewAdminController implements Controller, Initializable {
                   }
                   tb_RequestTable.getItems().clear();
                   tb_RequestTable.setItems(reqs);
-                  System.out.println("here");
+                  filterByType("Sanitation");
                 } catch (DBException e) {
                   e.printStackTrace();
                 }
@@ -1178,5 +1192,65 @@ public class NewAdminController implements Controller, Initializable {
           break;
         }
     }
+  }
+
+  public void filterByType(String type) {
+    ObservableList<Request> reqList = FXCollections.observableArrayList();
+
+    if (ch_requestFilter.isSelected() == false) {
+      try {
+        for (Request request : ServiceDB.getRequests()) {
+          if (request.getServiceType().equals(type)) {
+            reqList.add(request);
+          }
+        }
+      } catch (DBException e) {
+        e.printStackTrace();
+      }
+    } else if (ch_requestFilter.isSelected() == true) {
+      try {
+        for (Request request : ServiceDB.getOpenRequests()) {
+          if (request.getServiceType().equals(type)) {
+            reqList.add(request);
+          }
+        }
+      } catch (DBException e) {
+        e.printStackTrace();
+      }
+    }
+
+    ch_requestFilter
+        .selectedProperty()
+        .addListener(
+            (ob, old, newVal) -> {
+              if (newVal) {
+                try {
+                  reqList.clear();
+                  LinkedList<Request> req = new LinkedList<>();
+                  for (Request request : ServiceDB.getOpenRequests()) {
+                    if (request.getServiceType().equals(type)) {
+                      req.add(request);
+                    }
+                  }
+                  reqList.addAll(req);
+                } catch (DBException e) {
+                  e.printStackTrace();
+                }
+              } else {
+                try {
+                  reqList.clear();
+                  LinkedList<Request> reqs = new LinkedList<>();
+                  for (Request req : ServiceDB.getRequests()) {
+                    if (req.getServiceType().equals(type)) {
+                      reqs.add(req);
+                    }
+                  }
+                  reqList.addAll(reqs);
+                } catch (DBException a) {
+                  a.printStackTrace();
+                }
+              }
+            });
+    tb_RequestTable.setItems(reqList);
   }
 }

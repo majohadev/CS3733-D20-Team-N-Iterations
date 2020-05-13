@@ -5,6 +5,7 @@ import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.entities.memento.GlobalKeyListener;
 import edu.wpi.N.entities.memento.GlobalMouseListener;
 import edu.wpi.N.views.Controller;
+import edu.wpi.N.views.chatbot.ChatbotController;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import javafx.application.Application;
@@ -29,8 +30,13 @@ public class App extends Application {
   public void start(Stage primaryStage) throws IOException, DBException {
     // Configure the primary Stage
 
+    System.out.println("started");
     this.masterStage = primaryStage;
     this.masterStage.setTitle("Brigham and Women's Hospital Kiosk Application");
+
+    // Set up singleton and set its main app
+    StateSingleton newSingleton = StateSingleton.getInstance();
+    newSingleton.setMainApp(this);
 
     // Make mouse and keyboard listeners
     GlobalMouseListener mouseListener = new GlobalMouseListener();
@@ -41,16 +47,12 @@ public class App extends Application {
     GlobalScreen.addNativeMouseMotionListener(mouseListener);
     GlobalScreen.addNativeKeyListener(keyListener);
 
-    // Set up singleton and set its main app
-    StateSingleton newSingleton = StateSingleton.getInstance();
-    newSingleton.setMainApp(this);
-
     // Set up memento pattern
     newSingleton.originator.setState("views/mapDisplay/newMapDisplay.fxml");
     newSingleton.careTaker.add(newSingleton.originator.saveStateToMemento());
 
     switchScene("views/mapDisplay/newMapDisplay.fxml", newSingleton);
-    //    switchScene("views/chatbot/chatBox.fxml", newSingleton);
+    // switchScene("views/chatbot/chatBox.fxml", newSingleton);
     masterStage.setMaximized(true);
   }
 
@@ -68,10 +70,28 @@ public class App extends Application {
     FXMLLoader loader = new FXMLLoader();
     loader.setLocation(getClass().getResource(path));
 
+    // Check if Map Display is currently active
+    if (path.contains("newMapDisplay.fxml")) {
+      singleton.isMapDisplayActive = true;
+      singleton.isServicesPageActive = false;
+    }
+    // check if services page is active
+    else if (path.contains("newServicesPage")) {
+      singleton.isServicesPageActive = true;
+      singleton.isMapDisplayActive = false;
+    } else {
+      singleton.isMapDisplayActive = false;
+      singleton.isServicesPageActive = false;
+    }
+
     // Inject Singleton object into classes with Constructors that take StateSingleton
     loader.setControllerFactory(
         type -> {
           try {
+            if (type.equals(ChatbotController.class)) {
+              return new ChatbotController(singleton, this);
+            }
+
             // look for constructor taking StateSingleton as a parameter
             for (Constructor<?> c : type.getConstructors()) {
               if (c.getParameterCount() == 1) {
@@ -90,6 +110,7 @@ public class App extends Application {
     Pane pane = loader.load();
     Controller controller = loader.getController();
     controller.setMainApp(this);
+
     Scene scene = new Scene(pane);
     masterStage.setScene(scene);
     // masterStage.setMaximized(true);

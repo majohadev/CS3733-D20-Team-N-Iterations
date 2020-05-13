@@ -2,10 +2,12 @@ package edu.wpi.N.views.services;
 
 import com.jfoenix.controls.JFXButton;
 import edu.wpi.N.App;
+import edu.wpi.N.SanitationRequest;
+import edu.wpi.N.ServiceException;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.views.Controller;
-import edu.wpi.cs3733.c20.teamR.AppointmentRequest;
+import edu.wpi.N.views.chatbot.ChatbotController;
 import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -29,6 +31,7 @@ public class ServiceController implements Controller {
   @FXML JFXButton btn_wheelchair;
   @FXML JFXButton btn_sanitation;
   @FXML JFXButton btn_transport;
+  @FXML JFXButton btn_apis;
 
   @FXML Label txt_translator;
   @FXML Label txt_laundry;
@@ -39,6 +42,9 @@ public class ServiceController implements Controller {
   @FXML Label txt_wheelchair;
   @FXML Label txt_sanitation;
   @FXML Label txt_transport;
+  @FXML Label txt_api;
+
+  @FXML ChatbotController chatBotController;
 
   public ServiceController(StateSingleton singleton) {
     this.singleton = singleton;
@@ -60,6 +66,50 @@ public class ServiceController implements Controller {
     txt_wheelchair.setVisible(false);
     txt_transport.setVisible(false);
     txt_translator.setVisible(false);
+    txt_api.setVisible(false);
+
+    chatBotController.setServiceController(this);
+
+    // Check if there is any previously planned action
+    try {
+      checkChatBot();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  /** Checks to see which action needs to be taken upon loading the page */
+  private void checkChatBot() throws Exception {
+    if (singleton.chatBotState.showTranslator) {
+      // show translator
+      switchToTranslatorPage();
+    } else if (singleton.chatBotState.showWheelChair) {
+      // show wheelchair
+      switchToWheelchairPage();
+    } else if (singleton.chatBotState.showSecurity) {
+      // show security
+      switchToSecurityPage();
+    } else if (singleton.chatBotState.showSanitation) {
+      // show sanitations
+      switchToSanitationPage();
+    } else if (singleton.chatBotState.showLaundry) {
+      // show laundry
+      switchToLaundryPage();
+    } else if (singleton.chatBotState.showITService) {
+      // show IT
+      switchToITServicePage();
+    } else if (singleton.chatBotState.showInternalTransport) {
+      // show internal transport
+      switchToTransportPage();
+    } else if (singleton.chatBotState.showFlower) {
+      // show flower request
+      switchToFloralPage();
+    } else if (singleton.chatBotState.showEmotional) {
+      // show emotional request
+      switchToEmotionalPage();
+    }
+    // Reset all the chat messages state
+    singleton.chatBotState.resetPlannedActions();
   }
 
   @FXML
@@ -77,15 +127,18 @@ public class ServiceController implements Controller {
   }
 
   @FXML
-  public void switchToEmotionalPage() throws IOException {
-    AnchorPane currentPane = FXMLLoader.load(getClass().getResource("emotionalSupportReq.fxml"));
-    service_anchor.getChildren().setAll(currentPane);
+  public void switchToAPIS() throws IOException {
+    mainApp.switchScene("views/services/apiServicesPage.fxml", singleton);
   }
 
   @FXML
-  public void switchToSanitationPage() throws IOException {
-    AnchorPane currentPane = FXMLLoader.load(getClass().getResource("sanitationRequestPage.fxml"));
-    service_anchor.getChildren().setAll(currentPane);
+  public void switchToSanitationPage() throws IOException, ServiceException {
+    SanitationRequest request = new SanitationRequest();
+    String css = this.getClass().getResource("sanitationRequestUI2.css").toExternalForm();
+    request.run(service_anchor, css, 0);
+    // AnchorPane currentPane =
+    // FXMLLoader.load(getClass().getResource("sanitationRequestPage.fxml"));
+    // service_anchor.getChildren().setAll(currentPane);
   }
 
   @FXML
@@ -124,11 +177,9 @@ public class ServiceController implements Controller {
   }
 
   @FXML
-  public void switchToScheduler() throws Exception {
-    AppointmentRequest apt = new AppointmentRequest();
-    // String css = this.getClass().getResource("sanitationRequestUI1.css").toExternalForm();
-    String css = this.getClass().getResource("default.css").toExternalForm();
-    AppointmentRequest.run(576, 90, 1280, 950, css, null, null);
+  public void switchToEmotionalPage() throws Exception {
+    AnchorPane currentPane = FXMLLoader.load(getClass().getResource("emotionalSupportReq.fxml"));
+    service_anchor.getChildren().setAll(currentPane);
   }
 
   public void onIconClicked(MouseEvent event) throws IOException {
@@ -146,6 +197,7 @@ public class ServiceController implements Controller {
     if (e.getSource() == btn_laundry) txt_laundry.setVisible(true);
     if (e.getSource() == btn_wheelchair) txt_wheelchair.setVisible(true);
     if (e.getSource() == btn_transport) txt_transport.setVisible(true);
+    if (e.getSource() == btn_apis) txt_api.setVisible(true);
   }
 
   @FXML
@@ -160,5 +212,6 @@ public class ServiceController implements Controller {
     if (e.getSource() == btn_laundry) txt_laundry.setVisible(false);
     if (e.getSource() == btn_wheelchair) txt_wheelchair.setVisible(false);
     if (e.getSource() == btn_transport) txt_transport.setVisible(false);
+    if (e.getSource() == btn_apis) txt_api.setVisible(false);
   }
 }
