@@ -14,7 +14,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="587.0" prefWidth="425.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.chatbot.ChatbotController">
+<Pane fx:id="mainPane" prefHeight="587.0" prefWidth="425.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.chatbot.ChatbotController">
    <children>
       <AnchorPane fx:id="chatBotView" prefHeight="588.0" prefWidth="425.0" style="-fx-background-color: #FFFFFF;" visible="false">
          <children>

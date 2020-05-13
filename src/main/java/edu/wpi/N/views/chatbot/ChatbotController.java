@@ -618,8 +618,8 @@ public class ChatbotController implements Controller, Initializable {
           }
         });
 
-    mainPane.setPrefHeight(250);
-    mainPane.setPrefWidth(250);
+    mainPane.setPickOnBounds(false);
+    buttonOnlyView.setPickOnBounds(false);
 
     // Do such that scroll pane auto-scrolls down
     scrollPane.vvalueProperty().bind(chatBox.heightProperty());
