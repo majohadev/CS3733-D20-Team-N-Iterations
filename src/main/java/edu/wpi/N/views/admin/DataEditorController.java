@@ -31,14 +31,14 @@ public class DataEditorController implements Controller {
   @FXML Label lbl_filePath;
   @FXML Label lbl_filePath_edges;
   @FXML Label lbl_filePath_employees;
-  // @FXML Label lbl_filePath_detail;
+  @FXML Label lbl_filePath_detail;
   @FXML Label lbl_filePath_hitbox;
 
-  final String DEFAULT_NODES = "edu/wpi/N/csv/newNodes.csv";
-  final String DEFAULT_PATHS = "edu/wpi/N/csv/newEdges.csv";
-  final String DEFAULT_EMPLOYEES = "edu/wpi/N/csv/Employees.csv";
-  final String DEFAULT_DETAIL = "edu/wpi/N/csv/Detail.csv";
-  final String DEFAULT_HITBOXES = "edu/wpi/N/csv/hitBoxesCompleteBuilding.csv";
+  final String DEFAULT_NODES = "/edu/wpi/N/csv/newNodes.csv";
+  final String DEFAULT_PATHS = "/edu/wpi/N/csv/newEdges.csv";
+  final String DEFAULT_EMPLOYEES = "/edu/wpi/N/csv/Employees.csv";
+  final String DEFAULT_DETAIL = "/edu/wpi/N/csv/Detail.csv";
+  final String DEFAULT_HITBOXES = "/edu/wpi/N/csv/hitBoxesCompleteBuilding.csv";
   final InputStream INPUT_NODES_DEFAULT = Main.class.getResourceAsStream(DEFAULT_NODES);
   final InputStream INPUT_EDGES_DEFAULT = Main.class.getResourceAsStream(DEFAULT_PATHS);
   final InputStream INPUT_EMPLOYEES_DEFAULT = Main.class.getResourceAsStream(DEFAULT_EMPLOYEES);
@@ -54,7 +54,7 @@ public class DataEditorController implements Controller {
     lbl_filePath.setText(DEFAULT_NODES);
     lbl_filePath_edges.setText(DEFAULT_PATHS);
     lbl_filePath_employees.setText(DEFAULT_EMPLOYEES);
-    // lbl_filePath_detail.setText(DEFAULT_DETAIL);
+    lbl_filePath_detail.setText(DEFAULT_DETAIL);
     // onUploadDetailClicked();
   }
 
@@ -66,19 +66,6 @@ public class DataEditorController implements Controller {
     if (selectedFile != null) {
       lbl_filePath.setText(selectedFile.getAbsolutePath());
       lbl_filePath.setDisable(false);
-    } else {
-      System.out.println("The file is invalid");
-    }
-  }
-
-  @FXML
-  public void onSelectDetailClicked(MouseEvent e) {
-    FileChooser fc = new FileChooser();
-    fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
-    File selectedFile = fc.showOpenDialog(null);
-    if (selectedFile != null) {
-      // lbl_filePath_detail.setText(selectedFile.getAbsolutePath());
-      // lbl_filePath_detail.setDisable(false);
     } else {
       System.out.println("The file is invalid");
     }
@@ -121,6 +108,17 @@ public class DataEditorController implements Controller {
     } else {
       System.out.println("The file is invalid");
     }
+  }
+
+  @FXML
+  public void onSelectDirectoryClicked(MouseEvent event) {
+    FileChooser fc = new FileChooser();
+    fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+    File selectedFile = fc.showOpenDialog(null);
+    if (selectedFile != null) {
+      lbl_filePath_detail.setText(selectedFile.getAbsolutePath());
+      lbl_filePath_detail.setDisable(false);
+    } else System.out.println("The file is invalid");
   }
 
   /** Loads selected hitbox csv */
@@ -218,8 +216,8 @@ public class DataEditorController implements Controller {
       // Clear previous employees
       MapDB.clearDetail();
       // Upload employees
-      // String path = lbl_filePath_detail.getText();
-      String path = DEFAULT_DETAIL;
+      String path = lbl_filePath_detail.getText();
+      // String path = DEFAULT_DETAIL;
       if (path.equals(DEFAULT_DETAIL)) {
         CSVParser.parseDetail(INPUT_DETAIL_DEFAULT);
         Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -398,5 +396,10 @@ public class DataEditorController implements Controller {
   @FXML
   private void onDefaultHitboxesClicked(MouseEvent event) {
     lbl_filePath_hitbox.setText(DEFAULT_HITBOXES);
+  }
+
+  @FXML
+  private void onDefaultDepartmentClicked(MouseEvent event) {
+    lbl_filePath_detail.setText(DEFAULT_DETAIL);
   }
 }
