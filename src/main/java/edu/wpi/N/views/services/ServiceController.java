@@ -2,6 +2,8 @@ package edu.wpi.N.views.services;
 
 import com.jfoenix.controls.JFXButton;
 import edu.wpi.N.App;
+import edu.wpi.N.SanitationRequest;
+import edu.wpi.N.ServiceException;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.views.Controller;
@@ -82,9 +84,13 @@ public class ServiceController implements Controller {
   }
 
   @FXML
-  public void switchToSanitationPage() throws IOException {
-    AnchorPane currentPane = FXMLLoader.load(getClass().getResource("sanitationRequestPage.fxml"));
-    service_anchor.getChildren().setAll(currentPane);
+  public void switchToSanitationPage() throws IOException, ServiceException {
+    SanitationRequest request = new SanitationRequest();
+    String css = this.getClass().getResource("sanitationRequestUI2.css").toExternalForm();
+    request.run(service_anchor, css, 0);
+    // AnchorPane currentPane =
+    // FXMLLoader.load(getClass().getResource("sanitationRequestPage.fxml"));
+    // service_anchor.getChildren().setAll(currentPane);
   }
 
   @FXML

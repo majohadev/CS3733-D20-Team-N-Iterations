@@ -875,7 +875,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
         mapQRController.setTabFocus(this.currentFloor, this.currentBuilding);
       }
     } else if (src == pn_serviceIcon) {
-      this.mainApp.switchScene("/edu/wpi/N/views/services/apiServicesPage.fxml", singleton);
+      this.mainApp.switchScene("/edu/wpi/N/views/services/newServicesPage.fxml", singleton);
       resetMap();
     } else if (src == pn_infoIcon) {
       resetMap();
