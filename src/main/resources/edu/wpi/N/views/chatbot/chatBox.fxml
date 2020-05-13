@@ -24,9 +24,9 @@
                </content>
             </ScrollPane>
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="83.0" layoutX="-1.0" layoutY="-2.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-fill: #4A69C6;" width="426.0" />
-            <ImageView fitHeight="87.0" fitWidth="88.0" layoutX="332.0" layoutY="-4.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="72.0" fitWidth="79.0" layoutX="341.0" layoutY="4.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../images/chatbot/wwong2%20copy.png" />
+                  <Image url="@../../images/chatbot/wilsonCircle.png" />
                </image></ImageView>
             <Label layoutX="183.0" layoutY="29.0" style="-fx-font-size: 20; -fx-text-fill: #ffffff;" text="Wilson" />
             <JFXButton fx:id="btnSendMessage" contentDisplay="GRAPHIC_ONLY" defaultButton="true" layoutX="345.0" layoutY="510.0" onMouseClicked="#onBtnSendMessageClicked" prefHeight="57.0" prefWidth="57.0" style="-fx-background-radius: 150; -fx-background-color: #4A69C6;" text=" ">
@@ -41,7 +41,7 @@
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></JFXButton>
-            <JFXButton contentDisplay="GRAPHIC_ONLY" layoutX="17.0" layoutY="18.0" onMouseClicked="#onBtnCloseDialogClicked" prefHeight="47.0" prefWidth="47.0" style="-fx-background-color: #263051; -fx-background-radius: 150;">
+            <JFXButton contentDisplay="GRAPHIC_ONLY" layoutX="9.0" layoutY="18.0" onMouseClicked="#onBtnCloseDialogClicked" prefHeight="47.0" prefWidth="47.0" style="-fx-background-color: #263051; -fx-background-radius: 150;">
                <graphic>
                   <ImageView fitHeight="29.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
                      <image>
