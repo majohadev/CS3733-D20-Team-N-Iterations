@@ -198,6 +198,17 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
       if (singleton.chatBotState.whereIsNode != null) {
         this.resetMap();
         this.nodeFromDirectory(singleton.chatBotState.whereIsNode);
+
+        // add necessary selection to the search bar
+        locationSearchController
+            .getTextSecondLocation()
+            .setText(
+                singleton.chatBotState.whereIsNode.getLongName()
+                    + ", "
+                    + singleton.chatBotState.whereIsNode.getBuilding());
+
+        // clear start node selection
+        locationSearchController.getTextFirstLocation().clear();
       }
 
       if (singleton.chatBotState.showDoctorSearchGuide) {

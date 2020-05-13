@@ -239,37 +239,35 @@ public class ChatbotController implements Controller, Initializable {
         handleSpecificServiceRequest(intent, queryResults);
         return;
       } else if (intent.equals("questions-kiosk-location-search-where-is")) {
+
         String location =
             queryResults.getParameters().getFieldsMap().get("hospital-location1").getStringValue();
+
         LinkedList<DbNode> locations = FuzzySearchAlgorithm.suggestLocations(location);
+
         if (locations.size() == 0) {
-          Label reply = new Label("Sorry! I wasn't able to find " + location + "!");
-          singleMessageObject.add(reply);
-          return;
-        }
-
-        // Check if current scene is Map
-        if (!state.isMapDisplayActive) {
-          state.chatBotState.prevQueryResult = queryResults;
-          LinkedList<DbNode> nodes1 = FuzzySearchAlgorithm.suggestLocations(location);
-          if (nodes1.size() == 0) {
-            singleMessageObject.add(new Label("Sorry! I wasn't able to find " + location + "!"));
-            return;
-          }
-
-          state.chatBotState.whereIsNode = nodes1.getFirst();
-          Label reply = new Label(queryResults.getFulfillmentText());
+          Label reply = new Label("Sorry! I wasn't able to find it! Can you say it one more time?");
           singleMessageObject.add(reply);
           displayAndSaveMessages(singleMessageObject, false);
+          state.chatBotState.resetPlannedActions();
           mainApp.switchScene("views/mapDisplay/newMapDisplay.fxml", state);
           return;
         }
-
-        mapController.resetMap();
-        DbNode node = locations.getFirst();
-        mapController.nodeFromDirectory(node);
+        // get the node and generate reply
+        state.chatBotState.whereIsNode = locations.getFirst();
         Label reply = new Label(queryResults.getFulfillmentText());
         singleMessageObject.add(reply);
+        displayAndSaveMessages(singleMessageObject, false);
+
+        // Check if current scene is Map
+        if (!state.isMapDisplayActive) {
+          mainApp.switchScene("views/mapDisplay/newMapDisplay.fxml", state);
+          return;
+        } else {
+          mapController.checkChatbot();
+          return;
+        }
+
       } else if (intent.equals("kiosk-help-get-directions-from-to-wrong-locations")
           || intent.equals("questions-kiosk-location-search-from-to - no")
           || intent.equals("questions-kiosk-location-search-where-is-goal-location - no")) {
