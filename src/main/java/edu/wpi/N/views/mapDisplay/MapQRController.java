@@ -15,6 +15,8 @@ import edu.wpi.N.views.Controller;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -114,17 +116,26 @@ public class MapQRController implements Controller {
       }
     } else {
       tr.getSelectionModel().select(tr.getSelectionModel().getSelectedIndex() - 1);
+      DbNode prevNode = currentDirection.getValue().getNode();
       currentDirection = (TreeItem<Direction>) tr.getSelectionModel().getSelectedItem();
-      System.out.println(currentDirection.getValue().toString());
-      System.out.println(currentDirection.getValue().getNode().getFloor());
       DbNode node = currentDirection.getValue().getNode();
-      mapDisplayController.changeFloor(node.getFloor(), node.getBuilding());
-      if (currentDirection.getValue().getLevel() != Level.BUILDING) {
+      //      if (node.getFloor() != prevNode.getFloor() && )
+      DbNode currentNode = currentDirection.getValue().getNode();
+      if (currentNode.getFloor() != prevNode.getFloor() || changedBuilding(prevNode, currentNode)) {
+        mapDisplayController.changeFloor(currentNode.getFloor(), currentNode.getBuilding());
+      }
+      if (currentDirection.getValue().getLevel() != Level.BUILDING
+          && currentDirection.getValue().getLevel() != Level.FLOOR) {
         mapBaseController.autoFocusToNode(node);
       }
     }
   }
 
+  public boolean changedBuilding(DbNode n, DbNode m) {
+    boolean isFirstFaulkner = n.getBuilding().equals("Faulkner");
+    boolean isSecondFaulkner = m.getBuilding().equals("Faulkner");
+    return isFirstFaulkner ^ isSecondFaulkner;
+  }
   /**
    * Executes when the user wishes to see the next instruction
    *
@@ -180,19 +191,53 @@ public class MapQRController implements Controller {
       }
     } else {
       currentDirection = (TreeItem<Direction>) tr.getSelectionModel().getSelectedItem();
-      if (currentDirection.getValue().getLevel() != Level.BUILDING) {
+      if (currentDirection.getValue().getLevel() != Level.BUILDING
+          && currentDirection.getValue().getLevel() != Level.FLOOR) {
         DbNode node = currentDirection.getValue().getNode();
         mapBaseController.autoFocusToNode(node);
+      } else {
+        mapBaseController.autoFocusToNodesGroup();
       }
       if (currentDirection.getValue().getLevel() == Level.FLOOR) {
         int i = root.getChildren().indexOf(currentDirection);
         root.getChildren().get(i).setExpanded(true);
-        mapBaseController.setFloor(
-            currentDirection.getValue().getNode().getBuilding(),
+        mapBaseController.resetFocus();
+        mapDisplayController.changeFloor(
             currentDirection.getValue().getNode().getFloor(),
-            path);
+            currentDirection.getValue().getNode().getBuilding());
       }
     }
+  }
+
+  public void onChangeTab() {
+    tbpn_directions
+        .getSelectionModel()
+        .selectedItemProperty()
+        .addListener(
+            new ChangeListener<Tab>() {
+              @Override
+              public void changed(ObservableValue<? extends Tab> ov, Tab t, Tab t1) {
+                if (t1 == tb_faulkner) {
+                  try {
+                    onFaulknerTabSelected();
+                  } catch (DBException e) {
+                    e.printStackTrace();
+                  }
+                } else if (t1 == tb_main) {
+                  try {
+                    onMainTabSelected();
+                  } catch (DBException e) {
+                    e.printStackTrace();
+                  }
+                } else if (t1 == tb_drive) {
+                  onDriveTabSelected();
+                }
+              }
+            });
+  }
+
+  public void initialize() {
+    onChangeTab();
   }
 
   /**
@@ -201,10 +246,14 @@ public class MapQRController implements Controller {
    * @throws DBException
    */
   public void onFaulknerTabSelected() throws DBException {
+    if (tbpn_directions.getSelectionModel().getSelectedItem() != tb_faulkner) {
+      return;
+    }
     tr_faulkner.getSelectionModel().select(0);
     currentDirection = (TreeItem<Direction>) tr_faulkner.getSelectionModel().getSelectedItem();
     if (currentDirection != null) {
       mapDisplayController.switchHospitalView();
+      mapBaseController.resetFocus();
       mapDisplayController.changeFloor(
           currentDirection.getValue().getNode().getFloor(), "Faulkner");
     }
@@ -222,12 +271,17 @@ public class MapQRController implements Controller {
    * @throws DBException
    */
   public void onMainTabSelected() throws DBException {
+    if (tbpn_directions.getSelectionModel().getSelectedItem() != tb_main) {
+      return;
+    }
+
     tr_main.getSelectionModel().select(0);
     currentDirection = (TreeItem<Direction>) tr_main.getSelectionModel().getSelectedItem();
     if (currentDirection != null) {
       mapDisplayController.switchHospitalView();
       //      mapBaseController.setFloor("Main", currentDirection.getValue().getNode().getFloor(),
       // path);
+      mapBaseController.resetFocus();
       mapDisplayController.changeFloor(currentDirection.getValue().getNode().getFloor(), "Main");
     }
     try {
@@ -240,8 +294,12 @@ public class MapQRController implements Controller {
 
   /** Executes when the drive tab is manually selected by the user */
   public void onDriveTabSelected() {
+    if (tbpn_directions.getSelectionModel().getSelectedItem() != tb_drive) {
+      return;
+    }
     tr_drive.getSelectionModel().select(0);
     mapDisplayController.switchGoogleView();
+    mapDisplayController.setFloorBuildingText(0, "Drive");
     try {
       // onDriveTreeClicked();
     } catch (NullPointerException e) {
@@ -333,8 +391,12 @@ public class MapQRController implements Controller {
       if (cell.getItem().getLevel() == Level.BUILDING) return;
       DbNode node = cell.getItem().getNode();
       try {
-        controller.mapBaseController.setFloor(node.getBuilding(), node.getFloor(), controller.path);
-        controller.mapBaseController.autoFocusToNode(node);
+        controller.mapDisplayController.changeFloor(node.getFloor(), node.getBuilding());
+        if (cell.getItem().getLevel() != Level.BUILDING && cell.getItem().getLevel() != Level.FLOOR)
+          controller.mapBaseController.autoFocusToNode(node);
+        else {
+          controller.mapBaseController.autoFocusToNodesGroup();
+        }
       } catch (DBException e) {
         e.printStackTrace();
       } catch (NullPointerException e) {
