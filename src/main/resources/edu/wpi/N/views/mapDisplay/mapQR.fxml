@@ -14,7 +14,7 @@
 
 <AnchorPane maxHeight="1080.0" maxWidth="345.0" minHeight="1080.0" minWidth="345.0" prefHeight="1080.0" prefWidth="115.0" style="-fx-background-color: #263051;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.wpi.N.views.mapDisplay.MapQRController">
    <children>
-      <Label layoutX="118.0" layoutY="14.0" prefHeight="50.0" prefWidth="110.0" text="Directions" textFill="#e6ebf2" AnchorPane.leftAnchor="118.0" AnchorPane.topAnchor="14.0">
+      <Label layoutX="96.0" layoutY="14.0" prefHeight="50.0" prefWidth="160.0" text="Directions" textAlignment="CENTER" textFill="#e6ebf2" AnchorPane.leftAnchor="96.0" AnchorPane.topAnchor="14.0">
          <font>
             <Font size="34.0" />
          </font>

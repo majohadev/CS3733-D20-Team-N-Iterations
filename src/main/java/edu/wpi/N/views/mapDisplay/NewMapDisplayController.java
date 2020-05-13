@@ -55,6 +55,8 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
   @FXML AnchorPane pn_background;
 
   @FXML MapBaseController mapBaseController;
+  @FXML MapThumbnailsController mapThumbnailsController;
+  @FXML Pane pn_thumbsWrapper;
   @FXML ChatbotController chatBotController;
 
   public MapLocationSearchController locationSearchController;
@@ -100,7 +102,6 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
    * @throws IOException
    */
   public void initialize() throws DBException, IOException {
-    System.out.println("ligma nutz");
     this.path = new Path(new LinkedList<>());
     this.currentFloor = 1;
     this.currentBuilding = "Faulkner";
@@ -111,12 +112,12 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     this.mainButtonList = new JFXNodesList();
     this.pn_hospitalView = mapBaseController.getAnchorPane();
 
-    System.out.println("gagnon som");
     mapBaseController.setNewMapDisplayController(this);
     mapBaseController.setFloor(this.currentBuilding, this.currentFloor, this.path);
     setFloorBuildingText(this.currentFloor, this.currentBuilding);
     pn_mapContainer.getChildren().setAll(pn_hospitalView);
     pn_iconBar.getChildren().get(0).setStyle("-fx-background-color: #4A69C6;");
+    mapThumbnailsController.setMapDisplay(this);
     initFloorButtons();
     initFunctionPane();
     setDefaultKioskNode();
@@ -457,6 +458,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
   }
 
   public void handleFloorButtonClickedHelper(int floor, String building) throws DBException {
+
     if (building.equals("Faulkner") || building.equals("Main")) {
       changeFloor(floor, building);
       switchHospitalView();
@@ -478,6 +480,13 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     if (newFloor == this.currentFloor && !changedBuilding(this.currentBuilding, newBuilding)) {
       return;
     }
+
+    if (newBuilding.equals("Faulkner")) {
+      mapThumbnailsController.pickThumbnail("Faulkner" + newFloor);
+    } else {
+      mapThumbnailsController.pickThumbnail("Main" + newFloor);
+    }
+
     mapBaseController.resetFocus();
     mapBaseController.clearPath();
     this.currentFloor = newFloor;
@@ -735,6 +744,8 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
       displayErrorMessage("No path can be found");
       return;
     }
+    pn_thumbsWrapper.setVisible(true);
+    mapThumbnailsController.setThumbs(path);
     switchHospitalView();
     mapBaseController.setFloor(first.getBuilding(), first.getFloor(), path);
     this.currentBuilding = first.getBuilding();
@@ -874,6 +885,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     mapBaseController.setFloor(this.currentBuilding, this.currentFloor, null);
     this.path = new Path(new LinkedList<>());
     collapseAllFloorButtons();
+    pn_thumbsWrapper.setVisible(false);
     mapBaseController.clearPath();
     setGoogleButtonDisable(true);
     disableTextDirections();
@@ -1118,6 +1130,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
   /** switches the current map view to the google map */
   public void switchGoogleView() {
     pn_mapContainer.getChildren().setAll(pn_googleMapView);
+    mapThumbnailsController.pickThumbnail("Drive");
   }
 
   /** switches the current map view to the hospital view */
