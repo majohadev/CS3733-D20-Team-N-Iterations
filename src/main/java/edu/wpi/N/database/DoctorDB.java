@@ -9,6 +9,32 @@ public class DoctorDB {
   private static Connection con = MapDB.getCon();
 
   /**
+   * Gets a list of doctors associated with a given node
+   *
+   * @param nodeID The id of the given node
+   * @return A LinkedList of all of the doctors associated with the given node
+   * @throws DBException on error
+   */
+  public static LinkedList<Doctor> getDoctorsByLocation(String nodeID) throws DBException {
+    try {
+      String query =
+          "SELECT doctors.doctorID FROM doctors, location WHERE location.nodeID = ? AND doctors.doctorID = location.doctor";
+      PreparedStatement st = con.prepareStatement(query);
+      st.setString(1, nodeID);
+      ResultSet rs = st.executeQuery();
+
+      LinkedList<Doctor> result = new LinkedList<>();
+      while (rs.next()) {
+        result.add(getDoctor(rs.getInt("doctorID")));
+      }
+
+      return result;
+    } catch (SQLException e) {
+      throw new DBException("Unknown error: getDoctorsByDept", e);
+    }
+  }
+
+  /**
    * Gets the doctor with the specified ID
    *
    * @param doctorID The exact name of the doctor
