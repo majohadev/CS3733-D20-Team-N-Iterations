@@ -269,7 +269,7 @@ public class MedicineRequestController implements Controller, Initializable {
   }
 
   public void logout() throws IOException, DBException {
-    mainApp.switchScene("views/newHomePage.fxml", singleton);
+    mainApp.switchScene("views/mapDisplay/newMapDisplay.fxml", singleton);
     LoginDB.logout();
   }
 

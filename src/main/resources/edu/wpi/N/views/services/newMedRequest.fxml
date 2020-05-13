@@ -63,7 +63,7 @@
                         </Pane>
                         <Pane prefHeight="251.25" prefWidth="200.0">
                            <children>
-                              <JFXButton buttonType="RAISED" disable="true" layoutX="32.0" layoutY="89.0" styleClass="jfx-button-regular" stylesheets="@../../css/sanitationRequestUI.css" text="Exit">
+                              <JFXButton buttonType="RAISED" layoutX="32.0" layoutY="89.0" onMouseClicked="#logout" styleClass="jfx-button-regular" stylesheets="@../../css/sanitationRequestUI.css" text="Exit">
                                  <font>
                                     <Font size="24.0" />
                                  </font>
