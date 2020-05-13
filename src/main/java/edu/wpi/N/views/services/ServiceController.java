@@ -131,7 +131,7 @@ public class ServiceController implements Controller {
   }
 
   @FXML
-  public void switchToScheduler() throws Exception {
+  public void switchToEmotionalPage() throws Exception {
     AnchorPane currentPane = FXMLLoader.load(getClass().getResource("emotionalSupportReq.fxml"));
     service_anchor.getChildren().setAll(currentPane);
   }
