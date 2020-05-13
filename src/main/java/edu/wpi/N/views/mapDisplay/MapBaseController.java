@@ -58,6 +58,8 @@ public class MapBaseController implements Controller {
   private double MAX_MAP_SCALE = 3;
   private final double ZOOM_STEP_SCROLL = 0.005;
   private final double ZOOM_STEP_BUTTON = 0.1;
+  private double DEFAULT_TRANSLATEX = 0;
+  private double DEFAULT_TRANSLATEY = 0;
   private DoubleProperty mapScaleAlpha = new SimpleDoubleProperty(0);
   private double clickStartX, clickStartY;
 
@@ -89,6 +91,9 @@ public class MapBaseController implements Controller {
   private ArrayList<KeyValue> keyStartVals, keyEndVals;
   private Label startLabel, endLabel;
   private final int NODE_LABEL_PADDING = 35;
+  private double SCALE_VALUE;
+
+  LinkedList<DbNode> pathCircles;
 
   // Hitbox Needed Data
   String building;
@@ -100,6 +105,7 @@ public class MapBaseController implements Controller {
   @FXML ImageView img_map;
   @FXML Button btn_zoomIn, btn_zoomOut;
   @FXML AnchorPane controllerAnchorPane;
+  @FXML Pane pn_routeNodes;
 
   MapQRController mapQRController;
   NewMapDisplayController newMapDisplayController;
@@ -136,11 +142,15 @@ public class MapBaseController implements Controller {
    * @throws DBException
    */
   public void initialize() throws DBException {
-
+    pathCircles = new LinkedList<>();
     initAutoFocus();
     initNodeLabels();
     initPathAnim();
     setFaulknerDefaults();
+    pn_routeNodes.layoutXProperty().addListener((nval) -> System.out.println("layout X " + nval));
+    pn_routeNodes.layoutYProperty().addListener((nval) -> System.out.println("layout Y " + nval));
+    pn_movableMap.layoutXProperty().addListener((nval) -> System.out.println("layout X m" + nval));
+    pn_movableMap.layoutYProperty().addListener((nval) -> System.out.println("layout Y m" + nval));
   }
 
   /**
@@ -159,8 +169,11 @@ public class MapBaseController implements Controller {
     } else {
       setFaulknerDefaults();
     }
+    if (newMapDisplayController != null) {
+      newMapDisplayController.setFloorBuildingText(floor, building);
+    }
     img_map.setImage(singleton.mapImageLoader.getMap(building, floor));
-    // resetFocus();
+    resetFocus();
     if (!(currentPath == null || currentPath.isEmpty())) {
       drawPath(currentPath, floor, building);
     }
@@ -178,12 +191,8 @@ public class MapBaseController implements Controller {
     MIN_MAP_SCALE = 1;
     MAX_MAP_SCALE = 3.2;
 
-    IMAGE_WIDTH1 = 2475;
-    IMAGE_HEIGHT1 = 1485;
-    MAP_WIDTH1 = 1520;
-    MAP_HEIGHT1 = 912;
-    HORIZONTAL_SCALE1 = MAP_WIDTH1 / IMAGE_WIDTH1;
-    VERTICAL_SCALE1 = MAP_HEIGHT1 / IMAGE_HEIGHT1;
+    DEFAULT_TRANSLATEX = 0;
+    DEFAULT_TRANSLATEY = 100;
   }
 
   public void setMainDefaults() {
@@ -197,12 +206,8 @@ public class MapBaseController implements Controller {
     MIN_MAP_SCALE = 1.2;
     MAX_MAP_SCALE = 5.5;
 
-    IMAGE_WIDTH1 = 5000;
-    IMAGE_HEIGHT1 = 3400;
-    MAP_WIDTH1 = 1465;
-    MAP_HEIGHT1 = 994;
-    HORIZONTAL_SCALE1 = MAP_WIDTH1 / IMAGE_WIDTH1;
-    VERTICAL_SCALE1 = MAP_HEIGHT1 / IMAGE_HEIGHT1;
+    DEFAULT_TRANSLATEX = 0;
+    DEFAULT_TRANSLATEY = 0;
   }
 
   /**
@@ -253,14 +258,22 @@ public class MapBaseController implements Controller {
    */
   public void drawPath(Path currentPath, int floor, String building) {
     clearPath();
+    pathCircles.clear();
     DbNode firstNode, secondNode;
-    startLabel.setText("Start: ");
-    endLabel.setText("Destination: ");
-    if (currentPath.get(0).getFloor() == floor) {
-      drawCircle(currentPath.get(0), START_NODE_COLOR, startLabel);
-    } else if (currentPath.get(currentPath.size() - 1).getFloor() == floor) {
-      drawCircle(currentPath.get(currentPath.size() - 1), END_NODE_COLOR, endLabel);
+    if (currentPath.size() > 1) {
+      pathCircles.add(currentPath.get(0));
+      pathCircles.add(currentPath.get(currentPath.size() - 1));
+    } else {
+      pathCircles.add(currentPath.get(0));
     }
+    //    startLabel.setText("Start: ");
+    //    endLabel.setText("Destination: ");
+    //    if (currentPath.get(0).getFloor() == floor) {
+    //      // drawCircle(currentPath.get(0), START_NODE_COLOR, startLabel);
+    //    } else if (currentPath.get(currentPath.size() - 1).getFloor() == floor) {
+    //      drawCircle(currentPath.get(currentPath.size() - 1), END_NODE_COLOR, endLabel);
+    //    }
+    boolean first = true;
 
     for (int i = 0; i < currentPath.size() - 1; i++) {
       firstNode = currentPath.get(i);
@@ -282,18 +295,18 @@ public class MapBaseController implements Controller {
         styleLine(line);
         pn_path.getChildren().add(line);
 
-        if (i == 0) {
+        if (first) {
+          first = false;
           startLabel.setVisible(true);
           endLabel.setVisible(true);
           startLabel.setText("Start at ");
-
           autoFocusToNode(firstNode); // TODO: Place this somewhere better
-
+          // autoFocusToNodesGroup(pathCircles, 0);
           drawCircle(firstNode, START_NODE_COLOR, startLabel);
         } else if (i == currentPath.size() - 2) {
           startLabel.setVisible(true);
           endLabel.setVisible(true);
-          endLabel.setText("End at ");
+          endLabel.setText("Destination: ");
           drawCircle(secondNode, END_NODE_COLOR, endLabel);
         } else if (currentPath.get(i - 1).getFloor() != floor) {
           // If firstNode is first on current floor
@@ -301,9 +314,10 @@ public class MapBaseController implements Controller {
           endLabel.setVisible(true);
           startLabel.setText("Exit from ");
 
-          autoFocusToNode(firstNode); // TODO: Place this somewhere better
-
+          // autoFocusToNode(firstNode); // TODO: Place this somewhere better
+          // autoFocusToNodesGroup(pathCircles, 0.1);
           Circle circle = drawCircle(firstNode, MIDDLE_NODE_COLOR, startLabel);
+          circle.setCursor(Cursor.HAND);
           DbNode finalFirstNode = firstNode;
           circle.setOnMouseClicked(
               e -> {
@@ -313,9 +327,9 @@ public class MapBaseController implements Controller {
                   prev = path.get(path.indexOf(prev) - 1);
                 }
                 try {
+                  newMapDisplayController.setCurrentFloor(prev.getFloor());
+                  newMapDisplayController.setCurrentBuilding(prev.getBuilding());
                   setFloor(prev.getBuilding(), prev.getFloor(), currentPath);
-                  newMapDisplayController.currentFloor = prev.getFloor();
-                  newMapDisplayController.currentBuilding = prev.getBuilding();
                   if (mapQRController != null) {
                     if (!prev.getBuilding().equals("Faulkner")) {
                       mapQRController.setTabFocus(prev.getFloor(), "Main");
@@ -333,6 +347,7 @@ public class MapBaseController implements Controller {
           endLabel.setVisible(true);
           endLabel.setText("Enter ");
           Circle circle = drawCircle(secondNode, MIDDLE_NODE_COLOR, endLabel);
+          circle.setCursor(Cursor.HAND);
           DbNode finalSecondNode = secondNode;
           circle.setOnMouseClicked(
               e -> {
@@ -342,10 +357,9 @@ public class MapBaseController implements Controller {
                   next = path.get(path.indexOf(next) + 1);
                 }
                 try {
+                  newMapDisplayController.setCurrentFloor(next.getFloor());
+                  newMapDisplayController.setCurrentBuilding(next.getBuilding());
                   setFloor(next.getBuilding(), next.getFloor(), currentPath);
-                  newMapDisplayController.currentFloor = next.getFloor();
-                  //                  System.out.println(newMapDisplayController.currentFloor);
-                  newMapDisplayController.currentBuilding = next.getBuilding();
                   if (mapQRController != null) {
                     if (!next.getBuilding().equals("Faulkner")) {
                       mapQRController.setTabFocus(next.getFloor(), "Main");
@@ -360,6 +374,7 @@ public class MapBaseController implements Controller {
         }
       }
     }
+
     pn_path.getChildren().addAll(startLabel, endLabel); // To make sure they render over the path
     setAnimFrames();
   }
@@ -397,7 +412,7 @@ public class MapBaseController implements Controller {
     keyEnd = new KeyFrame(Duration.millis(PATH_ANIM_LENGTH), "keyEnd", null, keyEndVals);
 
     // Apply new frames
-    pathAnimTimeline.getKeyFrames().addAll(keyStart, keyEnd);
+    pathAnimTimeline.getKeyFrames().setAll(keyStart, keyEnd);
 
     if (!(keyStartVals.isEmpty() || keyEndVals.isEmpty())) {
       // Play anim
@@ -453,17 +468,6 @@ public class MapBaseController implements Controller {
 
   //   == MAP ZOOM CONTROLS ==
 
-  // Get zoom button input
-  @FXML
-  private void zoomToolHandler(MouseEvent event) throws IOException {
-
-    if (event.getSource() == btn_zoomIn) {
-      zoom(ZOOM_STEP_BUTTON);
-    } else if (event.getSource() == btn_zoomOut) {
-      zoom(-ZOOM_STEP_BUTTON);
-    }
-  }
-
   // When user scrolls mouse over map
   @FXML
   private void mapScrollHandler(ScrollEvent event) throws IOException {
@@ -487,14 +491,14 @@ public class MapBaseController implements Controller {
 
     // Exponentially interpolate alpha to actual scale value
     // Results in finer zoom up close, coarser zoom in mid range
-    double expInterpScale = MIN_MAP_SCALE * Math.pow(MAX_MAP_SCALE / MIN_MAP_SCALE, alphaVal);
+    SCALE_VALUE = MIN_MAP_SCALE * Math.pow(MAX_MAP_SCALE / MIN_MAP_SCALE, alphaVal);
 
     // Linearly interpolate (lerp) alpha to actual scale value
     // double lerpedScale = MIN_MAP_SCALE + alphaVal * (MAX_MAP_SCALE - MIN_MAP_SCALE);
 
     // Apply new scale and correct panning
-    pn_movableMap.setScaleX(expInterpScale);
-    pn_movableMap.setScaleY(expInterpScale);
+    pn_movableMap.setScaleX(SCALE_VALUE);
+    pn_movableMap.setScaleY(SCALE_VALUE);
     clampPanning(0, 0);
   }
 
@@ -587,23 +591,18 @@ public class MapBaseController implements Controller {
   }
 
   // TODO: This implementation should be cleaner - currently uses raw circle objects
-  /**
-   * Automatically pans and zooms to the center of a group of nodes
-   *
-   * @param circles List of JavaFX Circles to get location data from
-   */
-  private void autoFocusToNodesGroup(LinkedList<Circle> circles) {
+  /** Automatically pans and zooms to the center of a group of nodes */
+  public void autoFocusToNodesGroup() {
 
     double xSum = 0;
     double ySum = 0;
-    int nodesCount = circles.size();
+    int nodesCount = pathCircles.size();
 
-    for (Circle circle : circles) {
-      xSum += circle.getCenterX();
-      ySum += circle.getCenterY();
+    for (DbNode n : pathCircles) {
+      xSum += scaleX(n.getX());
+      ySum += scaleX(n.getY());
     }
-
-    autoFocusToPoint(xSum / nodesCount, ySum / nodesCount); // Get midpoint of group
+    autoFocusToPoint(xSum / nodesCount, ySum / nodesCount, 0); // Get midpoint of group
   }
 
   /**
@@ -632,6 +631,35 @@ public class MapBaseController implements Controller {
     autoFocus.playFromStart();
   }
 
+  /**
+   * Automatically pans and zooms to a given node
+   *
+   * @param x x location to go to
+   * @param y y location to go to
+   */
+  public void autoFocusToPoint(double x, double y, double alpha) {
+    mapScaleAlpha.set(alpha);
+    pn_movableMap.setTranslateX(SCALE_VALUE * (MAP_WIDTH / 2 - x));
+    pn_movableMap.setTranslateY(SCALE_VALUE * (MAP_HEIGHT / 2 - y));
+    /*endFocusVals.add(
+        new KeyValue(
+            pn_movableMap.translateXProperty(),
+            MAX_MAP_SCALE * (MAP_WIDTH / 2 - x),
+            Interpolator.LINEAR));
+    endFocusVals.add(
+        new KeyValue(
+            pn_movableMap.translateYProperty(),
+            MAX_MAP_SCALE * (MAP_HEIGHT / 2 - y),
+            Interpolator.LINEAR));
+    endFocusVals.add(new KeyValue(mapScaleAlpha, 1, Interpolator.LINEAR));
+
+    KeyFrame endFrame = new KeyFrame(Duration.millis(500), "endFocus", null, endFocusVals);
+    // mapScaleAlpha.set(alpha);
+    autoFocus.getKeyFrames().setAll(endFrame);
+    autoFocus.playFromStart();
+    // mapScaleAlpha.set(alpha);*/
+  }
+
   /** Automatically pans and zoom out to reset view */
   public void resetFocus() {
 
@@ -645,9 +673,9 @@ public class MapBaseController implements Controller {
     //
     //    autoFocus.getKeyFrames().setAll(endFrame);
     //    autoFocus.playFromStart();
-    pn_movableMap.setTranslateX(0);
-    pn_movableMap.setTranslateY(0);
     mapScaleAlpha.set(0);
+    pn_movableMap.setTranslateX(DEFAULT_TRANSLATEX);
+    pn_movableMap.setTranslateY(DEFAULT_TRANSLATEY);
   }
 
   /** Called when zooming is completed */
