@@ -1020,7 +1020,7 @@ public class NewAdminController implements Controller, Initializable {
                 TableColumn<Request, String> attr4 = new TableColumn<>("Dropoff");
                 attr4.setMaxWidth(100);
                 attr4.setMinWidth(100);
-                attr4.setCellValueFactory(new ViewRequestControllerOUTDATED.nodeLongName());
+                attr4.setCellValueFactory(new ViewRequestControllerOUTDATED.nodeLongName(true));
 
                 ObservableList<Request> reqs = FXCollections.observableArrayList();
 
