@@ -1065,7 +1065,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     label.setBorder(
         new Border(
             new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, null, BorderWidths.DEFAULT)));
-    mapBaseController.drawCircle(node, Color.GREEN, label);
+    mapBaseController.drawCircle(node, Color.GREEN);
     locationSearchController.lst_fuzzySearch.setItems(FXCollections.observableList(nlist));
     mapBaseController.pn_path.getChildren().add(label); // lmao
     mapBaseController.autoFocusToNode(node);
