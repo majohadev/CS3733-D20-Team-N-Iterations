@@ -32,6 +32,10 @@ public class App extends Application {
     this.masterStage = primaryStage;
     this.masterStage.setTitle("Brigham and Women's Hospital Kiosk Application");
 
+    // Set up singleton and set its main app
+    StateSingleton newSingleton = StateSingleton.getInstance();
+    newSingleton.setMainApp(this);
+
     // Make mouse and keyboard listeners
     GlobalMouseListener mouseListener = new GlobalMouseListener();
     GlobalKeyListener keyListener = new GlobalKeyListener();
@@ -40,14 +44,6 @@ public class App extends Application {
     GlobalScreen.addNativeMouseListener(mouseListener);
     GlobalScreen.addNativeMouseMotionListener(mouseListener);
     GlobalScreen.addNativeKeyListener(keyListener);
-
-    // Set up singleton and set its main app
-    StateSingleton newSingleton = StateSingleton.getInstance();
-    newSingleton.setMainApp(this);
-
-    // Set up memento pattern
-    newSingleton.originator.setState("views/mapDisplay/newMapDisplay.fxml");
-    newSingleton.careTaker.add(newSingleton.originator.saveStateToMemento());
 
     switchScene("views/mapDisplay/newMapDisplay.fxml", newSingleton);
     //    switchScene("views/chatbot/chatBox.fxml", newSingleton);
