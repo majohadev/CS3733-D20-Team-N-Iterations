@@ -60,5 +60,10 @@
          <font>
             <Font size="14.0" />
          </font></JFXButton>
+      <Label layoutX="61.0" layoutY="396.0" styleClass="label-mid-size" stylesheets="@../../css/sanitationRequestUI.css" text="Change Timeout" />
+      <JFXTextField fx:id="txtf_newTime" alignment="CENTER" layoutX="49.0" layoutY="490.0" promptText="New Time" styleClass="jfx-text-field" stylesheets="@../../css/sanitationRequestUI.css" />
+      <JFXButton fx:id="btn_changeTime" layoutX="113.0" layoutY="550.0" onMouseClicked="#changeTime" styleClass="jfx-button-regular-arduino" stylesheets="@../../css/sanitationRequestUI.css" text="Submit" />
+      <Label layoutX="32.0" layoutY="452.0" styleClass="label-file-size" stylesheets="@../../css/sanitationRequestUI.css" text="Current Time:" />
+      <Label fx:id="lbl_currentTime" layoutX="185.0" layoutY="452.0" styleClass="label-file-size" stylesheets="@../../css/sanitationRequestUI.css" text="Label" />
     </children>
 </AnchorPane>
