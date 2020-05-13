@@ -440,6 +440,7 @@ public class NewAdminController implements Controller, Initializable {
     service.setMinWidth(75);
     service.setCellValueFactory(new PropertyValueFactory<Request, String>("serviceType"));
 
+    tb_RequestTable.setPrefWidth(575);
     tb_RequestTable.getColumns().addAll(requestID, service, emp_assigned, notes, nodeID, status);
   }
 
@@ -707,6 +708,8 @@ public class NewAdminController implements Controller, Initializable {
                   tb_RequestTable.getItems().clear();
                   tb_RequestTable.setItems(reqs);
                   filterByType("Laundry");
+                  tb_RequestTable.setPrefWidth(575);
+
                 } catch (DBException e) {
                   e.printStackTrace();
                 }
@@ -734,6 +737,8 @@ public class NewAdminController implements Controller, Initializable {
                   tb_RequestTable.getItems().clear();
                   tb_RequestTable.setItems(reqs);
                   filterByType("Translator");
+                  tb_RequestTable.setPrefWidth(675);
+
                 } catch (DBException e) {
                   e.printStackTrace();
                 }
@@ -760,6 +765,8 @@ public class NewAdminController implements Controller, Initializable {
                   }
                   tb_RequestTable.getItems().clear();
                   tb_RequestTable.setItems(reqs);
+                  tb_RequestTable.setPrefWidth(675);
+
                   filterByType("Wheelchair");
                 } catch (DBException e) {
                   e.printStackTrace();
@@ -792,6 +799,8 @@ public class NewAdminController implements Controller, Initializable {
                   }
                   tb_RequestTable.getItems().clear();
                   tb_RequestTable.setItems(reqs);
+                  tb_RequestTable.setPrefWidth(775);
+
                   filterByType("IT");
                 } catch (DBException e) {
                   e.printStackTrace();
@@ -808,6 +817,7 @@ public class NewAdminController implements Controller, Initializable {
 
                 initializeTable();
                 tb_RequestTable.getColumns().addAll(attr1);
+                tb_RequestTable.setPrefWidth(675);
 
                 ObservableList<Request> reqs = FXCollections.observableArrayList();
 
@@ -849,6 +859,7 @@ public class NewAdminController implements Controller, Initializable {
 
                 initializeTable();
                 tb_RequestTable.getColumns().addAll(attr1, attr2, attr3, attr4);
+                tb_RequestTable.setPrefWidth(975);
 
                 ObservableList<Request> reqs = FXCollections.observableArrayList();
 
@@ -891,6 +902,7 @@ public class NewAdminController implements Controller, Initializable {
 
                 initializeTable();
                 tb_RequestTable.getColumns().addAll(attr1, attr2, attr3, attr22);
+                tb_RequestTable.setPrefWidth(975);
 
                 ObservableList<Request> reqs = FXCollections.observableArrayList();
 
@@ -918,6 +930,7 @@ public class NewAdminController implements Controller, Initializable {
 
                 initializeTable();
                 tb_RequestTable.getColumns().addAll(attr1);
+                tb_RequestTable.setPrefWidth(675);
 
                 ObservableList<Request> reqs = FXCollections.observableArrayList();
 
@@ -951,10 +964,11 @@ public class NewAdminController implements Controller, Initializable {
                 TableColumn<Request, String> attr3 = new TableColumn<>("Priority");
                 attr3.setMaxWidth(100);
                 attr3.setMinWidth(100);
-                attr3.setCellValueFactory(new PropertyValueFactory<Request, String>("Atr2"));
+                attr3.setCellValueFactory(new PropertyValueFactory<Request, String>("Atr3"));
 
                 initializeTable();
-                tb_RequestTable.getColumns().addAll(attr1, attr2);
+                tb_RequestTable.getColumns().addAll(attr1, attr2, attr3);
+                tb_RequestTable.setPrefWidth(875);
 
                 ObservableList<Request> reqs = FXCollections.observableArrayList();
 
