@@ -414,7 +414,7 @@ public class NewAdminController implements Controller, Initializable {
                     for (Request req : ServiceDB.getOpenRequests()) {
                       if (req.getServiceType()
                           .equals(
-                              tb_RequestTable
+                              cb_reqFilter
                                   .getSelectionModel()
                                   .getSelectedItem()
                                   .getServiceType())) {
