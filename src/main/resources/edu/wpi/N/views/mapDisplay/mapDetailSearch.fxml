@@ -25,7 +25,7 @@
          </image>
       </ImageView>
       <ListView fx:id="lst_selection" layoutX="24.0" layoutY="238.0" prefHeight="481.0" prefWidth="296.0" styleClass="list-cell" stylesheets="@../../css/newMapDisplay.css" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="235.0" />
-      <JFXComboBox fx:id="cmb_detail" layoutX="83.0" layoutY="169.0" prefHeight="39.0" prefWidth="219.0" promptText="Search Options" />
+      <JFXComboBox fx:id="cmb_detail" layoutX="83.0" layoutY="169.0" prefHeight="39.0" prefWidth="219.0" promptText="Search Options" stylesheets="@../../css/sanitationRequestUI.css"/>
       <ListView fx:id="lst_fuzzySearch" layoutX="35.0" layoutY="245.0" prefHeight="481.0" prefWidth="296.0" styleClass="list-cell" stylesheets="@../../css/newMapDisplay.css" AnchorPane.leftAnchor="25.0" AnchorPane.rightAnchor="25.0" AnchorPane.topAnchor="235.0" />
    </children>
 </AnchorPane>
