@@ -189,10 +189,49 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
             .setText(nodeEnd.getLongName() + ", " + nodeEnd.getBuilding());
 
         initPathfind(nodeStart, nodeEnd, false);
-        singleton.chatBotState.startNode = null;
-        singleton.chatBotState.endNode = null;
-        singleton.chatBotState.prevQueryResult = null;
+        singleton.chatBotState.resetPlannedActions();
         enableTextDirections();
+      }
+
+      // Check if we wanna use Kiosk as default node
+      if (nodeEnd != null && singleton.chatBotState.useDefault) {
+        nodeStart = locationSearchController.getDBNodes()[0];
+        locationSearchController
+            .getTextFirstLocation()
+            .setText(nodeStart.getLongName() + ", " + nodeStart.getBuilding());
+        locationSearchController
+            .getTextSecondLocation()
+            .setText(nodeEnd.getLongName() + ", " + nodeEnd.getBuilding());
+
+        initPathfind(nodeStart, nodeEnd, false);
+        singleton.chatBotState.resetPlannedActions();
+        enableTextDirections();
+      }
+
+      // Check if need to do a quick search to bathroom
+      if (nodeStart != null && singleton.chatBotState.quickSearchBathroom) {
+
+        // Set the necessary search fields
+        locationSearchController
+            .getTextFirstLocation()
+            .setText(nodeStart.getLongName() + ", " + nodeStart.getBuilding());
+        locationSearchController.getTextSecondLocation().clear();
+
+        try {
+          this.path = singleton.savedAlgo.findQuickAccess(nodeStart, "REST", false);
+          mapBaseController.setFloor(nodeStart.getBuilding(), nodeStart.getFloor(), path);
+          if (path.size() == 0) {
+            displayErrorMessage("Please select the first node");
+          }
+        } catch (DBException | NullPointerException ex) {
+          displayErrorMessage("Please select the first node");
+          return;
+        }
+        enableTextDirections();
+        disableNonPathFloors();
+        if (pathButtonList.size() > 1) {
+          pathButtonList.get(1).setStyle("-fx-background-color: #6C5C7F;");
+        }
       }
 
       if (singleton.chatBotState.whereIsNode != null) {

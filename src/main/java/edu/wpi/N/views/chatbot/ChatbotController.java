@@ -147,7 +147,6 @@ public class ChatbotController implements Controller, Initializable {
       String intent = queryResults.getIntent().getDisplayName();
 
       if (intent.equals("question-billing-how-to-pay-online-option")) {
-
         // add elements to a 'Single Message'
         singleMessageObject.addAll(getAnswerToPayingOnlineOption());
       }
@@ -155,39 +154,28 @@ public class ChatbotController implements Controller, Initializable {
       else if (intent.equals("get-weather")) {
         Label message = new Label(Dialogflow.getCurrentWeatherReply());
         singleMessageObject.add(message);
-      } else if (intent.equals("kiosk-help-get-directions-from-to")
-          || intent.equals("questions-kiosk-location-search-from-to")) {
+      } else if (intent.equals("directions-to-location")) {
+        // CAN"T GET IT TO WORK
+        // use default node
 
-        // Get Parameters
-        String startLocation =
-            queryResults.getParameters().getFieldsMap().get("hospital-location1").getStringValue();
+        // get Goal Node
         String goalLocation =
-            queryResults.getParameters().getFieldsMap().get("hospital-location2").getStringValue();
-        // Identify the nodes
-        LinkedList<DbNode> nodes1 = FuzzySearchAlgorithm.suggestLocations(startLocation);
-        LinkedList<DbNode> nodes2 = FuzzySearchAlgorithm.suggestLocations(goalLocation);
+            queryResults.getParameters().getFieldsMap().get("hospital-location1").getStringValue();
 
-        if (nodes1.size() == 0) {
+        LinkedList<DbNode> nodes = FuzzySearchAlgorithm.suggestLocations(goalLocation);
+
+        // Didn't find anything
+        if (nodes.size() == 0) {
           singleMessageObject.add(new Label("Sorry! I wasn't able to find Start location!"));
-
           // display and rest the message
           state.chatBotState.resetPlannedActions();
           displayAndSaveMessages(singleMessageObject, false);
           mainApp.switchScene("views/mapDisplay/newMapDisplay.fxml", state);
           return;
         }
-        if (nodes2.size() == 0) {
-          singleMessageObject.add(new Label("Sorry! I wasn't able to find Goal location!"));
 
-          // display and reset the message
-          state.chatBotState.resetPlannedActions();
-          displayAndSaveMessages(singleMessageObject, false);
-          mainApp.switchScene("views/mapDisplay/newMapDisplay.fxml", state);
-          return;
-        }
-
-        state.chatBotState.startNode = nodes1.getFirst();
-        state.chatBotState.endNode = nodes2.getFirst();
+        state.chatBotState.endNode = nodes.getFirst();
+        state.chatBotState.useDefault = true;
         Label reply = new Label(queryResults.getFulfillmentText());
         singleMessageObject.add(reply);
         displayAndSaveMessages(singleMessageObject, false);
@@ -201,6 +189,107 @@ public class ChatbotController implements Controller, Initializable {
           //          mapController.setToLocationSearch();
           mapController.checkChatbot();
           return;
+        }
+
+      } else if (intent.equals("kiosk-help-get-directions-from-to")
+          || intent.equals("questions-kiosk-location-search-from-to")
+          || intent.equals("questions-kiosk-location-search-where-is - yes-startloc")) {
+
+        // Get Parameters
+        String startLocation =
+            queryResults.getParameters().getFieldsMap().get("hospital-location1").getStringValue();
+        String goalLocation =
+            queryResults.getParameters().getFieldsMap().get("hospital-location2").getStringValue();
+
+        // Check to see if what nodes we're going from and to
+        boolean isToFirst = false;
+        boolean isFromFirst = false;
+        for (String word : queryResults.getFulfillmentText().split(" ")) {
+          if (word.equals("to") && !isFromFirst) {
+            String temp = startLocation;
+            startLocation = goalLocation;
+            goalLocation = startLocation;
+
+            break;
+          }
+
+          if (word.equals("from") && !isToFirst) {
+
+            break;
+          }
+        }
+
+        // use quick search
+        if (goalLocation.equals("bathroom") || goalLocation.equals("restroom")) {
+          LinkedList<DbNode> nodes1 = FuzzySearchAlgorithm.suggestLocations(startLocation);
+
+          if (nodes1.size() == 0) {
+            singleMessageObject.add(new Label("Sorry! I wasn't able to find Start location!"));
+
+            // display and rest the message
+            state.chatBotState.resetPlannedActions();
+            displayAndSaveMessages(singleMessageObject, false);
+            mainApp.switchScene("views/mapDisplay/newMapDisplay.fxml", state);
+            return;
+          }
+
+          state.chatBotState.startNode = nodes1.getFirst();
+          state.chatBotState.quickSearchBathroom = true;
+          Label reply = new Label(queryResults.getFulfillmentText());
+          singleMessageObject.add(reply);
+          displayAndSaveMessages(singleMessageObject, false);
+
+          // Check if current scene is Map
+          if (!state.isMapDisplayActive) {
+            mainApp.switchScene("views/mapDisplay/newMapDisplay.fxml", state);
+            return;
+          } else {
+            //          mapController.resetMap();
+            //          mapController.setToLocationSearch();
+            mapController.checkChatbot();
+            return;
+          }
+        } else {
+
+          // Identify the nodes
+          LinkedList<DbNode> nodes1 = FuzzySearchAlgorithm.suggestLocations(startLocation);
+          LinkedList<DbNode> nodes2 = FuzzySearchAlgorithm.suggestLocations(goalLocation);
+
+          if (nodes1.size() == 0) {
+            singleMessageObject.add(new Label("Sorry! I wasn't able to find Start location!"));
+
+            // display and rest the message
+            state.chatBotState.resetPlannedActions();
+            displayAndSaveMessages(singleMessageObject, false);
+            mainApp.switchScene("views/mapDisplay/newMapDisplay.fxml", state);
+            return;
+          }
+          if (nodes2.size() == 0) {
+            singleMessageObject.add(new Label("Sorry! I wasn't able to find Goal location!"));
+
+            // display and reset the message
+            state.chatBotState.resetPlannedActions();
+            displayAndSaveMessages(singleMessageObject, false);
+            mainApp.switchScene("views/mapDisplay/newMapDisplay.fxml", state);
+            return;
+          }
+
+          state.chatBotState.startNode = nodes1.getFirst();
+          state.chatBotState.endNode = nodes2.getFirst();
+          Label reply = new Label(queryResults.getFulfillmentText());
+          singleMessageObject.add(reply);
+          displayAndSaveMessages(singleMessageObject, false);
+
+          // Check if current scene is Map
+          if (!state.isMapDisplayActive) {
+            mainApp.switchScene("views/mapDisplay/newMapDisplay.fxml", state);
+            return;
+          } else {
+            //          mapController.resetMap();
+            //          mapController.setToLocationSearch();
+            mapController.checkChatbot();
+            return;
+          }
         }
 
       } else if (intent.equals("questions-kiosk-doctor-search")) {
@@ -241,7 +330,7 @@ public class ChatbotController implements Controller, Initializable {
       } else if (intent.equals("questions-kiosk-location-search-where-is")) {
 
         String location =
-            queryResults.getParameters().getFieldsMap().get("hospital-location1").getStringValue();
+            queryResults.getParameters().getFieldsMap().get("hospital-location2").getStringValue();
 
         LinkedList<DbNode> locations = FuzzySearchAlgorithm.suggestLocations(location);
 
@@ -270,7 +359,9 @@ public class ChatbotController implements Controller, Initializable {
 
       } else if (intent.equals("kiosk-help-get-directions-from-to-wrong-locations")
           || intent.equals("questions-kiosk-location-search-from-to - no")
-          || intent.equals("questions-kiosk-location-search-where-is-goal-location - no")) {
+          || intent.equals("questions-kiosk-location-search-where-is-goal-location - no")
+          || intent.equals("directions-to-location - no")
+          || intent.equals("questions-kiosk-location-search-where-is - yes-startloc - no")) {
 
         // Reset everything
         if (mapController != null) {
@@ -301,8 +392,8 @@ public class ChatbotController implements Controller, Initializable {
   }
 
   /**
-   * Creates a message consisting on Nodes in order, that needs to be displayed Called if user would
-   * like to make a specific service request
+   * Creates a message consisting on Nodes in order, that needs to be displayed. Called if user
+   * would like to make a specific service request
    *
    * @param intent user's intent
    */

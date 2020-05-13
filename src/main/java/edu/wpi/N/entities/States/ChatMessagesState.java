@@ -17,8 +17,14 @@ public class ChatMessagesState {
   public DbNode startNode;
   public DbNode endNode;
 
+  // for quick search
+  public boolean quickSearchBathroom = false;
+
   // For showing just the given node
   public DbNode whereIsNode;
+
+  // For using default location for start node
+  public boolean useDefault;
 
   // If need to display guide for doctor's search
   public boolean showDoctorSearchGuide = false;
@@ -84,9 +90,16 @@ public class ChatMessagesState {
   /** Resets all previously planned actions. String and Structs to Null Boolean values to false */
   public void resetPlannedActions() {
     prevQueryResult = null;
+
     startNode = null;
     endNode = null;
+
+    useDefault = false;
+
+    quickSearchBathroom = false;
+
     whereIsNode = null;
+
     showDoctorSearchGuide = false;
     showTranslator = false;
     showWheelChair = false;
