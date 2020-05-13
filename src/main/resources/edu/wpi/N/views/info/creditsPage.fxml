@@ -34,17 +34,13 @@
       <Label layoutX="960.0" layoutY="359.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="Google" />
       <Hyperlink layoutX="956.0" layoutY="386.0" onMouseClicked="#onLink2Clicked" styleClass="hyperlink-credits" stylesheets="@../../css/sanitationRequestUI.css" text="Home Page" />
       <Label layoutX="70.0" layoutY="382.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="Secure Incedent Reporting" />
-      <Label layoutX="70.0" layoutY="452.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="On-Call Beds Request" />
-      <Label layoutX="70.0" layoutY="522.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="Flower Request" />
-      <Label layoutX="70.0" layoutY="592.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="Interpreter Request" />
-      <Label layoutX="70.0" layoutY="662.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="Audio-Visual Request" />
-      <Label layoutX="70.0" layoutY="732.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="Gift Delivery Service" />
+      <Label layoutX="70.0" layoutY="452.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="Flower Delivery" />
+      <Label layoutX="70.0" layoutY="522.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="Interpreter Request" />
+      <Label layoutX="70.0" layoutY="592.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="Gift Delivery Service" />
       <Label layoutX="70.0" layoutY="409.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="Team B" />
-      <Label layoutX="70.0" layoutY="479.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="Team E" />
-      <Label layoutX="70.0" layoutY="549.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="Team A" />
-      <Label layoutX="70.0" layoutY="619.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="Team C" />
-      <Label layoutX="70.0" layoutY="689.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="Team M" />
-      <Label layoutX="70.0" layoutY="759.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="Team L" />
+      <Label layoutX="70.0" layoutY="479.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="Team A" />
+      <Label layoutX="70.0" layoutY="549.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="Team C" />
+      <Label layoutX="70.0" layoutY="619.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="Team L" />
       <Label layoutX="960.0" layoutY="422.0" styleClass="label-name" stylesheets="@../../css/sanitationRequestUI.css" text="JFoenix" />
       <Label layoutX="960.0" layoutY="449.0" styleClass="label-role" stylesheets="@../../css/sanitationRequestUI.css" text="The JFoenix Team" />
       <Hyperlink layoutX="956.0" layoutY="476.0" onMouseClicked="#onLink3Clicked" styleClass="hyperlink-credits" stylesheets="@../../css/sanitationRequestUI.css" text="Home Page" />
