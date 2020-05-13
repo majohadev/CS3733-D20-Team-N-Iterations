@@ -287,7 +287,7 @@
          </children>
       </AnchorPane>
       <AnchorPane fx:id="anchorSwap" layoutX="186.0" layoutY="96.0" prefHeight="1080.0" prefWidth="1552.0" style="-fx-background-color: #263051;" AnchorPane.leftAnchor="380.0" AnchorPane.topAnchor="0.0" />
-      <TableView fx:id="tb_RequestTable" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="429.0" prefWidth="975.0" stylesheets="@../../css/adminTables.css" AnchorPane.bottomAnchor="296.0" AnchorPane.leftAnchor="450.0" AnchorPane.topAnchor="245.0" />
+      <TableView fx:id="tb_RequestTable" prefHeight="429.0" stylesheets="@../../css/adminTables.css" AnchorPane.bottomAnchor="296.0" AnchorPane.leftAnchor="450.0" AnchorPane.topAnchor="245.0" />
       <TableView fx:id="tbl_Employees" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="400.0" stylesheets="@../../css/adminTables.css" AnchorPane.bottomAnchor="296.0" AnchorPane.leftAnchor="1475.0" AnchorPane.topAnchor="245.0" />
       <JFXCheckBox fx:id="ch_requestFilter" checkedColor="#5a69c6" styleClass="label-mid-size" stylesheets="@../../css/sanitationRequestUI.css" text="Filter to Open Requests" textFill="#e6ebf2" AnchorPane.leftAnchor="450.0" AnchorPane.topAnchor="790.0">
          <font>
