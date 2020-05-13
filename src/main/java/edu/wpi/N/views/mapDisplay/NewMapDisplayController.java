@@ -108,6 +108,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
     this.faulknerButtonList = new JFXNodesList();
     this.mainButtonList = new JFXNodesList();
     this.pn_hospitalView = mapBaseController.getAnchorPane();
+
     mapBaseController.setNewMapDisplayController(this);
     mapBaseController.setFloor(this.currentBuilding, this.currentFloor, this.path);
     setFloorBuildingText(this.currentFloor, this.currentBuilding);
