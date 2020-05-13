@@ -30,6 +30,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 
@@ -57,6 +58,8 @@ public class MapBaseController implements Controller {
   // Zoom constants
   private double MIN_MAP_SCALE = 1;
   private double MAX_MAP_SCALE = 3;
+  private double MIN_LABEL_SIZE = 6;
+  private double MAX_LABEL_SIZE = 10;
   private final double ZOOM_STEP_SCROLL = 0.005;
   private final double ZOOM_STEP_BUTTON = 0.1;
   private double DEFAULT_TRANSLATEX = 0;
@@ -91,6 +94,7 @@ public class MapBaseController implements Controller {
   private KeyFrame keyStart, keyEnd; // Keyframes in path animation
   private ArrayList<KeyValue> keyStartVals, keyEndVals;
   private Label startLabel, endLabel;
+  private Circle startCircle, endCircle;
   private final int NODE_LABEL_PADDING = 35;
   private double SCALE_VALUE;
 
@@ -189,6 +193,8 @@ public class MapBaseController implements Controller {
     VERTICAL_SCALE = MAP_HEIGHT / IMAGE_HEIGHT;
     MIN_MAP_SCALE = 1;
     MAX_MAP_SCALE = 3.2;
+    MIN_LABEL_SIZE = 8;
+    MAX_LABEL_SIZE = 20;
 
     DEFAULT_TRANSLATEX = 0;
     DEFAULT_TRANSLATEY = 100;
@@ -204,6 +210,8 @@ public class MapBaseController implements Controller {
     VERTICAL_SCALE = MAP_HEIGHT / IMAGE_HEIGHT;
     MIN_MAP_SCALE = 1.2;
     MAX_MAP_SCALE = 5.5;
+    MIN_LABEL_SIZE = 4;
+    MAX_LABEL_SIZE = 16;
 
     DEFAULT_TRANSLATEX = 0;
     DEFAULT_TRANSLATEY = 0;
@@ -301,12 +309,12 @@ public class MapBaseController implements Controller {
           startLabel.setText("Start at ");
           autoFocusToNode(firstNode); // TODO: Place this somewhere better
           // autoFocusToNodesGroup(pathCircles, 0);
-          drawCircle(firstNode, START_NODE_COLOR, startLabel);
+          startCircle = drawCircle(firstNode, START_NODE_COLOR, startLabel);
         } else if (i == currentPath.size() - 2) {
           startLabel.setVisible(true);
           endLabel.setVisible(true);
           endLabel.setText("Destination: ");
-          drawCircle(secondNode, END_NODE_COLOR, endLabel);
+          endCircle = drawCircle(secondNode, END_NODE_COLOR, endLabel);
         } else if (currentPath.get(i - 1).getFloor() != floor) {
           // If firstNode is first on current floor
           startLabel.setVisible(true);
@@ -315,10 +323,10 @@ public class MapBaseController implements Controller {
 
           // autoFocusToNode(firstNode); // TODO: Place this somewhere better
           // autoFocusToNodesGroup(pathCircles, 0.1);
-          Circle circle = drawCircle(firstNode, MIDDLE_NODE_COLOR, startLabel);
-          circle.setCursor(Cursor.HAND);
+          startCircle = drawCircle(firstNode, MIDDLE_NODE_COLOR, startLabel);
+          startCircle.setCursor(Cursor.HAND);
           DbNode finalFirstNode = firstNode;
-          circle.setOnMouseClicked(
+          startCircle.setOnMouseClicked(
               e -> {
                 LinkedList<DbNode> path = currentPath.getPath();
                 DbNode prev = path.get(path.indexOf(finalFirstNode) - 1);
@@ -347,10 +355,10 @@ public class MapBaseController implements Controller {
           startLabel.setVisible(true);
           endLabel.setVisible(true);
           endLabel.setText("Enter ");
-          Circle circle = drawCircle(secondNode, MIDDLE_NODE_COLOR, endLabel);
-          circle.setCursor(Cursor.HAND);
+          endCircle = drawCircle(secondNode, MIDDLE_NODE_COLOR, endLabel);
+          endCircle.setCursor(Cursor.HAND);
           DbNode finalSecondNode = secondNode;
-          circle.setOnMouseClicked(
+          endCircle.setOnMouseClicked(
               e -> {
                 LinkedList<DbNode> path = currentPath.getPath();
                 DbNode next = path.get(path.indexOf(finalSecondNode) + 1);
@@ -440,8 +448,11 @@ public class MapBaseController implements Controller {
       pn_path.getChildren().add(label);
       label.setText(label.getText() + node.getLongName());
       label.applyCss(); // To make sure prefWidth doesn't return 0, for whatever reason
-      label.relocate(
-          scaleX(node.getX()) - label.prefWidth(-1) / 2, scaleY(node.getY()) - NODE_LABEL_PADDING);
+      double x = (scaleY(node.getX()) - label.getLayoutBounds().getWidth() / 2);
+      double y =
+          (scaleY(node.getY()) + label.getLayoutBounds().getHeight() / 4 - NODE_LABEL_PADDING);
+      label.relocate(scaleX(x), scaleY(y));
+
       pn_path.getChildren().remove(label); // Gets added back after all lines are drawn
     }
     return circle;
@@ -464,6 +475,8 @@ public class MapBaseController implements Controller {
     keyEndVals.clear();
     startLabel.setVisible(false);
     endLabel.setVisible(false);
+    startCircle = null;
+    endCircle = null;
     pn_path.getChildren().clear();
   }
 
@@ -493,6 +506,7 @@ public class MapBaseController implements Controller {
     // Exponentially interpolate alpha to actual scale value
     // Results in finer zoom up close, coarser zoom in mid range
     SCALE_VALUE = MIN_MAP_SCALE * Math.pow(MAX_MAP_SCALE / MIN_MAP_SCALE, alphaVal);
+    double SCALE_LABEL = MAX_LABEL_SIZE * Math.pow(MIN_LABEL_SIZE / MAX_LABEL_SIZE, alphaVal);
 
     // Linearly interpolate (lerp) alpha to actual scale value
     // double lerpedScale = MIN_MAP_SCALE + alphaVal * (MAX_MAP_SCALE - MIN_MAP_SCALE);
@@ -500,6 +514,29 @@ public class MapBaseController implements Controller {
     // Apply new scale and correct panning
     pn_movableMap.setScaleX(SCALE_VALUE);
     pn_movableMap.setScaleY(SCALE_VALUE);
+
+    if (!((startLabel == null) || (endLabel == null))) {
+      startLabel.applyCss();
+      double startX = (startCircle.getCenterX() - startLabel.getLayoutBounds().getWidth() / 2);
+      double startY =
+          (startCircle.getCenterY()
+              + startLabel.getLayoutBounds().getHeight() / 4
+              - NODE_LABEL_PADDING);
+
+      endLabel.applyCss();
+      double endX = (endCircle.getCenterX() - endLabel.getLayoutBounds().getWidth() / 2);
+      double endY =
+          (endCircle.getCenterY()
+              + endLabel.getLayoutBounds().getHeight() / 4
+              - NODE_LABEL_PADDING);
+
+      startLabel.relocate(startX, startY);
+      endLabel.relocate(endX, endY);
+
+      startLabel.setFont(new Font(SCALE_LABEL));
+      endLabel.setFont(new Font(SCALE_LABEL));
+    }
+
     clampPanning(0, 0);
   }
 
