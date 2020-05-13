@@ -315,6 +315,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
   }
 
   public void handleFloorButtonClickedHelper(int floor, String building) throws DBException {
+
     if (building.equals("Faulkner") || building.equals("Main")) {
       changeFloor(floor, building);
       switchHospitalView();
@@ -335,6 +336,12 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
   public void changeFloor(int newFloor, String newBuilding) throws DBException {
     if (newFloor == this.currentFloor && !changedBuilding(this.currentBuilding, newBuilding)) {
       return;
+    }
+
+    if (newBuilding.equals("Faulkner")) {
+      mapThumbnailsController.pickThumbnail("Faulkner" + newFloor);
+    } else {
+      mapThumbnailsController.pickThumbnail("Main" + newFloor);
     }
 
     mapBaseController.resetFocus();
@@ -638,9 +645,9 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
       displayErrorMessage("No path can be found");
       return;
     }
-    switchHospitalView();
     pn_thumbsWrapper.setVisible(true);
     mapThumbnailsController.setThumbs(path);
+    switchHospitalView();
     mapBaseController.setFloor(first.getBuilding(), first.getFloor(), path);
     this.currentBuilding = first.getBuilding();
     this.currentFloor = first.getFloor();
@@ -997,6 +1004,7 @@ public class NewMapDisplayController extends QRGenerator implements Controller {
   /** switches the current map view to the google map */
   public void switchGoogleView() {
     pn_mapContainer.getChildren().setAll(pn_googleMapView);
+    mapThumbnailsController.pickThumbnail("Drive");
   }
 
   /** switches the current map view to the hospital view */

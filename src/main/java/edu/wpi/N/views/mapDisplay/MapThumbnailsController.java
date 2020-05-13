@@ -8,6 +8,7 @@ import edu.wpi.N.entities.Path;
 import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.views.Controller;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -31,9 +32,9 @@ public class MapThumbnailsController implements Controller {
   @FXML HBox hb_layout;
 
   private LinkedList<Thumb> thumbs = new LinkedList<>();
-  // private LinkedHashMap<Region, Thumb> links = new LinkedHashMap<>();
+  private HashMap<String, Region> vBoxes = new HashMap<>();
 
-  // Thumb corresponding to the currently diplayed floor
+  // Thumb corresponding to the currently displayed floor
   private Region currentBox;
 
   /**
@@ -160,6 +161,10 @@ public class MapThumbnailsController implements Controller {
 
       Thumb thumb = thumbs.get(i);
 
+      VBox vbox = new VBox();
+      vbox.setAlignment(Pos.CENTER);
+      vbox.setStyle("-fx-border-color: #263051; -fx-border-width: 1; -fx-border-radius: 5");
+
       // Make label
 
       Label label = new Label();
@@ -182,7 +187,6 @@ public class MapThumbnailsController implements Controller {
           e -> {
             try {
               mapDisplay.handleFloorButtonClicked(thumb.getFloorName());
-              highlightBox(thumbImgView.getParent());
             } catch (DBException ex) {
               ex.printStackTrace();
             }
@@ -194,18 +198,18 @@ public class MapThumbnailsController implements Controller {
         image = singleton.mapImageLoader.getIcon(Icon.PATH_WHITE);
         thumbImgView.setFitHeight(90);
         label.setText("Drive to " + thumbs.get(i + 1).getHospital());
+        vBoxes.put("Drive", vbox);
       } else if (thumb.getHospital().equals("Faulkner")) {
         image = singleton.mapImageLoader.getMap("Faulkner", thumb.getFloorNum());
+        vBoxes.put("Faulkner" + thumb.getFloorNum(), vbox);
       } else {
         image = singleton.mapImageLoader.getMap("Main", thumb.getFloorNum());
+        vBoxes.put("Main" + thumb.getFloorNum(), vbox);
       }
 
       thumbImgView.setImage(image);
 
-      VBox vbox = new VBox();
-      vbox.setAlignment(Pos.CENTER);
       vbox.getChildren().addAll(label, thumbImgView);
-      vbox.setStyle("-fx-border-color: #263051; -fx-border-width: 1; -fx-border-radius: 5");
 
       // links.put(vbox, thumb);
 
@@ -230,6 +234,15 @@ public class MapThumbnailsController implements Controller {
       String style = "-fx-border-color: white; -fx-border-width: 5; -fx-border-radius: 5";
       region.setStyle(style);
       currentBox = region;
+    }
+  }
+
+  public void pickThumbnail(String key) {
+
+    if (vBoxes.get(key) != null) {
+      highlightBox(vBoxes.get(key));
+    } else {
+      System.out.println("Couldn't find " + key);
     }
   }
 }
