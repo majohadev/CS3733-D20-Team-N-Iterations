@@ -170,3 +170,8 @@ gradle-app.setting
 # End of https://www.gitignore.io/api/java,macos,gradle,intellij+all
 
 
+/interpreterCDB/
+/incident_report_backups/
+/edu.wpi.cs3733.d20.teamP/
+/EdbAPI/
+/BWDatabase/

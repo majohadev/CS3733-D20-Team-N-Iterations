@@ -530,6 +530,7 @@ public class MapBaseController implements Controller {
   @FXML
   private void sendHitboxData(MouseEvent e) {
 
+    System.out.println("did I fuk it");
     if (e.getClickCount() == 2) {
       double x = e.getX();
       double y = e.getY();
