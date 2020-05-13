@@ -60,7 +60,7 @@ public class StateSingleton {
     try {
       chatBotState.closeSession();
     } catch (NullPointerException ex) {
-      System.out.println("Chatbot isn't open, can't reset it");
+      System.out.println("Chatbot isn't open, don't need to close it");
     }
     mainApp.switchScene(path, this);
   }
@@ -95,7 +95,6 @@ public class StateSingleton {
                   System.out.println("Reset Kiosk!");
                   try {
                     originator.getStateFromMemento(careTaker.get(0));
-                    System.out.println(careTaker.get(0).getState());
                     String path = originator.getState();
                     switchTheScene(path);
                   } catch (Exception e) {
