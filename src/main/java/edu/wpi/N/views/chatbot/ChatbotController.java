@@ -162,7 +162,6 @@ public class ChatbotController implements Controller, Initializable {
         Label message = new Label(Dialogflow.getCurrentWeatherReply());
         singleMessageObject.add(message);
       } else if (intent.equals("directions-to-location")) {
-        // CAN"T GET IT TO WORK
         // use default node
 
         // get Goal Node
@@ -173,7 +172,7 @@ public class ChatbotController implements Controller, Initializable {
 
         // Didn't find anything
         if (nodes.size() == 0) {
-          singleMessageObject.add(new Label("Sorry! I wasn't able to find Start location!"));
+          singleMessageObject.add(new Label("Sorry! I wasn't able to find the location :("));
           // display and rest the message
           state.chatBotState.resetPlannedActions();
           displayAndSaveMessages(singleMessageObject, false);
@@ -382,6 +381,17 @@ public class ChatbotController implements Controller, Initializable {
         // Display animation how to use 'way-finding feature'
         mapController.displayGuideForSearchLocation();
 
+      } else if (intent.contains("kiosk-help-admin-question")) {
+
+        if (state.isAdminLoggedIn) {
+          // Display the fulfilment text
+          Label reply = new Label(queryResults.getFulfillmentText());
+          singleMessageObject.add(reply);
+        } else {
+          singleMessageObject.add(
+              new Label(
+                  "I'm sorry, but you need to log in first to get the necessary instructions."));
+        }
       } else {
         // else, use Dialogflow text
         Label message = new Label(queryResults.getFulfillmentText());
@@ -389,7 +399,6 @@ public class ChatbotController implements Controller, Initializable {
       }
 
       state.chatBotState.resetPlannedActions();
-
       displayAndSaveMessages(singleMessageObject, false);
 
     } catch (Exception ex) {

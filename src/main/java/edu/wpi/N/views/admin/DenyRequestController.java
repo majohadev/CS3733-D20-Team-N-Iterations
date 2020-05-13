@@ -18,7 +18,7 @@ public class DenyRequestController {
   public void denyRequest() throws DBException {
     String compNotes = txtf_compNotes.getText();
     newAdminController.denyRow(compNotes);
-    newAdminController.populateRequestTable();
+    // newAdminController.populateRequestTable();
     txtf_compNotes.clear();
   }
 }

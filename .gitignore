@@ -166,6 +166,7 @@ gradle-app.setting
 /incident_report_backups/
 /SIR-DB/
 /interpreterCDB/
+/NSanitationDB/
 
 # End of https://www.gitignore.io/api/java,macos,gradle,intellij+all
 

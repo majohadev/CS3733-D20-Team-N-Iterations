@@ -383,9 +383,11 @@ public class MapQRController implements Controller {
     @Override
     public void handle(MouseEvent mouseEvent) {
       controller.currentDirection = cell.getTreeItem();
-      if (controller.currentDirection.getChildren().size() != 0)
+      if (controller.currentDirection.getChildren().size() != 0) {
         controller.currentDirection.setExpanded(
             !controller.currentDirection.expandedProperty().getValue());
+        return;
+      }
       if (cell.getItem().getLevel() == Level.BUILDING) return;
       DbNode node = cell.getItem().getNode();
       try {

@@ -143,5 +143,6 @@
             </AnchorPane>
          </children>
       </AnchorPane>
+      <fx:include fx:id="chatBot" source="../chatbot/chatBox.fxml" layoutX="1480.0" layoutY="475.0" />
    </children>
 </AnchorPane>

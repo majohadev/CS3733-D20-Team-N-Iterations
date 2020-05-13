@@ -1,8 +1,6 @@
 package edu.wpi.N.views.mapDisplay;
 
-import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXToggleButton;
 import edu.wpi.N.App;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.database.MapDB;
@@ -22,14 +20,10 @@ import javafx.scene.input.KeyEvent;
 public class MapDetailSearchController implements Controller {
 
   @FXML JFXComboBox<String> cmb_detail;
-  @FXML TextField txt_location;
   @FXML ListView<String> lst_selection;
   @FXML ListView<DbNode> lst_fuzzySearch;
   @FXML TextField activeText;
-  @FXML JFXButton btn_search;
-  @FXML JFXButton btn_doctor;
-  @FXML JFXToggleButton tg_handicap;
-  @FXML JFXButton btn_reset;
+
   @FXML DbNode[] nodes = new DbNode[1];
 
   private StateSingleton singleton;
@@ -242,10 +236,6 @@ public class MapDetailSearchController implements Controller {
     return cmb_detail;
   }
 
-  public TextField getTxt_location() {
-    return txt_location;
-  }
-
   public ListView getLst_selection() {
     return lst_selection;
   }
@@ -254,27 +244,7 @@ public class MapDetailSearchController implements Controller {
     return activeText;
   }
 
-  public JFXButton getBtn_search() {
-    return btn_search;
-  }
-
-  public Boolean getTg_handicap() {
-    return tg_handicap.isSelected();
-  }
-
-  public JFXToggleButton getHandicap() {
-    return this.tg_handicap;
-  }
-
-  public JFXButton getBtn_reset() {
-    return btn_reset;
-  }
-
   public DbNode[] getDBNodes() {
     return this.nodes;
-  }
-
-  public JFXButton getBtn_doctor() {
-    return btn_doctor;
   }
 }
