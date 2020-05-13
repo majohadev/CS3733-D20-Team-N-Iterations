@@ -392,6 +392,16 @@ public class ChatbotController implements Controller, Initializable {
               new Label(
                   "I'm sorry, but you need to log in first to get the necessary instructions."));
         }
+      } else if (intent.contains("link")) {
+
+        if (intent.equals("question-billing-cost-different-than-on-insurance-link")) {
+          singleMessageObject.addAll(handleIntentCostDiffThanInsurance());
+        } else if (intent.equals("questions-bills-why-got-bill-from-unvisited-physician-link")) {
+          singleMessageObject.addAll(handleIntentReceivedBillFromPhysicianNotVisited());
+        } else if (intent.equals("question-billing-charged-for-preventitive-link")) {
+          singleMessageObject.addAll(handleIntentWhyChargedForAnnualExam());
+        }
+
       } else {
         // else, use Dialogflow text
         Label message = new Label(queryResults.getFulfillmentText());
@@ -405,6 +415,166 @@ public class ChatbotController implements Controller, Initializable {
       ex.printStackTrace();
       displayErrorMessage("Ooops... Something went wong when loading chat-bot message");
     }
+  }
+
+  private LinkedList<Node> handleIntentWhyChargedForAnnualExam() {
+    LinkedList<Node> message = new LinkedList<>();
+
+    Label messagePartA =
+        new Label(
+            "When you are scheduled for your annual Preventive health exam there is typically no co-payment.\n"
+                + "\n"
+                + "However, sometimes, your annual Preventive Health Exam, Medicare Annual Wellness Visit, or Welcome to Medicare Visit can turn into a “Sick Visit”.\n"
+                + "\n"
+                + "During your visit, your provider may need to treat a new medical issue or a chronic problem that has changed. If that occurs, this part of the visit is called a Sick Visit and may result in additional services being billed to your insurance.\n"
+                + "\n"
+                + "Most insurance companies will pay for Sick Visit evaluations, tests, and treatments, but your insurance plan may require you to pay a co-payment, deductible, and/or co-insurance payment for the Sick Visit, even when it is done during the same appointment as your Preventive Health Exam.\n"
+                + "\n"
+                + "The office staff does not know at the time of check in what services will be provided during your actual visit, as this is between you and your provider. We will send you a bill if there is any unpaid balance after we receive payment for your visit from your insurance company.\n"
+                + "\n"
+                + "It is important that you understand your health insurance benefits, and we encourage you to contact your health insurance plan if you have any questions about what is included in your Preventive Health Exam.\n"
+                + "\n"
+                + "Please read our page about");
+    Hyperlink link = new Hyperlink("billing for Preventive Health Exams");
+
+    link.setOnMouseClicked(
+        new EventHandler<MouseEvent>() {
+          @Override
+          public void handle(MouseEvent event) {
+            try {
+              loadWebView(
+                  "https://www.partners.org/for-patients/Patient-Billing-Financial-Assistance/Patient-Bill/Preventive-Health-Exams.aspx");
+            } catch (IOException e) {
+              e.printStackTrace();
+            }
+          }
+        });
+
+    message.add(messagePartA);
+    message.add(link);
+
+    return message;
+  }
+
+  /**
+   * Handles Intent Displays the necessary link
+   *
+   * @return
+   */
+  private LinkedList<Node> handleIntentReceivedBillFromPhysicianNotVisited() {
+    LinkedList<Node> message = new LinkedList<>();
+
+    Label messagePartA =
+        new Label(
+            "Some visits also have charges for ancillary departments (e.g., Radiology, Pathology, Anesthesia, etc.); please check to see if your bill includes an ancillary charge.\n"
+                + "\n"
+                + "If you still believe that you received a bill in error, please contact");
+    Hyperlink link = new Hyperlink("Partners Patient Billing Solutions");
+
+    link.setOnMouseClicked(
+        new EventHandler<MouseEvent>() {
+          @Override
+          public void handle(MouseEvent event) {
+            try {
+              loadWebView(
+                  "https://www.partners.org/for-patients/Patient-Billing-Financial-Assistance/Contact-Patient-Billing-Solutions.aspx");
+            } catch (IOException e) {
+              e.printStackTrace();
+            }
+          }
+        });
+
+    message.add(messagePartA);
+    message.add(link);
+
+    return message;
+  }
+
+  /**
+   * Function handles the case if 'Cost different that state in insurance' is matched Generates
+   * message and necessary link
+   *
+   * @return
+   */
+  private LinkedList<Node> handleIntentCostDiffThanInsurance() {
+    LinkedList<Node> message = new LinkedList<>();
+
+    Label messagePartA =
+        new Label(
+            "Some health insurance plans consider our health centers and physician practices to be hospital outpatient locations and not doctors’ offices. This may change how your health insurance pays for your care.\n"
+                + "\n"
+                + "What does this mean?\n"
+                + "\n"
+                + "If you visit one of these sites, you may be charged for a hospital outpatient service, rather than a doctor visit.\n"
+                + "Your co-payment, co-insurance, or deductible may be different from what they would be for a doctor visit.\n"
+                + "\n"
+                + "Please read our page about");
+    Hyperlink link = new Hyperlink("billing at hospital outpatient locations");
+
+    link.setOnMouseClicked(
+        new EventHandler<MouseEvent>() {
+          @Override
+          public void handle(MouseEvent event) {
+            try {
+              loadWebView(
+                  "https://www.partners.org/for-patients/Patient-Billing-Financial-Assistance/Patient-Bill/Hospital-Outpatient-Locations.aspx");
+            } catch (IOException e) {
+              e.printStackTrace();
+            }
+          }
+        });
+
+    message.add(messagePartA);
+    message.add(link);
+
+    return message;
+  }
+
+  /**
+   * Create a single message consisting of 'Nodes' in the order, which is needed
+   *
+   * @return list of Nodes, which represent a message. Every node is a separate chat-bot's message
+   */
+  private LinkedList<Node> getAnswerToPayingOnlineOption() {
+    LinkedList<Node> ans = new LinkedList<Node>();
+
+    Label messagePartA =
+        new Label(
+            "Great! It is the most convenient, efficient way to pay your bill. If you have a Partners Patient Gateway account, you can see the current status of all open patient balances; payments are immediately posted to your account.\n"
+                + "\n"
+                + "You can opt to go paperless and receive your bills online. In addition, you can now set up monthly payment plans.\n"
+                + "\n");
+    Hyperlink loginLink = new Hyperlink("Log in to Partners Patient Gateway");
+    loginLink.setOnMouseClicked(
+        new EventHandler<MouseEvent>() {
+          @Override
+          public void handle(MouseEvent event) {
+            try {
+              loadWebView("https://mychart.partners.org/mychart-prd/Authentication/Login?");
+            } catch (IOException e) {
+              e.printStackTrace();
+            }
+          }
+        });
+
+    Hyperlink guestLink = new Hyperlink("Or you can quickly pay as a guest");
+    guestLink.setOnMouseClicked(
+        new EventHandler<MouseEvent>() {
+          @Override
+          public void handle(MouseEvent event) {
+            try {
+              loadWebView("https://mychart.partners.org/mychart-prd/billing/guestpay/payasguest");
+            } catch (IOException e) {
+              e.printStackTrace();
+            }
+          }
+        });
+
+    ans.add(messagePartA);
+    ans.add(loginLink);
+    ans.add(guestLink);
+
+    return ans;
   }
 
   /**
@@ -472,53 +642,6 @@ public class ChatbotController implements Controller, Initializable {
     singleMessageObject.add(reply);
     state.chatBotState.resetPlannedActions();
     displayAndSaveMessages(singleMessageObject, false);
-  }
-
-  /**
-   * Create a single message consisting of 'Nodes' in the order, which is needed
-   *
-   * @return list of Nodes, which represent a message. Every node is a separate chat-bot's message
-   */
-  private LinkedList<Node> getAnswerToPayingOnlineOption() {
-    LinkedList<Node> ans = new LinkedList<Node>();
-
-    Label messagePartA =
-        new Label(
-            "Great! It is the most convenient, efficient way to pay your bill. If you have a Partners Patient Gateway account, you can see the current status of all open patient balances; payments are immediately posted to your account.\n"
-                + "\n"
-                + "You can opt to go paperless and receive your bills online. In addition, you can now set up monthly payment plans.\n"
-                + "\n");
-    Hyperlink loginLink = new Hyperlink("Log in to Partners Patient Gateway");
-    loginLink.setOnMouseClicked(
-        new EventHandler<MouseEvent>() {
-          @Override
-          public void handle(MouseEvent event) {
-            try {
-              loadWebView("https://mychart.partners.org/mychart-prd/Authentication/Login?");
-            } catch (IOException e) {
-              e.printStackTrace();
-            }
-          }
-        });
-
-    Hyperlink guestLink = new Hyperlink("Or you can quickly pay as a guest");
-    guestLink.setOnMouseClicked(
-        new EventHandler<MouseEvent>() {
-          @Override
-          public void handle(MouseEvent event) {
-            try {
-              loadWebView("https://mychart.partners.org/mychart-prd/billing/guestpay/payasguest");
-            } catch (IOException e) {
-              e.printStackTrace();
-            }
-          }
-        });
-
-    ans.add(messagePartA);
-    ans.add(loginLink);
-    ans.add(guestLink);
-
-    return ans;
   }
 
   /**
