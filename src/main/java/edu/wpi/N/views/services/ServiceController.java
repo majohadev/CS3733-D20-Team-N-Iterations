@@ -7,6 +7,7 @@ import edu.wpi.N.ServiceException;
 import edu.wpi.N.database.DBException;
 import edu.wpi.N.entities.States.StateSingleton;
 import edu.wpi.N.views.Controller;
+import edu.wpi.N.views.chatbot.ChatbotController;
 import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -43,6 +44,8 @@ public class ServiceController implements Controller {
   @FXML Label txt_transport;
   @FXML Label txt_api;
 
+  @FXML ChatbotController chatBotController;
+
   public ServiceController(StateSingleton singleton) {
     this.singleton = singleton;
   }
@@ -64,6 +67,45 @@ public class ServiceController implements Controller {
     txt_transport.setVisible(false);
     txt_translator.setVisible(false);
     txt_api.setVisible(false);
+
+    chatBotController.setServiceController(this);
+
+    // Check if there is any previously planned action
+    checkChatBot();
+  }
+
+  /** Checks to see which action needs to be taken upon loading the page */
+  private void checkChatBot() throws IOException {
+    if (singleton.chatBotState.showTranslator) {
+      // show translator
+      switchToTranslatorPage();
+    } else if (singleton.chatBotState.showWheelChair) {
+      // show wheelchair
+      switchToWheelchairPage();
+    } else if (singleton.chatBotState.showSecurity) {
+      // show security
+      switchToSecurityPage();
+    } else if (singleton.chatBotState.showSanitation) {
+      // show sanitations
+      switchToSanitationPage();
+    } else if (singleton.chatBotState.showLaundry) {
+      // show laundry
+      switchToLaundryPage();
+    } else if (singleton.chatBotState.showITService) {
+      // show IT
+      switchToITServicePage();
+    } else if (singleton.chatBotState.showInternalTransport) {
+      // show internal transport
+      switchToTransportPage();
+    } else if (singleton.chatBotState.showFlower) {
+      // show flower request
+      switchToFloralPage();
+    } else if (singleton.chatBotState.showEmotional) {
+      // show emotional request
+      switchToEmotionalPage();
+    }
+    // Reset all the chat messages state
+    singleton.chatBotState.resetPlannedActions();
   }
 
   @FXML
