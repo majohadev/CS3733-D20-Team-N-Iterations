@@ -22,6 +22,31 @@ public class DoctorDBTest {
   }
 
   @Test
+  public void testGetDoctorsByLocation() throws DBException {
+    LinkedList<DbNode> offices1 = new LinkedList<>();
+    offices1.add(MapDB.getNode("NDEPT00104"));
+    int wongID = DoctorDB.addDoctor("Wong", "Softeng", "wwong", "password", offices1);
+
+    LinkedList<DbNode> offices2 = new LinkedList<>();
+    offices2.add(MapDB.getNode("NDEPT00104"));
+    offices2.add(MapDB.getNode("NHALL00104"));
+    int tonyID = DoctorDB.addDoctor("Tony Cannoli", "Boats", "TCannoli", "theCatPiano", offices2);
+
+    LinkedList<Doctor> result = DoctorDB.getDoctorsByLocation("NDEPT00104");
+    assertTrue(result.contains(DoctorDB.getDoctor(wongID)));
+    assertTrue(result.contains(DoctorDB.getDoctor(tonyID)));
+
+    result = DoctorDB.getDoctorsByLocation("NHALL00104");
+    assertTrue(result.contains(DoctorDB.getDoctor(tonyID)));
+
+    result = DoctorDB.getDoctorsByLocation("NCONF00203");
+    assertTrue(result.isEmpty());
+
+    ServiceDB.removeEmployee(wongID);
+    ServiceDB.removeEmployee(tonyID);
+  }
+
+  @Test
   public void testGetDoctor() throws DBException {
     LinkedList<DbNode> offices = new LinkedList<DbNode>();
     offices.add(MapDB.getNode("NDEPT00104"));

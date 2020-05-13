@@ -634,7 +634,7 @@ public class MapEditorControllerAddingNodes implements Controller {
   }
 
   private void onCircleAddShaftNodeClicked(MouseEvent event, Circle circle) {
-    if (circle.getFill() == Color.CADETBLUE) { // TODO: set colors at top
+    if (circle.getFill() == Color.CADETBLUE) {
       circle.setFill(Color.BLACK);
       addShaftNodeCircles.add(nodesMap.get(circle).getDBNode());
       controllerAddShaft.addLstAddShaftNode(nodesMap.get(circle).getDBNode().getLongName());
